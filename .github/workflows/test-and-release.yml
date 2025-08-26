@@ -22,9 +22,6 @@ jobs:
       - name: Install
         run: yarn install --frozen-lockfile
 
-  lint-commits:
-    uses: dhis2/workflows-platform/.github/workflows/lint-commits.yml@v1
-
   lint:
     runs-on: ubuntu-latest
     needs: [install]
