@@ -1,17 +1,51 @@
-name: deploy-pr
+name: preview
 
 on:
     pull_request:
-        paths:
-            - 'packages/modeling-app/**'
-            - 'packages/chap-lib/**'
+      types: [ labeled ]
 
 concurrency:
     group: ${{ github.workflow }}-${{ github.head_ref }}
     cancel-in-progress: true
 
 jobs:
-    deploy:
-        uses: dhis2/workflows-platform/.github/workflows/deploy-pr.yml@v1
-        if: '!github.event.pull_request.head.repo.fork'
-        secrets: inherit
+    preview:
+        runs-on: ubuntu-latest
+        if: (github.event.label.name == 'preview') && !github.event.push.repository.fork && github.actor != 'dependabot[bot]'
+        steps:
+          - uses: actions/checkout@v4
+          - uses: actions/setup-node@v4
+            with:
+              node-version: 20.x
+              cache: 'yarn'
+              cache-dependency-path: '**/yarn.lock'
+
+          - name: Install
+            run: yarn install --frozen-lockfile
+
+          - name: Cache turbo build setup
+            uses: actions/cache@v4
+            with:
+              path: .turbo
+              key: ${{ runner.os }}-turbo-${{ github.sha }}
+              restore-keys: |
+                ${{ runner.os }}-turbo-
+
+          - name: Build
+            run: yarn build
+
+          - name: Deploy
+            id: netlify-deploy
+            uses: nwtgck/actions-netlify@v1.1
+            timeout-minutes: 1
+            with:
+              github-token: ${{ secrets.GITHUB_TOKEN }}
+              deploy-message: ${{ github.event.pull_request.title }}
+              enable-pull-request-comment: true
+              enable-commit-comment: false
+              alias: deploy-preview-${{ github.event.number }}
+              publish-dir: 'apps/modeling-app/build/app'
+            env:
+              NETLIFY_AUTH_TOKEN: ${{ secrets.DHIS2_BOT_NETLIFY_TOKEN }}
+              # repo secret
+              NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}

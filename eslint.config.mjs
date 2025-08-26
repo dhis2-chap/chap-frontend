@@ -12,8 +12,9 @@ export default defineConfig([
       "**/build/**",
       "**/.d2/**",
       "dist/**",
+      ".turbo/**",
       ".eslintcache/**",
-      "**/chap-lib/src/httpfunctions/**",
+      "**/ui/src/httpfunctions/**",
       "**/*.{js,jsx}"
     ]
   },

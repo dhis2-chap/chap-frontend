@@ -1,0 +1,53 @@
+{
+    "name": "@dhis2-chap/ui",
+    "type": "commonjs",
+    "version": "2.2.3",
+    "module": "./build/es/index.js",
+    "types": "./build/types/index.d.ts",
+    "license": "MIT",
+    "scripts": {
+        "watch": "tsc --watch",
+        "build": "d2-app-scripts build && tsc --emitDeclarationOnly --outDir ./build/types",
+        "start": "concurrently -n build,types --hide types \"d2-app-scripts build --watch\" \"tsc --emitDeclarationOnly --outDir ./build/types --watch\"",
+        "linter:check": "eslint . --config ../../eslint.config.mjs",
+        "test": "d2-app-scripts test",
+        "deploy": "d2-app-scripts deploy",
+        "generate": "yarn openapi --input ./public/openapi.json --output ./src/httpfunctions --request ./src/queuedRequest.ts",
+        "generate-localhost": "yarn openapi --input http://localhost:8000/v1/openapi.json --output ./src/httpfunctions --request ./src/queuedRequest.ts",
+        "tsc:check": "tsc --noEmit"
+    },
+    "main": "./build/cjs/index.js",
+    "exports": {
+        "import": "./build/es/index.js",
+        "require": "./build/cjs/index.js",
+        "types": "./build/types/index.d.ts"
+    },
+    "peerDependencies": {
+        "react": ">=18",
+        "react-dom": ">=18"
+    },
+    "dependencies": {
+        "@dhis2/d2-i18n": "1.1.3",
+        "@dhis2/maps-gl": "^4.0.1",
+        "@dhis2/multi-calendar-dates": "^2.1.1",
+        "@dhis2/ui": "^10.1.10",
+        "classnames": "^2.5.1",
+        "highcharts": "11.4.8",
+        "highcharts-react-official": "^3.2.1",
+        "p-queue": "^8.1.0",
+        "react-virtuoso": "^4.6.2",
+        "styled-jsx": "^4.0.1"
+    },
+    "devDependencies": {
+        "@dhis2/cli-app-scripts": "^12.2.0",
+        "@types/css-modules": "^1.0.5",
+        "@types/highcharts": "^5.0.44",
+        "@types/node": "^22.10.1",
+        "openapi-typescript-codegen": "^0.29.0",
+        "@types/react": "^18.3.12",
+        "@types/react-dom": "^18.3.0",
+        "react": "^18.3.1",
+        "react-dom": "^18.3.1",
+        "typescript": "^5.7.2"
+    }
+}

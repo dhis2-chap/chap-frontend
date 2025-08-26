@@ -1,0 +1,27 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: i18next-conv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"POT-Creation-Date: 2025-08-25T10:40:41.528Z\n"
+"PO-Revision-Date: 2025-08-25T10:40:41.529Z\n"
+
+msgid "Median Prediction for {{predictionTargetName}}"
+msgstr "Median Prediction for {{predictionTargetName}}"
+
+msgid "Prediction for {{orgUnitName}}"
+msgstr "Prediction for {{orgUnitName}}"
+
+msgid "Prediction for {{predictionTargetName}} for {{orgUnitName}}"
+msgstr "Prediction for {{predictionTargetName}} for {{orgUnitName}}"
+
+msgid "Quantile median"
+msgstr "Quantile median"
+
+msgid "Range"
+msgstr "Range"
+
+msgid "More"
+msgstr "More"

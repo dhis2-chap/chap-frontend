@@ -1,0 +1,1115 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: i18next-conv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"POT-Creation-Date: 2025-08-25T15:36:37.061Z\n"
+"PO-Revision-Date: 2025-08-25T15:36:37.062Z\n"
+
+msgid "View"
+msgstr "View"
+
+msgid "Rename"
+msgstr "Rename"
+
+msgid "Delete"
+msgstr "Delete"
+
+msgid "Delete evaluation"
+msgstr "Delete evaluation"
+
+msgid ""
+"Are you sure you want to delete this evaluation? This action cannot be "
+"undone."
+msgstr ""
+"Are you sure you want to delete this evaluation? This action cannot be "
+"undone."
+
+msgid "Cancel"
+msgstr "Cancel"
+
+msgid "Name is required"
+msgstr "Name is required"
+
+msgid "Rename evaluation"
+msgstr "Rename evaluation"
+
+msgid "Name"
+msgstr "Name"
+
+msgid "Save"
+msgstr "Save"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Created"
+msgstr "Created"
+
+msgid "Model"
+msgstr "Model"
+
+msgid "CRPS (Norm)"
+msgstr "CRPS (Norm)"
+
+msgid ""
+"Normalized CRPS (Continuous Ranked Probability Score) shows how close a "
+"model's predicted range of outcomes is to the actual result on a 0 - 1 "
+"scale. Lower values indicate better probabilistic accuracy"
+msgstr ""
+"Normalized CRPS (Continuous Ranked Probability Score) shows how close a "
+"model's predicted range of outcomes is to the actual result on a 0 - 1 "
+"scale. Lower values indicate better probabilistic accuracy"
+
+msgid "Actions"
+msgstr "Actions"
+
+msgid "New evaluation"
+msgstr "New evaluation"
+
+msgid "Sort by {{column}}"
+msgstr "Sort by {{column}}"
+
+msgid "No evaluations available"
+msgstr "No evaluations available"
+
+msgid "Search"
+msgstr "Search"
+
+msgid "No models found"
+msgstr "No models found"
+
+msgid "Clear"
+msgstr "Clear"
+
+msgid "{{count}} evaluations selected"
+msgid_plural "{{count}} evaluations selected"
+msgstr[0] "{{count}} evaluation selected"
+msgstr[1] "{{count}} evaluations selected"
+
+msgid "There are running jobs in the background"
+msgstr "There are running jobs in the background"
+
+msgid "Running jobs"
+msgstr "Running jobs"
+
+msgid "Evaluations deleted"
+msgstr "Evaluations deleted"
+
+msgid "Failed to delete evaluations"
+msgstr "Failed to delete evaluations"
+
+msgid "Evaluation deleted"
+msgstr "Evaluation deleted"
+
+msgid "Failed to delete evaluation"
+msgstr "Failed to delete evaluation"
+
+msgid "Error renaming evaluation"
+msgstr "Error renaming evaluation"
+
+msgid "Could not connect to CHAP"
+msgstr "Could not connect to CHAP"
+
+msgid "The app is not able to connect to the CHAP server."
+msgstr "The app is not able to connect to the CHAP server."
+
+msgid ""
+"Please check your route configuration and make sure the CHAP server is "
+"running."
+msgstr ""
+"Please check your route configuration and make sure the CHAP server is "
+"running."
+
+msgid "Learn more about Modeling and CHAP"
+msgstr "Learn more about Modeling and CHAP"
+
+msgid "Configure settings"
+msgstr "Configure settings"
+
+msgid "Oops!"
+msgstr "Oops!"
+
+msgid "Sorry, an unexpected error has occurred."
+msgstr "Sorry, an unexpected error has occurred."
+
+msgid "Inspect dataset"
+msgstr "Inspect dataset"
+
+msgid "Close"
+msgstr "Close"
+
+msgid "Cancel job"
+msgstr "Cancel job"
+
+msgid "Are you sure you want to cancel this job? This action cannot be undone."
+msgstr "Are you sure you want to cancel this job? This action cannot be undone."
+
+msgid "Delete job"
+msgstr "Delete job"
+
+msgid "Are you sure you want to delete this job? This action cannot be undone."
+msgstr "Are you sure you want to delete this job? This action cannot be undone."
+
+msgid "Failed to copy job ID"
+msgstr "Failed to copy job ID"
+
+msgid "Go to result"
+msgstr "Go to result"
+
+msgid "View Logs"
+msgstr "View Logs"
+
+msgid "Copy Job ID"
+msgstr "Copy Job ID"
+
+msgid "Job Logs"
+msgstr "Job Logs"
+
+msgid "An error occurred while loading the logs."
+msgstr "An error occurred while loading the logs."
+
+msgid "No logs reported for this job"
+msgstr "No logs reported for this job"
+
+msgid "Job cancelled"
+msgstr "Job cancelled"
+
+msgid "Failed to cancel job"
+msgstr "Failed to cancel job"
+
+msgid "Job deleted"
+msgstr "Job deleted"
+
+msgid "Failed to delete job"
+msgstr "Failed to delete job"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Type"
+msgstr "Type"
+
+msgid "Start date"
+msgstr "Start date"
+
+msgid "End date"
+msgstr "End date"
+
+msgid "Duration"
+msgstr "Duration"
+
+msgid "No jobs available"
+msgstr "No jobs available"
+
+msgid "Pending"
+msgstr "Pending"
+
+msgid "Running"
+msgstr "Running"
+
+msgid "Success"
+msgstr "Success"
+
+msgid "Failed"
+msgstr "Failed"
+
+msgid "Revoked"
+msgstr "Revoked"
+
+msgid "Create evaluation"
+msgstr "Create evaluation"
+
+msgid "Make prediction"
+msgstr "Make prediction"
+
+msgid "Create dataset (deprecated)"
+msgstr "Create dataset (deprecated)"
+
+msgid "Create evaluation (deprecated)"
+msgstr "Create evaluation (deprecated)"
+
+msgid "Create evaluation (Legacy)"
+msgstr "Create evaluation (Legacy)"
+
+msgid "Create dataset"
+msgstr "Create dataset"
+
+msgid "Cancelled"
+msgstr "Cancelled"
+
+msgid "Unsaved changes"
+msgstr "Unsaved changes"
+
+msgid ""
+"You have unsaved changes that will be lost if you leave this page. Are you "
+"sure you want to continue?"
+msgstr ""
+"You have unsaved changes that will be lost if you leave this page. Are you "
+"sure you want to continue?"
+
+msgid "Leave page"
+msgstr "Leave page"
+
+msgid "Back to evaluations"
+msgstr "Back to evaluations"
+
+msgid "There was an error"
+msgstr "There was an error"
+
+msgid "Start dry run"
+msgstr "Start dry run"
+
+msgid "Start import"
+msgstr "Start import"
+
+msgid "Map Data Items"
+msgstr "Map Data Items"
+
+msgid "Map the model features to corresponding data items in DHIS2"
+msgstr "Map the model features to corresponding data items in DHIS2"
+
+msgid "Target"
+msgstr "Target"
+
+msgid "Map the model target to the corresponding data item in DHIS2"
+msgstr "Map the model target to the corresponding data item in DHIS2"
+
+msgid "Map each model covariate to the corresponding data item in DHIS2"
+msgstr "Map each model covariate to the corresponding data item in DHIS2"
+
+msgid "No model selected"
+msgstr "No model selected"
+
+msgid "All data items mapped"
+msgstr "All data items mapped"
+
+msgid "{{mapped}}/{{total}} data items mapped"
+msgstr "{{mapped}}/{{total}} data items mapped"
+
+msgid "Dataset Configuration"
+msgstr "Dataset Configuration"
+
+msgid "Configure sources"
+msgstr "Configure sources"
+
+msgid ""
+"The Data Visualizer app is not compatible with this feature. Please update "
+"to a newer version."
+msgstr ""
+"The Data Visualizer app is not compatible with this feature. Please update "
+"to a newer version."
+
+msgid "Please map all model covariates to valid data items"
+msgstr "Please map all model covariates to valid data items"
+
+msgid "Target \"{{targetName}}\" must be mapped to a data item"
+msgstr "Target \"{{targetName}}\" must be mapped to a data item"
+
+msgid "Covariate \"{{covariateName}}\" must be mapped to a data item"
+msgstr "Covariate \"{{covariateName}}\" must be mapped to a data item"
+
+msgid "Organisation Units"
+msgstr "Organisation Units"
+
+msgid "Select organisation units"
+msgstr "Select organisation units"
+
+msgid "Select Organisation Units"
+msgstr "Select Organisation Units"
+
+msgid "Organisation unit levels"
+msgstr "Organisation unit levels"
+
+msgid ""
+"Some models require you to only select organisation units from the same "
+"level."
+msgstr ""
+"Some models require you to only select organisation units from the same "
+"level."
+
+msgid "All org units must be at the same level"
+msgstr "All org units must be at the same level"
+
+msgid "Confirm Selection"
+msgstr "Confirm Selection"
+
+msgid "Monthly"
+msgstr "Monthly"
+
+msgid "Yearly"
+msgstr "Yearly"
+
+msgid "Weekly"
+msgstr "Weekly"
+
+msgid "Daily"
+msgstr "Daily"
+
+msgid "Any"
+msgstr "Any"
+
+msgid "Deprecated"
+msgstr "Deprecated"
+
+msgid "This model is not intended for use or has been deprecated."
+msgstr "This model is not intended for use or has been deprecated."
+
+msgid "Experimental"
+msgstr "Experimental"
+
+msgid ""
+"An early prototype with no formal validation - only for initial "
+"experimentation."
+msgstr ""
+"An early prototype with no formal validation - only for initial "
+"experimentation."
+
+msgid "Limited"
+msgstr "Limited"
+
+msgid "Tested on a small dataset. Requires manual tuning and close monitoring."
+msgstr "Tested on a small dataset. Requires manual tuning and close monitoring."
+
+msgid "Testing"
+msgstr "Testing"
+
+msgid "Prepared for more extensive testing; not yet approved for production."
+msgstr "Prepared for more extensive testing; not yet approved for production."
+
+msgid "Production"
+msgstr "Production"
+
+msgid "Approved for general use."
+msgstr "Approved for general use."
+
+msgid "{{count}} covariates"
+msgid_plural "{{count}} covariates"
+msgstr[0] "{{count}} covariate"
+msgstr[1] "{{count}} covariates"
+
+msgid "Author note"
+msgstr "Author note"
+
+msgid "Selected"
+msgstr "Selected"
+
+msgid "Select Model"
+msgstr "Select Model"
+
+msgid "Search by title"
+msgstr "Search by title"
+
+msgid "Period Type"
+msgstr "Period Type"
+
+msgid "Assessment Status"
+msgstr "Assessment Status"
+
+msgid "Select model"
+msgstr "Select model"
+
+msgid "Evaluation name"
+msgstr "Evaluation name"
+
+msgid "EWARS Evaluation 22-24"
+msgstr "EWARS Evaluation 22-24"
+
+msgid "Period type"
+msgstr "Period type"
+
+msgid "From period"
+msgstr "From period"
+
+msgid "To period"
+msgstr "To period"
+
+msgid "Reason"
+msgstr "Reason"
+
+msgid "Feature"
+msgstr "Feature"
+
+msgid "Org unit"
+msgstr "Org unit"
+
+msgid "Period"
+msgstr "Period"
+
+msgid "Import Summary"
+msgstr "Import Summary"
+
+msgid "Valid import"
+msgstr "Valid import"
+
+msgid "All {{count}} locations can be successfully imported"
+msgid_plural "All {{count}} locations can be successfully imported"
+msgstr[0] "{{count}} location can be successfully imported"
+msgstr[1] "All {{count}} locations can be successfully imported"
+
+msgid "Partial import"
+msgstr "Partial import"
+
+msgid "{{count}} locations could be successfully imported, but some were rejected"
+msgid_plural "{{count}} locations could be successfully imported, but some were rejected"
+msgstr[0] "{{count}} location could be successfully imported, but some were rejected"
+msgstr[1] "{{count}} locations could be successfully imported, but some were rejected"
+
+msgid "No locations imported"
+msgstr "No locations imported"
+
+msgid ""
+"None of the provided locations could be imported. Please check the data "
+"items and the period type."
+msgstr ""
+"None of the provided locations could be imported. Please check the data "
+"items and the period type."
+
+msgid "Valid"
+msgstr "Valid"
+
+msgid "Rejected"
+msgstr "Rejected"
+
+msgid "Total"
+msgstr "Total"
+
+msgid "Filter by Feature"
+msgstr "Filter by Feature"
+
+msgid "Clear filter"
+msgstr "Clear filter"
+
+msgid "All features"
+msgstr "All features"
+
+msgid "Filter by Org Unit"
+msgstr "Filter by Org Unit"
+
+msgid "All org units"
+msgstr "All org units"
+
+msgid "No rejected items match the current filters"
+msgstr "No rejected items match the current filters"
+
+msgid "No items to display"
+msgstr "No items to display"
+
+msgid "Missing data for covariate"
+msgstr "Missing data for covariate"
+
+msgid "Missing id for org unit"
+msgstr "Missing id for org unit"
+
+msgid "Period type is required"
+msgstr "Period type is required"
+
+msgid "Start date is required"
+msgstr "Start date is required"
+
+msgid "End date is required"
+msgstr "End date is required"
+
+msgid "End date cannot be in the future"
+msgstr "End date cannot be in the future"
+
+msgid "At least one org unit is required"
+msgstr "At least one org unit is required"
+
+msgid "Please select a model"
+msgstr "Please select a model"
+
+msgid "Please map the covariates to valid data items"
+msgstr "Please map the covariates to valid data items"
+
+msgid "Please map the target to a valid data item"
+msgstr "Please map the target to a valid data item"
+
+msgid "End period must be after start period"
+msgstr "End period must be after start period"
+
+msgid "Model not found"
+msgstr "Model not found"
+
+msgid ""
+"The following org units have no geometry{{escape}} "
+"{{orgUnitsWithoutGeometry}}"
+msgstr ""
+"The following org units have no geometry{{escape}} "
+"{{orgUnitsWithoutGeometry}}"
+
+msgid "Data layer not found for data item id{{escape}} {{dataItemId}}"
+msgstr "Data layer not found for data item id{{escape}} {{dataItemId}}"
+
+msgid "{{count}} org units"
+msgid_plural "{{count}} org units"
+msgstr[0] "{{count}} org unit"
+msgstr[1] "{{count}} org units"
+
+msgid "{{count}} levels"
+msgid_plural "{{count}} levels"
+msgstr[0] "{{count}} level"
+msgstr[1] "{{count}} levels"
+
+msgid "{{count}} groups"
+msgid_plural "{{count}} groups"
+msgstr[0] "{{count}} group"
+msgstr[1] "{{count}} groups"
+
+msgid "Selected: {{commaSeparatedListOfOrganisationUnits}}"
+msgstr "Selected: {{commaSeparatedListOfOrganisationUnits}}"
+
+msgid "Nothing selected"
+msgstr "Nothing selected"
+
+msgid "User organisation unit"
+msgstr "User organisation unit"
+
+msgid "User sub-units"
+msgstr "User sub-units"
+
+msgid "User sub-x2-units"
+msgstr "User sub-x2-units"
+
+msgid "Select a level"
+msgstr "Select a level"
+
+msgid "Select a group"
+msgstr "Select a group"
+
+msgid "Deselect all"
+msgstr "Deselect all"
+
+msgid "Search organisation units"
+msgstr "Search organisation units"
+
+msgid "Clear all organisation units"
+msgstr "Clear all organisation units"
+
+msgid "No organisation units match your search"
+msgstr "No organisation units match your search"
+
+msgid "You cannot select more than {{max}} organisation units at a time"
+msgstr "You cannot select more than {{max}} organisation units at a time"
+
+msgid "Evaluate"
+msgstr "Evaluate"
+
+msgid "Overview"
+msgstr "Overview"
+
+msgid "Compare"
+msgstr "Compare"
+
+msgid "Predict"
+msgstr "Predict"
+
+msgid "Jobs"
+msgstr "Jobs"
+
+msgid "Settings"
+msgstr "Settings"
+
+msgid ""
+"The version of the Modeling App is not compatible with the backend (Chap "
+"core)."
+msgstr ""
+"The version of the Modeling App is not compatible with the backend (Chap "
+"core)."
+
+msgid ""
+"The Chap Core version {{chapVersion}} is too old. The Modeling App "
+"specifies minimum Chap core version{{escape}} {{chapMinVersion}}"
+msgstr ""
+"The Chap Core version {{chapVersion}} is too old. The Modeling App "
+"specifies minimum Chap core version{{escape}} {{chapMinVersion}}"
+
+msgid "Compare evaluations"
+msgstr "Compare evaluations"
+
+msgid "Compare evaluations to assess model, co-variates and data performance."
+msgstr "Compare evaluations to assess model, co-variates and data performance."
+
+msgid "Select base evaluation"
+msgstr "Select base evaluation"
+
+msgid ""
+"Selected evaluations do not have any split periods in common. Please select "
+"evaluations with overlapping split periods."
+msgstr ""
+"Selected evaluations do not have any split periods in common. Please select "
+"evaluations with overlapping split periods."
+
+msgid "An error occurred while fetching chart data "
+msgstr "An error occurred while fetching chart data "
+
+msgid "Evaluation"
+msgstr "Evaluation"
+
+msgid ""
+"Select two evaluations to compare their results. The\n"
+"                    selected evaluations must be compatible."
+msgstr ""
+"Select two evaluations to compare their results. The\n"
+"                    selected evaluations must be compatible."
+
+msgid ""
+"Compatible evaluations have overlapping organisation units and split "
+"periods."
+msgstr ""
+"Compatible evaluations have overlapping organisation units and split "
+"periods."
+
+msgid "Split period"
+msgstr "Split period"
+
+msgid "Add required Data Elements"
+msgstr "Add required Data Elements"
+
+msgid ""
+"This app requires specific DHIS2 Data Elements to import data into. If you "
+"have not already added them, go to the "
+msgstr ""
+"This app requires specific DHIS2 Data Elements to import data into. If you "
+"have not already added them, go to the "
+
+msgid "-app and create the Data Elements listed below."
+msgstr "-app and create the Data Elements listed below."
+
+msgid ""
+"NB! Make sure the CODE property for each data element is exactly the same "
+"as below."
+msgstr ""
+"NB! Make sure the CODE property for each data element is exactly the same "
+"as below."
+
+msgid ""
+"Properties in the new Data Element form not specified in the tables below "
+"should have the default value."
+msgstr ""
+"Properties in the new Data Element form not specified in the tables below "
+"should have the default value."
+
+msgid "Short name"
+msgstr "Short name"
+
+msgid "Code"
+msgstr "Code"
+
+msgid "Domain type"
+msgstr "Domain type"
+
+msgid "Aggregate"
+msgstr "Aggregate"
+
+msgid "Aggregation levels"
+msgstr "Aggregation levels"
+
+msgid "Assign all org unit levels"
+msgstr "Assign all org unit levels"
+
+msgid "Prediction for {{predictionTargetName}} for {{orgUnitName}}"
+msgstr "Prediction for {{predictionTargetName}} for {{orgUnitName}}"
+
+msgid "Quantile median"
+msgstr "Quantile median"
+
+msgid "Range"
+msgstr "Range"
+
+msgid "Quantile low"
+msgstr "Quantile low"
+
+msgid "Select data element for low quantile"
+msgstr "Select data element for low quantile"
+
+msgid "Select data element for median quantile"
+msgstr "Select data element for median quantile"
+
+msgid "Select data element for high quantile"
+msgstr "Select data element for high quantile"
+
+msgid "Import prediction"
+msgstr "Import prediction"
+
+msgid "Prediction has been imported."
+msgstr "Prediction has been imported."
+
+msgid "CHAP Core results"
+msgstr "CHAP Core results"
+
+msgid "Select data element"
+msgstr "Select data element"
+
+msgid "It seems like you missing Data Elements for CHAP prediction."
+msgstr "It seems like you missing Data Elements for CHAP prediction."
+
+msgid "Add data elements"
+msgstr "Add data elements"
+
+msgid ""
+"Job is still running. Please wait until it is finished before doing any "
+"actions."
+msgstr ""
+"Job is still running. Please wait until it is finished before doing any "
+"actions."
+
+msgid "Unknown error"
+msgstr "Unknown error"
+
+msgid "No model templates found."
+msgstr "No model templates found."
+
+msgid "Model Templates"
+msgstr "Model Templates"
+
+msgid "Configure new models based on generic model templates"
+msgstr "Configure new models based on generic model templates"
+
+msgid "Back to settings"
+msgstr "Back to settings"
+
+msgid "Configure Model"
+msgstr "Configure Model"
+
+msgid "Model Template"
+msgstr "Model Template"
+
+msgid "Select a model template"
+msgstr "Select a model template"
+
+msgid "Configured Model Name"
+msgstr "Configured Model Name"
+
+msgid "Enter something to identify your model, e.g. \"Debug\" or \"Malaria\""
+msgstr "Enter something to identify your model, e.g. \"Debug\" or \"Malaria\""
+
+msgid "Your model will be saved as {{modelName}} [{{configuredModelName}}]"
+msgstr "Your model will be saved as {{modelName}} [{{configuredModelName}}]"
+
+msgid "Additional continuous covariates"
+msgstr "Additional continuous covariates"
+
+msgid "Enter covariate name"
+msgstr "Enter covariate name"
+
+msgid "Add"
+msgstr "Add"
+
+msgid "Required"
+msgstr "Required"
+
+msgid "Remove"
+msgstr "Remove"
+
+msgid "Please check covariates"
+msgstr "Please check covariates"
+
+msgid "Template is required"
+msgstr "Template is required"
+
+msgid "Covariate name is required"
+msgstr "Covariate name is required"
+
+msgid "Covariate name cannot contain spaces"
+msgstr "Covariate name cannot contain spaces"
+
+msgid "Covariate already exists"
+msgstr "Covariate already exists"
+
+msgid "Model Parameters"
+msgstr "Model Parameters"
+
+msgid "Enter item"
+msgstr "Enter item"
+
+msgid "Please enter a valid number"
+msgstr "Please enter a valid number"
+
+msgid "Please enter a whole number"
+msgstr "Please enter a whole number"
+
+msgid "Invalid input"
+msgstr "Invalid input"
+
+msgid "Enter a whole number"
+msgstr "Enter a whole number"
+
+msgid "Enter a number (use , or . for decimal)"
+msgstr "Enter a number (use , or . for decimal)"
+
+msgid "Please enter a valid number or leave empty"
+msgstr "Please enter a valid number or leave empty"
+
+msgid "Please enter a whole number or leave empty"
+msgstr "Please enter a whole number or leave empty"
+
+msgid "Enter a whole number or leave empty for null"
+msgstr "Enter a whole number or leave empty for null"
+
+msgid "Enter a number (use , or . for decimal) or leave empty for null"
+msgstr "Enter a number (use , or . for decimal) or leave empty for null"
+
+msgid "Leave empty for null"
+msgstr "Leave empty for null"
+
+msgid "Model configured"
+msgstr "Model configured"
+
+msgid "Failed to configure model"
+msgstr "Failed to configure model"
+
+msgid "Prediction for Northern Province"
+msgstr "Prediction for Northern Province"
+
+msgid "Organisation unit level"
+msgstr "Organisation unit level"
+
+msgid "Organisation unit level to import data to"
+msgstr "Organisation unit level to import data to"
+
+msgid "Organisation units"
+msgstr "Organisation units"
+
+msgid "Data Element"
+msgstr "Data Element"
+
+msgid "Indicator"
+msgstr "Indicator"
+
+msgid "Program Indicator"
+msgstr "Program Indicator"
+
+msgid "Loading"
+msgstr "Loading"
+
+msgid "Start typing to search for data items"
+msgstr "Start typing to search for data items"
+
+msgid "No matches found"
+msgstr "No matches found"
+
+msgid "Search for indicators, data elements, or program indicators"
+msgstr "Search for indicators, data elements, or program indicators"
+
+msgid "No compatible evaluations found"
+msgstr "No compatible evaluations found"
+
+msgid "Select evaluation to compare with"
+msgstr "Select evaluation to compare with"
+
+msgid "No evaluations found"
+msgstr "No evaluations found"
+
+msgid "CHAP settings"
+msgstr "CHAP settings"
+
+msgid "An error occurred while connecting to the CHAP server."
+msgstr "An error occurred while connecting to the CHAP server."
+
+msgid ""
+"Are you sure you have configured your route correctly? See the console for "
+"more details."
+msgstr ""
+"Are you sure you have configured your route correctly? See the console for "
+"more details."
+
+msgid "Server information"
+msgstr "Server information"
+
+msgid "CHAP Version"
+msgstr "CHAP Version"
+
+msgid "Python Version"
+msgstr "Python Version"
+
+msgid "Operating System"
+msgstr "Operating System"
+
+msgid "Connected"
+msgstr "Connected"
+
+msgid "Your server might not be secure"
+msgstr "Your server might not be secure"
+
+msgid ""
+"CHAP currently does not have it's own authentication service. Make sure to "
+"secure it by blocking public access on your server firewall."
+msgstr ""
+"CHAP currently does not have it's own authentication service. Make sure to "
+"secure it by blocking public access on your server firewall."
+
+msgid "Your server is not secure"
+msgstr "Your server is not secure"
+
+msgid "Model settings"
+msgstr "Model settings"
+
+msgid "An error occurred while loading models."
+msgstr "An error occurred while loading models."
+
+msgid ""
+"Please try to reload the page. If the problem persists, contact your system "
+"administrator."
+msgstr ""
+"Please try to reload the page. If the problem persists, contact your system "
+"administrator."
+
+msgid "Model templates"
+msgstr "Model templates"
+
+msgid ""
+"Model templates are base models that can be configured to fit your data "
+"with different parameters and covariates. This is still an advanced feature "
+"and should be used with caution."
+msgstr ""
+"Model templates are base models that can be configured to fit your data "
+"with different parameters and covariates. This is still an advanced feature "
+"and should be used with caution."
+
+msgid "Configured models"
+msgstr "Configured models"
+
+msgid "Configure"
+msgstr "Configure"
+
+msgid "Models configured"
+msgstr "Models configured"
+
+msgid "Route configuration"
+msgstr "Route configuration"
+
+msgid "No route found."
+msgstr "No route found."
+
+msgid "Add route"
+msgstr "Add route"
+
+msgid "Delete route"
+msgstr "Delete route"
+
+msgid "Are you sure you want to delete this route?"
+msgstr "Are you sure you want to delete this route?"
+
+msgid "Edit route"
+msgstr "Edit route"
+
+msgid "Public access"
+msgstr "Public access"
+
+msgid ""
+"Your route is public and can be accessed by anyone. This can potentially "
+"expose sensitive data. If you want to restrict access, click the "
+"\"Sharing\" button and remove access for \"All users\"."
+msgstr ""
+"Your route is public and can be accessed by anyone. This can potentially "
+"expose sensitive data. If you want to restrict access, click the "
+"\"Sharing\" button and remove access for \"All users\"."
+
+msgid "Sharing"
+msgstr "Sharing"
+
+msgid "Edit"
+msgstr "Edit"
+
+msgid "Invalid URL format"
+msgstr "Invalid URL format"
+
+msgid "URL is required"
+msgstr "URL is required"
+
+msgid "URL must end with a double wildcard (/**)"
+msgstr "URL must end with a double wildcard (/**)"
+
+msgid "CHAP Core URL"
+msgstr "CHAP Core URL"
+
+msgid "Route settings"
+msgstr "Route settings"
+
+msgid ""
+"There was an error loading the route settings. Please try to reload the "
+"page."
+msgstr ""
+"There was an error loading the route settings. Please try to reload the "
+"page."
+
+msgid "If the problem persists, please contact your system administrator."
+msgstr "If the problem persists, please contact your system administrator."
+
+msgid "You do not have permission to add or modify routes."
+msgstr "You do not have permission to add or modify routes."
+
+msgid "If you think this is an error, please contact your system administrator."
+msgstr "If you think this is an error, please contact your system administrator."
+
+msgid "URL"
+msgstr "URL"
+
+msgid "Authorities"
+msgstr "Authorities"
+
+msgid "Error deleting route"
+msgstr "Error deleting route"
+
+msgid "Route deleted successfully"
+msgstr "Route deleted successfully"
+
+msgid "Error saving route"
+msgstr "Error saving route"
+
+msgid "Route saved successfully"
+msgstr "Route saved successfully"
+
+msgid "Start month"
+msgstr "Start month"
+
+msgid "End month"
+msgstr "End month"
+
+msgid "Error loading evaluations"
+msgstr "Error loading evaluations"
+
+msgid "An unknown error occurred"
+msgstr "An unknown error occurred"
+
+msgid "Evaluations"
+msgstr "Evaluations"
+
+msgid ""
+"Evaluates the accuracy of a predictive model using historical data. "
+"Compares actual outcomes with predicted values to assess model performance."
+msgstr ""
+"Evaluates the accuracy of a predictive model using historical data. "
+"Compares actual outcomes with predicted values to assess model performance."
+
+msgid "Get started with the Modeling app"
+msgstr "Get started with the Modeling app"
+
+msgid "To get started, create a route that points to a running CHAP server."
+msgstr "To get started, create a route that points to a running CHAP server."
+
+msgid "Route and servers are configured on the settings page."
+msgstr "Route and servers are configured on the settings page."
+
+msgid "Error loading jobs"
+msgstr "Error loading jobs"
+
+msgid "Active jobs"
+msgstr "Active jobs"
+
+msgid "View and manage currently running jobs and their status."
+msgstr "View and manage currently running jobs and their status."
+
+msgid "Create a new evaluation to assess the performance of a model"
+msgstr "Create a new evaluation to assess the performance of a model"
+
+msgctxt "Application title"
+msgid "__MANIFEST_APP_TITLE"
+msgstr "Modeling"
+
+msgctxt "Application description"
+msgid "__MANIFEST_APP_DESCRIPTION"
+msgstr ""

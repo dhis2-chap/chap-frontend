@@ -1,0 +1,21 @@
+{
+    "$schema": "https://turborepo.com/schema.json",
+    "tasks": {
+      "start": {
+        "persistent": true,
+        "cache": false
+      },
+      "tsc:check": {
+        "dependsOn": ["^tsc:check"],
+        "outputs": []
+      },
+      "linter:check": {
+        "dependsOn": ["^linter:check"],
+        "outputs": []
+      },
+      "build": {
+        "dependsOn": ["^build"],
+        "outputs": ["build/**"]
+      }
+    }
+  }
