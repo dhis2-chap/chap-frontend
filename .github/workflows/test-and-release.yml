@@ -4,8 +4,8 @@ on: push
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  # Cancel previous runs if not on a release branch
-  cancel-in-progress: ${{ !contains(fromJSON('["refs/heads/main", "ref/heads/main"]'), github.ref) }}
+  # Cancel previous runs if not on main
+  cancel-in-progress: ${{ !contains(fromJSON('["refs/heads/main"]'), github.ref) }}
 
 jobs:
   install:
@@ -16,15 +16,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20.x
-
-      - uses: actions/cache@v4
-        id: yarn-cache
-        with:
-          path: "**/node_modules"
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          cache: 'yarn'
+          cache-dependency-path: '**/yarn.lock'
 
       - name: Install
-        if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
 
   lint-commits:
@@ -38,13 +33,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: 'yarn'
+          cache-dependency-path: '**/yarn.lock'
 
-      - uses: actions/cache@v4
-        id: yarn-cache
-        with:
-          path: "**/node_modules"
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-
+      - run: yarn install --frozen-lockfile
       - run: yarn i18n
 
   lint:
@@ -55,12 +47,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: 'yarn'
+          cache-dependency-path: '**/yarn.lock'
 
-      - uses: actions/cache@v4
-        id: yarn-cache
-        with:
-          path: "**/node_modules"
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+      - run: yarn install --frozen-lockfile
 
       - run: yarn linter:check
 
@@ -72,28 +62,21 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: 'yarn'
+          cache-dependency-path: '**/yarn.lock'
 
-      - uses: actions/cache@v4
-        id: yarn-cache
+      - run: yarn install --frozen-lockfile
+
+      - name: Cache turbo build setup
+        uses: actions/cache@v4
         with:
-          path: "**/node_modules"
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
 
       - run: yarn build
-      
-      - name: Upload UI build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: ui-build
-          path: packages/ui/build
-          if-no-files-found: error
 
-      - name: Upload app build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: app-build
-          path: apps/modeling-app/build
-          if-no-files-found: error
 
   typescript:
     runs-on: ubuntu-latest
@@ -103,25 +86,27 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: 'yarn'
+          cache-dependency-path: '**/yarn.lock'
 
-      - uses: actions/cache@v4
-        id: yarn-cache
-        with:
-          path: "**/node_modules"
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+      - run: yarn install --frozen-lockfile
 
-      - name: Download UI build artifacts
-        uses: actions/download-artifact@v4
+      - name: Restore turbo cache
+        uses: actions/cache@v4
         with:
-          name: ui-build
-          path: packages/ui/build
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
+
+      - run: yarn build
 
       - run: yarn tsc:check
 
   release:
-    needs: [install, lint, i18n, typescript, lint, build]
-    # Skips forks and dependabot PRs
-    if: "!github.event.push.repository.fork"
+    needs: [install, lint, i18n, typescript, build]
+    # Skips forks
+    if: ${{ !github.event.repository.fork }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -131,23 +116,24 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: 'yarn'
+          cache-dependency-path: '**/yarn.lock'
 
-      - uses: actions/cache@v4
-        id: yarn-cache
+      - run: yarn install --frozen-lockfile
+
+      - name: Restore turbo cache
+        uses: actions/cache@v4
         with:
-          path: "**/node_modules"
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
 
-      - name: Download app build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: app-build
-          path: apps/modeling-app/build
+      - run: yarn build
 
-      # `cp-build` moves the modeling app build to where the semantic
-      # release action looks for it
-      # https://github.com/dhis2/action-semantic-release/blob/master/plugins/publish-github.js#L12
+      # Move the modeling app build to where semantic-release expects it
       - run: yarn cp-build
+
       - uses: dhis2/action-semantic-release@master
         with:
           publish-apphub: true
