@@ -90,7 +90,7 @@ jobs:
       - run: yarn tsc:check
 
   release:
-    needs: [install, lint, i18n, typescript, build]
+    needs: [install, lint, typescript, build]
     # Skips forks
     if: ${{ !github.event.repository.fork }}
     runs-on: ubuntu-latest
