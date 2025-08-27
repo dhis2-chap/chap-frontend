@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 
 const usePolling = (callback: () => void, delay: number) => {
     const savedCallback = useRef<() => void>()
-    const intervalId = useRef<NodeJS.Timeout | null>(null)
+    const intervalId = useRef<ReturnType<typeof setInterval> | null>(null)
 
     const startPolling = () => {
         if (intervalId.current === null && document.visibilityState === 'visible') {
