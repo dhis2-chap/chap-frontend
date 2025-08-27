@@ -28,7 +28,7 @@ export const useDatasetValidation = () => {
       })
     }
 
-    if (targetMapping.covariateName !== model.target.name || !targetMapping.dataItemId) {
+    if (targetMapping.covariateName !== model.target.name || !targetMapping.dataItem.id) {
       return i18n.t('Target "{{targetName}}" must be mapped to a data item', {
         targetName: model.target.displayName || model.target.name
       })
@@ -48,7 +48,7 @@ export const useDatasetValidation = () => {
 
       const mapping = covariateMappings?.find(m => m.covariateName === covariate.name)
 
-      if (!mapping || !mapping.dataItemId) {
+      if (!mapping || !mapping.dataItem.id) {
         errors[covariate.name] = i18n.t('Covariate "{{covariateName}}" must be mapped to a data item', {
           covariateName: covariate.displayName || covariate.name
         })
@@ -64,14 +64,14 @@ export const useDatasetValidation = () => {
 
     const missingCovariates = model.covariates?.filter(covariate =>
       !covariateMappings?.some(mapping =>
-        mapping.covariateName === covariate.name && mapping.dataItemId
+        mapping.covariateName === covariate.name && mapping.dataItem.id
       )
     ) || []
 
     const missingTarget = !targetMapping ||
       !model.target ||
       targetMapping.covariateName !== model.target.name ||
-      !targetMapping.dataItemId
+      !targetMapping.dataItem.id
 
     return { missingCovariates, missingTarget }
   }

@@ -1,0 +1,17 @@
+diff a/apps/modeling-app/src/components/NewEvaluationForm/Sections/DatasetConfiguration/hooks/useMappingState.ts b/apps/modeling-app/src/components/NewEvaluationForm/Sections/DatasetConfiguration/hooks/useMappingState.ts	(rejected hunks)
+@@ -1,12 +1,13 @@
+ import { useState } from 'react'
+ import { useFormContext } from 'react-hook-form'
++import { z } from 'zod'
+ import { ModelSpecRead } from '@dhis2-chap/chap-lib'
+-import { EvaluationFormValues, CovariateMapping } from '../../../hooks/useFormController'
++import { EvaluationFormValues, CovariateMapping, dataItemSchema } from '../../../hooks/useFormController'
+ import { useDatasetValidation } from '../useDatasetValidation'
+ 
+ type LocalMappingState = {
+     targetMapping?: CovariateMapping
+-    covariateMappings: Record<string, string>
++    covariateMappings: Record<string, z.infer<typeof dataItemSchema>>
+ }
+ 
+ export const useMappingState = (model: ModelSpecRead) => {

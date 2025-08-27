@@ -1,0 +1,22 @@
+diff a/apps/modeling-app/src/components/NewEvaluationForm/Sections/DatasetConfiguration/FeatureMappingItem/FeatureMappingItem.tsx b/apps/modeling-app/src/components/NewEvaluationForm/Sections/DatasetConfiguration/FeatureMappingItem/FeatureMappingItem.tsx	(rejected hunks)
+@@ -1,14 +1,18 @@
+ import React from 'react'
++import { z } from 'zod'
+ import { FeatureType } from '@dhis2-chap/chap-lib'
+ import SearchSelectField from '../../../../../features/search-dataitem/SearchSelectField'
+ import styles from './FeatureMappingItem.module.css'
++import { dataItemSchema, dimensionItemTypeSchema } from '../../../hooks/useFormController'
+ 
+ type Props = {
+     feature: FeatureType
+-    onMapping: (featureName: string, dataItemId: string) => void
++    onMapping: (featureName: string, dataItemId: string, dataItemDisplayName: string, dimensionItemType: z.infer<typeof dimensionItemTypeSchema>) => void
++    existingMapping?: z.infer<typeof dataItemSchema>
++    onResetField: () => void
+ }
+ 
+-export const FeatureMappingItem = ({ feature, onMapping }: Props) => {
++export const FeatureMappingItem = ({ feature, onMapping, existingMapping, onResetField }: Props) => {
+     const createFeature = (feature: FeatureType) => ({
+         id: feature.name || feature.displayName,
+         name: feature.displayName,

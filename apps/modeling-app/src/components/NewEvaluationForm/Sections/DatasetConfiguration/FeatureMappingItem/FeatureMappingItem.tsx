@@ -1,14 +1,23 @@
 import React from 'react'
+import { z } from 'zod'
 import { FeatureType } from '@dhis2-chap/ui'
 import SearchSelectField from '../../../../../features/search-dataitem/SearchSelectField'
 import styles from './FeatureMappingItem.module.css'
+import { dataItemSchema, dimensionItemTypeSchema } from '../../../hooks/useFormController'
 
 type Props = {
     feature: FeatureType
-    onMapping: (featureName: string, dataItemId: string) => void
+    onMapping: (
+        featureName: string,
+        dataItemId: string,
+        dataItemDisplayName: string,
+        dimensionItemType: z.infer<typeof dimensionItemTypeSchema>
+    ) => void
+    existingMapping?: z.infer<typeof dataItemSchema>
+    onResetField: () => void
 }
 
-export const FeatureMappingItem = ({ feature, onMapping }: Props) => {
+export const FeatureMappingItem = ({ feature, onMapping, existingMapping, onResetField }: Props) => {
     const createFeature = (feature: FeatureType) => ({
         id: feature.name || feature.displayName,
         name: feature.displayName,
@@ -25,12 +34,16 @@ export const FeatureMappingItem = ({ feature, onMapping }: Props) => {
         <div className={styles.mappingItem}>
             <SearchSelectField
                 feature={createFeature(feature)}
-                onChangeSearchSelectField={(_, dataItemId) => {
+                onChangeSearchSelectField={(_, dataItemId, dataItemDisplayName, dimensionItemType) => {
                     onMapping(
                         feature.name || feature.displayName,
-                        dataItemId
+                        dataItemId,
+                        dataItemDisplayName,
+                        dimensionItemType
                     )
                 }}
+                defaultValue={existingMapping}
+                onResetField={onResetField}
             />
             {shouldShowDescription(feature) && (
                 <p className={styles.featureDescription}>

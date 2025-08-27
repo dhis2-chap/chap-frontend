@@ -53,6 +53,10 @@ const NewPredictionForm = ({
         setDataLayers(newLayers)
     }, [selecetedModel])
 
+    const resetDataLayer = (featureName: string) => {
+        setDataLayers(prev => prev.filter(layer => layer.feature !== featureName))
+    }
+
     return (
         <>
             <div className={styles.newPredictionForm}>
@@ -69,7 +73,6 @@ const NewPredictionForm = ({
                         label="Name of prediction"
                         value={datasetName}
                         onChange={(e) => setDatasetName(e.value)}
-                        // Is this supposed to be hardcoded?
                         placeholder={i18n.t('Prediction for Northern Province')}
                     />
                     <SelectModel
@@ -80,6 +83,7 @@ const NewPredictionForm = ({
                         setDataLayers={setDataLayers}
                         datasetLayers={dataLayers}
                         predictMode={true}
+                        onResetDataLayer={resetDataLayer}
                     />
                     <TimePeriodeSelector
                         setTimePeriods={setSelectedTimePeriodes}
