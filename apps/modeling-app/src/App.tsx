@@ -5,7 +5,6 @@ import {
     Outlet,
 } from 'react-router-dom'
 import ErrorPage from './components/ErrorPage'
-import React from 'react'
 import './locales'
 import './App.module.css'
 import PageWrapper from './components/PageWrapper'
@@ -27,12 +26,22 @@ import { JobsPage } from './pages/JobsPage'
 import { EvaluationComparePage } from './pages/EvaluationCompare'
 import { GetStartedPage } from './pages/GetStartedPage'
 import { SyncUrlWithGlobalShell } from './utils/syncUrlWithGlobalShell'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 export type RouteHandle = {
     fullWidth?: boolean
     /* whether to automatically collapse the sidebar when route is active*/
     collapseSidebar?: boolean
 }
+
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            refetchOnWindowFocus: false,
+            retry: false,
+        },
+    },
+})
 
 const router = createHashRouter([
     {
@@ -136,12 +145,14 @@ const router = createHashRouter([
 const App = () => {
     return (
         <>
-            <CssReset />
-            <CssVariables theme spacers colors elevations />
-            <SetChapUrl>
-                <RouterProvider router={router} />
-            </SetChapUrl>
-            <ReactQueryDevtools position="bottom-right" />
+            <QueryClientProvider client={queryClient}>
+                <CssReset />
+                <CssVariables theme spacers colors elevations />
+                <SetChapUrl>
+                    <RouterProvider router={router} />
+                </SetChapUrl>
+                <ReactQueryDevtools position="bottom-right" />
+            </QueryClientProvider>
         </>
     )
 }

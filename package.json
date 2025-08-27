@@ -1,7 +1,7 @@
 {
     "name": "chap-frontend",
     "main": "index.js",
-    "packageManager": "yarn@1.22.19",
+    "packageManager": "pnpm@10.14.0",
     "license": "MIT",
     "private": true,
     "workspaces": [
@@ -12,11 +12,13 @@
         "linter:check": "turbo linter:check --parallel",
         "tsc:check": "turbo tsc:check --parallel",
         "format": "d2-style apply",
-        "start": "turbo start --parallel",
+        "start": "turbo start",
         "build": "turbo build",
         "cp-build": "rm -rf ./build && cp -r apps/modeling-app/build ."
     },
-    "dependencies": {},
+    "dependencies": {
+        "@dhis2/app-runtime": "^3.14.5"
+    },
     "devDependencies": {
         "@dhis2/cli-style": "^10.7.5",
         "@eslint/js": "^9.26.0",
@@ -26,11 +28,16 @@
         "globals": "^16.1.0",
         "typescript": "^5.7.2",
         "turbo": "^2.5.6",
-        "typescript-eslint": "^8.33.0"
+        "typescript-eslint": "^8.33.0",
+        "react": "^18.3.1",
+        "react-dom": "^18.3.1",
+        "@types/react": "^18.3.1",
+        "@types/react-dom": "^18.3.1"
     },
     "resolutions": {
         "i18next": "20.5.0",
-        "@dhis2/app-runtime": "3.13.0"
+        "@dhis2/app-runtime": "3.13.0",
+        "@dhis2/cli-app-scripts": "12.7.0-alpha.14"
     },
     "version": "2.2.3"
 }
