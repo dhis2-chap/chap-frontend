@@ -1,7 +1,7 @@
 {
     "name": "chap-frontend",
     "main": "index.js",
-    "packageManager": "yarn@1.22.19",
+    "packageManager": "pnpm@10.14.0",
     "license": "MIT",
     "private": true,
     "workspaces": [
@@ -12,7 +12,7 @@
         "linter:check": "turbo linter:check --parallel",
         "tsc:check": "turbo tsc:check --parallel",
         "format": "d2-style apply",
-        "start": "turbo start --parallel",
+        "start:app": "turbo start --parallel",
         "build": "turbo build",
         "cp-build": "rm -rf ./build && cp -r apps/modeling-app/build ."
     },
@@ -30,7 +30,8 @@
     },
     "resolutions": {
         "i18next": "20.5.0",
-        "@dhis2/app-runtime": "3.13.0"
+        "@dhis2/app-runtime": "3.13.0",
+        "@dhis2/cli-app-scripts": "12.7.0-alpha.14"
     },
     "version": "2.2.3"
 }

@@ -12,7 +12,7 @@ const config = {
         app: './src/App.tsx',
     },
 
-    viteConfigExtensions: './viteConfigExtensions.mjs',
+    viteConfigExtensions: './viteConfigExtensions.mts',
 }
 
 module.exports = config
