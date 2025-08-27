@@ -140,7 +140,7 @@ jobs:
       # Move the modeling app build to where semantic-release expects it
       - run: pnpm cp-build
 
-      - uses: dhis2/action-semantic-release@master
+      - uses: dhis2/action-semantic-release@pnpm
         with:
           publish-apphub: true
           publish-github: true

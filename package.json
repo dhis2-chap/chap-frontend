@@ -12,11 +12,13 @@
         "linter:check": "turbo linter:check --parallel",
         "tsc:check": "turbo tsc:check --parallel",
         "format": "d2-style apply",
-        "start:app": "turbo start --parallel",
+        "start": "turbo start",
         "build": "turbo build",
         "cp-build": "rm -rf ./build && cp -r apps/modeling-app/build ."
     },
-    "dependencies": {},
+    "dependencies": {
+        "@dhis2/app-runtime": "^3.14.5"
+    },
     "devDependencies": {
         "@dhis2/cli-style": "^10.7.5",
         "@eslint/js": "^9.26.0",
