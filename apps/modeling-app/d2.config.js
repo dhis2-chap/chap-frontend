@@ -11,6 +11,8 @@ const config = {
     entryPoints: {
         app: './src/App.tsx',
     },
+
+    viteConfigExtensions: './viteConfigExtensions.mjs',
 }
 
 module.exports = config
