@@ -1,3 +1,16 @@
+## [2.2.4](https://github.com/dhis2-chap/chap-frontend/compare/v2.2.3...v2.2.4) (2025-08-29)
+
+
+### Bug Fixes
+
+* add data mapping to form state ([#89](https://github.com/dhis2-chap/chap-frontend/issues/89)) ([ddc03bc](https://github.com/dhis2-chap/chap-frontend/commit/ddc03bcd99235cf822685cf8be066679adfdc25c)), closes [#78](https://github.com/dhis2-chap/chap-frontend/issues/78)
+* add turborepo [skip release] ([25fdcce](https://github.com/dhis2-chap/chap-frontend/commit/25fdcce5a5721dd6c645328804380049cd80e960))
+
+
+### Features
+
+* add viteConfigExtensions to d2.config.js files [skip release] ([952c243](https://github.com/dhis2-chap/chap-frontend/commit/952c24399c1e8cfb2e9197cd7836b73ed8b9d469))
+
 ## [2.2.3](https://github.com/dhis2-chap/chap-frontend-monorepo/compare/v2.2.2...v2.2.3) (2025-08-20)
 
 
