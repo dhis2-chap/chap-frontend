@@ -42,10 +42,10 @@ export const InspectDatasetModal = ({
     const calculateDataDimensions = () => {
         const dataDimensions = [
             {
-                id: targetMapping.dataItemId,
+                id: targetMapping.dataItem.id,
             },
             ...covariateMappings.map((mapping) => ({
-                id: mapping.dataItemId,
+                id: mapping.dataItem.id,
             })),
         ]
         return dataDimensions

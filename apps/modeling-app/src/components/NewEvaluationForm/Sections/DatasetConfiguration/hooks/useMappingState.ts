@@ -1,12 +1,13 @@
 import { useState } from 'react'
 import { useFormContext } from 'react-hook-form'
+import { z } from 'zod'
 import { ModelSpecRead } from '@dhis2-chap/ui'
-import { EvaluationFormValues, CovariateMapping } from '../../../hooks/useFormController'
+import { EvaluationFormValues, CovariateMapping, dataItemSchema } from '../../../hooks/useFormController'
 import { useDatasetValidation } from '../useDatasetValidation'
 
 type LocalMappingState = {
     targetMapping?: CovariateMapping
-    covariateMappings: Record<string, string>
+    covariateMappings: Record<string, z.infer<typeof dataItemSchema>>
 }
 
 export const useMappingState = (model: ModelSpecRead) => {
@@ -16,9 +17,13 @@ export const useMappingState = (model: ModelSpecRead) => {
     const [localState, setLocalState] = useState<LocalMappingState>(() => {
         const existingMappings = methods.getValues('covariateMappings') || []
         const covariateMappingsObject = existingMappings.reduce((acc, mapping) => {
-            acc[mapping.covariateName] = mapping.dataItemId
+            acc[mapping.covariateName] = {
+                id: mapping.dataItem.id,
+                displayName: mapping.dataItem.displayName,
+                dimensionItemType: mapping.dataItem.dimensionItemType,
+            }
             return acc
-        }, {} as Record<string, string>)
+        }, {} as Record<string, z.infer<typeof dataItemSchema>>)
 
         return {
             targetMapping: methods.getValues('targetMapping'),
@@ -26,30 +31,55 @@ export const useMappingState = (model: ModelSpecRead) => {
         }
     })
 
-    const handleTargetMapping = (targetName: string, dataItemId: string) => {
+    const handleTargetMapping = (targetName: string, dataItemId: string, dataItemDisplayName: string, dimensionItemType: z.infer<typeof dataItemSchema>['dimensionItemType']) => {
         setLocalState(prev => ({
             ...prev,
             targetMapping: {
                 covariateName: targetName,
-                dataItemId,
+                dataItem: {
+                    id: dataItemId,
+                    displayName: dataItemDisplayName,
+                    dimensionItemType: dimensionItemType,
+                },
             }
         }))
     }
 
-    const handleCovariateMapping = (covariateName: string, dataItemId: string) => {
+    const handleCovariateMapping = (covariateName: string, dataItemId: string, dataItemDisplayName: string, dimensionItemType: z.infer<typeof dataItemSchema>['dimensionItemType']) => {
         setLocalState(prev => ({
             ...prev,
             covariateMappings: {
                 ...prev.covariateMappings,
-                [covariateName]: dataItemId
+                [covariateName]: {
+                    id: dataItemId,
+                    displayName: dataItemDisplayName,
+                    dimensionItemType: dimensionItemType,
+                }
             }
         }))
     }
 
-    // Convert local state to format expected by validation functions
+    const resetCovariateMapping = (covariateName: string) => {
+        setLocalState(prev => {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const { [covariateName]: _featureToReset, ...rest } = prev.covariateMappings
+            return {
+                ...prev,
+                covariateMappings: rest
+            }
+        })
+    }
+
     const getLocalStateForValidation = () => {
         const covariateMappingsArray = Object.entries(localState.covariateMappings).map(
-            ([covariateName, dataItemId]) => ({ covariateName, dataItemId })
+            ([covariateName, dataItem]) => ({
+                covariateName,
+                dataItem: {
+                    id: dataItem.id,
+                    displayName: dataItem.displayName,
+                    dimensionItemType: dataItem.dimensionItemType,
+                }
+            })
         )
         return {
             targetMapping: localState.targetMapping,
@@ -86,5 +116,6 @@ export const useMappingState = (model: ModelSpecRead) => {
         areAllCovariatesMapped,
         isFormValid,
         getMappingsForSubmission,
+        resetCovariateMapping,
     }
 } 

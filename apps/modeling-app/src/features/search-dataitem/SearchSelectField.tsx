@@ -1,14 +1,16 @@
 import React, { useRef, useState } from 'react'
+import { z } from 'zod'
 import i18n from '@dhis2/d2-i18n';
 import styles from './SearchSelectField.module.css'
 import { Label, Layer, Popper, IconChevronDown16, IconCross16 } from '@dhis2/ui'
 import { useApiDataQuery } from '../../utils/useApiDataQuery'
 import { useDebounce } from '../../hooks/useDebounce'
+import { dimensionItemTypeSchema } from '../../components/NewEvaluationForm/hooks/useFormController';
 
 interface Option {
     id: string
     displayName: string
-    dimensionItemType: string
+    dimensionItemType: z.infer<typeof dimensionItemTypeSchema>
 }
 
 interface DataItemsResponse {
@@ -27,8 +29,15 @@ interface SearchSelectFieldProps {
     onChangeSearchSelectField: (
         feature: Feature,
         dataItemId: string,
-        dataItemDisplayName: string
+        dataItemDisplayName: string,
+        dimensionItemType: z.infer<typeof dimensionItemTypeSchema>
     ) => void
+    defaultValue?: {
+        id: string
+        displayName: string
+        dimensionItemType: string | null | undefined
+    }
+    onResetField: () => void
 }
 
 const DIMENSION_ITEM_TYPE_LABELS = {
@@ -41,9 +50,20 @@ const DIMENSION_ITEM_TYPE_LABELS = {
 const SearchSelectField = ({
     feature,
     onChangeSearchSelectField,
+    defaultValue,
+    onResetField,
 }: SearchSelectFieldProps) => {
     const [searchQuery, setSearchQuery] = useState<string>('')
-    const [selectedOption, setSelectedOption] = useState<Option | null>(null)
+    const [selectedOption, setSelectedOption] = useState<Option | null>(() => {
+        if (defaultValue && defaultValue.id && defaultValue.displayName) {
+            return {
+                id: defaultValue.id,
+                displayName: defaultValue.displayName,
+                dimensionItemType: defaultValue.dimensionItemType as z.infer<typeof dimensionItemTypeSchema>,
+            }
+        }
+        return null
+    })
     const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false)
 
     const debouncedQuery = useDebounce(searchQuery, 300)
@@ -100,14 +120,14 @@ const SearchSelectField = ({
         setSelectedOption(option)
         setSearchQuery('')
         setIsDropdownOpen(false)
-        onChangeSearchSelectField(feature, option.id, option.displayName)
+        onChangeSearchSelectField(feature, option.id, option.displayName, option.dimensionItemType)
     }
 
     const handleClearSelection = (event: React.MouseEvent) => {
-        event.stopPropagation() // Prevent trigger click
+        event.stopPropagation()
         setSelectedOption(null)
         setSearchQuery('')
-        onChangeSearchSelectField(feature, '', '')
+        onResetField()
     }
 
     const renderList = () => {

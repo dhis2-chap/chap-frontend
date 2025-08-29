@@ -61,6 +61,10 @@ const NewDatasetForm = ({ onDrawerSubmit }: NewDatasetFormProps) => {
     )
     const [datasetName, setDatasetName] = useState<string | undefined>('')
 
+    const resetDataLayer = (featureName: string) => {
+        setDataLayers(prev => prev.filter(layer => layer.feature !== featureName))
+    }
+
     return (
         <>
             <div className={styles.formWrapper}>
@@ -75,6 +79,7 @@ const NewDatasetForm = ({ onDrawerSubmit }: NewDatasetFormProps) => {
                 <SelectDataLine
                     setDataLayers={setDataLayers}
                     datasetLayers={dataLayers}
+                    onResetDataLayer={resetDataLayer}
                 />
                 <TimePeriodeSelector setTimePeriods={setSelectedTimePeriodes} />
                 <OrgUnitSelector

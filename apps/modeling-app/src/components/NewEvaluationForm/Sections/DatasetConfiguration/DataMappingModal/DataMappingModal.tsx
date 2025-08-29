@@ -26,10 +26,12 @@ export const DataMappingModal = ({
     onConfirm,
 }: Props) => {
     const {
+        localState,
         handleTargetMapping,
         handleCovariateMapping,
         isFormValid,
         getMappingsForSubmission,
+        resetCovariateMapping,
     } = useMappingState(model)
 
     const handleConfirm = () => {
@@ -58,6 +60,8 @@ export const DataMappingModal = ({
                             <FeatureMappingItem
                                 feature={model.target}
                                 onMapping={handleTargetMapping}
+                                existingMapping={localState.targetMapping?.dataItem}
+                                onResetField={() => resetCovariateMapping(model.target.name || '')}
                             />
                         </div>
                     )}
@@ -74,6 +78,8 @@ export const DataMappingModal = ({
                                     key={covariate.name || index}
                                     feature={covariate}
                                     onMapping={handleCovariateMapping}
+                                    existingMapping={localState.covariateMappings[covariate.name || '']}
+                                    onResetField={() => resetCovariateMapping(covariate.name || '')}
                                 />
                             ))}
                         </div>
