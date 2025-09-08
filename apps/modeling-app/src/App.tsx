@@ -9,7 +9,6 @@ import React from 'react'
 import './locales'
 import './App.module.css'
 import PageWrapper from './components/PageWrapper'
-import EvaluationPageLegacy from './pages/EvaluationPageLegacy'
 import ModelTemplatesPage from './pages/ModelTemplatesPage'
 import PredictionOverview from './features/predictions-overview/PredictionOverview'
 import { SetChapUrl } from './features/route-api/SetChapUrl'
@@ -84,10 +83,6 @@ const router = createHashRouter([
                                 } satisfies RouteHandle,
                             },
                         ],
-                    },
-                    {
-                        path: '/evaluate-old',
-                        element: <EvaluationPageLegacy />,
                     },
                     {
                         path: '/jobs',
