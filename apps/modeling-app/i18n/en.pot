@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2025-08-27T13:56:37.888Z\n"
-"PO-Revision-Date: 2025-08-27T13:56:37.889Z\n"
+"POT-Creation-Date: 2025-09-08T18:51:48.106Z\n"
+"PO-Revision-Date: 2025-09-08T18:51:48.108Z\n"
 
 msgid "View"
 msgstr "View"
@@ -1068,6 +1068,12 @@ msgstr "Start month"
 
 msgid "End month"
 msgstr "End month"
+
+msgid "Evaluation details"
+msgstr "Evaluation details"
+
+msgid "Inspect a single evaluation and view its visualizations."
+msgstr "Inspect a single evaluation and view its visualizations."
 
 msgid "Error loading evaluations"
 msgstr "Error loading evaluations"

@@ -20,6 +20,7 @@ import { RouteValidator } from './components/RouteValidator'
 import InfoAboutReportingBugs from './features/common-features/InfoAboutReportingBugs/InfoAboutReportingBugs'
 import WarnAboutIncompatibleVersion from './features/common-features/WarnAboutIncompatibleVersion/WarnAboutIncompatibleVersion'
 import { EvaluationPage } from './pages/EvaluationPage'
+import { EvaluationDetailsPage } from './pages/EvaluationDetailsPage'
 import { ChapValidator } from './components/ChapValidator'
 import { NewEvaluationPage } from './pages/NewEvaluationPage'
 import { JobsPage } from './pages/JobsPage'
@@ -67,6 +68,10 @@ const router = createHashRouter([
                             {
                                 index: true,
                                 element: <EvaluationPage />,
+                            },
+                            {
+                                path: ':evaluationId',
+                                element: <EvaluationDetailsPage />,
                             },
                             {
                                 path: 'compare',

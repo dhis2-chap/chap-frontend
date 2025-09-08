@@ -75,3 +75,4 @@ export { CrudService } from './services/CrudService';
 export { DebugService } from './services/DebugService';
 export { DefaultService } from './services/DefaultService';
 export { JobsService } from './services/JobsService';
+export { VisualizationService } from './services/VisualizationService';
