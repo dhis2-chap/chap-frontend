@@ -3,25 +3,25 @@ import { ApiError, VisualizationService } from "@dhis2-chap/ui";
 
 type UseVisualizationParams = {
     evaluationId?: number;
-    visualizationName: string;
+    visualizationId: string;
     metricId: string;
 };
 
 export const useCustomVisualization = ({
     evaluationId,
-    visualizationName,
+    visualizationId,
     metricId,
 }: UseVisualizationParams) => {
     const { data, isLoading, error } = useQuery<unknown, ApiError>({
         queryKey: [
             "custom-visualizations",
             evaluationId,
-            visualizationName,
+            visualizationId,
             metricId,
         ],
         queryFn: () =>
             VisualizationService.generateVisualizationVisualizationVisualizationNameBacktestIdMetricIdGet(
-                visualizationName,
+                visualizationId,
                 Number(evaluationId),
                 metricId
             ),

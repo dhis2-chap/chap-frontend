@@ -23,31 +23,28 @@ export const useEvaluationVisualizationParams = (
     const defaultMetricId =
         options.defaultMetricId ?? options.allowedMetricIds[0]
 
-    const vizParam = searchParams.get(PARAM_KEYS.visualization) ?? undefined
-    const metricParam = searchParams.get(PARAM_KEYS.metric) ?? undefined
+    const visualizationFromUrl = searchParams.get(PARAM_KEYS.visualization) ?? undefined
+    const metricFromUrl = searchParams.get(PARAM_KEYS.metric) ?? undefined
 
-    const selectedVisualizationId = options.allowedVisualizationIds.includes(
-        vizParam ?? ''
-    )
-        ? (vizParam as string)
+    const selectedVisualizationId = options.allowedVisualizationIds.includes(visualizationFromUrl ?? '')
+        ? (visualizationFromUrl as string)
         : defaultVisualizationId
 
-    const selectedMetricId = options.allowedMetricIds.includes(metricParam ?? '')
-        ? (metricParam as string)
+    const selectedMetricId = options.allowedMetricIds.includes(metricFromUrl ?? '')
+        ? (metricFromUrl as string)
         : defaultMetricId
 
-    // Ensure URL contains valid values; backfill or correct invalid values
     useEffect(() => {
         const params = new URLSearchParams(searchParams)
         let updated = false
 
-        if (!vizParam || !options.allowedVisualizationIds.includes(vizParam)) {
+        if (!visualizationFromUrl || !options.allowedVisualizationIds.includes(visualizationFromUrl)) {
             if (selectedVisualizationId) {
                 params.set(PARAM_KEYS.visualization, selectedVisualizationId)
                 updated = true
             }
         }
-        if (!metricParam || !options.allowedMetricIds.includes(metricParam)) {
+        if (!metricFromUrl || !options.allowedMetricIds.includes(metricFromUrl)) {
             if (selectedMetricId) {
                 params.set(PARAM_KEYS.metric, selectedMetricId)
                 updated = true
@@ -56,11 +53,9 @@ export const useEvaluationVisualizationParams = (
         if (updated) {
             setSearchParams(params, { replace: true })
         }
-        // We intentionally depend on primitive values to avoid loops
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
-        vizParam,
-        metricParam,
+        visualizationFromUrl,
+        metricFromUrl,
         selectedVisualizationId,
         selectedMetricId,
         setSearchParams,

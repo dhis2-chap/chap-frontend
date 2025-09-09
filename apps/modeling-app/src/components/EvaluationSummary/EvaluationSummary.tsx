@@ -40,7 +40,7 @@ export const EvaluationSummary: React.FC<EvaluationSummaryProps> = ({ evaluation
         error: visualizationError,
     } = useCustomVisualization({
         evaluationId,
-        visualizationName: selectedVisualizationId,
+        visualizationId: selectedVisualizationId,
         metricId: selectedMetricId,
     })
 
