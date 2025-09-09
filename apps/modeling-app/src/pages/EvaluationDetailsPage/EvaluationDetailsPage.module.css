@@ -1,0 +1,28 @@
+.loadingContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60vh;
+    text-align: center;
+}
+
+.visualizationContainer {
+    width: 100%;
+    height: 60vh;
+}
+
+.vegaEmbed {
+    width: 100%;
+    height: 100%;
+}
+
+.controlsRow {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin: 8px 0 12px;
+}
+
+.singleSelectContainer {
+    min-width: 260px;
+}
