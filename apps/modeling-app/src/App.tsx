@@ -70,10 +70,6 @@ const router = createHashRouter([
                                 element: <EvaluationPage />,
                             },
                             {
-                                path: ':evaluationId',
-                                element: <EvaluationDetailsPage />,
-                            },
-                            {
                                 path: 'compare',
                                 handle: {
                                     fullWidth: true,
@@ -86,6 +82,13 @@ const router = createHashRouter([
                                 handle: {
                                     collapseSidebar: true,
                                 } satisfies RouteHandle,
+                            },
+                            {
+                                path: ':evaluationId',
+                                handle: {
+                                    collapseSidebar: true,
+                                } satisfies RouteHandle,
+                                element: <EvaluationDetailsPage />,
                             },
                         ],
                     },
