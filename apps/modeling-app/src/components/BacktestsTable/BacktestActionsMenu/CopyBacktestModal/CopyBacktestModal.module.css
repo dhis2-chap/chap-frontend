@@ -1,0 +1,9 @@
+.description {
+  margin-bottom: 16px;
+}
+
+.attributesList {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}

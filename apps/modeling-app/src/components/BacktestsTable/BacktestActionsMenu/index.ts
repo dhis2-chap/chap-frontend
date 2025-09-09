@@ -1,1 +1,2 @@
-export { BacktestActionsMenu } from './BacktestActionsMenu'; 
+export { BacktestActionsMenu } from './BacktestActionsMenu';
+export * from './CopyBacktestModal';
