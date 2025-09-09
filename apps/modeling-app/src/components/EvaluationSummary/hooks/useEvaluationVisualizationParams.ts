@@ -6,7 +6,7 @@ export const PARAM_KEYS = {
     metric: 'metric',
 } as const
 
-type UseEvaluationVisualizationParamsOptions = {
+type Props = {
     allowedVisualizationIds: string[]
     allowedMetricIds: string[]
     defaultVisualizationId?: string
@@ -14,7 +14,7 @@ type UseEvaluationVisualizationParamsOptions = {
 }
 
 export const useEvaluationVisualizationParams = (
-    options: UseEvaluationVisualizationParamsOptions
+    options: Props
 ) => {
     const [searchParams, setSearchParams] = useSearchParams()
 
