@@ -3,10 +3,10 @@ import i18n from '@dhis2/d2-i18n'
 import { NewEvaluationForm } from '../../components/NewEvaluationForm'
 import { PageHeader } from '../../features/common-features/PageHeader/PageHeader'
 import { CircularLoader } from '@dhis2/ui'
-import { useEvaluationFormState } from './hooks/useEvaluationFormState'
+import { useInitialFormState } from './hooks/useInitialFormState'
 
 export const NewEvaluationPage = () => {
-  const { initialValues, isLoading } = useEvaluationFormState()
+  const { initialValues, isLoading } = useInitialFormState()
 
   return (
     <div>

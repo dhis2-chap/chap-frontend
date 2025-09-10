@@ -13,16 +13,16 @@ const locationStateInnerSchema = z.object({
   modelId: z.string().optional(),
 })
 
-type EvaluationFormLocationState = z.infer<typeof locationStateInnerSchema>
+type InitialFormLocationState = z.infer<typeof locationStateInnerSchema>
 
 const evaluationFormLocationStateSchema = locationStateInnerSchema.optional()
 
-export const useEvaluationFormState = () => {
+export const useInitialFormState = () => {
   const location = useLocation()
 
   const validationResult = evaluationFormLocationStateSchema.safeParse(location.state)
 
-  const locationState: EvaluationFormLocationState | undefined = validationResult.success
+  const locationState: InitialFormLocationState | undefined = validationResult.success
     ? validationResult.data
     : undefined
 
