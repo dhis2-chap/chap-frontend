@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2025-08-27T13:56:37.888Z\n"
-"PO-Revision-Date: 2025-08-27T13:56:37.889Z\n"
+"POT-Creation-Date: 2025-09-10T19:30:57.217Z\n"
+"PO-Revision-Date: 2025-09-10T19:30:57.218Z\n"
 
 msgid "View"
 msgstr "View"
@@ -609,6 +609,9 @@ msgstr "Predict"
 msgid "Jobs"
 msgstr "Jobs"
 
+msgid "Models"
+msgstr "Models"
+
 msgid "Settings"
 msgstr "Settings"
 
@@ -1102,6 +1105,16 @@ msgstr "Active jobs"
 
 msgid "View and manage currently running jobs and their status."
 msgstr "View and manage currently running jobs and their status."
+
+msgid ""
+"Manage your model templates and configured models. View, create, and "
+"configure predictive models for your data analysis needs."
+msgstr ""
+"Manage your model templates and configured models. View, create, and "
+"configure predictive models for your data analysis needs."
+
+msgid "Model templates and configured models will be displayed here."
+msgstr "Model templates and configured models will be displayed here."
 
 msgid "Create a new evaluation to assess the performance of a model"
 msgstr "Create a new evaluation to assess the performance of a model"
