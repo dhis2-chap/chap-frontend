@@ -1,9 +1,9 @@
 import { ApiError, DefaultService, ModelSpec } from "@dhis2-chap/ui";
 import { useQuery } from "@tanstack/react-query";
 
-export const useAvailableModels = () => {
+export const useAvailableModelTemplates = () => {
     const { data, error, isLoading } = useQuery<ModelSpec[], ApiError>({
-        queryKey: ['availableModels'],
+        queryKey: ['modelTemplatesAvailable'],
         queryFn: () => DefaultService.listModelsListModelsGet(),
         staleTime: Infinity,
         cacheTime: Infinity,
@@ -11,7 +11,7 @@ export const useAvailableModels = () => {
     });
 
     return {
-        models: data,
+        modelTemplates: data,
         error,
         isLoading,
     };
