@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
 import { z } from 'zod'
 import { useOrgUnitsById } from '../../../hooks/useOrgUnitsById'
@@ -20,33 +20,33 @@ const evaluationFormLocationStateSchema = locationStateInnerSchema.optional()
 export const useInitialFormState = () => {
   const location = useLocation()
 
-  const validationResult = evaluationFormLocationStateSchema.safeParse(location.state)
+  const {
+    data: locationState,
+    error,
+  } = evaluationFormLocationStateSchema.safeParse(location.state)
 
-  const locationState: InitialFormLocationState | undefined = validationResult.success
-    ? validationResult.data
-    : undefined
-
-  if (!validationResult.success && location.state) {
-    // eslint-disable-next-line no-console
-    console.warn('Invalid location state:', validationResult.error.errors)
-  }
-
-  const { data: orgUnitsData, isInitialLoading: isOrgUnitsInitialLoading } = useOrgUnitsById(locationState?.orgUnits || [])
+  const {
+    data: orgUnitsData,
+    isInitialLoading: isOrgUnitsInitialLoading,
+  } = useOrgUnitsById(locationState?.orgUnits || [])
 
   const initialValues: Partial<EvaluationFormValues> = useMemo(
     () => ({
       name: locationState?.name || '',
-      periodType: (locationState?.periodType) || PERIOD_TYPES.MONTH,
+      periodType: locationState?.periodType || PERIOD_TYPES.MONTH,
       fromDate: locationState?.fromDate || '',
       toDate: locationState?.toDate || '',
-      orgUnits: (orgUnitsData?.organisationUnits || []),
+      orgUnits: orgUnitsData?.organisationUnits || [],
       modelId: locationState?.modelId || '',
-    }),
-    [locationState, orgUnitsData]
-  )
+    }), [locationState, orgUnitsData]);
 
-  const isLoading =
-    !!locationState?.orgUnits && locationState.orgUnits.length > 0 && isOrgUnitsInitialLoading
+  useEffect(() => {
+    if (error) {
+      console.warn('Invalid location state:', error.errors)
+    }
+  }, [error])
+
+  const isLoading = !!locationState?.orgUnits?.length && isOrgUnitsInitialLoading
 
   return {
     initialValues,
