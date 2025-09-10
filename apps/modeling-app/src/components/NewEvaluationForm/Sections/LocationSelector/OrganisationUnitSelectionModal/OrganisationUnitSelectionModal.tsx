@@ -30,6 +30,7 @@ export const OrganisationUnitSelectionModal = ({
     onConfirm,
 }: Props) => {
     const [pendingOrgUnits, setPendingOrgUnits] = useState<OrganisationUnit[]>(selectedOrgUnits)
+    debugger
 
     const handleOrgUnitSelect = (e: SelectionChangeEvent) => {
         setPendingOrgUnits(e.items)

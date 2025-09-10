@@ -55,7 +55,11 @@ export const LocationSelector = ({
                 >
                     {i18n.t('Select organisation units')}
                 </Button>
-                {errors.orgUnits && <p className={styles.errorText}>{errors.orgUnits.message}</p>}
+                {errors.orgUnits && (
+                    <p className={styles.errorText}>
+                        {errors.orgUnits.message}
+                    </p>
+                )}
             </div>
 
             {isOrgUnitModalOpen && (

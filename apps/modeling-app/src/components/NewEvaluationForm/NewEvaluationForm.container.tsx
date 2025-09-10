@@ -29,7 +29,7 @@ export const NewEvaluationForm = ({ initialValues }: NewEvaluationFormProps = {}
         closeSummaryModal,
         handleDryRun,
         isValidationLoading,
-    } = useFormController(initialValues as any)
+    } = useFormController(initialValues)
 
     const {
         showConfirmModal,

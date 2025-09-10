@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2025-08-27T13:56:37.888Z\n"
-"PO-Revision-Date: 2025-08-27T13:56:37.889Z\n"
+"POT-Creation-Date: 2025-09-09T11:59:32.174Z\n"
+"PO-Revision-Date: 2025-09-09T11:59:32.176Z\n"
 
 msgid "View"
 msgstr "View"
@@ -14,8 +14,41 @@ msgstr "View"
 msgid "Rename"
 msgstr "Rename"
 
+msgid "Copy"
+msgstr "Copy"
+
 msgid "Delete"
 msgstr "Delete"
+
+msgid "{{name}} (Copy)"
+msgstr "{{name}} (Copy)"
+
+msgid "Copy evaluation"
+msgstr "Copy evaluation"
+
+msgid "Cancel"
+msgstr "Cancel"
+
+msgid "Failed to load evaluation data. Please try again."
+msgstr "Failed to load evaluation data. Please try again."
+
+msgid "Close"
+msgstr "Close"
+
+msgid "Name"
+msgstr "Name"
+
+msgid "Untitled"
+msgstr "Untitled"
+
+msgid "Model"
+msgstr "Model"
+
+msgid "Organisation units"
+msgstr "Organisation units"
+
+msgid "Copy to new evaluation"
+msgstr "Copy to new evaluation"
 
 msgid "Delete evaluation"
 msgstr "Delete evaluation"
@@ -27,17 +60,11 @@ msgstr ""
 "Are you sure you want to delete this evaluation? This action cannot be "
 "undone."
 
-msgid "Cancel"
-msgstr "Cancel"
-
 msgid "Name is required"
 msgstr "Name is required"
 
 msgid "Rename evaluation"
 msgstr "Rename evaluation"
-
-msgid "Name"
-msgstr "Name"
 
 msgid "Save"
 msgstr "Save"
@@ -47,9 +74,6 @@ msgstr "ID"
 
 msgid "Created"
 msgstr "Created"
-
-msgid "Model"
-msgstr "Model"
 
 msgid "CRPS (Norm)"
 msgstr "CRPS (Norm)"
@@ -137,9 +161,6 @@ msgstr "Sorry, an unexpected error has occurred."
 
 msgid "Inspect dataset"
 msgstr "Inspect dataset"
-
-msgid "Close"
-msgstr "Close"
 
 msgid "Cancel job"
 msgstr "Cancel job"
@@ -869,9 +890,6 @@ msgstr "Organisation unit level"
 
 msgid "Organisation unit level to import data to"
 msgstr "Organisation unit level to import data to"
-
-msgid "Organisation units"
-msgstr "Organisation units"
 
 msgid "Data Element"
 msgstr "Data Element"

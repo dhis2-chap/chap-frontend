@@ -19,7 +19,6 @@ export const dataItemSchema = z.object({
 
 const orgUnitSchema = z.object({
   id: z.string().min(1, { message: i18n.t('Missing id for org unit') }),
-  name: z.string().optional(),
   displayName: z.string().optional(),
   path: z.string().optional(),
 })

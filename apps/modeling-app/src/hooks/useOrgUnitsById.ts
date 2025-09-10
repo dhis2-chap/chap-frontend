@@ -26,7 +26,10 @@ export const useOrgUnitsById = (orgUnitIds: string[]) => {
 
         const cachedOrgUnits = queryClient
             .getQueryCache()
-            .findAll(['organisationUnits'], { exact: false })
+            .findAll({
+                queryKey: ['organisationUnits'],
+                exact: false,
+            })
             .flatMap((query) =>
                 isOrgUnitQuery(query)
                     ? query.state.data?.organisationUnits ?? []
@@ -54,7 +57,7 @@ export const useOrgUnitsById = (orgUnitIds: string[]) => {
             resource: 'organisationUnits',
             params: {
                 paging: false,
-                fields: ['id', 'displayName'],
+                fields: ['id', 'displayName', 'path', 'level'],
                 filter: `id:in:[${orgUnitIds.join(',')}]`,
                 order: 'displayName:asc',
             },

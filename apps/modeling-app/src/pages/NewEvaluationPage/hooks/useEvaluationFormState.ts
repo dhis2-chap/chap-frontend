@@ -36,10 +36,10 @@ export const useEvaluationFormState = () => {
   const initialValues: Partial<EvaluationFormValues> = useMemo(
     () => ({
       name: locationState?.name || '',
-      periodType: (locationState?.periodType as any) || PERIOD_TYPES.MONTH,
+      periodType: (locationState?.periodType) || PERIOD_TYPES.MONTH,
       fromDate: locationState?.fromDate || '',
       toDate: locationState?.toDate || '',
-      orgUnits: (orgUnitsData as any)?.organisationUnits || [],
+      orgUnits: (orgUnitsData?.organisationUnits || []),
       modelId: locationState?.modelId || '',
     }),
     [locationState, orgUnitsData]

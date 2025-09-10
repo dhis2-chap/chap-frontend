@@ -56,12 +56,12 @@ export const CopyBacktestModal = ({ id, onClose }: CopyBacktestModalProps) => {
             state.name = i18n.t('{{name}} (Copy)', { name: backtest.name });
         }
 
-        if (selectedAttributes.model && (backtest as any).configuredModel?.id) {
-            state.modelId = String((backtest as any).configuredModel.id);
+        if (selectedAttributes.model && backtest.configuredModel?.id) {
+            state.modelId = String(backtest.configuredModel.id);
         }
 
-        if (selectedAttributes.orgUnits && (backtest as any).orgUnits?.length) {
-            state.orgUnits = (backtest as any).orgUnits as string[];
+        if (selectedAttributes.orgUnits && backtest.orgUnits?.length) {
+            state.orgUnits = backtest.orgUnits;
         }
 
         return state;
@@ -121,7 +121,7 @@ export const CopyBacktestModal = ({ id, onClose }: CopyBacktestModalProps) => {
                         name="name"
                         checked={selectedAttributes.name}
                         onChange={() => handleAttributeChange('name')}
-                        value={(backtest as any).name || i18n.t('Untitled')}
+                        value={backtest.name || i18n.t('Untitled')}
                     />
 
                     <Checkbox
@@ -129,7 +129,7 @@ export const CopyBacktestModal = ({ id, onClose }: CopyBacktestModalProps) => {
                         name="model"
                         checked={selectedAttributes.model}
                         onChange={() => handleAttributeChange('model')}
-                        value={(backtest as any).modelId}
+                        value={String(backtest.configuredModel.id)}
                     />
 
                     <Checkbox
@@ -137,7 +137,7 @@ export const CopyBacktestModal = ({ id, onClose }: CopyBacktestModalProps) => {
                         name="orgUnits"
                         checked={selectedAttributes.orgUnits}
                         onChange={() => handleAttributeChange('orgUnits')}
-                        disabled={!(backtest as any).orgUnits?.length}
+                        disabled={!(backtest.orgUnits?.length)}
                     />
                 </div>
             </ModalContent>
