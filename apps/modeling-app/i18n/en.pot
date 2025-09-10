@@ -5,11 +5,14 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2025-09-08T18:51:48.106Z\n"
-"PO-Revision-Date: 2025-09-08T18:51:48.108Z\n"
+"POT-Creation-Date: 2025-09-10T12:10:43.634Z\n"
+"PO-Revision-Date: 2025-09-10T12:10:43.635Z\n"
 
 msgid "View"
 msgstr "View"
+
+msgid "Detailed metrics"
+msgstr "Detailed metrics"
 
 msgid "Rename"
 msgstr "Rename"
@@ -134,6 +137,30 @@ msgstr "Oops!"
 
 msgid "Sorry, an unexpected error has occurred."
 msgstr "Sorry, an unexpected error has occurred."
+
+msgid "Select visualization"
+msgstr "Select visualization"
+
+msgid "Select metric"
+msgstr "Select metric"
+
+msgid "Click to view actions"
+msgstr "Click to view actions"
+
+msgid "View Compiled Vega"
+msgstr "View Compiled Vega"
+
+msgid "Open in Vega Editor"
+msgstr "Open in Vega Editor"
+
+msgid "Save as PNG"
+msgstr "Save as PNG"
+
+msgid "View Source"
+msgstr "View Source"
+
+msgid "Save as SVG"
+msgstr "Save as SVG"
 
 msgid "Inspect dataset"
 msgstr "Inspect dataset"

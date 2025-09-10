@@ -39,7 +39,7 @@ const router = createHashRouter([
         element: (
             <>
                 <SyncUrlWithGlobalShell />
-                <Layout />,
+                <Layout />
             </>
         ),
         errorElement: <ErrorPage />,
