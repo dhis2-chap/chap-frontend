@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2025-09-10T12:10:43.634Z\n"
-"PO-Revision-Date: 2025-09-10T12:10:43.635Z\n"
+"POT-Creation-Date: 2025-09-11T14:59:41.869Z\n"
+"PO-Revision-Date: 2025-09-11T14:59:41.869Z\n"
 
 msgid "View"
 msgstr "View"
@@ -138,6 +138,16 @@ msgstr "Oops!"
 msgid "Sorry, an unexpected error has occurred."
 msgstr "Sorry, an unexpected error has occurred."
 
+msgid "Unable to load data"
+msgstr "Unable to load data"
+
+msgid ""
+"There was a problem loading the visualization. See the browser console for "
+"details."
+msgstr ""
+"There was a problem loading the visualization. See the browser console for "
+"details."
+
 msgid "Select visualization"
 msgstr "Select visualization"
 
@@ -161,6 +171,13 @@ msgstr "View Source"
 
 msgid "Save as SVG"
 msgstr "Save as SVG"
+
+msgid ""
+"There was a problem loading required data. See the browser console for "
+"details."
+msgstr ""
+"There was a problem loading required data. See the browser console for "
+"details."
 
 msgid "Inspect dataset"
 msgstr "Inspect dataset"

@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Card, Metric, VisualizationInfo } from '@dhis2-chap/ui'
-import { CircularLoader, SingleSelect, MenuItem } from '@dhis2/ui'
+import { CircularLoader, SingleSelect, MenuItem, NoticeBox } from '@dhis2/ui'
 import { VegaEmbed } from 'react-vega'
 import i18n from '@dhis2/d2-i18n'
 import { useCustomVisualization } from './hooks/useCustomVisualization'
@@ -34,6 +34,18 @@ export const EvaluationSummary: React.FC<EvaluationSummaryProps> = ({ evaluation
         metricId: selectedMetricId,
     })
 
+    useEffect(() => {
+        if (!visualizationError && visualization) return
+        console.error('EvaluationSummary: visualization load error', {
+            message: visualizationError?.message,
+            error: visualizationError,
+            visualization,
+            evaluationId,
+            selectedVisualizationId,
+            selectedMetricId,
+        })
+    }, [visualizationError, visualization, evaluationId, selectedVisualizationId, selectedMetricId])
+
     if (isVisualizationLoading || !selectedVisualizationId) {
         return (
             <div className={styles.loadingContainer}>
@@ -43,7 +55,13 @@ export const EvaluationSummary: React.FC<EvaluationSummaryProps> = ({ evaluation
     }
 
     if (visualizationError || !visualization) {
-        return <div>Error: {visualizationError?.message}</div>
+        return (
+            <div className={styles.errorContainer}>
+                <NoticeBox title={i18n.t('Unable to load data')} error>
+                    <p>{i18n.t('There was a problem loading the visualization. See the browser console for details.')}</p>
+                </NoticeBox>
+            </div>
+        )
     }
 
     return (
@@ -57,7 +75,11 @@ export const EvaluationSummary: React.FC<EvaluationSummaryProps> = ({ evaluation
                         onChange={(e) => setVisualizationId(e.selected)}
                     >
                         {visualizationTypes.map((v) => (
-                            <MenuItem key={v.id} value={v.id} label={v.displayName} />
+                            <MenuItem
+                                key={v.id}
+                                value={v.id}
+                                label={v.displayName}
+                            />
                         ))}
                     </SingleSelect>
                 </div>
@@ -69,7 +91,11 @@ export const EvaluationSummary: React.FC<EvaluationSummaryProps> = ({ evaluation
                         onChange={(e) => setMetricId(e.selected)}
                     >
                         {metrics.map((m) => (
-                            <MenuItem key={m.id} value={m.id} label={m.displayName} />
+                            <MenuItem
+                                key={m.id}
+                                value={m.id}
+                                label={m.displayName}
+                            />
                         ))}
                     </SingleSelect>
                 </div>
