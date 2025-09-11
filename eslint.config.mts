@@ -6,19 +6,6 @@ import js from '@eslint/js';
 import stylistic from '@stylistic/eslint-plugin';
 
 export default defineConfig([
-    js.configs.recommended,
-    stylistic.configs.customize({
-        indent: 4,
-        quotes: 'single',
-        semi: true,
-        jsx: true,
-        braceStyle: '1tbs',
-    }),
-    {
-        rules: {
-            '@stylistic/operator-linebreak': ['error', 'before', { overrides: { '=': 'after', '&&': 'after' } }],
-        },
-    },
     {
         ignores: [
             '**/node_modules/**',
@@ -30,6 +17,20 @@ export default defineConfig([
             '**/ui/src/httpfunctions/**',
             '**/*.{js,jsx,mjs}',
         ],
+    },
+    js.configs.recommended,
+    stylistic.configs.customize({
+        indent: 4,
+        quotes: 'single',
+        semi: true,
+        jsx: true,
+        braceStyle: '1tbs',
+    }),
+    {
+        rules: {
+            '@stylistic/operator-linebreak': ['error', 'before', { overrides: { '=': 'after', '&&': 'after' } }],
+            '@stylistic/multiline-ternary': 'off',
+        },
     },
     {
         files: ['**/*.{ts,tsx,mts,cts}'],

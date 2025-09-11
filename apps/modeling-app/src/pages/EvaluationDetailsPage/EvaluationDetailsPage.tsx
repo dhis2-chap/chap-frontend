@@ -1,13 +1,13 @@
-import React from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
-import i18n from '@dhis2/d2-i18n'
-import { PageHeader } from '../../features/common-features/PageHeader/PageHeader'
-import { EvaluationSummary } from '../../components/EvaluationSummary/EvaluationSummary.container'
-import { Button, IconArrowLeft16 } from '@dhis2/ui'
+import React from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import i18n from '@dhis2/d2-i18n';
+import { PageHeader } from '../../features/common-features/PageHeader/PageHeader';
+import { EvaluationSummary } from '../../components/EvaluationSummary/EvaluationSummary.container';
+import { Button, IconArrowLeft16 } from '@dhis2/ui';
 
 export const EvaluationDetailsPage: React.FC = () => {
-    const { evaluationId } = useParams<{ evaluationId: string }>()
-    const navigate = useNavigate()
+    const { evaluationId } = useParams<{ evaluationId: string }>();
+    const navigate = useNavigate();
 
     return (
         <>
@@ -20,7 +20,7 @@ export const EvaluationDetailsPage: React.FC = () => {
                     small
                     icon={<IconArrowLeft16 />}
                     onClick={() => {
-                        navigate('/evaluate')
+                        navigate('/evaluate');
                     }}
                 >
                     {i18n.t('Back to evaluations')}
@@ -31,7 +31,5 @@ export const EvaluationDetailsPage: React.FC = () => {
                 evaluationId={evaluationId ? Number(evaluationId) : undefined}
             />
         </>
-    )
-}
-
-
+    );
+};

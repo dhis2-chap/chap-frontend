@@ -1,39 +1,38 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import {
     Button,
     Label,
     IconSettings16,
-} from '@dhis2/ui'
-import i18n from '@dhis2/d2-i18n'
-import cn from 'classnames'
-import { Control, useFormContext, useWatch } from 'react-hook-form'
-import { EvaluationFormValues } from '../../hooks/useFormController'
-import { useModels } from '../../../../hooks/useModels'
-import { ModelSpecRead } from '@dhis2-chap/ui'
-import { ModelSelectionModal } from './ModelSelectionModal'
-import styles from './ModelSelector.module.css'
+} from '@dhis2/ui';
+import i18n from '@dhis2/d2-i18n';
+import cn from 'classnames';
+import { Control, useFormContext, useWatch } from 'react-hook-form';
+import { EvaluationFormValues } from '../../hooks/useFormController';
+import { useModels } from '../../../../hooks/useModels';
+import { ModelSpecRead } from '@dhis2-chap/ui';
+import { ModelSelectionModal } from './ModelSelectionModal';
+import styles from './ModelSelector.module.css';
 
 type Props = {
-    control: Control<EvaluationFormValues>
-}
+    control: Control<EvaluationFormValues>;
+};
 
 export const ModelSelector = ({
     control,
 }: Props) => {
-    const { models, isLoading } = useModels()
-    const [isModelModalOpen, setIsModelModalOpen] = useState(false)
-    const methods = useFormContext<EvaluationFormValues>()
-    const modelId = useWatch({ control, name: 'modelId' })
-
+    const { models, isLoading } = useModels();
+    const [isModelModalOpen, setIsModelModalOpen] = useState(false);
+    const methods = useFormContext<EvaluationFormValues>();
+    const modelId = useWatch({ control, name: 'modelId' });
 
     const handleModalConfirm = (model: ModelSpecRead) => {
-        methods.setValue('modelId', model.id.toString(), { shouldValidate: true, shouldDirty: true })
-        methods.resetField('covariateMappings')
-        methods.resetField('targetMapping')
-        setIsModelModalOpen(false)
-    }
+        methods.setValue('modelId', model.id.toString(), { shouldValidate: true, shouldDirty: true });
+        methods.resetField('covariateMappings');
+        methods.resetField('targetMapping');
+        setIsModelModalOpen(false);
+    };
 
-    const selectedFormModel = models?.find((model) => model.id.toString() === modelId)
+    const selectedFormModel = models?.find(model => model.id.toString() === modelId);
 
     return (
         <>
@@ -44,7 +43,6 @@ export const ModelSelector = ({
                 ) : (
                     <p className={styles.mutedText}>{i18n.t('No model selected')}</p>
                 )}
-
 
                 <Button
                     onClick={() => setIsModelModalOpen(true)}
@@ -70,5 +68,5 @@ export const ModelSelector = ({
                 />
             )}
         </>
-    )
-} 
+    );
+};

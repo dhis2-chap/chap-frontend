@@ -1,1 +1,1 @@
-export { NewEvaluationPage } from './NewEvaluationPage'
+export { NewEvaluationPage } from './NewEvaluationPage';

@@ -1,1 +1,1 @@
-export { EditBacktestModal } from './EditBacktestModal'; 
+export { EditBacktestModal } from './EditBacktestModal';

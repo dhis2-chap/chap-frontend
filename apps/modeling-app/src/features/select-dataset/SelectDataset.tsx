@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { DataSetRead } from '@dhis2-chap/ui';
 import { SingleSelectField, SingleSelectOption, CircularLoader } from '@dhis2/ui';
-import styles from './SelectDataset.module.css'
+import styles from './SelectDataset.module.css';
 
 interface SelectDatasetProps {
-    selectedDataset: DataSetRead | undefined
-    setSelectedDataset: (d: DataSetRead | undefined) => void
+    selectedDataset: DataSetRead | undefined;
+    setSelectedDataset: (d: DataSetRead | undefined) => void;
 }
 
 const getFakeDatasetResponse = () => {
@@ -15,44 +15,44 @@ const getFakeDatasetResponse = () => {
             name: 'Testdataset1',
             created: '2025-03-25',
             covariates: ['precipitation', 'disease'],
-            type: 'dataset'
+            type: 'dataset',
         },
         {
             id: 1,
             name: 'Testdataset2',
             created: '2025-03-31',
             covariates: ['precipitation', 'temperature', 'population', 'disease'],
-            type: 'dataset'
-        }
-    ]
-}
+            type: 'dataset',
+        },
+    ];
+};
 
 const SelectDataset = ({ selectedDataset, setSelectedDataset }: SelectDatasetProps) => {
-    const [datasets, setDatasets] = useState<DataSetRead[]>([])
-    const [isLoading, setIsLoading] = useState(true)
+    const [datasets, setDatasets] = useState<DataSetRead[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     const getDatasets = async () => {
-        const datasets = getFakeDatasetResponse() // TODO: replace with actual url fetch
+        const datasets = getFakeDatasetResponse(); // TODO: replace with actual url fetch
         datasets.sort((a, b) => {
-            //return b.created.getTime() - a.created.getTime()
+            // return b.created.getTime() - a.created.getTime()
             if (a.created > b.created) {
-                return -1
+                return -1;
             } else {
-                return 1
+                return 1;
             }
-        })
-        setDatasets(datasets)
-        setIsLoading(false)
-    }
+        });
+        setDatasets(datasets);
+        setIsLoading(false);
+    };
 
     const onChange = ({ selected }: any) => {
-        const dataset = datasets.find(d => JSON.stringify(d.id) === selected)
-        setSelectedDataset(dataset)
-    }
+        const dataset = datasets.find(d => JSON.stringify(d.id) === selected);
+        setSelectedDataset(dataset);
+    };
 
     useEffect(() => {
-        getDatasets()
-    }, [])
+        getDatasets();
+    }, []);
 
     return (
         <div className={styles.datasetSelectContainer}>
@@ -78,7 +78,7 @@ const SelectDataset = ({ selectedDataset, setSelectedDataset }: SelectDatasetPro
                 </SingleSelectField>
             )}
         </div>
-    )
-}
+    );
+};
 
-export default SelectDataset
+export default SelectDataset;

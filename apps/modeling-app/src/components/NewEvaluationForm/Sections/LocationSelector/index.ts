@@ -1,1 +1,1 @@
-export { LocationSelector } from './LocationSelector' 
+export { LocationSelector } from './LocationSelector';

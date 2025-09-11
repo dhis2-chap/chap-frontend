@@ -1,14 +1,14 @@
-import React from 'react'
-import { EvaluationPerOrgUnit } from '../../../interfaces/Evaluation'
-import { ComparisonPlot } from '../ComparisonPlot/ComparisonPlot'
-import { Virtuoso, VirtuosoProps } from 'react-virtuoso'
+import React from 'react';
+import { EvaluationPerOrgUnit } from '../../../interfaces/Evaluation';
+import { ComparisonPlot } from '../ComparisonPlot/ComparisonPlot';
+import { Virtuoso, VirtuosoProps } from 'react-virtuoso';
 
 interface ComparisonPlotListProps {
-    evaluationPerOrgUnits: EvaluationPerOrgUnit[]
-    useVirtuoso?: boolean
-    useVirtuosoWindowScroll?: boolean
-    virtuosoProps?: VirtuosoProps<any, any>
-    nameLabel?: string
+    evaluationPerOrgUnits: EvaluationPerOrgUnit[];
+    useVirtuoso?: boolean;
+    useVirtuosoWindowScroll?: boolean;
+    virtuosoProps?: VirtuosoProps<any, any>;
+    nameLabel?: string;
 }
 
 export const ComparisonPlotList: React.FC<ComparisonPlotListProps> = ({
@@ -23,7 +23,7 @@ export const ComparisonPlotList: React.FC<ComparisonPlotListProps> = ({
             <>
                 {evaluationPerOrgUnits.map((orgUnitsData) => {
                     if (!orgUnitsData) {
-                        return null
+                        return null;
                     }
 
                     return (
@@ -32,10 +32,10 @@ export const ComparisonPlotList: React.FC<ComparisonPlotListProps> = ({
                             orgUnitsData={orgUnitsData}
                             nameLabel={nameLabel}
                         />
-                    )
+                    );
                 })}
             </>
-        )
+        );
     }
 
     return (
@@ -44,12 +44,12 @@ export const ComparisonPlotList: React.FC<ComparisonPlotListProps> = ({
             style={{ height: '100%' }}
             useWindowScroll={useVirtuosoWindowScroll}
             totalCount={evaluationPerOrgUnits.length}
-            itemContent={(index) => (
+            itemContent={index => (
                 <ComparisonPlot
                     orgUnitsData={evaluationPerOrgUnits[index]}
                     nameLabel={nameLabel}
                 />
             )}
         />
-    )
-}
+    );
+};

@@ -18,4 +18,4 @@ export const JobTypeCell = ({ jobType }: JobTypeCellProps) => {
     const label = labelByJobType[typedJobType] || typedJobType;
 
     return <>{label}</>;
-}; 
+};

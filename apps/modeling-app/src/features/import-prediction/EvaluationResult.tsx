@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import {
     AnalyticsService,
     ComparionPlotWrapper,
@@ -7,66 +7,66 @@ import {
     EvaluationResponse,
     evaluationResultToViewData,
     getSplitPeriod,
-} from '@dhis2-chap/ui'
-import useOrgUnits from '../../hooks/useOrgUnits'
+} from '@dhis2-chap/ui';
+import useOrgUnits from '../../hooks/useOrgUnits';
 
 const EvaluationResult = ({ evaluationId }: { evaluationId: number }) => {
-    //const [evaluation, setEvaluation] = useState<Record<string, Record<string, HighChartsData>> | undefined>(undefined)
-    const [httpError, setHttpError] = useState<string>('')
-    const [splitPeriods, setSplitPeriods] = useState<string[]>([])
+    // const [evaluation, setEvaluation] = useState<Record<string, Record<string, HighChartsData>> | undefined>(undefined)
+    const [httpError, setHttpError] = useState<string>('');
+    const [splitPeriods, setSplitPeriods] = useState<string[]>([]);
     const [proceededData, setProceededData] =
-        useState<EvaluationForSplitPoint[]>()
-    const [unProceededData, setUnProceededData] = useState<EvaluationResponse>()
-    const [evaluationName, setEvaluationName] = useState<string>('')
-    const [modelName, setModelName] = useState<string>('')
-    const [isLoading, setIsLoading] = useState(false)
+        useState<EvaluationForSplitPoint[]>();
+    const [unProceededData, setUnProceededData] = useState<EvaluationResponse>();
+    const [evaluationName, setEvaluationName] = useState<string>('');
+    const [modelName, setModelName] = useState<string>('');
+    const [isLoading, setIsLoading] = useState(false);
 
-    const { orgUnits } = useOrgUnits()
+    const { orgUnits } = useOrgUnits();
 
     useEffect(() => {
         if (orgUnits && unProceededData) {
             const processedData = evaluationResultToViewData(
                 unProceededData.predictions,
                 unProceededData.actualCases.data,
-                ''
-            )
+                '',
+            );
 
-            //fill with orgUnitName
+            // fill with orgUnitName
             processedData.forEach((evaluationPerSplitPoint) => {
                 evaluationPerSplitPoint.evaluation.forEach(
                     (evaluationPerOrgUnit) => {
                         const orgUnitName = orgUnits?.organisationUnits.find(
                             (root: { displayName: string; id: string }) =>
-                                root.id === evaluationPerOrgUnit.orgUnitId
-                        )
+                                root.id === evaluationPerOrgUnit.orgUnitId,
+                        );
                         if (orgUnitName) {
                             evaluationPerOrgUnit.orgUnitName =
-                                orgUnitName.displayName
+                                orgUnitName.displayName;
                         }
-                    }
-                )
-            })
+                    },
+                );
+            });
 
-            setProceededData(processedData)
-            setSplitPeriods(getSplitPeriod(unProceededData.predictions))
+            setProceededData(processedData);
+            setSplitPeriods(getSplitPeriod(unProceededData.predictions));
         }
-    }, [orgUnits, unProceededData])
+    }, [orgUnits, unProceededData]);
 
     const fetchEvaluationInfo = async (evaluationId: number) => {
-        const evaluations = await CrudService.getBacktestsCrudBacktestsGet()
-        return evaluations.find((e) => e.id === Number(evaluationId))
-    }
+        const evaluations = await CrudService.getBacktestsCrudBacktestsGet();
+        return evaluations.find(e => e.id === Number(evaluationId));
+    };
 
     const fetchModelByName = async (modelName: string) => {
-        const models = await CrudService.listModelsCrudModelsGet()
-        return models.find((m) => m.name === modelName)
-    }
+        const models = await CrudService.listModelsCrudModelsGet();
+        return models.find(m => m.name === modelName);
+    };
 
     const fetchEvaluation = async () => {
-        setIsLoading(true)
-        //setHttpError(undefined)
+        setIsLoading(true);
+        // setHttpError(undefined)
 
-        const quantiles = [0.1, 0.25, 0.5, 0.75, 0.9]
+        const quantiles = [0.1, 0.25, 0.5, 0.75, 0.9];
 
         try {
             const [evaluationInfo, evaluationEntries, actualCases] =
@@ -74,41 +74,41 @@ const EvaluationResult = ({ evaluationId }: { evaluationId: number }) => {
                     fetchEvaluationInfo(evaluationId),
                     AnalyticsService.getEvaluationEntriesAnalyticsEvaluationEntryGet(
                         evaluationId,
-                        quantiles
+                        quantiles,
                     ),
                     AnalyticsService.getActualCasesAnalyticsActualCasesBacktestIdGet(
-                        evaluationId
+                        evaluationId,
                     ),
-                ])
+                ]);
 
             if (!evaluationInfo) {
-                throw new Error('Evaluation info not found')
+                throw new Error('Evaluation info not found');
             }
 
             // Set evaluation name
-            setEvaluationName(evaluationInfo.name ?? '')
+            setEvaluationName(evaluationInfo.name ?? '');
 
             // Set model name
-            const modelInfo = await fetchModelByName(evaluationInfo.modelId)
-            setModelName(modelInfo?.displayName ?? '')
+            const modelInfo = await fetchModelByName(evaluationInfo.modelId);
+            setModelName(modelInfo?.displayName ?? '');
 
             // Merge and send to state
             const mergedResponse: EvaluationResponse = {
                 predictions: evaluationEntries,
                 actualCases: actualCases,
-            }
+            };
 
-            setUnProceededData(mergedResponse)
+            setUnProceededData(mergedResponse);
         } catch (err: any) {
-            setHttpError(err.toString())
+            setHttpError(err.toString());
         } finally {
-            setIsLoading(false)
+            setIsLoading(false);
         }
-    }
+    };
 
     useEffect(() => {
-        fetchEvaluation()
-    }, [])
+        fetchEvaluation();
+    }, []);
 
     return (
         <div>
@@ -124,7 +124,7 @@ const EvaluationResult = ({ evaluationId }: { evaluationId: number }) => {
                 />
             )}
         </div>
-    )
-}
+    );
+};
 
-export default EvaluationResult
+export default EvaluationResult;

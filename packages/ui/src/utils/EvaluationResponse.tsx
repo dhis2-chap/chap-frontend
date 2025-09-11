@@ -172,7 +172,7 @@ export const evaluationResultToViewData = (
                                     highChartData,
                                     realValues.filter(
                                         item => item.ou === orgUnit,
-                                    )
+                                    ),
                                 );
 
                             return {

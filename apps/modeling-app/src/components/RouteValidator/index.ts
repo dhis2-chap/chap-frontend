@@ -1,2 +1,1 @@
-
-export { RouteValidator } from './RouteValidator'
+export { RouteValidator } from './RouteValidator';

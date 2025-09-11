@@ -1,17 +1,17 @@
-import React from 'react'
+import React from 'react';
 import {
     Input,
     Label,
-} from '@dhis2/ui'
-import i18n from '@dhis2/d2-i18n'
-import { Controller, Control, FieldErrors } from 'react-hook-form'
-import { EvaluationFormValues } from '../../hooks/useFormController'
-import styles from './NameInput.module.css'
+} from '@dhis2/ui';
+import i18n from '@dhis2/d2-i18n';
+import { Controller, Control, FieldErrors } from 'react-hook-form';
+import { EvaluationFormValues } from '../../hooks/useFormController';
+import styles from './NameInput.module.css';
 
 type Props = {
-    control: Control<EvaluationFormValues>
-    errors: FieldErrors<EvaluationFormValues>
-}
+    control: Control<EvaluationFormValues>;
+    errors: FieldErrors<EvaluationFormValues>;
+};
 
 export const NameInput = ({ control, errors }: Props) => {
     return (
@@ -25,7 +25,7 @@ export const NameInput = ({ control, errors }: Props) => {
                         {...field}
                         type="text"
                         error={!!errors.name}
-                        onChange={(payload) => field.onChange(payload.value)}
+                        onChange={payload => field.onChange(payload.value)}
                         dataTest="evaluation-name-input"
                         placeholder={i18n.t('EWARS Evaluation 22-24')}
                     />
@@ -33,5 +33,5 @@ export const NameInput = ({ control, errors }: Props) => {
             />
             {errors.name && <p className={styles.errorText}>{errors.name.message}</p>}
         </div>
-    )
-} 
+    );
+};

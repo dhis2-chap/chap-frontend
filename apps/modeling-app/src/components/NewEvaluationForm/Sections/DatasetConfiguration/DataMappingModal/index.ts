@@ -1,1 +1,1 @@
-export { DataMappingModal } from './DataMappingModal' 
+export { DataMappingModal } from './DataMappingModal';

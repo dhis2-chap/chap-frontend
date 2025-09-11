@@ -1,12 +1,12 @@
-import React from 'react'
-import styles from './Settings.module.css'
-import { RouteSettings } from './RouteSettings'
-import { ChapSettings } from './ChapSettings'
-import { ModelSettings } from './ModelSettings'
-import { useRoute } from '../../hooks/useRoute'
+import React from 'react';
+import styles from './Settings.module.css';
+import { RouteSettings } from './RouteSettings';
+import { ChapSettings } from './ChapSettings';
+import { ModelSettings } from './ModelSettings';
+import { useRoute } from '../../hooks/useRoute';
 
 export const SettingsPage = () => {
-    const { route } = useRoute()
+    const { route } = useRoute();
 
     return (
         <div className={styles.settingsContainer}>
@@ -16,5 +16,5 @@ export const SettingsPage = () => {
 
             {route && <ModelSettings />}
         </div>
-    )
-}
+    );
+};

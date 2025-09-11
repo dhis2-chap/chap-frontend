@@ -1,13 +1,13 @@
-import { useEffect } from 'react'
-import { useDataMutation } from '@dhis2/app-runtime'
+import { useEffect } from 'react';
+import { useDataMutation } from '@dhis2/app-runtime';
 
 interface PostResultProps {
-    prediction: any
-    qLowDataElementId: string
-    qMedianDataElementId: string
-    qHighDataElementId: string
-    setPostStatus: (value: 'loading' | 'finish' | 'error' | 'initial') => void
-    setPostHttpError: (value: string) => void
+    prediction: any;
+    qLowDataElementId: string;
+    qMedianDataElementId: string;
+    qHighDataElementId: string;
+    setPostStatus: (value: 'loading' | 'finish' | 'error' | 'initial') => void;
+    setPostHttpError: (value: string) => void;
 }
 
 const PostResult = ({
@@ -19,10 +19,10 @@ const PostResult = ({
     setPostStatus,
 }: PostResultProps) => {
     const mapQuantiesToDataElement = (quantile: string) => {
-        if (quantile === 'quantile_low') return qLowDataElementId
-        if (quantile === 'median') return qMedianDataElementId
-        if (quantile === 'quantile_high') return qHighDataElementId
-    }
+        if (quantile === 'quantile_low') return qLowDataElementId;
+        if (quantile === 'median') return qMedianDataElementId;
+        if (quantile === 'quantile_high') return qHighDataElementId;
+    };
 
     const createBodyRequest = (prediction: any) => {
         return prediction.dataValues.map((d: any) => {
@@ -31,9 +31,9 @@ const PostResult = ({
                 period: d.period,
                 orgUnit: d.orgUnit,
                 value: d.value,
-            }
-        })
-    }
+            };
+        });
+    };
 
     const mutatePrediction = (data: any) => {
         return {
@@ -42,39 +42,39 @@ const PostResult = ({
             data: {
                 dataValues: data,
             },
-        }
-    }
+        };
+    };
 
     const [mutate, { error, loading, called }] = useDataMutation(
-        mutatePrediction(createBodyRequest(prediction)) as any
-    )
+        mutatePrediction(createBodyRequest(prediction)) as any,
+    );
 
     const sendPrediction = async () => {
-        await mutate()
-    }
+        await mutate();
+    };
 
     useEffect(() => {
-        sendPrediction()
-    }, [])
+        sendPrediction();
+    }, []);
 
-    //Run when loading change state
+    // Run when loading change state
     useEffect(() => {
-        if (!called) return
-        if (loading) return
+        if (!called) return;
+        if (loading) return;
 
         if (error) {
             setPostHttpError(
-                'Something went wrong when posting the prediction.'
-            )
-            setPostStatus('error')
+                'Something went wrong when posting the prediction.',
+            );
+            setPostStatus('error');
         }
         if (!error) {
-            setPostHttpError('')
-            setPostStatus('finish')
+            setPostHttpError('');
+            setPostStatus('finish');
         }
-    }, [loading])
+    }, [loading]);
 
-    return null
-}
+    return null;
+};
 
-export default PostResult
+export default PostResult;

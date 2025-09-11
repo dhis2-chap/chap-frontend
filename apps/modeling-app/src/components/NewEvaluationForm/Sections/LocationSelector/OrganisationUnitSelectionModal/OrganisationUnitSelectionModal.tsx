@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react';
 import {
     Button,
     ButtonStrip,
@@ -7,21 +7,21 @@ import {
     ModalContent,
     ModalActions,
     NoticeBox,
-} from '@dhis2/ui'
-import i18n from '@dhis2/d2-i18n'
+} from '@dhis2/ui';
+import i18n from '@dhis2/d2-i18n';
 import {
     OrganisationUnit,
     OrganisationUnitSelector as OrgUnitSelector,
     SelectionChangeEvent,
-} from '../../../../OrganisationUnitSelector'
-import styles from '../LocationSelector.module.css'
+} from '../../../../OrganisationUnitSelector';
+import styles from '../LocationSelector.module.css';
 
 type Props = {
-    orgUnitRoots: string[]
-    selectedOrgUnits: OrganisationUnit[]
-    onClose: () => void
-    onConfirm: (selectedOrgUnits: OrganisationUnit[]) => void
-}
+    orgUnitRoots: string[];
+    selectedOrgUnits: OrganisationUnit[];
+    onClose: () => void;
+    onConfirm: (selectedOrgUnits: OrganisationUnit[]) => void;
+};
 
 export const OrganisationUnitSelectionModal = ({
     orgUnitRoots,
@@ -29,36 +29,36 @@ export const OrganisationUnitSelectionModal = ({
     onClose,
     onConfirm,
 }: Props) => {
-    const [pendingOrgUnits, setPendingOrgUnits] = useState<OrganisationUnit[]>(selectedOrgUnits)
+    const [pendingOrgUnits, setPendingOrgUnits] = useState<OrganisationUnit[]>(selectedOrgUnits);
 
     const handleOrgUnitSelect = (e: SelectionChangeEvent) => {
-        setPendingOrgUnits(e.items)
-    }
+        setPendingOrgUnits(e.items);
+    };
 
     const handleConfirm = () => {
-        onConfirm(pendingOrgUnits)
-    }
+        onConfirm(pendingOrgUnits);
+    };
 
     const isSameLevel = useMemo(() => {
         if (pendingOrgUnits.length <= 1) {
-            return true
+            return true;
         }
 
         // Only consider org units that have paths
-        const orgUnitsWithPath = pendingOrgUnits.filter((ou) => ou.path)
+        const orgUnitsWithPath = pendingOrgUnits.filter(ou => ou.path);
 
         if (orgUnitsWithPath.length === 0) {
-            return true
+            return true;
         }
 
         const orgUnitLevels = orgUnitsWithPath.map((ou) => {
-            const pathSegments = ou.path!.split('/')
-            return pathSegments.filter(segment => segment.length > 0).length
-        })
+            const pathSegments = ou.path!.split('/');
+            return pathSegments.filter(segment => segment.length > 0).length;
+        });
 
-        const firstLevel = orgUnitLevels[0]
-        return orgUnitLevels.every((level) => level === firstLevel)
-    }, [pendingOrgUnits])
+        const firstLevel = orgUnitLevels[0];
+        return orgUnitLevels.every(level => level === firstLevel);
+    }, [pendingOrgUnits]);
 
     return (
         <Modal onClose={onClose} large>
@@ -94,5 +94,5 @@ export const OrganisationUnitSelectionModal = ({
                 </ButtonStrip>
             </ModalActions>
         </Modal>
-    )
-} 
+    );
+};

@@ -1,5 +1,5 @@
-export { NewEvaluationForm } from './NewEvaluationForm.container'
+export { NewEvaluationForm } from './NewEvaluationForm.container';
 
-export { PERIOD_TYPES } from './Sections/PeriodSelector'
+export { PERIOD_TYPES } from './Sections/PeriodSelector';
 
-export type { EvaluationFormValues } from './hooks/useFormController'
+export type { EvaluationFormValues } from './hooks/useFormController';

@@ -19,4 +19,4 @@ export interface ResourceQuery {
     id?: PossiblyDynamic<string, QueryVariables>;
     data?: PossiblyDynamic<any, QueryVariables>;
     params?: PossiblyDynamic<QueryParameters, QueryVariables>;
-} 
+}

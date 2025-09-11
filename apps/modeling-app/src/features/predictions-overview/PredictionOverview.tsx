@@ -1,24 +1,24 @@
-import React, { useEffect, useState } from 'react'
-import NewPredictionDrawer from '../new-prediction/NewPredictionDrawer'
-import JobResults from '../job-results/JobResults'
-import { PageHeader } from '../common-features/PageHeader/PageHeader'
+import React, { useEffect, useState } from 'react';
+import NewPredictionDrawer from '../new-prediction/NewPredictionDrawer';
+import JobResults from '../job-results/JobResults';
+import { PageHeader } from '../common-features/PageHeader/PageHeader';
 
 const PredictionOverview = () => {
     const [newPredictionDrawerOpen, setNewPredictionDrawerOpen] =
-        useState<boolean>(false)
+        useState<boolean>(false);
 
     const [reRenderDatasetEvaluation, setReRenderDatasetEvaluation] =
-        useState<boolean>(false)
+        useState<boolean>(false);
 
     const onDrawerSubmit = () => {
-        setReRenderDatasetEvaluation(false)
-        setNewPredictionDrawerOpen(false)
-    }
+        setReRenderDatasetEvaluation(false);
+        setNewPredictionDrawerOpen(false);
+    };
 
-    //dirty solution, i know..
+    // dirty solution, i know..
     useEffect(() => {
-        setReRenderDatasetEvaluation(true)
-    }, [reRenderDatasetEvaluation])
+        setReRenderDatasetEvaluation(true);
+    }, [reRenderDatasetEvaluation]);
 
     return (
         <div>
@@ -37,7 +37,7 @@ const PredictionOverview = () => {
                 <JobResults type="predictions" />
             )}
         </div>
-    )
-}
+    );
+};
 
-export default PredictionOverview
+export default PredictionOverview;
