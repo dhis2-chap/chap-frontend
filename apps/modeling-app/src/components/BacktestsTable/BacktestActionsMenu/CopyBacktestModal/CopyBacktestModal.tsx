@@ -33,15 +33,14 @@ const DEFAULT_COPYABLE_ATTRIBUTES: CopyableAttributes = {
     // TODO: API does not return periods or period type
     periods: false,
 };
-
 export const CopyBacktestModal = ({ id, onClose }: CopyBacktestModalProps) => {
     const [selectedAttributes, setSelectedAttributes] = useState<CopyableAttributes>(DEFAULT_COPYABLE_ATTRIBUTES);
 
     const { backtests, isLoading, error } = useBacktests();
-    const backtest = useMemo(() => backtests?.find((b) => b.id === id), [backtests, id]);
+    const backtest = useMemo(() => backtests?.find(b => b.id === id), [backtests, id]);
 
     const handleAttributeChange = (attribute: keyof CopyableAttributes) => {
-        setSelectedAttributes((prev) => ({
+        setSelectedAttributes(prev => ({
             ...prev,
             [attribute]: !prev[attribute],
         }));
@@ -155,5 +154,4 @@ export const CopyBacktestModal = ({ id, onClose }: CopyBacktestModalProps) => {
             </ModalActions>
         </Modal>
     );
-}
-
+};

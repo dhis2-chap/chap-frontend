@@ -1,8 +1,9 @@
-import { useEffect, useMemo } from 'react'
-import { useLocation } from 'react-router-dom'
-import { z } from 'zod'
-import { useOrgUnitsById } from '../../../hooks/useOrgUnitsById'
-import { EvaluationFormValues, PERIOD_TYPES } from '../../../components/NewEvaluationForm'
+/* eslint-disable @stylistic/indent */
+import { useEffect, useMemo } from 'react';
+import { useLocation } from 'react-router-dom';
+import { z } from 'zod';
+import { useOrgUnitsById } from '../../../hooks/useOrgUnitsById';
+import { EvaluationFormValues, PERIOD_TYPES } from '../../../components/NewEvaluationForm';
 
 const locationStateInnerSchema = z.object({
   name: z.string().optional(),
@@ -11,24 +12,16 @@ const locationStateInnerSchema = z.object({
   toDate: z.string().optional(),
   orgUnits: z.array(z.string()).optional(),
   modelId: z.string().optional(),
-})
+});
 
-type InitialFormLocationState = z.infer<typeof locationStateInnerSchema>
-
-const evaluationFormLocationStateSchema = locationStateInnerSchema.optional()
+const evaluationFormLocationStateSchema = locationStateInnerSchema.optional();
 
 export const useInitialFormState = () => {
-  const location = useLocation()
+  const location = useLocation();
 
-  const {
-    data: locationState,
-    error,
-  } = evaluationFormLocationStateSchema.safeParse(location.state)
+  const { data: locationState, error } = evaluationFormLocationStateSchema.safeParse(location.state);
 
-  const {
-    data: orgUnitsData,
-    isInitialLoading: isOrgUnitsInitialLoading,
-  } = useOrgUnitsById(locationState?.orgUnits || [])
+  const { data: orgUnitsData, isInitialLoading: isOrgUnitsInitialLoading } = useOrgUnitsById(locationState?.orgUnits || []);
 
   const initialValues: Partial<EvaluationFormValues> = useMemo(
     () => ({
@@ -38,19 +31,20 @@ export const useInitialFormState = () => {
       toDate: locationState?.toDate || '',
       orgUnits: orgUnitsData?.organisationUnits || [],
       modelId: locationState?.modelId || '',
-    }), [locationState, orgUnitsData]);
+    }),
+    [locationState, orgUnitsData],
+  );
 
   useEffect(() => {
     if (error) {
-      console.warn('Invalid location state:', error.errors)
+      console.warn('Invalid location state:', error.errors);
     }
-  }, [error])
+  }, [error]);
 
-  const isLoading = !!locationState?.orgUnits?.length && isOrgUnitsInitialLoading
+  const isLoading = !!locationState?.orgUnits?.length && isOrgUnitsInitialLoading;
 
   return {
     initialValues,
     isLoading,
-  }
-}
-
+  };
+};

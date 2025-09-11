@@ -1,1 +1,1 @@
-export { CopyBacktestModal } from './CopyBacktestModal'
+export { CopyBacktestModal } from './CopyBacktestModal';

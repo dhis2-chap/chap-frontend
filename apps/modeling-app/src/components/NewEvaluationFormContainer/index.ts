@@ -1,3 +1,1 @@
-export { NewEvaluationFormContainer } from './NewEvaluationFormContainer'
-
-
+export { NewEvaluationFormContainer } from './NewEvaluationFormContainer';
