@@ -1,1 +1,1 @@
-export * from './EvaluationCompare'
+export * from './EvaluationCompare';

@@ -1,6 +1,6 @@
-import { useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { ApiError, VisualizationInfo, VisualizationService } from "@dhis2-chap/ui";
+import { useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { ApiError, VisualizationInfo, VisualizationService } from '@dhis2-chap/ui';
 
 type Props = {
     evaluationId?: number;
@@ -8,12 +8,12 @@ type Props = {
 
 export const useCustomVisualizationTypes = ({ evaluationId }: Props) => {
     const { data, error, isLoading } = useQuery<VisualizationInfo[], ApiError>({
-        queryKey: ["custom-visualization-types", evaluationId],
+        queryKey: ['custom-visualization-types', evaluationId],
         queryFn: () =>
             VisualizationService.listVisualizationsVisualizationBacktestIdGet(
-                Number(evaluationId)
+                Number(evaluationId),
             ),
-        enabled: typeof evaluationId === "number" && evaluationId > 0,
+        enabled: typeof evaluationId === 'number' && evaluationId > 0,
         staleTime: 5 * 60 * 1000,
         cacheTime: 5 * 60 * 1000,
         retry: 0,
@@ -21,7 +21,7 @@ export const useCustomVisualizationTypes = ({ evaluationId }: Props) => {
 
     useEffect(() => {
         if (!error) return;
-        console.error("useCustomVisualizationTypes: error loading visualization types", {
+        console.error('useCustomVisualizationTypes: error loading visualization types', {
             message: error?.message,
             error,
             evaluationId,
@@ -34,5 +34,3 @@ export const useCustomVisualizationTypes = ({ evaluationId }: Props) => {
         isLoading,
     };
 };
-
-

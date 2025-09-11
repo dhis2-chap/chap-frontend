@@ -25,7 +25,7 @@ type Props = {
     status: string;
     result: string | undefined | null;
     type: string;
-}
+};
 
 export const JobActionsMenu = ({
     jobId,
@@ -71,21 +71,22 @@ export const JobActionsMenu = ({
                 onClick={() => {
                     setFlyoutMenuIsOpen(prev => !prev);
                 }}
-                component={
+                component={(
                     <FlyoutMenu dense>
-                        {status === JOB_STATUSES.SUCCESS && (<MenuItem
-                            label={i18n.t('Go to result')}
-                            dataTest={'job-overflow-go-to-result'}
-                            disabled={!result}
-                            icon={<IconArrowRight16 />}
-                            onClick={handleNavigateToResult}
-                        />)}
-
+                        {status === JOB_STATUSES.SUCCESS && (
+                            <MenuItem
+                                label={i18n.t('Go to result')}
+                                dataTest="job-overflow-go-to-result"
+                                disabled={!result}
+                                icon={<IconArrowRight16 />}
+                                onClick={handleNavigateToResult}
+                            />
+                        )}
 
                         {status !== JOB_STATUSES.PENDING && (
                             <MenuItem
                                 label={i18n.t('View Logs')}
-                                dataTest={'job-overflow-view-logs'}
+                                dataTest="job-overflow-view-logs"
                                 icon={<IconView16 />}
                                 onClick={handleViewLogs}
                             />
@@ -93,7 +94,7 @@ export const JobActionsMenu = ({
 
                         <MenuItem
                             label={i18n.t('Copy Job ID')}
-                            dataTest={'job-overflow-copy-job-id'}
+                            dataTest="job-overflow-copy-job-id"
                             icon={isCopied ? <IconCheckmark16 /> : <IconCopy16 />}
                             onClick={() => {
                                 copyToClipboard(jobId);
@@ -103,7 +104,7 @@ export const JobActionsMenu = ({
                         {(status === JOB_STATUSES.PENDING || status === JOB_STATUSES.STARTED) && (
                             <MenuItem
                                 label={i18n.t('Cancel')}
-                                dataTest={'job-overflow-cancel'}
+                                dataTest="job-overflow-cancel"
                                 destructive
                                 icon={<IconUndo16 />}
                                 onClick={() => {
@@ -116,7 +117,7 @@ export const JobActionsMenu = ({
                         {(status === JOB_STATUSES.SUCCESS || status === JOB_STATUSES.FAILED || status === JOB_STATUSES.REVOKED) && (
                             <MenuItem
                                 label={i18n.t('Delete')}
-                                dataTest={'job-overflow-delete'}
+                                dataTest="job-overflow-delete"
                                 destructive
                                 icon={<IconDelete16 />}
                                 onClick={() => {
@@ -126,7 +127,7 @@ export const JobActionsMenu = ({
                             />
                         )}
                     </FlyoutMenu>
-                }
+                )}
             />
 
             {viewLogsModalIsOpen && (
@@ -152,4 +153,4 @@ export const JobActionsMenu = ({
             )}
         </>
     );
-}; 
+};

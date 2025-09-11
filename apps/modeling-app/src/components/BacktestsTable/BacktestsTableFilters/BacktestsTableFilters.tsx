@@ -12,7 +12,7 @@ import styles from './BacktestsTableFilters.module.css';
 type Props = {
     table: Table<BackTestRead>;
     models: ModelSpecRead[];
-}
+};
 
 export const BacktestsTableFilters = ({ table, models }: Props) => {
     return (
@@ -22,7 +22,7 @@ export const BacktestsTableFilters = ({ table, models }: Props) => {
                     dense
                     placeholder={i18n.t('Search')}
                     value={(table.getColumn('name')?.getFilterValue() as string | undefined) ?? ''}
-                    onChange={(e) => table.getColumn('name')?.setFilterValue(e.value)}
+                    onChange={e => table.getColumn('name')?.setFilterValue(e.value)}
                 />
             </div>
 
@@ -35,9 +35,9 @@ export const BacktestsTableFilters = ({ table, models }: Props) => {
                     clearText={i18n.t('Clear')}
                     selected={table.getColumn('modelId')?.getFilterValue() as string | undefined}
                     placeholder={i18n.t('Model')}
-                    onChange={(e) => table.getColumn('modelId')?.setFilterValue(e.selected)}
+                    onChange={e => table.getColumn('modelId')?.setFilterValue(e.selected)}
                 >
-                    {models.map((model) => (
+                    {models.map(model => (
                         <MenuItem
                             key={model.id}
                             className={styles.singleSelectMenuItem}
@@ -49,4 +49,4 @@ export const BacktestsTableFilters = ({ table, models }: Props) => {
             </div>
         </>
     );
-}; 
+};

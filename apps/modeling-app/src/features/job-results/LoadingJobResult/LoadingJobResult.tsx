@@ -1,9 +1,9 @@
-import React from 'react'
-import styles from './LoadingJobResult.module.css'
-import { CircularLoader } from '@dhis2/ui'
+import React from 'react';
+import styles from './LoadingJobResult.module.css';
+import { CircularLoader } from '@dhis2/ui';
 
 interface LoadingJobResultProps {
-    type: 'predictions' | 'datasets' | 'evaluations'
+    type: 'predictions' | 'datasets' | 'evaluations';
 }
 
 const LoadingJobResult = ({ type }: LoadingJobResultProps) => {
@@ -15,10 +15,13 @@ const LoadingJobResult = ({ type }: LoadingJobResultProps) => {
                 </div>
             </div>
             <p className={styles.textLoad}>
-                <i>Loading {type}</i>
+                <i>
+                    Loading
+                    {type}
+                </i>
             </p>
         </>
-    )
-}
+    );
+};
 
-export default LoadingJobResult
+export default LoadingJobResult;

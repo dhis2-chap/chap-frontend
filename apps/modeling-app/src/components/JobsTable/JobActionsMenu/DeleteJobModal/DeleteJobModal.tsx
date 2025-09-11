@@ -47,4 +47,4 @@ export const DeleteJobModal = ({ id, onClose, onDelete }: Props) => {
             </ModalActions>
         </Modal>
     );
-}; 
+};

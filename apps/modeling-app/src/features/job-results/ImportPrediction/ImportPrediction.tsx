@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react'
-import { Modal } from '@dhis2/ui'
-import styles from './ImportPrediction.module.css'
+import React, { useEffect, useState } from 'react';
+import { Modal } from '@dhis2/ui';
+import styles from './ImportPrediction.module.css';
 
 import {
     CrudService,
     PredictionRead,
-} from '@dhis2-chap/ui'
-import PredictionResult from '../../import-prediction/PredictionResult'
+} from '@dhis2-chap/ui';
+import PredictionResult from '../../import-prediction/PredictionResult';
 
 interface ImportPredictionProps {
-    setIsImportModalOpen: (value: boolean) => void
-    isImportModalOpen: boolean
-    predictionIdToImport: string | undefined
+    setIsImportModalOpen: (value: boolean) => void;
+    isImportModalOpen: boolean;
+    predictionIdToImport: string | undefined;
 }
 
 const ImportPrediction = ({
@@ -19,21 +19,21 @@ const ImportPrediction = ({
     setIsImportModalOpen,
     predictionIdToImport,
 }: ImportPredictionProps) => {
-    const [result, setResult] = useState<PredictionRead>()
+    const [result, setResult] = useState<PredictionRead>();
 
-    //fetch all prediction values
+    // fetch all prediction values
     const fetchPredictionSamples = async (predictionId: number) => {
         await CrudService.getPredictionCrudPredictionsPredictionIdGet(
-            predictionId
+            predictionId,
         ).then((response: any) => {
-            setResult(response)
-        })
-    }
+            setResult(response);
+        });
+    };
 
     useEffect(() => {
         if (predictionIdToImport)
-            fetchPredictionSamples(Number(predictionIdToImport))
-    }, [])
+            fetchPredictionSamples(Number(predictionIdToImport));
+    }, []);
 
     return (
         <div>
@@ -42,15 +42,15 @@ const ImportPrediction = ({
                     <Modal
                         className={styles.modal}
                         onClose={() => {
-                            setIsImportModalOpen(false)
+                            setIsImportModalOpen(false);
                         }}
                     >
                         <>
-                            {/*show spinner while loading*/}
+                            {/* show spinner while loading */}
 
-                            {/*when loaded show results and view to import*/}
+                            {/* when loaded show results and view to import */}
 
-                            {/*make a copy of this file in folder features/import-prediction*/}
+                            {/* make a copy of this file in folder features/import-prediction */}
                             {result && (
                                 <PredictionResult
                                     prediction_unprocessed={result}
@@ -61,7 +61,7 @@ const ImportPrediction = ({
                 </>
             )}
         </div>
-    )
-}
+    );
+};
 
-export default ImportPrediction
+export default ImportPrediction;

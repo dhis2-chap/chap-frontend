@@ -1,32 +1,32 @@
-import React, { useEffect, useState } from 'react'
-import { PeriodTypeSelector } from './PeriodTypeSelector'
-import TimePeriodInputField from './TimePeriodInputField'
-import styles from './TimePeriodPicker.module.css'
-import { toDHIS2PeriodData } from '../utils/timePeriodUtils'
+import React, { useEffect, useState } from 'react';
+import { PeriodTypeSelector } from './PeriodTypeSelector';
+import TimePeriodInputField from './TimePeriodInputField';
+import styles from './TimePeriodPicker.module.css';
+import { toDHIS2PeriodData } from '../utils/timePeriodUtils';
 
-import { Period } from '../interfaces/Period'
+import { Period } from '../interfaces/Period';
 
 interface TimePeriodeSelectorProps {
-    setTimePeriods: (timePeriods: Period[]) => void
+    setTimePeriods: (timePeriods: Period[]) => void;
 }
 
 const TimePeriodeSelector = ({ setTimePeriods }: TimePeriodeSelectorProps) => {
     const [timePeriodeType, setTimePeriodType] = useState<
         'week' | 'month' | ''
-    >('')
-    const [startTime, setStartTime] = useState('')
-    const [endTime, setEndTime] = useState('')
+    >('');
+    const [startTime, setStartTime] = useState('');
+    const [endTime, setEndTime] = useState('');
 
     const onChangeTimePeriodType = (e: 'week' | 'month' | '') => {
-        setStartTime('')
-        setEndTime('')
-        setTimePeriodType(e)
-    }
+        setStartTime('');
+        setEndTime('');
+        setTimePeriodType(e);
+    };
 
     useEffect(() => {
-        //updates the timePeriode used in the analytics request later
-        setTimePeriods(toDHIS2PeriodData(startTime, endTime, timePeriodeType))
-    }, [startTime, endTime])
+        // updates the timePeriode used in the analytics request later
+        setTimePeriods(toDHIS2PeriodData(startTime, endTime, timePeriodeType));
+    }, [startTime, endTime]);
 
     return (
         <div>
@@ -40,23 +40,23 @@ const TimePeriodeSelector = ({ setTimePeriods }: TimePeriodeSelectorProps) => {
                     <div className={styles.timePeriodeSelectorInputFieldsChild}>
                         <TimePeriodInputField
                             periodeType={timePeriodeType}
-                            label={'Dateset start:'}
-                            name={''}
+                            label="Dateset start:"
+                            name=""
                             onChange={setStartTime}
                         />
                     </div>
                     <div className={styles.timePeriodeSelectorInputFieldsChild}>
                         <TimePeriodInputField
                             periodeType={timePeriodeType}
-                            label={'Dateset end:'}
-                            name={''}
+                            label="Dateset end:"
+                            name=""
                             onChange={setEndTime}
                         />
                     </div>
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default TimePeriodeSelector
+export default TimePeriodeSelector;

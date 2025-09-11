@@ -8,7 +8,7 @@ import { useBatchDeleteBacktests } from '../hooks/useBatchDeleteBacktests';
 
 type Props = {
     table: Table<BackTestRead>;
-}
+};
 
 export const BatchActions = ({ table }: Props) => {
     const {
@@ -16,14 +16,14 @@ export const BatchActions = ({ table }: Props) => {
         isSubmitting: isBatchDeleting,
     } = useBatchDeleteBacktests({
         onSuccess: () => {
-            table.resetRowSelection()
+            table.resetRowSelection();
         },
-    })
+    });
 
     const handleDelete = () => {
-        const selectedIds = table.getSelectedRowModel().rows.map((row) => row.original.id)
-        deleteBacktests(selectedIds)
-    }
+        const selectedIds = table.getSelectedRowModel().rows.map(row => row.original.id);
+        deleteBacktests(selectedIds);
+    };
 
     return (
         <div className={styles.batchActionsContainer}>
@@ -55,4 +55,4 @@ export const BatchActions = ({ table }: Props) => {
             </div>
         </div>
     );
-}; 
+};

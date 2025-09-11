@@ -1,13 +1,13 @@
-import React from 'react'
-import { SingleSelectField, SingleSelectOption } from '@dhis2/ui'
-import styles from './styles/SelectDataValues.module.css'
-import i18n from '@dhis2/d2-i18n'
+import React from 'react';
+import { SingleSelectField, SingleSelectOption } from '@dhis2/ui';
+import styles from './styles/SelectDataValues.module.css';
+import i18n from '@dhis2/d2-i18n';
 
 interface SelectDataValuesProps {
-    label: string
-    dataElements: any[] | undefined
-    value: { displayName: string; id: string } | null
-    onChange: (v: { displayName: string; id: string }) => void
+    label: string;
+    dataElements: any[] | undefined;
+    value: { displayName: string; id: string } | null;
+    onChange: (v: { displayName: string; id: string }) => void;
 }
 
 const SelectDataValues = ({
@@ -21,11 +21,11 @@ const SelectDataValues = ({
             displayName: dataElements?.find((d: any) => d.id === e.selected)
                 .displayName,
             id: e.selected,
-        })
-    }
+        });
+    };
 
     const noDataElements =
-        dataElements?.length === 0 && dataElements != undefined
+        dataElements?.length === 0 && dataElements != undefined;
 
     return (
         <div>
@@ -53,7 +53,7 @@ const SelectDataValues = ({
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default SelectDataValues
+export default SelectDataValues;

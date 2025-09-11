@@ -42,7 +42,7 @@ const columns = [
         header: i18n.t('Status'),
         filterFn: 'equals',
         enableSorting: false,
-        cell: (info) => (
+        cell: info => (
             <StatusCell
                 status={info.getValue()}
             />
@@ -55,7 +55,7 @@ const columns = [
     columnHelper.accessor('type', {
         header: i18n.t('Type'),
         enableSorting: false,
-        cell: (info) => (
+        cell: info => (
             <JobTypeCell
                 jobType={info.getValue()}
             />
@@ -119,7 +119,7 @@ const getSortDirection = (column: Column<JobDescription>) => {
 
 type Props = {
     jobs: JobDescription[];
-}
+};
 
 export const JobsTable = ({ jobs }: Props) => {
     const table = useReactTable({
@@ -131,7 +131,7 @@ export const JobsTable = ({ jobs }: Props) => {
                 id: false,
             },
         },
-        getRowId: (row) => row.id.toString(),
+        getRowId: row => row.id.toString(),
         enableRowSelection: false,
         getSortedRowModel: getSortedRowModel(),
         getCoreRowModel: getCoreRowModel(),
@@ -152,9 +152,9 @@ export const JobsTable = ({ jobs }: Props) => {
             </div>
             <DataTable>
                 <DataTableHead>
-                    {table.getHeaderGroups().map((headerGroup) => (
+                    {table.getHeaderGroups().map(headerGroup => (
                         <DataTableRow key={headerGroup.id}>
-                            {headerGroup.headers.map((header) => (
+                            {headerGroup.headers.map(header => (
                                 <DataTableColumnHeader
                                     key={header.id}
                                     fixed
@@ -162,15 +162,15 @@ export const JobsTable = ({ jobs }: Props) => {
                                     {...(header.column.getCanSort() ? {
                                         sortDirection: getSortDirection(header.column),
                                         sortIconTitle: i18n.t('Sort by {{column}}', { column: header.column.id }),
-                                        onSortIconClick: () => header.column.toggleSorting()
+                                        onSortIconClick: () => header.column.toggleSorting(),
                                     } : {})}
                                 >
                                     {header.isPlaceholder
                                         ? null
                                         : flexRender(
-                                            header.column.columnDef.header,
-                                            header.getContext()
-                                        )}
+                                                header.column.columnDef.header,
+                                                header.getContext(),
+                                            )}
                                 </DataTableColumnHeader>
                             ))}
                         </DataTableRow>
@@ -178,20 +178,20 @@ export const JobsTable = ({ jobs }: Props) => {
                 </DataTableHead>
                 <DataTableBody>
                     {hasVisibleRows ? table.getRowModel().rows
-                        .map((row) => (
+                        .map(row => (
                             <DataTableRow key={row.id}>
-                                {row.getVisibleCells().map((cell) => (
+                                {row.getVisibleCells().map(cell => (
                                     <DataTableCell key={cell.id}>
                                         {flexRender(
                                             cell.column.columnDef.cell,
-                                            cell.getContext()
+                                            cell.getContext(),
                                         )}
                                     </DataTableCell>
                                 ))}
                             </DataTableRow>
                         )) : (
                         <DataTableRow>
-                            <DataTableCell colSpan={String(table.getAllColumns().length)} align='center'>
+                            <DataTableCell colSpan={String(table.getAllColumns().length)} align="center">
                                 {i18n.t('No jobs available')}
                             </DataTableCell>
                         </DataTableRow>

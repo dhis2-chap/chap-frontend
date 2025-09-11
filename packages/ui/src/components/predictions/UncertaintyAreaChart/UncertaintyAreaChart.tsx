@@ -1,26 +1,26 @@
-import i18n from '@dhis2/d2-i18n'
-import Highcharts from 'highcharts'
-import accessibility from 'highcharts/modules/accessibility'
-import highchartsMore from 'highcharts/highcharts-more'
-import exporting from 'highcharts/modules/exporting'
-import React, { useState } from 'react'
-import HighchartsReact from 'highcharts-react-official'
-import styles from './UncertaintyAreaChart.module.css'
-import { Menu, MenuItem } from '@dhis2/ui'
-import { FullPredictionResponseExtended } from '../../../interfaces/Prediction'
-import { createFixedPeriodFromPeriodId } from '@dhis2/multi-calendar-dates'
+import i18n from '@dhis2/d2-i18n';
+import Highcharts from 'highcharts';
+import accessibility from 'highcharts/modules/accessibility';
+import highchartsMore from 'highcharts/highcharts-more';
+import exporting from 'highcharts/modules/exporting';
+import React, { useState } from 'react';
+import HighchartsReact from 'highcharts-react-official';
+import styles from './UncertaintyAreaChart.module.css';
+import { Menu, MenuItem } from '@dhis2/ui';
+import { FullPredictionResponseExtended } from '../../../interfaces/Prediction';
+import { createFixedPeriodFromPeriodId } from '@dhis2/multi-calendar-dates';
 
-accessibility(Highcharts)
-exporting(Highcharts)
-highchartsMore(Highcharts)
+accessibility(Highcharts);
+exporting(Highcharts);
+highchartsMore(Highcharts);
 
 const getChartOptions = (
     data: any,
-    predictionTargetName: string
+    predictionTargetName: string,
 ): Highcharts.Options => {
     const median = data
         .filter((d: any) => d.dataElement === 'median')
-        .map((d: any) => [d.period, d.value])
+        .map((d: any) => [d.period, d.value]);
 
     const range = data
         .filter((d: any) => d.dataElement === 'quantile_low')
@@ -29,9 +29,9 @@ const getChartOptions = (
             d.value,
             data.filter(
                 (x: any) =>
-                    x.dataElement === 'quantile_high' && x.period === d.period
+                    x.dataElement === 'quantile_high' && x.period === d.period,
             )[0].value,
-        ])
+        ]);
 
     return {
         title: {
@@ -40,7 +40,7 @@ const getChartOptions = (
                 {
                     predictionTargetName,
                     orgUnitName: data[0].displayName,
-                }
+                },
             ),
         },
         tooltip: {
@@ -54,7 +54,7 @@ const getChartOptions = (
                     return createFixedPeriodFromPeriodId({
                         periodId: this.value.toString(),
                         calendar: 'gregory',
-                    }).displayName
+                    }).displayName;
                 },
                 style: {
                     fontSize: '0.9rem',
@@ -79,7 +79,7 @@ const getChartOptions = (
             },
         },
         series: [
-            //median
+            // median
             {
                 type: 'line',
                 data: median,
@@ -87,7 +87,7 @@ const getChartOptions = (
                 color: '#004bbd',
                 zIndex: 2,
             },
-            //high
+            // high
             {
                 type: 'arearange',
                 name: i18n.t('Range'),
@@ -98,36 +98,36 @@ const getChartOptions = (
                 fillOpacity: 0.4,
             },
         ],
-    }
-}
+    };
+};
 
 interface PredicationChartProps {
-    data: FullPredictionResponseExtended
-    predictionTargetName: string
+    data: FullPredictionResponseExtended;
+    predictionTargetName: string;
 }
 
 function groupByOrgUnit(data: any) {
-    const orgUnits = [...new Set(data.map((item: any) => item.orgUnit))]
-    return orgUnits.map((orgUnit) =>
-        data.filter((item: any) => item.orgUnit === orgUnit)
-    )
+    const orgUnits = [...new Set(data.map((item: any) => item.orgUnit))];
+    return orgUnits.map(orgUnit =>
+        data.filter((item: any) => item.orgUnit === orgUnit),
+    );
 }
 
 export const UncertaintyAreaChart = ({
     data,
     predictionTargetName,
 }: PredicationChartProps) => {
-    const matrix = groupByOrgUnit(data.dataValues)
+    const matrix = groupByOrgUnit(data.dataValues);
 
     const [options, setOptions] = useState<Highcharts.Options | undefined>(
-        getChartOptions(matrix[0], predictionTargetName)
-    )
-    const [indexOfSelectedOrgUnit, setIndexOfSelectedOrgUnit] = useState(0)
+        getChartOptions(matrix[0], predictionTargetName),
+    );
+    const [indexOfSelectedOrgUnit, setIndexOfSelectedOrgUnit] = useState(0);
 
     const onSelectOrgUnit = (index: number) => {
-        setIndexOfSelectedOrgUnit(index)
-        setOptions(getChartOptions(matrix[index], predictionTargetName))
-    }
+        setIndexOfSelectedOrgUnit(index);
+        setOptions(getChartOptions(matrix[index], predictionTargetName));
+    };
 
     return (
         <>
@@ -148,11 +148,11 @@ export const UncertaintyAreaChart = ({
                 <div className={styles.chart}>
                     <HighchartsReact
                         highcharts={Highcharts}
-                        constructorType={'chart'}
+                        constructorType="chart"
                         options={options}
                     />
                 </div>
             </div>
         </>
-    )
-}
+    );
+};

@@ -1,1 +1,1 @@
-export { ModelSelectionModal } from './ModelSelectionModal' 
+export { ModelSelectionModal } from './ModelSelectionModal';

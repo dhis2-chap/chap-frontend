@@ -1,3 +1,1 @@
-export { EvaluationDetailsPage } from './EvaluationDetailsPage'
-
-
+export { EvaluationDetailsPage } from './EvaluationDetailsPage';

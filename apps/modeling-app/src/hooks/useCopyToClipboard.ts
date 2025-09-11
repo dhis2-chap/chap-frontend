@@ -10,7 +10,7 @@ const copyToClipboardFn = async (text: string): Promise<void> => {
 type Props = {
     onSuccess?: () => void;
     onError?: () => void;
-}
+};
 
 export const useCopyToClipboard = ({ onSuccess, onError }: Props = {}) => {
     const mutation = useMutation<void, Error, string>({
@@ -33,4 +33,4 @@ export const useCopyToClipboard = ({ onSuccess, onError }: Props = {}) => {
         error: mutation.error,
         reset: mutation.reset,
     };
-}; 
+};

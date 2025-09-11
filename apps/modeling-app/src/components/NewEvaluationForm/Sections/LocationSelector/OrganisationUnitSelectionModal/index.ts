@@ -1,1 +1,1 @@
-export { OrganisationUnitSelectionModal } from './OrganisationUnitSelectionModal' 
+export { OrganisationUnitSelectionModal } from './OrganisationUnitSelectionModal';

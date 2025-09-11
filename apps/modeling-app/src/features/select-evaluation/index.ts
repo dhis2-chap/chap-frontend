@@ -1,1 +1,1 @@
-export * from './EvaluationSelector'
+export * from './EvaluationSelector';

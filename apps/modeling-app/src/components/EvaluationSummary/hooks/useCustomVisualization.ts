@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
-import { ApiError, VisualizationService } from "@dhis2-chap/ui";
+import { useQuery } from '@tanstack/react-query';
+import { ApiError, VisualizationService } from '@dhis2-chap/ui';
 
 type UseVisualizationParams = {
     evaluationId?: number;
@@ -14,7 +14,7 @@ export const useCustomVisualization = ({
 }: UseVisualizationParams) => {
     const { data, isLoading, error } = useQuery<unknown, ApiError>({
         queryKey: [
-            "custom-visualizations",
+            'custom-visualizations',
             evaluationId,
             visualizationId,
             metricId,
@@ -23,10 +23,10 @@ export const useCustomVisualization = ({
             VisualizationService.generateVisualizationVisualizationVisualizationNameBacktestIdMetricIdGet(
                 visualizationId as string,
                 Number(evaluationId),
-                metricId as string
+                metricId as string,
             ),
         enabled:
-            typeof evaluationId === "number" &&
+            typeof evaluationId === 'number' &&
             evaluationId > 0 &&
             !!visualizationId &&
             !!metricId,
@@ -41,5 +41,3 @@ export const useCustomVisualization = ({
         error,
     };
 };
-
-

@@ -1,10 +1,10 @@
-import { ComparisonPlotList } from '@dhis2-chap/ui'
+import { ComparisonPlotList } from '@dhis2-chap/ui';
 import {
     EvaluationCompatibleSelector,
     EvaluationSelectorBase,
-} from '../select-evaluation'
-import React, { useMemo, useRef } from 'react'
-import css from './EvaluationCompare.module.css'
+} from '../select-evaluation';
+import React, { useMemo, useRef } from 'react';
+import css from './EvaluationCompare.module.css';
 import {
     Button,
     CircularLoader,
@@ -13,25 +13,25 @@ import {
     IconVisualizationLine24,
     IconVisualizationLineMulti24,
     NoticeBox,
-} from '@dhis2/ui'
-import i18n from '@dhis2/d2-i18n'
-import { usePlotDataForEvaluations } from '../../hooks/usePlotDataForEvaluations'
-import { PageHeader } from '../common-features/PageHeader/PageHeader'
-import OrganisationUnitMultiSelect from '../../components/OrganisationUnitsSelect/OrganisationUnitMultiSelect'
-import { useCompareSelectionController } from './useCompareSelectionController'
-import { SplitPeriodSlider } from './SplitPeriodSlider'
-import { useNavigate } from 'react-router-dom'
-import { ID_MAIN_LAYOUT } from '../../components/layout/Layout'
+} from '@dhis2/ui';
+import i18n from '@dhis2/d2-i18n';
+import { usePlotDataForEvaluations } from '../../hooks/usePlotDataForEvaluations';
+import { PageHeader } from '../common-features/PageHeader/PageHeader';
+import OrganisationUnitMultiSelect from '../../components/OrganisationUnitsSelect/OrganisationUnitMultiSelect';
+import { useCompareSelectionController } from './useCompareSelectionController';
+import { SplitPeriodSlider } from './SplitPeriodSlider';
+import { useNavigate } from 'react-router-dom';
+import { ID_MAIN_LAYOUT } from '../../components/layout/Layout';
 
-const MAX_SELECTED_ORG_UNITS = 10
+const MAX_SELECTED_ORG_UNITS = 10;
 
 export const EvaluationCompare = () => {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     // reference to the scrollable container
     // used by virtuoso in ComparisonPlotList
     const scrollerRef = useRef<HTMLDivElement>(
-        document.getElementById(ID_MAIN_LAYOUT) as HTMLDivElement
-    )
+        document.getElementById(ID_MAIN_LAYOUT) as HTMLDivElement,
+    );
 
     const {
         selectedEvaluations,
@@ -49,7 +49,7 @@ export const EvaluationCompare = () => {
         setSelectedSplitPeriod: setSelectedSplitPoint,
     } = useCompareSelectionController({
         maxSelectedOrgUnits: MAX_SELECTED_ORG_UNITS,
-    })
+    });
 
     const {
         combined,
@@ -57,23 +57,23 @@ export const EvaluationCompare = () => {
         error,
     } = usePlotDataForEvaluations(selectedEvaluations, {
         orgUnits: selectedOrgUnits,
-    })
+    });
 
     const { dataForSplitPeriod, periods } = useMemo(() => {
         const dataForSplitPeriod = combined.viewData
-            .filter((v) => v.splitPoint === selectedSplitPeriod)
-            .flatMap((v) =>
-                v.evaluation.map((e) => ({
+            .filter(v => v.splitPoint === selectedSplitPeriod)
+            .flatMap(v =>
+                v.evaluation.map(e => ({
                     ...e,
                     orgUnitName:
-                        orgUnits?.find((ou) => ou.id === e.orgUnitId)
+                        orgUnits?.find(ou => ou.id === e.orgUnitId)
                             ?.displayName ?? e.orgUnitId,
-                }))
+                })),
             )
-            .sort((a, b) => a.orgUnitName.localeCompare(b.orgUnitName))
-        const periods = dataForSplitPeriod[0]?.models[0].data.periods ?? []
-        return { dataForSplitPeriod, periods }
-    }, [combined.viewData, selectedSplitPeriod, orgUnits])
+            .sort((a, b) => a.orgUnitName.localeCompare(b.orgUnitName));
+        const periods = dataForSplitPeriod[0]?.models[0].data.periods ?? [];
+        return { dataForSplitPeriod, periods };
+    }, [combined.viewData, selectedSplitPeriod, orgUnits]);
 
     return (
         <div className={css.wrapper}>
@@ -81,7 +81,7 @@ export const EvaluationCompare = () => {
                 <PageHeader
                     pageTitle={i18n.t('Compare evaluations')}
                     pageDescription={i18n.t(
-                        'Compare evaluations to assess model, co-variates and data performance.'
+                        'Compare evaluations to assess model, co-variates and data performance.',
                     )}
                 />
                 <div>
@@ -89,7 +89,7 @@ export const EvaluationCompare = () => {
                         small
                         icon={<IconArrowLeft16 />}
                         onClick={() => {
-                            navigate('/evaluate')
+                            navigate('/evaluate');
                         }}
                     >
                         {i18n.t('Back to evaluations')}
@@ -98,7 +98,7 @@ export const EvaluationCompare = () => {
                 <div className={css.compareSelectors}>
                     <EvaluationSelectorBase
                         onSelect={(evaluation1) => {
-                            setBaseEvaluation(evaluation1?.id.toString())
+                            setBaseEvaluation(evaluation1?.id.toString());
                         }}
                         selected={baseEvaluation}
                         available={evaluations ?? []}
@@ -107,7 +107,7 @@ export const EvaluationCompare = () => {
                     />
                     <EvaluationCompatibleSelector
                         onSelect={(evaluation2) => {
-                            setComparisonEvaluation(evaluation2?.id.toString())
+                            setComparisonEvaluation(evaluation2?.id.toString());
                         }}
                         selected={comparisonEvaluation}
                         compatibleEvaluationId={baseEvaluation?.id}
@@ -119,8 +119,7 @@ export const EvaluationCompare = () => {
                         selected={selectedOrgUnits}
                         disabled={!orgUnits}
                         onSelect={({ selected }) =>
-                            setSelectedOrgUnits(selected)
-                        }
+                            setSelectedOrgUnits(selected)}
                         available={orgUnits ?? []}
                         inputMaxHeight="52px"
                         maxSelections={MAX_SELECTED_ORG_UNITS}
@@ -135,14 +134,14 @@ export const EvaluationCompare = () => {
             {hasNoMatchingSplitPeriods && (
                 <NoticeBox warning>
                     {i18n.t(
-                        'Selected evaluations do not have any split periods in common. Please select evaluations with overlapping split periods.'
+                        'Selected evaluations do not have any split periods in common. Please select evaluations with overlapping split periods.',
                     )}
                 </NoticeBox>
             )}
             {!!error && (
                 <NoticeBox
                     title={i18n.t(
-                        'An error occurred while fetching chart data '
+                        'An error occurred while fetching chart data ',
                     )}
                     error
                 >
@@ -173,10 +172,10 @@ export const EvaluationCompare = () => {
             </div>
             {selectedEvaluations.length === 0 && <EmptySelection />}
         </div>
-    )
-}
+    );
+};
 
-export default EvaluationCompare
+export default EvaluationCompare;
 
 const EmptySelection = () => {
     return (
@@ -196,10 +195,10 @@ const EmptySelection = () => {
                 </p>
                 <p>
                     {i18n.t(
-                        `Compatible evaluations have overlapping organisation units and split periods.`
+                        `Compatible evaluations have overlapping organisation units and split periods.`,
                     )}
                 </p>
             </div>
         </div>
-    )
-}
+    );
+};
