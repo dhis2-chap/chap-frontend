@@ -21,5 +21,6 @@ export type ModelSpecRead = {
     id: number;
     covariates: Array<FeatureType>;
     target: FeatureType;
+    configurationName?: (string | null);
 };
 

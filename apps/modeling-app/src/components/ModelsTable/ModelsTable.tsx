@@ -59,7 +59,7 @@ const columns = [
         cell: (info) => (
             <ModelActionsMenu
                 id={info.row.original.id}
-                name={info.row.original.displayName || info.row.original.name}
+                name={info.row.original.configurationName}
             />
         ),
     }),
