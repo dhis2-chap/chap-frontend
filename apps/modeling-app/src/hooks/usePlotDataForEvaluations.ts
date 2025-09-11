@@ -167,8 +167,7 @@ export const usePlotDataForEvaluations = (
                 initialData: getInitialData(evaluation.id),
                 select: select,
                 enabled:
-                    !!evaluation &&
-                    (!!orgUnits ? orgUnits.length > 0 : true),
+                    !!evaluation && (!orgUnits || orgUnits.length > 0),
                 staleTime: 60 * 1000,
             } satisfies UseQueryOptions<
                 PlotDataRequestResult,
