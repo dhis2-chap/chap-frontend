@@ -9,7 +9,7 @@
         "watch": "tsc --watch",
         "build": "d2-app-scripts build && tsc --emitDeclarationOnly --outDir ./build/types",
         "start": "concurrently -n build,types --hide types \"d2-app-scripts build --watch\" \"tsc --emitDeclarationOnly --outDir ./build/types --watch\"",
-        "linter:check": "eslint . --config ../../eslint.config.mjs",
+        "linter:check": "eslint . --config ../../eslint.config.mts",
         "test": "d2-app-scripts test",
         "deploy": "d2-app-scripts deploy",
         "generate": "yarn openapi --input ./public/openapi.json --output ./src/httpfunctions --request ./src/queuedRequest.ts",
