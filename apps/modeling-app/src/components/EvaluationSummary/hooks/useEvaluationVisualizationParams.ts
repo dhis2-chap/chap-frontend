@@ -23,8 +23,8 @@ export const useEvaluationVisualizationParams = (
     const defaultMetricId =
         options.defaultMetricId ?? options.allowedMetricIds[0]
 
-    const visualizationFromUrl = searchParams.get(PARAM_KEYS.visualization) ?? undefined
-    const metricFromUrl = searchParams.get(PARAM_KEYS.metric) ?? undefined
+    const visualizationFromUrl = searchParams.get(PARAM_KEYS.visualization)
+    const metricFromUrl = searchParams.get(PARAM_KEYS.metric)
 
     const selectedVisualizationId = options.allowedVisualizationIds.includes(visualizationFromUrl ?? '')
         ? (visualizationFromUrl as string)
