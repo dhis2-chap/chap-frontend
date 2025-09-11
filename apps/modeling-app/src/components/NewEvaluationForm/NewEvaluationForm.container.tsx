@@ -11,17 +11,12 @@ import { useNavigationBlocker } from '../../hooks/useNavigationBlocker';
 import { NavigationConfirmModal } from '../NavigationConfirmModal';
 import { SummaryModal } from './SummaryModal';
 
-<<<<<<< HEAD
 type NewEvaluationFormProps = {
-    initialValues?: Partial<ReturnType<typeof useFormController>['methods']['getValues']>
-}
+    initialValues?: Partial<ReturnType<typeof useFormController>['methods']['getValues']>;
+};
 
 export const NewEvaluationForm = ({ initialValues }: NewEvaluationFormProps = {}) => {
-    const navigate = useNavigate()
-=======
-export const NewEvaluationForm = () => {
     const navigate = useNavigate();
->>>>>>> origin/main
     const {
         methods,
         onUpdateOrgUnits,
@@ -34,11 +29,7 @@ export const NewEvaluationForm = () => {
         closeSummaryModal,
         handleDryRun,
         isValidationLoading,
-<<<<<<< HEAD
-    } = useFormController(initialValues)
-=======
-    } = useFormController();
->>>>>>> origin/main
+    } = useFormController(initialValues);
 
     const {
         showConfirmModal,

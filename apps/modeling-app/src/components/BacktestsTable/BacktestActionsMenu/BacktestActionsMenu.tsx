@@ -6,11 +6,8 @@ import {
     IconEdit16,
     IconMore16,
     IconView16,
-<<<<<<< HEAD
     IconDuplicate16,
-=======
     IconVisualizationBarStacked24,
->>>>>>> origin/main
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { OverflowButton } from '@dhis2-chap/ui';

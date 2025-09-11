@@ -5,13 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-<<<<<<< HEAD
-"POT-Creation-Date: 2025-09-09T11:59:32.174Z\n"
-"PO-Revision-Date: 2025-09-09T11:59:32.176Z\n"
-=======
 "POT-Creation-Date: 2025-09-11T14:59:41.869Z\n"
 "PO-Revision-Date: 2025-09-11T14:59:41.869Z\n"
->>>>>>> origin/main
 
 msgid "View"
 msgstr "View"
