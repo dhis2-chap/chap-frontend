@@ -1,1 +1,1 @@
-export { InspectDatasetModal } from './InspectDatasetModal' 
+export { InspectDatasetModal } from './InspectDatasetModal';

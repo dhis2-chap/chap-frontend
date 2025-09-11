@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
-import { Card, CircularLoader, Button, NoticeBox, IconSettings16 } from "@dhis2/ui";
-import i18n from "@dhis2/d2-i18n";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect } from 'react';
+import { Card, CircularLoader, Button, NoticeBox, IconSettings16 } from '@dhis2/ui';
+import i18n from '@dhis2/d2-i18n';
+import { useNavigate } from 'react-router-dom';
 import styles from './ModelSettings.module.css';
-import { useModels } from "../../../hooks/useModels";
+import { useModels } from '../../../hooks/useModels';
 
 const Wrapper = ({ children }: { children: React.ReactNode }) => {
     return (
@@ -36,7 +36,7 @@ export const ModelSettings = () => {
                     <CircularLoader />
                 </div>
             </Wrapper>
-        )
+        );
     }
 
     if (error) {
@@ -48,7 +48,7 @@ export const ModelSettings = () => {
                     </NoticeBox>
                 </div>
             </Wrapper>
-        )
+        );
     }
 
     const handleConfigureModels = () => {
@@ -58,12 +58,12 @@ export const ModelSettings = () => {
     return (
         <Wrapper>
             <div className={styles.settingsContainer}>
-            <NoticeBox title={i18n.t('Model templates')}>
-                        {i18n.t('Model templates are base models that can be configured to fit your data with different parameters and covariates. This is still an advanced feature and should be used with caution.')}
-                    </NoticeBox>
+                <NoticeBox title={i18n.t('Model templates')}>
+                    {i18n.t('Model templates are base models that can be configured to fit your data with different parameters and covariates. This is still an advanced feature and should be used with caution.')}
+                </NoticeBox>
                 <div className={styles.info}>
                     <div className={styles.infoHeader}>
-                        <h3>{i18n.t('Configured models')}</h3> 
+                        <h3>{i18n.t('Configured models')}</h3>
 
                         <Button
                             small
@@ -82,4 +82,4 @@ export const ModelSettings = () => {
             </div>
         </Wrapper>
     );
-}; 
+};

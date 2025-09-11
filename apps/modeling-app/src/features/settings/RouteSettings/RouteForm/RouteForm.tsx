@@ -1,4 +1,4 @@
-import React from "react"
+import React from 'react';
 import {
     Button,
     ButtonStrip,
@@ -7,24 +7,24 @@ import {
     Modal,
     ModalActions,
     ModalContent,
-    ModalTitle
-} from "@dhis2/ui"
-import i18n from "@dhis2/d2-i18n"
-import { useForm, Controller } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { z } from "zod"
-import styles from '../RouteSettings.module.css'
+    ModalTitle,
+} from '@dhis2/ui';
+import i18n from '@dhis2/d2-i18n';
+import { useForm, Controller } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import styles from '../RouteSettings.module.css';
 
 const routeSchema = z.object({
     url: z.string()
-        .url({ message: i18n.t("Invalid URL format") })
-        .min(1, { message: i18n.t("URL is required") })
-        .refine((url) => url.endsWith("/**"), {
-            message: i18n.t("URL must end with a double wildcard (/**)")
-        })
-})
+        .url({ message: i18n.t('Invalid URL format') })
+        .min(1, { message: i18n.t('URL is required') })
+        .refine(url => url.endsWith('/**'), {
+            message: i18n.t('URL must end with a double wildcard (/**)'),
+        }),
+});
 
-export type RouteFormValues = z.infer<typeof routeSchema>
+export type RouteFormValues = z.infer<typeof routeSchema>;
 
 interface RouteFormProps {
     onClose: () => void;
@@ -39,7 +39,7 @@ export const RouteForm = ({
     onClose,
     onSubmit,
     isLoading,
-    initialUrl = "",
+    initialUrl = '',
     modalTitle,
     submitButtonText,
 }: RouteFormProps) => {
@@ -71,7 +71,7 @@ export const RouteForm = ({
                                 {...field}
                                 type="text"
                                 error={!!errors.url}
-                                onChange={(payload) => field.onChange(payload.value)}
+                                onChange={payload => field.onChange(payload.value)}
                                 dataTest="route-url-input"
                             />
                         )}
@@ -86,7 +86,7 @@ export const RouteForm = ({
                             disabled={isLoading}
                             dataTest="cancel-route-button"
                         >
-                            {i18n.t("Cancel")}
+                            {i18n.t('Cancel')}
                         </Button>
                         <Button
                             type="submit"
@@ -102,4 +102,4 @@ export const RouteForm = ({
             </form>
         </Modal>
     );
-}; 
+};

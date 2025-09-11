@@ -1,14 +1,14 @@
-import { useApiDataQuery } from "../utils/useApiDataQuery"
+import { useApiDataQuery } from '../utils/useApiDataQuery';
 
 type User = {
-    id: string
-    username: string
-    displayName: string
-    authorities: string[]
-}
+    id: string;
+    username: string;
+    displayName: string;
+    authorities: string[];
+};
 
 export const useLoggedInUser = () => {
-    const fields = 'id,username,displayName,authorities'
+    const fields = 'id,username,displayName,authorities';
 
     const { data, isLoading, error } = useApiDataQuery<User, Error, User>({
         queryKey: ['me', fields],
@@ -21,11 +21,11 @@ export const useLoggedInUser = () => {
         staleTime: Infinity,
         cacheTime: Infinity,
         refetchOnWindowFocus: false,
-    })
+    });
 
     return {
         user: data,
         isLoading,
         error,
-    }
-}
+    };
+};

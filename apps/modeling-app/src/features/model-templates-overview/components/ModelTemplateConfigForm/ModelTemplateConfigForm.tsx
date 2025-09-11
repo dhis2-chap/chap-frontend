@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import {
     Button,
     ButtonStrip,
@@ -6,19 +6,19 @@ import {
     Label,
     SingleSelect,
     SingleSelectOption,
-} from '@dhis2/ui'
-import i18n from '@dhis2/d2-i18n'
-import { Controller } from 'react-hook-form'
-import { UserOptionsFields } from '../UserOptionsFields'
-import { useFormController, ModelTemplateConfigFormValues } from './hooks/useFormController'
-import styles from './ModelTemplateConfigForm.module.css'
+} from '@dhis2/ui';
+import i18n from '@dhis2/d2-i18n';
+import { Controller } from 'react-hook-form';
+import { UserOptionsFields } from '../UserOptionsFields';
+import { useFormController, ModelTemplateConfigFormValues } from './hooks/useFormController';
+import styles from './ModelTemplateConfigForm.module.css';
 
 interface ModelTemplateConfigFormProps {
-    onSubmit: (data: ModelTemplateConfigFormValues) => void
-    isSubmitting: boolean
+    onSubmit: (data: ModelTemplateConfigFormValues) => void;
+    isSubmitting: boolean;
 }
 
-export type { ModelTemplateConfigFormValues }
+export type { ModelTemplateConfigFormValues };
 
 export const ModelTemplateConfigForm = ({
     onSubmit,
@@ -41,12 +41,12 @@ export const ModelTemplateConfigForm = ({
         requiredCovariates,
         modelTemplates,
         isLoadingTemplates,
-        watchedTemplateId
-    } = useFormController()
+        watchedTemplateId,
+    } = useFormController();
 
     const handleFormSubmit = (data: ModelTemplateConfigFormValues) => {
-        onSubmit(data)
-    }
+        onSubmit(data);
+    };
 
     return (
         <div className={styles.formContainer}>
@@ -91,15 +91,14 @@ export const ModelTemplateConfigForm = ({
                                 disabled={!watchedTemplateId}
                                 placeholder={i18n.t('Enter something to identify your model, e.g. "Debug" or "Malaria"')}
                                 onChange={({ value }) => field.onChange(value)}
-                                helpText={field.value ?
-                                    i18n.t('Your model will be saved as {{modelName}} [{{configuredModelName}}]',
-                                        {
-                                            modelName: currentTemplate?.displayName,
-                                            configuredModelName: field.value,
-                                            escape: ':'
-                                        }
-                                    ) : undefined
-                                }
+                                helpText={field.value
+                                    ? i18n.t('Your model will be saved as {{modelName}} [{{configuredModelName}}]',
+                                            {
+                                                modelName: currentTemplate?.displayName,
+                                                configuredModelName: field.value,
+                                                escape: ':',
+                                            },
+                                        ) : undefined}
                             />
                         )}
                     />
@@ -122,16 +121,16 @@ export const ModelTemplateConfigForm = ({
                                 placeholder={i18n.t('Enter covariate name')}
                                 onKeyDown={(_, event) => {
                                     if (event.key === 'Enter') {
-                                        event.preventDefault()
+                                        event.preventDefault();
                                         if (newCovariate.trim()) {
-                                            handleAddCovariate()
+                                            handleAddCovariate();
                                         }
                                     }
                                 }}
                                 onChange={({ value }) => {
-                                    setNewCovariate(value || '')
+                                    setNewCovariate(value || '');
                                     if (covariateError) {
-                                        setCovariateError('')
+                                        setCovariateError('');
                                     }
                                 }}
                                 disabled={!watchedTemplateId}
@@ -141,7 +140,7 @@ export const ModelTemplateConfigForm = ({
                         <Button
                             onClick={handleAddCovariate}
                             disabled={!newCovariate.trim()}
-                            type='button'
+                            type="button"
                         >
                             {i18n.t('Add')}
                         </Button>
@@ -187,7 +186,7 @@ export const ModelTemplateConfigForm = ({
                 </div>
             </form>
         </div>
-    )
-}
+    );
+};
 
-export default ModelTemplateConfigForm
+export default ModelTemplateConfigForm;

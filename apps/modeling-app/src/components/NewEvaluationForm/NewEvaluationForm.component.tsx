@@ -1,19 +1,19 @@
-import React from 'react'
-import { type UseFormReturn } from 'react-hook-form'
-import styles from './NewEvaluationForm.module.css'
-import { PeriodSelector } from './Sections/PeriodSelector'
-import { NameInput } from './Sections/NameInput'
-import { LocationSelector } from './Sections/LocationSelector'
-import { ModelSelector } from './Sections/ModelSelector/ModelSelector'
-import { DatasetConfiguration } from './Sections/DatasetConfiguration'
-import { OrganisationUnit } from '../OrganisationUnitSelector'
-import { EvaluationFormValues } from './hooks/useFormController'
+import React from 'react';
+import { type UseFormReturn } from 'react-hook-form';
+import styles from './NewEvaluationForm.module.css';
+import { PeriodSelector } from './Sections/PeriodSelector';
+import { NameInput } from './Sections/NameInput';
+import { LocationSelector } from './Sections/LocationSelector';
+import { ModelSelector } from './Sections/ModelSelector/ModelSelector';
+import { DatasetConfiguration } from './Sections/DatasetConfiguration';
+import { OrganisationUnit } from '../OrganisationUnitSelector';
+import { EvaluationFormValues } from './hooks/useFormController';
 
 type Props = {
-    onSubmit: (data: EvaluationFormValues) => void
-    methods: UseFormReturn<EvaluationFormValues>
-    onUpdateOrgUnits: (orgUnits: OrganisationUnit[]) => void
-}
+    onSubmit: (data: EvaluationFormValues) => void;
+    methods: UseFormReturn<EvaluationFormValues>;
+    onUpdateOrgUnits: (orgUnits: OrganisationUnit[]) => void;
+};
 
 export const NewEvaluationFormComponent = ({
     onSubmit,
@@ -21,14 +21,14 @@ export const NewEvaluationFormComponent = ({
     onUpdateOrgUnits,
 }: Props) => {
     const handleFormSubmit = (data: EvaluationFormValues) => {
-        onSubmit(data)
-    }
+        onSubmit(data);
+    };
 
     const {
         control,
         handleSubmit,
         formState: { errors },
-    } = methods
+    } = methods;
 
     return (
         <>
@@ -61,5 +61,5 @@ export const NewEvaluationFormComponent = ({
                 </form>
             </div>
         </>
-    )
-}
+    );
+};

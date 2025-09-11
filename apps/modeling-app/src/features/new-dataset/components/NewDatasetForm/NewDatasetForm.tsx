@@ -1,17 +1,17 @@
-import React, { useState } from 'react'
-import styles from './NewDatasetForm.module.css'
-import { DatasetLayer } from '../../interfaces/DataSetLayer'
-import { InputField } from '@dhis2/ui'
-import TimePeriodeSelector from '../../../timeperiod-selector/components/TimePeriodPicker'
-import OrgUnitSelector from '../../../orgunit-selector/OrgUnitSelector'
-import { Feature } from '@dhis2-chap/ui'
-import { SendChapData } from '../../../send-chap-data/SendChapData'
-import { IOrgUnitLevel, OrgUnit } from '../../../orgunit-selector/interfaces/orgUnit'
-import SelectDataLine from './SelectDataLine/SelectDataLine'
-import { Period } from '../../../timeperiod-selector/interfaces/Period'
+import React, { useState } from 'react';
+import styles from './NewDatasetForm.module.css';
+import { DatasetLayer } from '../../interfaces/DataSetLayer';
+import { InputField } from '@dhis2/ui';
+import TimePeriodeSelector from '../../../timeperiod-selector/components/TimePeriodPicker';
+import OrgUnitSelector from '../../../orgunit-selector/OrgUnitSelector';
+import { Feature } from '@dhis2-chap/ui';
+import { SendChapData } from '../../../send-chap-data/SendChapData';
+import { IOrgUnitLevel, OrgUnit } from '../../../orgunit-selector/interfaces/orgUnit';
+import SelectDataLine from './SelectDataLine/SelectDataLine';
+import { Period } from '../../../timeperiod-selector/interfaces/Period';
 
 interface NewDatasetFormProps {
-    onDrawerSubmit: () => void
+    onDrawerSubmit: () => void;
 }
 
 export const features: Feature[] = [
@@ -35,7 +35,7 @@ export const features: Feature[] = [
     },
 
     { name: 'Disease cases', id: 'disease_cases', description: 'Feature 5' },
-]
+];
 
 const fromFeatureToDataSetLayer = () => {
     const dataSetLayer: DatasetLayer[] = features.map((feature) => {
@@ -43,27 +43,27 @@ const fromFeatureToDataSetLayer = () => {
             feature: feature.id,
             origin: 'dataItem',
             dataSource: '', // This will be set later
-        }
-    })
-    return dataSetLayer
-}
+        };
+    });
+    return dataSetLayer;
+};
 
 const NewDatasetForm = ({ onDrawerSubmit }: NewDatasetFormProps) => {
     const [dataLayers, setDataLayers] = useState<DatasetLayer[]>(
-        fromFeatureToDataSetLayer()
-    )
-    const [selectedOrgUnits, setSelectedOrgUnits] = useState<OrgUnit[]>([])
+        fromFeatureToDataSetLayer(),
+    );
+    const [selectedOrgUnits, setSelectedOrgUnits] = useState<OrgUnit[]>([]);
     const [selectedTimePeriodes, setSelectedTimePeriodes] = useState<Period[]>(
-        []
-    )
+        [],
+    );
     const [orgUnitLevel, setOrgUnitLevel] = useState<IOrgUnitLevel | undefined>(
-        undefined
-    )
-    const [datasetName, setDatasetName] = useState<string | undefined>('')
+        undefined,
+    );
+    const [datasetName, setDatasetName] = useState<string | undefined>('');
 
     const resetDataLayer = (featureName: string) => {
-        setDataLayers(prev => prev.filter(layer => layer.feature !== featureName))
-    }
+        setDataLayers(prev => prev.filter(layer => layer.feature !== featureName));
+    };
 
     return (
         <>
@@ -72,7 +72,7 @@ const NewDatasetForm = ({ onDrawerSubmit }: NewDatasetFormProps) => {
                     autoComplete=""
                     label="Dataset name"
                     value={datasetName}
-                    onChange={(e) => setDatasetName(e.value)}
+                    onChange={e => setDatasetName(e.value)}
                     helpText="Name your dataset"
                     placeholder="Example: Monthly malaria cases, ERA5 climate data, all districts"
                 />
@@ -99,7 +99,7 @@ const NewDatasetForm = ({ onDrawerSubmit }: NewDatasetFormProps) => {
                 />
             </div>
         </>
-    )
-}
+    );
+};
 
-export default NewDatasetForm
+export default NewDatasetForm;

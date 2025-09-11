@@ -1,6 +1,6 @@
 export {
     Pill,
-} from './Pill'; 
+} from './Pill';
 
 export type {
     PillVariant,

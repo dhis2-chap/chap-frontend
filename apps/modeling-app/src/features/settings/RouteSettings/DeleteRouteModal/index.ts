@@ -1,2 +1,1 @@
-
-export { DeleteRouteModal } from './DeleteRouteModal'
+export { DeleteRouteModal } from './DeleteRouteModal';

@@ -1,52 +1,52 @@
-import { useState } from "react"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useState } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import i18n from '@dhis2/d2-i18n';
-import { EvaluationFormValues } from "./useFormController"
+import { EvaluationFormValues } from './useFormController';
 import {
     AnalyticsService,
     FeatureCollectionModel,
     MakeBacktestWithDataRequest,
     ApiError,
     ImportSummaryResponse,
-} from "@dhis2-chap/ui"
-import { useDataEngine } from "@dhis2/app-runtime"
-import { PERIOD_TYPES } from "../Sections/PeriodSelector"
-import { useNavigate } from "react-router-dom"
-import { validateClimateData } from "../utils/validateClimateData"
-import { prepareBacktestData } from "../utils/prepareBacktestData"
+} from '@dhis2-chap/ui';
+import { useDataEngine } from '@dhis2/app-runtime';
+import { PERIOD_TYPES } from '../Sections/PeriodSelector';
+import { useNavigate } from 'react-router-dom';
+import { validateClimateData } from '../utils/validateClimateData';
+import { prepareBacktestData } from '../utils/prepareBacktestData';
 
-const N_SPLITS = 10
-const STRIDE = 1
+const N_SPLITS = 10;
+const STRIDE = 1;
 
 const N_PERIODS = {
     [PERIOD_TYPES.MONTH]: 3,
     [PERIOD_TYPES.WEEK]: 12,
-}
+};
 
 // This is a workaround to get the correct type for the rejected field - the openapi spec is incorrect
 export type ImportSummaryCorrected = Omit<ImportSummaryResponse, 'rejected'> & {
-    hash?: string,
+    hash?: string;
     rejected: {
-        featureName: string,
-        orgUnit: string,
-        reason: string,
-        period: string[]
-    }[]
-}
+        featureName: string;
+        orgUnit: string;
+        reason: string;
+        period: string[];
+    }[];
+};
 
 type Props = {
-    onSuccess?: () => void
-    onError?: (error: ApiError) => void
-}
+    onSuccess?: () => void;
+    onError?: (error: ApiError) => void;
+};
 
 export const useCreateNewBacktest = ({
     onSuccess,
     onError,
 }: Props = {}) => {
-    const dataEngine = useDataEngine()
-    const queryClient = useQueryClient()
-    const navigate = useNavigate()
-    const [summaryModalOpen, setSummaryModalOpen] = useState<boolean>(false)
+    const dataEngine = useDataEngine();
+    const queryClient = useQueryClient();
+    const navigate = useNavigate();
+    const [summaryModalOpen, setSummaryModalOpen] = useState<boolean>(false);
 
     // TODO - remove this once the validation is done in the backend
     const {
@@ -62,12 +62,12 @@ export const useCreateNewBacktest = ({
                 periods,
                 orgUnitIds,
                 hash,
-            } = await prepareBacktestData(formData, dataEngine, queryClient)
+            } = await prepareBacktestData(formData, dataEngine, queryClient);
 
-            const validation = validateClimateData(observations, formData, periods, orgUnitIds)
+            const validation = validateClimateData(observations, formData, periods, orgUnitIds);
 
             if (!validation.isValid) {
-                const uniqueOrgUnits = [...new Set(validation.missingData.map(item => item.orgUnit))]
+                const uniqueOrgUnits = [...new Set(validation.missingData.map(item => item.orgUnit))];
                 const successCount = orgUnitIds.length - uniqueOrgUnits.length;
                 return {
                     id: null,
@@ -77,24 +77,24 @@ export const useCreateNewBacktest = ({
                         featureName: item.covariate,
                         orgUnit: item.orgUnit,
                         reason: i18n.t('Missing data for covariate'),
-                        period: [item.period]
-                    }))
-                }
+                        period: [item.period],
+                    })),
+                };
             }
 
             return {
                 id: null,
                 importedCount: orgUnitIds.length,
-                rejected: []
-            }
+                rejected: [],
+            };
         },
         onSuccess: () => {
-            setSummaryModalOpen(true)
+            setSummaryModalOpen(true);
         },
         onError: (error: ApiError) => {
-            onError?.(error)
-        }
-    })
+            onError?.(error);
+        },
+    });
 
     const {
         mutate: createNewBacktest,
@@ -105,8 +105,8 @@ export const useCreateNewBacktest = ({
             const { model, observations, orgUnitResponse } = await prepareBacktestData(
                 formData,
                 dataEngine,
-                queryClient
-            )
+                queryClient,
+            );
 
             const filteredGeoJson: FeatureCollectionModel = {
                 type: 'FeatureCollection',
@@ -119,9 +119,9 @@ export const useCreateNewBacktest = ({
                         parent: ou.parent.id,
                         parentGraph: ou.parent.id,
                         level: ou.level,
-                    }
+                    },
                 })),
-            }
+            };
 
             const backtestRequest: MakeBacktestWithDataRequest = {
                 name: formData.name,
@@ -132,25 +132,25 @@ export const useCreateNewBacktest = ({
                 nPeriods: N_PERIODS[formData.periodType],
                 nSplits: N_SPLITS,
                 stride: STRIDE,
-            }
+            };
 
-            return AnalyticsService.createBacktestWithDataAnalyticsCreateBacktestWithDataPost(backtestRequest, false) as unknown as Promise<ImportSummaryCorrected>
+            return AnalyticsService.createBacktestWithDataAnalyticsCreateBacktestWithDataPost(backtestRequest, false) as unknown as Promise<ImportSummaryCorrected>;
         },
         onMutate: () => {
-            resetValidation()
+            resetValidation();
         },
         onSuccess: (data: ImportSummaryCorrected) => {
             if (data.id) {
-                queryClient.invalidateQueries({ queryKey: ['jobs'] })
-                queryClient.invalidateQueries({ queryKey: ['new-backtest-data'] })
-                onSuccess?.()
+                queryClient.invalidateQueries({ queryKey: ['jobs'] });
+                queryClient.invalidateQueries({ queryKey: ['new-backtest-data'] });
+                onSuccess?.();
                 navigate('/jobs');
             }
         },
         onError: (error: ApiError) => {
-            onError?.(error)
-        }
-    })
+            onError?.(error);
+        },
+    });
 
     return {
         createNewBacktest,
@@ -161,6 +161,6 @@ export const useCreateNewBacktest = ({
         importSummary: validationResult,
         error: validationError || error,
         summaryModalOpen,
-        closeSummaryModal: () => setSummaryModalOpen(false)
-    }
-}
+        closeSummaryModal: () => setSummaryModalOpen(false),
+    };
+};

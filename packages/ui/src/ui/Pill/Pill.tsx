@@ -25,4 +25,4 @@ export const Pill = ({ children, variant = 'default' }: PillProps) => {
             </div>
         </span>
     );
-}; 
+};

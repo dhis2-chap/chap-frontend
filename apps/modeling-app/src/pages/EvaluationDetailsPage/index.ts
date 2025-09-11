@@ -1,0 +1,1 @@
+export { EvaluationDetailsPage } from './EvaluationDetailsPage';

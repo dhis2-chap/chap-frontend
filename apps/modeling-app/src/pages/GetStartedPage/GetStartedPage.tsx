@@ -1,7 +1,7 @@
-import React from 'react'
-import styles from './GetStartedPage.module.css'
-import { Button } from '@dhis2/ui'
-import i18n from '@dhis2/d2-i18n'
+import React from 'react';
+import styles from './GetStartedPage.module.css';
+import { Button } from '@dhis2/ui';
+import i18n from '@dhis2/d2-i18n';
 import { useNavigate } from 'react-router-dom';
 
 const EmptyStateIcon = () => (
@@ -53,11 +53,10 @@ export const GetStartedPage = () => {
                     </a>
                 </div>
 
-
                 <Button onClick={() => navigate('/settings')}>
                     {i18n.t('Configure settings')}
                 </Button>
             </div>
         </div>
     );
-}
+};

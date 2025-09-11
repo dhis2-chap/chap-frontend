@@ -1,1 +1,1 @@
-export { NameInput } from './NameInput' 
+export { NameInput } from './NameInput';

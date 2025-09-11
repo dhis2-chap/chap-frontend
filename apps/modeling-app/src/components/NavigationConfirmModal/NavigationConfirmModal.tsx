@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import {
     Modal,
     ModalTitle,
@@ -6,13 +6,13 @@ import {
     ModalActions,
     ButtonStrip,
     Button,
-} from '@dhis2/ui'
-import i18n from '@dhis2/d2-i18n'
+} from '@dhis2/ui';
+import i18n from '@dhis2/d2-i18n';
 
 type Props = {
-    onConfirm: () => void
-    onCancel: () => void
-}
+    onConfirm: () => void;
+    onCancel: () => void;
+};
 
 export const NavigationConfirmModal = ({
     onConfirm,
@@ -36,4 +36,4 @@ export const NavigationConfirmModal = ({
             </ButtonStrip>
         </ModalActions>
     </Modal>
-) 
+);

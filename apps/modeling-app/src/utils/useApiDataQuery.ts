@@ -1,12 +1,11 @@
-import { useDataEngine } from "@dhis2/app-runtime"
+import { useDataEngine } from '@dhis2/app-runtime';
 import {
     useQuery,
     QueryFunction,
     UseQueryOptions,
     QueryKey,
-} from "@tanstack/react-query";
+} from '@tanstack/react-query';
 import { ResourceQuery } from '../interfaces/apiQueryTypes';
-
 
 type UseApiDataQueryProps<
     TResultData,
@@ -39,4 +38,4 @@ export const useApiDataQuery = <
         queryFn,
         ...options,
     });
-}
+};

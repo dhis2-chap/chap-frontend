@@ -1,32 +1,32 @@
-import React, { useState } from "react"
+import React, { useState } from 'react';
 import {
     Button,
     IconAdd16,
-} from "@dhis2/ui"
-import i18n from "@dhis2/d2-i18n"
-import styles from '../RouteSettings.module.css'
-import { useSaveRoute } from "../hooks/useSaveRoute"
-import { RouteForm, RouteFormValues } from "../RouteForm"
+} from '@dhis2/ui';
+import i18n from '@dhis2/d2-i18n';
+import styles from '../RouteSettings.module.css';
+import { useSaveRoute } from '../hooks/useSaveRoute';
+import { RouteForm, RouteFormValues } from '../RouteForm';
 
 export const CreateRoute = () => {
-    const [isDialogOpen, setIsDialogOpen] = useState(false)
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
     const { saveRoute, isSaving } = useSaveRoute({
         onSuccess: () => {
-            setIsDialogOpen(false)
-        }
-    })
+            setIsDialogOpen(false);
+        },
+    });
 
     const handleSubmit = (data: RouteFormValues) => {
-        saveRoute({ url: data.url })
-    }
+        saveRoute({ url: data.url });
+    };
 
     const handleOpenDialog = () => {
-        setIsDialogOpen(true)
-    }
+        setIsDialogOpen(true);
+    };
 
     const handleCloseDialog = () => {
-        setIsDialogOpen(false)
-    }
+        setIsDialogOpen(false);
+    };
 
     return (
         <>
@@ -66,5 +66,5 @@ export const CreateRoute = () => {
                 />
             )}
         </>
-    )
-} 
+    );
+};

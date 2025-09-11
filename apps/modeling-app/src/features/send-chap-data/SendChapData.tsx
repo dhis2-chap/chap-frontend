@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import DownloadAnalyticsData from './components/DownloadData/DownloadAnalyticsData'
+import React, { useEffect, useState } from 'react';
+import DownloadAnalyticsData from './components/DownloadData/DownloadAnalyticsData';
 import {
     AnalyticsService,
     DatasetMakeRequest,
@@ -8,28 +8,28 @@ import {
     MakePredictionRequest,
     ModelSpecRead,
     ObservationBase,
-} from '@dhis2-chap/ui'
-import { ErrorResponse } from './interfaces/ErrorResponse'
-import saveAs from 'file-saver'
-import { IconError24 } from '@dhis2/ui'
-import styles from './SendChapData.module.css'
-import SendOrDownloadButtons from './components/SendOrDownloadButtons/SendOrDownloadButtons'
-import { IOrgUnitLevel, OrgUnit } from '../orgunit-selector/interfaces/orgUnit'
-import { Period } from '../timeperiod-selector/interfaces/Period'
-import { DatasetLayer } from '../new-dataset/interfaces/DataSetLayer'
-import { useConfig } from '@dhis2/app-runtime'
-import { createFixedPeriodFromPeriodId } from '@dhis2/multi-calendar-dates'
-import { useQueryClient } from '@tanstack/react-query'
+} from '@dhis2-chap/ui';
+import { ErrorResponse } from './interfaces/ErrorResponse';
+import saveAs from 'file-saver';
+import { IconError24 } from '@dhis2/ui';
+import styles from './SendChapData.module.css';
+import SendOrDownloadButtons from './components/SendOrDownloadButtons/SendOrDownloadButtons';
+import { IOrgUnitLevel, OrgUnit } from '../orgunit-selector/interfaces/orgUnit';
+import { Period } from '../timeperiod-selector/interfaces/Period';
+import { DatasetLayer } from '../new-dataset/interfaces/DataSetLayer';
+import { useConfig } from '@dhis2/app-runtime';
+import { createFixedPeriodFromPeriodId } from '@dhis2/multi-calendar-dates';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface SendChapDataProps {
-    onSendAction: 'predict' | 'new-dataset'
-    selectedPeriodItems: Period[]
-    selectedOrgUnits: OrgUnit[]
-    orgUnitLevel: IOrgUnitLevel | undefined
-    dataLayers: DatasetLayer[]
-    name: string | undefined
-    selectedModel?: ModelSpecRead | undefined
-    onDrawerSubmit: () => void
+    onSendAction: 'predict' | 'new-dataset';
+    selectedPeriodItems: Period[];
+    selectedOrgUnits: OrgUnit[];
+    orgUnitLevel: IOrgUnitLevel | undefined;
+    dataLayers: DatasetLayer[];
+    name: string | undefined;
+    selectedModel?: ModelSpecRead | undefined;
+    onDrawerSubmit: () => void;
 }
 
 export const SendChapData = ({
@@ -44,135 +44,142 @@ export const SendChapData = ({
 }: SendChapDataProps) => {
     const queryClient = useQueryClient();
 
-    //States applies for both "predict" and "new-dataset"
+    // States applies for both "predict" and "new-dataset"
     const [startDownload, setStartDownload] = useState<{
-        action: 'download' | 'predict' | 'new-dataset'
-        startDownload: boolean
-    }>({ action: 'download', startDownload: false })
+        action: 'download' | 'predict' | 'new-dataset';
+        startDownload: boolean;
+    }>({ action: 'download', startDownload: false });
 
-    const [isSendingDataToChap, setIsSendingDataToChap] = useState(false)
+    const [isSendingDataToChap, setIsSendingDataToChap] = useState(false);
 
-    //Keeping the analytics content (including geojson), before sending to CHAP
+    // Keeping the analytics content (including geojson), before sending to CHAP
     const [observations, setObservations] = useState<
         ObservationBase[] | undefined
-    >(undefined)
-    const [geoJSON, setGeoJSON] = useState<FeatureCollectionModel | undefined>()
+    >(undefined);
+    const [geoJSON, setGeoJSON] = useState<FeatureCollectionModel | undefined>();
     const [analyticsMetaData, setAnalyticsMetaData] = useState<{
-        [key: string]: { name: string }
-    }>({})
+        [key: string]: { name: string };
+    }>({});
     const analyticsDataLayers: DatasetLayer[] = dataLayers.filter(
-        (dataLayer) => dataLayer.origin === 'dataItem'
-    )
+        dataLayer => dataLayer.origin === 'dataItem',
+    );
 
     const [featureDataItemMapper, setFeatureDataItemMapper] = useState<
         { featureName: string; dataItemId: string }[]
-    >([])
+    >([]);
 
-    //State for validation, request status etc..
-    const [errorMessages, setErrorMessages] = useState<ErrorResponse[]>([])
-    const [errorChapMsg, setErrorChapMsg] = useState('')
+    // State for validation, request status etc..
+    const [errorMessages, setErrorMessages] = useState<ErrorResponse[]>([]);
+    const [errorChapMsg, setErrorChapMsg] = useState('');
 
     const formValid = () => {
-        if (orgUnitLevel === undefined) return false
-        if (selectedOrgUnits.length == 0) return false
-        if (selectedPeriodItems.length == 0) return false
-        if (datasetName === '') return false
-        if (selectedPeriodItems.length == 0) return false
-        if (dataLayers.length == 0) return false
+        if (orgUnitLevel === undefined) return false;
+        if (selectedOrgUnits.length == 0) return false;
+        if (selectedPeriodItems.length == 0) return false;
+        if (datasetName === '') return false;
+        if (selectedPeriodItems.length == 0) return false;
+        if (dataLayers.length == 0) return false;
         if (
             dataLayers.some(
                 (v: DatasetLayer) =>
-                    v.feature === '' || v.dataSource === '' || v.origin === ''
+                    v.feature === '' || v.dataSource === '' || v.origin === '',
             )
         )
-            return false
-        return true
-    }
+            return false;
+        return true;
+    };
 
-    //This will render the DownloadAnalyticsData components, which will fetch the analytics content from DHIS2
+    // This will render the DownloadAnalyticsData components, which will fetch the analytics content from DHIS2
     const onClickDownloadOrPostData = (
-        action: 'download' | 'predict' | 'new-dataset'
+        action: 'download' | 'predict' | 'new-dataset',
     ) => {
-        setObservations(undefined)
-        setGeoJSON(undefined)
-        setErrorMessages([])
-        setStartDownload({ action: action, startDownload: true })
-    }
+        setObservations(undefined);
+        setGeoJSON(undefined);
+        setErrorMessages([]);
+        setStartDownload({ action: action, startDownload: true });
+    };
 
-    //Triggered when anayltics content is fetched
+    // Triggered when anayltics content is fetched
     useEffect(() => {
         if (observations && geoJSON) {
-            setErrorChapMsg('')
-            setStartDownload((prev) => ({ ...prev, startDownload: false }))
+            setErrorChapMsg('');
+            setStartDownload(prev => ({ ...prev, startDownload: false }));
 
-            //if action is "download", do not do any validation
+            // if action is "download", do not do any validation
             if (startDownload.action === 'download') {
-                downloadData()
-                return
+                downloadData();
+                return;
             }
 
-            //if action is "predict" or "new-dataset", check if the analytics contains row
-            if (isAnalyticsContentIsEmpty(observations)) return
+            // if action is "predict" or "new-dataset", check if the analytics contains row
+            if (isAnalyticsContentIsEmpty(observations)) return;
 
-            if (startDownload.action === 'predict') predict()
-            if (startDownload.action === 'new-dataset') newDataset()
+            if (startDownload.action === 'predict') predict();
+            if (startDownload.action === 'new-dataset') newDataset();
         }
-    }, [observations, geoJSON])
+    }, [observations, geoJSON]);
 
     const climateHasMissingData = (
         allData: ObservationBase[],
         emptyFeatures: ErrorResponse[],
         covariate: string,
-        covariateDisplayName: string
+        covariateDisplayName: string,
     ) => {
         const missingData: {
-            orgUnitName: string
-            period: string
-            covariate: string
-        }[] = []
+            orgUnitName: string;
+            period: string;
+            covariate: string;
+        }[] = [];
 
-        //get uniqe orgunit out of allData
-        const uniqueOrgUnits = [...new Set(allData.map((d) => d.orgUnit))]
+        // get uniqe orgunit out of allData
+        const uniqueOrgUnits = [...new Set(allData.map(d => d.orgUnit))];
 
         selectedPeriodItems.forEach((per) => {
             uniqueOrgUnits.forEach((orgUnit) => {
-                let isMissing = true
+                let isMissing = true;
                 allData
-                    .filter((d) => d.featureName === covariate)
+                    .filter(d => d.featureName === covariate)
                     .forEach((f) => {
                         if (per.id == f.period) {
-                            isMissing = false
-                            return
+                            isMissing = false;
+                            return;
                         }
-                    })
+                    });
                 if (isMissing) {
                     missingData.push({
                         covariate: covariateDisplayName,
                         orgUnitName: analyticsMetaData[orgUnit]?.name || '',
                         period: per.id,
-                    })
+                    });
                 }
-            })
-        })
+            });
+        });
 
         if (missingData.length > 0) {
             emptyFeatures.push({
                 title:
-                    covariateDisplayName +
-                    ' is missing for the following orgUnit and time periods: ',
+                    covariateDisplayName
+                    + ' is missing for the following orgUnit and time periods: ',
                 description: (
                     <div>
                         <p>
-                            Total missing: {missingData.length} | Use the{' '}
+                            Total missing:
+                            {' '}
+                            {missingData.length}
+                            {' '}
+                            | Use the
+                            {' '}
                             <a
                                 target="_blank"
                                 href={
-                                    config?.systemInfo?.contextPath +
-                                    '/api/apps/climate-data/index.html#/import'
-                                } rel="noreferrer"
+                                    config?.systemInfo?.contextPath
+                                    + '/api/apps/climate-data/index.html#/import'
+                                }
+                                rel="noreferrer"
                             >
                                 Climate App
-                            </a>{' '}
+                            </a>
+                            {' '}
                             to import climate data.
                         </p>
                         <div className={styles.scrollMissingData}>
@@ -196,89 +203,89 @@ export const SendChapData = ({
                                                                     d.period,
                                                                 calendar:
                                                                     'gregory',
-                                                            }
+                                                            },
                                                         ).displayName
                                                     }
                                                 </td>
                                             </tr>
-                                        )
+                                        );
                                     })}
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 ),
-            })
+            });
         }
-    }
+    };
 
-    //Check if the analytics content is empty, before sending it to CHAP
+    // Check if the analytics content is empty, before sending it to CHAP
     const isAnalyticsContentIsEmpty = (observations: ObservationBase[]) => {
-        const emptyFeatures: ErrorResponse[] = []
+        const emptyFeatures: ErrorResponse[] = [];
 
         dataLayers
-            .filter((o) => o.origin == 'dataItem')
+            .filter(o => o.origin == 'dataItem')
             .forEach((f: DatasetLayer) => {
-                //find the name of the feature
+                // find the name of the feature
                 if (
                     observations.filter(
-                        (v: ObservationBase) => v.featureName === f.feature
+                        (v: ObservationBase) => v.featureName === f.feature,
                     )?.length === 0
                 ) {
                     const msg =
-                        'Thes selected data item for covarate "' +
-                        f.feature +
-                        '" returned no data.'
+                        'Thes selected data item for covarate "'
+                        + f.feature
+                        + '" returned no data.';
                     emptyFeatures.push({
                         description:
                             'Ensure you have exported the analytics tables in DHIS2.',
                         title: msg,
-                    })
+                    });
                 }
-            })
+            });
 
         if (
             dataLayers.find(
-                (o) => o.feature === 'rainfall' && o.origin == 'dataItem'
+                o => o.feature === 'rainfall' && o.origin == 'dataItem',
             )
         ) {
             climateHasMissingData(
                 observations,
                 emptyFeatures,
                 'rainfall',
-                'Rainfall'
-            )
+                'Rainfall',
+            );
         }
         if (
             dataLayers.find(
-                (o) =>
-                    o.feature === 'mean_temperature' && o.origin == 'dataItem'
+                o =>
+                    o.feature === 'mean_temperature' && o.origin == 'dataItem',
             )
         ) {
             climateHasMissingData(
                 observations,
                 emptyFeatures,
                 'mean_temperature',
-                'Mean Temperature'
-            )
+                'Mean Temperature',
+            );
         }
 
         if (emptyFeatures.length > 0) {
-            setErrorMessages([...errorMessages, ...emptyFeatures])
-            return true
+            setErrorMessages([...errorMessages, ...emptyFeatures]);
+            return true;
         }
-        return false
-    }
+        return false;
+    };
 
-    const config = useConfig()
+    const config = useConfig();
 
     const getMetadate = () => {
         return {
             appVersion: config?.appVersion?.full || 'Unknown',
             dhis2Version: config?.systemInfo?.version || 'Unknown',
             dataItemMapper: featureDataItemMapper,
-        }
-    }
+        };
+    };
 
     const getCommonRequestData = () => {
         return {
@@ -287,103 +294,103 @@ export const SendChapData = ({
             metaData: getMetadate(),
             providedData: observations as ObservationBase[],
             geojson: geoJSON as FeatureCollectionModel,
-        }
-    }
+        };
+    };
 
     const getNewDatasetRequest = (): DatasetMakeRequest => {
-        return getCommonRequestData()
-    }
+        return getCommonRequestData();
+    };
 
     const getPredictionRequest = (): MakePredictionRequest => {
         return {
-            //could consider to remove later
+            // could consider to remove later
             type: 'predict',
             modelId: selectedModel?.name as string,
             ...getCommonRequestData(),
-        }
-    }
+        };
+    };
 
     const getDataToBeFetched = (): FetchRequest[] => {
         return dataLayers
-            .filter((dl) => dl.origin === 'CHAP')
+            .filter(dl => dl.origin === 'CHAP')
             .map((v: DatasetLayer) => {
                 return {
                     dataSourceName: v.dataSource,
                     featureName: v.feature,
-                } as FetchRequest
-            })
-    }
+                } as FetchRequest;
+            });
+    };
 
     const newDataset = async () => {
-        const request: DatasetMakeRequest = getNewDatasetRequest()
+        const request: DatasetMakeRequest = getNewDatasetRequest();
 
-        setIsSendingDataToChap(true)
+        setIsSendingDataToChap(true);
         await AnalyticsService.makeDatasetAnalyticsMakeDatasetPost(request)
             .then(() => {
-                setErrorChapMsg('')
-                onDrawerSubmit()
+                setErrorChapMsg('');
+                onDrawerSubmit();
                 queryClient.invalidateQueries({ queryKey: ['jobs'] });
             })
             .catch((error: any) => {
                 if (error?.body?.detail)
-                    setErrorChapMsg(JSON.stringify(error?.body?.detail))
+                    setErrorChapMsg(JSON.stringify(error?.body?.detail));
                 else
                     setErrorChapMsg(
-                        'An error occured while sending the request to CHAP Core.'
-                    )
+                        'An error occured while sending the request to CHAP Core.',
+                    );
             })
             .finally(() => {
-                setIsSendingDataToChap(false)
-            })
-    }
+                setIsSendingDataToChap(false);
+            });
+    };
 
     const predict = async () => {
-        const request: MakePredictionRequest = getPredictionRequest()
+        const request: MakePredictionRequest = getPredictionRequest();
 
-        setIsSendingDataToChap(true)
+        setIsSendingDataToChap(true);
         await AnalyticsService.makePredictionAnalyticsMakePredictionPost(
-            request
+            request,
         )
             .then(() => {
-                onDrawerSubmit()
+                onDrawerSubmit();
                 queryClient.invalidateQueries({ queryKey: ['jobs'] });
             })
             .catch((error: any) => {
                 if (error?.body?.detail)
-                    setErrorChapMsg(JSON.stringify(error?.body?.detail))
+                    setErrorChapMsg(JSON.stringify(error?.body?.detail));
                 else
                     setErrorChapMsg(
-                        'An error occured while sending the request to CHAP Core.'
-                    )
+                        'An error occured while sending the request to CHAP Core.',
+                    );
             })
             .finally(() => {
-                setIsSendingDataToChap(false)
-            })
-    }
+                setIsSendingDataToChap(false);
+            });
+    };
 
     const downloadData = () => {
-        let content = {}
+        let content = {};
 
         if (onSendAction === 'predict') {
-            content = getPredictionRequest()
+            content = getPredictionRequest();
         }
         if (onSendAction === 'new-dataset') {
-            content = getNewDatasetRequest()
+            content = getNewDatasetRequest();
         }
 
         const fileToSave = new Blob([JSON.stringify(content, null, 2)], {
             type: 'application/json',
-        })
+        });
 
-        const today = new Date()
+        const today = new Date();
         saveAs(
             fileToSave,
-            onSendAction.replaceAll('-', '_') +
-            '_chap_request_data_' +
-            today.toJSON() +
-            '.json'
-        )
-    }
+            onSendAction.replaceAll('-', '_')
+            + '_chap_request_data_'
+            + today.toJSON()
+            + '.json',
+        );
+    };
 
     return (
         <div>
@@ -396,7 +403,7 @@ export const SendChapData = ({
                 startDownload={startDownload}
             />
 
-            {<p className={styles.errorChap}>{errorChapMsg}</p>}
+            <p className={styles.errorChap}>{errorChapMsg}</p>
             {startDownload.startDownload && formValid() && (
                 <DownloadAnalyticsData
                     setAnalyticsMetaData={setAnalyticsMetaData}
@@ -426,5 +433,5 @@ export const SendChapData = ({
                 </div>
             ))}
         </div>
-    )
-}
+    );
+};

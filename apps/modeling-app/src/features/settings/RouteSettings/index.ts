@@ -1,2 +1,1 @@
-
-export { RouteSettings } from './RouteSettings'
+export { RouteSettings } from './RouteSettings';

@@ -9,7 +9,7 @@ export const RunningJobsIndicator = () => {
 
     const runningBacktestJobs = jobs?.filter(job =>
         job.type === JOB_TYPES.CREATE_BACKTEST_WITH_DATA &&
-        (job.status === JOB_STATUSES.PENDING || job.status === JOB_STATUSES.STARTED)
+        (job.status === JOB_STATUSES.PENDING || job.status === JOB_STATUSES.STARTED),
     ) || [];
 
     if (runningBacktestJobs.length === 0) {
@@ -19,10 +19,10 @@ export const RunningJobsIndicator = () => {
     return (
         <Tooltip content={i18n.t('There are running jobs in the background')}>
             <StatusIndicator
-                variant='info'
+                variant="info"
                 active={true}
                 label={i18n.t('Running jobs')}
             />
         </Tooltip>
     );
-}; 
+};

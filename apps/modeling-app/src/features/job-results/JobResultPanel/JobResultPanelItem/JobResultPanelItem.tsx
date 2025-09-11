@@ -1,7 +1,7 @@
-import React, { useState, useRef } from 'react'
-import { ConditionalTooltip } from '@dhis2-chap/ui'
-import i18n from '@dhis2/d2-i18n'
-import styles from './JobResultPanelItem.module.css'
+import React, { useState, useRef } from 'react';
+import { ConditionalTooltip } from '@dhis2-chap/ui';
+import i18n from '@dhis2/d2-i18n';
+import styles from './JobResultPanelItem.module.css';
 import {
     Button,
     IconDelete24,
@@ -13,17 +13,17 @@ import {
     Menu,
     MenuItem,
     Popper,
-} from '@dhis2/ui'
-import { JobResult } from '../../interfaces/JobResult'
-import { useClickOutside } from '../../../../hooks/useClickOutside'
+} from '@dhis2/ui';
+import { JobResult } from '../../interfaces/JobResult';
+import { useClickOutside } from '../../../../hooks/useClickOutside';
 interface JobResultPanelItem {
-    i: number
-    jobResult: JobResult
-    onClickImport: any
-    onClickEvaluateDataset: any
-    onClickViewEvaluation: any
-    onClickViewLogs: any
-    onClickRemove: any
+    i: number;
+    jobResult: JobResult;
+    onClickImport: any;
+    onClickEvaluateDataset: any;
+    onClickViewEvaluation: any;
+    onClickViewLogs: any;
+    onClickRemove: any;
 }
 
 const JobResultPanelItem = ({
@@ -35,52 +35,52 @@ const JobResultPanelItem = ({
     onClickViewLogs,
     onClickRemove,
 }: JobResultPanelItem) => {
-    const [showMenu, setShowMenu] = useState(false)
-    const buttonRef = useRef<HTMLDivElement>(null)
-    const menuRef = useRef<HTMLDivElement>(null)
+    const [showMenu, setShowMenu] = useState(false);
+    const buttonRef = useRef<HTMLDivElement>(null);
+    const menuRef = useRef<HTMLDivElement>(null);
 
     // Close menu when clicking outside menu or button
     useClickOutside(menuRef, (event) => {
         // Only close if clicked outside the menu and not on the trigger
         if (!buttonRef.current?.contains(event.target as Node)) {
-            setShowMenu(false)
+            setShowMenu(false);
         }
-    })
+    });
 
     const getStatusColor = (status: string | undefined) => {
         switch (status) {
             case 'STARTED':
-                return styles.inProgress
+                return styles.inProgress;
             case 'PENDING':
-                return styles.notStarted
+                return styles.notStarted;
             case 'FAILURE':
-                return styles.failed
+                return styles.failed;
             default:
-                return styles.completed
+                return styles.completed;
         }
-    }
+    };
 
     const getStatusText = (status: string | undefined) => {
         switch (status) {
             case 'STARTED':
-                return 'In progress..'
+                return 'In progress..';
             case 'PENDING':
-                return 'Pending..'
+                return 'Pending..';
             case 'FAILURE':
-                return 'Failed'
+                return 'Failed';
             default:
-                return 'Completed'
+                return 'Completed';
         }
-    }
+    };
 
     return (
         <div key={i} className={styles.boxPanel}>
             <div className={styles.jobResultPanelContainer}>
                 <div className={styles.flexMedium}>{jobResult.name}</div>
                 <div className={styles.flexMedium}>
-                    {jobResult.created.toDateString() +
-                        ', ' +
-                        jobResult.created.toLocaleTimeString().slice(0, 5)}
+                    {jobResult.created.toDateString()
+                        + ', '
+                        + jobResult.created.toLocaleTimeString().slice(0, 5)}
                 </div>
                 <div className={styles.flexMedium}>
                     <span className={getStatusColor(jobResult.status)}>
@@ -96,8 +96,7 @@ const JobResultPanelItem = ({
                                         <Button
                                             icon={<IconLaunch24 />}
                                             onClick={() =>
-                                                onClickImport(jobResult.result)
-                                            }
+                                                onClickImport(jobResult.result)}
                                             small
                                         >
                                             Import
@@ -112,9 +111,8 @@ const JobResultPanelItem = ({
                                             icon={<IconRuler24 />}
                                             onClick={() =>
                                                 onClickEvaluateDataset(
-                                                    jobResult.result
-                                                )
-                                            }
+                                                    jobResult.result,
+                                                )}
                                             small
                                         >
                                             Evaluate
@@ -131,9 +129,8 @@ const JobResultPanelItem = ({
                                             }
                                             onClick={() =>
                                                 onClickViewEvaluation(
-                                                    jobResult.result
-                                                )
-                                            }
+                                                    jobResult.result,
+                                                )}
                                             small
                                         >
                                             View
@@ -158,14 +155,14 @@ const JobResultPanelItem = ({
                         <ConditionalTooltip
                             enabled={jobResult.status === 'STARTED'}
                             content={i18n.t(
-                                'Job is still running. Please wait until it is finished before doing any actions.'
+                                'Job is still running. Please wait until it is finished before doing any actions.',
                             )}
                         >
                             <Button
                                 small
                                 icon={<IconMore16 />}
                                 disabled={jobResult.status === 'STARTED'}
-                                onClick={() => setShowMenu((prev) => !prev)}
+                                onClick={() => setShowMenu(prev => !prev)}
                             />
                         </ConditionalTooltip>
                     </div>
@@ -175,18 +172,18 @@ const JobResultPanelItem = ({
                             <div ref={menuRef} className={styles.popupMenuDiv}>
                                 <Menu>
                                     {['SUCCESS', 'FAILURE'].includes(
-                                        jobResult.status
+                                        jobResult.status,
                                     ) && (
-                                            <MenuItem
-                                                label="Delete"
-                                                icon={<IconDelete24 />}
-                                                destructive
-                                                onClick={() => {
-                                                    setShowMenu(false)
-                                                    onClickRemove(jobResult)
-                                                }}
-                                            />
-                                        )}
+                                        <MenuItem
+                                            label="Delete"
+                                            icon={<IconDelete24 />}
+                                            destructive
+                                            onClick={() => {
+                                                setShowMenu(false);
+                                                onClickRemove(jobResult);
+                                            }}
+                                        />
+                                    )}
                                 </Menu>
                             </div>
                         </Popper>
@@ -194,7 +191,7 @@ const JobResultPanelItem = ({
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default JobResultPanelItem
+export default JobResultPanelItem;

@@ -1,13 +1,13 @@
-import React from 'react'
-import Drawer from 'react-modern-drawer'
-import 'react-modern-drawer/dist/index.css'
-import styles from './NewPredictionDrawer.module.css'
-import NewPredictionForm from './NewPredictionForm/NewPredictionForm'
+import React from 'react';
+import Drawer from 'react-modern-drawer';
+import 'react-modern-drawer/dist/index.css';
+import styles from './NewPredictionDrawer.module.css';
+import NewPredictionForm from './NewPredictionForm/NewPredictionForm';
 
 interface NewPredictionDrawerProps {
-    onDrawerClose: () => void
-    onDrawerSubmit: () => void
-    isOpen: boolean
+    onDrawerClose: () => void;
+    onDrawerSubmit: () => void;
+    isOpen: boolean;
 }
 
 const NewPredictionDrawer = ({
@@ -15,7 +15,7 @@ const NewPredictionDrawer = ({
     isOpen,
     onDrawerSubmit,
 }: NewPredictionDrawerProps) => {
-    const size = window.innerWidth < 900 ? '100vw' : '1000px'
+    const size = window.innerWidth < 900 ? '100vw' : '1000px';
 
     return (
         <div>
@@ -33,7 +33,7 @@ const NewPredictionDrawer = ({
                 </div>
             </Drawer>
         </div>
-    )
-}
+    );
+};
 
-export default NewPredictionDrawer
+export default NewPredictionDrawer;

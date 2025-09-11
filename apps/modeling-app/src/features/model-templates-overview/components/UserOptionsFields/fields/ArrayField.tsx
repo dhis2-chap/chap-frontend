@@ -1,18 +1,18 @@
-import React from 'react'
-import { Button, InputField, Label, Chip } from '@dhis2/ui'
-import i18n from '@dhis2/d2-i18n'
-import { UseFormSetValue } from 'react-hook-form'
-import { UserOptionConfig } from '../UserOptionsFields'
-import styles from '../UserOptionsFields.module.css'
+import React from 'react';
+import { Button, InputField, Label, Chip } from '@dhis2/ui';
+import i18n from '@dhis2/d2-i18n';
+import { UseFormSetValue } from 'react-hook-form';
+import { UserOptionConfig } from '../UserOptionsFields';
+import styles from '../UserOptionsFields.module.css';
 
 interface ArrayFieldProps {
-    optionKey: string
-    optionConfig: UserOptionConfig
-    setValue: UseFormSetValue<any>
-    disabled: boolean
-    watchedUserOptions: any
-    arrayInputs: Record<string, string>
-    setArrayInputs: React.Dispatch<React.SetStateAction<Record<string, string>>>
+    optionKey: string;
+    optionConfig: UserOptionConfig;
+    setValue: UseFormSetValue<any>;
+    disabled: boolean;
+    watchedUserOptions: any;
+    arrayInputs: Record<string, string>;
+    setArrayInputs: React.Dispatch<React.SetStateAction<Record<string, string>>>;
 }
 
 export const ArrayField: React.FC<ArrayFieldProps> = ({
@@ -22,28 +22,28 @@ export const ArrayField: React.FC<ArrayFieldProps> = ({
     disabled,
     watchedUserOptions,
     arrayInputs,
-    setArrayInputs
+    setArrayInputs,
 }) => {
-    const currentValue = watchedUserOptions?.[optionKey] as string[] || []
-    const newItem = arrayInputs[optionKey] || ''
+    const currentValue = watchedUserOptions?.[optionKey] as string[] || [];
+    const newItem = arrayInputs[optionKey] || '';
 
     const handleAddItem = () => {
-        const trimmedItem = newItem.trim()
+        const trimmedItem = newItem.trim();
         if (trimmedItem && !currentValue.includes(trimmedItem)) {
-            const updatedArray = [...currentValue, trimmedItem]
-            setValue(`userOptions.${optionKey}`, updatedArray)
-            setArrayInputs(prev => ({ ...prev, [optionKey]: '' }))
+            const updatedArray = [...currentValue, trimmedItem];
+            setValue(`userOptions.${optionKey}`, updatedArray);
+            setArrayInputs(prev => ({ ...prev, [optionKey]: '' }));
         }
-    }
+    };
 
     const handleRemoveItem = (index: number) => {
-        const updatedArray = currentValue.filter((_, i) => i !== index)
-        setValue(`userOptions.${optionKey}`, updatedArray)
-    }
+        const updatedArray = currentValue.filter((_, i) => i !== index);
+        setValue(`userOptions.${optionKey}`, updatedArray);
+    };
 
     const handleInputChange = (value: string) => {
-        setArrayInputs(prev => ({ ...prev, [optionKey]: value }))
-    }
+        setArrayInputs(prev => ({ ...prev, [optionKey]: value }));
+    };
 
     return (
         <div key={optionKey} className={styles.formField}>
@@ -76,5 +76,5 @@ export const ArrayField: React.FC<ArrayFieldProps> = ({
                 </div>
             </div>
         </div>
-    )
-} 
+    );
+};

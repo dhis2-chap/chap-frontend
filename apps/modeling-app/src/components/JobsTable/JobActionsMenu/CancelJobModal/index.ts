@@ -1,1 +1,1 @@
-export { CancelJobModal } from './CancelJobModal'; 
+export { CancelJobModal } from './CancelJobModal';

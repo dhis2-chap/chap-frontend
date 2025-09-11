@@ -11,7 +11,7 @@ import styles from './ModelFilters.module.css';
 
 type Props = {
     table: Table<ModelSpecRead>;
-}
+};
 
 export const ModelFilters = ({ table }: Props) => {
     return (
@@ -21,7 +21,7 @@ export const ModelFilters = ({ table }: Props) => {
                     dense
                     placeholder={i18n.t('Search by title')}
                     value={(table.getColumn('displayName')?.getFilterValue() as string | undefined) ?? ''}
-                    onChange={(e) => table.getColumn('displayName')?.setFilterValue(e.value)}
+                    onChange={e => table.getColumn('displayName')?.setFilterValue(e.value)}
                 />
             </div>
 
@@ -33,7 +33,7 @@ export const ModelFilters = ({ table }: Props) => {
                         clearText={i18n.t('Clear')}
                         selected={table.getColumn('supportedPeriodType')?.getFilterValue() as string | undefined}
                         placeholder={i18n.t('Period Type')}
-                        onChange={(e) => table.getColumn('supportedPeriodType')?.setFilterValue(e.selected)}
+                        onChange={e => table.getColumn('supportedPeriodType')?.setFilterValue(e.selected)}
                     >
                         <MenuItem
                             key={PeriodType.WEEK}
@@ -69,7 +69,7 @@ export const ModelFilters = ({ table }: Props) => {
                         clearText={i18n.t('Clear')}
                         selected={table.getColumn('authorAssessedStatus')?.getFilterValue() as string | undefined}
                         placeholder={i18n.t('Assessment Status')}
-                        onChange={(e) => table.getColumn('authorAssessedStatus')?.setFilterValue(e.selected)}
+                        onChange={e => table.getColumn('authorAssessedStatus')?.setFilterValue(e.selected)}
                     >
                         <MenuItem
                             key={AuthorAssessedStatus.GREEN}
@@ -106,4 +106,4 @@ export const ModelFilters = ({ table }: Props) => {
             </div>
         </div>
     );
-}; 
+};

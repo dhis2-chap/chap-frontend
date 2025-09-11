@@ -2,14 +2,14 @@
 // import { ApiRequestOptions } from './httpfunctions/core/ApiRequestOptions'
 // import { request as __request } from './httpfunctions/core/request'
 
-/* THIS WILL BE COPIED VERBATIM TO src/httpfunctions/core/request.ts 
+/* THIS WILL BE COPIED VERBATIM TO src/httpfunctions/core/request.ts
     by --request option to openapi-typescript-codegen
 
-    ** EXPECT TYPESCRIPT AND IMPORT ERRORS ** 
+    ** EXPECT TYPESCRIPT AND IMPORT ERRORS **
 
     For more info see https://github.com/dhis2-chap/chap-frontend-monorepo/pull/76
 */
-import PQueue from 'p-queue'
+import PQueue from 'p-queue';
 
 /* generated using openapi-typescript-codegen -- do not edit */
 /* istanbul ignore file */

@@ -1,5 +1,5 @@
-import { ApiError, CrudService, ModelSpecRead } from "@dhis2-chap/ui";
-import { useQuery } from "@tanstack/react-query";
+import { ApiError, CrudService, ModelSpecRead } from '@dhis2-chap/ui';
+import { useQuery } from '@tanstack/react-query';
 
 export const useModels = () => {
     const { data, error, isLoading } = useQuery<ModelSpecRead[], ApiError>({
@@ -15,4 +15,4 @@ export const useModels = () => {
         error,
         isLoading,
     };
-}
+};
