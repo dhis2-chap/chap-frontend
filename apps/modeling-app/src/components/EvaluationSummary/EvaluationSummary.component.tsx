@@ -13,7 +13,7 @@ type EvaluationSummaryProps = {
     metrics: Metric[]
 }
 
-export const EvaluationSummary: React.FC<EvaluationSummaryProps> = ({ evaluationId, visualizationTypes, metrics }) => {
+export const EvaluationSummaryComponent: React.FC<EvaluationSummaryProps> = ({ evaluationId, visualizationTypes, metrics }) => {
     const {
         selectedVisualizationId,
         selectedMetricId,
@@ -35,16 +35,15 @@ export const EvaluationSummary: React.FC<EvaluationSummaryProps> = ({ evaluation
     })
 
     useEffect(() => {
-        if (!visualizationError && visualization) return
+        if (!visualizationError) return
         console.error('EvaluationSummary: visualization load error', {
             message: visualizationError?.message,
             error: visualizationError,
-            visualization,
             evaluationId,
             selectedVisualizationId,
             selectedMetricId,
         })
-    }, [visualizationError, visualization, evaluationId, selectedVisualizationId, selectedMetricId])
+    }, [visualizationError, evaluationId, selectedVisualizationId, selectedMetricId])
 
     if (isVisualizationLoading || !selectedVisualizationId) {
         return (

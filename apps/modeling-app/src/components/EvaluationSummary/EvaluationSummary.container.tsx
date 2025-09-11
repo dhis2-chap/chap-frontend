@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { CircularLoader, NoticeBox } from '@dhis2/ui'
 import i18n from '@dhis2/d2-i18n'
 import styles from './EvaluationSummary.module.css'
-import { EvaluationSummary as EvaluationSummaryComponent } from './EvaluationSummary.component'
+import { EvaluationSummaryComponent } from './EvaluationSummary.component'
 import { useCustomVisualizationTypes } from '../../hooks/useCustomVisualizationTypes'
 import { useCustomMetricsForBacktest } from '../../hooks/useCustomMetricsForBacktest'
 
@@ -22,17 +22,6 @@ export const EvaluationSummary: React.FC<EvaluationSummaryContainerProps> = ({ e
         isLoading: isMetricsLoading,
         error: metricsError
     } = useCustomMetricsForBacktest({ evaluationId })
-
-    const errorDetails = [typesError?.message, metricsError?.message].filter(Boolean) as string[]
-
-    useEffect(() => {
-        if (!typesError && !metricsError) return
-        console.error('EvaluationSummary: data load errors', {
-            messages: errorDetails,
-            typesError,
-            metricsError,
-        })
-    }, [typesError, metricsError])
 
     if (isTypesLoading || isMetricsLoading) {
         return (

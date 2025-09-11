@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { ApiError, Metric, VisualizationService } from "@dhis2-chap/ui";
 
@@ -17,6 +18,15 @@ export const useCustomMetricsForBacktest = ({ evaluationId }: Props) => {
         cacheTime: 5 * 60 * 1000,
         retry: 0,
     });
+
+    useEffect(() => {
+        if (!error) return;
+        console.error("useCustomMetricsForBacktest: error loading metrics", {
+            message: error?.message,
+            error,
+            evaluationId,
+        });
+    }, [error, evaluationId]);
 
     return {
         metrics: data,
