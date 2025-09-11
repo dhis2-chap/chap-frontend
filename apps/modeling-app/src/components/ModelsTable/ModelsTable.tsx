@@ -8,6 +8,7 @@ import {
     DataTableColumnHeader,
     DataTableFoot,
     Pagination,
+    Input,
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import {
@@ -15,50 +16,72 @@ import {
     flexRender,
     getCoreRowModel,
     useReactTable,
+    getSortedRowModel,
+    getFilteredRowModel,
     getPaginationRowModel,
+    Column,
 } from '@tanstack/react-table';
-import { ModelSpec } from '@dhis2-chap/ui';
+import { ModelSpecRead } from '@dhis2-chap/ui';
+import styles from './ModelsTable.module.css';
+import { ModelActionsMenu } from './ModelActionsMenu';
 
-const columnHelper = createColumnHelper<ModelSpec>();
+const columnHelper = createColumnHelper<ModelSpecRead>();
 
 const columns = [
-    columnHelper.accessor('name', {
+    columnHelper.accessor((row) => row.displayName || row.name, {
+        id: 'name',
         header: i18n.t('Name'),
-    }),
-    columnHelper.accessor('description', {
-        header: i18n.t('Description'),
+        filterFn: 'includesString',
         cell: (info) => info.getValue() || undefined,
     }),
     columnHelper.accessor('author', {
         header: i18n.t('Author'),
         cell: (info) => info.getValue() || undefined,
     }),
-    columnHelper.accessor('period', {
+    columnHelper.accessor('supportedPeriodType', {
         header: i18n.t('Period'),
         cell: (info) => info.getValue() || undefined,
     }),
-    columnHelper.display({
+    columnHelper.accessor((row) => row.covariates?.length ?? 0, {
         id: 'featuresCount',
         header: i18n.t('Features'),
-        cell: (info) => info.row.original.features?.length ?? 0,
+        cell: (info) => info.getValue(),
     }),
-    columnHelper.accessor('targets', {
-        header: i18n.t('Target(s)'),
+    columnHelper.accessor((row) => row.target?.displayName || row.target?.name || '', {
+        id: 'target',
+        header: i18n.t('Target'),
+        enableSorting: false,
         cell: (info) => info.getValue() || undefined,
+    }),
+    columnHelper.display({
+        id: 'actions',
+        header: i18n.t('Actions'),
+        cell: (info) => (
+            <ModelActionsMenu
+                id={info.row.original.id}
+                name={info.row.original.displayName || info.row.original.name}
+            />
+        ),
     }),
 ];
 
+const getSortDirection = (column: Column<ModelSpecRead>) => {
+    return column.getIsSorted() || 'default';
+};
+
 type Props = {
-    models: ModelSpec[];
+    models: ModelSpecRead[];
 }
 
 export const ModelsTable = ({ models }: Props) => {
     const table = useReactTable({
         data: models || [],
         columns,
-        getRowId: (row) => row.name,
+        getRowId: (row) => String(row.id),
         enableRowSelection: false,
+        getSortedRowModel: getSortedRowModel(),
         getCoreRowModel: getCoreRowModel(),
+        getFilteredRowModel: getFilteredRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
     });
 
@@ -66,6 +89,18 @@ export const ModelsTable = ({ models }: Props) => {
 
     return (
         <div>
+            <div className={styles.buttonContainer}>
+                <div className={styles.leftSection}>
+                    <div className={styles.inputContainer}>
+                        <Input
+                            dense
+                            placeholder={i18n.t('Search')}
+                            value={(table.getColumn('name')?.getFilterValue() as string | undefined) ?? ''}
+                            onChange={(e) => table.getColumn('name')?.setFilterValue(e.value)}
+                        />
+                    </div>
+                </div>
+            </div>
             <DataTable>
                 <DataTableHead>
                     {table.getHeaderGroups().map((headerGroup) => (
@@ -75,6 +110,11 @@ export const ModelsTable = ({ models }: Props) => {
                                     key={header.id}
                                     fixed
                                     top
+                                    {...(header.column.getCanSort() ? {
+                                        sortDirection: getSortDirection(header.column),
+                                        sortIconTitle: i18n.t('Sort by {{column}}', { column: header.column.id }),
+                                        onSortIconClick: () => header.column.toggleSorting()
+                                    } : {})}
                                 >
                                     {header.isPlaceholder
                                         ? null

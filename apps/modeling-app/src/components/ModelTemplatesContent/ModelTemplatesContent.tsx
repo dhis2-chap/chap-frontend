@@ -3,11 +3,11 @@ import { Card } from '@dhis2-chap/ui';
 import { CircularLoader, NoticeBox } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import styles from './ModelTemplatesContent.module.css';
-import { useAvailableModelTemplates } from '../../hooks/useAvailableModels';
 import { ModelsTable } from '../ModelsTable';
+import { useModels } from '../../hooks/useModels';
 
 export const ModelTemplatesContent: React.FC = () => {
-    const { modelTemplates, error, isLoading } = useAvailableModelTemplates();
+    const { models, error, isLoading } = useModels();
 
     if (isLoading) {
         return (
@@ -29,7 +29,7 @@ export const ModelTemplatesContent: React.FC = () => {
 
     return (
         <Card className={styles.container}>
-            <ModelsTable models={modelTemplates || []} />
+            <ModelsTable models={models || []} />
         </Card>
     );
 };
