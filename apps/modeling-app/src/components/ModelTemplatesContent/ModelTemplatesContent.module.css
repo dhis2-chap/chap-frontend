@@ -1,0 +1,15 @@
+.container {
+  margin: 16px 0;
+}
+
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+}
+
+.errorContainer {
+  margin: 16px 0;
+}
+
