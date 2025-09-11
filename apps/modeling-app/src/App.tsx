@@ -20,6 +20,7 @@ import { RouteValidator } from './components/RouteValidator'
 import InfoAboutReportingBugs from './features/common-features/InfoAboutReportingBugs/InfoAboutReportingBugs'
 import WarnAboutIncompatibleVersion from './features/common-features/WarnAboutIncompatibleVersion/WarnAboutIncompatibleVersion'
 import { EvaluationPage } from './pages/EvaluationPage'
+import { EvaluationDetailsPage } from './pages/EvaluationDetailsPage'
 import { ChapValidator } from './components/ChapValidator'
 import { NewEvaluationPage } from './pages/NewEvaluationPage'
 import { JobsPage } from './pages/JobsPage'
@@ -38,7 +39,7 @@ const router = createHashRouter([
         element: (
             <>
                 <SyncUrlWithGlobalShell />
-                <Layout />,
+                <Layout />
             </>
         ),
         errorElement: <ErrorPage />,
@@ -81,6 +82,13 @@ const router = createHashRouter([
                                 handle: {
                                     collapseSidebar: true,
                                 } satisfies RouteHandle,
+                            },
+                            {
+                                path: ':evaluationId',
+                                handle: {
+                                    collapseSidebar: true,
+                                } satisfies RouteHandle,
+                                element: <EvaluationDetailsPage />,
                             },
                         ],
                     },

@@ -6,6 +6,7 @@ import {
     IconEdit16,
     IconMore16,
     IconView16,
+    IconVisualizationBarStacked24,
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { OverflowButton } from '@dhis2-chap/ui';
@@ -33,6 +34,10 @@ export const BacktestActionsMenu = ({
         navigate(`/evaluate/compare?baseEvaluation=${id}`);
     }
 
+    const handleViewDetails = () => {
+        navigate(`/evaluate/${id}`);
+    }
+
     return (
         <>
             <OverflowButton
@@ -50,6 +55,15 @@ export const BacktestActionsMenu = ({
                             icon={<IconView16 />}
                             onClick={() => {
                                 handleView();
+                                setFlyoutMenuIsOpen(false);
+                            }}
+                        />
+                        <MenuItem
+                            label={i18n.t('Detailed metrics')}
+                            dataTest={'backtest-overflow-view-details'}
+                            icon={<IconVisualizationBarStacked24 />}
+                            onClick={() => {
+                                handleViewDetails();
                                 setFlyoutMenuIsOpen(false);
                             }}
                         />
