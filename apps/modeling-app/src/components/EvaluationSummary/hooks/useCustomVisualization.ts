@@ -3,8 +3,8 @@ import { ApiError, VisualizationService } from "@dhis2-chap/ui";
 
 type UseVisualizationParams = {
     evaluationId?: number;
-    visualizationId: string;
-    metricId: string;
+    visualizationId?: string;
+    metricId?: string;
 };
 
 export const useCustomVisualization = ({
@@ -21,11 +21,15 @@ export const useCustomVisualization = ({
         ],
         queryFn: () =>
             VisualizationService.generateVisualizationVisualizationVisualizationNameBacktestIdMetricIdGet(
-                visualizationId,
+                visualizationId as string,
                 Number(evaluationId),
-                metricId
+                metricId as string
             ),
-        enabled: typeof evaluationId === "number" && evaluationId > 0,
+        enabled:
+            typeof evaluationId === "number" &&
+            evaluationId > 0 &&
+            !!visualizationId &&
+            !!metricId,
         staleTime: 5 * 60 * 1000,
         cacheTime: 5 * 60 * 1000,
         retry: 0,

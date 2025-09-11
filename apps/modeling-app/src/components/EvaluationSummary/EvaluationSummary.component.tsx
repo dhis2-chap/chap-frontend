@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card } from '@dhis2-chap/ui'
+import { Card, Metric, VisualizationInfo } from '@dhis2-chap/ui'
 import { CircularLoader, SingleSelect, MenuItem } from '@dhis2/ui'
 import { VegaEmbed } from 'react-vega'
 import i18n from '@dhis2/d2-i18n'
@@ -9,21 +9,11 @@ import styles from './EvaluationSummary.module.css'
 
 type EvaluationSummaryProps = {
     evaluationId?: number
+    visualizationTypes: VisualizationInfo[]
+    metrics: Metric[]
 }
 
-const visualizationTypes = [
-    { id: 'metric_by_horizon', label: 'Metric by Horizon' },
-    { id: 'metric_map', label: 'Metric Map' },
-]
-
-const metrics = [
-    { id: 'crps', label: 'CRPS' },
-    { id: 'crps_norm_mean', label: 'CRPS normalized mean' },
-    { id: 'ratio_within_10th_90th', label: 'Ratio within 10th–90th' },
-    { id: 'ratio_within_90th', label: 'Ratio within 90th' },
-]
-
-export const EvaluationSummary: React.FC<EvaluationSummaryProps> = ({ evaluationId }) => {
+export const EvaluationSummary: React.FC<EvaluationSummaryProps> = ({ evaluationId, visualizationTypes, metrics }) => {
     const {
         selectedVisualizationId,
         selectedMetricId,
@@ -44,7 +34,7 @@ export const EvaluationSummary: React.FC<EvaluationSummaryProps> = ({ evaluation
         metricId: selectedMetricId,
     })
 
-    if (isVisualizationLoading) {
+    if (isVisualizationLoading || !selectedVisualizationId) {
         return (
             <div className={styles.loadingContainer}>
                 <CircularLoader />
@@ -67,7 +57,7 @@ export const EvaluationSummary: React.FC<EvaluationSummaryProps> = ({ evaluation
                         onChange={(e) => setVisualizationId(e.selected)}
                     >
                         {visualizationTypes.map((v) => (
-                            <MenuItem key={v.id} value={v.id} label={v.label} />
+                            <MenuItem key={v.id} value={v.id} label={v.displayName} />
                         ))}
                     </SingleSelect>
                 </div>
@@ -79,7 +69,7 @@ export const EvaluationSummary: React.FC<EvaluationSummaryProps> = ({ evaluation
                         onChange={(e) => setMetricId(e.selected)}
                     >
                         {metrics.map((m) => (
-                            <MenuItem key={m.id} value={m.id} label={m.label} />
+                            <MenuItem key={m.id} value={m.id} label={m.displayName} />
                         ))}
                     </SingleSelect>
                 </div>

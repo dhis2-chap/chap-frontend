@@ -2,7 +2,7 @@ import React from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import i18n from '@dhis2/d2-i18n'
 import { PageHeader } from '../../features/common-features/PageHeader/PageHeader'
-import { EvaluationSummary } from '../../components/EvaluationSummary/EvaluationSummary'
+import { EvaluationSummary } from '../../components/EvaluationSummary/EvaluationSummary.container'
 import { Button, IconArrowLeft16 } from '@dhis2/ui'
 
 export const EvaluationDetailsPage: React.FC = () => {
