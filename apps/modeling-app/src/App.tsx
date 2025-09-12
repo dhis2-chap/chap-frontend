@@ -26,6 +26,7 @@ import { NewEvaluationPage } from './pages/NewEvaluationPage';
 import { JobsPage } from './pages/JobsPage';
 import { EvaluationComparePage } from './pages/EvaluationCompare';
 import { GetStartedPage } from './pages/GetStartedPage';
+import { PredictionsNewPage } from './pages/PredictionsNewPage';
 import { SyncUrlWithGlobalShell } from './utils/syncUrlWithGlobalShell';
 
 export type RouteHandle = {
@@ -99,6 +100,10 @@ const router = createHashRouter([
                     {
                         path: '/predict',
                         element: <PredictionOverview />,
+                    },
+                    {
+                        path: '/predictions-new',
+                        element: <PredictionsNewPage />,
                     },
                 ],
             },

@@ -1,0 +1,1 @@
+export { PredictionsNewPage } from './PredictionsNewPage';
