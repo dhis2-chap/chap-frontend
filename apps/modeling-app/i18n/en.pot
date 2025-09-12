@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2025-09-11T14:59:41.869Z\n"
-"PO-Revision-Date: 2025-09-11T14:59:41.869Z\n"
+"POT-Creation-Date: 2025-09-12T13:51:59.704Z\n"
+"PO-Revision-Date: 2025-09-12T13:51:59.705Z\n"
 
 msgid "View"
 msgstr "View"
@@ -1155,3 +1155,11 @@ msgstr "View and manage currently running jobs and their status."
 
 msgid "Create a new evaluation to assess the performance of a model"
 msgstr "Create a new evaluation to assess the performance of a model"
+
+msgctxt "Application title"
+msgid "__MANIFEST_APP_TITLE"
+msgstr "Modeling"
+
+msgctxt "Application description"
+msgid "__MANIFEST_APP_DESCRIPTION"
+msgstr ""
