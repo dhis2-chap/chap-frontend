@@ -1,0 +1,9 @@
+.inputContainer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.singleSelectContainer {
+    min-width: 200px;
+}
