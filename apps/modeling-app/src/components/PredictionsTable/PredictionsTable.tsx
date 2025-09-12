@@ -20,7 +20,7 @@ import {
     getPaginationRowModel,
     Column,
 } from '@tanstack/react-table';
-import { NewClass } from '@dhis2-chap/ui';
+import { NewClass, ModelSpecRead } from '@dhis2-chap/ui';
 import styles from './PredictionsTable.module.css';
 import { PredictionsTableFilters } from './PredictionsTableFilters';
 
@@ -42,6 +42,12 @@ const columns = [
     columnHelper.accessor('modelId', {
         header: () => i18n.t('Model'),
         filterFn: 'equals',
+        cell: (info) => {
+            const modelId = info.getValue();
+            const models = (info.table.options.meta as { models: ModelSpecRead[] })?.models;
+            const model = models?.find((model: ModelSpecRead) => model.name === modelId);
+            return model?.displayName || modelId;
+        },
     }),
     columnHelper.accessor('nPeriods', {
         header: () => i18n.t('Periods'),
@@ -59,14 +65,18 @@ const getSortDirection = (column: Column<NewClass>) => {
 
 type Props = {
     predictions: NewClass[];
+    models: ModelSpecRead[];
 };
 
-export const PredictionsTable = ({ predictions }: Props) => {
+export const PredictionsTable = ({ predictions, models }: Props) => {
     const table = useReactTable({
         data: predictions || [],
         columns,
         initialState: {
             sorting: [{ id: 'created', desc: true }],
+        },
+        meta: {
+            models,
         },
         getRowId: row => row.id.toString(),
         getSortedRowModel: getSortedRowModel(),
