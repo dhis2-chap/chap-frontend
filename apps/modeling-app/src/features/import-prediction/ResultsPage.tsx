@@ -1,14 +1,14 @@
-import React, { useState } from 'react'
-import i18n from '@dhis2/d2-i18n'
-import styles from './styles/ResultsPage.module.css'
-import { SelectImportMode } from './SelectImportMode'
-import PredictionResult from './PredictionResult'
-import EvaluationResult from './EvaluationResult'
+import React, { useState } from 'react';
+import i18n from '@dhis2/d2-i18n';
+import styles from './styles/ResultsPage.module.css';
+import { SelectImportMode } from './SelectImportMode';
+import PredictionResult from './PredictionResult';
+import EvaluationResult from './EvaluationResult';
 
 const ResultsPage = () => {
     const [importMode, setImportMode] = useState<
         undefined | 'predict' | 'evaluate'
-    >(undefined)
+    >(undefined);
 
     return (
         <div className={styles.container}>
@@ -31,7 +31,7 @@ const ResultsPage = () => {
                 }
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default ResultsPage
+export default ResultsPage;

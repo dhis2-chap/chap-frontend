@@ -1,24 +1,24 @@
-import React from 'react'
-import { Label, SingleSelect, SingleSelectOption } from '@dhis2/ui'
-import { Control, Controller } from 'react-hook-form'
-import { UserOptionConfig } from '../UserOptionsFields'
-import styles from '../UserOptionsFields.module.css'
+import React from 'react';
+import { Label, SingleSelect, SingleSelectOption } from '@dhis2/ui';
+import { Control, Controller } from 'react-hook-form';
+import { UserOptionConfig } from '../UserOptionsFields';
+import styles from '../UserOptionsFields.module.css';
 
 interface EnumFieldProps {
-    optionKey: string
-    optionConfig: UserOptionConfig
-    control: Control<any>
-    disabled: boolean
+    optionKey: string;
+    optionConfig: UserOptionConfig;
+    control: Control<any>;
+    disabled: boolean;
 }
 
 export const EnumField: React.FC<EnumFieldProps> = ({
     optionKey,
     optionConfig,
     control,
-    disabled
+    disabled,
 }) => {
-    const { title, enum: enumValues } = optionConfig
-    const label = title || optionKey
+    const { title, enum: enumValues } = optionConfig;
+    const label = title || optionKey;
 
     return (
         <div key={optionKey} className={styles.formField}>
@@ -32,7 +32,7 @@ export const EnumField: React.FC<EnumFieldProps> = ({
                         disabled={disabled}
                         onChange={({ selected }) => field.onChange(selected)}
                     >
-                        {enumValues!.map((value) => (
+                        {enumValues!.map(value => (
                             <SingleSelectOption
                                 key={value}
                                 label={value}
@@ -43,5 +43,5 @@ export const EnumField: React.FC<EnumFieldProps> = ({
                 )}
             />
         </div>
-    )
-} 
+    );
+};

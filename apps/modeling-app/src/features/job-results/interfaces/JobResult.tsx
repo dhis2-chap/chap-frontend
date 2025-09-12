@@ -1,16 +1,16 @@
 export interface JobResult {
-    id: string
-    status: string
-    type: 'prediction' | 'dataset' | 'evaluation'
-    name: string
-    created: Date
+    id: string;
+    status: string;
+    type: 'prediction' | 'dataset' | 'evaluation';
+    name: string;
+    created: Date;
 
-    result?: string | undefined
+    result?: string | undefined;
 
-    datasetId?: number
-    estimatorId?: string
-    nPeriods?: number
+    datasetId?: number;
+    estimatorId?: string;
+    nPeriods?: number;
 
-    description?: string
-    hostname?: string
+    description?: string;
+    hostname?: string;
 }

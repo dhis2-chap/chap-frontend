@@ -1,11 +1,11 @@
-import { IconChevronDown16 } from '@dhis2/ui-icons'
-import cx from 'classnames'
-import React, { PropsWithChildren } from 'react'
-import styles from './Sidenav.module.css'
+import { IconChevronDown16 } from '@dhis2/ui-icons';
+import cx from 'classnames';
+import React, { PropsWithChildren } from 'react';
+import styles from './Sidenav.module.css';
 
 type WithClassName = {
-    className?: string
-}
+    className?: string;
+};
 
 export const Sidenav = ({
     children,
@@ -14,26 +14,26 @@ export const Sidenav = ({
     <nav data-test="sidenav" className={cx(styles['sidenav-wrap'], className)}>
         {children}
     </nav>
-)
+);
 
 export const SidenavItems = ({ children }: PropsWithChildren) => (
     <ul className={styles['sidenav-items']}>{children}</ul>
-)
+);
 
 export const SidenavHeader = ({ children }: PropsWithChildren) => (
     <div className={styles['sidenav-header']}>{children}</div>
-)
+);
 
 export const SidenavFooter = ({ children }: PropsWithChildren) => (
     <div className={styles['sidenav-footer']}>{children}</div>
-)
+);
 
 interface SidenavParentProps {
-    label: string
-    icon?: React.ReactNode
-    disabled?: boolean
-    open: boolean
-    onClick?: () => void
+    label: string;
+    icon?: React.ReactNode;
+    disabled?: boolean;
+    open: boolean;
+    onClick?: () => void;
 }
 
 export const SidenavParent = ({
@@ -70,45 +70,45 @@ export const SidenavParent = ({
                 )}
             </li>
         </>
-    )
-}
+    );
+};
 
 export interface Path {
     /**
      * A URL pathname, beginning with a /.
      */
-    pathname: string
+    pathname: string;
 
     /**
      * A URL search string, beginning with a ?.
      */
-    search: string
+    search: string;
 
     /**
      * A URL fragment identifier, beginning with a #.
      */
-    hash: string
+    hash: string;
 }
 
 interface SidenavLinkComponentProps {
-    to: string | Partial<Path>
+    to: string | Partial<Path>;
     // rest props
-    [key: string]: unknown
+    [key: string]: unknown;
 }
 
 interface SidenavLinkProps {
-    icon?: React.ReactNode
-    active?: boolean
-    disabled?: boolean
-    children?: React.ReactNode
-    to: string | Partial<Path>
-    label?: React.ReactNode
-    end?: boolean
-    LinkComponent?: React.ComponentType<SidenavLinkComponentProps>
+    icon?: React.ReactNode;
+    active?: boolean;
+    disabled?: boolean;
+    children?: React.ReactNode;
+    to: string | Partial<Path>;
+    label?: React.ReactNode;
+    end?: boolean;
+    LinkComponent?: React.ComponentType<SidenavLinkComponentProps>;
 }
 
 interface SidenavLinkBaseProps {
-    disabled?: boolean
+    disabled?: boolean;
 }
 
 export const SidenavLinkBase = ({
@@ -122,7 +122,7 @@ export const SidenavLinkBase = ({
     >
         {children}
     </li>
-)
+);
 
 /**
  * If children is a string, it will be rendered as a link.
@@ -158,21 +158,21 @@ export const SidenavLink = ({
             )}
             {label}
         </a>
-    )
+    );
 
     return (
         <SidenavLinkBase disabled={disabled}>
             {React.Children.count(children) > 0 ? children : linkElement}
         </SidenavLinkBase>
-    )
-}
+    );
+};
 
-export const SidenavDivider = () => <li className="sidenav-divider"></li>
+export const SidenavDivider = () => <li className="sidenav-divider"></li>;
 
 interface SidenavSectionTitleProps {
-    label: string
+    label: string;
 }
 
 export const SidenavSectionTitle = ({ label }: SidenavSectionTitleProps) => (
     <li className="sidenav-section-title">{label}</li>
-)
+);

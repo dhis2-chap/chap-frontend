@@ -17,7 +17,7 @@ import styles from './EditBacktestModal.module.css';
 import { useRenameEvaluation } from '../../hooks/useRenameEvaluation';
 
 const backtestNameSchema = z.object({
-    name: z.string().min(1, { message: i18n.t("Name is required") }),
+    name: z.string().min(1, { message: i18n.t('Name is required') }),
 });
 
 export type EditBacktestFormValues = z.infer<typeof backtestNameSchema>;
@@ -31,7 +31,7 @@ interface EditBacktestModalProps {
 export const EditBacktestModal = ({
     id,
     onClose,
-    initialName = "",
+    initialName = '',
 }: EditBacktestModalProps) => {
     const {
         renameEvaluation,
@@ -71,12 +71,12 @@ export const EditBacktestModal = ({
                                 {...field}
                                 type="text"
                                 error={!!errors.name}
-                                onChange={(payload) => field.onChange(payload.value)}
+                                onChange={payload => field.onChange(payload.value)}
                                 dataTest="backtest-name-input"
                             />
                         )}
                     />
-                    {errors.name  && <p className={styles.mutedText}>{errors.name.message}</p>}
+                    {errors.name && <p className={styles.mutedText}>{errors.name.message}</p>}
                 </ModalContent>
                 <ModalActions>
                     <ButtonStrip>
@@ -86,7 +86,7 @@ export const EditBacktestModal = ({
                             disabled={isSubmitting}
                             dataTest="cancel-edit-backtest-button"
                         >
-                            {i18n.t("Cancel")}
+                            {i18n.t('Cancel')}
                         </Button>
                         <Button
                             type="submit"
@@ -95,11 +95,11 @@ export const EditBacktestModal = ({
                             disabled={isSubmitting}
                             dataTest="submit-edit-backtest-button"
                         >
-                            {i18n.t("Save")}
+                            {i18n.t('Save')}
                         </Button>
                     </ButtonStrip>
                 </ModalActions>
             </form>
         </Modal>
     );
-}; 
+};

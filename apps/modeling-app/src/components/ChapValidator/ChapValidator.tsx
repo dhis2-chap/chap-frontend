@@ -1,32 +1,32 @@
-import React, { useEffect } from 'react'
-import i18n from '@dhis2/d2-i18n'
-import { Button, CircularLoader, IconError24 } from '@dhis2/ui'
-import { useNavigate } from 'react-router-dom'
-import styles from './ChapValidator.module.css'
-import { useChapStatus } from '../../features/settings/ChapSettings/hooks/useChapStatus'
-import { useRoute } from '../../hooks/useRoute'
+import React, { useEffect } from 'react';
+import i18n from '@dhis2/d2-i18n';
+import { Button, CircularLoader, IconError24 } from '@dhis2/ui';
+import { useNavigate } from 'react-router-dom';
+import styles from './ChapValidator.module.css';
+import { useChapStatus } from '../../features/settings/ChapSettings/hooks/useChapStatus';
+import { useRoute } from '../../hooks/useRoute';
 
 type Props = {
-    children: React.ReactNode
-}
+    children: React.ReactNode;
+};
 
 export const ChapValidator = ({ children }: Props) => {
-    const { route } = useRoute()
-    const { status, error, isLoading } = useChapStatus({ route })
-    const navigate = useNavigate()
+    const { route } = useRoute();
+    const { status, error, isLoading } = useChapStatus({ route });
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (error) {
-            console.error('CHAP connection error:', error)
+            console.error('CHAP connection error:', error);
         }
-    }, [error])
+    }, [error]);
 
     if (isLoading) {
         return (
             <div className={styles.loadingContainer}>
                 <CircularLoader />
             </div>
-        )
+        );
     }
 
     if (error || !status) {
@@ -57,8 +57,8 @@ export const ChapValidator = ({ children }: Props) => {
                     </Button>
                 </div>
             </div>
-        )
+        );
     }
 
-    return children
-}
+    return children;
+};

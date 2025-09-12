@@ -18,19 +18,20 @@
     },
     "dependencies": {},
     "devDependencies": {
-        "@dhis2/cli-style": "^10.7.5",
-        "@eslint/js": "^9.26.0",
+        "@dhis2/cli-style": "^10.7.9",
+        "@eslint/js": "^9.12.0",
+        "@stylistic/eslint-plugin": "^5.3.1",
         "concurrently": "^9.1.2",
-        "eslint": "^9.26.0",
-        "eslint-plugin-react": "^7.37.5",
+        "eslint": "^9.12.0",
+        "eslint-plugin-react": "^7.37.2",
         "globals": "^16.1.0",
-        "typescript": "^5.7.2",
+        "jiti": "^2.5.1",
         "turbo": "^2.5.6",
-        "typescript-eslint": "^8.33.0"
+        "typescript": "^5.7.2",
+        "typescript-eslint": "^8.43.0"
     },
     "resolutions": {
-        "i18next": "20.5.0",
-        "@dhis2/app-runtime": "3.13.0"
+        "i18next": "20.5.0"
     },
     "version": "2.2.4"
 }

@@ -1,13 +1,13 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import i18n from "@dhis2/d2-i18n";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import i18n from '@dhis2/d2-i18n';
 
-import { JobsService } from "@dhis2-chap/ui";
-import { useAlert } from "@dhis2/app-runtime";
+import { JobsService } from '@dhis2-chap/ui';
+import { useAlert } from '@dhis2/app-runtime';
 
 type Props = {
     onSuccess?: ({ id }: { id: string }) => void;
     onError?: () => void;
-}
+};
 
 export const useDeleteJob = ({ onSuccess, onError }: Props = {}) => {
     const queryClient = useQueryClient();

@@ -1,22 +1,22 @@
-import React from 'react'
-import i18n from '@dhis2/d2-i18n'
-import { FormProvider } from 'react-hook-form'
-import { NewEvaluationFormComponent } from './NewEvaluationForm.component'
-import { Card } from '@dhis2-chap/ui'
-import { useFormController } from './hooks/useFormController'
-import styles from './NewEvaluationForm.module.css'
-import { Button, ButtonStrip, IconArrowLeft16, IconArrowRightMulti16, NoticeBox } from '@dhis2/ui'
-import { useNavigate } from 'react-router-dom'
-import { useNavigationBlocker } from '../../hooks/useNavigationBlocker'
-import { NavigationConfirmModal } from '../NavigationConfirmModal'
-import { SummaryModal } from './SummaryModal'
+import React from 'react';
+import i18n from '@dhis2/d2-i18n';
+import { FormProvider } from 'react-hook-form';
+import { NewEvaluationFormComponent } from './NewEvaluationForm.component';
+import { Card } from '@dhis2-chap/ui';
+import { useFormController } from './hooks/useFormController';
+import styles from './NewEvaluationForm.module.css';
+import { Button, ButtonStrip, IconArrowLeft16, IconArrowRightMulti16, NoticeBox } from '@dhis2/ui';
+import { useNavigate } from 'react-router-dom';
+import { useNavigationBlocker } from '../../hooks/useNavigationBlocker';
+import { NavigationConfirmModal } from '../NavigationConfirmModal';
+import { SummaryModal } from './SummaryModal';
 
 type NewEvaluationFormProps = {
-    initialValues?: Partial<ReturnType<typeof useFormController>['methods']['getValues']>
-}
+    initialValues?: Partial<ReturnType<typeof useFormController>['methods']['getValues']>;
+};
 
 export const NewEvaluationForm = ({ initialValues }: NewEvaluationFormProps = {}) => {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const {
         methods,
         onUpdateOrgUnits,
@@ -29,19 +29,19 @@ export const NewEvaluationForm = ({ initialValues }: NewEvaluationFormProps = {}
         closeSummaryModal,
         handleDryRun,
         isValidationLoading,
-    } = useFormController(initialValues)
+    } = useFormController(initialValues);
 
     const {
         showConfirmModal,
         handleConfirmNavigation,
         handleCancelNavigation,
     } = useNavigationBlocker({
-        shouldBlock: !isSubmitting && methods.formState.isDirty
-    })
+        shouldBlock: !isSubmitting && methods.formState.isDirty,
+    });
 
     const handleBackClick = () => {
-        navigate('/evaluate')
-    }
+        navigate('/evaluate');
+    };
 
     return (
         <>
@@ -112,5 +112,5 @@ export const NewEvaluationForm = ({ initialValues }: NewEvaluationFormProps = {}
                 />
             )}
         </>
-    )
-}
+    );
+};

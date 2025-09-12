@@ -1,25 +1,25 @@
-import i18n from '@dhis2/d2-i18n'
-import Highcharts from 'highcharts'
-import accessibility from 'highcharts/modules/accessibility'
-import highchartsMore from 'highcharts/highcharts-more'
-import exporting from 'highcharts/modules/exporting'
-import React, { useState } from 'react'
-import HighchartsReact from 'highcharts-react-official'
-import styles from '../styles/PredictionChart.module.css'
-import { Menu, MenuItem } from '@dhis2/ui'
+import i18n from '@dhis2/d2-i18n';
+import Highcharts from 'highcharts';
+import accessibility from 'highcharts/modules/accessibility';
+import highchartsMore from 'highcharts/highcharts-more';
+import exporting from 'highcharts/modules/exporting';
+import React, { useState } from 'react';
+import HighchartsReact from 'highcharts-react-official';
+import styles from '../styles/PredictionChart.module.css';
+import { Menu, MenuItem } from '@dhis2/ui';
 
-accessibility(Highcharts)
-exporting(Highcharts)
-highchartsMore(Highcharts)
+accessibility(Highcharts);
+exporting(Highcharts);
+highchartsMore(Highcharts);
 
 const getChartOptions = (
     data: any,
     period: string,
-    predictionTargetName: string
+    predictionTargetName: string,
 ): Highcharts.Options => {
     const median = data
         .filter((d: any) => d.dataElement === 'median')
-        .map((d: any) => [d.period, d.value])
+        .map((d: any) => [d.period, d.value]);
 
     const range = data
         .filter((d: any) => d.dataElement === 'quantile_low')
@@ -28,9 +28,9 @@ const getChartOptions = (
             d.value,
             data.filter(
                 (x: any) =>
-                    x.dataElement === 'quantile_high' && x.period === d.period
+                    x.dataElement === 'quantile_high' && x.period === d.period,
             )[0].value,
-        ])
+        ]);
 
     return {
         title: {
@@ -39,7 +39,7 @@ const getChartOptions = (
                 {
                     predictionTargetName,
                     orgUnitName: data[0].displayName,
-                }
+                },
             ),
         },
         tooltip: {
@@ -61,7 +61,7 @@ const getChartOptions = (
             },
         },
         series: [
-            //median
+            // median
             {
                 type: 'line',
                 data: median,
@@ -69,7 +69,7 @@ const getChartOptions = (
                 color: '#004bbd',
                 zIndex: 2,
             },
-            //high
+            // high
             {
                 type: 'arearange',
                 name: i18n.t('Range'),
@@ -79,31 +79,31 @@ const getChartOptions = (
                 color: '#004bbd',
                 fillOpacity: 0.4,
             },
-            //low
-            /*{
-        type: "arearange",   
+            // low
+            /* {
+        type: "arearange",
         name: i18n.t("Quantile low"),
         data: quantile_low,
         zIndex: 1,
         lineWidth: 0,
         color : colors[7],
         fillOpacity: 0.4,
-      }*/
+      } */
         ],
-    }
-}
+    };
+};
 
 interface PredicationChartProps {
-    data: any
-    predictionTargetName: string
-    periode: string
+    data: any;
+    predictionTargetName: string;
+    periode: string;
 }
 
 function groupByOrgUnit(data: any) {
-    const orgUnits = [...new Set(data.map((item: any) => item.orgUnit))]
-    return orgUnits.map((orgUnit) =>
-        data.filter((item: any) => item.orgUnit === orgUnit)
-    )
+    const orgUnits = [...new Set(data.map((item: any) => item.orgUnit))];
+    return orgUnits.map(orgUnit =>
+        data.filter((item: any) => item.orgUnit === orgUnit),
+    );
 }
 
 const PredictionChart = ({
@@ -111,19 +111,19 @@ const PredictionChart = ({
     predictionTargetName,
     periode,
 }: PredicationChartProps) => {
-    const matrix = groupByOrgUnit(data.dataValues)
+    const matrix = groupByOrgUnit(data.dataValues);
 
     const [options, setOptions] = useState<Highcharts.Options | undefined>(
-        getChartOptions(matrix[0], periode, predictionTargetName)
-    )
-    const [indexOfSelectedOrgUnit, setIndexOfSelectedOrgUnit] = useState(0)
+        getChartOptions(matrix[0], periode, predictionTargetName),
+    );
+    const [indexOfSelectedOrgUnit, setIndexOfSelectedOrgUnit] = useState(0);
 
     const onSelectOrgUnit = (index: number) => {
-        setIndexOfSelectedOrgUnit(index)
+        setIndexOfSelectedOrgUnit(index);
         setOptions(
-            getChartOptions(matrix[index], periode, predictionTargetName)
-        )
-    }
+            getChartOptions(matrix[index], periode, predictionTargetName),
+        );
+    };
 
     return (
         <>
@@ -144,13 +144,13 @@ const PredictionChart = ({
                 <div className={styles.chart}>
                     <HighchartsReact
                         highcharts={Highcharts}
-                        constructorType={'chart'}
+                        constructorType="chart"
                         options={options}
                     />
                 </div>
             </div>
         </>
-    )
-}
+    );
+};
 
-export default PredictionChart
+export default PredictionChart;

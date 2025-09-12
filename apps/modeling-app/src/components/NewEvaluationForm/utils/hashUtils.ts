@@ -4,12 +4,12 @@
  * @returns Promise<string> - The hex-encoded hash string
  */
 export const generateSHA256Hash = async (data: any): Promise<string> => {
-    const encoder = new TextEncoder()
-    const encodedData = encoder.encode(JSON.stringify(data))
-    const hashBuffer = await crypto.subtle.digest('SHA-256', encodedData)
-    const hashArray = Array.from(new Uint8Array(hashBuffer))
-    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('')
-}
+    const encoder = new TextEncoder();
+    const encodedData = encoder.encode(JSON.stringify(data));
+    const hashBuffer = await crypto.subtle.digest('SHA-256', encodedData);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+};
 
 /**
  * Generates a unique hash for backtest data caching based on data elements, periods, and org units
@@ -21,11 +21,11 @@ export const generateSHA256Hash = async (data: any): Promise<string> => {
 export const generateBacktestDataHash = async (
     dataElements: string[],
     periods: string[],
-    orgUnitIds: string[]
+    orgUnitIds: string[],
 ): Promise<string> => {
     return generateSHA256Hash({
         dataElements,
         periods,
-        orgUnits: orgUnitIds
-    })
-} 
+        orgUnits: orgUnitIds,
+    });
+};

@@ -1,86 +1,86 @@
-import React, { useState } from 'react'
-import styles from './JobResultPanel.module.css'
-import { Modal } from '@dhis2/ui'
-import ImportPrediction from '../ImportPrediction/ImportPrediction'
-import { JobResult } from '../interfaces/JobResult'
-import { JobsService, CrudService } from '@dhis2-chap/ui'
-import JobResultPanelItem from './JobResultPanelItem/JobResultPanelItem'
-import JobLogs from './JobLogs/JobLogs'
-import NewEvaluationDrawer from '../../new-evaluation/components/NewEvaluationDrawer'
-import EvaluationResult from '../../import-prediction/EvaluationResult'
+import React, { useState } from 'react';
+import styles from './JobResultPanel.module.css';
+import { Modal } from '@dhis2/ui';
+import ImportPrediction from '../ImportPrediction/ImportPrediction';
+import { JobResult } from '../interfaces/JobResult';
+import { JobsService, CrudService } from '@dhis2-chap/ui';
+import JobResultPanelItem from './JobResultPanelItem/JobResultPanelItem';
+import JobLogs from './JobLogs/JobLogs';
+import NewEvaluationDrawer from '../../new-evaluation/components/NewEvaluationDrawer';
+import EvaluationResult from '../../import-prediction/EvaluationResult';
 
 interface JobResultPanel {
-    jobResults: JobResult[]
+    jobResults: JobResult[];
 }
 
 const JobResultPanel = ({ jobResults: jobResults }: JobResultPanel) => {
-    const [isImportModalOpen, setIsImportModalOpen] = useState<boolean>(false)
+    const [isImportModalOpen, setIsImportModalOpen] = useState<boolean>(false);
     const [predictionIdToImport, setPredictionToImport] = useState<
         string | undefined
-    >(undefined)
+    >(undefined);
 
     const [newEvaluationDrawerOpen, setNewEvaluationDrawerOpen] =
-        useState<boolean>(false)
+        useState<boolean>(false);
     const [showEvaluationResultModal, setShowEvaluationResultModal] =
-        useState<boolean>(false)
+        useState<boolean>(false);
     const [evaluationResultId, setEvaluationResultId] = useState<
         number | undefined
-    >(undefined)
+    >(undefined);
 
     const [datasetIdToEvaluate, setDatasetIdToEvaluate] = useState<
         number | undefined
-    >(undefined)
+    >(undefined);
 
-    const [showJobLogs, setShowJobLogs] = useState(false)
-    const [jobLogsId, setJobLogsId] = useState<string | undefined>(undefined)
+    const [showJobLogs, setShowJobLogs] = useState(false);
+    const [jobLogsId, setJobLogsId] = useState<string | undefined>(undefined);
 
     const onClickImport = (predictionId: string) => {
-        setIsImportModalOpen(true)
-        setPredictionToImport(predictionId)
-    }
+        setIsImportModalOpen(true);
+        setPredictionToImport(predictionId);
+    };
 
     const onClickViewEvaluation = (evaluationId: number) => {
-        setShowEvaluationResultModal(true)
-        setEvaluationResultId(evaluationId)
-    }
+        setShowEvaluationResultModal(true);
+        setEvaluationResultId(evaluationId);
+    };
 
     const onClickViewLogs = (jobId: string) => {
-        setShowJobLogs(true)
-        setJobLogsId(jobId)
-    }
+        setShowJobLogs(true);
+        setJobLogsId(jobId);
+    };
 
     const onClickRemove = (item: JobResult) => {
         const msg =
-            'Are you sure you want to permanently remove this item? Any data entries that depend on this item will also be deleted.'
+            'Are you sure you want to permanently remove this item? Any data entries that depend on this item will also be deleted.';
         if (confirm(msg) == true) {
-            console.log('Should remove item')
-            const dbId = item.result
+            console.log('Should remove item');
+            const dbId = item.result;
             if (dbId) {
                 if (item.type == 'dataset') {
                     CrudService.deleteDatasetCrudDatasetsDatasetIdDelete(
-                        parseInt(dbId)
-                    )
+                        parseInt(dbId),
+                    );
                 } else if (item.type == 'evaluation') {
                     CrudService.deleteBacktestCrudBacktestsBacktestIdDelete(
-                        parseInt(dbId)
-                    )
+                        parseInt(dbId),
+                    );
                 } else if (item.type == 'prediction') {
                     CrudService.deletePredictionCrudPredictionsPredictionIdDelete(
-                        parseInt(dbId)
-                    )
+                        parseInt(dbId),
+                    );
                 }
             } else {
-                const jobId = item.id
-                JobsService.deleteJobJobsJobIdDelete(jobId)
+                const jobId = item.id;
+                JobsService.deleteJobJobsJobIdDelete(jobId);
             }
         }
-    }
+    };
 
     const onClickEvaluateDataset = (datasetId: number | undefined) => {
-        console.log('clicked evaluate dataset id', datasetId)
-        setDatasetIdToEvaluate(datasetId)
-        setNewEvaluationDrawerOpen(true)
-    }
+        console.log('clicked evaluate dataset id', datasetId);
+        setDatasetIdToEvaluate(datasetId);
+        setNewEvaluationDrawerOpen(true);
+    };
 
     return (
         <>
@@ -117,7 +117,7 @@ const JobResultPanel = ({ jobResults: jobResults }: JobResultPanel) => {
                 <Modal
                     className={styles.evaluationModal}
                     onClose={() => {
-                        setShowEvaluationResultModal(false)
+                        setShowEvaluationResultModal(false);
                     }}
                 >
                     <EvaluationResult evaluationId={evaluationResultId} />
@@ -129,14 +129,14 @@ const JobResultPanel = ({ jobResults: jobResults }: JobResultPanel) => {
                 <Modal
                     className={styles.jobLogsModal}
                     onClose={() => {
-                        setShowJobLogs(false)
+                        setShowJobLogs(false);
                     }}
                 >
                     <JobLogs jobId={jobLogsId} />
                 </Modal>
             )}
         </>
-    )
-}
+    );
+};
 
-export default JobResultPanel
+export default JobResultPanel;

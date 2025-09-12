@@ -1,16 +1,16 @@
-import React, { useState } from 'react'
-import styles from './FetchError.module.css'
-import { Button, NoticeBox } from '@dhis2/ui'
+import React, { useState } from 'react';
+import styles from './FetchError.module.css';
+import { Button, NoticeBox } from '@dhis2/ui';
 
 interface FetchErrorProps {
-    error: string | undefined
-    type: 'predictions' | 'datasets' | 'evaluations' | 'jobs'
+    error: string | undefined;
+    type: 'predictions' | 'datasets' | 'evaluations' | 'jobs';
 }
 
 const FetchError = ({ error, type }: FetchErrorProps) => {
-    const [seeDetailOpen, setSeeDetailOpen] = useState(false)
+    const [seeDetailOpen, setSeeDetailOpen] = useState(false);
 
-    if (error == undefined) return <></>
+    if (error == undefined) return <></>;
 
     return (
         <div>
@@ -34,7 +34,7 @@ const FetchError = ({ error, type }: FetchErrorProps) => {
                 )}
             </NoticeBox>
         </div>
-    )
-}
+    );
+};
 
-export default FetchError
+export default FetchError;

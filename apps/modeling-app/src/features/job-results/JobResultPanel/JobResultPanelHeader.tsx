@@ -1,5 +1,5 @@
-import React from 'react'
-import styles from './JobResultPanel.module.css'
+import React from 'react';
+import styles from './JobResultPanel.module.css';
 
 const PanelHeader = () => {
     return (
@@ -16,7 +16,7 @@ const PanelHeader = () => {
                 <div className={styles.flexItemRight}></div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default PanelHeader
+export default PanelHeader;

@@ -1,1 +1,1 @@
-export { EditRoute } from './EditRoute'; 
+export { EditRoute } from './EditRoute';

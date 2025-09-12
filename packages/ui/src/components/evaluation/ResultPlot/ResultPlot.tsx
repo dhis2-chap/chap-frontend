@@ -1,30 +1,30 @@
-import HighchartsReact from 'highcharts-react-official'
-import Highcharts from 'highcharts'
-import React from 'react'
-import { HighChartsData } from '../../../interfaces/Evaluation'
-import { getPeriodNameFromId } from '../../../utils/Time'
-import enableOfflineExporting from 'highcharts/modules/offline-exporting'
+import HighchartsReact from 'highcharts-react-official';
+import Highcharts from 'highcharts';
+import React from 'react';
+import { HighChartsData } from '../../../interfaces/Evaluation';
+import { getPeriodNameFromId } from '../../../utils/Time';
+import enableOfflineExporting from 'highcharts/modules/offline-exporting';
 
-enableOfflineExporting(Highcharts)
+enableOfflineExporting(Highcharts);
 
 function syncChartZoom(
     this: Highcharts.Axis,
-    event: Highcharts.AxisSetExtremesEventObject
+    event: Highcharts.AxisSetExtremesEventObject,
 ): void {
     Highcharts.charts.forEach((chart) => {
         if (chart) {
-            chart.xAxis[0].setExtremes(event.min, event.max)
+            chart.xAxis[0].setExtremes(event.min, event.max);
         }
-    })
+    });
 }
 
 interface ResultPlotProps {
-    data: HighChartsData
-    modelName: string
-    nameLabel?: string
-    syncZoom: boolean | Highcharts.AxisSetExtremesEventCallbackFunction
-    ref?: HighchartsReact.RefObject
-    maxY?: number
+    data: HighChartsData;
+    modelName: string;
+    nameLabel?: string;
+    syncZoom: boolean | Highcharts.AxisSetExtremesEventCallbackFunction;
+    ref?: HighchartsReact.RefObject;
+    maxY?: number;
 }
 
 const getSeries = (data: any): Highcharts.SeriesOptionsType[] => {
@@ -39,7 +39,7 @@ const getSeries = (data: any): Highcharts.SeriesOptionsType[] => {
             marker: {
                 enabled: false,
                 lineWidth: 2,
-                //fillColor: Highcharts.getOptions().colors[2]
+                // fillColor: Highcharts.getOptions().colors[2]
             },
         },
         {
@@ -78,16 +78,16 @@ const getSeries = (data: any): Highcharts.SeriesOptionsType[] => {
                 enabled: false,
             },
         },
-    ]
-}
+    ];
+};
 
 type GetOptionParams = {
-    data: any
-    modelName: string
-    syncZoom: ResultPlotProps['syncZoom']
-    nameLabel?: string
-    maxY?: number
-}
+    data: any;
+    modelName: string;
+    syncZoom: ResultPlotProps['syncZoom'];
+    nameLabel?: string;
+    maxY?: number;
+};
 
 const getOptions = ({
     data,
@@ -100,8 +100,8 @@ const getOptions = ({
         nameLabel && modelName
             ? `${nameLabel}: ${modelName}`
             : modelName
-            ? `Model: ${modelName}`
-            : ''
+                ? `Model: ${modelName}`
+                : '';
     return {
         title: {
             text: '',
@@ -118,9 +118,9 @@ const getOptions = ({
             labels: {
                 enabled: true,
                 formatter: function (
-                    this: Highcharts.AxisLabelsFormatterContextObject
+                    this: Highcharts.AxisLabelsFormatterContextObject,
                 ): string {
-                    return getPeriodNameFromId(this.value.toString())
+                    return getPeriodNameFromId(this.value.toString());
                 },
                 style: {
                     fontSize: '0.9rem',
@@ -128,11 +128,11 @@ const getOptions = ({
             },
             events: syncZoom
                 ? {
-                      afterSetExtremes:
+                        afterSetExtremes:
                           typeof syncZoom === 'function'
                               ? syncZoom
                               : syncChartZoom,
-                  }
+                    }
                 : undefined,
             title: {
                 text: 'Period',
@@ -163,8 +163,8 @@ const getOptions = ({
         exporting: {
             fallbackToExportServer: false,
         },
-    }
-}
+    };
+};
 
 export const ResultPlot = React.forwardRef<
     HighchartsReact.RefObject,
@@ -184,5 +184,5 @@ export const ResultPlot = React.forwardRef<
                 })}
             />
         </>
-    )
-})
+    );
+});

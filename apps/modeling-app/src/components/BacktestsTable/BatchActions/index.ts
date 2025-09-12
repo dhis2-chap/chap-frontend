@@ -1,1 +1,1 @@
-export { BatchActions } from './BatchActions'; 
+export { BatchActions } from './BatchActions';

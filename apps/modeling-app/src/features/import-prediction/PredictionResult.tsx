@@ -1,93 +1,93 @@
-import React, { useEffect, useState } from 'react'
-import i18n from '@dhis2/d2-i18n'
+import React, { useEffect, useState } from 'react';
+import i18n from '@dhis2/d2-i18n';
 import {
     FullPredictionResponseExtended,
     PredictionRead,
-} from '@dhis2-chap/ui'
-import styles from './styles/PredictionResult.module.css'
-import useOrgUnits from '../../hooks/useOrgUnits'
-import { Button, TabBar, IconArrowRight24, Tab } from '@dhis2/ui'
-import PostResult from './PostResult'
-import SelectDataValues from './SelectDataValues'
-import SetupInstruction from './SetupInstruction'
-import useDataElements from '../../hooks/useDataElements'
-import { useLocation } from 'react-router-dom'
+} from '@dhis2-chap/ui';
+import styles from './styles/PredictionResult.module.css';
+import useOrgUnits from '../../hooks/useOrgUnits';
+import { Button, TabBar, IconArrowRight24, Tab } from '@dhis2/ui';
+import PostResult from './PostResult';
+import SelectDataValues from './SelectDataValues';
+import SetupInstruction from './SetupInstruction';
+import useDataElements from '../../hooks/useDataElements';
+import { useLocation } from 'react-router-dom';
 import {
     FullPredictionResponse,
     PredictionResponse,
     PredictionTable,
-} from '@dhis2-chap/ui'
+} from '@dhis2-chap/ui';
 
-import { UncertaintyAreaChart } from '@dhis2-chap/ui'
-import useFindDataItem from '../../hooks/useDataItem'
+import { UncertaintyAreaChart } from '@dhis2-chap/ui';
+import useFindDataItem from '../../hooks/useDataItem';
 
 interface PredictionResultProps {
-    prediction_unprocessed: PredictionRead
+    prediction_unprocessed: PredictionRead;
 }
 
 const PredictionResult = ({
     prediction_unprocessed,
 }: PredictionResultProps) => {
-    const location = useLocation()
+    const location = useLocation();
 
     const [selectedTab, setSelectedTab] = useState<'chart' | 'table' | 'map'>(
-        'chart'
-    )
+        'chart',
+    );
 
     const [prediciton, setPrediciton] = useState<
         FullPredictionResponseExtended | undefined
-    >()
+    >();
 
-    //This states hold the dataElement prediction would be imported to
+    // This states hold the dataElement prediction would be imported to
     const [qLowDataElement, setqLowDataElementId] = useState<{
-        displayName: string
-        id: string
-    } | null>(null)
+        displayName: string;
+        id: string;
+    } | null>(null);
     const [qMedianDataElement, setqMedianDataElementId] = useState<{
-        displayName: string
-        id: string
-    } | null>(null)
+        displayName: string;
+        id: string;
+    } | null>(null);
     const [qHighDataElement, setqHighDataElementId] = useState<{
-        displayName: string
-        id: string
-    } | null>(null)
+        displayName: string;
+        id: string;
+    } | null>(null);
 
     const getQuantile = (quantile: number, values: number[] | undefined) => {
-        if (!values) return 0
+        if (!values) return 0;
         // Make a copy of the array to avoid mutating the original array
-        const sortedArr = [...values].sort((a, b) => a - b)
-        const n = sortedArr.length
+        const sortedArr = [...values].sort((a, b) => a - b);
+        const n = sortedArr.length;
 
         // Calculate the quantile index
-        const index = quantile * (n - 1)
-        const lowerIndex = Math.floor(index)
-        const upperIndex = Math.ceil(index)
+        const index = quantile * (n - 1);
+        const lowerIndex = Math.floor(index);
+        const upperIndex = Math.ceil(index);
 
         // Linearly interpolate between the two bounding indices
         if (lowerIndex === upperIndex) {
-            return Math.round(sortedArr[lowerIndex])
+            return Math.round(sortedArr[lowerIndex]);
         }
 
         return Math.round(
-            sortedArr[lowerIndex] +
-            (sortedArr[upperIndex] - sortedArr[lowerIndex]) *
-            (index - lowerIndex)
-        )
-    }
+            sortedArr[lowerIndex]
+            + (sortedArr[upperIndex] - sortedArr[lowerIndex])
+            * (index - lowerIndex),
+        );
+    };
 
     const quantiles = [
         { q: 0.1, name: 'quantile_low' },
         { q: 0.5, name: 'median' },
         { q: 0.9, name: 'quantile_high' },
-    ]
+    ];
 
     const getPredictorId = () => {
         return (
             prediction_unprocessed?.metaData?.dataItemMapper?.find(
-                (m: any) => m.featureName === 'disease_cases'
+                (m: any) => m.featureName === 'disease_cases',
             ).dataItemId ?? ''
-        )
-    }
+        );
+    };
 
     const getFullPredictionResponseExtended =
         (): FullPredictionResponseExtended => {
@@ -102,62 +102,62 @@ const PredictionResult = ({
                                 displayName: forecast.orgUnit,
                                 dataElement: quantile.name,
                                 period: forecast.period,
-                            }
-                        })
-                    }
+                            };
+                        });
+                    },
                 ),
-            }
-        }
+            };
+        };
 
-    //Every dataElement that have a code that start with CHAP_LOW would be fetched, same for CHAP_MEDIAN and CHAP_HIGH
-    const { dataElements: dataElementsLow } = useDataElements('CHAP_LOW')
-    const { dataElements: dataElementsMedian } = useDataElements('CHAP_MEDIAN')
-    const { dataElements: dataElementsHigh } = useDataElements('CHAP_HIGH')
+    // Every dataElement that have a code that start with CHAP_LOW would be fetched, same for CHAP_MEDIAN and CHAP_HIGH
+    const { dataElements: dataElementsLow } = useDataElements('CHAP_LOW');
+    const { dataElements: dataElementsMedian } = useDataElements('CHAP_MEDIAN');
+    const { dataElements: dataElementsHigh } = useDataElements('CHAP_HIGH');
 
-    //PredicationTargetId comes from the uploaded file, this is used to fetch the name of the disease
-    const predictionTargetId = getPredictorId()
+    // PredicationTargetId comes from the uploaded file, this is used to fetch the name of the disease
+    const predictionTargetId = getPredictorId();
 
     const { displayName: predictionTargetName } =
-        useFindDataItem(predictionTargetId)
+        useFindDataItem(predictionTargetId);
 
-    //Used to display the name of the orgUnit in the table/chart
-    const { orgUnits, loading: orgUnitLoading } = useOrgUnits()
+    // Used to display the name of the orgUnit in the table/chart
+    const { orgUnits, loading: orgUnitLoading } = useOrgUnits();
 
-    //States related to posting the prediction
+    // States related to posting the prediction
     const [postStatus, setPostStatus] = useState<
         'loading' | 'finish' | 'error' | 'initial'
-    >('initial')
-    const [postHttpError, setPostHttpError] = useState('')
+    >('initial');
+    const [postHttpError, setPostHttpError] = useState('');
 
-    //if id is passed in
+    // if id is passed in
     useEffect(() => {
         if (orgUnits) {
-            fetchOrHandleFileDropData()
+            fetchOrHandleFileDropData();
         }
-    }, [location?.state?.data, orgUnits])
+    }, [location?.state?.data, orgUnits]);
 
-    //If the user do not have any data elements that start with CHAP_LOW, CHAP_MEDIAN or CHAP_HIGH, show a warning
+    // If the user do not have any data elements that start with CHAP_LOW, CHAP_MEDIAN or CHAP_HIGH, show a warning
     const noCHAPDataElementExists = () => {
         if (
-            dataElementsLow?.length === 0 ||
-            dataElementsMedian?.length === 0 ||
-            dataElementsHigh?.length === 0
+            dataElementsLow?.length === 0
+            || dataElementsMedian?.length === 0
+            || dataElementsHigh?.length === 0
         ) {
-            return true
+            return true;
         }
-        return false
-    }
+        return false;
+    };
 
     const fetchOrHandleFileDropData = async () => {
-        setPostStatus('initial')
-    }
+        setPostStatus('initial');
+    };
 
-    //when name of disease is fetched, the prediction is filled with orgUnitName
+    // when name of disease is fetched, the prediction is filled with orgUnitName
     useEffect(() => {
         if (predictionTargetName && orgUnits && prediction_unprocessed) {
-            setPrediciton(fillWithOrgUnit(getFullPredictionResponseExtended()))
+            setPrediciton(fillWithOrgUnit(getFullPredictionResponseExtended()));
         }
-    }, [predictionTargetName, orgUnits, prediction_unprocessed])
+    }, [predictionTargetName, orgUnits, prediction_unprocessed]);
 
     useEffect(() => {
         if (
@@ -168,63 +168,63 @@ const PredictionResult = ({
         ) {
             const low = dataElementsLow.find(
                 (de: any) =>
-                    de.code ===
-                    `CHAP_LOW_${predictionTargetName
+                    de.code
+                    === `CHAP_LOW_${predictionTargetName
                         .toLocaleUpperCase()
-                        .replaceAll(' ', '_')}`
-            )
-            if (low) setqLowDataElementId(low)
+                        .replaceAll(' ', '_')}`,
+            );
+            if (low) setqLowDataElementId(low);
             const median = dataElementsMedian.find(
                 (de: any) =>
-                    de.code ===
-                    `CHAP_MEDIAN_${predictionTargetName
+                    de.code
+                    === `CHAP_MEDIAN_${predictionTargetName
                         .toLocaleUpperCase()
-                        .replaceAll(' ', '_')}`
-            )
-            if (median) setqMedianDataElementId(median)
+                        .replaceAll(' ', '_')}`,
+            );
+            if (median) setqMedianDataElementId(median);
             const high = dataElementsHigh.find(
                 (de: any) =>
-                    de.code ===
-                    `CHAP_HIGH_${predictionTargetName
+                    de.code
+                    === `CHAP_HIGH_${predictionTargetName
                         .toLocaleUpperCase()
-                        .replaceAll(' ', '_')}`
-            )
-            if (high) setqHighDataElementId(high)
+                        .replaceAll(' ', '_')}`,
+            );
+            if (high) setqHighDataElementId(high);
         }
     }, [
         dataElementsLow,
         dataElementsMedian,
         dataElementsHigh,
         predictionTargetName,
-    ])
+    ]);
 
-    //If user has selcted to import prediction into a data element that not contain the predictionName, give a warning to the user.
+    // If user has selcted to import prediction into a data element that not contain the predictionName, give a warning to the user.
     const warnAboutUnequalDiseaseAndDataElement = () => {
-        //do not warn when nothing is selected
+        // do not warn when nothing is selected
         if (!qLowDataElement && !qMedianDataElement && !qHighDataElement) {
-            return false
+            return false;
         }
-        //show warning if any of the selected data elements do not match the disease
+        // show warning if any of the selected data elements do not match the disease
         if (
             qLowDataElement &&
             !qLowDataElement?.displayName.includes(predictionTargetName)
         )
-            return true
+            return true;
         if (
             qMedianDataElement &&
             !qMedianDataElement?.displayName.includes(predictionTargetName)
         )
-            return true
+            return true;
         if (
             qHighDataElement &&
             !qHighDataElement?.displayName.includes(predictionTargetName)
         )
-            return true
-        return false
-    }
-    //This add displayName to the orgUnits
+            return true;
+        return false;
+    };
+    // This add displayName to the orgUnits
     const fillWithOrgUnit = (
-        data: FullPredictionResponse
+        data: FullPredictionResponse,
     ): FullPredictionResponseExtended => {
         return {
             dataValues: data.dataValues.map((d: PredictionResponse) => {
@@ -232,29 +232,32 @@ const PredictionResult = ({
                     ...d,
                     displayName: (
                         orgUnits?.organisationUnits.find(
-                            (ou: any) => ou.id === d.orgUnit
+                            (ou: any) => ou.id === d.orgUnit,
                         ) as any
                     )?.displayName,
-                }
+                };
             }),
             diseaseId: data.diseaseId,
-        }
-    }
+        };
+    };
 
     const validateForm = () => {
         if (qLowDataElement && qMedianDataElement && qHighDataElement) {
-            return true
+            return true;
         }
-        return false
-    }
+        return false;
+    };
 
     return (
         <div className={styles.container}>
             <div className={styles.innerContainer}>
                 {orgUnitLoading && <p>Loading metadata from DHIS2.. </p>}
-                <h1>Prediction: {prediction_unprocessed.name}</h1>
+                <h1>
+                    Prediction:
+                    {prediction_unprocessed.name}
+                </h1>
                 {
-                    //If predication is null, show only "Upload file"-area
+                    // If predication is null, show only "Upload file"-area
 
                     prediciton && (
                         <>
@@ -271,12 +274,12 @@ const PredictionResult = ({
                                 >
                                     Table
                                 </Tab>
-                                {/*<Tab
+                                {/* <Tab
                                 selected={selectedTab === 'map'}
                                 onClick={() => setSelectedTab('map')}
                             >
                                 Map
-                            </Tab>*/}
+                            </Tab> */}
                             </TabBar>
 
                             <div className={styles.prediction}>
@@ -296,12 +299,12 @@ const PredictionResult = ({
                                             />
                                         ),
                                         map: (
-                                            /*<PredictionMap
+                                            /* <PredictionMap
                                             predictionTargetName={
                                                 predictionTargetName
                                             }
                                             data={prediction}
-                                        />*/
+                                        /> */
                                             <></>
                                         ),
                                     }[selectedTab]
@@ -310,7 +313,7 @@ const PredictionResult = ({
 
                             <h3>
                                 {i18n.t(
-                                    'Select which data element prediction should be imported to:'
+                                    'Select which data element prediction should be imported to:',
                                 )}
                             </h3>
                             <SetupInstruction
@@ -320,7 +323,7 @@ const PredictionResult = ({
 
                             <SelectDataValues
                                 label={i18n.t(
-                                    'Select data element for low quantile'
+                                    'Select data element for low quantile',
                                 )}
                                 dataElements={dataElementsLow}
                                 onChange={setqLowDataElementId}
@@ -328,7 +331,7 @@ const PredictionResult = ({
                             />
                             <SelectDataValues
                                 label={i18n.t(
-                                    'Select data element for median quantile'
+                                    'Select data element for median quantile',
                                 )}
                                 dataElements={dataElementsMedian}
                                 onChange={setqMedianDataElementId}
@@ -336,7 +339,7 @@ const PredictionResult = ({
                             />
                             <SelectDataValues
                                 label={i18n.t(
-                                    'Select data element for high quantile'
+                                    'Select data element for high quantile',
                                 )}
                                 dataElements={dataElementsHigh}
                                 onChange={setqHighDataElementId}
@@ -356,9 +359,9 @@ const PredictionResult = ({
                                     onClick={() => setPostStatus('loading')}
                                     loading={postStatus === 'loading'}
                                     disabled={
-                                        postStatus === 'finish' ||
-                                        postStatus === 'loading' ||
-                                        !validateForm()
+                                        postStatus === 'finish'
+                                        || postStatus === 'loading'
+                                        || !validateForm()
                                     }
                                     icon={<IconArrowRight24 />}
                                     primary
@@ -388,7 +391,7 @@ const PredictionResult = ({
                                 {postStatus === 'finish' && (
                                     <p className={styles.greenText}>
                                         {i18n.t(
-                                            'Prediction has been imported.'
+                                            'Prediction has been imported.',
                                         )}
                                     </p>
                                 )}
@@ -401,7 +404,7 @@ const PredictionResult = ({
                 }
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default PredictionResult
+export default PredictionResult;

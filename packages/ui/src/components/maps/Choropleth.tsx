@@ -1,5 +1,5 @@
-import { useContext, useEffect } from 'react'
-import { MapContext } from './MapItem'
+import { useContext, useEffect } from 'react';
+import { MapContext } from './MapItem';
 
 const Choropleth = ({
     period,
@@ -9,24 +9,24 @@ const Choropleth = ({
     bins,
     colors,
 }: any) => {
-    const map: any = useContext(MapContext)
+    const map: any = useContext(MapContext);
 
     useEffect(() => {
-        if (geojson.hasOwnProperty('features')) {
+        if (Object.prototype.hasOwnProperty.call(geojson, 'features')) {
             const features = geojson.features.map((feature: any) => {
                 const value = prediction.dataValues.find(
                     (d: any) =>
                         d.period === period &&
                         d.orgUnit === feature.id &&
-                        d.dataElement === dataElement
-                )?.value
+                        d.dataElement === dataElement,
+                )?.value;
 
                 const binIndex = bins.findIndex(
                     (bin: any) =>
-                        value >= bin.startValue && value <= bin.endValue
-                )
+                        value >= bin.startValue && value <= bin.endValue,
+                );
 
-                const color = colors[binIndex]
+                const color = colors[binIndex];
 
                 return {
                     ...feature,
@@ -35,23 +35,23 @@ const Choropleth = ({
                         value: value || 'No value',
                         color,
                     },
-                }
-            })
+                };
+            });
 
             const config = {
                 type: 'choropleth',
                 data: features,
                 opacity: 0.8,
                 hoverLabel: '{name} ({value})',
-            }
+            };
 
-            map.addLayer(map.createLayer(config))
+            map.addLayer(map.createLayer(config));
 
-            map.fitBounds(map.getLayersBounds())
+            map.fitBounds(map.getLayersBounds());
         }
-    }, [map, period, prediction, dataElement, geojson, bins])
+    }, [map, period, prediction, dataElement, geojson, bins]);
 
-    return null
-}
+    return null;
+};
 
-export default Choropleth
+export default Choropleth;

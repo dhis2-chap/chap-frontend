@@ -1,7 +1,7 @@
 /* generated using openapi-typescript-codegen -- do not edit */
 /* istanbul ignore file */
 /* tslint:disable */
-/* eslint-disable */
+
 export { ApiError } from './core/ApiError';
 export { CancelablePromise, CancelError } from './core/CancelablePromise';
 export { OpenAPI } from './core/OpenAPI';
@@ -48,6 +48,7 @@ export type { LineStringModel } from './models/LineStringModel';
 export type { MakeBacktestRequest } from './models/MakeBacktestRequest';
 export type { MakeBacktestWithDataRequest } from './models/MakeBacktestWithDataRequest';
 export type { MakePredictionRequest } from './models/MakePredictionRequest';
+export type { Metric } from './models/Metric';
 export type { ModelConfigurationCreate } from './models/ModelConfigurationCreate';
 export type { ModelSpec } from './models/ModelSpec';
 export type { ModelSpecRead } from './models/ModelSpecRead';
@@ -69,9 +70,11 @@ export type { PredictionResponse } from './models/PredictionResponse';
 export type { State } from './models/State';
 export type { SystemInfoResponse } from './models/SystemInfoResponse';
 export type { ValidationError } from './models/ValidationError';
+export type { VisualizationInfo } from './models/VisualizationInfo';
 
 export { AnalyticsService } from './services/AnalyticsService';
 export { CrudService } from './services/CrudService';
 export { DebugService } from './services/DebugService';
 export { DefaultService } from './services/DefaultService';
 export { JobsService } from './services/JobsService';
+export { VisualizationService } from './services/VisualizationService';

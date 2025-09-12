@@ -1,1 +1,1 @@
-export { ModelSettings } from './ModelSettings' 
+export { ModelSettings } from './ModelSettings';

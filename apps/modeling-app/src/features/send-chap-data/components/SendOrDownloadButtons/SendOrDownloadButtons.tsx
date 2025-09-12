@@ -1,19 +1,19 @@
-import { Button, IconAdd24, IconArrowRight24, IconDownload24 } from '@dhis2/ui'
-import React from 'react'
-import styles from './SendOrDownloadButtons.module.css'
+import { Button, IconAdd24, IconArrowRight24, IconDownload24 } from '@dhis2/ui';
+import React from 'react';
+import styles from './SendOrDownloadButtons.module.css';
 
 interface SendOrDownloadButtonsProps {
     startDownload: {
-        startDownload: boolean
-        action: 'predict' | 'new-dataset' | 'download'
-    }
-    isSendingDataToChap: boolean
-    orgUnits: any[]
+        startDownload: boolean;
+        action: 'predict' | 'new-dataset' | 'download';
+    };
+    isSendingDataToChap: boolean;
+    orgUnits: any[];
     onClickDownloadOrPostData: (
         action: 'predict' | 'new-dataset' | 'download'
-    ) => void
-    formValid: boolean
-    onButtonSendAction: 'predict' | 'new-dataset'
+    ) => void;
+    formValid: boolean;
+    onButtonSendAction: 'predict' | 'new-dataset';
 }
 
 const SendOrDownloadButtons = ({
@@ -26,20 +26,20 @@ const SendOrDownloadButtons = ({
 }: SendOrDownloadButtonsProps) => {
     const orgUnitsSelectedIsValid = () => {
         if (orgUnits.length === 0) {
-            return true
+            return true;
         }
 
-        const firstElement = (orgUnits[0] as any).path.split('/').length
+        const firstElement = (orgUnits[0] as any).path.split('/').length;
         return orgUnits.every(
             (innerArray: any) =>
-                (innerArray as any).path.split('/').length === firstElement
-        )
-    }
+                (innerArray as any).path.split('/').length === firstElement,
+        );
+    };
 
     const rightButtonText =
-        onButtonSendAction === 'predict' ? 'Send prediction' : 'Create dataset'
+        onButtonSendAction === 'predict' ? 'Send prediction' : 'Create dataset';
     const icon =
-        onButtonSendAction === 'predict' ? <IconArrowRight24 /> : <IconAdd24 />
+        onButtonSendAction === 'predict' ? <IconArrowRight24 /> : <IconAdd24 />;
 
     return (
         <div>
@@ -51,9 +51,9 @@ const SendOrDownloadButtons = ({
                         startDownload.action === 'download'
                     }
                     disabled={
-                        !isValid ||
-                        startDownload.startDownload ||
-                        !orgUnitsSelectedIsValid()
+                        !isValid
+                        || startDownload.startDownload
+                        || !orgUnitsSelectedIsValid()
                     }
                     onClick={() => onClickDownloadOrPostData('download')}
                 >
@@ -64,17 +64,16 @@ const SendOrDownloadButtons = ({
                     primary
                     loading={
                         (startDownload.startDownload &&
-                            startDownload.action === onButtonSendAction) ||
-                        isSendingDataToChap
+                            startDownload.action === onButtonSendAction)
+                        || isSendingDataToChap
                     }
                     disabled={
-                        !isValid ||
-                        startDownload.startDownload ||
-                        !orgUnitsSelectedIsValid()
+                        !isValid
+                        || startDownload.startDownload
+                        || !orgUnitsSelectedIsValid()
                     }
                     onClick={() =>
-                        onClickDownloadOrPostData(onButtonSendAction)
-                    }
+                        onClickDownloadOrPostData(onButtonSendAction)}
                 >
                     {rightButtonText}
                 </Button>
@@ -83,7 +82,7 @@ const SendOrDownloadButtons = ({
                 <p className={styles.text}>Sending data..</p>
             )}
         </div>
-    )
-}
+    );
+};
 
-export default SendOrDownloadButtons
+export default SendOrDownloadButtons;

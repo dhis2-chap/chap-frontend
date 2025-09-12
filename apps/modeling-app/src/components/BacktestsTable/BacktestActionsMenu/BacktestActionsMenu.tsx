@@ -6,6 +6,7 @@ import {
     IconEdit16,
     IconMore16,
     IconView16,
+    IconVisualizationBarStacked24,
     IconDuplicate16,
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
@@ -20,7 +21,7 @@ type Props = {
     name: string | null | undefined;
     onRename?: () => void;
     onDelete?: () => void;
-}
+};
 
 export const BacktestActionsMenu = ({
     id,
@@ -34,7 +35,11 @@ export const BacktestActionsMenu = ({
 
     const handleView = () => {
         navigate(`/evaluate/compare?baseEvaluation=${id}`);
-    }
+    };
+
+    const handleViewDetails = () => {
+        navigate(`/evaluate/${id}`);
+    };
 
     return (
         <>
@@ -45,11 +50,11 @@ export const BacktestActionsMenu = ({
                 onClick={() => {
                     setFlyoutMenuIsOpen(prev => !prev);
                 }}
-                component={
+                component={(
                     <FlyoutMenu dense>
                         <MenuItem
                             label={i18n.t('View')}
-                            dataTest={'backtest-overflow-view'}
+                            dataTest="backtest-overflow-view"
                             icon={<IconView16 />}
                             onClick={() => {
                                 handleView();
@@ -57,8 +62,17 @@ export const BacktestActionsMenu = ({
                             }}
                         />
                         <MenuItem
+                            label={i18n.t('Detailed metrics')}
+                            dataTest="backtest-overflow-view-details"
+                            icon={<IconVisualizationBarStacked24 />}
+                            onClick={() => {
+                                handleViewDetails();
+                                setFlyoutMenuIsOpen(false);
+                            }}
+                        />
+                        <MenuItem
                             label={i18n.t('Rename')}
-                            dataTest={'backtest-overflow-rename'}
+                            dataTest="backtest-overflow-rename"
                             icon={<IconEdit16 />}
                             onClick={() => {
                                 setEditModalIsOpen(true);
@@ -76,7 +90,7 @@ export const BacktestActionsMenu = ({
                         />
                         <MenuItem
                             label={i18n.t('Delete')}
-                            dataTest={'backtest-overflow-delete'}
+                            dataTest="backtest-overflow-delete"
                             destructive
                             icon={<IconDelete16 />}
                             onClick={() => {
@@ -85,7 +99,7 @@ export const BacktestActionsMenu = ({
                             }}
                         />
                     </FlyoutMenu>
-                }
+                )}
             />
 
             {editModalIsOpen && (
@@ -111,4 +125,4 @@ export const BacktestActionsMenu = ({
             )}
         </>
     );
-}; 
+};
