@@ -81,7 +81,7 @@ export const BacktestActionsMenu = ({
                         />
                         <MenuItem
                             label={i18n.t('Copy')}
-                            dataTest={'backtest-overflow-copy'}
+                            dataTest="backtest-overflow-copy"
                             icon={<IconDuplicate16 />}
                             onClick={() => {
                                 setCopyModalIsOpen(true);

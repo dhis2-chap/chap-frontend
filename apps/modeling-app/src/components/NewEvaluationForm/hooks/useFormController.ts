@@ -18,10 +18,10 @@ export const dataItemSchema = z.object({
 });
 
 const orgUnitSchema = z.object({
-  id: z.string().min(1, { message: i18n.t('Missing id for org unit') }),
-  displayName: z.string().optional(),
-  path: z.string().optional(),
-})
+    id: z.string().min(1, { message: i18n.t('Missing id for org unit') }),
+    displayName: z.string().optional(),
+    path: z.string().optional(),
+});
 
 const covariateMappingSchema = z.object({
     covariateName: z.string(),
@@ -50,20 +50,20 @@ const evaluationSchema = z.object({
 export type EvaluationFormValues = z.infer<typeof evaluationSchema>;
 
 export const useFormController = (initialValues?: Partial<EvaluationFormValues>) => {
-  const methods = useForm<EvaluationFormValues>({
-    resolver: zodResolver(evaluationSchema),
-    defaultValues: {
-      name: initialValues?.name ?? '',
-      periodType: initialValues?.periodType ?? PERIOD_TYPES.MONTH,
-      fromDate: initialValues?.fromDate ?? '',
-      toDate: initialValues?.toDate ?? '',
-      orgUnits: initialValues?.orgUnits ?? [],
-      modelId: initialValues?.modelId ?? '',
-      covariateMappings: initialValues?.covariateMappings ?? [],
-      targetMapping: initialValues?.targetMapping ?? undefined,
-    },
-    shouldFocusError: false,
-  });
+    const methods = useForm<EvaluationFormValues>({
+        resolver: zodResolver(evaluationSchema),
+        defaultValues: {
+            name: initialValues?.name ?? '',
+            periodType: initialValues?.periodType ?? PERIOD_TYPES.MONTH,
+            fromDate: initialValues?.fromDate ?? '',
+            toDate: initialValues?.toDate ?? '',
+            orgUnits: initialValues?.orgUnits ?? [],
+            modelId: initialValues?.modelId ?? '',
+            covariateMappings: initialValues?.covariateMappings ?? [],
+            targetMapping: initialValues?.targetMapping ?? undefined,
+        },
+        shouldFocusError: false,
+    });
 
     const {
         createNewBacktest,
