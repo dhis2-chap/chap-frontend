@@ -1,6 +1,6 @@
 import React from 'react';
 import i18n from '@dhis2/d2-i18n';
-import { NewEvaluationFormContainer } from '../../components/NewEvaluationFormContainer/NewEvaluationFormContainer';
+import { NewEvaluationFormContainer } from '../../components/NewEvaluationFormContainer';
 import { PageHeader } from '../../features/common-features/PageHeader/PageHeader';
 
 export const NewEvaluationPage = () => {
