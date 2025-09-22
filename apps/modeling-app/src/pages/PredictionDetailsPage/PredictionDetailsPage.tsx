@@ -4,8 +4,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 import useOrgUnits from '../../hooks/useOrgUnits';
 import { PredictionDetails } from '../../components/PageContent/PredictionDetails';
 import usePredictionById from '../../components/PageContent/PredictionDetails/hooks/usePredictionById';
-import { Button, IconArrowLeft16 } from '@dhis2/ui';
+import { Button, IconArrowLeft16, CircularLoader } from '@dhis2/ui';
 import { PageHeader } from '../../features/common-features/PageHeader/PageHeader';
+import styles from './PredictionDetailsPage.module.css';
 
 export const PredictionDetailsPage: React.FC = () => {
     const navigate = useNavigate();
@@ -20,7 +21,11 @@ export const PredictionDetailsPage: React.FC = () => {
     ), [orgUnits]);
 
     if (isLoading) {
-        return <div>Loading...</div>;
+        return (
+            <div className={styles.loadingContainer}>
+                <CircularLoader />
+            </div>
+        );
     }
 
     if (!prediction || orgUnitMap.size === 0) {
