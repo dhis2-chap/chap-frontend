@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import styles from './PredictionDetails.module.css';
 import i18n from '@dhis2/d2-i18n';
-import { TabBar, Tab, Menu, MenuItem } from '@dhis2/ui';
+import { TabBar, Tab, Menu, MenuItem, CircularLoader } from '@dhis2/ui';
 import {
     Card,
     PredictionRead,
@@ -43,7 +43,11 @@ export const PredictionDetails = ({
     }, [series, selectedOrgUnitId]);
 
     if (isDataItemLoading) {
-        return <p>{i18n.t('Loading prediction...')}</p>;
+        return (
+            <div className={styles.loadingContainer}>
+                <CircularLoader />
+            </div>
+        );
     }
 
     if (!series || series.length === 0) {
