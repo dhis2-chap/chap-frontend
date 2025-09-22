@@ -32,6 +32,7 @@ import { BacktestActionsMenu } from './BacktestActionsMenu';
 import { BacktestsTableFilters } from './BacktestsTableFilters';
 import { BatchActions } from './BatchActions';
 import { RunningJobsIndicator } from './RunningJobsIndicator';
+import { JOB_TYPES } from '../../hooks/useJobs';
 
 const columnHelper = createColumnHelper<BackTestRead>();
 
@@ -155,7 +156,7 @@ export const BacktestsTable = ({ backtests, models }: Props) => {
                     </div>
 
                     <div className={styles.rightSection}>
-                        <RunningJobsIndicator />
+                        <RunningJobsIndicator jobType={JOB_TYPES.CREATE_BACKTEST_WITH_DATA} />
                         <Button
                             primary
                             icon={<IconAdd16 />}

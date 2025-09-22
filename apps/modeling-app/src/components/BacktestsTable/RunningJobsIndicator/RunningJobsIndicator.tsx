@@ -4,15 +4,21 @@ import { StatusIndicator } from '@dhis2-chap/ui';
 import i18n from '@dhis2/d2-i18n';
 import { useJobs, JOB_STATUSES, JOB_TYPES } from '../../../hooks/useJobs';
 
-export const RunningJobsIndicator = () => {
+type JobTypeValue = (typeof JOB_TYPES)[keyof typeof JOB_TYPES];
+
+type Props = {
+    jobType: JobTypeValue;
+};
+
+export const RunningJobsIndicator = ({ jobType }: Props) => {
     const { jobs } = useJobs();
 
-    const runningBacktestJobs = jobs?.filter(job =>
-        job.type === JOB_TYPES.CREATE_BACKTEST_WITH_DATA &&
+    const runningJobs = jobs?.filter(job =>
+        job.type === jobType &&
         (job.status === JOB_STATUSES.PENDING || job.status === JOB_STATUSES.STARTED),
     ) || [];
 
-    if (runningBacktestJobs.length === 0) {
+    if (runningJobs.length === 0) {
         return null;
     }
 
