@@ -1,9 +1,19 @@
-.chartContainer {
-    display: flex;
-    max-height: 60vh;
+.card {
+    margin-top: 20px;
 }
 
-.chart {
+.container {
+    display: flex;
+    max-height: 60vh;
+    gap: 10px;
+}
+
+.tabBar {
+    margin-bottom: 10px;
+    margin-left: 20%;
+}
+
+.content {
     width: 80%;
     height: 100%;
 }
@@ -13,3 +23,4 @@
     overflow-y: auto;
     max-height: 100%;
 }
+

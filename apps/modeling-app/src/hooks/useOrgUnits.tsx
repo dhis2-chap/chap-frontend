@@ -16,6 +16,8 @@ const REQUEST = {
     },
 };
 
+// THIS IS DEPRECATED, USE useOrgUnitsById INSTEAD
+// PLEASE DO NOT USE THIS HOOK
 const useOrgUnits = () => {
     const [orgUnits, setOrgunits] = useState<{ organisationUnits: OrganisationUnit[] }>();
 

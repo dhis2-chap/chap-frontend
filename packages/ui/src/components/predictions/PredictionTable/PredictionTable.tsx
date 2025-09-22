@@ -1,98 +1,59 @@
+import React from 'react';
 import i18n from '@dhis2/d2-i18n';
 import styles from './PredictionTable.module.css';
-import React from 'react';
-import {
-    FullPredictionResponseExtended,
-} from '../../../interfaces/Prediction';
-import { PredictionResponse } from '../../../httpfunctions';
-import {
-    getUniqeOrgUnits,
-    findOrgUnitName,
-    getUniqePeriods,
-    getUniqeQuantiles,
-} from '../../../utils/PredictionResponse';
+import { PredictionResponseExtended } from '../../../interfaces/Prediction';
+import { getUniqePeriods, getUniqeQuantiles } from '../../../utils/PredictionResponse';
 import { createFixedPeriodFromPeriodId } from '@dhis2/multi-calendar-dates';
+import {
+    DataTable,
+    DataTableHead,
+    DataTableRow,
+    DataTableBody,
+    DataTableCell,
+    DataTableColumnHeader,
+} from '@dhis2/ui';
 
 interface PredictionTableProps {
-    data: FullPredictionResponseExtended;
+    data: PredictionResponseExtended[];
 }
 
 export const PredictionTable = ({ data }: PredictionTableProps) => {
-    const dataValues = data.dataValues;
-
+    const orgUnitId = data[0]?.orgUnit ?? 'ou';
+    const uniquePeriods = getUniqePeriods(data);
+    const uniqueQuantiles = getUniqeQuantiles(data);
     return (
         <>
-            {getUniqeOrgUnits(dataValues).map((ou: string) => {
-                return (
-                    <div key={ou}>
-                        <h3>
-                            {i18n.t(
-                                'Prediction for {{orgUnitName}}',
-                                {
-                                    orgUnitName: findOrgUnitName(
-                                        ou,
-                                        dataValues,
-                                    ),
-                                },
-                            )}
-                        </h3>
-                        <table className={styles.table}>
-                            <thead>
-                                <tr>
-                                    <th>Quantiles</th>
-                                    {getUniqePeriods(dataValues).map(
-                                        (p: string) => {
-                                            return (
-                                                <th key={p}>
-                                                    {
-                                                        createFixedPeriodFromPeriodId(
-                                                            {
-                                                                periodId: p,
-                                                                calendar:
-                                                                    'gregory',
-                                                            },
-                                                        ).displayName
-                                                    }
-                                                </th>
-                                            );
-                                        },
-                                    )}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {getUniqeQuantiles(dataValues).map(
-                                    (q: string) => (
-                                        <tr key={q}>
-                                            <td>{q.replaceAll('_', ' ')}</td>
-                                            {getUniqePeriods(dataValues).map(
-                                                (p: string) => {
-                                                    return (
-                                                        <td key={p}>
-                                                            {
-                                                                dataValues.filter(
-                                                                    (
-                                                                        d: PredictionResponse,
-                                                                    ) =>
-                                                                        d.dataElement
-                                                                        === q &&
-                                                                        d.orgUnit
-                                                                        === ou &&
-                                                                        d.period
-                                                                        === p,
-                                                                )[0].value
-                                                            }
-                                                        </td>
-                                                    );
-                                                },
-                                            )}
-                                        </tr>
-                                    ),
-                                )}
-                            </tbody>
-                        </table>
-                    </div>
-                );
-            })}
+            <div key={orgUnitId}>
+                <DataTable className={styles.table}>
+                    <DataTableHead>
+                        <DataTableRow>
+                            <DataTableColumnHeader>
+                                {i18n.t('Quantiles')}
+                            </DataTableColumnHeader>
+                            {uniquePeriods.map((p: string) => (
+                                <DataTableColumnHeader key={p}>
+                                    {createFixedPeriodFromPeriodId({
+                                        periodId: p,
+                                        calendar: 'gregory',
+                                    }).displayName}
+                                </DataTableColumnHeader>
+                            ))}
+                        </DataTableRow>
+                    </DataTableHead>
+                    <DataTableBody>
+                        {uniqueQuantiles.map((q: string) => (
+                            <DataTableRow key={q}>
+                                <DataTableCell>{q.replaceAll('_', ' ')}</DataTableCell>
+                                {uniquePeriods.map((p: string) => (
+                                    <DataTableCell key={`${q}-${p}`}>
+                                        {data.find((d: PredictionResponseExtended) => d.dataElement === q && d.period === p)?.value}
+                                    </DataTableCell>
+                                ))}
+                            </DataTableRow>
+                        ))}
+                    </DataTableBody>
+                </DataTable>
+            </div>
         </>
     );
 };
