@@ -23,6 +23,8 @@ import {
 import { NewClass, ModelSpecRead } from '@dhis2-chap/ui';
 import styles from './PredictionsTable.module.css';
 import { PredictionsTableFilters } from './PredictionsTableFilters';
+import { RunningJobsIndicator } from '../BacktestsTable/RunningJobsIndicator';
+import { JOB_TYPES } from '../../hooks/useJobs';
 
 const columnHelper = createColumnHelper<NewClass>();
 
@@ -51,10 +53,6 @@ const columns = [
     }),
     columnHelper.accessor('nPeriods', {
         header: () => i18n.t('Periods'),
-        cell: info => info.getValue(),
-    }),
-    columnHelper.accessor('datasetId', {
-        header: () => i18n.t('Dataset ID'),
         cell: info => info.getValue(),
     }),
 ];
@@ -92,6 +90,9 @@ export const PredictionsTable = ({ predictions, models }: Props) => {
             <div className={styles.buttonContainer}>
                 <div className={styles.leftSection}>
                     <PredictionsTableFilters table={table} />
+                </div>
+                <div className={styles.rightSection}>
+                    <RunningJobsIndicator jobType={JOB_TYPES.MAKE_PREDICTION} />
                 </div>
             </div>
 
