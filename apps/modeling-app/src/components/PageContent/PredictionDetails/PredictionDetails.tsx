@@ -4,41 +4,17 @@ import i18n from '@dhis2/d2-i18n';
 import { TabBar, Tab, Menu, MenuItem } from '@dhis2/ui';
 import {
     Card,
-    FullPredictionResponseExtended,
-    PredictionResponseExtended,
     PredictionRead,
     PredictionTable,
     UncertaintyAreaChart,
+    buildPredictionSeries,
+    PredictionOrgUnitSeries,
 } from '@dhis2-chap/ui';
 import { useDataItemById } from '../../../hooks/useDataItemById';
-import { OrganisationUnit } from '../../OrganisationUnitSelector/OrganisationUnitSelector';
 
 type Props = {
     prediction: PredictionRead;
-    orgUnits: Map<string, OrganisationUnit>;
-};
-
-const quantiles = [
-    { q: 0.1, name: 'quantile_low' },
-    { q: 0.5, name: 'median' },
-    { q: 0.9, name: 'quantile_high' },
-];
-
-const getQuantile = (quantile: number, values: number[] | undefined) => {
-    if (!values) return 0;
-    const sortedArr = [...values].sort((a, b) => a - b);
-    const n = sortedArr.length;
-    const index = quantile * (n - 1);
-    const lowerIndex = Math.floor(index);
-    const upperIndex = Math.ceil(index);
-    if (lowerIndex === upperIndex) {
-        return Math.round(sortedArr[lowerIndex]);
-    }
-    return Math.round(
-        sortedArr[lowerIndex]
-        + (sortedArr[upperIndex] - sortedArr[lowerIndex])
-        * (index - lowerIndex),
-    );
+    orgUnits: Map<string, { id: string; displayName: string }>;
 };
 
 export const PredictionDetails = ({
@@ -46,7 +22,7 @@ export const PredictionDetails = ({
     orgUnits,
 }: Props) => {
     const [selectedTab, setSelectedTab] = useState<'chart' | 'table'>('chart');
-    const [indexOfSelectedOrgUnit, setIndexOfSelectedOrgUnit] = useState(0);
+    const [selectedOrgUnitId, setSelectedOrgUnitId] = useState<string | undefined>(undefined);
 
     const predictionTargetId: string = prediction.metaData?.dataItemMapper?.find(
         (m: { featureName: string }) => m.featureName === 'disease_cases',
@@ -54,42 +30,23 @@ export const PredictionDetails = ({
 
     const { dataItem, isLoading: isDataItemLoading } = useDataItemById(predictionTargetId);
 
-    const toFullPredictionResponse = useMemo((): FullPredictionResponseExtended => {
-        return {
-            diseaseId: predictionTargetId,
-            dataValues: prediction.forecasts.flatMap(forecast =>
-                quantiles.map(quantile => ({
-                    orgUnit: forecast.orgUnit,
-                    value: getQuantile(quantile.q, forecast.values),
-                    displayName: orgUnits.get(forecast.orgUnit)?.displayName ?? forecast.orgUnit,
-                    dataElement: quantile.name,
-                    period: forecast.period,
-                })),
-            ),
-        };
-    }, [prediction, predictionTargetId, orgUnits]);
+    const series: PredictionOrgUnitSeries[] = useMemo(() => {
+        const map: Map<string, { id: string; displayName: string }> = new Map();
+        orgUnits.forEach((val, key) => map.set(key, { id: val.id, displayName: val.displayName }));
+        return buildPredictionSeries(prediction, map, predictionTargetId);
+    }, [prediction, orgUnits, predictionTargetId]);
 
-    const matrix: PredictionResponseExtended[][] = useMemo(() => {
-        const groups = new Map<string, PredictionResponseExtended[]>();
-        for (const item of toFullPredictionResponse.dataValues) {
-            const group = groups.get(item.orgUnit);
-            if (group) {
-                group.push(item);
-            } else {
-                groups.set(item.orgUnit, [item]);
-            }
-        }
-
-        return Array
-            .from(groups.values())
-            .sort((a, b) => a[0].displayName.localeCompare(b[0].displayName));
-    }, [toFullPredictionResponse]);
+    const selectedSeries: PredictionOrgUnitSeries | undefined = useMemo(() => {
+        if (!series.length) return undefined;
+        if (selectedOrgUnitId) return series.find(s => s.orgUnitId === selectedOrgUnitId);
+        return series[0];
+    }, [series, selectedOrgUnitId]);
 
     if (isDataItemLoading) {
         return <p>{i18n.t('Loading prediction...')}</p>;
     }
 
-    if (!toFullPredictionResponse) {
+    if (!series || series.length === 0) {
         return <p>{i18n.t('Prediction not found')}</p>;
     }
 
@@ -113,29 +70,29 @@ export const PredictionDetails = ({
                 <div className={styles.container}>
                     <div className={styles.menu}>
                         <Menu dense>
-                            {matrix.map((orgUnitData, index) => (
+                            {series.map(s => (
                                 <MenuItem
-                                    active={indexOfSelectedOrgUnit === index}
-                                    key={index}
-                                    label={orgUnitData[0].displayName}
-                                    onClick={() => setIndexOfSelectedOrgUnit(index)}
+                                    active={selectedSeries?.orgUnitId === s.orgUnitId}
+                                    key={s.orgUnitId}
+                                    label={s.orgUnitName}
+                                    onClick={() => setSelectedOrgUnitId(s.orgUnitId)}
                                 />
                             ))}
                         </Menu>
                     </div>
 
-                    {selectedTab === 'chart' && (
+                    {selectedTab === 'chart' && selectedSeries && (
                         <div className={styles.content}>
                             <UncertaintyAreaChart
                                 predictionTargetName={dataItem?.displayName ?? predictionTargetId}
-                                data={matrix[indexOfSelectedOrgUnit] ?? []}
+                                series={selectedSeries}
                             />
                         </div>
                     )}
-                    {selectedTab === 'table' && (
+                    {selectedTab === 'table' && selectedSeries && (
                         <div className={styles.content}>
                             <PredictionTable
-                                data={matrix[indexOfSelectedOrgUnit]}
+                                series={selectedSeries}
                             />
                         </div>
                     )}

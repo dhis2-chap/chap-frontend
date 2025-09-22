@@ -5,7 +5,7 @@ import highchartsMore from 'highcharts/highcharts-more';
 import exporting from 'highcharts/modules/exporting';
 import React, { useMemo } from 'react';
 import HighchartsReact from 'highcharts-react-official';
-import { PredictionResponseExtended } from '../../../interfaces/Prediction';
+import { PredictionOrgUnitSeries } from '../../../interfaces/Prediction';
 import { createFixedPeriodFromPeriodId } from '@dhis2/multi-calendar-dates';
 
 accessibility(Highcharts);
@@ -13,26 +13,17 @@ exporting(Highcharts);
 highchartsMore(Highcharts);
 
 const getChartOptions = (
-    data: PredictionResponseExtended[],
+    series: PredictionOrgUnitSeries,
     predictionTargetName: string,
 ): Highcharts.Options => {
-    const median: Highcharts.PointOptionsObject[] = data
-        .filter(d => d.dataElement === 'median')
-        .map(d => ({ name: d.period, y: d.value }));
+    const median: Highcharts.PointOptionsObject[] = series.points
+        .map(p => ({ name: p.period, y: p.quantiles.median }));
 
-    const highsByPeriod = new Map<string, number>();
-    data.forEach((point) => {
-        if (point.dataElement === 'quantile_high') {
-            highsByPeriod.set(point.period, point.value);
-        }
-    });
-
-    const range: Highcharts.PointOptionsObject[] = data
-        .filter(d => d.dataElement === 'quantile_low')
-        .map(d => ({
-            name: d.period,
-            low: d.value,
-            high: highsByPeriod.get(d.period) ?? d.value,
+    const range: Highcharts.PointOptionsObject[] = series.points
+        .map(p => ({
+            name: p.period,
+            low: p.quantiles.quantile_low,
+            high: p.quantiles.quantile_high,
         }));
 
     return {
@@ -44,7 +35,7 @@ const getChartOptions = (
                 'Prediction for {{predictionTargetName}} for {{orgUnitName}}',
                 {
                     predictionTargetName,
-                    orgUnitName: data[0]?.displayName ?? '',
+                    orgUnitName: series.orgUnitName ?? '',
                 },
             ),
         },
@@ -107,18 +98,18 @@ const getChartOptions = (
 };
 
 interface PredicationChartProps {
-    data: PredictionResponseExtended[];
+    series: PredictionOrgUnitSeries;
     predictionTargetName: string;
 }
 
 export const UncertaintyAreaChart = ({
-    data,
+    series,
     predictionTargetName,
 }: PredicationChartProps) => {
     const options: Highcharts.Options | undefined = useMemo(() => {
-        if (!data || data.length === 0) return undefined;
-        return getChartOptions(data, predictionTargetName);
-    }, [data, predictionTargetName]);
+        if (!series || series.points.length === 0) return undefined;
+        return getChartOptions(series, predictionTargetName);
+    }, [series, predictionTargetName]);
 
     return (
         <HighchartsReact

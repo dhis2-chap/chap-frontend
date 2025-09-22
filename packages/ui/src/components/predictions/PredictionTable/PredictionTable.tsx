@@ -1,9 +1,7 @@
 import React from 'react';
 import i18n from '@dhis2/d2-i18n';
 import styles from './PredictionTable.module.css';
-import { PredictionResponseExtended } from '../../../interfaces/Prediction';
-import { getUniqePeriods, getUniqeQuantiles } from '../../../utils/PredictionResponse';
-import { createFixedPeriodFromPeriodId } from '@dhis2/multi-calendar-dates';
+import { PredictionOrgUnitSeries } from '../../../interfaces/Prediction';
 import {
     DataTable,
     DataTableHead,
@@ -14,13 +12,12 @@ import {
 } from '@dhis2/ui';
 
 interface PredictionTableProps {
-    data: PredictionResponseExtended[];
+    series: PredictionOrgUnitSeries;
 }
 
-export const PredictionTable = ({ data }: PredictionTableProps) => {
-    const orgUnitId = data[0]?.orgUnit ?? 'ou';
-    const uniquePeriods = getUniqePeriods(data);
-    const uniqueQuantiles = getUniqeQuantiles(data);
+export const PredictionTable = ({ series }: PredictionTableProps) => {
+    const orgUnitId = series.orgUnitId ?? 'ou';
+    const periods = series.points.map(p => p.periodLabel);
     return (
         <>
             <div key={orgUnitId}>
@@ -30,27 +27,38 @@ export const PredictionTable = ({ data }: PredictionTableProps) => {
                             <DataTableColumnHeader>
                                 {i18n.t('Quantiles')}
                             </DataTableColumnHeader>
-                            {uniquePeriods.map((p: string) => (
-                                <DataTableColumnHeader key={p}>
-                                    {createFixedPeriodFromPeriodId({
-                                        periodId: p,
-                                        calendar: 'gregory',
-                                    }).displayName}
+                            {periods.map((label: string, idx: number) => (
+                                <DataTableColumnHeader key={`${orgUnitId}-${idx}`}>
+                                    {label}
                                 </DataTableColumnHeader>
                             ))}
                         </DataTableRow>
                     </DataTableHead>
                     <DataTableBody>
-                        {uniqueQuantiles.map((q: string) => (
-                            <DataTableRow key={q}>
-                                <DataTableCell>{q.replaceAll('_', ' ')}</DataTableCell>
-                                {uniquePeriods.map((p: string) => (
-                                    <DataTableCell key={`${q}-${p}`}>
-                                        {data.find((d: PredictionResponseExtended) => d.dataElement === q && d.period === p)?.value}
-                                    </DataTableCell>
-                                ))}
-                            </DataTableRow>
-                        ))}
+                        <DataTableRow>
+                            <DataTableCell>{i18n.t('Quantile median')}</DataTableCell>
+                            {series.points.map((pt, idx) => (
+                                <DataTableCell key={`median-${idx}`}>
+                                    {pt.quantiles.median}
+                                </DataTableCell>
+                            ))}
+                        </DataTableRow>
+                        <DataTableRow>
+                            <DataTableCell className={styles.quantile_low}>{i18n.t('quantile low')}</DataTableCell>
+                            {series.points.map((pt, idx) => (
+                                <DataTableCell key={`low-${idx}`} className={styles.quantile_low}>
+                                    {pt.quantiles.quantile_low}
+                                </DataTableCell>
+                            ))}
+                        </DataTableRow>
+                        <DataTableRow>
+                            <DataTableCell className={styles.quantile_high}>{i18n.t('quantile high')}</DataTableCell>
+                            {series.points.map((pt, idx) => (
+                                <DataTableCell key={`high-${idx}`} className={styles.quantile_high}>
+                                    {pt.quantiles.quantile_high}
+                                </DataTableCell>
+                            ))}
+                        </DataTableRow>
                     </DataTableBody>
                 </DataTable>
             </div>

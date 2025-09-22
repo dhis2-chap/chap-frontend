@@ -23,7 +23,7 @@ export const PredictionDetailsPage: React.FC = () => {
         return <div>Loading...</div>;
     }
 
-    if (!prediction || !orgUnitMap) {
+    if (!prediction || orgUnitMap.size === 0) {
         return <div>Prediction not found</div>;
     }
 
