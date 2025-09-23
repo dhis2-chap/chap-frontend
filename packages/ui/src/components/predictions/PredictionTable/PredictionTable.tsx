@@ -24,11 +24,14 @@ export const PredictionTable = ({ series }: PredictionTableProps) => {
                 <DataTable className={styles.table}>
                     <DataTableHead>
                         <DataTableRow>
-                            <DataTableColumnHeader>
+                            <DataTableColumnHeader className={styles.headerRight}>
                                 {i18n.t('Quantiles')}
                             </DataTableColumnHeader>
                             {periods.map((label: string, idx: number) => (
-                                <DataTableColumnHeader key={`${orgUnitId}-${idx}`}>
+                                <DataTableColumnHeader
+                                    className={styles.headerRight}
+                                    key={`${orgUnitId}-${idx}`}
+                                >
                                     {label}
                                 </DataTableColumnHeader>
                             ))}
@@ -36,9 +39,9 @@ export const PredictionTable = ({ series }: PredictionTableProps) => {
                     </DataTableHead>
                     <DataTableBody>
                         <DataTableRow>
-                            <DataTableCell>{i18n.t('Quantile median')}</DataTableCell>
+                            <DataTableCell align="left">{i18n.t('Quantile median')}</DataTableCell>
                             {series.points.map((pt, idx) => (
-                                <DataTableCell key={`median-${idx}`}>
+                                <DataTableCell key={`median-${idx}`} align="left">
                                     {pt.quantiles.median}
                                 </DataTableCell>
                             ))}
