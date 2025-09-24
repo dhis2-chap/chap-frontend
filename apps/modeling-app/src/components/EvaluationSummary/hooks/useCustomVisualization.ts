@@ -21,9 +21,9 @@ export const useCustomVisualization = ({
         ],
         queryFn: () =>
             VisualizationService.generateVisualizationVisualizationVisualizationNameBacktestIdMetricIdGet(
-                visualizationId as string,
+                visualizationId!,
                 Number(evaluationId),
-                metricId as string,
+                metricId!,
             ),
         enabled:
             typeof evaluationId === 'number' &&

@@ -1,7 +1,7 @@
 /* generated using openapi-typescript-codegen -- do not edit */
 /* istanbul ignore file */
 /* tslint:disable */
-
+/* eslint-disable */
 export { ApiError } from './core/ApiError';
 export { CancelablePromise, CancelError } from './core/CancelablePromise';
 export { OpenAPI } from './core/OpenAPI';
@@ -16,6 +16,7 @@ export type { BackTestMetric } from './models/BackTestMetric';
 export type { BackTestRead } from './models/BackTestRead';
 export type { BackTestUpdate } from './models/BackTestUpdate';
 export type { Body_create_dataset_csv_crud_datasets_csvFile_post } from './models/Body_create_dataset_csv_crud_datasets_csvFile_post';
+export type { ChapDataSource } from './models/ChapDataSource';
 export type { CompatibilityResponse } from './models/CompatibilityResponse';
 export type { ConfiguredModelDB } from './models/ConfiguredModelDB';
 export type { ConfiguredModelRead } from './models/ConfiguredModelRead';
@@ -24,9 +25,9 @@ export type { DataBaseResponse } from './models/DataBaseResponse';
 export type { DataElement } from './models/DataElement';
 export type { DataList } from './models/DataList';
 export type { DatasetCreate } from './models/DatasetCreate';
+export type { DataSetInfo } from './models/DataSetInfo';
 export type { DatasetMakeRequest } from './models/DatasetMakeRequest';
 export type { DataSetMeta } from './models/DataSetMeta';
-export type { DataSetRead } from './models/DataSetRead';
 export type { DataSetWithObservations } from './models/DataSetWithObservations';
 export type { DataSource } from './models/DataSource';
 export type { DebugEntry } from './models/DebugEntry';
