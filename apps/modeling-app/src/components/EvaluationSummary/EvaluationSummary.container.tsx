@@ -1,10 +1,11 @@
 import React from 'react';
-import { CircularLoader, NoticeBox } from '@dhis2/ui';
+import { CircularLoader, MenuItem, NoticeBox, SingleSelect } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import styles from './EvaluationSummary.module.css';
 import { EvaluationSummaryComponent } from './EvaluationSummary.component';
 import { useCustomVisualizationTypes } from '../../hooks/useCustomVisualizationTypes';
 import { useCustomMetricsForBacktest } from '../../hooks/useCustomMetricsForBacktest';
+import { useEvaluationVisualizationParams } from './hooks/useEvaluationVisualizationParams';
 
 type EvaluationSummaryContainerProps = {
     evaluationId?: number;
@@ -22,6 +23,16 @@ export const EvaluationSummary: React.FC<EvaluationSummaryContainerProps> = ({ e
         isLoading: isMetricsLoading,
         error: metricsError,
     } = useCustomMetricsForBacktest({ evaluationId });
+
+    const {
+        selectedVisualizationId,
+        selectedMetricId,
+        setVisualizationId,
+        setMetricId,
+    } = useEvaluationVisualizationParams({
+        allowedVisualizationIds: (visualizationTypes ?? []).map(v => v.id),
+        allowedMetricIds: (metrics ?? []).map(m => m.id),
+    });
 
     if (isTypesLoading || isMetricsLoading) {
         return (
@@ -42,10 +53,39 @@ export const EvaluationSummary: React.FC<EvaluationSummaryContainerProps> = ({ e
     }
 
     return (
-        <EvaluationSummaryComponent
-            evaluationId={evaluationId}
-            visualizationTypes={visualizationTypes ?? []}
-            metrics={metrics ?? []}
-        />
+        <>
+            <div className={styles.controlsRow}>
+                <div className={styles.singleSelectContainer}>
+                    <SingleSelect
+                        dense
+                        selected={selectedVisualizationId}
+                        placeholder={i18n.t('Select visualization')}
+                        onChange={e => setVisualizationId(e.selected)}
+                    >
+                        {(visualizationTypes ?? []).map(v => (
+                            <MenuItem key={v.id} value={v.id} label={v.displayName} />
+                        ))}
+                    </SingleSelect>
+                </div>
+                <div className={styles.singleSelectContainer}>
+                    <SingleSelect
+                        dense
+                        selected={selectedMetricId}
+                        placeholder={i18n.t('Select metric')}
+                        onChange={e => setMetricId(e.selected)}
+                    >
+                        {(metrics ?? []).map(m => (
+                            <MenuItem key={m.id} value={m.id} label={m.displayName} />
+                        ))}
+                    </SingleSelect>
+                </div>
+            </div>
+
+            <EvaluationSummaryComponent
+                evaluationId={evaluationId}
+                selectedVisualizationId={selectedVisualizationId}
+                selectedMetricId={selectedMetricId}
+            />
+        </>
     );
 };
