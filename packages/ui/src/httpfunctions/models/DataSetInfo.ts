@@ -3,7 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { DataSource } from './DataSource';
-export type DataSetMeta = {
+export type DataSetInfo = {
     name: string;
     dataSources?: Array<DataSource>;
     type?: (string | null);
@@ -12,6 +12,5 @@ export type DataSetMeta = {
     covariates?: Array<string>;
     created?: (string | null);
     orgUnits?: Array<string>;
-    id: number;
 };
 

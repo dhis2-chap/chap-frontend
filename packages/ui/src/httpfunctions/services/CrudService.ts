@@ -10,7 +10,7 @@ import type { Body_create_dataset_csv_crud_datasets_csvFile_post } from '../mode
 import type { ConfiguredModelDB } from '../models/ConfiguredModelDB';
 import type { DataBaseResponse } from '../models/DataBaseResponse';
 import type { DatasetCreate } from '../models/DatasetCreate';
-import type { DataSetRead } from '../models/DataSetRead';
+import type { DataSetInfo } from '../models/DataSetInfo';
 import type { DataSetWithObservations } from '../models/DataSetWithObservations';
 import type { DebugEntry } from '../models/DebugEntry';
 import type { JobResponse } from '../models/JobResponse';
@@ -140,6 +140,26 @@ export class CrudService {
         });
     }
     /**
+     * Get Backtest Info
+     * @param backtestId
+     * @returns BackTestRead Successful Response
+     * @throws ApiError
+     */
+    public static getBacktestInfoCrudBacktestsBacktestIdInfoGet(
+        backtestId: number,
+    ): CancelablePromise<BackTestRead> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/crud/backtests/{backtestId}/info',
+            path: {
+                'backtestId': backtestId,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
      * Get Predictions
      * @returns NewClass Successful Response
      * @throws ApiError
@@ -211,10 +231,10 @@ export class CrudService {
     }
     /**
      * Get Datasets
-     * @returns DataSetRead Successful Response
+     * @returns DataSetInfo Successful Response
      * @throws ApiError
      */
-    public static getDatasetsCrudDatasetsGet(): CancelablePromise<Array<DataSetRead>> {
+    public static getDatasetsCrudDatasetsGet(): CancelablePromise<Array<DataSetInfo>> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/crud/datasets',

@@ -2,12 +2,14 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { DataSource } from './DataSource';
 import type { FeatureCollectionModel } from './FeatureCollectionModel';
 import type { ObservationBase } from './ObservationBase';
 export type DatasetCreate = {
     name: string;
+    dataSources?: Array<DataSource>;
     type?: (string | null);
-    geojson: FeatureCollectionModel;
     observations: Array<ObservationBase>;
+    geojson: FeatureCollectionModel;
 };
 
