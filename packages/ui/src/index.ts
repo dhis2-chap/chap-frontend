@@ -33,6 +33,10 @@ export type {
     QuantileKey,
 } from './interfaces/Prediction';
 
+export type {
+    VisualizationInfo,
+} from './httpfunctions/models/VisualizationInfo';
+
 // Services
 export { CrudService } from './httpfunctions/services/CrudService';
 export { AnalyticsService } from './httpfunctions/services/AnalyticsService';
