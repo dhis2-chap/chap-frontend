@@ -6,13 +6,8 @@ import {
     DataTableBody,
     DataTableCell,
     DataTableColumnHeader,
-    Checkbox,
-    Button,
-    IconAdd16,
     DataTableFoot,
     Pagination,
-    Tooltip,
-    IconInfo16,
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import {
@@ -25,57 +20,30 @@ import {
     getPaginationRowModel,
     Column,
 } from '@tanstack/react-table';
-import { BackTestRead, ModelSpecRead } from '@dhis2-chap/ui';
-import { Link, useNavigate } from 'react-router-dom';
-import styles from './BacktestsTable.module.css';
-import { BacktestActionsMenu } from './BacktestActionsMenu';
-import { BacktestsTableFilters } from './BacktestsTableFilters';
-import { BatchActions } from './BatchActions';
-import { RunningJobsIndicator } from './RunningJobsIndicator';
+import { NewClass, ModelSpecRead } from '@dhis2-chap/ui';
+import styles from './PredictionsTable.module.css';
+import { PredictionsTableFilters } from './PredictionsTableFilters';
+import { RunningJobsIndicator } from '../BacktestsTable/RunningJobsIndicator';
 import { JOB_TYPES } from '../../hooks/useJobs';
+import { PredictionActionsMenu } from './PredictionActionsMenu';
 
-const columnHelper = createColumnHelper<BackTestRead>();
+const columnHelper = createColumnHelper<NewClass>();
 
 const columns = [
-    columnHelper.display({
-        id: 'select',
-        header: ({ table }) => (
-            <Checkbox
-                checked={table.getIsAllPageRowsSelected()}
-                onChange={() => table.toggleAllPageRowsSelected()}
-                disabled={table.getRowModel().rows.length === 0}
-            />
-        ),
-        cell: ({ row }) => (
-            <Checkbox
-                checked={row.getIsSelected()}
-                onChange={() => row.toggleSelected()}
-            />
-        ),
-    }),
     columnHelper.accessor('id', {
-        header: i18n.t('ID'),
+        header: () => i18n.t('ID'),
         filterFn: 'equals',
     }),
     columnHelper.accessor('name', {
-        header: i18n.t('Name'),
+        header: () => i18n.t('Name'),
         filterFn: 'includesString',
-        cell: (info) => {
-            return (
-                <Link
-                    to={`/evaluate/compare?baseEvaluation=${info.row.original.id}`}
-                >
-                    {info.getValue()}
-                </Link>
-            );
-        },
     }),
     columnHelper.accessor('created', {
-        header: i18n.t('Created'),
+        header: () => i18n.t('Created'),
         cell: info => info.getValue() ? new Date(info.getValue()!).toLocaleString() : undefined,
     }),
     columnHelper.accessor('modelId', {
-        header: i18n.t('Model'),
+        header: () => i18n.t('Model'),
         filterFn: 'equals',
         cell: (info) => {
             const modelId = info.getValue();
@@ -84,27 +52,15 @@ const columns = [
             return model?.displayName || modelId;
         },
     }),
-    columnHelper.accessor('aggregateMetrics.crps_norm_mean', {
-        header: () => (
-            <div className={styles.headerWithTooltip}>
-                <span>{i18n.t('CRPS (Norm)')}</span>
-                <Tooltip content={i18n.t('Normalized CRPS (Continuous Ranked Probability Score) shows how close a model\'s predicted range of outcomes is to the actual result on a 0 - 1 scale. Lower values indicate better probabilistic accuracy')}>
-                    <div className={styles.iconContainer}>
-                        <IconInfo16 />
-                    </div>
-                </Tooltip>
-            </div>
-        ),
-        cell: (info) => {
-            const crps = info.getValue();
-            return crps ? crps.toFixed(2) : undefined;
-        },
+    columnHelper.accessor('nPeriods', {
+        header: () => i18n.t('Periods'),
+        cell: info => info.getValue(),
     }),
     columnHelper.display({
         id: 'actions',
         header: i18n.t('Actions'),
         cell: info => (
-            <BacktestActionsMenu
+            <PredictionActionsMenu
                 id={info.row.original.id}
                 name={info.row.original.name}
             />
@@ -112,19 +68,18 @@ const columns = [
     }),
 ];
 
-const getSortDirection = (column: Column<BackTestRead>) => {
+const getSortDirection = (column: Column<NewClass>) => {
     return column.getIsSorted() || 'default';
 };
 
 type Props = {
-    backtests: BackTestRead[];
+    predictions: NewClass[];
     models: ModelSpecRead[];
 };
 
-export const BacktestsTable = ({ backtests, models }: Props) => {
-    const navigate = useNavigate();
+export const PredictionsTable = ({ predictions, models }: Props) => {
     const table = useReactTable({
-        data: backtests || [],
+        data: predictions || [],
         columns,
         initialState: {
             sorting: [{ id: 'created', desc: true }],
@@ -133,7 +88,6 @@ export const BacktestsTable = ({ backtests, models }: Props) => {
             models,
         },
         getRowId: row => row.id.toString(),
-        enableRowSelection: true,
         getSortedRowModel: getSortedRowModel(),
         getCoreRowModel: getCoreRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
@@ -144,32 +98,15 @@ export const BacktestsTable = ({ backtests, models }: Props) => {
 
     return (
         <div>
-            {(table.getIsSomeRowsSelected() || table.getIsAllRowsSelected()) ? (
-                <BatchActions table={table} />
-            ) : (
-                <div className={styles.buttonContainer}>
-                    <div className={styles.leftSection}>
-                        <BacktestsTableFilters
-                            table={table}
-                            models={models}
-                        />
-                    </div>
-
-                    <div className={styles.rightSection}>
-                        <RunningJobsIndicator jobType={JOB_TYPES.CREATE_BACKTEST_WITH_DATA} />
-                        <Button
-                            primary
-                            icon={<IconAdd16 />}
-                            small
-                            onClick={() => {
-                                navigate('/evaluate/new');
-                            }}
-                        >
-                            {i18n.t('New evaluation')}
-                        </Button>
-                    </div>
+            <div className={styles.buttonContainer}>
+                <div className={styles.leftSection}>
+                    <PredictionsTableFilters table={table} />
                 </div>
-            )}
+                <div className={styles.rightSection}>
+                    <RunningJobsIndicator jobType={JOB_TYPES.MAKE_PREDICTION} />
+                </div>
+            </div>
+
             <DataTable>
                 <DataTableHead>
                     {table.getHeaderGroups().map(headerGroup => (
@@ -196,7 +133,7 @@ export const BacktestsTable = ({ backtests, models }: Props) => {
                 <DataTableBody>
                     {hasVisibleRows ? table.getRowModel().rows
                         .map(row => (
-                            <DataTableRow selected={row.getIsSelected()} key={row.id}>
+                            <DataTableRow key={row.id}>
                                 {row.getVisibleCells().map(cell => (
                                     <DataTableCell key={cell.id}>
                                         {flexRender(
@@ -209,7 +146,7 @@ export const BacktestsTable = ({ backtests, models }: Props) => {
                         )) : (
                         <DataTableRow>
                             <DataTableCell colSpan={String(table.getAllColumns().length)} align="center">
-                                {i18n.t('No evaluations available')}
+                                {i18n.t('No predictions available') as string}
                             </DataTableCell>
                         </DataTableRow>
                     )}

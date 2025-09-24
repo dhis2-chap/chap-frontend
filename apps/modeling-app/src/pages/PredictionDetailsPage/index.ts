@@ -1,0 +1,1 @@
+export { PredictionDetailsPage } from './PredictionDetailsPage';
