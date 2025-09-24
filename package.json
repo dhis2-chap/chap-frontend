@@ -16,7 +16,9 @@
         "build": "turbo build",
         "cp-build": "rm -rf ./build && cp -r apps/modeling-app/build ."
     },
-    "dependencies": {},
+    "dependencies": {
+        "clsx": "^2.1.1"
+    },
     "devDependencies": {
         "@dhis2/cli-style": "^10.7.9",
         "@eslint/js": "^9.12.0",

@@ -5,20 +5,26 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2025-08-25T10:40:41.528Z\n"
-"PO-Revision-Date: 2025-08-25T10:40:41.529Z\n"
+"POT-Creation-Date: 2025-09-23T10:04:12.780Z\n"
+"PO-Revision-Date: 2025-09-23T10:04:12.782Z\n"
 
 msgid "Median Prediction for {{predictionTargetName}}"
 msgstr "Median Prediction for {{predictionTargetName}}"
 
-msgid "Prediction for {{orgUnitName}}"
-msgstr "Prediction for {{orgUnitName}}"
-
-msgid "Prediction for {{predictionTargetName}} for {{orgUnitName}}"
-msgstr "Prediction for {{predictionTargetName}} for {{orgUnitName}}"
+msgid "Quantiles"
+msgstr "Quantiles"
 
 msgid "Quantile median"
 msgstr "Quantile median"
+
+msgid "quantile low"
+msgstr "quantile low"
+
+msgid "quantile high"
+msgstr "quantile high"
+
+msgid "Prediction for {{predictionTargetName}} for {{orgUnitName}}"
+msgstr "Prediction for {{predictionTargetName}} for {{orgUnitName}}"
 
 msgid "Range"
 msgstr "Range"

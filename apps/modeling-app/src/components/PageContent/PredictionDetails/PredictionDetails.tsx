@@ -9,6 +9,7 @@ import {
     UncertaintyAreaChart,
     buildPredictionSeries,
     PredictionOrgUnitSeries,
+    PredictionMap,
 } from '@dhis2-chap/ui';
 import { useDataItemById } from '../../../hooks/useDataItemById';
 
@@ -21,7 +22,7 @@ export const PredictionDetails = ({
     prediction,
     orgUnits,
 }: Props) => {
-    const [selectedTab, setSelectedTab] = useState<'chart' | 'table'>('chart');
+    const [selectedTab, setSelectedTab] = useState<'chart' | 'table' | 'map'>('chart');
     const [selectedOrgUnitId, setSelectedOrgUnitId] = useState<string | undefined>(undefined);
 
     const predictionTargetId: string = prediction.metaData?.dataItemMapper?.find(
@@ -55,7 +56,7 @@ export const PredictionDetails = ({
     }
 
     return (
-        <>
+        <div>
             <Card className={styles.card}>
                 <TabBar className={styles.tabBar}>
                     <Tab
@@ -70,13 +71,20 @@ export const PredictionDetails = ({
                     >
                         {i18n.t('Table')}
                     </Tab>
+                    <Tab
+                        selected={selectedTab === 'map'}
+                        onClick={() => setSelectedTab('map')}
+                    >
+                        {i18n.t('Map')}
+                    </Tab>
                 </TabBar>
                 <div className={styles.container}>
                     <div className={styles.menu}>
                         <Menu dense>
                             {series.map(s => (
                                 <MenuItem
-                                    active={selectedSeries?.orgUnitId === s.orgUnitId}
+                                    active={selectedTab !== 'map' && selectedSeries?.orgUnitId === s.orgUnitId}
+                                    disabled={selectedTab === 'map'}
                                     key={s.orgUnitId}
                                     label={s.orgUnitName}
                                     onClick={() => setSelectedOrgUnitId(s.orgUnitId)}
@@ -100,8 +108,16 @@ export const PredictionDetails = ({
                             />
                         </div>
                     )}
+                    {selectedTab === 'map' && (
+                        <div className={styles.content}>
+                            <PredictionMap
+                                series={series}
+                                predictionTargetName={dataItem?.displayName ?? predictionTargetId}
+                            />
+                        </div>
+                    )}
                 </div>
             </Card>
-        </>
+        </div>
     );
 };

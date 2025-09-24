@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2025-09-22T16:19:26.675Z\n"
-"PO-Revision-Date: 2025-09-22T16:19:26.676Z\n"
+"POT-Creation-Date: 2025-09-23T10:04:12.828Z\n"
+"PO-Revision-Date: 2025-09-23T10:04:12.828Z\n"
 
 msgid "View"
 msgstr "View"
@@ -638,20 +638,17 @@ msgstr "No organisation units match your search"
 msgid "You cannot select more than {{max}} organisation units at a time"
 msgstr "You cannot select more than {{max}} organisation units at a time"
 
-msgid "Loading prediction..."
-msgstr "Loading prediction..."
-
 msgid "Prediction not found"
 msgstr "Prediction not found"
-
-msgid "Prediction{{escaped}} {{name}}"
-msgstr "Prediction{{escaped}} {{name}}"
 
 msgid "Chart"
 msgstr "Chart"
 
 msgid "Table"
 msgstr "Table"
+
+msgid "Map"
+msgstr "Map"
 
 msgid "Delete prediction"
 msgstr "Delete prediction"
@@ -1156,11 +1153,8 @@ msgstr "View and manage currently running jobs and their status."
 msgid "Create a new evaluation to assess the performance of a model"
 msgstr "Create a new evaluation to assess the performance of a model"
 
-msgid "Prediction details"
-msgstr "Prediction details"
-
-msgid "Inspect a prediction and view its results."
-msgstr "Inspect a prediction and view its results."
+msgid "Prediction details{{escaped}} {{name}}"
+msgstr "Prediction details{{escaped}} {{name}}"
 
 msgid "Back to predictions"
 msgstr "Back to predictions"
