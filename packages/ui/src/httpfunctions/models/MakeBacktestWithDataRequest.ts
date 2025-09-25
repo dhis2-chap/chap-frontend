@@ -11,7 +11,7 @@ export type MakeBacktestWithDataRequest = {
     nSplits: number;
     stride: number;
     name: string;
-    dataSources?: Array<DataSource>;
+    dataSources?: (Array<DataSource> | null);
     type?: (string | null);
     geojson: FeatureCollectionModel;
     providedData: Array<ObservationBase>;
