@@ -80,7 +80,7 @@ export const BacktestActionsMenu = ({
                             }}
                         />
                         <MenuItem
-                            label={i18n.t('Copy')}
+                            label={i18n.t('Create new...')}
                             dataTest="backtest-overflow-copy"
                             icon={<IconDuplicate16 />}
                             onClick={() => {

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import {
     Modal,
     ModalTitle,
@@ -12,7 +12,7 @@ import {
 import i18n from '@dhis2/d2-i18n';
 import { Link } from 'react-router-dom';
 import styles from './CopyBacktestModal.module.css';
-import { useBacktests } from '../../../../hooks/useBacktests';
+import { useBacktestById } from '../../../../hooks/useBacktestById';
 
 interface CopyBacktestModalProps {
     id: number;
@@ -37,8 +37,7 @@ const DEFAULT_COPYABLE_ATTRIBUTES: CopyableAttributes = {
 export const CopyBacktestModal = ({ id, onClose }: CopyBacktestModalProps) => {
     const [selectedAttributes, setSelectedAttributes] = useState<CopyableAttributes>(DEFAULT_COPYABLE_ATTRIBUTES);
 
-    const { backtests, isLoading, error } = useBacktests();
-    const backtest = useMemo(() => backtests?.find(b => b.id === id), [backtests, id]);
+    const { backtest, isLoading, error } = useBacktestById(id);
 
     const handleAttributeChange = (attribute: keyof CopyableAttributes) => {
         setSelectedAttributes(prev => ({
