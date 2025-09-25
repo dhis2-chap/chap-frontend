@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2025-09-25T10:39:25.114Z\n"
-"PO-Revision-Date: 2025-09-25T10:39:25.114Z\n"
+"POT-Creation-Date: 2025-09-25T12:58:15.535Z\n"
+"PO-Revision-Date: 2025-09-25T12:58:15.536Z\n"
 
 msgid "View"
 msgstr "View"
@@ -44,11 +44,17 @@ msgstr "Name"
 msgid "Untitled"
 msgstr "Untitled"
 
+msgid "Organisation units"
+msgstr "Organisation units"
+
 msgid "Model"
 msgstr "Model"
 
-msgid "Organisation units"
-msgstr "Organisation units"
+msgid "Period type"
+msgstr "Period type"
+
+msgid "Period range"
+msgstr "Period range"
 
 msgid "Copy to new evaluation"
 msgstr "Copy to new evaluation"
@@ -481,9 +487,6 @@ msgstr "Evaluation name"
 
 msgid "EWARS Evaluation 22-24"
 msgstr "EWARS Evaluation 22-24"
-
-msgid "Period type"
-msgstr "Period type"
 
 msgid "From period"
 msgstr "From period"

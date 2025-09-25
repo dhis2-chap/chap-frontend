@@ -10,6 +10,7 @@ import {
     CircularLoader,
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
+import clsx from 'clsx';
 import { Link } from 'react-router-dom';
 import styles from './CopyBacktestModal.module.css';
 import { useBacktestById } from '../../../../hooks/useBacktestById';
@@ -23,20 +24,20 @@ interface CopyableAttributes {
     name: boolean;
     model: boolean;
     orgUnits: boolean;
-    periods: boolean;
+    periodType: boolean;
+    period: boolean;
 }
 
 const DEFAULT_COPYABLE_ATTRIBUTES: CopyableAttributes = {
     name: true,
     model: true,
     orgUnits: true,
-    // TODO: API does not return periods or period type
-    periods: false,
+    periodType: true,
+    period: true,
 };
 
 export const CopyBacktestModal = ({ id, onClose }: CopyBacktestModalProps) => {
     const [selectedAttributes, setSelectedAttributes] = useState<CopyableAttributes>(DEFAULT_COPYABLE_ATTRIBUTES);
-
     const { backtest, isLoading, error } = useBacktestById(id);
 
     const handleAttributeChange = (attribute: keyof CopyableAttributes) => {
@@ -46,10 +47,11 @@ export const CopyBacktestModal = ({ id, onClose }: CopyBacktestModalProps) => {
         }));
     };
 
-    const generateCopyState = (): any => {
+    const generateCopyState = (): Record<string, string | string[]> => {
         if (!backtest) return {};
 
-        const state: any = {};
+        const state: Record<string, string | string[]> = {};
+        const { dataset } = backtest;
 
         if (selectedAttributes.name && backtest.name) {
             state.name = i18n.t('{{name}} (Copy)', { name: backtest.name });
@@ -61,6 +63,20 @@ export const CopyBacktestModal = ({ id, onClose }: CopyBacktestModalProps) => {
 
         if (selectedAttributes.orgUnits && backtest.orgUnits?.length) {
             state.orgUnits = backtest.orgUnits;
+        }
+
+        if (selectedAttributes.periodType && dataset?.periodType) {
+            state.periodType = dataset.periodType.toUpperCase();
+
+            if (selectedAttributes.period) {
+                if (dataset?.firstPeriod) {
+                    state.fromDate = dataset.firstPeriod;
+                }
+
+                if (dataset?.lastPeriod) {
+                    state.toDate = dataset.lastPeriod;
+                }
+            }
         }
 
         return state;
@@ -124,6 +140,14 @@ export const CopyBacktestModal = ({ id, onClose }: CopyBacktestModalProps) => {
                     />
 
                     <Checkbox
+                        label={i18n.t('Organisation units')}
+                        name="orgUnits"
+                        checked={selectedAttributes.orgUnits}
+                        onChange={() => handleAttributeChange('orgUnits')}
+                        disabled={!(backtest.orgUnits?.length)}
+                    />
+
+                    <Checkbox
                         label={i18n.t('Model')}
                         name="model"
                         checked={selectedAttributes.model}
@@ -132,12 +156,27 @@ export const CopyBacktestModal = ({ id, onClose }: CopyBacktestModalProps) => {
                     />
 
                     <Checkbox
-                        label={i18n.t('Organisation units')}
-                        name="orgUnits"
-                        checked={selectedAttributes.orgUnits}
-                        onChange={() => handleAttributeChange('orgUnits')}
-                        disabled={!(backtest.orgUnits?.length)}
+                        label={i18n.t('Period type')}
+                        name="periodType"
+                        checked={selectedAttributes.periodType}
+                        onChange={() => handleAttributeChange('periodType')}
+                        disabled={!backtest.dataset?.periodType}
                     />
+
+                    <div
+                        className={clsx(
+                            styles.dependentAttribute,
+                            !selectedAttributes.periodType && styles.dependentAttributeDisabled,
+                        )}
+                    >
+                        <Checkbox
+                            label={i18n.t('Period range')}
+                            name="period"
+                            checked={selectedAttributes.period}
+                            onChange={() => handleAttributeChange('period')}
+                            disabled={!selectedAttributes.periodType}
+                        />
+                    </div>
                 </div>
             </ModalContent>
             <ModalActions>

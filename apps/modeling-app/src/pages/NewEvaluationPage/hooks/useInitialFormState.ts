@@ -3,15 +3,26 @@ import { useLocation } from 'react-router-dom';
 import { z } from 'zod';
 import { useOrgUnitsById } from '../../../hooks/useOrgUnitsById';
 import { EvaluationFormValues, PERIOD_TYPES } from '../../../components/NewEvaluationForm';
+import { convertServerToClientPeriod } from '../../../features/timeperiod-selector/utils/timePeriodUtils';
 
-const locationStateInnerSchema = z.object({
-    name: z.string().optional(),
-    periodType: z.enum([PERIOD_TYPES.WEEK, PERIOD_TYPES.MONTH]).optional(),
-    fromDate: z.string().optional(),
-    toDate: z.string().optional(),
-    orgUnits: z.array(z.string()).optional(),
-    modelId: z.string().optional(),
-});
+const locationStateInnerSchema = z
+    .object({
+        name: z.string().optional(),
+        periodType: z.enum([PERIOD_TYPES.WEEK, PERIOD_TYPES.MONTH]).optional(),
+        fromDate: z.string().optional(),
+        toDate: z.string().optional(),
+        orgUnits: z.array(z.string()).optional(),
+        modelId: z.string().optional(),
+    })
+    .superRefine((data, ctx) => {
+        if ((data.fromDate || data.toDate) && !data.periodType) {
+            ctx.addIssue({
+                code: z.ZodIssueCode.custom,
+                message: 'Period type is required when either fromDate or toDate are provided',
+                path: ['periodType'],
+            });
+        }
+    });
 
 const evaluationFormLocationStateSchema = locationStateInnerSchema.optional();
 
@@ -32,8 +43,8 @@ export const useInitialFormState = () => {
         () => ({
             name: locationState?.name || '',
             periodType: locationState?.periodType || PERIOD_TYPES.MONTH,
-            fromDate: locationState?.fromDate || '',
-            toDate: locationState?.toDate || '',
+            fromDate: locationState?.fromDate ? convertServerToClientPeriod(locationState.fromDate, locationState.periodType!) : '',
+            toDate: locationState?.toDate ? convertServerToClientPeriod(locationState.toDate, locationState.periodType!) : '',
             orgUnits: orgUnitsData?.organisationUnits || [],
             modelId: locationState?.modelId || '',
         }), [locationState, orgUnitsData]);
