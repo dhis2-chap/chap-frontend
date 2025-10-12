@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2025-10-12T21:11:49.463Z\n"
-"PO-Revision-Date: 2025-10-12T21:11:49.464Z\n"
+"POT-Creation-Date: 2025-10-12T21:38:16.417Z\n"
+"PO-Revision-Date: 2025-10-12T21:38:16.418Z\n"
 
 msgid "View"
 msgstr "View"
@@ -314,33 +314,6 @@ msgstr "Create dataset"
 msgid "Cancelled"
 msgstr "Cancelled"
 
-msgid "Error loading models"
-msgstr "Error loading models"
-
-msgid "An unknown error occurred"
-msgstr "An unknown error occurred"
-
-msgid "Rename model"
-msgstr "Rename model"
-
-msgid "View evaluations"
-msgstr "View evaluations"
-
-msgid "Author"
-msgstr "Author"
-
-msgid "Period"
-msgstr "Period"
-
-msgid "Features"
-msgstr "Features"
-
-msgid "Target"
-msgstr "Target"
-
-msgid "No models available"
-msgstr "No models available"
-
 msgid "Unsaved changes"
 msgstr "Unsaved changes"
 
@@ -371,6 +344,9 @@ msgstr "Map Data Items"
 
 msgid "Map the model features to corresponding data items in DHIS2"
 msgstr "Map the model features to corresponding data items in DHIS2"
+
+msgid "Target"
+msgstr "Target"
 
 msgid "Map the model target to the corresponding data item in DHIS2"
 msgstr "Map the model target to the corresponding data item in DHIS2"
@@ -530,6 +506,9 @@ msgstr "Feature"
 msgid "Org unit"
 msgstr "Org unit"
 
+msgid "Period"
+msgstr "Period"
+
 msgid "Import Summary"
 msgstr "Import Summary"
 
@@ -688,6 +667,36 @@ msgstr "You cannot select more than {{max}} organisation units at a time"
 
 msgid "Error loading jobs"
 msgstr "Error loading jobs"
+
+msgid "An unknown error occurred"
+msgstr "An unknown error occurred"
+
+msgid "Error loading models"
+msgstr "Error loading models"
+
+msgid "Delete model"
+msgstr "Delete model"
+
+msgid "Are you sure you want to delete this model? This action cannot be undone."
+msgstr "Are you sure you want to delete this model? This action cannot be undone."
+
+msgid "View evaluations"
+msgstr "View evaluations"
+
+msgid "Model deleted"
+msgstr "Model deleted"
+
+msgid "Failed to delete model"
+msgstr "Failed to delete model"
+
+msgid "Author"
+msgstr "Author"
+
+msgid "Features"
+msgstr "Features"
+
+msgid "No models available"
+msgstr "No models available"
 
 msgid "Evaluate"
 msgstr "Evaluate"

@@ -13,8 +13,6 @@ import { useDeleteModel } from '../hooks/useDeleteModel';
 interface DeleteModelModalProps {
     id: number;
     onClose: () => void;
-    // We might want to pass the name to display in the modal, though it's not used in the current message
-    // name?: string | null | undefined;
 }
 
 export const DeleteModelModal = ({
@@ -23,7 +21,7 @@ export const DeleteModelModal = ({
 }: DeleteModelModalProps) => {
     const {
         deleteModel,
-        isLoading: deleteIsLoading,
+        isPending: deleteIsLoading,
     } = useDeleteModel({
         onSuccess: () => {
             onClose();

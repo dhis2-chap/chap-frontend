@@ -9,6 +9,7 @@ import {
     DataTableFoot,
     Pagination,
     Input,
+    Tooltip,
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import {
@@ -21,9 +22,17 @@ import {
     getPaginationRowModel,
     Column,
 } from '@tanstack/react-table';
-import { ModelSpecRead } from '@dhis2-chap/ui';
+import { ModelSpecRead, Pill } from '@dhis2-chap/ui';
 import styles from './ModelsTable.module.css';
 import { ModelActionsMenu } from './ModelActionsMenu';
+
+const labelByPeriodType = {
+    month: i18n.t('Monthly'),
+    year: i18n.t('Yearly'),
+    week: i18n.t('Weekly'),
+    day: i18n.t('Daily'),
+    any: i18n.t('Any'),
+};
 
 const columnHelper = createColumnHelper<ModelSpecRead>();
 
@@ -40,12 +49,47 @@ const columns = [
     }),
     columnHelper.accessor('supportedPeriodType', {
         header: i18n.t('Period'),
-        cell: info => info.getValue() || undefined,
+        cell: (info) => {
+            const periodType = info.getValue();
+            return periodType ? (labelByPeriodType[periodType as keyof typeof labelByPeriodType] || periodType) : undefined;
+        },
     }),
     columnHelper.accessor(row => row.covariates?.length ?? 0, {
         id: 'featuresCount',
-        header: i18n.t('Features'),
-        cell: info => info.getValue(),
+        header: i18n.t('Covariates'),
+        cell: (info) => {
+            const count = info.getValue();
+            const covariates = info.row.original.covariates || [];
+
+            if (count === 0) {
+                return count;
+            }
+
+            const covariateNames = covariates
+                .map(cov => cov.displayName)
+                .filter(Boolean)
+                .join(', ');
+
+            return (
+                <div className={styles.featuresCell}>
+                    <Tooltip content={covariateNames || i18n.t('No covariate names available')}>
+                        {({ onMouseOver, onMouseOut, ref }) => (
+                            <span
+                                ref={ref}
+                                className={styles.infoIcon}
+                                onMouseEnter={onMouseOver}
+                                onMouseLeave={onMouseOut}
+                            >
+                                <Pill>
+                                    {count}
+                                </Pill>
+                                {/* <IconInfo16 /> */}
+                            </span>
+                        )}
+                    </Tooltip>
+                </div>
+            );
+        },
     }),
     columnHelper.accessor(row => row.target?.displayName || row.target?.name || '', {
         id: 'target',

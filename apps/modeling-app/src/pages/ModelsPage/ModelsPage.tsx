@@ -8,7 +8,7 @@ export const ModelsPage: React.FC = () => {
         <>
             <PageHeader
                 pageTitle={i18n.t('Models')}
-                pageDescription={i18n.t('Manage templates and configured models available in your system.')}
+                pageDescription={i18n.t('Manage configured models available in your system.')}
             />
             <ModelContent />
         </>

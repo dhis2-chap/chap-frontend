@@ -18,18 +18,16 @@ export const useDeleteModel = ({ onSuccess, onError }: Props = {}) => {
 
     const { show: showErrorAlert } = useAlert(
         i18n.t('Failed to delete model'),
-        { success: false },
+        { critical: true },
     );
 
     const {
         mutate: deleteModel,
-        isLoading,
+        isPending,
         isError,
         error,
-    } = useMutation({
-        mutationFn: (id: number) => {
-            // TODO: Replace with actual API call once endpoint is available
-            // CrudService.deleteConfiguredModelCrudConfiguredModelsModelIdDelete(id)
+    } = useMutation<{ id: number }, Error, number>({
+        mutationFn: (id) => {
             throw new Error('Delete model endpoint not yet implemented in the API');
         },
         onSuccess: (id) => {
@@ -46,9 +44,8 @@ export const useDeleteModel = ({ onSuccess, onError }: Props = {}) => {
 
     return {
         deleteModel,
-        isLoading,
+        isPending,
         isError,
         error,
     };
 };
-
