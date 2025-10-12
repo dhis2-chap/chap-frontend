@@ -3,13 +3,16 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { DataSource } from './DataSource';
-import type { FeatureCollectionModel } from './FeatureCollectionModel';
-import type { ObservationBase } from './ObservationBase';
-export type DatasetCreate = {
+export type DataSetInfo = {
     name: string;
     dataSources?: (Array<DataSource> | null);
     type?: (string | null);
-    observations: Array<ObservationBase>;
-    geojson: FeatureCollectionModel;
+    id?: (number | null);
+    covariates?: Array<string>;
+    firstPeriod?: (string | null);
+    lastPeriod?: (string | null);
+    orgUnits?: (Array<string> | null);
+    created?: (string | null);
+    periodType?: (string | null);
 };
 

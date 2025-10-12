@@ -2,8 +2,9 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type DataSource = {
-    covariate: string;
-    dataElementId: string;
+export type Metric = {
+    id: string;
+    displayName: string;
+    description?: string;
 };
 

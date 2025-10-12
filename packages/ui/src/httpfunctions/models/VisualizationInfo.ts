@@ -2,7 +2,9 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type ModelUpdate = {
-    name?: (string | null);
+export type VisualizationInfo = {
+    id: string;
+    displayName: string;
+    description: string;
 };
 

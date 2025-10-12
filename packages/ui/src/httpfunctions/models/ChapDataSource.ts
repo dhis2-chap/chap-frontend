@@ -2,11 +2,11 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type DataSetRead = {
-    id: number;
+export type ChapDataSource = {
     name: string;
-    type: (string | null);
-    created: (string | null);
-    covariates: Array<string>;
+    displayName: string;
+    supportedFeatures: Array<string>;
+    description: string;
+    dataset: string;
 };
 

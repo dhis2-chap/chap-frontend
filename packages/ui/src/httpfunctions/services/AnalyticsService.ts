@@ -4,9 +4,9 @@
 /* eslint-disable */
 import type { BacktestDomain } from '../models/BacktestDomain';
 import type { BackTestRead } from '../models/BackTestRead';
+import type { ChapDataSource } from '../models/ChapDataSource';
 import type { DataList } from '../models/DataList';
 import type { DatasetMakeRequest } from '../models/DatasetMakeRequest';
-import type { DataSource } from '../models/DataSource';
 import type { EvaluationEntry } from '../models/EvaluationEntry';
 import type { ImportSummaryResponse } from '../models/ImportSummaryResponse';
 import type { JobResponse } from '../models/JobResponse';
@@ -78,6 +78,30 @@ export class AnalyticsService {
             path: {
                 'backtestId1': backtestId1,
                 'backtestId2': backtestId2,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
+     * Get Prediction Entry
+     * return
+     * @param predictionId
+     * @param quantiles
+     * @returns PredictionEntry Successful Response
+     * @throws ApiError
+     */
+    public static getPredictionEntryAnalyticsPredictionEntryGet(
+        predictionId: number,
+        quantiles: Array<number>,
+    ): CancelablePromise<Array<PredictionEntry>> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/analytics/prediction-entry',
+            query: {
+                'predictionId': predictionId,
+                'quantiles': quantiles,
             },
             errors: {
                 422: `Validation Error`,
@@ -205,10 +229,10 @@ export class AnalyticsService {
     }
     /**
      * Get Data Sources
-     * @returns DataSource Successful Response
+     * @returns ChapDataSource Successful Response
      * @throws ApiError
      */
-    public static getDataSourcesAnalyticsDataSourcesGet(): CancelablePromise<Array<DataSource>> {
+    public static getDataSourcesAnalyticsDataSourcesGet(): CancelablePromise<Array<ChapDataSource>> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/analytics/data-sources',

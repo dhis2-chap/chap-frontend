@@ -2,6 +2,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { Metric } from '../models/Metric';
+import type { VisualizationInfo } from '../models/VisualizationInfo';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
@@ -9,13 +11,42 @@ export class VisualizationService {
     /**
      * List Visualizations
      * List available visualizations
-     * @returns string Successful Response
+     * @param backtestId
+     * @returns VisualizationInfo Successful Response
      * @throws ApiError
      */
-    public static listVisualizationsVisualizationGet(): CancelablePromise<Array<string>> {
+    public static listVisualizationsVisualizationBacktestIdGet(
+        backtestId: number,
+    ): CancelablePromise<Array<VisualizationInfo>> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/visualization/',
+            url: '/visualization/{backtest_id}',
+            path: {
+                'backtest_id': backtestId,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
+     * Get Available Metrics
+     * @param backtestId
+     * @returns Metric Successful Response
+     * @throws ApiError
+     */
+    public static getAvailableMetricsVisualizationMetricsBacktestIdGet(
+        backtestId: number,
+    ): CancelablePromise<Array<Metric>> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/visualization/metrics/{backtest_id}',
+            path: {
+                'backtest_id': backtestId,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
         });
     }
     /**
