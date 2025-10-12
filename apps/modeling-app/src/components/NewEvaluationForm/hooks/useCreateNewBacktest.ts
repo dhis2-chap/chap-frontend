@@ -52,7 +52,7 @@ export const useCreateNewBacktest = ({
     const {
         mutate: validateAndDryRun,
         data: validationResult,
-        isLoading: isValidationLoading,
+        isPending: isValidationLoading,
         error: validationError,
         reset: resetValidation,
     } = useMutation<ImportSummaryCorrected, ApiError, EvaluationFormValues>({
@@ -98,11 +98,11 @@ export const useCreateNewBacktest = ({
 
     const {
         mutate: createNewBacktest,
-        isLoading,
+        isPending,
         error,
     } = useMutation<ImportSummaryCorrected, ApiError, EvaluationFormValues>({
         mutationFn: async (formData: EvaluationFormValues) => {
-            const { model, observations, orgUnitResponse } = await prepareBacktestData(
+            const { model, observations, orgUnitResponse, dataSources } = await prepareBacktestData(
                 formData,
                 dataEngine,
                 queryClient,
@@ -127,6 +127,7 @@ export const useCreateNewBacktest = ({
                 name: formData.name,
                 geojson: filteredGeoJson,
                 providedData: observations,
+                dataSources,
                 dataToBeFetched: [],
                 modelId: model.name,
                 nPeriods: N_PERIODS[formData.periodType],
@@ -156,7 +157,7 @@ export const useCreateNewBacktest = ({
         createNewBacktest,
         validateAndDryRun,
         validationResult,
-        isSubmitting: isLoading,
+        isSubmitting: isPending,
         isValidationLoading,
         importSummary: validationResult,
         error: validationError || error,

@@ -17,8 +17,50 @@ msgstr "Detailed metrics"
 msgid "Rename"
 msgstr "Rename"
 
+msgid "Create new..."
+msgstr "Create new..."
+
 msgid "Delete"
 msgstr "Delete"
+
+msgid "{{name}} (Copy)"
+msgstr "{{name}} (Copy)"
+
+msgid "Copy evaluation"
+msgstr "Copy evaluation"
+
+msgid "Cancel"
+msgstr "Cancel"
+
+msgid "Failed to load evaluation data. Please try again."
+msgstr "Failed to load evaluation data. Please try again."
+
+msgid "Close"
+msgstr "Close"
+
+msgid "Name"
+msgstr "Name"
+
+msgid "Untitled"
+msgstr "Untitled"
+
+msgid "Organisation units"
+msgstr "Organisation units"
+
+msgid "Model"
+msgstr "Model"
+
+msgid "Data sources"
+msgstr "Data sources"
+
+msgid "Period type"
+msgstr "Period type"
+
+msgid "Period range"
+msgstr "Period range"
+
+msgid "Copy to new evaluation"
+msgstr "Copy to new evaluation"
 
 msgid "Delete evaluation"
 msgstr "Delete evaluation"
@@ -30,17 +72,11 @@ msgstr ""
 "Are you sure you want to delete this evaluation? This action cannot be "
 "undone."
 
-msgid "Cancel"
-msgstr "Cancel"
-
 msgid "Name is required"
 msgstr "Name is required"
 
 msgid "Rename evaluation"
 msgstr "Rename evaluation"
-
-msgid "Name"
-msgstr "Name"
 
 msgid "Save"
 msgstr "Save"
@@ -50,9 +86,6 @@ msgstr "ID"
 
 msgid "Created"
 msgstr "Created"
-
-msgid "Model"
-msgstr "Model"
 
 msgid "CRPS (Norm)"
 msgstr "CRPS (Norm)"
@@ -181,9 +214,6 @@ msgstr "Select metric"
 
 msgid "Inspect dataset"
 msgstr "Inspect dataset"
-
-msgid "Close"
-msgstr "Close"
 
 msgid "Cancel job"
 msgstr "Cancel job"
@@ -460,9 +490,6 @@ msgstr "Evaluation name"
 
 msgid "EWARS Evaluation 22-24"
 msgstr "EWARS Evaluation 22-24"
-
-msgid "Period type"
-msgstr "Period type"
 
 msgid "From period"
 msgstr "From period"
@@ -919,9 +946,6 @@ msgstr "Organisation unit level"
 
 msgid "Organisation unit level to import data to"
 msgstr "Organisation unit level to import data to"
-
-msgid "Organisation units"
-msgstr "Organisation units"
 
 msgid "Data Element"
 msgstr "Data Element"

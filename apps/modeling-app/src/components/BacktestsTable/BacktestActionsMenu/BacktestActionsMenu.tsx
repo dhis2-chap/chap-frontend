@@ -7,11 +7,13 @@ import {
     IconMore16,
     IconView16,
     IconVisualizationBarStacked24,
+    IconDuplicate16,
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { OverflowButton } from '@dhis2-chap/ui';
 import { EditBacktestModal } from './EditBacktestModal';
 import { DeleteBacktestModal } from './DeleteBacktestModal/DeleteBacktestModal';
+import { CopyBacktestModal } from './CopyBacktestModal';
 import { useNavigate } from 'react-router-dom';
 
 type Props = {
@@ -29,6 +31,7 @@ export const BacktestActionsMenu = ({
     const [flyoutMenuIsOpen, setFlyoutMenuIsOpen] = useState(false);
     const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
     const [editModalIsOpen, setEditModalIsOpen] = useState(false);
+    const [copyModalIsOpen, setCopyModalIsOpen] = useState(false);
 
     const handleView = () => {
         navigate(`/evaluate/compare?baseEvaluation=${id}`);
@@ -55,6 +58,15 @@ export const BacktestActionsMenu = ({
                             icon={<IconView16 />}
                             onClick={() => {
                                 handleView();
+                                setFlyoutMenuIsOpen(false);
+                            }}
+                        />
+                        <MenuItem
+                            label={i18n.t('Create new...')}
+                            dataTest="backtest-overflow-copy"
+                            icon={<IconDuplicate16 />}
+                            onClick={() => {
+                                setCopyModalIsOpen(true);
                                 setFlyoutMenuIsOpen(false);
                             }}
                         />
@@ -95,6 +107,13 @@ export const BacktestActionsMenu = ({
                     id={id}
                     initialName={name ?? ''}
                     onClose={() => setEditModalIsOpen(false)}
+                />
+            )}
+
+            {copyModalIsOpen && (
+                <CopyBacktestModal
+                    id={id}
+                    onClose={() => setCopyModalIsOpen(false)}
                 />
             )}
 

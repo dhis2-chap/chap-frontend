@@ -5,13 +5,14 @@
 import type { DataSource } from './DataSource';
 export type DataSetMeta = {
     name: string;
-    dataSources?: Array<DataSource>;
+    dataSources?: (Array<DataSource> | null);
     type?: (string | null);
+    id: number;
+    covariates?: Array<string>;
     firstPeriod?: (string | null);
     lastPeriod?: (string | null);
-    covariates?: Array<string>;
+    orgUnits?: (Array<string> | null);
     created?: (string | null);
-    orgUnits?: Array<string>;
-    id: number;
+    periodType?: (string | null);
 };
 

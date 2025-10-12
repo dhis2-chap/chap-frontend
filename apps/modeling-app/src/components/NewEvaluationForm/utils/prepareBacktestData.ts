@@ -2,6 +2,7 @@ import { QueryClient } from '@tanstack/react-query';
 import i18n from '@dhis2/d2-i18n';
 import { EvaluationFormValues } from '../hooks/useFormController';
 import {
+    DataSource,
     ModelSpecRead,
     ObservationBase,
 } from '@dhis2-chap/ui';
@@ -26,6 +27,7 @@ export type PreparedBacktestData = {
     orgUnitResponse: OrgUnitResponse;
     orgUnitIds: string[];
     hash: string;
+    dataSources: DataSource[];
 };
 
 export const prepareBacktestData = async (
@@ -51,6 +53,17 @@ export const prepareBacktestData = async (
     const dataItems = [
         ...formData.covariateMappings.map(mapping => mapping.dataItem.id),
         formData.targetMapping.dataItem.id,
+    ];
+
+    const dataSources: DataSource[] = [
+        ...formData.covariateMappings.map(mapping => ({
+            covariate: mapping.covariateName,
+            dataElementId: mapping.dataItem.id,
+        })),
+        {
+            covariate: formData.targetMapping.covariateName,
+            dataElementId: formData.targetMapping.dataItem.id,
+        },
     ];
 
     // Create a unique hash of the data elements, periods, and org units for caching
@@ -126,5 +139,6 @@ export const prepareBacktestData = async (
         orgUnitResponse,
         orgUnitIds,
         hash,
+        dataSources,
     };
 };
