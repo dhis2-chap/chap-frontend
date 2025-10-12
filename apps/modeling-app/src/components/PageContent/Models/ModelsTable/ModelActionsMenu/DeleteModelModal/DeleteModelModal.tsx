@@ -8,23 +8,23 @@ import {
     Button,
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
-import { useDeleteBacktest } from '../../hooks/useDeleteBacktest';
+import { useDeleteModel } from '../hooks/useDeleteModel';
 
-interface DeleteBacktestModalProps {
+interface DeleteModelModalProps {
     id: number;
     onClose: () => void;
     // We might want to pass the name to display in the modal, though it's not used in the current message
     // name?: string | null | undefined;
 }
 
-export const DeleteBacktestModal = ({
+export const DeleteModelModal = ({
     id,
     onClose,
-}: DeleteBacktestModalProps) => {
+}: DeleteModelModalProps) => {
     const {
-        deleteBacktest,
+        deleteModel,
         isLoading: deleteIsLoading,
-    } = useDeleteBacktest({
+    } = useDeleteModel({
         onSuccess: () => {
             onClose();
         },
@@ -34,33 +34,33 @@ export const DeleteBacktestModal = ({
         <Modal
             onClose={onClose}
             small
-            dataTest="delete-backtest-modal"
+            dataTest="delete-model-modal"
         >
             <ModalTitle>
-                {i18n.t('Delete evaluation')}
+                {i18n.t('Delete model')}
             </ModalTitle>
             <ModalContent>
                 <p>
-                    {i18n.t('Are you sure you want to delete this evaluation? This action cannot be undone.')}
+                    {i18n.t('Are you sure you want to delete this model? This action cannot be undone.')}
                 </p>
             </ModalContent>
             <ModalActions>
                 <ButtonStrip>
                     <Button
                         onClick={onClose}
-                        secondary // Matching Edit modal's cancel button style
+                        secondary
                         disabled={deleteIsLoading}
-                        dataTest="cancel-delete-backtest-button"
+                        dataTest="cancel-delete-model-button"
                     >
                         {i18n.t('Cancel')}
                     </Button>
                     <Button
                         primary
-                        onClick={() => deleteBacktest(id)}
+                        onClick={() => deleteModel(id)}
                         destructive
                         loading={deleteIsLoading}
                         disabled={deleteIsLoading}
-                        dataTest="submit-delete-backtest-button"
+                        dataTest="submit-delete-model-button"
                     >
                         {i18n.t('Delete')}
                     </Button>

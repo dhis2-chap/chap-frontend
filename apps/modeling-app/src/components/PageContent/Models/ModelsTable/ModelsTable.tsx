@@ -28,38 +28,38 @@ import { ModelActionsMenu } from './ModelActionsMenu';
 const columnHelper = createColumnHelper<ModelSpecRead>();
 
 const columns = [
-    columnHelper.accessor((row) => row.displayName || row.name, {
+    columnHelper.accessor(row => row.displayName || row.name, {
         id: 'name',
         header: i18n.t('Name'),
         filterFn: 'includesString',
-        cell: (info) => info.getValue() || undefined,
+        cell: info => info.getValue() || undefined,
     }),
     columnHelper.accessor('author', {
         header: i18n.t('Author'),
-        cell: (info) => info.getValue() || undefined,
+        cell: info => info.getValue() || undefined,
     }),
     columnHelper.accessor('supportedPeriodType', {
         header: i18n.t('Period'),
-        cell: (info) => info.getValue() || undefined,
+        cell: info => info.getValue() || undefined,
     }),
-    columnHelper.accessor((row) => row.covariates?.length ?? 0, {
+    columnHelper.accessor(row => row.covariates?.length ?? 0, {
         id: 'featuresCount',
         header: i18n.t('Features'),
-        cell: (info) => info.getValue(),
+        cell: info => info.getValue(),
     }),
-    columnHelper.accessor((row) => row.target?.displayName || row.target?.name || '', {
+    columnHelper.accessor(row => row.target?.displayName || row.target?.name || '', {
         id: 'target',
         header: i18n.t('Target'),
         enableSorting: false,
-        cell: (info) => info.getValue() || undefined,
+        cell: info => info.getValue() || undefined,
     }),
     columnHelper.display({
         id: 'actions',
         header: i18n.t('Actions'),
-        cell: (info) => (
+        cell: info => (
             <ModelActionsMenu
                 id={info.row.original.id}
-                name={info.row.original.configurationName}
+                name={info.row.original.displayName}
             />
         ),
     }),
@@ -71,13 +71,13 @@ const getSortDirection = (column: Column<ModelSpecRead>) => {
 
 type Props = {
     models: ModelSpecRead[];
-}
+};
 
 export const ModelsTable = ({ models }: Props) => {
     const table = useReactTable({
         data: models || [],
         columns,
-        getRowId: (row) => String(row.id),
+        getRowId: row => String(row.id),
         enableRowSelection: false,
         getSortedRowModel: getSortedRowModel(),
         getCoreRowModel: getCoreRowModel(),
@@ -96,16 +96,16 @@ export const ModelsTable = ({ models }: Props) => {
                             dense
                             placeholder={i18n.t('Search')}
                             value={(table.getColumn('name')?.getFilterValue() as string | undefined) ?? ''}
-                            onChange={(e) => table.getColumn('name')?.setFilterValue(e.value)}
+                            onChange={e => table.getColumn('name')?.setFilterValue(e.value)}
                         />
                     </div>
                 </div>
             </div>
             <DataTable>
                 <DataTableHead>
-                    {table.getHeaderGroups().map((headerGroup) => (
+                    {table.getHeaderGroups().map(headerGroup => (
                         <DataTableRow key={headerGroup.id}>
-                            {headerGroup.headers.map((header) => (
+                            {headerGroup.headers.map(header => (
                                 <DataTableColumnHeader
                                     key={header.id}
                                     fixed
@@ -113,15 +113,15 @@ export const ModelsTable = ({ models }: Props) => {
                                     {...(header.column.getCanSort() ? {
                                         sortDirection: getSortDirection(header.column),
                                         sortIconTitle: i18n.t('Sort by {{column}}', { column: header.column.id }),
-                                        onSortIconClick: () => header.column.toggleSorting()
+                                        onSortIconClick: () => header.column.toggleSorting(),
                                     } : {})}
                                 >
                                     {header.isPlaceholder
                                         ? null
                                         : flexRender(
-                                            header.column.columnDef.header,
-                                            header.getContext()
-                                        )}
+                                                header.column.columnDef.header,
+                                                header.getContext(),
+                                            )}
                                 </DataTableColumnHeader>
                             ))}
                         </DataTableRow>
@@ -129,20 +129,20 @@ export const ModelsTable = ({ models }: Props) => {
                 </DataTableHead>
                 <DataTableBody>
                     {hasVisibleRows ? table.getRowModel().rows
-                        .map((row) => (
+                        .map(row => (
                             <DataTableRow key={row.id}>
-                                {row.getVisibleCells().map((cell) => (
+                                {row.getVisibleCells().map(cell => (
                                     <DataTableCell key={cell.id}>
                                         {flexRender(
                                             cell.column.columnDef.cell,
-                                            cell.getContext()
+                                            cell.getContext(),
                                         )}
                                     </DataTableCell>
                                 ))}
                             </DataTableRow>
                         )) : (
                         <DataTableRow>
-                            <DataTableCell colSpan={String(table.getAllColumns().length)} align='center'>
+                            <DataTableCell colSpan={String(table.getAllColumns().length)} align="center">
                                 {i18n.t('No models available')}
                             </DataTableCell>
                         </DataTableRow>
@@ -168,4 +168,3 @@ export const ModelsTable = ({ models }: Props) => {
         </div>
     );
 };
-

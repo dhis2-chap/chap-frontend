@@ -4,12 +4,11 @@ import {
     MenuItem,
     IconView16,
     IconMore16,
-    IconEdit16,
     IconDelete16,
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { OverflowButton } from '@dhis2-chap/ui';
-import { EditModelModal } from './EditModelModal/EditModelModal';
+import { DeleteModelModal } from './DeleteModelModal';
 
 type Props = {
     id: number;
@@ -18,7 +17,7 @@ type Props = {
 
 export const ModelActionsMenu = ({ id, name }: Props) => {
     const [flyoutMenuIsOpen, setFlyoutMenuIsOpen] = useState(false);
-    const [editModalIsOpen, setEditModalIsOpen] = useState(false);
+    const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
 
     return (
         <>
@@ -27,43 +26,34 @@ export const ModelActionsMenu = ({ id, name }: Props) => {
                 open={flyoutMenuIsOpen}
                 icon={<IconMore16 />}
                 onClick={() => setFlyoutMenuIsOpen(prev => !prev)}
-                component={
+                component={(
                     <FlyoutMenu dense>
                         <MenuItem
                             label={i18n.t('View evaluations')}
-                            dataTest={'model-overflow-view'}
+                            dataTest="model-overflow-view"
                             icon={<IconView16 />}
                             onClick={() => setFlyoutMenuIsOpen(false)}
                         />
                         <MenuItem
-                            label={i18n.t('Rename')}
-                            dataTest={'model-overflow-rename'}
-                            icon={<IconEdit16 />}
+                            label={i18n.t('Delete')}
+                            dataTest="model-overflow-delete"
+                            destructive
+                            icon={<IconDelete16 />}
                             onClick={() => {
-                                setEditModalIsOpen(true);
+                                setDeleteModalIsOpen(true);
                                 setFlyoutMenuIsOpen(false);
                             }}
                         />
-                        <MenuItem
-                            label={i18n.t('Delete')}
-                            dataTest={'model-overflow-delete'}
-                            destructive
-                            icon={<IconDelete16 />}
-                            onClick={() => setFlyoutMenuIsOpen(false)}
-                        />
                     </FlyoutMenu>
-                }
+                )}
             />
 
-            {editModalIsOpen && (
-                <EditModelModal
+            {deleteModalIsOpen && (
+                <DeleteModelModal
                     id={id}
-                    initialName={name}
-                    onClose={() => setEditModalIsOpen(false)}
+                    onClose={() => setDeleteModalIsOpen(false)}
                 />
             )}
         </>
     );
 };
-
-

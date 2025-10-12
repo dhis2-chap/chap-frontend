@@ -5,20 +5,20 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2025-10-09T08:13:16.610Z\n"
-"PO-Revision-Date: 2025-10-09T08:13:16.611Z\n"
+"POT-Creation-Date: 2025-10-12T21:11:49.463Z\n"
+"PO-Revision-Date: 2025-10-12T21:11:49.464Z\n"
 
 msgid "View"
 msgstr "View"
+
+msgid "Create new..."
+msgstr "Create new..."
 
 msgid "Detailed metrics"
 msgstr "Detailed metrics"
 
 msgid "Rename"
 msgstr "Rename"
-
-msgid "Create new..."
-msgstr "Create new..."
 
 msgid "Delete"
 msgstr "Delete"
@@ -314,6 +314,33 @@ msgstr "Create dataset"
 msgid "Cancelled"
 msgstr "Cancelled"
 
+msgid "Error loading models"
+msgstr "Error loading models"
+
+msgid "An unknown error occurred"
+msgstr "An unknown error occurred"
+
+msgid "Rename model"
+msgstr "Rename model"
+
+msgid "View evaluations"
+msgstr "View evaluations"
+
+msgid "Author"
+msgstr "Author"
+
+msgid "Period"
+msgstr "Period"
+
+msgid "Features"
+msgstr "Features"
+
+msgid "Target"
+msgstr "Target"
+
+msgid "No models available"
+msgstr "No models available"
+
 msgid "Unsaved changes"
 msgstr "Unsaved changes"
 
@@ -344,9 +371,6 @@ msgstr "Map Data Items"
 
 msgid "Map the model features to corresponding data items in DHIS2"
 msgstr "Map the model features to corresponding data items in DHIS2"
-
-msgid "Target"
-msgstr "Target"
 
 msgid "Map the model target to the corresponding data item in DHIS2"
 msgstr "Map the model target to the corresponding data item in DHIS2"
@@ -506,9 +530,6 @@ msgstr "Feature"
 msgid "Org unit"
 msgstr "Org unit"
 
-msgid "Period"
-msgstr "Period"
-
 msgid "Import Summary"
 msgstr "Import Summary"
 
@@ -667,9 +688,6 @@ msgstr "You cannot select more than {{max}} organisation units at a time"
 
 msgid "Error loading jobs"
 msgstr "Error loading jobs"
-
-msgid "An unknown error occurred"
-msgstr "An unknown error occurred"
 
 msgid "Evaluate"
 msgstr "Evaluate"
@@ -1146,6 +1164,9 @@ msgstr "Start month"
 msgid "End month"
 msgstr "End month"
 
+msgid "Error renaming model"
+msgstr "Error renaming model"
+
 msgid "Evaluation details"
 msgstr "Evaluation details"
 
@@ -1182,9 +1203,6 @@ msgstr "View and manage currently running jobs and their status."
 
 msgid "Manage templates and configured models available in your system."
 msgstr "Manage templates and configured models available in your system."
-
-msgid "Model templates and configured models will be displayed here."
-msgstr "Model templates and configured models will be displayed here."
 
 msgid "Create a new evaluation to assess the performance of a model"
 msgstr "Create a new evaluation to assess the performance of a model"
