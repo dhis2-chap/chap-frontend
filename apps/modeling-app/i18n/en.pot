@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2025-10-06T07:55:57.758Z\n"
-"PO-Revision-Date: 2025-10-06T07:55:57.758Z\n"
+"POT-Creation-Date: 2025-10-09T08:13:16.610Z\n"
+"PO-Revision-Date: 2025-10-09T08:13:16.611Z\n"
 
 msgid "View"
 msgstr "View"
@@ -665,6 +665,12 @@ msgstr "No organisation units match your search"
 msgid "You cannot select more than {{max}} organisation units at a time"
 msgstr "You cannot select more than {{max}} organisation units at a time"
 
+msgid "Error loading jobs"
+msgstr "Error loading jobs"
+
+msgid "An unknown error occurred"
+msgstr "An unknown error occurred"
+
 msgid "Evaluate"
 msgstr "Evaluate"
 
@@ -1146,9 +1152,6 @@ msgstr "Inspect a single evaluation and view its visualizations."
 msgid "Error loading evaluations"
 msgstr "Error loading evaluations"
 
-msgid "An unknown error occurred"
-msgstr "An unknown error occurred"
-
 msgid "Evaluations"
 msgstr "Evaluations"
 
@@ -1167,9 +1170,6 @@ msgstr "To get started, create a route that points to a running CHAP server."
 
 msgid "Route and servers are configured on the settings page."
 msgstr "Route and servers are configured on the settings page."
-
-msgid "Error loading jobs"
-msgstr "Error loading jobs"
 
 msgid "Active jobs"
 msgstr "Active jobs"
