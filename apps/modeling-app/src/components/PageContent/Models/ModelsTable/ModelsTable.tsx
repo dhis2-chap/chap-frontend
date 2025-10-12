@@ -104,7 +104,6 @@ const columns = [
         cell: info => (
             <ModelActionsMenu
                 id={info.row.original.id}
-                name={info.row.original.displayName}
             />
         ),
     }),

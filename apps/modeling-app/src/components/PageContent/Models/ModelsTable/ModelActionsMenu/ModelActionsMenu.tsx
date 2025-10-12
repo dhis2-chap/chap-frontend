@@ -12,10 +12,9 @@ import { DeleteModelModal } from './DeleteModelModal';
 
 type Props = {
     id: number;
-    name: string | null | undefined;
 };
 
-export const ModelActionsMenu = ({ id, name }: Props) => {
+export const ModelActionsMenu = ({ id }: Props) => {
     const [flyoutMenuIsOpen, setFlyoutMenuIsOpen] = useState(false);
     const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
 
