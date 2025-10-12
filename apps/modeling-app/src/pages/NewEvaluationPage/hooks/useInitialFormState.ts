@@ -84,12 +84,13 @@ export const useInitialFormState = ({ models, isModelsLoading }: Props) => {
             if (selectedModel && dataItems && dataItems.length > 0) {
                 const covariateMappings = locationState?.dataSources?.map((dataSource) => {
                     const dataItem = dataItems.find(dataItem => dataItem.id === dataSource.dataElementId);
-                    if (!dataItem) return null;
+                    if (!dataItem || dataItem.id === selectedModel.target.name) return null;
                     return ({
                         covariateName: dataSource.covariate,
                         dataItem: dataItem,
                     });
                 }).filter(Boolean) as CovariateMapping[] || [];
+
                 const targetMapping = covariateMappings.find(mapping => mapping.covariateName === selectedModel.target.name);
                 values.covariateMappings = covariateMappings;
                 values.targetMapping = targetMapping;
