@@ -47,13 +47,6 @@ const columns = [
         header: i18n.t('Author'),
         cell: info => info.getValue() || undefined,
     }),
-    columnHelper.accessor('supportedPeriodType', {
-        header: i18n.t('Period'),
-        cell: (info) => {
-            const periodType = info.getValue();
-            return periodType ? (labelByPeriodType[periodType as keyof typeof labelByPeriodType] || periodType) : undefined;
-        },
-    }),
     columnHelper.accessor(row => row.covariates?.length ?? 0, {
         id: 'featuresCount',
         header: i18n.t('Covariates'),
@@ -89,6 +82,14 @@ const columns = [
                     </Tooltip>
                 </div>
             );
+        },
+    }),
+    columnHelper.accessor('supportedPeriodType', {
+        header: i18n.t('Period'),
+        enableSorting: false,
+        cell: (info) => {
+            const periodType = info.getValue();
+            return periodType ? (labelByPeriodType[periodType as keyof typeof labelByPeriodType] || periodType) : undefined;
         },
     }),
     columnHelper.accessor(row => row.target?.displayName || row.target?.name || '', {
