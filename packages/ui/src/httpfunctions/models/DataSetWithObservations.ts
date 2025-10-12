@@ -8,6 +8,7 @@ export type DataSetWithObservations = {
     name: string;
     dataSources?: (Array<DataSource> | null);
     type?: (string | null);
+    id: number;
     covariates?: Array<string>;
     firstPeriod?: (string | null);
     lastPeriod?: (string | null);
@@ -15,7 +16,6 @@ export type DataSetWithObservations = {
     created: (string | null);
     periodType?: (string | null);
     geojson?: (string | null);
-    id: number;
     observations: Array<ObservationBase>;
 };
 

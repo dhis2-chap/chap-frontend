@@ -7,6 +7,7 @@ export type DataSetInfo = {
     name: string;
     dataSources?: (Array<DataSource> | null);
     type?: (string | null);
+    id?: (number | null);
     covariates?: Array<string>;
     firstPeriod?: (string | null);
     lastPeriod?: (string | null);
