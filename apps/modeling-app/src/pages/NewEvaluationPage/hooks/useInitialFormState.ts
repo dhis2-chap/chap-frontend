@@ -1,9 +1,16 @@
 import { useEffect, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import { z } from 'zod';
+import { ModelSpecRead } from '@dhis2-chap/ui';
 import { useOrgUnitsById } from '../../../hooks/useOrgUnitsById';
 import { EvaluationFormValues, PERIOD_TYPES } from '../../../components/NewEvaluationForm';
 import { convertServerToClientPeriod } from '../../../features/timeperiod-selector/utils/timePeriodUtils';
+import { useDataItemByIds } from './useDataItemById';
+import { CovariateMapping } from 'apps/modeling-app/src/components/NewEvaluationForm/hooks/useFormController';
+
+type Props = {
+    models: ModelSpecRead[];
+};
 
 const locationStateInnerSchema = z
     .object({
@@ -13,6 +20,10 @@ const locationStateInnerSchema = z
         toDate: z.string().optional(),
         orgUnits: z.array(z.string()).optional(),
         modelId: z.string().optional(),
+        dataSources: z.array(z.object({
+            covariate: z.string(),
+            dataElementId: z.string(),
+        })).optional(),
     })
     .superRefine((data, ctx) => {
         if ((data.fromDate || data.toDate) && !data.periodType) {
@@ -22,11 +33,18 @@ const locationStateInnerSchema = z
                 path: ['periodType'],
             });
         }
+        if (data.dataSources && data.dataSources.length > 0 && !data.modelId) {
+            ctx.addIssue({
+                code: z.ZodIssueCode.custom,
+                message: 'Model ID is required when data sources are provided',
+                path: ['modelId'],
+            });
+        }
     });
 
 const evaluationFormLocationStateSchema = locationStateInnerSchema.optional();
 
-export const useInitialFormState = () => {
+export const useInitialFormState = ({ models }: Props) => {
     const location = useLocation();
 
     const {
@@ -39,15 +57,44 @@ export const useInitialFormState = () => {
         isInitialLoading: isOrgUnitsInitialLoading,
     } = useOrgUnitsById(locationState?.orgUnits || []);
 
-    const initialValues: Partial<EvaluationFormValues> = useMemo(
-        () => ({
+    const {
+        dataItems,
+        isLoading: isDataItemsLoading,
+    } = useDataItemByIds({
+        dataItemIds: locationState
+            ?.dataSources
+            ?.map(dataSource => dataSource.dataElementId) || [],
+    });
+
+    const initialValues: Partial<EvaluationFormValues> = useMemo(() => {
+        const values: Partial<EvaluationFormValues> = {
             name: locationState?.name || '',
             periodType: locationState?.periodType || PERIOD_TYPES.MONTH,
             fromDate: locationState?.fromDate ? convertServerToClientPeriod(locationState.fromDate, locationState.periodType!) : '',
             toDate: locationState?.toDate ? convertServerToClientPeriod(locationState.toDate, locationState.periodType!) : '',
             orgUnits: orgUnitsData?.organisationUnits || [],
             modelId: locationState?.modelId || '',
-        }), [locationState, orgUnitsData]);
+        };
+
+        if (locationState?.modelId) {
+            const selectedModel = models.find(model => model.id.toString() === locationState.modelId);
+            if (selectedModel && dataItems && dataItems.length > 0) {
+                const covariateMappings = locationState?.dataSources?.map((dataSource) => {
+                    const dataItem = dataItems.find(dataItem => dataItem.id === dataSource.dataElementId);
+                    if (!dataItem) return null;
+                    return ({
+                        covariateName: dataSource.covariate,
+                        dataItem: dataItem,
+                    });
+                }).filter(Boolean) as CovariateMapping[] || [];
+                const targetMapping = covariateMappings.find(mapping => mapping.covariateName === selectedModel.target.name);
+                values.covariateMappings = covariateMappings;
+                values.targetMapping = targetMapping;
+            }
+        }
+
+        return values;
+    }, [dataItems, locationState, models, orgUnitsData]);
 
     useEffect(() => {
         if (error) {
@@ -55,7 +102,10 @@ export const useInitialFormState = () => {
         }
     }, [error]);
 
-    const isLoading = !!locationState?.orgUnits?.length && isOrgUnitsInitialLoading;
+    const isLoading = (
+        (!!locationState?.orgUnits?.length && isOrgUnitsInitialLoading)
+        || (!!locationState?.dataSources?.length && isDataItemsLoading)
+    );
 
     return {
         initialValues,

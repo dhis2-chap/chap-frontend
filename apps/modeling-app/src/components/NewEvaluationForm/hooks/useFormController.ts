@@ -23,7 +23,7 @@ const orgUnitSchema = z.object({
     path: z.string().optional(),
 });
 
-const covariateMappingSchema = z.object({
+export const covariateMappingSchema = z.object({
     covariateName: z.string(),
     dataItem: dataItemSchema,
 });

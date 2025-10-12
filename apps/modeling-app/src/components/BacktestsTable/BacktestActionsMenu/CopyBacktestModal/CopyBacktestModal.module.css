@@ -12,9 +12,9 @@
   margin-inline-start: 16px;
   padding: 8px 12px;
   border-inline-start: 3px solid var(--colors-grey300);
-  border-radius: 4px;
-  background-color: var(--colors-grey050);
   transition: opacity 100ms ease-in-out;
+  display: flex;
+  gap: 8px;
 }
 
 .dependentAttributeDisabled {

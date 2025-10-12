@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2025-09-25T12:58:15.535Z\n"
-"PO-Revision-Date: 2025-09-25T12:58:15.536Z\n"
+"POT-Creation-Date: 2025-10-06T07:55:57.758Z\n"
+"PO-Revision-Date: 2025-10-06T07:55:57.758Z\n"
 
 msgid "View"
 msgstr "View"
@@ -49,6 +49,9 @@ msgstr "Organisation units"
 
 msgid "Model"
 msgstr "Model"
+
+msgid "Data sources"
+msgstr "Data sources"
 
 msgid "Period type"
 msgstr "Period type"
