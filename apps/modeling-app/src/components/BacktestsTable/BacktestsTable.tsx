@@ -32,6 +32,7 @@ import { BacktestActionsMenu } from './BacktestActionsMenu';
 import { BacktestsTableFilters } from './BacktestsTableFilters';
 import { BatchActions } from './BatchActions';
 import { RunningJobsIndicator } from './RunningJobsIndicator';
+import { useBacktestsTableFilters } from './hooks/useBacktestsTableFilters';
 
 const columnHelper = createColumnHelper<BackTestRead>();
 
@@ -122,11 +123,17 @@ type Props = {
 
 export const BacktestsTable = ({ backtests, models }: Props) => {
     const navigate = useNavigate();
+    const { modelId, search } = useBacktestsTableFilters();
+
     const table = useReactTable({
         data: backtests || [],
         columns,
         initialState: {
             sorting: [{ id: 'created', desc: true }],
+            columnFilters: [
+                ...(modelId ? [{ id: 'modelId', value: modelId }] : []),
+                ...(search ? [{ id: 'name', value: search }] : []),
+            ],
         },
         meta: {
             models,
