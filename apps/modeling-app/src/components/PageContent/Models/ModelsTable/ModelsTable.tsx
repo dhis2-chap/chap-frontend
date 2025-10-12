@@ -77,7 +77,6 @@ const columns = [
                                 <Pill>
                                     {count}
                                 </Pill>
-                                {/* <IconInfo16 /> */}
                             </span>
                         )}
                     </Tooltip>

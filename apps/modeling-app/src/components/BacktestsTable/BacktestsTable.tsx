@@ -75,8 +75,8 @@ const columns = [
         cell: info => info.getValue() ? new Date(info.getValue()!).toLocaleString() : undefined,
     }),
     columnHelper.accessor('configuredModel.id', {
-        header: i18n.t('Model'),
         id: 'configuredModel.id',
+        header: i18n.t('Model'),
         filterFn: (row, columnId, filterValue) => {
             const configuredModelId = row.getValue(columnId) as string;
             return configuredModelId.toString() === filterValue.toString();

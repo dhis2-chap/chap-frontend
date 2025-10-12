@@ -11,7 +11,7 @@ type Props = {
 };
 
 export const ModelsTableFilters = ({ table }: Props) => {
-    const { setSearch } = useModelsTableFilters();
+    const { search, setSearch } = useModelsTableFilters();
 
     const handleSearchChange = (value: string | undefined) => {
         const searchValue = value || undefined;
@@ -24,7 +24,7 @@ export const ModelsTableFilters = ({ table }: Props) => {
             <Input
                 dense
                 placeholder={i18n.t('Search')}
-                value={(table.getColumn('name')?.getFilterValue() as string | undefined) ?? ''}
+                value={search}
                 onChange={e => handleSearchChange(e.value)}
             />
         </div>
