@@ -9,7 +9,8 @@ import { useDataItemByIds } from './useDataItemById';
 import { CovariateMapping } from 'apps/modeling-app/src/components/NewEvaluationForm/hooks/useFormController';
 
 type Props = {
-    models: ModelSpecRead[];
+    models: ModelSpecRead[] | undefined;
+    isModelsLoading: boolean;
 };
 
 const locationStateInnerSchema = z
@@ -44,7 +45,7 @@ const locationStateInnerSchema = z
 
 const evaluationFormLocationStateSchema = locationStateInnerSchema.optional();
 
-export const useInitialFormState = ({ models }: Props) => {
+export const useInitialFormState = ({ models, isModelsLoading }: Props) => {
     const location = useLocation();
 
     const {
@@ -67,6 +68,8 @@ export const useInitialFormState = ({ models }: Props) => {
     });
 
     const initialValues: Partial<EvaluationFormValues> = useMemo(() => {
+        if (!models) return {};
+
         const values: Partial<EvaluationFormValues> = {
             name: locationState?.name || '',
             periodType: locationState?.periodType || PERIOD_TYPES.MONTH,
@@ -105,6 +108,7 @@ export const useInitialFormState = ({ models }: Props) => {
     const isLoading = (
         (!!locationState?.orgUnits?.length && isOrgUnitsInitialLoading)
         || (!!locationState?.dataSources?.length && isDataItemsLoading)
+        || isModelsLoading
     );
 
     return {

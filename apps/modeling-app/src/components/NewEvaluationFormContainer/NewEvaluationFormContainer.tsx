@@ -7,7 +7,7 @@ import { useModels } from '../../hooks/useModels';
 
 export const NewEvaluationFormContainer = () => {
     const { models, isLoading: isModelsLoading } = useModels();
-    const { initialValues, isLoading } = useInitialFormState({ models });
+    const { initialValues, isLoading } = useInitialFormState({ models, isModelsLoading });
 
     if (isLoading || isModelsLoading) {
         return (
