@@ -23,7 +23,7 @@ interface CopyBacktestModalProps {
 type CopyableAttributeKey =
     | 'name'
     | 'model'
-    | 'dataItemMapping'
+    | 'dataSources'
     | 'orgUnits'
     | 'periodType'
     | 'period';
@@ -33,7 +33,7 @@ type CopyableAttributes = Record<CopyableAttributeKey, boolean>;
 const DEFAULT_COPYABLE_ATTRIBUTES: CopyableAttributes = {
     name: true,
     model: true,
-    dataItemMapping: true,
+    dataSources: true,
     orgUnits: true,
     periodType: true,
     period: true,
@@ -64,7 +64,7 @@ export const CopyBacktestModal = ({ id, onClose }: CopyBacktestModalProps) => {
         if (selectedAttributes.model && backtest.configuredModel?.id) {
             state.modelId = String(backtest.configuredModel.id);
 
-            if (selectedAttributes.dataItemMapping && dataset?.dataSources?.length) {
+            if (selectedAttributes.dataSources && dataset?.dataSources?.length) {
                 state.dataSources = dataset.dataSources.map(dataSource => ({
                     covariate: dataSource.covariate,
                     dataElementId: dataSource.dataElementId,
@@ -174,9 +174,9 @@ export const CopyBacktestModal = ({ id, onClose }: CopyBacktestModalProps) => {
                     >
                         <Checkbox
                             label={i18n.t('Data sources')}
-                            name="dataItemMapping"
-                            checked={selectedAttributes.dataItemMapping}
-                            onChange={() => handleAttributeChange('dataItemMapping')}
+                            name="dataSources"
+                            checked={selectedAttributes.dataSources}
+                            onChange={() => handleAttributeChange('dataSources')}
                             disabled={
                                 !selectedAttributes.model
                                 || !(backtest.dataset?.dataSources?.length)

@@ -62,6 +62,15 @@ export const BacktestActionsMenu = ({
                             }}
                         />
                         <MenuItem
+                            label={i18n.t('Create new...')}
+                            dataTest="backtest-overflow-copy"
+                            icon={<IconDuplicate16 />}
+                            onClick={() => {
+                                setCopyModalIsOpen(true);
+                                setFlyoutMenuIsOpen(false);
+                            }}
+                        />
+                        <MenuItem
                             label={i18n.t('Detailed metrics')}
                             dataTest="backtest-overflow-view-details"
                             icon={<IconVisualizationBarStacked24 />}
@@ -76,15 +85,6 @@ export const BacktestActionsMenu = ({
                             icon={<IconEdit16 />}
                             onClick={() => {
                                 setEditModalIsOpen(true);
-                                setFlyoutMenuIsOpen(false);
-                            }}
-                        />
-                        <MenuItem
-                            label={i18n.t('Create new...')}
-                            dataTest="backtest-overflow-copy"
-                            icon={<IconDuplicate16 />}
-                            onClick={() => {
-                                setCopyModalIsOpen(true);
                                 setFlyoutMenuIsOpen(false);
                             }}
                         />
