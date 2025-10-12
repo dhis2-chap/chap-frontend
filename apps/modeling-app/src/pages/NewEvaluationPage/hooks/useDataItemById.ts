@@ -9,52 +9,21 @@ type Props = {
 
 type DataItem = z.infer<typeof dataItemSchema>;
 
-type DataItemsResponse = {
-    dataItems: DataItem[];
-};
-
-const isDataItem = (value: unknown): value is DataItem => {
-    if (!value || typeof value !== 'object') {
-        return false;
-    }
-
-    const candidate = value as Partial<DataItem>;
-
-    return (
-        typeof candidate.id === 'string' &&
-        typeof candidate.displayName === 'string' &&
-        typeof candidate.dimensionItemType === 'string'
-    );
-};
-
-const isDataItemArray = (data: unknown): data is DataItem[] => {
-    return Array.isArray(data) && data.every(isDataItem);
-};
-
-const isDataItemsResponse = (data: unknown): data is DataItemsResponse => {
-    return (
-        !!data &&
-        typeof data === 'object' &&
-        isDataItemArray((data as DataItemsResponse).dataItems)
-    );
-};
+// Zod schemas for validation
+const dataItemsResponseSchema = z.object({ dataItems: z.array(dataItemSchema) });
+const dataElementsResponseSchema = z.object({ dataElements: z.object({ dataElements: z.array(dataItemSchema) }) });
+const indicatorsResponseSchema = z.object({ indicators: z.object({ indicators: z.array(dataItemSchema) }) });
+const programIndicatorsResponseSchema = z.object({ programIndicators: z.object({ programIndicators: z.array(dataItemSchema) }) });
 
 const extractCachedDataItems = (query: Query<any>): DataItem[] => {
     const cachedData = query.state.data;
+    if (!cachedData) return [];
 
-    if (!cachedData) {
-        return [];
-    }
+    const arrayResult = z.array(dataItemSchema).safeParse(cachedData);
+    if (arrayResult.success) return arrayResult.data;
 
-    if (isDataItemArray(cachedData)) {
-        return cachedData;
-    }
-
-    if (isDataItemsResponse(cachedData)) {
-        return cachedData.dataItems;
-    }
-
-    return [];
+    const responseResult = dataItemsResponseSchema.safeParse(cachedData);
+    return responseResult.success ? responseResult.data.dataItems : [];
 };
 
 const collectCachedDataItems = (
@@ -115,11 +84,8 @@ export const useDataItemByIds = ({ dataItemIds }: Props) => {
         const remainingIds = new Set(freshMissingIds);
         const fetchedItems: DataItem[] = [];
 
-        const fetchDataElements = async (requestedIds: string[]) => {
-            if (requestedIds.length === 0) {
-                return [] as DataItem[];
-            }
-
+        const fetchDataElements = async (requestedIds: string[]): Promise<DataItem[]> => {
+            if (requestedIds.length === 0) return [];
             const response = await dataEngine.query({
                 dataElements: {
                     resource: 'dataElements',
@@ -128,16 +94,13 @@ export const useDataItemByIds = ({ dataItemIds }: Props) => {
                         filter: `id:in:[${requestedIds.join(',')}]`,
                     },
                 },
-            }) as { dataElements: { dataElements: DataItem[] } };
-
-            return response.dataElements?.dataElements ?? [];
+            });
+            const result = dataElementsResponseSchema.safeParse(response);
+            return result.success ? result.data.dataElements.dataElements : [];
         };
 
-        const fetchIndicators = async (requestedIds: string[]) => {
-            if (requestedIds.length === 0) {
-                return [] as DataItem[];
-            }
-
+        const fetchIndicators = async (requestedIds: string[]): Promise<DataItem[]> => {
+            if (requestedIds.length === 0) return [];
             const response = await dataEngine.query({
                 indicators: {
                     resource: 'indicators',
@@ -146,31 +109,49 @@ export const useDataItemByIds = ({ dataItemIds }: Props) => {
                         filter: `id:in:[${requestedIds.join(',')}]`,
                     },
                 },
-            }) as { indicators: { indicators: DataItem[] } };
+            });
+            const result = indicatorsResponseSchema.safeParse(response);
+            return result.success ? result.data.indicators.indicators : [];
+        };
 
-            return response.indicators?.indicators ?? [];
+        const fetchProgramIndicators = async (requestedIds: string[]): Promise<DataItem[]> => {
+            if (requestedIds.length === 0) return [];
+            const response = await dataEngine.query({
+                programIndicators: {
+                    resource: 'programIndicators',
+                    params: {
+                        fields: ['id', 'displayName', 'dimensionItemType'],
+                        filter: `id:in:[${requestedIds.join(',')}]`,
+                    },
+                },
+            });
+            const result = programIndicatorsResponseSchema.safeParse(response);
+            return result.success ? result.data.programIndicators.programIndicators : [];
         };
 
         const dataElements = await fetchDataElements(Array.from(remainingIds));
+        dataElements.forEach((item) => {
+            resultsMap.set(item.id, item);
+            remainingIds.delete(item.id);
+            fetchedItems.push(item);
+        });
 
-        if (dataElements.length > 0) {
-            dataElements.forEach((dataElement) => {
-                resultsMap.set(dataElement.id, dataElement);
-                remainingIds.delete(dataElement.id);
-                fetchedItems.push(dataElement);
+        if (remainingIds.size > 0) {
+            const indicators = await fetchIndicators(Array.from(remainingIds));
+            indicators.forEach((item) => {
+                resultsMap.set(item.id, item);
+                remainingIds.delete(item.id);
+                fetchedItems.push(item);
             });
         }
 
         if (remainingIds.size > 0) {
-            const indicators = await fetchIndicators(Array.from(remainingIds));
-
-            if (indicators.length > 0) {
-                indicators.forEach((indicator) => {
-                    resultsMap.set(indicator.id, indicator);
-                    remainingIds.delete(indicator.id);
-                    fetchedItems.push(indicator);
-                });
-            }
+            const programIndicators = await fetchProgramIndicators(Array.from(remainingIds));
+            programIndicators.forEach((item) => {
+                resultsMap.set(item.id, item);
+                remainingIds.delete(item.id);
+                fetchedItems.push(item);
+            });
         }
 
         return fetchedItems;
@@ -185,18 +166,14 @@ export const useDataItemByIds = ({ dataItemIds }: Props) => {
     });
 
     const combinedMap = new Map(cachedMap);
-    data?.forEach((item) => {
-        combinedMap.set(item.id, item);
-    });
+    data?.forEach(item => combinedMap.set(item.id, item));
 
     const combinedItems = dataItemIds
         .map(id => combinedMap.get(id))
-        .filter((dataItem): dataItem is DataItem => !!dataItem);
+        .filter((item): item is DataItem => !!item);
 
     return {
-        dataItems: combinedItems.length > 0
-            ? combinedItems
-            : (!shouldFetch ? cachedItems : undefined),
+        dataItems: combinedItems.length > 0 ? combinedItems : (!shouldFetch ? cachedItems : undefined),
         isLoading: shouldFetch ? isLoading : false,
         error,
     };
