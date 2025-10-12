@@ -1,15 +1,15 @@
 import {
     SingleSelectField,
     SingleSelectFieldProps,
-    SingleSelectOption
-} from '@dhis2/ui'
-import React from 'react'
-import { getPeriodNameFromId } from '../../../utils/Time'
+    SingleSelectOption,
+} from '@dhis2/ui';
+import React from 'react';
+import { getPeriodNameFromId } from '../../../utils/Time';
 
 interface SplitPeriodSelectorProps extends SingleSelectFieldProps {
-    splitPeriods: string[]
-    setSelectedSplitPeriod: (splitPeriod: string) => void
-    selectedSplitPeriod: string
+    splitPeriods: string[];
+    setSelectedSplitPeriod: (splitPeriod: string) => void;
+    selectedSplitPeriod: string;
 }
 
 const SplitPeriodSelector = ({
@@ -18,7 +18,7 @@ const SplitPeriodSelector = ({
     selectedSplitPeriod,
     ...singleSelectFieldProps
 }: SplitPeriodSelectorProps) => {
-    const selectedInAvailable = splitPeriods.includes(selectedSplitPeriod)
+    const selectedInAvailable = splitPeriods.includes(selectedSplitPeriod);
 
     return (
         <div>
@@ -26,7 +26,7 @@ const SplitPeriodSelector = ({
                 <SingleSelectField
                     {...singleSelectFieldProps}
                     selected={selectedInAvailable ? selectedSplitPeriod : undefined}
-                    onChange={(e) => setSelectedSplitPeriod(e.selected)}
+                    onChange={e => setSelectedSplitPeriod(e.selected)}
                 >
                     {splitPeriods.map((splitPeriod, i) => (
                         <SingleSelectOption
@@ -38,7 +38,7 @@ const SplitPeriodSelector = ({
                 </SingleSelectField>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default SplitPeriodSelector
+export default SplitPeriodSelector;

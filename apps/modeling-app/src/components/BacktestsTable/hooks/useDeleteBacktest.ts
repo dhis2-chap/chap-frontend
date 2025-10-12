@@ -1,13 +1,13 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import i18n from "@dhis2/d2-i18n";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import i18n from '@dhis2/d2-i18n';
 
-import { CrudService } from "@dhis2-chap/ui";
-import { useAlert } from "@dhis2/app-runtime";
+import { CrudService } from '@dhis2-chap/ui';
+import { useAlert } from '@dhis2/app-runtime';
 
 type Props = {
     onSuccess?: ({ id }: { id: number }) => void;
     onError?: () => void;
-}
+};
 
 export const useDeleteBacktest = ({ onSuccess, onError }: Props = {}) => {
     const queryClient = useQueryClient();
@@ -47,4 +47,3 @@ export const useDeleteBacktest = ({ onSuccess, onError }: Props = {}) => {
         error,
     };
 };
-

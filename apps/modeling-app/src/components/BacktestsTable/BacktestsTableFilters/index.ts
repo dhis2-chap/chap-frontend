@@ -1,1 +1,1 @@
-export { BacktestsTableFilters } from './BacktestsTableFilters'; 
+export { BacktestsTableFilters } from './BacktestsTableFilters';

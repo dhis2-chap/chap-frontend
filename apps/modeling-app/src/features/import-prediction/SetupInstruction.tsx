@@ -1,19 +1,19 @@
-import React, { useState } from 'react'
-import styles from './styles/SetupInstruction.module.css'
-import { Button, IconAdd24 } from '@dhis2/ui'
-import ModalInstruction from './ModalInstruction'
-import i18n from '@dhis2/d2-i18n'
+import React, { useState } from 'react';
+import styles from './styles/SetupInstruction.module.css';
+import { Button, IconAdd24 } from '@dhis2/ui';
+import ModalInstruction from './ModalInstruction';
+import i18n from '@dhis2/d2-i18n';
 
 interface SetupInstructionProps {
-    predictionTarget: string
-    warning: boolean
+    predictionTarget: string;
+    warning: boolean;
 }
 
 const SetupInstruction = ({
     predictionTarget,
     warning,
 }: SetupInstructionProps) => {
-    const [isModalOpen, setModalOpen] = useState(false)
+    const [isModalOpen, setModalOpen] = useState(false);
 
     return (
         <>
@@ -23,7 +23,7 @@ const SetupInstruction = ({
                         <>
                             <p>
                                 {i18n.t(
-                                    'It seems like you missing Data Elements for CHAP prediction.'
+                                    'It seems like you missing Data Elements for CHAP prediction.',
                                 )}
                             </p>
                         </>
@@ -44,7 +44,7 @@ const SetupInstruction = ({
                 predictionTarget={predictionTarget}
             />
         </>
-    )
-}
+    );
+};
 
-export default SetupInstruction
+export default SetupInstruction;

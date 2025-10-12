@@ -1,44 +1,44 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import {
     Button,
     Label,
     IconDimensionOrgUnit16,
-} from '@dhis2/ui'
-import i18n from '@dhis2/d2-i18n'
-import cn from 'classnames'
-import { Control, FieldErrors, useWatch } from 'react-hook-form'
-import { EvaluationFormValues } from '../../hooks/useFormController'
+} from '@dhis2/ui';
+import i18n from '@dhis2/d2-i18n';
+import cn from 'classnames';
+import { Control, FieldErrors, useWatch } from 'react-hook-form';
+import { EvaluationFormValues } from '../../hooks/useFormController';
 import {
     getSelectionSummary,
     OrganisationUnit,
-} from '../../../OrganisationUnitSelector'
-import { useDataViewRootOrgUnits } from '../../../../hooks/useDataViewRootOrgUnits'
-import { OrganisationUnitSelectionModal } from './OrganisationUnitSelectionModal'
-import styles from './LocationSelector.module.css'
+} from '../../../OrganisationUnitSelector';
+import { useDataViewRootOrgUnits } from '../../../../hooks/useDataViewRootOrgUnits';
+import { OrganisationUnitSelectionModal } from './OrganisationUnitSelectionModal';
+import styles from './LocationSelector.module.css';
 
 type Props = {
-    control: Control<EvaluationFormValues>
-    errors: FieldErrors<EvaluationFormValues>
-    onUpdateOrgUnits: (orgUnits: OrganisationUnit[]) => void
-}
+    control: Control<EvaluationFormValues>;
+    errors: FieldErrors<EvaluationFormValues>;
+    onUpdateOrgUnits: (orgUnits: OrganisationUnit[]) => void;
+};
 
 export const LocationSelector = ({
     control,
     errors,
     onUpdateOrgUnits,
 }: Props) => {
-    const selectedOrgUnits = useWatch({ control, name: 'orgUnits' })
-    const [isOrgUnitModalOpen, setIsOrgUnitModalOpen] = useState(false)
-    const { orgUnits: orgUnitRoots, isLoading: isLoadingOrgUnits } = useDataViewRootOrgUnits()
+    const selectedOrgUnits = useWatch({ control, name: 'orgUnits' });
+    const [isOrgUnitModalOpen, setIsOrgUnitModalOpen] = useState(false);
+    const { orgUnits: orgUnitRoots, isLoading: isLoadingOrgUnits } = useDataViewRootOrgUnits();
 
     const handleModalClose = () => {
-        setIsOrgUnitModalOpen(false)
-    }
+        setIsOrgUnitModalOpen(false);
+    };
 
     const handleModalConfirm = (pendingOrgUnits: OrganisationUnit[]) => {
-        onUpdateOrgUnits(pendingOrgUnits)
-        setIsOrgUnitModalOpen(false)
-    }
+        onUpdateOrgUnits(pendingOrgUnits);
+        setIsOrgUnitModalOpen(false);
+    };
 
     return (
         <>
@@ -55,7 +55,11 @@ export const LocationSelector = ({
                 >
                     {i18n.t('Select organisation units')}
                 </Button>
-                {errors.orgUnits && <p className={styles.errorText}>{errors.orgUnits.message}</p>}
+                {errors.orgUnits && (
+                    <p className={styles.errorText}>
+                        {errors.orgUnits.message}
+                    </p>
+                )}
             </div>
 
             {isOrgUnitModalOpen && (
@@ -67,5 +71,5 @@ export const LocationSelector = ({
                 />
             )}
         </>
-    )
-} 
+    );
+};

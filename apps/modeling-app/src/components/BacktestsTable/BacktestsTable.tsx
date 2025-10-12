@@ -67,11 +67,11 @@ const columns = [
                     {info.getValue()}
                 </Link>
             );
-        }
+        },
     }),
     columnHelper.accessor('created', {
         header: i18n.t('Created'),
-        cell: (info) => info.getValue() ? new Date(info.getValue()!).toLocaleString() : undefined,
+        cell: info => info.getValue() ? new Date(info.getValue()!).toLocaleString() : undefined,
     }),
     columnHelper.accessor('modelId', {
         header: i18n.t('Model'),
@@ -81,7 +81,7 @@ const columns = [
             const models = (info.table.options.meta as { models: ModelSpecRead[] })?.models;
             const model = models?.find((model: ModelSpecRead) => model.name === modelId);
             return model?.displayName || modelId;
-        }
+        },
     }),
     columnHelper.accessor('aggregateMetrics.crps_norm_mean', {
         header: () => (
@@ -97,12 +97,12 @@ const columns = [
         cell: (info) => {
             const crps = info.getValue();
             return crps ? crps.toFixed(2) : undefined;
-        }
+        },
     }),
     columnHelper.display({
         id: 'actions',
         header: i18n.t('Actions'),
-        cell: (info) => (
+        cell: info => (
             <BacktestActionsMenu
                 id={info.row.original.id}
                 name={info.row.original.name}
@@ -112,13 +112,13 @@ const columns = [
 ];
 
 const getSortDirection = (column: Column<BackTestRead>) => {
-    return column.getIsSorted() || 'default'
-}
+    return column.getIsSorted() || 'default';
+};
 
 type Props = {
     backtests: BackTestRead[];
     models: ModelSpecRead[];
-}
+};
 
 export const BacktestsTable = ({ backtests, models }: Props) => {
     const navigate = useNavigate();
@@ -131,7 +131,7 @@ export const BacktestsTable = ({ backtests, models }: Props) => {
         meta: {
             models,
         },
-        getRowId: (row) => row.id.toString(),
+        getRowId: row => row.id.toString(),
         enableRowSelection: true,
         getSortedRowModel: getSortedRowModel(),
         getCoreRowModel: getCoreRowModel(),
@@ -171,9 +171,9 @@ export const BacktestsTable = ({ backtests, models }: Props) => {
             )}
             <DataTable>
                 <DataTableHead>
-                    {table.getHeaderGroups().map((headerGroup) => (
+                    {table.getHeaderGroups().map(headerGroup => (
                         <DataTableRow key={headerGroup.id}>
-                            {headerGroup.headers.map((header) => (
+                            {headerGroup.headers.map(header => (
                                 <DataTableColumnHeader
                                     key={header.id}
                                     fixed
@@ -181,15 +181,15 @@ export const BacktestsTable = ({ backtests, models }: Props) => {
                                     {...(header.column.getCanSort() ? {
                                         sortDirection: getSortDirection(header.column),
                                         sortIconTitle: i18n.t('Sort by {{column}}', { column: header.column.id }),
-                                        onSortIconClick: () => header.column.toggleSorting()
+                                        onSortIconClick: () => header.column.toggleSorting(),
                                     } : {})}
                                 >
                                     {header.isPlaceholder
                                         ? null
                                         : flexRender(
-                                            header.column.columnDef.header,
-                                            header.getContext()
-                                        )}
+                                                header.column.columnDef.header,
+                                                header.getContext(),
+                                            )}
                                 </DataTableColumnHeader>
                             ))}
                         </DataTableRow>
@@ -197,20 +197,20 @@ export const BacktestsTable = ({ backtests, models }: Props) => {
                 </DataTableHead>
                 <DataTableBody>
                     {hasVisibleRows ? table.getRowModel().rows
-                        .map((row) => (
+                        .map(row => (
                             <DataTableRow selected={row.getIsSelected()} key={row.id}>
-                                {row.getVisibleCells().map((cell) => (
+                                {row.getVisibleCells().map(cell => (
                                     <DataTableCell key={cell.id}>
                                         {flexRender(
                                             cell.column.columnDef.cell,
-                                            cell.getContext()
+                                            cell.getContext(),
                                         )}
                                     </DataTableCell>
                                 ))}
                             </DataTableRow>
                         )) : (
                         <DataTableRow>
-                            <DataTableCell colSpan={String(table.getAllColumns().length)} align='center'>
+                            <DataTableCell colSpan={String(table.getAllColumns().length)} align="center">
                                 {i18n.t('No evaluations available')}
                             </DataTableCell>
                         </DataTableRow>
@@ -233,6 +233,6 @@ export const BacktestsTable = ({ backtests, models }: Props) => {
                     </DataTableRow>
                 </DataTableFoot>
             </DataTable>
-        </div >
+        </div>
     );
 };

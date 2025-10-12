@@ -1,8 +1,8 @@
-import React from 'react'
-import styles from './Legend.module.css'
+import React from 'react';
+import styles from './Legend.module.css';
 
 const Legend = ({ title, bins, colors }: any) => {
-    console.log('Legend:', bins, colors)
+    console.log('Legend:', bins, colors);
     return (
         <div className={styles.legend}>
             <br></br>
@@ -14,16 +14,20 @@ const Legend = ({ title, bins, colors }: any) => {
                             <span
                                 className={styles.classSymbol}
                                 style={{ backgroundColor: colors[index] }}
-                            ></span>
+                            >
+                            </span>
                             <span className={styles.classLabel}>
-                                {bin.startValue} - {bin.endValue}
+                                {bin.startValue}
+                                {' '}
+                                -
+                                {bin.endValue}
                             </span>
                         </div>
-                    )
+                    );
                 })}
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default Legend
+export default Legend;

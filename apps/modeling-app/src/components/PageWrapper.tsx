@@ -1,13 +1,13 @@
-import React from 'react'
-import { useMatches } from 'react-router-dom'
-import { RouteHandle } from '../App'
+import React from 'react';
+import { useMatches } from 'react-router-dom';
+import { RouteHandle } from '../App';
 
 interface ComponentWrapperProps {
-    children: React.ReactNode
-    maxWidth?: string
+    children: React.ReactNode;
+    maxWidth?: string;
 }
 
-export const defaultMaxWidth: string = '1400px'
+export const defaultMaxWidth: string = '1400px';
 
 const style: React.CSSProperties = {
     maxWidth: defaultMaxWidth,
@@ -15,15 +15,15 @@ const style: React.CSSProperties = {
     marginRight: 'auto',
     padding: '20px 16px',
     width: '100%',
-}
+};
 
 const ComponentWrapper = ({
     children,
     maxWidth,
 }: ComponentWrapperProps) => {
     const fullWidthRoute = useMatches().some(
-        (match) => !!(match.handle as RouteHandle)?.fullWidth
-    )
+        match => !!(match.handle as RouteHandle)?.fullWidth,
+    );
 
     return (
         <div
@@ -35,7 +35,7 @@ const ComponentWrapper = ({
         >
             {children}
         </div>
-    )
-}
+    );
+};
 
-export default ComponentWrapper
+export default ComponentWrapper;

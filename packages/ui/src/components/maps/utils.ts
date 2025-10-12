@@ -4,21 +4,21 @@ interface Interval {
 }
 
 export const getEqualIntervals = (minValue: number, maxValue: number, numClasses: number = 5): Interval[] => {
-    const bins: Interval[] = []
-    const binSize = (maxValue - minValue) / numClasses
+    const bins: Interval[] = [];
+    const binSize = (maxValue - minValue) / numClasses;
 
     for (let i = 0; i < numClasses; i++) {
-        const startValue = minValue + i * binSize
-        const endValue = i < numClasses - 1 ? startValue + binSize : maxValue
+        const startValue = minValue + i * binSize;
+        const endValue = i < numClasses - 1 ? startValue + binSize : maxValue;
 
         bins.push({
             startValue: Math.round(startValue),
             endValue: Math.round(endValue),
-        })
+        });
     }
 
-    return bins
-}
+    return bins;
+};
 
 interface OrgUnit {
     id: string;
@@ -49,20 +49,20 @@ export const parseOrgUnits = (orgUnits: OrgUnit[]): FeatureCollection => {
         type: 'FeatureCollections',
         features: orgUnits.map((ou) => {
             // get geotype
-            let type: 'Point' | 'Polygon' | 'MultiPolygon' = 'Point'
+            let type: 'Point' | 'Polygon' | 'MultiPolygon' = 'Point';
             if (ou.ty === 2) {
-                type = 'Polygon'
+                type = 'Polygon';
                 if (ou.co.substring(0, 4) === '[[[[') {
-                    type = 'MultiPolygon'
+                    type = 'MultiPolygon';
                 }
             }
-            const geom = { type, coordinates: JSON.parse(ou.co) }
+            const geom = { type, coordinates: JSON.parse(ou.co) };
             return {
                 type: 'Feature',
                 id: ou.id,
                 properties: { name: ou.na },
                 geometry: geom,
-            }
+            };
         }),
-    }
-}
+    };
+};

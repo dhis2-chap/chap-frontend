@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo } from 'react';
 import {
     Button,
     ButtonStrip,
@@ -6,26 +6,26 @@ import {
     ModalTitle,
     ModalContent,
     ModalActions,
-} from '@dhis2/ui'
-import i18n from '@dhis2/d2-i18n'
+} from '@dhis2/ui';
+import i18n from '@dhis2/d2-i18n';
 import {
     useReactTable,
     getCoreRowModel,
     getFilteredRowModel,
     getSortedRowModel,
     createColumnHelper,
-} from '@tanstack/react-table'
-import { ModelSpecRead, AuthorAssessedStatus } from '@dhis2-chap/ui'
-import { ModelCard } from '../ModelCard'
-import { ModelFilters } from './ModelFilters'
-import styles from './ModelSelectionModal.module.css'
+} from '@tanstack/react-table';
+import { ModelSpecRead, AuthorAssessedStatus } from '@dhis2-chap/ui';
+import { ModelCard } from '../ModelCard';
+import { ModelFilters } from './ModelFilters';
+import styles from './ModelSelectionModal.module.css';
 
 type Props = {
-    models?: ModelSpecRead[]
-    selectedModel?: ModelSpecRead
-    onClose: () => void
-    onConfirm: (model: ModelSpecRead) => void
-}
+    models?: ModelSpecRead[];
+    selectedModel?: ModelSpecRead;
+    onClose: () => void;
+    onConfirm: (model: ModelSpecRead) => void;
+};
 
 const DefaultSortOrder = [
     AuthorAssessedStatus.GREEN,
@@ -41,29 +41,29 @@ export const ModelSelectionModal = ({
     onClose,
     onConfirm,
 }: Props) => {
-    const [selectedModel, setSelectedModel] = useState<ModelSpecRead | undefined>(initialSelectedModel)
+    const [selectedModel, setSelectedModel] = useState<ModelSpecRead | undefined>(initialSelectedModel);
 
     const handleModalClose = () => {
-        setSelectedModel(undefined)
-        onClose()
-    }
+        setSelectedModel(undefined);
+        onClose();
+    };
 
     const handleModalConfirm = () => {
         if (selectedModel) {
-            onConfirm(selectedModel)
+            onConfirm(selectedModel);
         }
-        handleModalClose()
-    }
+        handleModalClose();
+    };
 
     const onModelSelect = (model: ModelSpecRead) => {
         if (selectedModel?.id === model.id) {
-            setSelectedModel(undefined)
+            setSelectedModel(undefined);
         } else {
-            setSelectedModel(model)
+            setSelectedModel(model);
         }
-    }
+    };
 
-    const columnHelper = createColumnHelper<ModelSpecRead>()
+    const columnHelper = createColumnHelper<ModelSpecRead>();
 
     const columns = useMemo(
         () => [
@@ -102,8 +102,8 @@ export const ModelSelectionModal = ({
                 },
             }),
         ],
-        []
-    )
+        [],
+    );
 
     const table = useReactTable({
         data: models || [],
@@ -117,9 +117,9 @@ export const ModelSelectionModal = ({
         getCoreRowModel: getCoreRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
         getSortedRowModel: getSortedRowModel(),
-    })
+    });
 
-    const filteredRows = table.getRowModel().rows
+    const filteredRows = table.getRowModel().rows;
 
     return (
         <Modal fluid className={styles.modelModal} onClose={handleModalClose}>
@@ -130,7 +130,7 @@ export const ModelSelectionModal = ({
                 </div>
                 <div className={styles.content}>
                     <div className={styles.modelGrid}>
-                        {filteredRows.length > 0 ? filteredRows.map((row) => (
+                        {filteredRows.length > 0 ? filteredRows.map(row => (
                             <ModelCard
                                 key={row.original.id}
                                 model={row.original}
@@ -156,5 +156,5 @@ export const ModelSelectionModal = ({
                 </ButtonStrip>
             </ModalActions>
         </Modal>
-    )
-} 
+    );
+};

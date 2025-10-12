@@ -1,49 +1,49 @@
-import React from 'react'
-import { Button, IconInfo16, IconCalendar16, Tag, Tooltip, IconDimensionData16, IconArrowRight16 } from '@dhis2/ui'
-import i18n from '@dhis2/d2-i18n'
-import cn from 'classnames'
-import { ModelSpecRead, AuthorAssessedStatus } from '@dhis2-chap/ui'
-import styles from './ModelCard.module.css'
+import React from 'react';
+import { Button, IconInfo16, IconCalendar16, Tag, Tooltip, IconDimensionData16, IconArrowRight16 } from '@dhis2/ui';
+import i18n from '@dhis2/d2-i18n';
+import cn from 'classnames';
+import { ModelSpecRead, AuthorAssessedStatus } from '@dhis2-chap/ui';
+import styles from './ModelCard.module.css';
 
 type Props = {
-    model: ModelSpecRead
-    isSelected: boolean
-    onSelect: (model: ModelSpecRead) => void
-}
+    model: ModelSpecRead;
+    isSelected: boolean;
+    onSelect: (model: ModelSpecRead) => void;
+};
 
 const labelByPeriodType = {
-    'month': i18n.t('Monthly'),
-    'year': i18n.t('Yearly'),
-    'week': i18n.t('Weekly'),
-    'day': i18n.t('Daily'),
-    'any': i18n.t('Any'),
-}
+    month: i18n.t('Monthly'),
+    year: i18n.t('Yearly'),
+    week: i18n.t('Weekly'),
+    day: i18n.t('Daily'),
+    any: i18n.t('Any'),
+};
 
 const assessmentStatusConfig = {
     [AuthorAssessedStatus.GRAY]: {
         label: i18n.t('Deprecated'),
         description: i18n.t('This model is not intended for use or has been deprecated.'),
-        className: styles.statusGray
+        className: styles.statusGray,
     },
     [AuthorAssessedStatus.RED]: {
         label: i18n.t('Experimental'),
         description: i18n.t('An early prototype with no formal validation - only for initial experimentation.'),
-        className: styles.statusRed
+        className: styles.statusRed,
     },
     [AuthorAssessedStatus.ORANGE]: {
         label: i18n.t('Limited'),
         description: i18n.t('Tested on a small dataset. Requires manual tuning and close monitoring.'),
-        className: styles.statusOrange
+        className: styles.statusOrange,
     },
     [AuthorAssessedStatus.YELLOW]: {
         label: i18n.t('Testing'),
         description: i18n.t('Prepared for more extensive testing; not yet approved for production.'),
-        className: styles.statusYellow
+        className: styles.statusYellow,
     },
     [AuthorAssessedStatus.GREEN]: {
         label: i18n.t('Production'),
         description: i18n.t('Approved for general use.'),
-        className: styles.statusGreen
+        className: styles.statusGreen,
     },
 };
 
@@ -52,8 +52,9 @@ export const ModelCard = ({ model, isSelected, onSelect }: Props) => {
 
     return (
         <div className={cn(styles.modelCardContainer, {
-            [styles.selectedModelCard]: isSelected
-        })}>
+            [styles.selectedModelCard]: isSelected,
+        })}
+        >
 
             <div
                 className={styles.modelCard}
@@ -78,7 +79,7 @@ export const ModelCard = ({ model, isSelected, onSelect }: Props) => {
                     {model.organizationLogoUrl && (
                         <img
                             src={model.organizationLogoUrl}
-                            alt={model.name + " logo"}
+                            alt={model.name + ' logo'}
                             className={styles.modelAuthorLogo}
                         />
                     )}
@@ -92,7 +93,6 @@ export const ModelCard = ({ model, isSelected, onSelect }: Props) => {
                     </div>
                 </div>
 
-
                 <div>
                     <ul className={styles.list}>
                         {model.target && (
@@ -101,13 +101,13 @@ export const ModelCard = ({ model, isSelected, onSelect }: Props) => {
                             </li>
                         )}
                         {model.covariates && model.covariates.length > 0 && (
-                            <Tooltip content={model.covariates.map((covariate) => covariate.displayName).join(', ')}>
+                            <Tooltip content={model.covariates.map(covariate => covariate.displayName).join(', ')}>
                                 <li className={styles.listItem}>
                                     <Tag icon={<IconDimensionData16 />}>
                                         {i18n.t('{{count}} covariates', {
                                             count: model.covariates.length,
                                             defaultValue: '{{count}} covariate',
-                                            defaultValue_plural: '{{count}} covariates'
+                                            defaultValue_plural: '{{count}} covariates',
                                         })}
                                     </Tag>
                                 </li>
@@ -131,15 +131,14 @@ export const ModelCard = ({ model, isSelected, onSelect }: Props) => {
                     </ul>
                 </div>
 
-
             </div>
             <Button
                 onClick={() => onSelect(model)}
                 primary
                 small
             >
-                {isSelected ? i18n.t("Selected") : i18n.t("Select Model")}
+                {isSelected ? i18n.t('Selected') : i18n.t('Select Model')}
             </Button>
         </div>
-    )
-}
+    );
+};

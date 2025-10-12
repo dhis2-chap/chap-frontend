@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import {
     Button,
     ButtonStrip,
@@ -6,19 +6,19 @@ import {
     ModalTitle,
     ModalContent,
     ModalActions,
-} from '@dhis2/ui'
-import i18n from '@dhis2/d2-i18n'
-import { ModelSpecRead } from '@dhis2-chap/ui'
-import { CovariateMapping } from '../../../hooks/useFormController'
-import { FeatureMappingItem } from '../FeatureMappingItem'
-import { useMappingState } from '../hooks'
-import styles from './DataMappingModal.module.css'
+} from '@dhis2/ui';
+import i18n from '@dhis2/d2-i18n';
+import { ModelSpecRead } from '@dhis2-chap/ui';
+import { CovariateMapping } from '../../../hooks/useFormController';
+import { FeatureMappingItem } from '../FeatureMappingItem';
+import { useMappingState } from '../hooks';
+import styles from './DataMappingModal.module.css';
 
 type Props = {
-    model: ModelSpecRead
-    onClose: () => void
-    onConfirm: (targetMapping: CovariateMapping, covariateMappings: CovariateMapping[]) => void
-}
+    model: ModelSpecRead;
+    onClose: () => void;
+    onConfirm: (targetMapping: CovariateMapping, covariateMappings: CovariateMapping[]) => void;
+};
 
 export const DataMappingModal = ({
     model,
@@ -32,14 +32,14 @@ export const DataMappingModal = ({
         isFormValid,
         getMappingsForSubmission,
         resetCovariateMapping,
-    } = useMappingState(model)
+    } = useMappingState(model);
 
     const handleConfirm = () => {
-        const mappings = getMappingsForSubmission()
+        const mappings = getMappingsForSubmission();
         if (mappings && mappings.targetMapping) {
-            onConfirm(mappings.targetMapping, mappings.covariateMappings)
+            onConfirm(mappings.targetMapping, mappings.covariateMappings);
         }
-    }
+    };
 
     return (
         <Modal className={styles.dataMappingModal} onClose={onClose}>
@@ -97,5 +97,5 @@ export const DataMappingModal = ({
                 </ButtonStrip>
             </ModalActions>
         </Modal>
-    )
-} 
+    );
+};

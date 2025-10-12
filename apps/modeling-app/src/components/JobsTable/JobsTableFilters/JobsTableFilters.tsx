@@ -12,7 +12,7 @@ import { JOB_STATUSES, JOB_TYPES } from '../../../hooks/useJobs';
 
 type Props = {
     table: Table<JobDescription>;
-}
+};
 
 export const JobsTableFilters = ({ table }: Props) => {
     return (
@@ -22,7 +22,7 @@ export const JobsTableFilters = ({ table }: Props) => {
                     dense
                     placeholder={i18n.t('Search')}
                     value={table.getColumn('name')?.getFilterValue() as string | undefined ?? ''}
-                    onChange={(e) => table.getColumn('name')?.setFilterValue(e.value)}
+                    onChange={e => table.getColumn('name')?.setFilterValue(e.value)}
                 />
             </div>
 
@@ -33,7 +33,7 @@ export const JobsTableFilters = ({ table }: Props) => {
                     clearText={i18n.t('Clear')}
                     selected={table.getColumn('status')?.getFilterValue() as string | undefined}
                     placeholder={i18n.t('Status')}
-                    onChange={(e) => table.getColumn('status')?.setFilterValue(e.selected)}
+                    onChange={e => table.getColumn('status')?.setFilterValue(e.selected)}
                 >
                     <MenuItem
                         label={i18n.t('Pending')}
@@ -65,7 +65,7 @@ export const JobsTableFilters = ({ table }: Props) => {
                     clearText={i18n.t('Clear')}
                     selected={table.getColumn('type')?.getFilterValue() as string | undefined}
                     placeholder={i18n.t('Type')}
-                    onChange={(e) => table.getColumn('type')?.setFilterValue(e.selected)}
+                    onChange={e => table.getColumn('type')?.setFilterValue(e.selected)}
                 >
                     <MenuItem
                         label={i18n.t('Create evaluation')}

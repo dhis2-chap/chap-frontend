@@ -1,1 +1,1 @@
-export { FeatureMappingItem } from './FeatureMappingItem' 
+export { FeatureMappingItem } from './FeatureMappingItem';

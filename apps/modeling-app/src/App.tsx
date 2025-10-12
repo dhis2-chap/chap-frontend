@@ -3,36 +3,37 @@ import {
     RouterProvider,
     Navigate,
     Outlet,
-} from 'react-router-dom'
-import ErrorPage from './components/ErrorPage'
-import React from 'react'
-import './locales'
-import './App.module.css'
-import PageWrapper from './components/PageWrapper'
-import ModelTemplatesPage from './pages/ModelTemplatesPage'
-import PredictionOverview from './features/predictions-overview/PredictionOverview'
-import { SetChapUrl } from './features/route-api/SetChapUrl'
-import { SettingsPage } from './features/settings/Settings'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import { CssReset, CssVariables } from '@dhis2/ui'
-import { Layout } from './components/layout/Layout'
-import { RouteValidator } from './components/RouteValidator'
-import InfoAboutReportingBugs from './features/common-features/InfoAboutReportingBugs/InfoAboutReportingBugs'
-import WarnAboutIncompatibleVersion from './features/common-features/WarnAboutIncompatibleVersion/WarnAboutIncompatibleVersion'
-import { EvaluationPage } from './pages/EvaluationPage'
-import { ChapValidator } from './components/ChapValidator'
-import { NewEvaluationPage } from './pages/NewEvaluationPage'
-import { JobsPage } from './pages/JobsPage'
-import { EvaluationComparePage } from './pages/EvaluationCompare'
-import { GetStartedPage } from './pages/GetStartedPage'
-import { ModelsPage } from './pages/ModelsPage'
-import { SyncUrlWithGlobalShell } from './utils/syncUrlWithGlobalShell'
+} from 'react-router-dom';
+import ErrorPage from './components/ErrorPage';
+import React from 'react';
+import './locales';
+import './App.module.css';
+import PageWrapper from './components/PageWrapper';
+import ModelTemplatesPage from './pages/ModelTemplatesPage';
+import PredictionOverview from './features/predictions-overview/PredictionOverview';
+import { SetChapUrl } from './features/route-api/SetChapUrl';
+import { SettingsPage } from './features/settings/Settings';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { CssReset, CssVariables } from '@dhis2/ui';
+import { Layout } from './components/layout/Layout';
+import { RouteValidator } from './components/RouteValidator';
+import InfoAboutReportingBugs from './features/common-features/InfoAboutReportingBugs/InfoAboutReportingBugs';
+import WarnAboutIncompatibleVersion from './features/common-features/WarnAboutIncompatibleVersion/WarnAboutIncompatibleVersion';
+import { EvaluationPage } from './pages/EvaluationPage';
+import { EvaluationDetailsPage } from './pages/EvaluationDetailsPage';
+import { ChapValidator } from './components/ChapValidator';
+import { NewEvaluationPage } from './pages/NewEvaluationPage';
+import { JobsPage } from './pages/JobsPage';
+import { EvaluationComparePage } from './pages/EvaluationCompare';
+import { GetStartedPage } from './pages/GetStartedPage';
+import { ModelsPage } from './pages/ModelsPage';
+import { SyncUrlWithGlobalShell } from './utils/syncUrlWithGlobalShell';
 
 export type RouteHandle = {
-    fullWidth?: boolean
-    /* whether to automatically collapse the sidebar when route is active*/
-    collapseSidebar?: boolean
-}
+    fullWidth?: boolean;
+    /* whether to automatically collapse the sidebar when route is active */
+    collapseSidebar?: boolean;
+};
 
 const router = createHashRouter([
     {
@@ -83,6 +84,13 @@ const router = createHashRouter([
                                     collapseSidebar: true,
                                 } satisfies RouteHandle,
                             },
+                            {
+                                path: ':evaluationId',
+                                handle: {
+                                    collapseSidebar: true,
+                                } satisfies RouteHandle,
+                                element: <EvaluationDetailsPage />,
+                            },
                         ],
                     },
                     {
@@ -131,7 +139,7 @@ const router = createHashRouter([
             },
         ],
     },
-])
+]);
 
 const App = () => {
     return (
@@ -143,7 +151,7 @@ const App = () => {
             </SetChapUrl>
             <ReactQueryDevtools position="bottom-right" />
         </>
-    )
-}
+    );
+};
 
-export default App
+export default App;

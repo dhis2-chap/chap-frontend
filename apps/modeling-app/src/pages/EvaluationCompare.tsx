@@ -1,8 +1,8 @@
-import { EvaluationCompare } from '../features/evaluation-compare'
-import React from 'react'
+import { EvaluationCompare } from '../features/evaluation-compare';
+import React from 'react';
 
 export const EvaluationComparePage = () => {
-    return <EvaluationCompare />
-}
+    return <EvaluationCompare />;
+};
 
-export default EvaluationComparePage
+export default EvaluationComparePage;

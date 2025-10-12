@@ -1,24 +1,24 @@
-import i18n from '@dhis2/d2-i18n'
-import styles from './PredictionTable.module.css'
-import React from 'react'
+import i18n from '@dhis2/d2-i18n';
+import styles from './PredictionTable.module.css';
+import React from 'react';
 import {
     FullPredictionResponseExtended,
-} from '../../../interfaces/Prediction'
-import { PredictionResponse } from '../../../httpfunctions'
+} from '../../../interfaces/Prediction';
+import { PredictionResponse } from '../../../httpfunctions';
 import {
     getUniqeOrgUnits,
     findOrgUnitName,
     getUniqePeriods,
     getUniqeQuantiles,
-} from '../../../utils/PredictionResponse'
-import { createFixedPeriodFromPeriodId } from '@dhis2/multi-calendar-dates'
+} from '../../../utils/PredictionResponse';
+import { createFixedPeriodFromPeriodId } from '@dhis2/multi-calendar-dates';
 
 interface PredictionTableProps {
-    data: FullPredictionResponseExtended
+    data: FullPredictionResponseExtended;
 }
 
 export const PredictionTable = ({ data }: PredictionTableProps) => {
-    const dataValues = data.dataValues
+    const dataValues = data.dataValues;
 
     return (
         <>
@@ -31,9 +31,9 @@ export const PredictionTable = ({ data }: PredictionTableProps) => {
                                 {
                                     orgUnitName: findOrgUnitName(
                                         ou,
-                                        dataValues
+                                        dataValues,
                                     ),
-                                }
+                                },
                             )}
                         </h3>
                         <table className={styles.table}>
@@ -50,12 +50,12 @@ export const PredictionTable = ({ data }: PredictionTableProps) => {
                                                                 periodId: p,
                                                                 calendar:
                                                                     'gregory',
-                                                            }
+                                                            },
                                                         ).displayName
                                                     }
                                                 </th>
-                                            )
-                                        }
+                                            );
+                                        },
                                     )}
                                 </tr>
                             </thead>
@@ -71,28 +71,28 @@ export const PredictionTable = ({ data }: PredictionTableProps) => {
                                                             {
                                                                 dataValues.filter(
                                                                     (
-                                                                        d: PredictionResponse
+                                                                        d: PredictionResponse,
                                                                     ) =>
-                                                                        d.dataElement ===
-                                                                            q &&
-                                                                        d.orgUnit ===
-                                                                            ou &&
-                                                                        d.period ===
-                                                                            p
+                                                                        d.dataElement
+                                                                        === q &&
+                                                                        d.orgUnit
+                                                                        === ou &&
+                                                                        d.period
+                                                                        === p,
                                                                 )[0].value
                                                             }
                                                         </td>
-                                                    )
-                                                }
+                                                    );
+                                                },
                                             )}
                                         </tr>
-                                    )
+                                    ),
                                 )}
                             </tbody>
                         </table>
                     </div>
-                )
+                );
             })}
         </>
-    )
-}
+    );
+};

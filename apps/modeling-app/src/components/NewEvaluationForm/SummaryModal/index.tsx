@@ -1,1 +1,1 @@
-export { SummaryModal } from './SummaryModal' 
+export { SummaryModal } from './SummaryModal';

@@ -1,18 +1,18 @@
-import React, { useState } from 'react'
-import styles from './NewEvaluationForm.module.css'
+import React, { useState } from 'react';
+import styles from './NewEvaluationForm.module.css';
 import {
     Button,
     IconArrowRight24,
     IconCross24,
     InputField,
-} from '@dhis2/ui'
-import DatasetDetails from '../../../dataset-details/DatasetDetails'
-import SelectModel from '../../../select-model/SelectModel'
-import { AnalyticsService } from '@dhis2-chap/ui'
-import { useQueryClient } from '@tanstack/react-query'
+} from '@dhis2/ui';
+import DatasetDetails from '../../../dataset-details/DatasetDetails';
+import SelectModel from '../../../select-model/SelectModel';
+import { AnalyticsService } from '@dhis2-chap/ui';
+import { useQueryClient } from '@tanstack/react-query';
 interface NewEvaluationFormProps {
-    onDrawerClose: () => void
-    datasetIdToEvaluate: number | undefined
+    onDrawerClose: () => void;
+    datasetIdToEvaluate: number | undefined;
 }
 
 const NewEvaluationForm = ({
@@ -20,18 +20,18 @@ const NewEvaluationForm = ({
     datasetIdToEvaluate,
 }: NewEvaluationFormProps) => {
     const queryClient = useQueryClient();
-    const [evaluationName, setEvaluationName] = useState<string | undefined>('')
-    const [selectedModel, setSelectedModel] = useState<any>(undefined)
+    const [evaluationName, setEvaluationName] = useState<string | undefined>('');
+    const [selectedModel, setSelectedModel] = useState<any>(undefined);
 
-    const readyToSubmitEvaluation = (evaluationName && datasetIdToEvaluate && selectedModel)
+    const readyToSubmitEvaluation = (evaluationName && datasetIdToEvaluate && selectedModel);
 
     const onClickEvaluate = (): any => {
         console.log(
             'should evaluate',
             evaluationName,
             datasetIdToEvaluate,
-            selectedModel
-        )
+            selectedModel,
+        );
         if (readyToSubmitEvaluation) {
             try {
                 const response =
@@ -42,17 +42,17 @@ const NewEvaluationForm = ({
                         name: evaluationName,
                         datasetId: datasetIdToEvaluate,
                         modelId: selectedModel.name,
-                    })
+                    });
 
                 queryClient.invalidateQueries({ queryKey: ['jobs'] });
-                console.log('evaluate response', response)
+                console.log('evaluate response', response);
             } catch {
-                alert('There was an unknown error creating the evaluation')
+                alert('There was an unknown error creating the evaluation');
             } finally {
-                onDrawerClose()
+                onDrawerClose();
             }
         }
-    }
+    };
 
     return (
         <>
@@ -66,7 +66,7 @@ const NewEvaluationForm = ({
                     autoComplete=""
                     label="Evaluation name"
                     value={evaluationName}
-                    onChange={(e) => setEvaluationName(e.value)}
+                    onChange={e => setEvaluationName(e.value)}
                     helpText="Name your evaluation"
                     placeholder="Example: EWARS evaluation, 2020-2024"
                 />
@@ -90,7 +90,7 @@ const NewEvaluationForm = ({
                 </div>
             </div>
         </>
-    )
-}
+    );
+};
 
-export default NewEvaluationForm
+export default NewEvaluationForm;

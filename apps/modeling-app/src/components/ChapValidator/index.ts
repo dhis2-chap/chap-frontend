@@ -1,1 +1,1 @@
-export { ChapValidator } from './ChapValidator'
+export { ChapValidator } from './ChapValidator';
