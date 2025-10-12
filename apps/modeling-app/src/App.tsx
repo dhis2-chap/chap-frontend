@@ -9,7 +9,6 @@ import React from 'react';
 import './locales';
 import './App.module.css';
 import PageWrapper from './components/PageWrapper';
-import ModelTemplatesPage from './pages/ModelTemplatesPage';
 import PredictionOverview from './features/predictions-overview/PredictionOverview';
 import { SetChapUrl } from './features/route-api/SetChapUrl';
 import { SettingsPage } from './features/settings/Settings';
@@ -121,10 +120,6 @@ const router = createHashRouter([
                             {
                                 index: true,
                                 element: <SettingsPage />,
-                            },
-                            {
-                                path: 'models',
-                                element: <ModelTemplatesPage />,
                             },
                         ],
                     },
