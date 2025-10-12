@@ -16,7 +16,7 @@ type Props = {
 };
 
 export const BacktestsTableFilters = ({ table, models }: Props) => {
-    const { setModelId, setSearch } = useBacktestsTableFilters();
+    const { modelId, setModelId, search, setSearch } = useBacktestsTableFilters();
 
     const handleSearchChange = (value: string | undefined) => {
         const searchValue = value || undefined;
@@ -25,7 +25,7 @@ export const BacktestsTableFilters = ({ table, models }: Props) => {
     };
 
     const handleModelChange = (selected: string | undefined) => {
-        table.getColumn('modelId')?.setFilterValue(selected);
+        table.getColumn('configuredModel.id')?.setFilterValue(selected);
         setModelId(selected);
     };
 
@@ -35,7 +35,7 @@ export const BacktestsTableFilters = ({ table, models }: Props) => {
                 <Input
                     dense
                     placeholder={i18n.t('Search')}
-                    value={(table.getColumn('name')?.getFilterValue() as string | undefined) ?? ''}
+                    value={search}
                     onChange={e => handleSearchChange(e.value)}
                 />
             </div>
@@ -47,7 +47,7 @@ export const BacktestsTableFilters = ({ table, models }: Props) => {
                     dense
                     clearable
                     clearText={i18n.t('Clear')}
-                    selected={table.getColumn('modelId')?.getFilterValue() as string | undefined}
+                    selected={modelId}
                     placeholder={i18n.t('Model')}
                     onChange={e => handleModelChange(e.selected)}
                 >
@@ -56,7 +56,7 @@ export const BacktestsTableFilters = ({ table, models }: Props) => {
                             key={model.id}
                             className={styles.singleSelectMenuItem}
                             label={model.displayName ?? model.name}
-                            value={model.name.toString()}
+                            value={model.id.toString()}
                         />
                     ))}
                 </SingleSelect>

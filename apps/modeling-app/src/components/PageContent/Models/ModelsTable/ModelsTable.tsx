@@ -8,7 +8,6 @@ import {
     DataTableColumnHeader,
     DataTableFoot,
     Pagination,
-    Input,
     Tooltip,
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
@@ -25,6 +24,8 @@ import {
 import { ModelSpecRead, Pill } from '@dhis2-chap/ui';
 import styles from './ModelsTable.module.css';
 import { ModelActionsMenu } from './ModelActionsMenu';
+import { ModelsTableFilters } from './ModelsTableFilters';
+import { useModelsTableFilters } from './hooks/useModelsTableFilters';
 
 const labelByPeriodType = {
     month: i18n.t('Monthly'),
@@ -118,9 +119,16 @@ type Props = {
 };
 
 export const ModelsTable = ({ models }: Props) => {
+    const { search } = useModelsTableFilters();
+
     const table = useReactTable({
         data: models || [],
         columns,
+        initialState: {
+            columnFilters: [
+                ...(search ? [{ id: 'name', value: search }] : []),
+            ],
+        },
         getRowId: row => String(row.id),
         enableRowSelection: false,
         getSortedRowModel: getSortedRowModel(),
@@ -135,14 +143,7 @@ export const ModelsTable = ({ models }: Props) => {
         <div>
             <div className={styles.buttonContainer}>
                 <div className={styles.leftSection}>
-                    <div className={styles.inputContainer}>
-                        <Input
-                            dense
-                            placeholder={i18n.t('Search')}
-                            value={(table.getColumn('name')?.getFilterValue() as string | undefined) ?? ''}
-                            onChange={e => table.getColumn('name')?.setFilterValue(e.value)}
-                        />
-                    </div>
+                    <ModelsTableFilters table={table} />
                 </div>
             </div>
             <DataTable>

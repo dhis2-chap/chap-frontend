@@ -74,20 +74,24 @@ const columns = [
         header: i18n.t('Created'),
         cell: info => info.getValue() ? new Date(info.getValue()!).toLocaleString() : undefined,
     }),
-    columnHelper.accessor('modelId', {
+    columnHelper.accessor('configuredModel.id', {
         header: i18n.t('Model'),
-        filterFn: 'equals',
+        id: 'configuredModel.id',
+        filterFn: (row, columnId, filterValue) => {
+            const configuredModelId = row.getValue(columnId) as string;
+            return configuredModelId.toString() === filterValue.toString();
+        },
         cell: (info) => {
-            const modelId = info.getValue();
+            const configuredModelId = info.getValue();
             const models = (info.table.options.meta as { models: ModelSpecRead[] })?.models;
-            const model = models?.find((model: ModelSpecRead) => model.name === modelId);
-            return model?.displayName || modelId;
+            const model = models?.find((model: ModelSpecRead) => model.id === configuredModelId);
+            return model?.displayName || configuredModelId;
         },
     }),
-    columnHelper.accessor('aggregateMetrics.crps_norm_mean', {
+    columnHelper.accessor('aggregateMetrics.crps', {
         header: () => (
             <div className={styles.headerWithTooltip}>
-                <span>{i18n.t('CRPS (Norm)')}</span>
+                <span>{i18n.t('CRPS')}</span>
                 <Tooltip content={i18n.t('Normalized CRPS (Continuous Ranked Probability Score) shows how close a model\'s predicted range of outcomes is to the actual result on a 0 - 1 scale. Lower values indicate better probabilistic accuracy')}>
                     <div className={styles.iconContainer}>
                         <IconInfo16 />
@@ -131,7 +135,7 @@ export const BacktestsTable = ({ backtests, models }: Props) => {
         initialState: {
             sorting: [{ id: 'created', desc: true }],
             columnFilters: [
-                ...(modelId ? [{ id: 'modelId', value: modelId }] : []),
+                ...(modelId ? [{ id: 'configuredModel.id', value: modelId }] : []),
                 ...(search ? [{ id: 'name', value: search }] : []),
             ],
         },

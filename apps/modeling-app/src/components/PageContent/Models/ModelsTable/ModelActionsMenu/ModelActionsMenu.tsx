@@ -9,6 +9,7 @@ import {
 import i18n from '@dhis2/d2-i18n';
 import { OverflowButton } from '@dhis2-chap/ui';
 import { DeleteModelModal } from './DeleteModelModal';
+import { useNavigate } from 'react-router-dom';
 
 type Props = {
     id: number;
@@ -17,6 +18,11 @@ type Props = {
 export const ModelActionsMenu = ({ id }: Props) => {
     const [flyoutMenuIsOpen, setFlyoutMenuIsOpen] = useState(false);
     const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
+    const navigate = useNavigate();
+
+    const navigateToEvaluations = () => {
+        navigate(`/evaluate?modelId=${id}`);
+    };
 
     return (
         <>
@@ -31,7 +37,7 @@ export const ModelActionsMenu = ({ id }: Props) => {
                             label={i18n.t('View evaluations')}
                             dataTest="model-overflow-view"
                             icon={<IconView16 />}
-                            onClick={() => setFlyoutMenuIsOpen(false)}
+                            onClick={navigateToEvaluations}
                         />
                         <MenuItem
                             label={i18n.t('Delete')}

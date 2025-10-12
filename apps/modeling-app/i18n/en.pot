@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2025-10-12T21:38:16.417Z\n"
-"PO-Revision-Date: 2025-10-12T21:38:16.418Z\n"
+"POT-Creation-Date: 2025-10-12T23:30:42.695Z\n"
+"PO-Revision-Date: 2025-10-12T23:30:42.696Z\n"
 
 msgid "View"
 msgstr "View"
@@ -87,8 +87,8 @@ msgstr "ID"
 msgid "Created"
 msgstr "Created"
 
-msgid "CRPS (Norm)"
-msgstr "CRPS (Norm)"
+msgid "CRPS"
+msgstr "CRPS"
 
 msgid ""
 "Normalized CRPS (Continuous Ranked Probability Score) shows how close a "
@@ -677,6 +677,25 @@ msgstr "Error loading models"
 msgid "Delete model"
 msgstr "Delete model"
 
+msgid "Failed to load backtests"
+msgstr "Failed to load backtests"
+
+msgid "Cannot delete model"
+msgstr "Cannot delete model"
+
+msgid ""
+"This model has {{count}} associated backtest(s) and cannot be deleted. "
+"Please delete the associated backtests first."
+msgid_plural ""
+"This model has {{count}} associated backtest(s) and cannot be deleted. "
+"Please delete the associated backtests first."
+msgstr[0] ""
+"This model has {{count}} associated backtest(s) and cannot be deleted. "
+"Please delete the associated backtests first."
+msgstr[1] ""
+"This model has {{count}} associated backtest(s) and cannot be deleted. "
+"Please delete the associated backtests first."
+
 msgid "Are you sure you want to delete this model? This action cannot be undone."
 msgstr "Are you sure you want to delete this model? This action cannot be undone."
 
@@ -692,8 +711,11 @@ msgstr "Failed to delete model"
 msgid "Author"
 msgstr "Author"
 
-msgid "Features"
-msgstr "Features"
+msgid "Covariates"
+msgstr "Covariates"
+
+msgid "No covariate names available"
+msgstr "No covariate names available"
 
 msgid "No models available"
 msgstr "No models available"
@@ -710,11 +732,11 @@ msgstr "Compare"
 msgid "Predict"
 msgstr "Predict"
 
-msgid "Jobs"
-msgstr "Jobs"
-
 msgid "Models"
 msgstr "Models"
+
+msgid "Jobs"
+msgstr "Jobs"
 
 msgid "Settings"
 msgstr "Settings"
@@ -863,111 +885,6 @@ msgstr ""
 "Job is still running. Please wait until it is finished before doing any "
 "actions."
 
-msgid "Unknown error"
-msgstr "Unknown error"
-
-msgid "No model templates found."
-msgstr "No model templates found."
-
-msgid "Model Templates"
-msgstr "Model Templates"
-
-msgid "Configure new models based on generic model templates"
-msgstr "Configure new models based on generic model templates"
-
-msgid "Back to settings"
-msgstr "Back to settings"
-
-msgid "Configure Model"
-msgstr "Configure Model"
-
-msgid "Model Template"
-msgstr "Model Template"
-
-msgid "Select a model template"
-msgstr "Select a model template"
-
-msgid "Configured Model Name"
-msgstr "Configured Model Name"
-
-msgid "Enter something to identify your model, e.g. \"Debug\" or \"Malaria\""
-msgstr "Enter something to identify your model, e.g. \"Debug\" or \"Malaria\""
-
-msgid "Your model will be saved as {{modelName}} [{{configuredModelName}}]"
-msgstr "Your model will be saved as {{modelName}} [{{configuredModelName}}]"
-
-msgid "Additional continuous covariates"
-msgstr "Additional continuous covariates"
-
-msgid "Enter covariate name"
-msgstr "Enter covariate name"
-
-msgid "Add"
-msgstr "Add"
-
-msgid "Required"
-msgstr "Required"
-
-msgid "Remove"
-msgstr "Remove"
-
-msgid "Please check covariates"
-msgstr "Please check covariates"
-
-msgid "Template is required"
-msgstr "Template is required"
-
-msgid "Covariate name is required"
-msgstr "Covariate name is required"
-
-msgid "Covariate name cannot contain spaces"
-msgstr "Covariate name cannot contain spaces"
-
-msgid "Covariate already exists"
-msgstr "Covariate already exists"
-
-msgid "Model Parameters"
-msgstr "Model Parameters"
-
-msgid "Enter item"
-msgstr "Enter item"
-
-msgid "Please enter a valid number"
-msgstr "Please enter a valid number"
-
-msgid "Please enter a whole number"
-msgstr "Please enter a whole number"
-
-msgid "Invalid input"
-msgstr "Invalid input"
-
-msgid "Enter a whole number"
-msgstr "Enter a whole number"
-
-msgid "Enter a number (use , or . for decimal)"
-msgstr "Enter a number (use , or . for decimal)"
-
-msgid "Please enter a valid number or leave empty"
-msgstr "Please enter a valid number or leave empty"
-
-msgid "Please enter a whole number or leave empty"
-msgstr "Please enter a whole number or leave empty"
-
-msgid "Enter a whole number or leave empty for null"
-msgstr "Enter a whole number or leave empty for null"
-
-msgid "Enter a number (use , or . for decimal) or leave empty for null"
-msgstr "Enter a number (use , or . for decimal) or leave empty for null"
-
-msgid "Leave empty for null"
-msgstr "Leave empty for null"
-
-msgid "Model configured"
-msgstr "Model configured"
-
-msgid "Failed to configure model"
-msgstr "Failed to configure model"
-
 msgid "Prediction for Northern Province"
 msgstr "Prediction for Northern Province"
 
@@ -1048,40 +965,6 @@ msgstr ""
 msgid "Your server is not secure"
 msgstr "Your server is not secure"
 
-msgid "Model settings"
-msgstr "Model settings"
-
-msgid "An error occurred while loading models."
-msgstr "An error occurred while loading models."
-
-msgid ""
-"Please try to reload the page. If the problem persists, contact your system "
-"administrator."
-msgstr ""
-"Please try to reload the page. If the problem persists, contact your system "
-"administrator."
-
-msgid "Model templates"
-msgstr "Model templates"
-
-msgid ""
-"Model templates are base models that can be configured to fit your data "
-"with different parameters and covariates. This is still an advanced feature "
-"and should be used with caution."
-msgstr ""
-"Model templates are base models that can be configured to fit your data "
-"with different parameters and covariates. This is still an advanced feature "
-"and should be used with caution."
-
-msgid "Configured models"
-msgstr "Configured models"
-
-msgid "Configure"
-msgstr "Configure"
-
-msgid "Models configured"
-msgstr "Models configured"
-
 msgid "Route configuration"
 msgstr "Route configuration"
 
@@ -1090,6 +973,9 @@ msgstr "No route found."
 
 msgid "Add route"
 msgstr "Add route"
+
+msgid "Add"
+msgstr "Add"
 
 msgid "Delete route"
 msgstr "Delete route"
@@ -1173,9 +1059,6 @@ msgstr "Start month"
 msgid "End month"
 msgstr "End month"
 
-msgid "Error renaming model"
-msgstr "Error renaming model"
-
 msgid "Evaluation details"
 msgstr "Evaluation details"
 
@@ -1210,8 +1093,8 @@ msgstr "Active jobs"
 msgid "View and manage currently running jobs and their status."
 msgstr "View and manage currently running jobs and their status."
 
-msgid "Manage templates and configured models available in your system."
-msgstr "Manage templates and configured models available in your system."
+msgid "Manage configured models available in your system."
+msgstr "Manage configured models available in your system."
 
 msgid "Create a new evaluation to assess the performance of a model"
 msgstr "Create a new evaluation to assess the performance of a model"
