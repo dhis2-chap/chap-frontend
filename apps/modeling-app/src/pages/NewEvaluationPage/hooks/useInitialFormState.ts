@@ -83,17 +83,31 @@ export const useInitialFormState = ({ models, isModelsLoading }: Props) => {
             const selectedModel = models.find(model => model.id.toString() === locationState.modelId);
             if (selectedModel && dataItems && dataItems.length > 0) {
                 const covariateMappings = locationState?.dataSources?.map((dataSource) => {
+                    if (dataSource.covariate === selectedModel.target.name) {
+                        return null;
+                    }
                     const dataItem = dataItems.find(dataItem => dataItem.id === dataSource.dataElementId);
-                    if (!dataItem || dataItem.id === selectedModel.target.name) return null;
+
+                    if (!dataItem) {
+                        console.error('Data item not found or is the target', { dataItem, selectedModel });
+                        return null;
+                    }
                     return ({
                         covariateName: dataSource.covariate,
                         dataItem: dataItem,
                     });
                 }).filter(Boolean) as CovariateMapping[] || [];
 
-                const targetMapping = covariateMappings.find(mapping => mapping.covariateName === selectedModel.target.name);
                 values.covariateMappings = covariateMappings;
-                values.targetMapping = targetMapping;
+
+                const targetId = locationState?.dataSources?.find(dataSource => dataSource.covariate === selectedModel.target.name)?.dataElementId;
+                const targetMapping = dataItems.find(dataItem => dataItem.id === targetId);
+                if (targetMapping && selectedModel.target.name) {
+                    values.targetMapping = {
+                        covariateName: selectedModel.target.name,
+                        dataItem: targetMapping,
+                    };
+                }
             }
         }
 

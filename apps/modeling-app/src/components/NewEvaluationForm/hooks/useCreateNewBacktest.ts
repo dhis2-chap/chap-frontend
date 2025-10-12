@@ -102,21 +102,11 @@ export const useCreateNewBacktest = ({
         error,
     } = useMutation<ImportSummaryCorrected, ApiError, EvaluationFormValues>({
         mutationFn: async (formData: EvaluationFormValues) => {
-            const { model, observations, orgUnitResponse } = await prepareBacktestData(
+            const { model, observations, orgUnitResponse, dataSources } = await prepareBacktestData(
                 formData,
                 dataEngine,
                 queryClient,
             );
-
-            // TODO - Move this to the prepareBacktestData function
-            const dataSources = formData.covariateMappings.map(mapping => ({
-                covariate: mapping.covariateName,
-                dataElementId: mapping.dataItem.id,
-            }));
-            dataSources.push({
-                covariate: formData.targetMapping.covariateName,
-                dataElementId: formData.targetMapping.dataItem.id,
-            });
 
             const filteredGeoJson: FeatureCollectionModel = {
                 type: 'FeatureCollection',
