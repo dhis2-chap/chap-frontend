@@ -26,6 +26,7 @@ import { JobsPage } from './pages/JobsPage';
 import { EvaluationComparePage } from './pages/EvaluationCompare';
 import { GetStartedPage } from './pages/GetStartedPage';
 import { ModelsPage } from './pages/ModelsPage';
+import { NewModelPage } from './pages/NewModelPage';
 import { SyncUrlWithGlobalShell } from './utils/syncUrlWithGlobalShell';
 
 export type RouteHandle = {
@@ -102,7 +103,19 @@ const router = createHashRouter([
                     },
                     {
                         path: '/models',
-                        element: <ModelsPage />,
+                        children: [
+                            {
+                                index: true,
+                                element: <ModelsPage />,
+                            },
+                            {
+                                path: 'new',
+                                element: <NewModelPage />,
+                                handle: {
+                                    collapseSidebar: true,
+                                } satisfies RouteHandle,
+                            },
+                        ],
                     },
                 ],
             },
