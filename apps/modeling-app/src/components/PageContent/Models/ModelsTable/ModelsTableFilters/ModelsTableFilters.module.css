@@ -1,0 +1,9 @@
+.inputContainer {
+    width: 200px;
+    transition: width 0.3s ease;
+}
+
+.inputContainer:focus-within {
+    width: 300px;
+}
+

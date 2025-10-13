@@ -9,7 +9,6 @@ import React from 'react';
 import './locales';
 import './App.module.css';
 import PageWrapper from './components/PageWrapper';
-import ModelTemplatesPage from './pages/ModelTemplatesPage';
 import PredictionOverview from './features/predictions-overview/PredictionOverview';
 import { SetChapUrl } from './features/route-api/SetChapUrl';
 import { SettingsPage } from './features/settings/Settings';
@@ -26,6 +25,7 @@ import { NewEvaluationPage } from './pages/NewEvaluationPage';
 import { JobsPage } from './pages/JobsPage';
 import { EvaluationComparePage } from './pages/EvaluationCompare';
 import { GetStartedPage } from './pages/GetStartedPage';
+import { ModelsPage } from './pages/ModelsPage';
 import { SyncUrlWithGlobalShell } from './utils/syncUrlWithGlobalShell';
 
 export type RouteHandle = {
@@ -100,6 +100,10 @@ const router = createHashRouter([
                         path: '/predict',
                         element: <PredictionOverview />,
                     },
+                    {
+                        path: '/models',
+                        element: <ModelsPage />,
+                    },
                 ],
             },
             {
@@ -116,10 +120,6 @@ const router = createHashRouter([
                             {
                                 index: true,
                                 element: <SettingsPage />,
-                            },
-                            {
-                                path: 'models',
-                                element: <ModelTemplatesPage />,
                             },
                         ],
                     },

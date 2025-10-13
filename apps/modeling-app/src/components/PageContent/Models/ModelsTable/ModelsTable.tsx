@@ -6,13 +6,9 @@ import {
     DataTableBody,
     DataTableCell,
     DataTableColumnHeader,
-    Checkbox,
-    Button,
-    IconAdd16,
     DataTableFoot,
     Pagination,
     Tooltip,
-    IconInfo16,
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import {
@@ -25,125 +21,115 @@ import {
     getPaginationRowModel,
     Column,
 } from '@tanstack/react-table';
-import { BackTestRead, ModelSpecRead } from '@dhis2-chap/ui';
-import { Link, useNavigate } from 'react-router-dom';
-import styles from './BacktestsTable.module.css';
-import { BacktestActionsMenu } from './BacktestActionsMenu';
-import { BacktestsTableFilters } from './BacktestsTableFilters';
-import { BatchActions } from './BatchActions';
-import { RunningJobsIndicator } from './RunningJobsIndicator';
-import { useBacktestsTableFilters } from './hooks/useBacktestsTableFilters';
+import { ModelSpecRead, Pill } from '@dhis2-chap/ui';
+import styles from './ModelsTable.module.css';
+import { ModelActionsMenu } from './ModelActionsMenu';
+import { ModelsTableFilters } from './ModelsTableFilters';
+import { useModelsTableFilters } from './hooks/useModelsTableFilters';
 
-const columnHelper = createColumnHelper<BackTestRead>();
+const labelByPeriodType = {
+    month: i18n.t('Monthly'),
+    year: i18n.t('Yearly'),
+    week: i18n.t('Weekly'),
+    day: i18n.t('Daily'),
+    any: i18n.t('Any'),
+};
+
+const columnHelper = createColumnHelper<ModelSpecRead>();
 
 const columns = [
-    columnHelper.display({
-        id: 'select',
-        header: ({ table }) => (
-            <Checkbox
-                checked={table.getIsAllPageRowsSelected()}
-                onChange={() => table.toggleAllPageRowsSelected()}
-                disabled={table.getRowModel().rows.length === 0}
-            />
-        ),
-        cell: ({ row }) => (
-            <Checkbox
-                checked={row.getIsSelected()}
-                onChange={() => row.toggleSelected()}
-            />
-        ),
-    }),
-    columnHelper.accessor('id', {
-        header: i18n.t('ID'),
-        filterFn: 'equals',
-    }),
-    columnHelper.accessor('name', {
+    columnHelper.accessor(row => row.displayName || row.name, {
+        id: 'name',
         header: i18n.t('Name'),
         filterFn: 'includesString',
+        cell: info => info.getValue() || undefined,
+    }),
+    columnHelper.accessor('author', {
+        header: i18n.t('Author'),
+        cell: info => info.getValue() || undefined,
+    }),
+    columnHelper.accessor(row => row.covariates?.length ?? 0, {
+        id: 'featuresCount',
+        header: i18n.t('Covariates'),
         cell: (info) => {
+            const count = info.getValue();
+            const covariates = info.row.original.covariates || [];
+
+            if (count === 0) {
+                return count;
+            }
+
+            const covariateNames = covariates
+                .map(cov => cov.displayName)
+                .filter(Boolean)
+                .join(', ');
+
             return (
-                <Link
-                    to={`/evaluate/compare?baseEvaluation=${info.row.original.id}`}
-                >
-                    {info.getValue()}
-                </Link>
+                <div className={styles.featuresCell}>
+                    <Tooltip content={covariateNames || i18n.t('No covariate names available')}>
+                        {({ onMouseOver, onMouseOut, ref }) => (
+                            <span
+                                ref={ref}
+                                className={styles.infoIcon}
+                                onMouseEnter={onMouseOver}
+                                onMouseLeave={onMouseOut}
+                            >
+                                <Pill>
+                                    {count}
+                                </Pill>
+                            </span>
+                        )}
+                    </Tooltip>
+                </div>
             );
         },
     }),
-    columnHelper.accessor('created', {
-        header: i18n.t('Created'),
-        cell: info => info.getValue() ? new Date(info.getValue()!).toLocaleString() : undefined,
-    }),
-    columnHelper.accessor('configuredModel.id', {
-        id: 'configuredModel.id',
-        header: i18n.t('Model'),
-        filterFn: (row, columnId, filterValue) => {
-            const configuredModelId = row.getValue(columnId) as string;
-            return configuredModelId.toString() === filterValue.toString();
-        },
+    columnHelper.accessor('supportedPeriodType', {
+        header: i18n.t('Period'),
+        enableSorting: false,
         cell: (info) => {
-            const configuredModelId = info.getValue();
-            const models = (info.table.options.meta as { models: ModelSpecRead[] })?.models;
-            const model = models?.find((model: ModelSpecRead) => model.id === configuredModelId);
-            return model?.displayName || configuredModelId;
+            const periodType = info.getValue();
+            return periodType ? (labelByPeriodType[periodType as keyof typeof labelByPeriodType] || periodType) : undefined;
         },
     }),
-    columnHelper.accessor('aggregateMetrics.crps', {
-        header: () => (
-            <div className={styles.headerWithTooltip}>
-                <span>{i18n.t('CRPS')}</span>
-                <Tooltip content={i18n.t('Normalized CRPS (Continuous Ranked Probability Score) shows how close a model\'s predicted range of outcomes is to the actual result on a 0 - 1 scale. Lower values indicate better probabilistic accuracy')}>
-                    <div className={styles.iconContainer}>
-                        <IconInfo16 />
-                    </div>
-                </Tooltip>
-            </div>
-        ),
-        cell: (info) => {
-            const crps = info.getValue();
-            return crps ? crps.toFixed(2) : undefined;
-        },
+    columnHelper.accessor(row => row.target?.displayName || row.target?.name || '', {
+        id: 'target',
+        header: i18n.t('Target'),
+        enableSorting: false,
+        cell: info => info.getValue() || undefined,
     }),
     columnHelper.display({
         id: 'actions',
         header: i18n.t('Actions'),
         cell: info => (
-            <BacktestActionsMenu
+            <ModelActionsMenu
                 id={info.row.original.id}
-                name={info.row.original.name}
             />
         ),
     }),
 ];
 
-const getSortDirection = (column: Column<BackTestRead>) => {
+const getSortDirection = (column: Column<ModelSpecRead>) => {
     return column.getIsSorted() || 'default';
 };
 
 type Props = {
-    backtests: BackTestRead[];
     models: ModelSpecRead[];
 };
 
-export const BacktestsTable = ({ backtests, models }: Props) => {
-    const navigate = useNavigate();
-    const { modelId, search } = useBacktestsTableFilters();
+export const ModelsTable = ({ models }: Props) => {
+    const { search } = useModelsTableFilters();
 
     const table = useReactTable({
-        data: backtests || [],
+        data: models || [],
         columns,
         initialState: {
-            sorting: [{ id: 'created', desc: true }],
             columnFilters: [
-                ...(modelId ? [{ id: 'configuredModel.id', value: modelId }] : []),
                 ...(search ? [{ id: 'name', value: search }] : []),
             ],
         },
-        meta: {
-            models,
-        },
-        getRowId: row => row.id.toString(),
-        enableRowSelection: true,
+        getRowId: row => String(row.id),
+        enableRowSelection: false,
         getSortedRowModel: getSortedRowModel(),
         getCoreRowModel: getCoreRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
@@ -154,32 +140,11 @@ export const BacktestsTable = ({ backtests, models }: Props) => {
 
     return (
         <div>
-            {(table.getIsSomeRowsSelected() || table.getIsAllRowsSelected()) ? (
-                <BatchActions table={table} />
-            ) : (
-                <div className={styles.buttonContainer}>
-                    <div className={styles.leftSection}>
-                        <BacktestsTableFilters
-                            table={table}
-                            models={models}
-                        />
-                    </div>
-
-                    <div className={styles.rightSection}>
-                        <RunningJobsIndicator />
-                        <Button
-                            primary
-                            icon={<IconAdd16 />}
-                            small
-                            onClick={() => {
-                                navigate('/evaluate/new');
-                            }}
-                        >
-                            {i18n.t('New evaluation')}
-                        </Button>
-                    </div>
+            <div className={styles.buttonContainer}>
+                <div className={styles.leftSection}>
+                    <ModelsTableFilters table={table} />
                 </div>
-            )}
+            </div>
             <DataTable>
                 <DataTableHead>
                     {table.getHeaderGroups().map(headerGroup => (
@@ -209,7 +174,7 @@ export const BacktestsTable = ({ backtests, models }: Props) => {
                 <DataTableBody>
                     {hasVisibleRows ? table.getRowModel().rows
                         .map(row => (
-                            <DataTableRow selected={row.getIsSelected()} key={row.id}>
+                            <DataTableRow key={row.id}>
                                 {row.getVisibleCells().map(cell => (
                                     <DataTableCell key={cell.id}>
                                         {flexRender(
@@ -222,7 +187,7 @@ export const BacktestsTable = ({ backtests, models }: Props) => {
                         )) : (
                         <DataTableRow>
                             <DataTableCell colSpan={String(table.getAllColumns().length)} align="center">
-                                {i18n.t('No evaluations available')}
+                                {i18n.t('No models available')}
                             </DataTableCell>
                         </DataTableRow>
                     )}
