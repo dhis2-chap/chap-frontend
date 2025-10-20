@@ -43,7 +43,6 @@ export const useCreateModel = ({ onSuccess, onError }: UseCreateModelOptions = {
         createModel: mutation.mutateAsync,
         isCreating: mutation.isPending,
         error: mutation.error,
+        reset: mutation.reset,
     };
 };
-
-
