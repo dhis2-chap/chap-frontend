@@ -6,13 +6,14 @@ import { FormProvider, ResolverOptions, useForm, useWatch } from 'react-hook-for
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import styles from './NewModelForm.module.css';
-import { VariantNameInput, ModelTemplateSelector } from './FormComponents';
-import { AdditionalCovariatesField } from './FormComponents/AdditionalCovariatesField';
+import { VariantNameInput, ModelTemplateSelector, AdditionalCovariatesField } from './FormComponents';
 import {
     buildUserOptionsSchema,
     extractUserOptionsDefaults,
     UserOptionsFields,
 } from './FormComponents/UserOptionsFields';
+import { useNavigate } from 'react-router-dom';
+import { useCreateModel } from '../hooks/useCreateModel';
 
 const baseModelSchema = z.object({
     modelId: z.string().min(1, { message: i18n.t('Model template is required') }),
@@ -25,6 +26,16 @@ type NewModelFormValues = z.infer<typeof baseModelSchema> & {
 };
 
 export const NewModelForm = ({ modelTemplates }: { modelTemplates: ModelTemplateRead[] }) => {
+    const navigate = useNavigate();
+    const { createModel, isCreating } = useCreateModel({
+        onSuccess: (createdModel) => {
+            if (createdModel.id) {
+                navigate(`/models/${createdModel.id}`);
+            } else {
+                navigate('/models');
+            }
+        },
+    });
     const findModelTemplate = useCallback(
         (modelId?: string | null) =>
             modelTemplates.find(template => template.id.toString() === (modelId ?? '')),
@@ -80,8 +91,15 @@ export const NewModelForm = ({ modelTemplates }: { modelTemplates: ModelTemplate
         setValue('additionalContinuousCovariates', [], { shouldDirty: true, shouldValidate: false });
     }, [findModelTemplate, setValue]);
 
-    const onSubmit = (values: NewModelFormValues) => {
-        alert(JSON.stringify(values, null, 2));
+    const onSubmit = async (values: NewModelFormValues) => {
+        const payload = {
+            name: values.name,
+            modelTemplateId: Number(values.modelId),
+            userOptionValues: values.userOptions ?? {},
+            additionalContinuousCovariates: values.additionalContinuousCovariates ?? [],
+        };
+
+        await createModel(payload);
     };
 
     return (
@@ -115,8 +133,8 @@ export const NewModelForm = ({ modelTemplates }: { modelTemplates: ModelTemplate
                             small
                             type="submit"
                             primary
-                            loading={isSubmitting}
-                            disabled={isSubmitting}
+                            loading={isSubmitting || isCreating}
+                            disabled={isSubmitting || isCreating}
                             style={{ display: 'flex', alignItems: 'center', gap: 4 }}
                         >
                             <p>{i18n.t('Save')}</p>
