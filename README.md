@@ -1,6 +1,6 @@
 # CHAP Frontend
 
-A monorepo for the **Contextualized Health Analytics Platform (CHAP)**, enabling predictive modeling and forecasting for health information systems. The primary application integrates with DHIS2 for disease forecasting and health analytics.
+A monorepo for the **CHAP Modeling platform**, enabling predictive modeling and forecasting for health information systems. The primary application integrates with DHIS2 for disease forecasting and health analytics.
 
 ## Project Structure
 
