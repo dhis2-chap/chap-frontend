@@ -4,15 +4,17 @@ import i18n from '@dhis2/d2-i18n';
 import { Controller, useFormContext } from 'react-hook-form';
 import { ModelTemplateRead } from '@dhis2-chap/ui';
 
-interface ModelTemplateSelectorProps {
+type Props = {
     modelTemplates: ModelTemplateRead[];
     selectedModel?: ModelTemplateRead;
-}
+    onModelChange: (modelId: string) => void;
+};
 
-export const ModelTemplateSelector: React.FC<ModelTemplateSelectorProps> = ({
+export const ModelTemplateSelector = ({
     modelTemplates,
-    selectedModel
-}) => {
+    selectedModel,
+    onModelChange,
+}: Props) => {
     const {
         control,
         formState: { errors },
@@ -31,7 +33,7 @@ export const ModelTemplateSelector: React.FC<ModelTemplateSelectorProps> = ({
                         helpText={i18n.t('Select the base model template')}
                         placeholder={i18n.t('Select a model template')}
                         selected={field.value}
-                        onChange={({ selected }) => field.onChange(selected)}
+                        onChange={({ selected }) => onModelChange(selected)}
                         error={!!errors.modelId}
                         validationText={errors.modelId?.message as string}
                         required
@@ -55,4 +57,3 @@ export const ModelTemplateSelector: React.FC<ModelTemplateSelectorProps> = ({
         </>
     );
 };
-

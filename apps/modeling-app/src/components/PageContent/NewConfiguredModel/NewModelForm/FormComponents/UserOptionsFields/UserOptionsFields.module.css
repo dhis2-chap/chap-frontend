@@ -1,0 +1,35 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.title {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.unsupported {
+    color: var(--colors-grey700);
+    font-size: 14px;
+}
+
+.validationText {
+    color: var(--colors-red500);
+    font-size: 13px;
+    margin: 4px 0 0;
+}
+
+.arrayField {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.tagList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
