@@ -7,6 +7,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import styles from './NewModelForm.module.css';
 import { VariantNameInput, ModelTemplateSelector } from './FormComponents';
+import { AdditionalCovariatesField } from './FormComponents/AdditionalCovariatesField';
 import {
     buildUserOptionsSchema,
     extractUserOptionsDefaults,
@@ -20,6 +21,7 @@ const baseModelSchema = z.object({
 
 type NewModelFormValues = z.infer<typeof baseModelSchema> & {
     userOptions: Record<string, unknown>;
+    additionalContinuousCovariates: string[];
 };
 
 export const NewModelForm = ({ modelTemplates }: { modelTemplates: ModelTemplateRead[] }) => {
@@ -33,9 +35,14 @@ export const NewModelForm = ({ modelTemplates }: { modelTemplates: ModelTemplate
         async (values: NewModelFormValues, context: unknown, options: ResolverOptions<any>) => {
             const selectedModel = findModelTemplate(values.modelId);
             const userOptionsSchema = buildUserOptionsSchema(selectedModel?.userOptions ?? null);
-            const schema = userOptionsSchema
-                ? baseModelSchema.extend({ userOptions: userOptionsSchema })
-                : baseModelSchema.extend({ userOptions: z.record(z.any()).optional() });
+            const schemaExtensions = userOptionsSchema
+                ? { userOptions: userOptionsSchema }
+                : { userOptions: z.record(z.any()).optional() };
+
+            const schema = baseModelSchema.extend({
+                ...schemaExtensions,
+                additionalContinuousCovariates: z.array(z.string()).optional(),
+            });
 
             return zodResolver(schema)(values, context, options);
         },
@@ -48,6 +55,7 @@ export const NewModelForm = ({ modelTemplates }: { modelTemplates: ModelTemplate
             modelId: '',
             name: '',
             userOptions: {},
+            additionalContinuousCovariates: [],
         },
         shouldFocusError: false,
     });
@@ -69,6 +77,7 @@ export const NewModelForm = ({ modelTemplates }: { modelTemplates: ModelTemplate
         const model = findModelTemplate(modelId);
         const defaults = extractUserOptionsDefaults(model?.userOptions ?? null);
         setValue('userOptions', defaults, { shouldDirty: true, shouldValidate: false });
+        setValue('additionalContinuousCovariates', [], { shouldDirty: true, shouldValidate: false });
     }, [findModelTemplate, setValue]);
 
     const onSubmit = (values: NewModelFormValues) => {
@@ -93,6 +102,12 @@ export const NewModelForm = ({ modelTemplates }: { modelTemplates: ModelTemplate
                         <UserOptionsFields
                             selectedModel={selectedModel}
                         />
+
+                        {selectedModel?.allowFreeAdditionalContinuousCovariates && (
+                            <AdditionalCovariatesField
+                                requiredCovariates={selectedModel?.requiredCovariates ?? []}
+                            />
+                        )}
                     </div>
 
                     <ButtonStrip end>
