@@ -40,7 +40,7 @@ export const NewModelFormContainer = ({ modelTemplates }: Props) => {
             resolver: zodResolver(schema),
             defaultValues: defaults,
         };
-    }, [modelTemplates, selectedModelId]) as { resolver: Resolver<NewModelFormValues> | undefined; defaultValues: NewModelFormValues | undefined } | undefined;
+    }, [modelTemplates, selectedModelId]);
 
     const handleModelChange = (modelId: string) => {
         setModelValidationError(undefined);
@@ -60,7 +60,7 @@ export const NewModelFormContainer = ({ modelTemplates }: Props) => {
                 <NewModelFormView
                     key={selectedModelId}
                     selectedModel={selectedModel}
-                    resolver={resolver}
+                    resolver={resolver as Resolver<NewModelFormValues>}
                     defaultValues={defaultValues}
                     onValidationError={setModelValidationError}
                 />
