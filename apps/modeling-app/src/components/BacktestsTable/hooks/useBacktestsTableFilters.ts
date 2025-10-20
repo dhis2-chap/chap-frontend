@@ -52,3 +52,4 @@ export const useBacktestsTableFilters = () => {
         [modelId, setModelId, search, setSearch],
     );
 };
+
