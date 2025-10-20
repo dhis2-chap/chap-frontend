@@ -30,11 +30,11 @@ export const NewConfiguredModelContent: React.FC = () => {
         );
     }
 
-    if (!modelTemplates) {
+    if (!modelTemplates || modelTemplates.length === 0) {
         return (
             <div className={styles.errorContainer}>
-                <NoticeBox error title={i18n.t('No model templates found')}>
-                    {i18n.t('No model templates found')}
+                <NoticeBox warning title={i18n.t('No model templates found')}>
+                    {i18n.t('We could not find any available model templates. Please create templates or try again later.')}
                 </NoticeBox>
             </div>
         );

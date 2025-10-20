@@ -33,7 +33,10 @@ export const ModelTemplateSelector = ({
                         helpText={i18n.t('Select the base model template')}
                         placeholder={i18n.t('Select a model template')}
                         selected={field.value}
-                        onChange={({ selected }) => onModelChange(selected)}
+                        onChange={({ selected }) => {
+                            field.onChange(selected);
+                            onModelChange(selected);
+                        }}
                         error={!!errors.modelId}
                         validationText={errors.modelId?.message as string}
                         required

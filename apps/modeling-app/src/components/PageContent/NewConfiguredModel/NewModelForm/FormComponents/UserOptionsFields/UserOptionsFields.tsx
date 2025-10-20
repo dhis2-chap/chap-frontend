@@ -246,8 +246,6 @@ const renderFieldByType = (name: string, config: OptionConfig) => {
 };
 
 export const UserOptionsFields = ({ selectedModel }: Props) => {
-    useFormContext();
-
     if (!selectedModel || !selectedModel.userOptions) {
         return null;
     }
@@ -260,7 +258,6 @@ export const UserOptionsFields = ({ selectedModel }: Props) => {
 
     return (
         <div className={styles.container}>
-            <h3 className={styles.title}>{i18n.t('Model options')}</h3>
             {entries.map(([name, config]) => (
                 <React.Fragment key={name}>
                     {renderFieldByType(name, config)}

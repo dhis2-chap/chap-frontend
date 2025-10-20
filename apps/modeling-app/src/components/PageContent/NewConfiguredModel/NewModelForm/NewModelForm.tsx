@@ -68,8 +68,7 @@ export const NewModelForm = ({ modelTemplates }: { modelTemplates: ModelTemplate
     const handleModelChange = useCallback((modelId: string) => {
         const model = findModelTemplate(modelId);
         const defaults = extractUserOptionsDefaults(model?.userOptions ?? null);
-        setValue('modelId', modelId);
-        setValue('userOptions', defaults, { shouldValidate: false });
+        setValue('userOptions', defaults, { shouldDirty: true, shouldValidate: false });
     }, [findModelTemplate, setValue]);
 
     const onSubmit = (values: NewModelFormValues) => {
@@ -91,11 +90,9 @@ export const NewModelForm = ({ modelTemplates }: { modelTemplates: ModelTemplate
                             selectedModel={selectedModel}
                         />
 
-                        <div className={styles.userOptionsFields}>
                             <UserOptionsFields
                                 selectedModel={selectedModel}
                             />
-                        </div>
                     </div>
 
                     <ButtonStrip end>
