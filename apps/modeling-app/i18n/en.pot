@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2025-10-12T23:30:42.695Z\n"
-"PO-Revision-Date: 2025-10-12T23:30:42.696Z\n"
+"POT-Creation-Date: 2025-10-20T13:11:27.348Z\n"
+"PO-Revision-Date: 2025-10-20T13:11:27.349Z\n"
 
 msgid "View"
 msgstr "View"
@@ -717,8 +717,33 @@ msgstr "Covariates"
 msgid "No covariate names available"
 msgstr "No covariate names available"
 
+msgid "New model"
+msgstr "New model"
+
 msgid "No models available"
 msgstr "No models available"
+
+msgid "Error loading model templates"
+msgstr "Error loading model templates"
+
+msgid "No model templates found"
+msgstr "No model templates found"
+
+msgid "Model templates loaded"
+msgstr "Model templates loaded"
+
+msgid ""
+"Loaded {{count}} model templates. The new model form will be implemented "
+"soon."
+msgid_plural ""
+"Loaded {{count}} model templates. The new model form will be implemented "
+"soon."
+msgstr[0] ""
+"Loaded {{count}} model templates. The new model form will be implemented "
+"soon."
+msgstr[1] ""
+"Loaded {{count}} model templates. The new model form will be implemented "
+"soon."
 
 msgid "Evaluate"
 msgstr "Evaluate"
@@ -1095,6 +1120,12 @@ msgstr "View and manage currently running jobs and their status."
 
 msgid "Manage configured models available in your system."
 msgstr "Manage configured models available in your system."
+
+msgid "New configured model"
+msgstr "New configured model"
+
+msgid "Configure and save a new model for reuse."
+msgstr "Configure and save a new model for reuse."
 
 msgid "Create a new evaluation to assess the performance of a model"
 msgstr "Create a new evaluation to assess the performance of a model"
