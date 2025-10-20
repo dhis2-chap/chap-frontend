@@ -41,6 +41,7 @@ export const VariantNameInput: React.FC<VariantNameInputProps> = ({ selectedMode
                     validationText={errors.name?.message as string}
                     onChange={({ value }) => field.onChange(value)}
                     required
+                    disabled={!selectedModel}
                 />
             )}
         />
