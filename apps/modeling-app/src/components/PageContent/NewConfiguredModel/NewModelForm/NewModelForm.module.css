@@ -14,3 +14,11 @@
     gap: 16px;
     margin-block: 16px;
 }
+
+.userOptionsFields {
+    border: 1px solid #e1e5e9;
+    border-radius: 4px;
+    padding: 12px;
+    background-color: #f8f9fa;
+    margin-top: 8px;
+}

@@ -55,28 +55,48 @@ const buildPrimitiveSchema = (type: string | undefined, config: JsonSchemaLike):
         case 'string':
             return z.string();
         case 'number': {
-            let schema = z.coerce.number({
+            let baseSchema = z.coerce.number({
                 invalid_type_error: 'Must be a valid number',
+                required_error: 'This field is required',
             });
             if (typeof config.minimum === 'number') {
-                schema = schema.min(config.minimum);
+                baseSchema = baseSchema.min(config.minimum);
             }
             if (typeof config.maximum === 'number') {
-                schema = schema.max(config.maximum);
+                baseSchema = baseSchema.max(config.maximum);
             }
-            return schema;
+            return z.preprocess(
+                (val) => {
+                    if (typeof val === 'number') return val;
+                    if (typeof val !== 'string') return undefined;
+                    if (val.trim() === '') return undefined;
+
+                    return val;
+                },
+                baseSchema,
+            );
         }
         case 'integer': {
-            let schema = z.coerce.number({
+            let baseSchema = z.coerce.number({
                 invalid_type_error: 'Must be a valid integer',
+                required_error: 'This field is required',
             }).int('Must be an integer');
             if (typeof config.minimum === 'number') {
-                schema = schema.min(config.minimum);
+                baseSchema = baseSchema.min(config.minimum);
             }
             if (typeof config.maximum === 'number') {
-                schema = schema.max(config.maximum);
+                baseSchema = baseSchema.max(config.maximum);
             }
-            return schema;
+            return z.preprocess(
+                (val) => {
+                    if (typeof val === 'number') return val;
+                    if (typeof val !== 'string') return undefined;
+                    if (val.trim() === '') return undefined;
+
+                    return val;
+                },
+                baseSchema,
+            );
         }
         case 'boolean':
             return z.boolean();
@@ -90,12 +110,10 @@ const buildPrimitiveSchema = (type: string | undefined, config: JsonSchemaLike):
 };
 
 const resolveType = (config: JsonSchemaLike): string | undefined => {
-    // If the config has a direct type, use it
     if (config.type) {
         return config.type;
     }
 
-    // If the config has anyOf, extract the first non-null type
     if (Array.isArray(config.anyOf) && config.anyOf.length > 0) {
         const firstNonNull = config.anyOf.find(option => option.type !== 'null');
         return firstNonNull?.type;
@@ -105,7 +123,6 @@ const resolveType = (config: JsonSchemaLike): string | undefined => {
 };
 
 const isNullable = (config: JsonSchemaLike): boolean => {
-    // Check if anyOf contains a null type
     if (Array.isArray(config.anyOf)) {
         return config.anyOf.some(option => option.type === 'null');
     }
@@ -120,7 +137,6 @@ const buildSchemaForOption = (config: JsonSchemaLike): ZodTypeAny => {
     const type = resolveType(config);
     let schema = buildPrimitiveSchema(type, config);
 
-    // If the field is nullable (anyOf includes null), make it optional
     if (isNullable(config)) {
         schema = schema.optional().nullable();
     }

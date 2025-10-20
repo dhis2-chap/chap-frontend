@@ -28,6 +28,20 @@
     gap: 8px;
 }
 
+.inputContainer {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+}
+
+.inputContainer>div {
+    flex: 1;
+}
+
+.addButton {
+    margin-bottom: 2px;
+}
+
 .tagList {
     display: flex;
     flex-wrap: wrap;

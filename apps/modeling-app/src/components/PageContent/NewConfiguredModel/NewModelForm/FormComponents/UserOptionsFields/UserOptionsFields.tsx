@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SwitchField, InputField, SingleSelectField, SingleSelectOption } from '@dhis2/ui';
+import { SwitchField, InputField, SingleSelectField, SingleSelectOption, Button } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { Controller, useFormContext } from 'react-hook-form';
 import { ModelTemplateRead, Tag } from '@dhis2-chap/ui';
@@ -120,12 +120,14 @@ const renderStringField = (name: string, config: OptionConfig) => (
     />
 );
 
-const ArrayOptionField: React.FC<{ name: string; config: OptionConfig }> = ({ name, config }) => {
+const ArrayOptionField = ({ name, config }: { name: string; config: OptionConfig }) => {
     const [inputValue, setInputValue] = useState('');
+    const { setError, clearErrors } = useFormContext();
+    const fieldName = `userOptions.${name}`;
 
     return (
         <Controller
-            name={`userOptions.${name}`}
+            name={fieldName}
             render={({ field, fieldState }) => {
                 const values = field.value as string[] ?? [];
 
@@ -135,8 +137,17 @@ const ArrayOptionField: React.FC<{ name: string; config: OptionConfig }> = ({ na
                         return;
                     }
 
+                    if (trimmed.includes(' ')) {
+                        setError(fieldName, {
+                            type: 'manual',
+                            message: i18n.t('Spaces are not allowed. Use dashes (-) or underscores (_) instead.'),
+                        });
+                        return;
+                    }
+
                     field.onChange([...values, trimmed]);
                     setInputValue('');
+                    clearErrors(fieldName);
                 };
 
                 const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -146,18 +157,35 @@ const ArrayOptionField: React.FC<{ name: string; config: OptionConfig }> = ({ na
                     }
                 };
 
+                const handleInputChange = (value: string) => {
+                    setInputValue(value || '');
+                    if (fieldState.error) {
+                        clearErrors(fieldName);
+                    }
+                };
+
                 return (
                     <div className={styles.arrayField} data-test={`user-option-${name}`}>
-                        <InputField
-                            label={config.title ?? name}
-                            value={inputValue}
-                            onChange={({ value }) => setInputValue(value || '')}
-                            onKeyDown={(_, event) => handleKeyDown(event)}
-                            placeholder={i18n.t('Type a value and press Enter')}
-                            helpText={config.description}
-                            error={!!fieldState.error}
-                            validationText={fieldState.error?.message}
-                        />
+                        <div className={styles.inputContainer}>
+                            <InputField
+                                label={config.title ?? name}
+                                value={inputValue}
+                                onChange={({ value }) => handleInputChange(value || '')}
+                                onKeyDown={(_, event) => handleKeyDown(event)}
+                                placeholder={i18n.t('Type a value')}
+                                helpText={config.description}
+                                error={!!fieldState.error}
+                                validationText={fieldState.error?.message}
+                            />
+                            <Button
+                                onClick={addValue}
+                                disabled={!inputValue.trim()}
+                                className={styles.addButton}
+                                dataTest={`add-${name}-button`}
+                            >
+                                {i18n.t('Add')}
+                            </Button>
+                        </div>
                         {values.length > 0 && (
                             <div className={styles.tagList}>
                                 {values.map((value, index) => (

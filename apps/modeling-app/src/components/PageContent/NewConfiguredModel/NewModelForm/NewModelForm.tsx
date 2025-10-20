@@ -91,9 +91,11 @@ export const NewModelForm = ({ modelTemplates }: { modelTemplates: ModelTemplate
                             selectedModel={selectedModel}
                         />
 
-                        <UserOptionsFields
-                            selectedModel={selectedModel}
-                        />
+                        <div className={styles.userOptionsFields}>
+                            <UserOptionsFields
+                                selectedModel={selectedModel}
+                            />
+                        </div>
                     </div>
 
                     <ButtonStrip end>
