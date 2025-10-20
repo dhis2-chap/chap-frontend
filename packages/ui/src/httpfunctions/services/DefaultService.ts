@@ -8,7 +8,6 @@ import type { Feature } from '../models/Feature';
 import type { FullPredictionResponse } from '../models/FullPredictionResponse';
 import type { HealthResponse } from '../models/HealthResponse';
 import type { ModelSpec } from '../models/ModelSpec';
-import type { PredictionRequest } from '../models/PredictionRequest';
 import type { State } from '../models/State';
 import type { SystemInfoResponse } from '../models/SystemInfoResponse';
 import type { CancelablePromise } from '../core/CancelablePromise';
@@ -27,56 +26,7 @@ export class DefaultService {
         });
     }
     /**
-     * Predict
-     * Start a prediction task using the given data as training data.
-     * Results can be retrieved using the get-results endpoint.
-     * @param requestBody
-     * @returns any Successful Response
-     * @throws ApiError
-     */
-    public static predictPredictPost(
-        requestBody: PredictionRequest,
-    ): CancelablePromise<Record<string, any>> {
-        return __request(OpenAPI, {
-            method: 'POST',
-            url: '/predict',
-            body: requestBody,
-            mediaType: 'application/json',
-            errors: {
-                422: `Validation Error`,
-            },
-        });
-    }
-    /**
-     * Evaluate
-     * Start an evaluation task using the given data as training data.
-     * Results can be retrieved using the get-results endpoint.
-     * @param requestBody
-     * @param nSplits
-     * @param stride
-     * @returns any Successful Response
-     * @throws ApiError
-     */
-    public static evaluateEvaluatePost(
-        requestBody: PredictionRequest,
-        nSplits?: (number | null),
-        stride: number = 1,
-    ): CancelablePromise<Record<string, any>> {
-        return __request(OpenAPI, {
-            method: 'POST',
-            url: '/evaluate',
-            query: {
-                'n_splits': nSplits,
-                'stride': stride,
-            },
-            body: requestBody,
-            mediaType: 'application/json',
-            errors: {
-                422: `Validation Error`,
-            },
-        });
-    }
-    /**
+     * @deprecated
      * List Models
      * List all available models. These are not validated. Should set up test suite to validate them
      * @returns ModelSpec Successful Response
@@ -89,6 +39,7 @@ export class DefaultService {
         });
     }
     /**
+     * @deprecated
      * List Features
      * List all available features
      * @returns Feature Successful Response

@@ -7,8 +7,8 @@ import type { BackTestFull } from '../models/BackTestFull';
 import type { BackTestRead } from '../models/BackTestRead';
 import type { BackTestUpdate } from '../models/BackTestUpdate';
 import type { Body_create_dataset_csv_crud_datasets_csvFile_post } from '../models/Body_create_dataset_csv_crud_datasets_csvFile_post';
+import type { chap_core__rest_api__v1__jobs__DataBaseResponse } from '../models/chap_core__rest_api__v1__jobs__DataBaseResponse';
 import type { ConfiguredModelDB } from '../models/ConfiguredModelDB';
-import type { DataBaseResponse } from '../models/DataBaseResponse';
 import type { DatasetCreate } from '../models/DatasetCreate';
 import type { DataSetInfo } from '../models/DataSetInfo';
 import type { DataSetWithObservations } from '../models/DataSetWithObservations';
@@ -17,7 +17,7 @@ import type { JobResponse } from '../models/JobResponse';
 import type { ModelConfigurationCreate } from '../models/ModelConfigurationCreate';
 import type { ModelSpecRead } from '../models/ModelSpecRead';
 import type { ModelTemplateRead } from '../models/ModelTemplateRead';
-import type { NewClass } from '../models/NewClass';
+import type { PredictionBaseRead } from '../models/PredictionBaseRead';
 import type { PredictionCreate } from '../models/PredictionCreate';
 import type { PredictionRead } from '../models/PredictionRead';
 import type { CancelablePromise } from '../core/CancelablePromise';
@@ -161,10 +161,10 @@ export class CrudService {
     }
     /**
      * Get Predictions
-     * @returns NewClass Successful Response
+     * @returns PredictionBaseRead Successful Response
      * @throws ApiError
      */
-    public static getPredictionsCrudPredictionsGet(): CancelablePromise<Array<NewClass>> {
+    public static getPredictionsCrudPredictionsGet(): CancelablePromise<Array<PredictionBaseRead>> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/crud/predictions',
@@ -302,17 +302,37 @@ export class CrudService {
     /**
      * Create Dataset Csv
      * @param formData
-     * @returns DataBaseResponse Successful Response
+     * @returns chap_core__rest_api__v1__jobs__DataBaseResponse Successful Response
      * @throws ApiError
      */
     public static createDatasetCsvCrudDatasetsCsvFilePost(
         formData: Body_create_dataset_csv_crud_datasets_csvFile_post,
-    ): CancelablePromise<DataBaseResponse> {
+    ): CancelablePromise<chap_core__rest_api__v1__jobs__DataBaseResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/crud/datasets/csvFile',
             formData: formData,
             mediaType: 'multipart/form-data',
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
+     * Get Dataset Df
+     * @param datasetId
+     * @returns any Successful Response
+     * @throws ApiError
+     */
+    public static getDatasetDfCrudDatasetsDatasetIdDfGet(
+        datasetId: number,
+    ): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/crud/datasets/{datasetId}/df',
+            path: {
+                'datasetId': datasetId,
+            },
             errors: {
                 422: `Validation Error`,
             },
@@ -328,26 +348,6 @@ export class CrudService {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/crud/model-templates',
-        });
-    }
-    /**
-     * Delete Model Template
-     * @param modelTemplateId
-     * @returns any Successful Response
-     * @throws ApiError
-     */
-    public static deleteModelTemplateCrudModelTemplatesModelTemplateIdDelete(
-        modelTemplateId: number,
-    ): CancelablePromise<any> {
-        return __request(OpenAPI, {
-            method: 'DELETE',
-            url: '/crud/model-templates/{modelTemplateId}',
-            path: {
-                'modelTemplateId': modelTemplateId,
-            },
-            errors: {
-                422: `Validation Error`,
-            },
         });
     }
     /**
@@ -377,6 +377,27 @@ export class CrudService {
             url: '/crud/configured-models',
             body: requestBody,
             mediaType: 'application/json',
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
+     * Delete Configured Model
+     * Soft delete a configured model by setting archived to True
+     * @param configuredModelId
+     * @returns any Successful Response
+     * @throws ApiError
+     */
+    public static deleteConfiguredModelCrudConfiguredModelsConfiguredModelIdDelete(
+        configuredModelId: number,
+    ): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'DELETE',
+            url: '/crud/configured-models/{configuredModelId}',
+            path: {
+                'configuredModelId': configuredModelId,
+            },
             errors: {
                 422: `Validation Error`,
             },
