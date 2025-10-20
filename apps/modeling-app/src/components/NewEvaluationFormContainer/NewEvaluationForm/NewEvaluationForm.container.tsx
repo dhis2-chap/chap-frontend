@@ -7,8 +7,8 @@ import { useFormController } from './hooks/useFormController';
 import styles from './NewEvaluationForm.module.css';
 import { Button, ButtonStrip, IconArrowLeft16, IconArrowRightMulti16, NoticeBox } from '@dhis2/ui';
 import { useNavigate } from 'react-router-dom';
-import { useNavigationBlocker } from '../../hooks/useNavigationBlocker';
-import { NavigationConfirmModal } from '../NavigationConfirmModal';
+import { useNavigationBlocker } from '../../../hooks/useNavigationBlocker';
+import { NavigationConfirmModal } from '../../NavigationConfirmModal';
 import { SummaryModal } from './SummaryModal';
 
 type NewEvaluationFormProps = {

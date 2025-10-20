@@ -5,7 +5,7 @@ import styles from './SearchSelectField.module.css';
 import { Label, Layer, Popper, IconChevronDown16, IconCross16 } from '@dhis2/ui';
 import { useApiDataQuery } from '../../utils/useApiDataQuery';
 import { useDebounce } from '../../hooks/useDebounce';
-import { dimensionItemTypeSchema } from '../../components/NewEvaluationForm/hooks/useFormController';
+import { dimensionItemTypeSchema } from '../../components/NewEvaluationFormContainer/NewEvaluationForm/hooks/useFormController';
 
 interface Option {
     id: string;

@@ -6,7 +6,7 @@ import { NameInput } from './Sections/NameInput';
 import { LocationSelector } from './Sections/LocationSelector';
 import { ModelSelector } from './Sections/ModelSelector/ModelSelector';
 import { DatasetConfiguration } from './Sections/DatasetConfiguration';
-import { OrganisationUnit } from '../OrganisationUnitSelector';
+import { OrganisationUnit } from '../../OrganisationUnitSelector';
 import { EvaluationFormValues } from './hooks/useFormController';
 
 type Props = {

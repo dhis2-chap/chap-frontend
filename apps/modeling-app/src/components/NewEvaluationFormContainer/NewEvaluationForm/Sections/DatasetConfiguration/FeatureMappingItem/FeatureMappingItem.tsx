@@ -1,7 +1,7 @@
 import React from 'react';
 import { z } from 'zod';
 import { FeatureType } from '@dhis2-chap/ui';
-import SearchSelectField from '../../../../../features/search-dataitem/SearchSelectField';
+import SearchSelectField from '../../../../../../features/search-dataitem/SearchSelectField';
 import styles from './FeatureMappingItem.module.css';
 import { dataItemSchema, dimensionItemTypeSchema } from '../../../hooks/useFormController';
 

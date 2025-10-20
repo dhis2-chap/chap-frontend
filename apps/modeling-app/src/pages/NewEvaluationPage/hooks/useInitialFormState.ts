@@ -3,10 +3,10 @@ import { useLocation } from 'react-router-dom';
 import { z } from 'zod';
 import { ModelSpecRead } from '@dhis2-chap/ui';
 import { useOrgUnitsById } from '../../../hooks/useOrgUnitsById';
-import { EvaluationFormValues, PERIOD_TYPES } from '../../../components/NewEvaluationForm';
+import { EvaluationFormValues, PERIOD_TYPES } from '../../../components/NewEvaluationFormContainer/NewEvaluationForm';
 import { convertServerToClientPeriod } from '../../../features/timeperiod-selector/utils/timePeriodUtils';
 import { useDataItemByIds } from './useDataItemById';
-import { CovariateMapping } from 'apps/modeling-app/src/components/NewEvaluationForm/hooks/useFormController';
+import { CovariateMapping } from 'apps/modeling-app/src/components/NewEvaluationFormContainer/NewEvaluationForm/hooks/useFormController';
 
 type Props = {
     models: ModelSpecRead[] | undefined;

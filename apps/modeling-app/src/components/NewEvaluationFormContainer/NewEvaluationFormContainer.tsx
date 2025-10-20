@@ -1,6 +1,6 @@
 import React from 'react';
 import { CircularLoader } from '@dhis2/ui';
-import { NewEvaluationForm } from '../NewEvaluationForm';
+import { NewEvaluationForm } from './NewEvaluationForm';
 import { useInitialFormState } from '../../pages/NewEvaluationPage/hooks/useInitialFormState';
 import styles from './NewEvaluationFormContainer.module.css';
 import { useModels } from '../../hooks/useModels';

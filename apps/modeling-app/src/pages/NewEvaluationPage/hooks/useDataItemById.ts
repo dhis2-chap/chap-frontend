@@ -1,5 +1,5 @@
 import z from 'zod';
-import { dataItemSchema } from '../../../components/NewEvaluationForm/hooks/useFormController';
+import { dataItemSchema } from '../../../components/NewEvaluationFormContainer/NewEvaluationForm/hooks/useFormController';
 import { useDataEngine } from '@dhis2/app-runtime';
 import { Query, useQuery, useQueryClient } from '@tanstack/react-query';
 

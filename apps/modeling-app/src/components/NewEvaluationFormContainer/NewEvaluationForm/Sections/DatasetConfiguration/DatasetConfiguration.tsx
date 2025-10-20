@@ -10,15 +10,15 @@ import i18n from '@dhis2/d2-i18n';
 import cn from 'classnames';
 import { Control, FieldErrors, useFormContext, useWatch } from 'react-hook-form';
 import { EvaluationFormValues, CovariateMapping } from '../../hooks/useFormController';
-import { useModels } from '../../../../hooks/useModels';
+import { useModels } from '../../../../../hooks/useModels';
 import { DataMappingModal } from './DataMappingModal';
 import { useDatasetValidation } from './useDatasetValidation';
 import styles from './DatasetConfiguration.module.css';
-import { OrganisationUnit } from '../../../OrganisationUnitSelector/OrganisationUnitSelector';
-import { InspectDatasetModal } from '../../../InspectDatasetModal/InspectDatasetModal';
+import { OrganisationUnit } from '../../../../OrganisationUnitSelector/OrganisationUnitSelector';
+import { InspectDatasetModal } from '../../../../InspectDatasetModal/InspectDatasetModal';
 import { PERIOD_TYPES } from '../PeriodSelector';
-import { useInstalledDVVersion } from '../../../../utils/useInstalledDVVersion';
-import { ConditionalTooltip } from '../../../ConditionalTooltip';
+import { useInstalledDVVersion } from '../../../../../utils/useInstalledDVVersion';
+import { ConditionalTooltip } from '../../../../ConditionalTooltip';
 
 type Props = {
     control: Control<EvaluationFormValues>;

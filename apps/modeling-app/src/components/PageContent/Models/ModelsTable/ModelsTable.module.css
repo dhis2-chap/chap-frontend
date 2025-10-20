@@ -10,6 +10,13 @@
     align-items: center;
 }
 
+.rightSection {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    gap: var(--spacers-dp4);
+}
+
 .featuresCell {
     display: inline-flex;
     align-items: center;

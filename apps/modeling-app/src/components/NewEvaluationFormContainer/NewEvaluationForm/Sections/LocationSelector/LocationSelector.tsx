@@ -11,8 +11,8 @@ import { EvaluationFormValues } from '../../hooks/useFormController';
 import {
     getSelectionSummary,
     OrganisationUnit,
-} from '../../../OrganisationUnitSelector';
-import { useDataViewRootOrgUnits } from '../../../../hooks/useDataViewRootOrgUnits';
+} from '../../../../OrganisationUnitSelector';
+import { useDataViewRootOrgUnits } from '../../../../../hooks/useDataViewRootOrgUnits';
 import { OrganisationUnitSelectionModal } from './OrganisationUnitSelectionModal';
 import styles from './LocationSelector.module.css';
 

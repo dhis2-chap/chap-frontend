@@ -13,7 +13,7 @@ import {
     OrganisationUnit,
     OrganisationUnitSelector as OrgUnitSelector,
     SelectionChangeEvent,
-} from '../../../../OrganisationUnitSelector';
+} from '../../../../../OrganisationUnitSelector';
 import styles from '../LocationSelector.module.css';
 
 type Props = {
