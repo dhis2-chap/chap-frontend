@@ -24,7 +24,7 @@ export const ModelsTableFilters = ({ table }: Props) => {
             <Input
                 dense
                 placeholder={i18n.t('Search')}
-                value={search || ''}
+                value={search}
                 onChange={e => handleSearchChange(e.value)}
             />
         </div>

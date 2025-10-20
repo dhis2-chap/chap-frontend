@@ -8,7 +8,7 @@ const PARAM_KEYS = {
 export const useModelsTableFilters = () => {
     const [searchParams, setSearchParams] = useSearchParams();
 
-    const search = searchParams.get(PARAM_KEYS.search) || undefined;
+    const search = searchParams.get(PARAM_KEYS.search) || '';
 
     const setSearch = useCallback(
         (newSearch: string | undefined) => {
