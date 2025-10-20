@@ -1,6 +1,6 @@
 import { z, ZodTypeAny } from 'zod';
 
-type JsonSchemaLike = {
+export type JsonSchemaLike = {
     type?: string;
     default?: unknown;
     description?: string;
