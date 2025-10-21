@@ -115,6 +115,7 @@ const columns = [
         cell: info => (
             <ModelActionsMenu
                 id={info.row.original.id}
+                archived={info.row.original.archived ?? false}
             />
         ),
     }),
