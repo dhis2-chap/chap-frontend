@@ -1,4 +1,4 @@
-import { PERIOD_TYPES } from '../../../components/NewEvaluationForm';
+import { PERIOD_TYPES } from '../../../components/NewEvaluationFormContainer/NewEvaluationForm';
 import { Period } from '../interfaces/Period';
 import {
     parse,

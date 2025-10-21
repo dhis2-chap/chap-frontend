@@ -1,0 +1,1 @@
+export { NewConfiguredModelPage } from './NewConfiguredModelPage';

@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+    Button,
     DataTable,
     DataTableHead,
     DataTableRow,
@@ -7,6 +8,7 @@ import {
     DataTableCell,
     DataTableColumnHeader,
     DataTableFoot,
+    IconAdd16,
     Pagination,
     Tooltip,
 } from '@dhis2/ui';
@@ -26,6 +28,7 @@ import styles from './ModelsTable.module.css';
 import { ModelActionsMenu } from './ModelActionsMenu';
 import { ModelsTableFilters } from './ModelsTableFilters';
 import { useModelsTableFilters } from './hooks/useModelsTableFilters';
+import { useNavigate } from 'react-router-dom';
 
 const labelByPeriodType = {
     month: i18n.t('Monthly'),
@@ -119,6 +122,7 @@ type Props = {
 
 export const ModelsTable = ({ models }: Props) => {
     const { search } = useModelsTableFilters();
+    const navigate = useNavigate();
 
     const table = useReactTable({
         data: models || [],
@@ -143,6 +147,16 @@ export const ModelsTable = ({ models }: Props) => {
             <div className={styles.buttonContainer}>
                 <div className={styles.leftSection}>
                     <ModelsTableFilters table={table} />
+                </div>
+                <div className={styles.rightSection}>
+                    <Button
+                        primary
+                        icon={<IconAdd16 />}
+                        small
+                        onClick={() => navigate('/models/new')}
+                    >
+                        {i18n.t('New model')}
+                    </Button>
                 </div>
             </div>
             <DataTable>

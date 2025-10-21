@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2025-10-12T23:30:42.695Z\n"
-"PO-Revision-Date: 2025-10-12T23:30:42.696Z\n"
+"POT-Creation-Date: 2025-10-21T11:17:37.220Z\n"
+"PO-Revision-Date: 2025-10-21T11:17:37.221Z\n"
 
 msgid "View"
 msgstr "View"
@@ -717,8 +717,78 @@ msgstr "Covariates"
 msgid "No covariate names available"
 msgstr "No covariate names available"
 
+msgid "New model"
+msgstr "New model"
+
 msgid "No models available"
 msgstr "No models available"
+
+msgid "Error loading model templates"
+msgstr "Error loading model templates"
+
+msgid "No model templates found"
+msgstr "No model templates found"
+
+msgid ""
+"We could not find any available model templates. Please create templates or "
+"try again later."
+msgstr ""
+"We could not find any available model templates. Please create templates or "
+"try again later."
+
+msgid "This covariate has already been added."
+msgstr "This covariate has already been added."
+
+msgid "Additional continuous covariates"
+msgstr "Additional continuous covariates"
+
+msgid "Enter covariate name"
+msgstr "Enter covariate name"
+
+msgid "Add"
+msgstr "Add"
+
+msgid "Required"
+msgstr "Required"
+
+msgid "Remove"
+msgstr "Remove"
+
+msgid "Model template"
+msgstr "Model template"
+
+msgid "Select the base model template"
+msgstr "Select the base model template"
+
+msgid "Select a model template"
+msgstr "Select a model template"
+
+msgid "Deprecated model"
+msgstr "Deprecated model"
+
+msgid "This model is deprecated and may be removed in the future."
+msgstr "This model is deprecated and may be removed in the future."
+
+msgid "Type a value"
+msgstr "Type a value"
+
+msgid "The model name will be \"{{displayName}} [{{variantName}}]\""
+msgstr "The model name will be \"{{displayName}} [{{variantName}}]\""
+
+msgid "Provide a descriptive name for this variant"
+msgstr "Provide a descriptive name for this variant"
+
+msgid "Variant name"
+msgstr "Variant name"
+
+msgid "Model template is required"
+msgstr "Model template is required"
+
+msgid "Model created successfully"
+msgstr "Model created successfully"
+
+msgid "Failed to create model"
+msgstr "Failed to create model"
 
 msgid "Evaluate"
 msgstr "Evaluate"
@@ -974,9 +1044,6 @@ msgstr "No route found."
 msgid "Add route"
 msgstr "Add route"
 
-msgid "Add"
-msgstr "Add"
-
 msgid "Delete route"
 msgstr "Delete route"
 
@@ -1096,5 +1163,19 @@ msgstr "View and manage currently running jobs and their status."
 msgid "Manage configured models available in your system."
 msgstr "Manage configured models available in your system."
 
+msgid ""
+"Configure a new model with custom settings or parameters based on a model "
+"template."
+msgstr ""
+"Configure a new model with custom settings or parameters based on a model "
+"template."
+
+msgid "Back to models"
+msgstr "Back to models"
+
 msgid "Create a new evaluation to assess the performance of a model"
 msgstr "Create a new evaluation to assess the performance of a model"
+
+msgctxt ") instead."
+msgid "Spaces are not allowed. Use dashes (-) or underscores ("
+msgstr "Spaces are not allowed. Use dashes (-) or underscores (_) instead."

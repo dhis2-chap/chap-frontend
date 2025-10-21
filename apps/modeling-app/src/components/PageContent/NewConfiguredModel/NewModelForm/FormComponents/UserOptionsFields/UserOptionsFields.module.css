@@ -1,0 +1,53 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    border: 1px solid #e1e5e9;
+    border-radius: 4px;
+    padding: 12px;
+    background-color: #f8f9fa;
+    margin-top: 8px;
+}
+
+.title {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.unsupported {
+    color: var(--colors-grey700);
+    font-size: 14px;
+}
+
+.validationText {
+    color: var(--colors-red500);
+    font-size: 13px;
+    margin: 4px 0 0;
+}
+
+.arrayField {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.inputContainer {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+}
+
+.inputContainer>div {
+    flex: 1;
+}
+
+.addButton {
+    margin-bottom: 2px;
+}
+
+.tagList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
