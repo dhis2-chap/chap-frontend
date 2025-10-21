@@ -12,12 +12,12 @@ type Props = {
 export const useDeleteModel = ({ onSuccess, onError }: Props = {}) => {
     const queryClient = useQueryClient();
     const { show: showSuccessAlert } = useAlert(
-        i18n.t('Model deleted'),
+        i18n.t('Model archived'),
         { success: true },
     );
 
     const { show: showErrorAlert } = useAlert(
-        i18n.t('Failed to delete model'),
+        i18n.t('Failed to archive model'),
         { critical: true },
     );
 
@@ -26,11 +26,11 @@ export const useDeleteModel = ({ onSuccess, onError }: Props = {}) => {
         isPending,
         isError,
         error,
-    } = useMutation<{ id: number }, Error, number>({
-        mutationFn: (id) => {
-            throw new Error('Delete model endpoint not yet implemented in the API');
+    } = useMutation<void, Error, number>({
+        mutationFn: async (id) => {
+            await CrudService.deleteConfiguredModelCrudConfiguredModelsConfiguredModelIdDelete(id);
         },
-        onSuccess: (id) => {
+        onSuccess: (_, id) => {
             queryClient.invalidateQueries({ queryKey: ['models'] });
             showSuccessAlert();
             onSuccess?.({ id });

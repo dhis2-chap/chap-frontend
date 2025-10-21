@@ -40,7 +40,7 @@ export const ModelActionsMenu = ({ id }: Props) => {
                             onClick={navigateToEvaluations}
                         />
                         <MenuItem
-                            label={i18n.t('Delete')}
+                            label={i18n.t('Archive')}
                             dataTest="model-overflow-delete"
                             destructive
                             icon={<IconDelete16 />}

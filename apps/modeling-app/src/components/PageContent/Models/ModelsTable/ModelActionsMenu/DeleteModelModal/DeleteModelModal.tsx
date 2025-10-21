@@ -49,7 +49,7 @@ export const DeleteModelModal = ({
                 dataTest="delete-model-modal"
             >
                 <ModalTitle>
-                    {i18n.t('Delete model')}
+                    {i18n.t('Archive model')}
                 </ModalTitle>
                 <ModalContent>
                     <div className={styles.loadingContainer}>
@@ -71,7 +71,7 @@ export const DeleteModelModal = ({
     if (backtestsError) {
         return (
             <Modal onClose={onClose} dataTest="delete-model-modal" small>
-                <ModalTitle>{i18n.t('Delete model')}</ModalTitle>
+                <ModalTitle>{i18n.t('Archive model')}</ModalTitle>
                 <ModalContent>
                     <NoticeBox
                         error
@@ -98,20 +98,20 @@ export const DeleteModelModal = ({
             dataTest="delete-model-modal"
         >
             <ModalTitle>
-                {i18n.t('Delete model')}
+                {i18n.t('Archive model')}
             </ModalTitle>
             <ModalContent>
                 {hasAssociatedBacktests && (
                     <NoticeBox
                         warning
-                        title={i18n.t('Cannot delete model')}
+                        title={i18n.t('Cannot archive model')}
                     >
-                        {i18n.t('This model has {{count}} associated backtest(s) and cannot be deleted. Please delete the associated backtests first.', { count: associatedBacktests.length })}
+                        {i18n.t('This model has {{count}} associated backtest(s) and cannot be archived. Please delete the associated backtests first.', { count: associatedBacktests.length })}
                     </NoticeBox>
                 )}
                 {!hasAssociatedBacktests && (
                     <p>
-                        {i18n.t('Are you sure you want to delete this model? This action cannot be undone.')}
+                        {i18n.t('Are you sure you want to archive this model? You will still be able to view evaluations for this model, but you will not be able to create new evaluations or predictions.')}
                     </p>
                 )}
             </ModalContent>
@@ -133,7 +133,7 @@ export const DeleteModelModal = ({
                         disabled={deleteIsLoading || isLoadingBacktests || hasAssociatedBacktests}
                         dataTest="submit-delete-model-button"
                     >
-                        {i18n.t('Delete')}
+                        {i18n.t('Archive')}
                     </Button>
                 </ButtonStrip>
             </ModalActions>
