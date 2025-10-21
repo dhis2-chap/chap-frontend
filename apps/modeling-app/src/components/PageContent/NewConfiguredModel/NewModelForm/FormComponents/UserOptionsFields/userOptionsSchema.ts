@@ -90,8 +90,7 @@ const buildPrimitiveSchema = (type: string | undefined, config: JsonSchemaLike):
             return z.preprocess(
                 (val) => {
                     if (typeof val === 'number') return val;
-                    if (typeof val !== 'string') return undefined;
-                    if (val.trim() === '') return undefined;
+                    if (typeof val !== 'string' || val.trim() === '') return undefined;
 
                     return val;
                 },

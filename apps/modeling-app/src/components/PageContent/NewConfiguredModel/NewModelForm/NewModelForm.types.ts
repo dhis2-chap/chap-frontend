@@ -12,4 +12,3 @@ export type NewModelFormValues = BaseModelFormValues & {
     userOptions: Record<string, unknown>;
     additionalContinuousCovariates: string[];
 };
-

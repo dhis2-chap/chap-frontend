@@ -53,6 +53,7 @@ export const NewModelFormView = ({
             await createModel(payload);
         },
         (errors) => {
+            // In case of modelId error, we want to show the error message in the parent field - in practice this should never happen
             const modelError = errors.modelId?.message as string | undefined;
             onValidationError?.(modelError);
         },

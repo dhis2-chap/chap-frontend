@@ -6,7 +6,7 @@ import { useOrgUnitsById } from '../../../hooks/useOrgUnitsById';
 import { EvaluationFormValues, PERIOD_TYPES } from '../../../components/NewEvaluationFormContainer/NewEvaluationForm';
 import { convertServerToClientPeriod } from '../../../features/timeperiod-selector/utils/timePeriodUtils';
 import { useDataItemByIds } from './useDataItemById';
-import { CovariateMapping } from 'apps/modeling-app/src/components/NewEvaluationFormContainer/NewEvaluationForm/hooks/useFormController';
+import { CovariateMapping } from '../../../components/NewEvaluationFormContainer/NewEvaluationForm/hooks/useFormController';
 
 type Props = {
     models: ModelSpecRead[] | undefined;
