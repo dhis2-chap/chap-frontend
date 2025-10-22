@@ -5,11 +5,14 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2025-09-24T12:30:39.097Z\n"
-"PO-Revision-Date: 2025-09-24T12:30:39.098Z\n"
+"POT-Creation-Date: 2025-10-22T14:31:00.962Z\n"
+"PO-Revision-Date: 2025-10-22T14:31:00.962Z\n"
 
 msgid "View"
 msgstr "View"
+
+msgid "Create new..."
+msgstr "Create new..."
 
 msgid "Detailed metrics"
 msgstr "Detailed metrics"
@@ -19,6 +22,45 @@ msgstr "Rename"
 
 msgid "Delete"
 msgstr "Delete"
+
+msgid "{{name}} (Copy)"
+msgstr "{{name}} (Copy)"
+
+msgid "Copy evaluation"
+msgstr "Copy evaluation"
+
+msgid "Cancel"
+msgstr "Cancel"
+
+msgid "Failed to load evaluation data. Please try again."
+msgstr "Failed to load evaluation data. Please try again."
+
+msgid "Close"
+msgstr "Close"
+
+msgid "Name"
+msgstr "Name"
+
+msgid "Untitled"
+msgstr "Untitled"
+
+msgid "Organisation units"
+msgstr "Organisation units"
+
+msgid "Model"
+msgstr "Model"
+
+msgid "Data sources"
+msgstr "Data sources"
+
+msgid "Period type"
+msgstr "Period type"
+
+msgid "Period range"
+msgstr "Period range"
+
+msgid "Copy to new evaluation"
+msgstr "Copy to new evaluation"
 
 msgid "Delete evaluation"
 msgstr "Delete evaluation"
@@ -30,17 +72,11 @@ msgstr ""
 "Are you sure you want to delete this evaluation? This action cannot be "
 "undone."
 
-msgid "Cancel"
-msgstr "Cancel"
-
 msgid "Name is required"
 msgstr "Name is required"
 
 msgid "Rename evaluation"
 msgstr "Rename evaluation"
-
-msgid "Name"
-msgstr "Name"
 
 msgid "Save"
 msgstr "Save"
@@ -51,11 +87,8 @@ msgstr "ID"
 msgid "Created"
 msgstr "Created"
 
-msgid "Model"
-msgstr "Model"
-
-msgid "CRPS (Norm)"
-msgstr "CRPS (Norm)"
+msgid "CRPS"
+msgstr "CRPS"
 
 msgid ""
 "Normalized CRPS (Continuous Ranked Probability Score) shows how close a "
@@ -148,12 +181,6 @@ msgstr ""
 "There was a problem loading the visualization. See the browser console for "
 "details."
 
-msgid "Select visualization"
-msgstr "Select visualization"
-
-msgid "Select metric"
-msgstr "Select metric"
-
 msgid "Click to view actions"
 msgstr "Click to view actions"
 
@@ -179,11 +206,14 @@ msgstr ""
 "There was a problem loading required data. See the browser console for "
 "details."
 
+msgid "Select visualization"
+msgstr "Select visualization"
+
+msgid "Select metric"
+msgstr "Select metric"
+
 msgid "Inspect dataset"
 msgstr "Inspect dataset"
-
-msgid "Close"
-msgstr "Close"
 
 msgid "Cancel job"
 msgstr "Cancel job"
@@ -461,9 +491,6 @@ msgstr "Evaluation name"
 msgid "EWARS Evaluation 22-24"
 msgstr "EWARS Evaluation 22-24"
 
-msgid "Period type"
-msgstr "Period type"
-
 msgid "From period"
 msgstr "From period"
 
@@ -672,6 +699,128 @@ msgstr "Prediction deleted"
 msgid "Failed to delete prediction"
 msgstr "Failed to delete prediction"
 
+msgid "Error loading jobs"
+msgstr "Error loading jobs"
+
+msgid "An unknown error occurred"
+msgstr "An unknown error occurred"
+
+msgid "Error loading models"
+msgstr "Error loading models"
+
+msgid "Are you sure you want to archive this model?"
+msgstr "Are you sure you want to archive this model?"
+
+msgid ""
+"You will still be able to view evaluations for this model, but you will not "
+"be able to create new evaluations or predictions."
+msgstr ""
+"You will still be able to view evaluations for this model, but you will not "
+"be able to create new evaluations or predictions."
+
+msgid "Archive"
+msgstr "Archive"
+
+msgid "View evaluations"
+msgstr "View evaluations"
+
+msgid "Model archived"
+msgstr "Model archived"
+
+msgid "Failed to archive model"
+msgstr "Failed to archive model"
+
+msgid "Author"
+msgstr "Author"
+
+msgid "Covariates"
+msgstr "Covariates"
+
+msgid "No covariate names available"
+msgstr "No covariate names available"
+
+msgid "Archived"
+msgstr "Archived"
+
+msgid "Active"
+msgstr "Active"
+
+msgid "New model"
+msgstr "New model"
+
+msgid "No models available"
+msgstr "No models available"
+
+msgid "Include archived"
+msgstr "Include archived"
+
+msgid "Error loading model templates"
+msgstr "Error loading model templates"
+
+msgid "No model templates found"
+msgstr "No model templates found"
+
+msgid ""
+"We could not find any available model templates. Please create templates or "
+"try again later."
+msgstr ""
+"We could not find any available model templates. Please create templates or "
+"try again later."
+
+msgid "This covariate has already been added."
+msgstr "This covariate has already been added."
+
+msgid "Additional continuous covariates"
+msgstr "Additional continuous covariates"
+
+msgid "Enter covariate name"
+msgstr "Enter covariate name"
+
+msgid "Add"
+msgstr "Add"
+
+msgid "Required"
+msgstr "Required"
+
+msgid "Remove"
+msgstr "Remove"
+
+msgid "Model template"
+msgstr "Model template"
+
+msgid "Select the base model template"
+msgstr "Select the base model template"
+
+msgid "Select a model template"
+msgstr "Select a model template"
+
+msgid "Deprecated model"
+msgstr "Deprecated model"
+
+msgid "This model is deprecated and may be removed in the future."
+msgstr "This model is deprecated and may be removed in the future."
+
+msgid "Type a value"
+msgstr "Type a value"
+
+msgid "The model name will be \"{{displayName}} [{{variantName}}]\""
+msgstr "The model name will be \"{{displayName}} [{{variantName}}]\""
+
+msgid "Provide a descriptive name for this variant"
+msgstr "Provide a descriptive name for this variant"
+
+msgid "Variant name"
+msgstr "Variant name"
+
+msgid "Model template is required"
+msgstr "Model template is required"
+
+msgid "Model created successfully"
+msgstr "Model created successfully"
+
+msgid "Failed to create model"
+msgstr "Failed to create model"
+
 msgid "Evaluate"
 msgstr "Evaluate"
 
@@ -683,6 +832,9 @@ msgstr "Compare"
 
 msgid "Predict"
 msgstr "Predict"
+
+msgid "Models"
+msgstr "Models"
 
 msgid "Jobs"
 msgstr "Jobs"
@@ -796,6 +948,13 @@ msgstr "It seems like you missing Data Elements for CHAP prediction."
 
 msgid "Add data elements"
 msgstr "Add data elements"
+
+msgid ""
+"Job is still running. Please wait until it is finished before doing any "
+"actions."
+msgstr ""
+"Job is still running. Please wait until it is finished before doing any "
+"actions."
 
 msgid "Unknown error"
 msgstr "Unknown error"
@@ -911,9 +1070,6 @@ msgstr "Organisation unit level"
 msgid "Organisation unit level to import data to"
 msgstr "Organisation unit level to import data to"
 
-msgid "Organisation units"
-msgstr "Organisation units"
-
 msgid "Data Element"
 msgstr "Data Element"
 
@@ -984,40 +1140,6 @@ msgstr ""
 
 msgid "Your server is not secure"
 msgstr "Your server is not secure"
-
-msgid "Model settings"
-msgstr "Model settings"
-
-msgid "An error occurred while loading models."
-msgstr "An error occurred while loading models."
-
-msgid ""
-"Please try to reload the page. If the problem persists, contact your system "
-"administrator."
-msgstr ""
-"Please try to reload the page. If the problem persists, contact your system "
-"administrator."
-
-msgid "Model templates"
-msgstr "Model templates"
-
-msgid ""
-"Model templates are base models that can be configured to fit your data "
-"with different parameters and covariates. This is still an advanced feature "
-"and should be used with caution."
-msgstr ""
-"Model templates are base models that can be configured to fit your data "
-"with different parameters and covariates. This is still an advanced feature "
-"and should be used with caution."
-
-msgid "Configured models"
-msgstr "Configured models"
-
-msgid "Configure"
-msgstr "Configure"
-
-msgid "Models configured"
-msgstr "Models configured"
 
 msgid "Route configuration"
 msgstr "Route configuration"
@@ -1119,9 +1241,6 @@ msgstr "Inspect a single evaluation and view its visualizations."
 msgid "Error loading evaluations"
 msgstr "Error loading evaluations"
 
-msgid "An unknown error occurred"
-msgstr "An unknown error occurred"
-
 msgid "Evaluations"
 msgstr "Evaluations"
 
@@ -1141,17 +1260,39 @@ msgstr "To get started, create a route that points to a running CHAP server."
 msgid "Route and servers are configured on the settings page."
 msgstr "Route and servers are configured on the settings page."
 
-msgid "Error loading jobs"
-msgstr "Error loading jobs"
-
 msgid "Active jobs"
 msgstr "Active jobs"
 
 msgid "View and manage currently running jobs and their status."
 msgstr "View and manage currently running jobs and their status."
 
+msgid "Manage configured models available in your system."
+msgstr "Manage configured models available in your system."
+
+msgid ""
+"Configure a new model with custom settings or parameters based on a model "
+"template."
+msgstr ""
+"Configure a new model with custom settings or parameters based on a model "
+"template."
+
+msgid "Back to models"
+msgstr "Back to models"
+
 msgid "Create a new evaluation to assess the performance of a model"
 msgstr "Create a new evaluation to assess the performance of a model"
+
+msgctxt ") instead."
+msgid "Spaces are not allowed. Use dashes (-) or underscores ("
+msgstr "Spaces are not allowed. Use dashes (-) or underscores (_) instead."
+
+msgctxt "Application title"
+msgid "__MANIFEST_APP_TITLE"
+msgstr "Modeling"
+
+msgctxt "Application description"
+msgid "__MANIFEST_APP_DESCRIPTION"
+msgstr ""
 
 msgid "Prediction details{{escaped}} {{name}}"
 msgstr "Prediction details{{escaped}} {{name}}"

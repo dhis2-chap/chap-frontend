@@ -8,5 +8,7 @@ export type ConfiguredModelDB = {
     name: string;
     id?: (number | null);
     modelTemplateId: number;
+    archived?: boolean;
+    usesChapkit?: boolean;
 };
 

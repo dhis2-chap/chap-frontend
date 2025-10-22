@@ -1,6 +1,6 @@
 import React from 'react';
 import i18n from '@dhis2/d2-i18n';
-import { NewEvaluationForm } from '../../components/NewEvaluationForm';
+import { NewEvaluationFormContainer } from '../../components/NewEvaluationFormContainer';
 import { PageHeader } from '../../features/common-features/PageHeader/PageHeader';
 
 export const NewEvaluationPage = () => {
@@ -11,7 +11,7 @@ export const NewEvaluationPage = () => {
                 pageDescription={i18n.t('Create a new evaluation to assess the performance of a model')}
             />
 
-            <NewEvaluationForm />
+            <NewEvaluationFormContainer />
         </div>
     );
 };

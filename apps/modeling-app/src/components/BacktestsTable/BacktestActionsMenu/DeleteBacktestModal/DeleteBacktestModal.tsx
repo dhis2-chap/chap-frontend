@@ -33,6 +33,7 @@ export const DeleteBacktestModal = ({
     return (
         <Modal
             onClose={onClose}
+            small
             dataTest="delete-backtest-modal"
         >
             <ModalTitle>
