@@ -1,3 +1,9 @@
+.container {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
 .inputContainer {
     width: 200px;
     transition: width 0.3s ease;

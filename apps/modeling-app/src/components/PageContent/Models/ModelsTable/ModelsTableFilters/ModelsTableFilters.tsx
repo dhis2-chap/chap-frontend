@@ -20,13 +20,15 @@ export const ModelsTableFilters = ({ table }: Props) => {
     };
 
     return (
-        <div className={styles.inputContainer}>
-            <Input
-                dense
-                placeholder={i18n.t('Search')}
-                value={search}
-                onChange={e => handleSearchChange(e.value)}
-            />
+        <div className={styles.container}>
+            <div className={styles.inputContainer}>
+                <Input
+                    dense
+                    placeholder={i18n.t('Search')}
+                    value={search}
+                    onChange={e => handleSearchChange(e.value)}
+                />
+            </div>
             <Checkbox
                 dense
                 label={i18n.t('Include archived')}
