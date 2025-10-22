@@ -106,7 +106,7 @@ const router = createHashRouter([
                                 element: <PredictionsNewPage />,
                             },
                             {
-                                path: '/predictions/:predictionId',
+                                path: ':predictionId',
                                 handle: {
                                     collapseSidebar: true,
                                 } satisfies RouteHandle,
