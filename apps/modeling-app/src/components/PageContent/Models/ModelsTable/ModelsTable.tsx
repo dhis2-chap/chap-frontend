@@ -101,12 +101,21 @@ const columns = [
         enableSorting: false,
         cell: info => info.getValue() || undefined,
     }),
+    columnHelper.accessor('archived', {
+        header: i18n.t('Archived'),
+        cell: info => info.getValue() ? (
+            <Pill variant="destructive">{i18n.t('Archived')}</Pill>
+        ) : (
+            <Pill variant="info">{i18n.t('Active')}</Pill>
+        ),
+    }),
     columnHelper.display({
         id: 'actions',
         header: i18n.t('Actions'),
         cell: info => (
             <ModelActionsMenu
                 id={info.row.original.id}
+                archived={info.row.original.archived ?? false}
             />
         ),
     }),

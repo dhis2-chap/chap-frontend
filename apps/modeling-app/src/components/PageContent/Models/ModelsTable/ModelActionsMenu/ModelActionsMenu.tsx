@@ -4,7 +4,7 @@ import {
     MenuItem,
     IconView16,
     IconMore16,
-    IconDelete16,
+    IconArchive16,
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { OverflowButton } from '@dhis2-chap/ui';
@@ -13,9 +13,10 @@ import { useNavigate } from 'react-router-dom';
 
 type Props = {
     id: number;
+    archived: boolean;
 };
 
-export const ModelActionsMenu = ({ id }: Props) => {
+export const ModelActionsMenu = ({ id, archived }: Props) => {
     const [flyoutMenuIsOpen, setFlyoutMenuIsOpen] = useState(false);
     const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
     const navigate = useNavigate();
@@ -39,16 +40,18 @@ export const ModelActionsMenu = ({ id }: Props) => {
                             icon={<IconView16 />}
                             onClick={navigateToEvaluations}
                         />
-                        <MenuItem
-                            label={i18n.t('Delete')}
-                            dataTest="model-overflow-delete"
-                            destructive
-                            icon={<IconDelete16 />}
-                            onClick={() => {
-                                setDeleteModalIsOpen(true);
-                                setFlyoutMenuIsOpen(false);
-                            }}
-                        />
+                        {!archived && (
+                            <MenuItem
+                                label={i18n.t('Archive')}
+                                dataTest="model-overflow-archive"
+                                destructive
+                                icon={<IconArchive16 />}
+                                onClick={() => {
+                                    setDeleteModalIsOpen(true);
+                                    setFlyoutMenuIsOpen(false);
+                                }}
+                            />
+                        )}
                     </FlyoutMenu>
                 )}
             />

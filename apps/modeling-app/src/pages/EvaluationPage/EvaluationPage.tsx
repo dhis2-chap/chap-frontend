@@ -13,7 +13,7 @@ import { useModels } from '../../hooks/useModels';
 
 export const EvaluationPage: React.FC = () => {
     const { backtests, error: backtestsError, isLoading: backtestsLoading } = useBacktests();
-    const { models, error: modelsError, isLoading: modelsLoading } = useModels();
+    const { models, error: modelsError, isLoading: modelsLoading } = useModels({ includeArchived: true });
 
     if (backtestsLoading || modelsLoading) {
         return (

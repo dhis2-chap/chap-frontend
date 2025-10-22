@@ -7,7 +7,7 @@ import { ModelsTable } from './ModelsTable';
 import { useModels } from '../../../hooks/useModels';
 
 export const ModelContent: React.FC = () => {
-    const { models, error, isLoading } = useModels();
+    const { models, error, isLoading } = useModels({ includeArchived: true });
 
     if (isLoading) {
         return (
