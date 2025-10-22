@@ -5,9 +5,11 @@ import i18n from '@dhis2/d2-i18n';
 import styles from './ModelContent.module.css';
 import { ModelsTable } from './ModelsTable';
 import { useModels } from '../../../hooks/useModels';
+import { useModelsTableFilters } from './ModelsTable/hooks/useModelsTableFilters';
 
 export const ModelContent: React.FC = () => {
-    const { models, error, isLoading } = useModels({ includeArchived: true });
+    const { includeArchived } = useModelsTableFilters();
+    const { models, error, isLoading } = useModels({ includeArchived });
 
     if (isLoading) {
         return (
