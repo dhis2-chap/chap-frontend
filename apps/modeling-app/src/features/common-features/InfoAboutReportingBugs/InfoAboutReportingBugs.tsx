@@ -1,13 +1,29 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styles from './InfoAboutReportingBugs.module.css';
 import { Button, IconCross16, IconWarning16 } from '@dhis2/ui';
+import { useLocalStorage } from '../../../hooks/useLocalStorage';
+
+const STORAGE_KEY = 'chap-modeling-app:hide-reporting-bugs-warning';
+const WARNING_VERSION = '1';
+const EXPIRATION_DAYS = 30;
 
 const InfoAboutReportingBugs = () => {
-    const [closeWarning, setCloseWarning] = useState(true);
+    const [isWarningDismissed, setIsWarningDismissed] = useLocalStorage(
+        STORAGE_KEY,
+        false,
+        {
+            currentVersion: WARNING_VERSION,
+            expirationDays: EXPIRATION_DAYS,
+        },
+    );
+
+    const handleDismiss = () => {
+        setIsWarningDismissed(true);
+    };
 
     return (
         <div className={styles.infoAboutReportingBugs}>
-            {closeWarning && (
+            {!isWarningDismissed && (
                 <div
                     className={styles.infoAboutReportingBugsInner}
                     style={{ maxWidth: '1400px' }}
@@ -25,10 +41,7 @@ const InfoAboutReportingBugs = () => {
                         </a>
                     </div>
                     <div>
-                        <Button
-                            small
-                            onClick={() => setCloseWarning(!closeWarning)}
-                        >
+                        <Button small onClick={handleDismiss}>
                             <IconCross16 />
                         </Button>
                     </div>
