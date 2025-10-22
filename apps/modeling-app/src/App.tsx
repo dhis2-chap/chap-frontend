@@ -100,28 +100,17 @@ const router = createHashRouter([
                     },
                     {
                         path: '/predictions',
-                        element: <PredictionsNewPage />,
-                    },
-                    {
-                        path: '/predictions/:predictionId',
-                        handle: {
-                            collapseSidebar: true,
-                        } satisfies RouteHandle,
-                        element: <PredictionDetailsPage />,
-                    },
-                    {
-                        path: '/models',
                         children: [
                             {
                                 index: true,
-                                element: <ModelsPage />,
+                                element: <PredictionsNewPage />,
                             },
                             {
-                                path: 'new',
-                                element: <NewConfiguredModelPage />,
+                                path: '/predictions/:predictionId',
                                 handle: {
                                     collapseSidebar: true,
                                 } satisfies RouteHandle,
+                                element: <PredictionDetailsPage />,
                             },
                         ],
                     },

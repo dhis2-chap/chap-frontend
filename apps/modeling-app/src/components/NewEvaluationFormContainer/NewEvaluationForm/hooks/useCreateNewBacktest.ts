@@ -108,11 +108,6 @@ export const useCreateNewBacktest = ({
                 queryClient,
             );
 
-            const dataSources = formData.covariateMappings.map(mapping => ({
-                covariate: mapping.covariateName,
-                dataElementId: mapping.dataItem.id,
-            }));
-
             const filteredGeoJson: FeatureCollectionModel = {
                 type: 'FeatureCollection',
                 features: orgUnitResponse.geojson.organisationUnits.map(ou => ({
