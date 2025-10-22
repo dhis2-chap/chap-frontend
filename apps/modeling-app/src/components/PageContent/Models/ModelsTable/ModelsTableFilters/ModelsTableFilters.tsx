@@ -1,21 +1,14 @@
 import React from 'react';
 import { Input, Checkbox } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
-import { Table } from '@tanstack/react-table';
-import { ModelSpecRead } from '@dhis2-chap/ui';
 import styles from './ModelsTableFilters.module.css';
 import { useModelsTableFilters } from '../hooks/useModelsTableFilters';
 
-type Props = {
-    table: Table<ModelSpecRead>;
-};
-
-export const ModelsTableFilters = ({ table }: Props) => {
+export const ModelsTableFilters = () => {
     const { search, setSearch, includeArchived, setIncludeArchived } = useModelsTableFilters();
 
     const handleSearchChange = (value: string | undefined) => {
         const searchValue = value || undefined;
-        table.getColumn('name')?.setFilterValue(searchValue);
         setSearch(searchValue);
     };
 
