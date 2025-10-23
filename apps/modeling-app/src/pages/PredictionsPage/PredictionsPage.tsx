@@ -5,13 +5,13 @@ import {
 } from '@dhis2/ui';
 import { Card } from '@dhis2-chap/ui';
 import i18n from '@dhis2/d2-i18n';
-import styles from './PredictionsNewPage.module.css';
+import styles from './PredictionsPage.module.css';
 import { usePredictions } from '../../hooks/usePredictions';
 import { PredictionsTable } from '../../components/PredictionsTable';
 import { PageHeader } from '../../features/common-features/PageHeader/PageHeader';
 import { useModels } from '../../hooks/useModels';
 
-export const PredictionsNewPage: React.FC = () => {
+export const PredictionsPage: React.FC = () => {
     const { predictions, error: predictionsError, isLoading: predictionsLoading } = usePredictions();
     const { models, error: modelsError, isLoading: modelsLoading } = useModels();
 

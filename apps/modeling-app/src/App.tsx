@@ -24,7 +24,7 @@ import { NewEvaluationPage } from './pages/NewEvaluationPage';
 import { JobsPage } from './pages/JobsPage';
 import { EvaluationComparePage } from './pages/EvaluationCompare';
 import { GetStartedPage } from './pages/GetStartedPage';
-import { PredictionsNewPage } from './pages/PredictionsNewPage';
+import { PredictionsPage } from './pages/PredictionsPage';
 import { PredictionDetailsPage } from './pages/PredictionDetailsPage';
 import { ModelsPage } from './pages/ModelsPage';
 import { NewConfiguredModelPage } from './pages/NewConfiguredModelPage';
@@ -103,7 +103,7 @@ const router = createHashRouter([
                         children: [
                             {
                                 index: true,
-                                element: <PredictionsNewPage />,
+                                element: <PredictionsPage />,
                             },
                             {
                                 path: ':predictionId',
@@ -111,6 +111,13 @@ const router = createHashRouter([
                                     collapseSidebar: true,
                                 } satisfies RouteHandle,
                                 element: <PredictionDetailsPage />,
+                            },
+                            {
+                                path: 'new',
+                                handle: {
+                                    collapseSidebar: true,
+                                } satisfies RouteHandle,
+                                element: <p>New prediction</p>,
                             },
                         ],
                     },

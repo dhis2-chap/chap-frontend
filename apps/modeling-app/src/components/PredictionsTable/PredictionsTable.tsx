@@ -20,14 +20,14 @@ import {
     getPaginationRowModel,
     Column,
 } from '@tanstack/react-table';
-import { NewClass, ModelSpecRead } from '@dhis2-chap/ui';
+import { PredictionRead, ModelSpecRead } from '@dhis2-chap/ui';
 import styles from './PredictionsTable.module.css';
 import { PredictionsTableFilters } from './PredictionsTableFilters';
 import { RunningJobsIndicator } from '../BacktestsTable/RunningJobsIndicator';
 import { JOB_TYPES } from '../../hooks/useJobs';
 import { PredictionActionsMenu } from './PredictionActionsMenu';
 
-const columnHelper = createColumnHelper<NewClass>();
+const columnHelper = createColumnHelper<PredictionRead>();
 
 const columns = [
     columnHelper.accessor('id', {
@@ -68,12 +68,12 @@ const columns = [
     }),
 ];
 
-const getSortDirection = (column: Column<NewClass>) => {
+const getSortDirection = (column: Column<PredictionRead>) => {
     return column.getIsSorted() || 'default';
 };
 
 type Props = {
-    predictions: NewClass[];
+    predictions: PredictionRead[];
     models: ModelSpecRead[];
 };
 

@@ -1,1 +1,0 @@
-export { PredictionsNewPage } from './PredictionsNewPage';
