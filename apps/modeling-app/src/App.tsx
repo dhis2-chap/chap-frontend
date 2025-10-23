@@ -9,7 +9,6 @@ import React from 'react';
 import './locales';
 import './App.module.css';
 import PageWrapper from './components/PageWrapper';
-import PredictionOverview from './features/predictions-overview/PredictionOverview';
 import { SetChapUrl } from './features/route-api/SetChapUrl';
 import { SettingsPage } from './features/settings/Settings';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
@@ -25,6 +24,8 @@ import { NewEvaluationPage } from './pages/NewEvaluationPage';
 import { JobsPage } from './pages/JobsPage';
 import { EvaluationComparePage } from './pages/EvaluationCompare';
 import { GetStartedPage } from './pages/GetStartedPage';
+import { PredictionsPage } from './pages/PredictionsPage';
+import { PredictionDetailsPage } from './pages/PredictionDetailsPage';
 import { ModelsPage } from './pages/ModelsPage';
 import { NewConfiguredModelPage } from './pages/NewConfiguredModelPage';
 import { SyncUrlWithGlobalShell } from './utils/syncUrlWithGlobalShell';
@@ -98,8 +99,27 @@ const router = createHashRouter([
                         element: <JobsPage />,
                     },
                     {
-                        path: '/predict',
-                        element: <PredictionOverview />,
+                        path: '/predictions',
+                        children: [
+                            {
+                                index: true,
+                                element: <PredictionsPage />,
+                            },
+                            {
+                                path: ':predictionId',
+                                handle: {
+                                    collapseSidebar: true,
+                                } satisfies RouteHandle,
+                                element: <PredictionDetailsPage />,
+                            },
+                            {
+                                path: 'new',
+                                handle: {
+                                    collapseSidebar: true,
+                                } satisfies RouteHandle,
+                                element: <p>New prediction</p>,
+                            },
+                        ],
                     },
                     {
                         path: '/models',

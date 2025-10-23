@@ -1,0 +1,15 @@
+.inputContainer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 200px;
+    transition: width 0.3s ease;
+}
+
+.inputContainer:focus-within {
+    width: 300px;
+}
+
+.singleSelectContainer {
+    min-width: 200px;
+}

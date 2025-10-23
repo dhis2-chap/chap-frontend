@@ -1,7 +1,7 @@
 /* generated using openapi-typescript-codegen -- do not edit */
 /* istanbul ignore file */
 /* tslint:disable */
-
+/* eslint-disable */
 export { ApiError } from './core/ApiError';
 export { CancelablePromise, CancelError } from './core/CancelablePromise';
 export { OpenAPI } from './core/OpenAPI';
@@ -75,7 +75,6 @@ export type { VisualizationInfo } from './models/VisualizationInfo';
 
 export { AnalyticsService } from './services/AnalyticsService';
 export { CrudService } from './services/CrudService';
-export { DatasetPlotsService } from './services/DatasetPlotsService';
 export { DebugService } from './services/DebugService';
 export { DefaultService } from './services/DefaultService';
 export { JobsService } from './services/JobsService';

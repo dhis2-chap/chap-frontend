@@ -29,6 +29,9 @@ export { default as SplitPeriodSelector } from './components/evaluation/SplitPer
 export type {
     FullPredictionResponseExtended,
     PredictionResponseExtended,
+    PredictionOrgUnitSeries,
+    PredictionPointVM,
+    QuantileKey,
 } from './interfaces/Prediction';
 
 export type {
@@ -43,3 +46,4 @@ export {
     disableQueue,
     getQueue,
 } from './httpfunctions/core/request';
+export { buildPredictionSeries, computeQuantile } from './utils/PredictionViewModel';

@@ -1,98 +1,70 @@
+import React from 'react';
 import i18n from '@dhis2/d2-i18n';
 import styles from './PredictionTable.module.css';
-import React from 'react';
+import { PredictionOrgUnitSeries } from '../../../interfaces/Prediction';
 import {
-    FullPredictionResponseExtended,
-} from '../../../interfaces/Prediction';
-import { PredictionResponse } from '../../../httpfunctions';
-import {
-    getUniqeOrgUnits,
-    findOrgUnitName,
-    getUniqePeriods,
-    getUniqeQuantiles,
-} from '../../../utils/PredictionResponse';
-import { createFixedPeriodFromPeriodId } from '@dhis2/multi-calendar-dates';
+    DataTable,
+    DataTableHead,
+    DataTableRow,
+    DataTableBody,
+    DataTableCell,
+    DataTableColumnHeader,
+} from '@dhis2/ui';
 
 interface PredictionTableProps {
-    data: FullPredictionResponseExtended;
+    series: PredictionOrgUnitSeries;
 }
 
-export const PredictionTable = ({ data }: PredictionTableProps) => {
-    const dataValues = data.dataValues;
-
+export const PredictionTable = ({ series }: PredictionTableProps) => {
+    const orgUnitId = series.orgUnitId ?? 'ou';
+    const periods = series.points.map(p => p.periodLabel);
     return (
         <>
-            {getUniqeOrgUnits(dataValues).map((ou: string) => {
-                return (
-                    <div key={ou}>
-                        <h3>
-                            {i18n.t(
-                                'Prediction for {{orgUnitName}}',
-                                {
-                                    orgUnitName: findOrgUnitName(
-                                        ou,
-                                        dataValues,
-                                    ),
-                                },
-                            )}
-                        </h3>
-                        <table className={styles.table}>
-                            <thead>
-                                <tr>
-                                    <th>Quantiles</th>
-                                    {getUniqePeriods(dataValues).map(
-                                        (p: string) => {
-                                            return (
-                                                <th key={p}>
-                                                    {
-                                                        createFixedPeriodFromPeriodId(
-                                                            {
-                                                                periodId: p,
-                                                                calendar:
-                                                                    'gregory',
-                                                            },
-                                                        ).displayName
-                                                    }
-                                                </th>
-                                            );
-                                        },
-                                    )}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {getUniqeQuantiles(dataValues).map(
-                                    (q: string) => (
-                                        <tr key={q}>
-                                            <td>{q.replaceAll('_', ' ')}</td>
-                                            {getUniqePeriods(dataValues).map(
-                                                (p: string) => {
-                                                    return (
-                                                        <td key={p}>
-                                                            {
-                                                                dataValues.filter(
-                                                                    (
-                                                                        d: PredictionResponse,
-                                                                    ) =>
-                                                                        d.dataElement
-                                                                        === q &&
-                                                                        d.orgUnit
-                                                                        === ou &&
-                                                                        d.period
-                                                                        === p,
-                                                                )[0].value
-                                                            }
-                                                        </td>
-                                                    );
-                                                },
-                                            )}
-                                        </tr>
-                                    ),
-                                )}
-                            </tbody>
-                        </table>
-                    </div>
-                );
-            })}
+            <div key={orgUnitId}>
+                <DataTable className={styles.table}>
+                    <DataTableHead>
+                        <DataTableRow>
+                            <DataTableColumnHeader className={styles.headerRight}>
+                                {i18n.t('Quantiles')}
+                            </DataTableColumnHeader>
+                            {periods.map((label: string, idx: number) => (
+                                <DataTableColumnHeader
+                                    className={styles.headerRight}
+                                    key={`${orgUnitId}-${idx}`}
+                                >
+                                    {label}
+                                </DataTableColumnHeader>
+                            ))}
+                        </DataTableRow>
+                    </DataTableHead>
+                    <DataTableBody>
+                        <DataTableRow>
+                            <DataTableCell align="left">{i18n.t('Quantile median')}</DataTableCell>
+                            {series.points.map((pt, idx) => (
+                                <DataTableCell key={`median-${idx}`} align="left">
+                                    {pt.quantiles.median}
+                                </DataTableCell>
+                            ))}
+                        </DataTableRow>
+                        <DataTableRow>
+                            <DataTableCell className={styles.quantile_low}>{i18n.t('quantile low')}</DataTableCell>
+                            {series.points.map((pt, idx) => (
+                                <DataTableCell key={`low-${idx}`} className={styles.quantile_low}>
+                                    {pt.quantiles.quantile_low}
+                                </DataTableCell>
+                            ))}
+                        </DataTableRow>
+                        <DataTableRow>
+                            <DataTableCell className={styles.quantile_high}>{i18n.t('quantile high')}</DataTableCell>
+                            {series.points.map((pt, idx) => (
+                                <DataTableCell key={`high-${idx}`} className={styles.quantile_high}>
+                                    {pt.quantiles.quantile_high}
+                                </DataTableCell>
+                            ))}
+                        </DataTableRow>
+                    </DataTableBody>
+                </DataTable>
+            </div>
         </>
     );
 };
