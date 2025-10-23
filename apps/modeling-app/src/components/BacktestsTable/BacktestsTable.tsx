@@ -12,7 +12,6 @@ import {
     DataTableFoot,
     Pagination,
     Tooltip,
-    IconInfo16,
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import {
@@ -25,7 +24,7 @@ import {
     getPaginationRowModel,
     Column,
 } from '@tanstack/react-table';
-import { BackTestRead, ModelSpecRead } from '@dhis2-chap/ui';
+import { BackTestRead, ModelSpecRead, Pill } from '@dhis2-chap/ui';
 import { Link, useNavigate } from 'react-router-dom';
 import styles from './BacktestsTable.module.css';
 import { BacktestActionsMenu } from './BacktestActionsMenu';
@@ -88,20 +87,36 @@ const columns = [
             return model?.displayName || configuredModelId;
         },
     }),
-    columnHelper.accessor('aggregateMetrics.crps', {
-        header: () => (
-            <div className={styles.headerWithTooltip}>
-                <span>{i18n.t('CRPS')}</span>
-                <Tooltip content={i18n.t('Normalized CRPS (Continuous Ranked Probability Score) shows how close a model\'s predicted range of outcomes is to the actual result on a 0 - 1 scale. Lower values indicate better probabilistic accuracy')}>
-                    <div className={styles.iconContainer}>
-                        <IconInfo16 />
-                    </div>
-                </Tooltip>
-            </div>
-        ),
+    columnHelper.accessor(row => row.orgUnits?.length ?? 0, {
+        id: 'locationsCount',
+        header: i18n.t('Locations'),
         cell: (info) => {
-            const crps = info.getValue();
-            return crps ? crps.toFixed(2) : undefined;
+            const count = info.getValue();
+
+            if (count === 0) {
+                return count;
+            }
+
+            const tooltipContent = i18n.t('Evaluated on {{count}} locations', { count });
+
+            return (
+                <div className={styles.locationsCell}>
+                    <Tooltip content={tooltipContent}>
+                        {({ onMouseOver, onMouseOut, ref }) => (
+                            <span
+                                ref={ref}
+                                className={styles.infoIcon}
+                                onMouseEnter={onMouseOver}
+                                onMouseLeave={onMouseOut}
+                            >
+                                <Pill>
+                                    {count}
+                                </Pill>
+                            </span>
+                        )}
+                    </Tooltip>
+                </div>
+            );
         },
     }),
     columnHelper.display({
