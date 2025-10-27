@@ -27,7 +27,8 @@ export const PredictionDetails = ({
 
     const predictionTargetId: string = prediction.metaData?.dataItemMapper?.find(
         (m: { featureName: string }) => m.featureName === 'disease_cases',
-    )?.dataItemId;
+        // TODO: remove this once we have the working id from the API
+    )?.dataItemId ?? 'A0Y0q8g6DHw';
 
     const { dataItem, isLoading: isDataItemLoading } = useDataItemById(predictionTargetId);
 

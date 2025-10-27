@@ -1,5 +1,4 @@
-import { PERIOD_TYPES } from '../../../components/NewEvaluationFormContainer/NewEvaluationForm';
-import { Period } from '../interfaces/Period';
+import { PERIOD_TYPES } from '@/components/NewEvaluationFormContainer/NewEvaluationForm';
 import {
     parse,
     format,
@@ -16,6 +15,12 @@ import {
     isValid,
     getISOWeekYear,
 } from 'date-fns';
+
+export interface Period {
+    startDate: Date | undefined;
+    endDate: Date | undefined;
+    id: string;
+}
 
 export const toDHIS2PeriodData = (start: string, end: string, periodType: string): Period[] => {
     if (periodType === 'week') return getWeeks(start, end);
