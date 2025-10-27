@@ -135,7 +135,7 @@ export const useCreateNewBacktest = ({
                 stride: STRIDE,
             };
 
-            return AnalyticsService.createBacktestWithDataAnalyticsCreateBacktestWithDataPost(backtestRequest, false) as unknown as Promise<ImportSummaryCorrected>;
+            return AnalyticsService.makePredictionAnalyticsMakePredictionPost(backtestRequest) as unknown as Promise<ImportSummaryCorrected>;
         },
         onMutate: () => {
             resetValidation();

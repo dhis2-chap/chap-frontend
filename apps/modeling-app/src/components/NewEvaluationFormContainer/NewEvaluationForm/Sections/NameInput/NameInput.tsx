@@ -16,7 +16,7 @@ type Props = {
 export const NameInput = ({ control, errors }: Props) => {
     return (
         <div className={styles.formField}>
-            <Label htmlFor="evaluation-name">{i18n.t('Evaluation name')}</Label>
+            <Label htmlFor="evaluation-name">{i18n.t('Name')}</Label>
             <Controller
                 name="name"
                 control={control}

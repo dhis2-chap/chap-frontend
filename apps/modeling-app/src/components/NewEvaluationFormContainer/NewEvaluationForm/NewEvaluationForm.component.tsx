@@ -6,19 +6,17 @@ import { NameInput } from './Sections/NameInput';
 import { LocationSelector } from './Sections/LocationSelector';
 import { ModelSelector } from './Sections/ModelSelector/ModelSelector';
 import { DatasetConfiguration } from './Sections/DatasetConfiguration';
-import { OrganisationUnit } from '../../OrganisationUnitSelector';
 import { EvaluationFormValues } from './hooks/useFormController';
+import { OrganisationUnit } from '@/components/OrganisationUnitSelector';
 
 type Props = {
     onSubmit: (data: EvaluationFormValues) => void;
     methods: UseFormReturn<EvaluationFormValues>;
-    onUpdateOrgUnits: (orgUnits: OrganisationUnit[]) => void;
 };
 
 export const NewEvaluationFormComponent = ({
     onSubmit,
     methods,
-    onUpdateOrgUnits,
 }: Props) => {
     const handleFormSubmit = (data: EvaluationFormValues) => {
         onSubmit(data);
@@ -29,6 +27,10 @@ export const NewEvaluationFormComponent = ({
         handleSubmit,
         formState: { errors },
     } = methods;
+
+    const onUpdateOrgUnits = (orgUnits: OrganisationUnit[]) => {
+        methods.setValue('orgUnits', orgUnits, { shouldValidate: true, shouldDirty: true });
+    };
 
     return (
         <>

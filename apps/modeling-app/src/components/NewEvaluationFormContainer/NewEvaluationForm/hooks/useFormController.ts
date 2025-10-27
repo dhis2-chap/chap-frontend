@@ -2,7 +2,6 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import i18n from '@dhis2/d2-i18n';
-import { OrganisationUnit } from '../../../OrganisationUnitSelector';
 import { PERIOD_TYPES } from '../Sections/PeriodSelector';
 import { isAfter, isEqual, isFuture, parseISO } from 'date-fns';
 import { useCreateNewBacktest } from './useCreateNewBacktest';
@@ -80,10 +79,6 @@ export const useFormController = (initialValues?: Partial<EvaluationFormValues>)
         },
     });
 
-    const onUpdateOrgUnits = (orgUnits: OrganisationUnit[]) => {
-        methods.setValue('orgUnits', orgUnits, { shouldValidate: true, shouldDirty: true });
-    };
-
     const handleSubmit = (data: EvaluationFormValues) => createNewBacktest(data);
     const handleDryRunSubmit = (data: EvaluationFormValues) => validateAndDryRun(data);
 
@@ -97,7 +92,6 @@ export const useFormController = (initialValues?: Partial<EvaluationFormValues>)
 
     return {
         methods,
-        onUpdateOrgUnits,
         handleSubmit,
         handleStartJob,
         isSubmitting,

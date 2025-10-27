@@ -4,4 +4,6 @@
   padding: 2rem;
 }
 
-
+.errorContainer {
+  margin-block: 1rem;
+}

@@ -1,44 +1,18 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import i18n from '@dhis2/d2-i18n';
-import { useNavigate, useParams } from 'react-router-dom';
-import useOrgUnits from '../../hooks/useOrgUnits';
-import { PredictionDetails } from '../../components/PageContent/PredictionDetails';
-import usePredictionById from '../../components/PageContent/PredictionDetails/hooks/usePredictionById';
-import { Button, IconArrowLeft16, CircularLoader } from '@dhis2/ui';
+import { useNavigate } from 'react-router-dom';
+import { Button, IconArrowLeft16 } from '@dhis2/ui';
 import { PageHeader } from '../../features/common-features/PageHeader/PageHeader';
-import styles from './PredictionDetailsPage.module.css';
+import { PredictionDetailsContainer } from '../../components/PageContent/PredictionDetails';
 
 export const PredictionDetailsPage: React.FC = () => {
     const navigate = useNavigate();
-    const { predictionId } = useParams<{ predictionId: string }>();
-    const { prediction, isLoading } = usePredictionById(predictionId);
-    const { orgUnits } = useOrgUnits();
-
-    const orgUnitMap = useMemo(() => new Map(
-        orgUnits
-            ?.organisationUnits
-            ?.map(ou => [ou.id, ou]),
-    ), [orgUnits]);
-
-    if (isLoading) {
-        return (
-            <div className={styles.loadingContainer}>
-                <CircularLoader />
-            </div>
-        );
-    }
-
-    if (!prediction || orgUnitMap.size === 0) {
-        return <div>Prediction not found</div>;
-    }
 
     return (
         <>
             <PageHeader
-                pageTitle={i18n.t('Prediction details{{escaped}} {{name}}', {
-                    name: prediction.name,
-                    escaped: ':',
-                })}
+                pageTitle={i18n.t('Prediction details')}
+                pageDescription={i18n.t('View the details of a prediction.')}
             />
 
             <div>
@@ -51,10 +25,7 @@ export const PredictionDetailsPage: React.FC = () => {
                 </Button>
             </div>
 
-            <PredictionDetails
-                prediction={prediction}
-                orgUnits={orgUnitMap}
-            />
+            <PredictionDetailsContainer />
         </>
     );
 };

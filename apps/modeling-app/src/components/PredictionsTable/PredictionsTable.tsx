@@ -8,6 +8,8 @@ import {
     DataTableColumnHeader,
     DataTableFoot,
     Pagination,
+    Button,
+    IconAdd16,
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import {
@@ -26,6 +28,7 @@ import { PredictionsTableFilters } from './PredictionsTableFilters';
 import { RunningJobsIndicator } from '../BacktestsTable/RunningJobsIndicator';
 import { JOB_TYPES } from '../../hooks/useJobs';
 import { PredictionActionsMenu } from './PredictionActionsMenu';
+import { Link } from 'react-router-dom';
 
 const columnHelper = createColumnHelper<PredictionRead>();
 
@@ -37,6 +40,11 @@ const columns = [
     columnHelper.accessor('name', {
         header: () => i18n.t('Name'),
         filterFn: 'includesString',
+        cell: info => (
+            <Link to={`/predictions/${info.row.original.id}`}>
+                {info.getValue()}
+            </Link>
+        ),
     }),
     columnHelper.accessor('created', {
         header: () => i18n.t('Created'),
@@ -104,6 +112,16 @@ export const PredictionsTable = ({ predictions, models }: Props) => {
                 </div>
                 <div className={styles.rightSection}>
                     <RunningJobsIndicator jobType={JOB_TYPES.MAKE_PREDICTION} />
+                    <Link to="/predictions/new">
+                        <Button
+                            primary
+                            icon={<IconAdd16 />}
+                            small
+                            onClick={() => {}}
+                        >
+                            {i18n.t('New prediction')}
+                        </Button>
+                    </Link>
                 </div>
             </div>
 

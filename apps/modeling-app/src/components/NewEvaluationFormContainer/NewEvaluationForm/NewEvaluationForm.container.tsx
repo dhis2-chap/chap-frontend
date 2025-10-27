@@ -5,8 +5,7 @@ import { NewEvaluationFormComponent } from './NewEvaluationForm.component';
 import { Card } from '@dhis2-chap/ui';
 import { useFormController } from './hooks/useFormController';
 import styles from './NewEvaluationForm.module.css';
-import { Button, ButtonStrip, IconArrowLeft16, IconArrowRightMulti16, NoticeBox } from '@dhis2/ui';
-import { useNavigate } from 'react-router-dom';
+import { Button, ButtonStrip, IconArrowRightMulti16, NoticeBox } from '@dhis2/ui';
 import { useNavigationBlocker } from '../../../hooks/useNavigationBlocker';
 import { NavigationConfirmModal } from '../../NavigationConfirmModal';
 import { SummaryModal } from './SummaryModal';
@@ -16,10 +15,8 @@ type NewEvaluationFormProps = {
 };
 
 export const NewEvaluationForm = ({ initialValues }: NewEvaluationFormProps = {}) => {
-    const navigate = useNavigate();
     const {
         methods,
-        onUpdateOrgUnits,
         handleSubmit,
         handleStartJob,
         isSubmitting,
@@ -39,28 +36,14 @@ export const NewEvaluationForm = ({ initialValues }: NewEvaluationFormProps = {}
         shouldBlock: !isSubmitting && methods.formState.isDirty,
     });
 
-    const handleBackClick = () => {
-        navigate('/evaluate');
-    };
-
     return (
         <>
-            <Button
-                className={styles.backButton}
-                small
-                icon={<IconArrowLeft16 />}
-                onClick={handleBackClick}
-            >
-                {i18n.t('Back to evaluations')}
-            </Button>
-
             <FormProvider {...methods}>
                 <div className={styles.container}>
                     <Card>
                         <NewEvaluationFormComponent
                             onSubmit={handleSubmit}
                             methods={methods}
-                            onUpdateOrgUnits={onUpdateOrgUnits}
                         />
 
                         {!!error && !importSummary && (

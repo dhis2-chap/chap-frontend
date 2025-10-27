@@ -29,6 +29,7 @@ import { PredictionDetailsPage } from './pages/PredictionDetailsPage';
 import { ModelsPage } from './pages/ModelsPage';
 import { NewConfiguredModelPage } from './pages/NewConfiguredModelPage';
 import { SyncUrlWithGlobalShell } from './utils/syncUrlWithGlobalShell';
+import { NewPredictionPage } from './pages/NewPredictionPage';
 
 export type RouteHandle = {
     fullWidth?: boolean;
@@ -117,7 +118,7 @@ const router = createHashRouter([
                                 handle: {
                                     collapseSidebar: true,
                                 } satisfies RouteHandle,
-                                element: <p>New prediction</p>,
+                                element: <NewPredictionPage />,
                             },
                         ],
                     },

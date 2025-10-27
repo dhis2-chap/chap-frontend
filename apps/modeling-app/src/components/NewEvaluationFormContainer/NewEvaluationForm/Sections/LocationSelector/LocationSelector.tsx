@@ -43,7 +43,7 @@ export const LocationSelector = ({
     return (
         <>
             <div className={cn(styles.formField, styles.orgUnitSelector)}>
-                <Label>{i18n.t('Organisation Units')}</Label>
+                <Label>{i18n.t('Organisation units')}</Label>
                 <p className={styles.mutedText}>{getSelectionSummary(selectedOrgUnits)}</p>
                 <Button
                     onClick={() => setIsOrgUnitModalOpen(true)}

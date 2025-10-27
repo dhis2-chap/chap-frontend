@@ -1,18 +1,18 @@
 import React from 'react';
 import i18n from '@dhis2/d2-i18n';
+import { useInitialFormState } from '@/pages/NewEvaluationPage/hooks/useInitialFormState';
 import { CircularLoader, NoticeBox } from '@dhis2/ui';
-import { NewEvaluationForm } from './NewEvaluationForm';
-import { useInitialFormState } from '../../pages/NewEvaluationPage/hooks/useInitialFormState';
-import styles from './NewEvaluationFormContainer.module.css';
-import { useModels } from '../../hooks/useModels';
+import styles from './NewPredictionContent.module.css';
+import { useModels } from '@/hooks/useModels';
+import { NewEvaluationForm } from '@/components/NewEvaluationFormContainer/NewEvaluationForm';
 
-export const NewEvaluationFormContainer = () => {
+export const NewPredictionContent = () => {
     const { models, isLoading: isModelsLoading, error: modelsError } = useModels();
     const { initialValues, isLoading } = useInitialFormState({ models, isModelsLoading });
 
-    if (isLoading || isModelsLoading) {
+    if (isLoading) {
         return (
-            <div className={styles.loaderContainer}>
+            <div className={styles.loadingContainer}>
                 <CircularLoader />
             </div>
         );
@@ -29,8 +29,6 @@ export const NewEvaluationFormContainer = () => {
     }
 
     return (
-        <NewEvaluationForm
-            initialValues={initialValues}
-        />
+        <NewEvaluationForm initialValues={initialValues} />
     );
 };
