@@ -7,13 +7,13 @@ import {
     FeatureCollectionModel,
     MakeBacktestWithDataRequest,
     ApiError,
-    ImportSummaryResponse,
 } from '@dhis2-chap/ui';
 import { useDataEngine } from '@dhis2/app-runtime';
 import { PERIOD_TYPES } from '../../ModelExecutionForm/constants';
 import { useNavigate } from 'react-router-dom';
 import { validateClimateData } from '../../ModelExecutionForm/utils/validateClimateData';
 import { prepareBacktestData } from '../../ModelExecutionForm/utils/prepareBacktestData';
+import { ImportSummaryCorrected } from '../../ModelExecutionForm/types';
 
 const N_SPLITS = 10;
 const STRIDE = 1;
@@ -21,17 +21,6 @@ const STRIDE = 1;
 const N_PERIODS = {
     [PERIOD_TYPES.MONTH]: 3,
     [PERIOD_TYPES.WEEK]: 12,
-};
-
-// This is a workaround to get the correct type for the rejected field - the openapi spec is incorrect
-export type ImportSummaryCorrected = Omit<ImportSummaryResponse, 'rejected'> & {
-    hash?: string;
-    rejected: {
-        featureName: string;
-        orgUnit: string;
-        reason: string;
-        period: string[];
-    }[];
 };
 
 type Props = {

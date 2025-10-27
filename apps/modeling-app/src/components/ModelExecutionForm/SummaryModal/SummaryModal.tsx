@@ -29,7 +29,7 @@ import {
     getPaginationRowModel,
     Column,
 } from '@tanstack/react-table';
-import { ImportSummaryCorrected } from '../../NewEvaluationForm/hooks/useCreateNewBacktest';
+import { ImportSummaryCorrected } from '../../ModelExecutionForm/types';
 import styles from './SummaryModal.module.css';
 import { useQueryClient } from '@tanstack/react-query';
 import { OrgUnitResponse } from '../utils/queryUtils';
@@ -246,9 +246,9 @@ export const SummaryModal: React.FC<SummaryModalProps> = ({
                                                         {header.isPlaceholder
                                                             ? null
                                                             : flexRender(
-                                                                header.column.columnDef.header,
-                                                                header.getContext(),
-                                                            )}
+                                                                    header.column.columnDef.header,
+                                                                    header.getContext(),
+                                                                )}
                                                     </DataTableColumnHeader>
                                                 ))}
                                             </DataTableRow>
