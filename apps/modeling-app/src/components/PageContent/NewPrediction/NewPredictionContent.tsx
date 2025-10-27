@@ -4,7 +4,7 @@ import { useInitialFormState } from '@/pages/NewEvaluationPage/hooks/useInitialF
 import { CircularLoader, NoticeBox } from '@dhis2/ui';
 import styles from './NewPredictionContent.module.css';
 import { useModels } from '@/hooks/useModels';
-import { NewEvaluationForm } from '@/components/NewEvaluationFormContainer/NewEvaluationForm';
+import { NewPredictionForm } from '@/components/NewPredictionForm';
 
 export const NewPredictionContent = () => {
     const { models, isLoading: isModelsLoading, error: modelsError } = useModels();
@@ -29,6 +29,6 @@ export const NewPredictionContent = () => {
     }
 
     return (
-        <NewEvaluationForm initialValues={initialValues} />
+        <NewPredictionForm initialValues={initialValues} />
     );
 };

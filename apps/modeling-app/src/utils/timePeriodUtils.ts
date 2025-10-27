@@ -1,4 +1,4 @@
-import { PERIOD_TYPES } from '@/components/NewEvaluationFormContainer/NewEvaluationForm';
+import { PERIOD_TYPES } from '@/components/ModelExecutionForm/constants';
 import {
     parse,
     format,

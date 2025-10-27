@@ -4,9 +4,9 @@ import { Modal, Button, ModalTitle, ModalContent, ButtonStrip, ModalActions } fr
 import { VisualizationPlugin } from '../VisualizationPlugin';
 import { OrganisationUnit } from '../OrganisationUnitSelector';
 import { toDHIS2PeriodData } from '@/utils/timePeriodUtils';
-import { PERIOD_TYPES } from '../NewEvaluationFormContainer/NewEvaluationForm/Sections/PeriodSelector';
+import { PERIOD_TYPES } from '../ModelExecutionForm/constants';
 import { useConfig } from '@dhis2/app-runtime';
-import { CovariateMapping } from '../NewEvaluationFormContainer/NewEvaluationForm/hooks/useFormController';
+import { CovariateMapping } from '../ModelExecutionForm/hooks/useModelExecutionFormState';
 
 type Props = {
     onClose: () => void;

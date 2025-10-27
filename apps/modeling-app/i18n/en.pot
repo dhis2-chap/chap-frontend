@@ -335,6 +335,9 @@ msgstr "Start dry run"
 msgid "Start import"
 msgstr "Start import"
 
+msgid "Start Prediction"
+msgstr "Start Prediction"
+
 msgid "Map Data Items"
 msgstr "Map Data Items"
 

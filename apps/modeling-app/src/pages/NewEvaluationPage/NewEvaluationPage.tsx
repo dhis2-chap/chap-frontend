@@ -2,9 +2,9 @@ import React from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { Button, IconArrowLeft16 } from '@dhis2/ui';
 import { useNavigate } from 'react-router-dom';
-import { NewEvaluationFormContainer } from '../../components/NewEvaluationFormContainer';
 import { PageHeader } from '../../features/common-features/PageHeader/PageHeader';
 import styles from './NewEvaluationPage.module.css';
+import { NewEvaluationForm } from '@/components/NewEvaluationForm';
 
 export const NewEvaluationPage = () => {
     const navigate = useNavigate();
@@ -25,7 +25,7 @@ export const NewEvaluationPage = () => {
                 {i18n.t('Back to evaluations')}
             </Button>
 
-            <NewEvaluationFormContainer />
+            <NewEvaluationForm />
         </div>
     );
 };

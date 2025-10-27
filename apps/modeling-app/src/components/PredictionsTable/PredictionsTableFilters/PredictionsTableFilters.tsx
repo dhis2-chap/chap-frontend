@@ -4,11 +4,11 @@ import {
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { Table } from '@tanstack/react-table';
-import { NewClass } from '@dhis2-chap/ui';
+import { PredictionBaseRead } from '@dhis2-chap/ui';
 import styles from './PredictionsTableFilters.module.css';
 
 type Props = {
-    table: Table<NewClass>;
+    table: Table<PredictionBaseRead>;
 };
 
 export const PredictionsTableFilters = ({ table }: Props) => {

@@ -22,7 +22,7 @@ import {
     getPaginationRowModel,
     Column,
 } from '@tanstack/react-table';
-import { PredictionRead, ModelSpecRead } from '@dhis2-chap/ui';
+import { PredictionBaseRead, ModelSpecRead } from '@dhis2-chap/ui';
 import styles from './PredictionsTable.module.css';
 import { PredictionsTableFilters } from './PredictionsTableFilters';
 import { RunningJobsIndicator } from '../BacktestsTable/RunningJobsIndicator';
@@ -30,7 +30,7 @@ import { JOB_TYPES } from '../../hooks/useJobs';
 import { PredictionActionsMenu } from './PredictionActionsMenu';
 import { Link } from 'react-router-dom';
 
-const columnHelper = createColumnHelper<PredictionRead>();
+const columnHelper = createColumnHelper<PredictionBaseRead>();
 
 const columns = [
     columnHelper.accessor('id', {
@@ -76,12 +76,12 @@ const columns = [
     }),
 ];
 
-const getSortDirection = (column: Column<PredictionRead>) => {
+const getSortDirection = (column: Column<PredictionBaseRead>) => {
     return column.getIsSorted() || 'default';
 };
 
 type Props = {
-    predictions: PredictionRead[];
+    predictions: PredictionBaseRead[];
     models: ModelSpecRead[];
 };
 
@@ -117,7 +117,7 @@ export const PredictionsTable = ({ predictions, models }: Props) => {
                             primary
                             icon={<IconAdd16 />}
                             small
-                            onClick={() => {}}
+                            onClick={() => { }}
                         >
                             {i18n.t('New prediction')}
                         </Button>

@@ -3,10 +3,11 @@ import { useLocation } from 'react-router-dom';
 import { z } from 'zod';
 import { ModelSpecRead } from '@dhis2-chap/ui';
 import { useOrgUnitsById } from '../../../hooks/useOrgUnitsById';
-import { EvaluationFormValues, PERIOD_TYPES } from '../../../components/NewEvaluationFormContainer/NewEvaluationForm';
+import { ModelExecutionFormValues } from '../../../components/ModelExecutionForm/hooks/useModelExecutionFormState';
+import { PERIOD_TYPES } from '../../../components/ModelExecutionForm/constants';
 import { convertServerToClientPeriod } from '@/utils/timePeriodUtils';
 import { useDataItemByIds } from './useDataItemById';
-import { CovariateMapping } from '../../../components/NewEvaluationFormContainer/NewEvaluationForm/hooks/useFormController';
+import { CovariateMapping } from '../../../components/ModelExecutionForm/hooks/useModelExecutionFormState';
 
 type Props = {
     models: ModelSpecRead[] | undefined;
@@ -67,10 +68,10 @@ export const useInitialFormState = ({ models, isModelsLoading }: Props) => {
             ?.map(dataSource => dataSource.dataElementId) || [],
     });
 
-    const initialValues: Partial<EvaluationFormValues> = useMemo(() => {
+    const initialValues: Partial<ModelExecutionFormValues> = useMemo(() => {
         if (!models) return {};
 
-        const values: Partial<EvaluationFormValues> = {
+        const values: Partial<ModelExecutionFormValues> = {
             name: locationState?.name || '',
             periodType: locationState?.periodType || PERIOD_TYPES.MONTH,
             fromDate: locationState?.fromDate ? convertServerToClientPeriod(locationState.fromDate, locationState.periodType!) : '',
