@@ -1,32 +1,22 @@
 .button {
     cursor: pointer;
     border-radius: 3px;
-    border: none;
     background: transparent;
     display: flex;
     align-items: center;
     padding: 2px;
     justify-content: center;
-    color: #4A5768; /* colors.grey700, */
+    color: var(--colors-grey700);
+    border: 0.5px solid var(--colors-grey800);
 }
 
 .button:hover {
-    background: #F3F5F7; /* colors.grey200, */
-    color: #404B5A; /* colors.grey800, */
+    background: var(--colors-grey200);
+    color: var(--colors-grey500);
 }
 
 .button.disabled {
-    color: #A0ADBA; /* colors.grey500, */
+    color: var(--colors-grey500);
     cursor: not-allowed;
-}
-
-.button:focus {
-    outline-style: solid; 
-    outline-color: grey;
-    outline-width: 1px;
-    outline-offset: 0px;
-    outline: solid;
-    background: #F3F5F7; /* colors.grey200, */
-    color: #404B5A; /* colors.grey800, */
 }
 

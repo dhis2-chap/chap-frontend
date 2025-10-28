@@ -5,9 +5,8 @@ import {
     IconDelete16,
     IconEdit16,
     IconMore16,
-    IconView16,
-    IconVisualizationBarStacked24,
     IconDuplicate16,
+    IconVisualizationLineMulti16,
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { OverflowButton } from '@dhis2-chap/ui';
@@ -33,12 +32,8 @@ export const BacktestActionsMenu = ({
     const [editModalIsOpen, setEditModalIsOpen] = useState(false);
     const [copyModalIsOpen, setCopyModalIsOpen] = useState(false);
 
-    const handleView = () => {
-        navigate(`/evaluate/compare?baseEvaluation=${id}`);
-    };
-
-    const handleViewDetails = () => {
-        navigate(`/evaluate/${id}`);
+    const handleCompare = () => {
+        navigate(`/evaluate/compare?baseEvaluation=${id}&returnTo=${encodeURIComponent('/evaluate')}`);
     };
 
     return (
@@ -53,15 +48,6 @@ export const BacktestActionsMenu = ({
                 component={(
                     <FlyoutMenu dense>
                         <MenuItem
-                            label={i18n.t('View')}
-                            dataTest="backtest-overflow-view"
-                            icon={<IconView16 />}
-                            onClick={() => {
-                                handleView();
-                                setFlyoutMenuIsOpen(false);
-                            }}
-                        />
-                        <MenuItem
                             label={i18n.t('Create new...')}
                             dataTest="backtest-overflow-copy"
                             icon={<IconDuplicate16 />}
@@ -71,11 +57,11 @@ export const BacktestActionsMenu = ({
                             }}
                         />
                         <MenuItem
-                            label={i18n.t('Detailed metrics')}
-                            dataTest="backtest-overflow-view-details"
-                            icon={<IconVisualizationBarStacked24 />}
+                            label={i18n.t('Compare')}
+                            dataTest="backtest-overflow-view"
+                            icon={<IconVisualizationLineMulti16 />}
                             onClick={() => {
-                                handleViewDetails();
+                                handleCompare();
                                 setFlyoutMenuIsOpen(false);
                             }}
                         />

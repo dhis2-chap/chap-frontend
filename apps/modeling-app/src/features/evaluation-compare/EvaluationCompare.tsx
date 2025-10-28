@@ -20,13 +20,17 @@ import { PageHeader } from '../common-features/PageHeader/PageHeader';
 import OrganisationUnitMultiSelect from '../../components/OrganisationUnitsSelect/OrganisationUnitMultiSelect';
 import { useCompareSelectionController } from './useCompareSelectionController';
 import { SplitPeriodSlider } from './SplitPeriodSlider';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ID_MAIN_LAYOUT } from '../../components/layout/Layout';
 
 const MAX_SELECTED_ORG_UNITS = 10;
 
 export const EvaluationCompare = () => {
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const returnTo = searchParams.get('returnTo') || '/evaluate';
+    const isFromDetails = returnTo.startsWith('/evaluate/') && returnTo !== '/evaluate';
+
     // reference to the scrollable container
     // used by virtuoso in ComparisonPlotList
     const scrollerRef = useRef<HTMLDivElement>(
@@ -89,10 +93,10 @@ export const EvaluationCompare = () => {
                         small
                         icon={<IconArrowLeft16 />}
                         onClick={() => {
-                            navigate('/evaluate');
+                            navigate(returnTo);
                         }}
                     >
-                        {i18n.t('Back to evaluations')}
+                        {i18n.t(isFromDetails ? 'Back to evaluation details' : 'Back to evaluation')}
                     </Button>
                 </div>
                 <div className={css.compareSelectors}>

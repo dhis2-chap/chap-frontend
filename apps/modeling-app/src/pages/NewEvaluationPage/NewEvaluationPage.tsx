@@ -1,13 +1,16 @@
 import React from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { Button, IconArrowLeft16 } from '@dhis2/ui';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { PageHeader } from '../../features/common-features/PageHeader/PageHeader';
 import styles from './NewEvaluationPage.module.css';
 import { NewEvaluationForm } from '@/components/NewEvaluationForm';
 
 export const NewEvaluationPage = () => {
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const returnTo = searchParams.get('returnTo') || '/evaluate';
+    const isFromDetails = returnTo.startsWith('/evaluate/') && returnTo !== '/evaluate';
 
     return (
         <div>
@@ -20,9 +23,9 @@ export const NewEvaluationPage = () => {
                 className={styles.backButton}
                 small
                 icon={<IconArrowLeft16 />}
-                onClick={() => navigate('/evaluate')}
+                onClick={() => navigate(returnTo)}
             >
-                {i18n.t('Back to evaluations')}
+                {i18n.t(isFromDetails ? 'Back to evaluation details' : 'Back to evaluations')}
             </Button>
 
             <NewEvaluationForm />

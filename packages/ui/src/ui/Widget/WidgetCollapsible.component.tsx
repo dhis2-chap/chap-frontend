@@ -59,14 +59,18 @@ export const WidgetCollapsible = ({
                     {header}
                     <IconButton
                         dataTest="widget-open-close-toggle-button"
-                        className={cx(styles.toggleButton, {
-                            [styles.toggleButtonCloseInit]: !animationsReady && !postEffectOpen,
-                            [styles.toggleButtonOpen]: animationsReady && postEffectOpen,
-                            [styles.toggleButtonClose]: animationsReady && !postEffectOpen,
-                        })}
+                        className={styles.toggleButton}
                         onClick={open ? onClose : onOpen}
                     >
-                        <IconChevronUp24 />
+                        <span
+                            className={cx(styles.toggleIcon, {
+                                [styles.toggleIconCloseInit]: !animationsReady && !postEffectOpen,
+                                [styles.toggleIconOpen]: animationsReady && postEffectOpen,
+                                [styles.toggleIconClose]: animationsReady && !postEffectOpen,
+                            })}
+                        >
+                            <IconChevronUp24 />
+                        </span>
                     </IconButton>
                 </div>
             </div>

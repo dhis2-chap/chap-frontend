@@ -1,5 +1,6 @@
 import React from 'react';
 import { MetricPlotWidget } from './MetricPlot';
+import { QuickActionsWidget } from './QuickActionsWidget';
 import styles from './EvaluationDetails.module.css';
 
 type Props = {
@@ -10,6 +11,9 @@ export const EvaluationDetailsComponent = ({ evaluationId }: Props) => {
     return (
         <div className={styles.container}>
             <div className={styles.leftColumn}>
+                <QuickActionsWidget
+                    evaluationId={evaluationId}
+                />
                 <MetricPlotWidget
                     evaluationId={evaluationId}
                 />
