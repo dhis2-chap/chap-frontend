@@ -6,9 +6,9 @@ type Props = {
     evaluationId?: number;
 };
 
-export const useCustomMetricsForBacktest = ({ evaluationId }: Props) => {
+export const useMetricsForBacktest = ({ evaluationId }: Props) => {
     const { data, error, isLoading } = useQuery<Metric[], ApiError>({
-        queryKey: ['custom-visualization-metrics', evaluationId],
+        queryKey: ['visualization-metrics', evaluationId],
         queryFn: () =>
             VisualizationService.getAvailableMetricsVisualizationMetricsBacktestIdGet(
                 Number(evaluationId),
@@ -21,7 +21,7 @@ export const useCustomMetricsForBacktest = ({ evaluationId }: Props) => {
 
     useEffect(() => {
         if (!error) return;
-        console.error('useCustomMetricsForBacktest: error loading metrics', {
+        console.error('useMetricsForBacktest: error loading metrics', {
             message: error?.message,
             error,
             evaluationId,

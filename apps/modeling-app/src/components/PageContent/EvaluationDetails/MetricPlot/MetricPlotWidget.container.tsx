@@ -3,8 +3,8 @@ import { CircularLoader, MenuItem, NoticeBox, SingleSelect } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import styles from './MetricPlotWidget.module.css';
 import { MetricPlotWidgetComponent } from './MetricPlotWidget.component';
-import { useCustomVisualizationTypes } from '../../../../hooks/useCustomVisualizationTypes';
-import { useCustomMetricsForBacktest } from '../../../../hooks/useCustomMetricsForBacktest';
+import { useMetricVisualizationTypes } from './hooks/useMetricVisualizationTypes';
+import { useMetricsForBacktest } from './hooks/useMetricsForBacktest';
 import { useEvaluationVisualizationParams } from './hooks/useEvaluationVisualizationParams';
 import { Widget } from '@dhis2-chap/ui';
 
@@ -18,13 +18,13 @@ export const MetricPlotWidget = ({ evaluationId }: Props) => {
         visualizationTypes,
         isLoading: isTypesLoading,
         error: typesError,
-    } = useCustomVisualizationTypes({ evaluationId });
+    } = useMetricVisualizationTypes({ evaluationId });
 
     const {
         metrics,
         isLoading: isMetricsLoading,
         error: metricsError,
-    } = useCustomMetricsForBacktest({ evaluationId });
+    } = useMetricsForBacktest({ evaluationId });
 
     const {
         selectedVisualizationId,
