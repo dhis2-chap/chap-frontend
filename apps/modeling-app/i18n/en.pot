@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2025-10-28T15:44:27.740Z\n"
-"PO-Revision-Date: 2025-10-28T15:44:27.741Z\n"
+"POT-Creation-Date: 2025-10-28T18:52:20.500Z\n"
+"PO-Revision-Date: 2025-10-28T18:52:20.501Z\n"
 
 msgid "View"
 msgstr "View"
@@ -620,6 +620,9 @@ msgstr "Invalid evaluation ID"
 msgid "The evaluation ID is invalid. Please try again."
 msgstr "The evaluation ID is invalid. Please try again."
 
+msgid "Please select a visualization and metric"
+msgstr "Please select a visualization and metric"
+
 msgid "Unable to load data"
 msgstr "Unable to load data"
 
@@ -629,6 +632,9 @@ msgid ""
 msgstr ""
 "There was a problem loading the visualization. See the browser console for "
 "details."
+
+msgid "No visualization found"
+msgstr "No visualization found"
 
 msgid "Click to view actions"
 msgstr "Click to view actions"
@@ -655,8 +661,8 @@ msgstr ""
 "There was a problem loading required data. See the browser console for "
 "details."
 
-msgid "Metric Plot"
-msgstr "Metric Plot"
+msgid "Metric plot (Advanced)"
+msgstr "Metric plot (Advanced)"
 
 msgid "Select visualization"
 msgstr "Select visualization"
@@ -1206,3 +1212,11 @@ msgstr ""
 msgctxt ") instead."
 msgid "Spaces are not allowed. Use dashes (-) or underscores ("
 msgstr "Spaces are not allowed. Use dashes (-) or underscores (_) instead."
+
+msgctxt "Application title"
+msgid "__MANIFEST_APP_TITLE"
+msgstr "Modeling"
+
+msgctxt "Application description"
+msgid "__MANIFEST_APP_DESCRIPTION"
+msgstr ""

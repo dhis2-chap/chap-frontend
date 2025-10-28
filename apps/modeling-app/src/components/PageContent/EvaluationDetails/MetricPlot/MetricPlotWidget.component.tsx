@@ -40,8 +40,9 @@ export const MetricPlotWidgetComponent = ({
 
     if (!selectionComplete) {
         return (
-            <div className={styles.loadingContainer}>
-                {i18n.t('Please select a visualization and metric')}
+            <div className={styles.emptyState}>
+                <p>{i18n.t('Please select a visualization and metric.')}</p>
+                <p>{i18n.t('Keep in mind that this is advanced functionality and may not be suitable for all users.')}</p>
             </div>
         );
     }

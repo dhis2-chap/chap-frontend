@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CircularLoader, MenuItem, NoticeBox, SingleSelect } from '@dhis2/ui';
+import { CircularLoader, IconInfo16, MenuItem, NoticeBox, SingleSelect, Tooltip } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import styles from './MetricPlotWidget.module.css';
 import { MetricPlotWidgetComponent } from './MetricPlotWidget.component';
@@ -49,7 +49,21 @@ export const MetricPlotWidget = ({ evaluationId }: Props) => {
     return (
         <div className={styles.container}>
             <Widget
-                header={i18n.t('Metric plot')}
+                header={(
+                    <div className={styles.header}>
+                        <span>{i18n.t('Metric plot')}</span>
+                        <span
+                            className={styles.tooltip}
+                        >
+                            <Tooltip
+                                content={i18n.t('Metric plots are advanced functionality and can easily be misinterpreted. Use with caution.')}
+                                placement="top"
+                            >
+                                <IconInfo16 />
+                            </Tooltip>
+                        </span>
+                    </div>
+                )}
                 open={open}
                 onOpen={() => setOpen(true)}
                 onClose={() => setOpen(false)}
