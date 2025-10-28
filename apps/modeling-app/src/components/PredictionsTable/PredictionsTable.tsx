@@ -29,6 +29,7 @@ import { RunningJobsIndicator } from '../RunningJobsIndicator';
 import { JOB_TYPES } from '../../hooks/useJobs';
 import { PredictionActionsMenu } from './PredictionActionsMenu';
 import { Link } from 'react-router-dom';
+import { usePredictionsTableFilters } from './hooks/usePredictionsTableFilters';
 
 const columnHelper = createColumnHelper<PredictionBaseRead>();
 
@@ -86,11 +87,16 @@ type Props = {
 };
 
 export const PredictionsTable = ({ predictions, models }: Props) => {
+    const { search } = usePredictionsTableFilters();
+
     const table = useReactTable({
         data: predictions || [],
         columns,
-        initialState: {
+        state: {
             sorting: [{ id: 'created', desc: true }],
+            columnFilters: [
+                ...(search ? [{ id: 'name', value: search }] : []),
+            ],
         },
         meta: {
             models,
@@ -108,7 +114,7 @@ export const PredictionsTable = ({ predictions, models }: Props) => {
         <div>
             <div className={styles.buttonContainer}>
                 <div className={styles.leftSection}>
-                    <PredictionsTableFilters table={table} />
+                    <PredictionsTableFilters />
                 </div>
                 <div className={styles.rightSection}>
                     <RunningJobsIndicator jobType={JOB_TYPES.MAKE_PREDICTION} />
