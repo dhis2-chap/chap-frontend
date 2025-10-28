@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Menu, MenuItem } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
-import { Widget, ComparisonPlot, EvaluationPerOrgUnit } from '@dhis2-chap/ui';
+import { Widget, ResultPlot, EvaluationPerOrgUnit } from '@dhis2-chap/ui';
 import { SplitPeriodSlider } from '../../../../features/evaluation-compare/SplitPeriodSlider';
 import styles from './ModelExecutionResultWidget.module.css';
 
 type Props = {
-    orgUnits: string[];
+    orgUnitIds: string[];
+    orgUnitsMap: Map<string, { id: string; displayName: string }>;
     splitPeriods: string[];
     selectedOrgUnitId: string;
     selectedSplitPeriod: string;
@@ -17,7 +18,8 @@ type Props = {
 };
 
 export const ModelExecutionResultWidgetComponent = ({
-    orgUnits,
+    orgUnitIds,
+    orgUnitsMap,
     splitPeriods,
     selectedOrgUnitId,
     selectedSplitPeriod,
@@ -27,6 +29,8 @@ export const ModelExecutionResultWidgetComponent = ({
     onSelectSplitPeriod,
 }: Props) => {
     const [open, setOpen] = useState(false);
+
+    const model = dataForDisplay?.models?.[0];
 
     return (
         <div className={styles.container}>
@@ -40,11 +44,11 @@ export const ModelExecutionResultWidgetComponent = ({
                     <div className={styles.mainLayout}>
                         <div className={styles.sidebar}>
                             <Menu dense>
-                                {orgUnits.map(orgUnitId => (
+                                {orgUnitIds.map(orgUnitId => (
                                     <MenuItem
                                         active={selectedOrgUnitId === orgUnitId}
                                         key={orgUnitId}
-                                        label={orgUnitId}
+                                        label={orgUnitsMap.get(orgUnitId)?.displayName ?? orgUnitId}
                                         onClick={() => onSelectOrgUnit(orgUnitId)}
                                     />
                                 ))}
@@ -52,10 +56,11 @@ export const ModelExecutionResultWidgetComponent = ({
                         </div>
 
                         <div className={styles.plotArea}>
-                            {dataForDisplay ? (
-                                <ComparisonPlot
-                                    orgUnitsData={dataForDisplay}
-                                    nameLabel={i18n.t('Evaluation')}
+                            {model ? (
+                                <ResultPlot
+                                    data={model.data}
+                                    modelName={model.modelName}
+                                    syncZoom={false}
                                 />
                             ) : (
                                 <div className={styles.emptyState}>
