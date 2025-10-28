@@ -88,9 +88,6 @@ const router = createHashRouter([
                             },
                             {
                                 path: ':evaluationId',
-                                handle: {
-                                    collapseSidebar: true,
-                                } satisfies RouteHandle,
                                 element: <EvaluationDetailsPage />,
                             },
                         ],

@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2025-10-28T19:22:57.657Z\n"
-"PO-Revision-Date: 2025-10-28T19:22:57.658Z\n"
+"POT-Creation-Date: 2025-10-28T19:28:13.037Z\n"
+"PO-Revision-Date: 2025-10-28T19:28:13.038Z\n"
 
 msgid "View"
 msgstr "View"
@@ -683,6 +683,15 @@ msgstr "Select visualization"
 
 msgid "Select metric"
 msgstr "Select metric"
+
+msgid "Quick actions"
+msgstr "Quick actions"
+
+msgid "Compare with..."
+msgstr "Compare with..."
+
+msgid "Create new"
+msgstr "Create new"
 
 msgid "Error loading jobs"
 msgstr "Error loading jobs"

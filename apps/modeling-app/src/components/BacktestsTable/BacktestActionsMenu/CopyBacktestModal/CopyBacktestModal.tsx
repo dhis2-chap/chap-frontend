@@ -18,6 +18,7 @@ import { useBacktestById } from '../../../../hooks/useBacktestById';
 interface CopyBacktestModalProps {
     id: number;
     onClose: () => void;
+    returnTo?: string;
 }
 
 type CopyableAttributeKey =
@@ -39,7 +40,7 @@ const DEFAULT_COPYABLE_ATTRIBUTES: CopyableAttributes = {
     period: true,
 };
 
-export const CopyBacktestModal = ({ id, onClose }: CopyBacktestModalProps) => {
+export const CopyBacktestModal = ({ id, onClose, returnTo }: CopyBacktestModalProps) => {
     const [selectedAttributes, setSelectedAttributes] = useState<CopyableAttributes>(DEFAULT_COPYABLE_ATTRIBUTES);
     const { backtest, isLoading, error } = useBacktestById(id);
     const navigate = useNavigate();
@@ -98,7 +99,7 @@ export const CopyBacktestModal = ({ id, onClose }: CopyBacktestModalProps) => {
     if (isLoading) {
         return (
             <Modal onClose={onClose} dataTest="copy-backtest-modal">
-                <ModalTitle>{i18n.t('Copy evaluation')}</ModalTitle>
+                <ModalTitle>{i18n.t('Create new based on...')}</ModalTitle>
                 <ModalContent>
                     <div style={{ display: 'flex', justifyContent: 'center', padding: '2rem' }}>
                         <CircularLoader />
@@ -118,7 +119,7 @@ export const CopyBacktestModal = ({ id, onClose }: CopyBacktestModalProps) => {
     if (error || !backtest) {
         return (
             <Modal onClose={onClose} dataTest="copy-backtest-modal">
-                <ModalTitle>{i18n.t('Copy evaluation')}</ModalTitle>
+                <ModalTitle>{i18n.t('Create new based on...')}</ModalTitle>
                 <ModalContent>
                     <p>{i18n.t('Failed to load evaluation data. Please try again.')}</p>
                 </ModalContent>
@@ -135,10 +136,10 @@ export const CopyBacktestModal = ({ id, onClose }: CopyBacktestModalProps) => {
 
     return (
         <Modal onClose={onClose} dataTest="copy-backtest-modal">
-            <ModalTitle>{i18n.t('Copy evaluation')}</ModalTitle>
+            <ModalTitle>{i18n.t('Create new based on...')}</ModalTitle>
             <ModalContent>
                 <p className={styles.description}>
-                    {i18n.t('Select which attributes to copy to the new evaluation:')}
+                    {i18n.t('Select which attributes to copy to the new run{{escape}}', { escape: ':' })}
                 </p>
 
                 <div className={styles.attributesList}>
@@ -217,9 +218,14 @@ export const CopyBacktestModal = ({ id, onClose }: CopyBacktestModalProps) => {
                         primary
                         disabled={!hasSelectedAttributes}
                         dataTest="copy-backtest-button"
-                        onClick={() => navigate('/evaluate/new', { state: generateCopyState() })}
+                        onClick={() => {
+                            const url = returnTo
+                                ? `/evaluate/new?returnTo=${encodeURIComponent(returnTo)}`
+                                : '/evaluate/new';
+                            navigate(url, { state: generateCopyState() });
+                        }}
                     >
-                        {i18n.t('Copy to new evaluation')}
+                        {i18n.t('Create')}
                     </Button>
                 </ButtonStrip>
             </ModalActions>

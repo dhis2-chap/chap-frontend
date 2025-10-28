@@ -55,7 +55,7 @@ export const JobActionsMenu = ({
 
     const handleNavigateToResult = () => {
         if (type === JOB_TYPES.CREATE_BACKTEST_WITH_DATA || type === JOB_TYPES.BACKTEST) {
-            navigate(`/evaluate/compare?baseEvaluation=${result}`);
+            navigate(`/evaluate/compare?baseEvaluation=${result}&returnTo=${encodeURIComponent('/jobs')}`);
         } else if (type === JOB_TYPES.MAKE_PREDICTION) {
             navigate(`/predict`);
         }
