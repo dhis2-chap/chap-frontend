@@ -1,6 +1,7 @@
 import React from 'react';
-import { MetricPlotWidget } from './MetricPlot';
 import styles from './EvaluationDetails.module.css';
+import { MetricPlotWidget } from './MetricPlot';
+import { EvaluationSummaryWidget } from './EvaluationSummaryWidget';
 
 type Props = {
     evaluationId: number;
@@ -15,7 +16,9 @@ export const EvaluationDetailsComponent = ({ evaluationId }: Props) => {
                 />
             </div>
             <div className={styles.rightColumn}>
-
+                <EvaluationSummaryWidget
+                    evaluationId={evaluationId}
+                />
             </div>
         </div>
     );
