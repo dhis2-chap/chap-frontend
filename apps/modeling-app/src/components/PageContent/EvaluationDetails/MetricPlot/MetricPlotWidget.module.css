@@ -1,9 +1,14 @@
+.container {
+    width: 100%;
+}
+
 .loadingContainer {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 60vh;
     text-align: center;
+    color: var(--colors-grey700);
 }
 
 .visualizationContainer {

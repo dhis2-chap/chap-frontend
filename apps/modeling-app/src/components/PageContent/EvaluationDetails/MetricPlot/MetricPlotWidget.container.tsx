@@ -5,7 +5,6 @@ import styles from './MetricPlotWidget.module.css';
 import { MetricPlotWidgetComponent } from './MetricPlotWidget.component';
 import { useMetricVisualizationTypes } from './hooks/useMetricVisualizationTypes';
 import { useMetricsForBacktest } from './hooks/useMetricsForBacktest';
-import { useEvaluationVisualizationParams } from './hooks/useEvaluationVisualizationParams';
 import { Widget } from '@dhis2-chap/ui';
 
 type Props = {
@@ -26,15 +25,8 @@ export const MetricPlotWidget = ({ evaluationId }: Props) => {
         error: metricsError,
     } = useMetricsForBacktest({ evaluationId });
 
-    const {
-        selectedVisualizationId,
-        selectedMetricId,
-        setVisualizationId,
-        setMetricId,
-    } = useEvaluationVisualizationParams({
-        allowedVisualizationIds: (visualizationTypes ?? []).map(v => v.id),
-        allowedMetricIds: (metrics ?? []).map(m => m.id),
-    });
+    const [selectedVisualizationId, setVisualizationId] = useState<string | undefined>(undefined);
+    const [selectedMetricId, setMetricId] = useState<string | undefined>(undefined);
 
     if (isTypesLoading || isMetricsLoading) {
         return (
@@ -55,9 +47,9 @@ export const MetricPlotWidget = ({ evaluationId }: Props) => {
     }
 
     return (
-        <div style={{ width: '100%' }}>
+        <div className={styles.container}>
             <Widget
-                header={i18n.t('Metric Plot')}
+                header={i18n.t('Metric plot')}
                 open={open}
                 onOpen={() => setOpen(true)}
                 onClose={() => setOpen(false)}

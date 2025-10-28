@@ -12,7 +12,7 @@ export const useCustomVisualization = ({
     visualizationId,
     metricId,
 }: UseVisualizationParams) => {
-    const { data, isLoading, error } = useQuery<unknown, ApiError>({
+    const { data, isLoading, isFetching, error } = useQuery<unknown, ApiError>({
         queryKey: [
             'custom-visualizations',
             evaluationId,
@@ -38,6 +38,7 @@ export const useCustomVisualization = ({
     return {
         visualization: data,
         isLoading,
+        isFetching,
         error,
     };
 };

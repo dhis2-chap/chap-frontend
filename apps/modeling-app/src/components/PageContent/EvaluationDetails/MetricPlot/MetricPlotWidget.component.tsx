@@ -16,6 +16,7 @@ export const MetricPlotWidgetComponent = ({
     selectedVisualizationId,
     selectedMetricId,
 }: Props) => {
+    const selectionComplete = !!selectedVisualizationId && !!selectedMetricId;
     const {
         visualization,
         isLoading: isVisualizationLoading,
@@ -37,9 +38,15 @@ export const MetricPlotWidgetComponent = ({
         });
     }, [visualizationError, evaluationId, selectedVisualizationId, selectedMetricId]);
 
-    const isLoading = isVisualizationLoading || !selectedVisualizationId;
+    if (!selectionComplete) {
+        return (
+            <div className={styles.loadingContainer}>
+                {i18n.t('Please select a visualization and metric')}
+            </div>
+        );
+    }
 
-    if (isLoading) {
+    if (isVisualizationLoading) {
         return (
             <div className={styles.loadingContainer}>
                 <CircularLoader />
@@ -47,12 +54,20 @@ export const MetricPlotWidgetComponent = ({
         );
     }
 
-    if (visualizationError || !visualization) {
+    if (visualizationError) {
         return (
             <div className={styles.errorContainer}>
                 <NoticeBox title={i18n.t('Unable to load data')} error>
                     <p>{i18n.t('There was a problem loading the visualization. See the browser console for details.')}</p>
                 </NoticeBox>
+            </div>
+        );
+    }
+
+    if (!visualization) {
+        return (
+            <div className={styles.errorContainer}>
+                {i18n.t('No visualization found')}
             </div>
         );
     }
