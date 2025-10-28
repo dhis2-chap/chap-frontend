@@ -2,7 +2,7 @@ import React from 'react';
 import { Tooltip } from '@dhis2/ui';
 import { StatusIndicator } from '@dhis2-chap/ui';
 import i18n from '@dhis2/d2-i18n';
-import { useJobs, JOB_STATUSES, JOB_TYPES } from '../../../hooks/useJobs';
+import { useJobs, JOB_STATUSES, JOB_TYPES } from '../../hooks/useJobs';
 
 type JobTypeValue = (typeof JOB_TYPES)[keyof typeof JOB_TYPES];
 

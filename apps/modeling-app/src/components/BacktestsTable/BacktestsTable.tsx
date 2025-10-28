@@ -30,7 +30,7 @@ import styles from './BacktestsTable.module.css';
 import { BacktestActionsMenu } from './BacktestActionsMenu';
 import { BacktestsTableFilters } from './BacktestsTableFilters';
 import { BatchActions } from './BatchActions';
-import { RunningJobsIndicator } from './RunningJobsIndicator';
+import { RunningJobsIndicator } from '../RunningJobsIndicator';
 import { JOB_TYPES } from '../../hooks/useJobs';
 import { useBacktestsTableFilters } from './hooks/useBacktestsTableFilters';
 

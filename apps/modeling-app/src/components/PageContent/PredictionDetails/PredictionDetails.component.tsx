@@ -18,7 +18,7 @@ type Props = {
     orgUnits: Map<string, { id: string; displayName: string }>;
 };
 
-export const PredictionDetails = ({
+export const PredictionDetailsComponent = ({
     prediction,
     orgUnits,
 }: Props) => {

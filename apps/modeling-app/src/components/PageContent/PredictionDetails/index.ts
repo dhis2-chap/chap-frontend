@@ -1,2 +1,1 @@
-export { PredictionDetails } from './PredictionDetails';
-export { PredictionDetailsContainer } from './PredictionDetailsContainer';
+export { PredictionDetails } from './PredictionDetails.container';

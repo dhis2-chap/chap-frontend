@@ -17,7 +17,7 @@ export const useDeletePrediction = ({ onSuccess, onError }: Props = {}) => {
 
     const { show: showErrorAlert } = useAlert(
         i18n.t('Failed to delete prediction'),
-        { success: false },
+        { critical: true },
     );
 
     const {

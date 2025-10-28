@@ -2,12 +2,12 @@ import React, { useMemo } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { CircularLoader, NoticeBox } from '@dhis2/ui';
 import { useParams } from 'react-router-dom';
-import { PredictionDetails } from './PredictionDetails';
+import { PredictionDetailsComponent } from './PredictionDetails.component';
 import usePredictionById from './hooks/usePredictionById';
 import useOrgUnits from '../../../hooks/useOrgUnits';
-import styles from './PredictionDetailsContainer.module.css';
+import styles from './PredictionDetails.module.css';
 
-export const PredictionDetailsContainer: React.FC = () => {
+export const PredictionDetails: React.FC = () => {
     const { predictionId } = useParams<{ predictionId: string }>();
     const { prediction, isLoading: isPredictionLoading, error: predictionError } = usePredictionById(predictionId);
     const { orgUnits, loading: isOrgUnitsLoading, error: orgUnitsError } = useOrgUnits();
@@ -50,7 +50,7 @@ export const PredictionDetailsContainer: React.FC = () => {
     }
 
     return (
-        <PredictionDetails
+        <PredictionDetailsComponent
             prediction={prediction}
             orgUnits={orgUnitMap}
         />

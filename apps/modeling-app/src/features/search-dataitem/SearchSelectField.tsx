@@ -47,7 +47,7 @@ const DIMENSION_ITEM_TYPE_LABELS = {
     DATA_ELEMENT: i18n.t('Data Element'),
 };
 
-const SearchSelectField = ({
+export const SearchSelectField = ({
     feature,
     onChangeSearchSelectField,
     defaultValue,
@@ -222,5 +222,3 @@ const SearchSelectField = ({
         </div>
     );
 };
-
-export default SearchSelectField;

@@ -3,7 +3,7 @@ import i18n from '@dhis2/d2-i18n';
 import { useNavigate } from 'react-router-dom';
 import { Button, IconArrowLeft16 } from '@dhis2/ui';
 import { PageHeader } from '../../features/common-features/PageHeader/PageHeader';
-import { PredictionDetailsContainer } from '../../components/PageContent/PredictionDetails';
+import { PredictionDetails } from '../../components/PageContent/PredictionDetails';
 
 export const PredictionDetailsPage: React.FC = () => {
     const navigate = useNavigate();
@@ -25,7 +25,7 @@ export const PredictionDetailsPage: React.FC = () => {
                 </Button>
             </div>
 
-            <PredictionDetailsContainer />
+            <PredictionDetails />
         </>
     );
 };

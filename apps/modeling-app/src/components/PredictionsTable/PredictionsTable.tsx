@@ -25,7 +25,7 @@ import {
 import { PredictionBaseRead, ModelSpecRead } from '@dhis2-chap/ui';
 import styles from './PredictionsTable.module.css';
 import { PredictionsTableFilters } from './PredictionsTableFilters';
-import { RunningJobsIndicator } from '../BacktestsTable/RunningJobsIndicator';
+import { RunningJobsIndicator } from '../RunningJobsIndicator';
 import { JOB_TYPES } from '../../hooks/useJobs';
 import { PredictionActionsMenu } from './PredictionActionsMenu';
 import { Link } from 'react-router-dom';
