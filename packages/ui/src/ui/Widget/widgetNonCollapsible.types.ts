@@ -6,4 +6,3 @@ export type WidgetNonCollapsiblePropsPlain = {
     color?: string;
     borderless?: boolean;
 };
-

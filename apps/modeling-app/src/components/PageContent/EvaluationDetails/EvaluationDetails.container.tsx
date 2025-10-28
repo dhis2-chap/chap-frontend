@@ -1,7 +1,6 @@
 import React from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { useParams } from 'react-router-dom';
-import { MetricPlotWidget } from './MetricPlot';
 import * as z from 'zod';
 import { NoticeBox } from '@dhis2/ui';
 import { EvaluationDetailsComponent } from './EvaluationDetails.component';
