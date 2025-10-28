@@ -1,9 +1,9 @@
 import React from 'react';
 import i18n from '@dhis2/d2-i18n';
-import { Widget } from '@dhis2-chap/ui';
+import { Pill, Widget } from '@dhis2-chap/ui';
 import styles from './EvaluationSummaryWidget.module.css';
 import { useBacktestById } from '@/hooks/useBacktestById';
-import { CircularLoader, IconArrowRight16, IconChevronRight16, NoticeBox } from '@dhis2/ui';
+import { CircularLoader } from '@dhis2/ui';
 import { convertServerToClientPeriod } from '@/utils/timePeriodUtils';
 import { PERIOD_TYPES } from '@/components/ModelExecutionForm';
 
@@ -81,16 +81,28 @@ export const EvaluationSummaryWidget = ({ evaluationId }: Props) => {
                     </div>
                     <div className={styles.row}>
                         <span className={styles.label}>
-                            {i18n.t('Period')}
+                            {i18n.t('Start period')}
                         </span>
                         <span className={styles.value}>
                             {periodConverter(backtest.dataset.firstPeriod, backtest.dataset.periodType)}
-                            {backtest.dataset.firstPeriod && backtest.dataset.lastPeriod && (
-                                <span style={{ marginInline: '4px', paddingTop: '4px' }}>
-                                    <IconChevronRight16 />
-                                </span>
-                            )}
+                        </span>
+                    </div>
+                    <div className={styles.row}>
+                        <span className={styles.label}>
+                            {i18n.t('End period')}
+                        </span>
+                        <span className={styles.value}>
                             {periodConverter(backtest.dataset.lastPeriod, backtest.dataset.periodType)}
+                        </span>
+                    </div>
+                    <div className={styles.row}>
+                        <span className={styles.label}>
+                            {i18n.t('Regions')}
+                        </span>
+                        <span className={styles.value}>
+                            <Pill>
+                                {backtest.dataset.orgUnits ? i18n.t('{{count}} regions', { count: backtest.dataset.orgUnits.length }) : i18n.t('None')}
+                            </Pill>
                         </span>
                     </div>
                 </div>
