@@ -99,7 +99,7 @@ export const CopyBacktestModal = ({ id, onClose, returnTo }: CopyBacktestModalPr
     if (isLoading) {
         return (
             <Modal onClose={onClose} dataTest="copy-backtest-modal">
-                <ModalTitle>{i18n.t('Copy evaluation')}</ModalTitle>
+                <ModalTitle>{i18n.t('Create new based on...')}</ModalTitle>
                 <ModalContent>
                     <div style={{ display: 'flex', justifyContent: 'center', padding: '2rem' }}>
                         <CircularLoader />
@@ -119,7 +119,7 @@ export const CopyBacktestModal = ({ id, onClose, returnTo }: CopyBacktestModalPr
     if (error || !backtest) {
         return (
             <Modal onClose={onClose} dataTest="copy-backtest-modal">
-                <ModalTitle>{i18n.t('Copy evaluation')}</ModalTitle>
+                <ModalTitle>{i18n.t('Create new based on...')}</ModalTitle>
                 <ModalContent>
                     <p>{i18n.t('Failed to load evaluation data. Please try again.')}</p>
                 </ModalContent>
@@ -136,10 +136,10 @@ export const CopyBacktestModal = ({ id, onClose, returnTo }: CopyBacktestModalPr
 
     return (
         <Modal onClose={onClose} dataTest="copy-backtest-modal">
-            <ModalTitle>{i18n.t('Copy evaluation')}</ModalTitle>
+            <ModalTitle>{i18n.t('Create new based on...')}</ModalTitle>
             <ModalContent>
                 <p className={styles.description}>
-                    {i18n.t('Select which attributes to copy to the new evaluation:')}
+                    {i18n.t('Select which attributes to copy to the new run{{escape}}', { escape: ':' })}
                 </p>
 
                 <div className={styles.attributesList}>
@@ -225,7 +225,7 @@ export const CopyBacktestModal = ({ id, onClose, returnTo }: CopyBacktestModalPr
                             navigate(url, { state: generateCopyState() });
                         }}
                     >
-                        {i18n.t('Copy to new evaluation')}
+                        {i18n.t('Create')}
                     </Button>
                 </ButtonStrip>
             </ModalActions>
