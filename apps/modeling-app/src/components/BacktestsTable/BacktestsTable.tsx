@@ -63,7 +63,7 @@ const columns = [
         cell: (info) => {
             return (
                 <Link
-                    to={`/evaluate/compare?baseEvaluation=${info.row.original.id}`}
+                    to={`/evaluate/${info.row.original.id}`}
                 >
                     {info.getValue()}
                 </Link>
