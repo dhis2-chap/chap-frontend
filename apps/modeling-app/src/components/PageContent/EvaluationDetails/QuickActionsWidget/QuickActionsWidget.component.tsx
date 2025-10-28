@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, ButtonStrip } from '@dhis2/ui';
+import { Button, ButtonStrip, IconVisualizationLineMulti16, IconDuplicate16 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { useNavigate } from 'react-router-dom';
 import { Widget } from '@dhis2-chap/ui';
@@ -13,10 +13,9 @@ type Props = {
 export const QuickActionsWidgetComponent = ({ evaluationId }: Props) => {
     const navigate = useNavigate();
     const [copyModalIsOpen, setCopyModalIsOpen] = useState(false);
-    const [open, setOpen] = useState(true);
 
     const handleCompareWith = () => {
-        navigate(`/evaluate/compare?baseEvaluation=${evaluationId}`);
+        navigate(`/evaluate/compare?baseEvaluation=${evaluationId}&returnTo=${encodeURIComponent(`/evaluate/${evaluationId}`)}`);
     };
 
     const handleCreateNew = () => {
@@ -27,21 +26,21 @@ export const QuickActionsWidgetComponent = ({ evaluationId }: Props) => {
         <>
             <Widget
                 header={i18n.t('Quick actions')}
-                open={open}
-                onOpen={() => setOpen(true)}
-                onClose={() => setOpen(false)}
+                noncollapsible
             >
                 <div className={styles.content}>
                     <ButtonStrip>
                         <Button
                             onClick={handleCompareWith}
                             dataTest="quick-action-compare"
+                            icon={<IconVisualizationLineMulti16 />}
                         >
-                            {i18n.t('Compare with...')}
+                            {i18n.t('Compare')}
                         </Button>
                         <Button
                             onClick={handleCreateNew}
                             dataTest="quick-action-create-new"
+                            icon={<IconDuplicate16 />}
                         >
                             {i18n.t('Create new')}
                         </Button>

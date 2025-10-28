@@ -58,15 +58,19 @@
     /* grey800 */
 }
 
-.toggleButtonOpen {
+.toggleIcon {
+    display: flex;
+}
+
+.toggleIconOpen {
     animation: flipOpen 200ms normal forwards linear;
 }
 
-.toggleButtonClose {
+.toggleIconClose {
     animation: flipClose 200ms normal forwards linear;
 }
 
-.toggleButtonCloseInit {
+.toggleIconCloseInit {
     transform: rotateX(180deg);
 }
 
@@ -112,20 +116,20 @@
 
 @keyframes flipOpen {
     from {
-        transform: rotateX(180deg);
+        transform: rotate(180deg);
     }
 
     to {
-        transform: rotateX(0);
+        transform: rotate(0deg);
     }
 }
 
 @keyframes flipClose {
     from {
-        transform: rotateX(0);
+        transform: rotate(0deg);
     }
 
     to {
-        transform: rotateX(180deg);
+        transform: rotate(180deg);
     }
 }
