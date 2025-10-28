@@ -52,16 +52,16 @@ export const MetricPlotWidget = ({ evaluationId }: Props) => {
                 header={(
                     <div className={styles.header}>
                         <span>{i18n.t('Metric plot')}</span>
-                        <span
-                            className={styles.tooltip}
+                        <Tooltip
+                            content={i18n.t('Metric plots are advanced functionality and can easily be misinterpreted. Use with caution.')}
+                            placement="top"
                         >
-                            <Tooltip
-                                content={i18n.t('Metric plots are advanced functionality and can easily be misinterpreted. Use with caution.')}
-                                placement="top"
+                            <span
+                                className={styles.tooltip}
                             >
                                 <IconInfo16 />
-                            </Tooltip>
-                        </span>
+                            </span>
+                        </Tooltip>
                     </div>
                 )}
                 open={open}
