@@ -35,14 +35,14 @@ export const QuickActionsWidgetComponent = ({ evaluationId }: Props) => {
                             dataTest="quick-action-compare"
                             icon={<IconVisualizationLineMulti16 />}
                         >
-                            {i18n.t('Compare')}
+                            {i18n.t('Compare with...')}
                         </Button>
                         <Button
                             onClick={handleCreateNew}
                             dataTest="quick-action-create-new"
                             icon={<IconDuplicate16 />}
                         >
-                            {i18n.t('Create new')}
+                            {i18n.t('Create new based on...')}
                         </Button>
                     </ButtonStrip>
                 </div>
@@ -52,6 +52,7 @@ export const QuickActionsWidgetComponent = ({ evaluationId }: Props) => {
                 <CopyBacktestModal
                     id={evaluationId}
                     onClose={() => setCopyModalIsOpen(false)}
+                    returnTo={`/evaluate/${evaluationId}`}
                 />
             )}
         </>

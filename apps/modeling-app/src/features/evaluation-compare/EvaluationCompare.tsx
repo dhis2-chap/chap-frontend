@@ -29,6 +29,7 @@ export const EvaluationCompare = () => {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const returnTo = searchParams.get('returnTo') || '/evaluate';
+    const isFromDetails = returnTo.startsWith('/evaluate/') && returnTo !== '/evaluate';
 
     // reference to the scrollable container
     // used by virtuoso in ComparisonPlotList
@@ -95,7 +96,7 @@ export const EvaluationCompare = () => {
                             navigate(returnTo);
                         }}
                     >
-                        {i18n.t('Back to evaluation')}
+                        {i18n.t(isFromDetails ? 'Back to evaluation details' : 'Back to evaluation')}
                     </Button>
                 </div>
                 <div className={css.compareSelectors}>

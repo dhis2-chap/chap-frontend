@@ -18,6 +18,7 @@ import { useBacktestById } from '../../../../hooks/useBacktestById';
 interface CopyBacktestModalProps {
     id: number;
     onClose: () => void;
+    returnTo?: string;
 }
 
 type CopyableAttributeKey =
@@ -39,7 +40,7 @@ const DEFAULT_COPYABLE_ATTRIBUTES: CopyableAttributes = {
     period: true,
 };
 
-export const CopyBacktestModal = ({ id, onClose }: CopyBacktestModalProps) => {
+export const CopyBacktestModal = ({ id, onClose, returnTo }: CopyBacktestModalProps) => {
     const [selectedAttributes, setSelectedAttributes] = useState<CopyableAttributes>(DEFAULT_COPYABLE_ATTRIBUTES);
     const { backtest, isLoading, error } = useBacktestById(id);
     const navigate = useNavigate();
@@ -217,7 +218,12 @@ export const CopyBacktestModal = ({ id, onClose }: CopyBacktestModalProps) => {
                         primary
                         disabled={!hasSelectedAttributes}
                         dataTest="copy-backtest-button"
-                        onClick={() => navigate('/evaluate/new', { state: generateCopyState() })}
+                        onClick={() => {
+                            const url = returnTo
+                                ? `/evaluate/new?returnTo=${encodeURIComponent(returnTo)}`
+                                : '/evaluate/new';
+                            navigate(url, { state: generateCopyState() });
+                        }}
                     >
                         {i18n.t('Copy to new evaluation')}
                     </Button>
