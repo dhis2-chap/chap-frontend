@@ -2,27 +2,14 @@
     inline-size: 100%;
 }
 
-.table thead th {
-    text-align: end;
-}
-
-.table thead th:first-child {
-    text-align: start;
-}
-
-.table tbody th {
-    text-align: start;
-    font-weight: normal;
-}
-
-.table tbody td {
-    text-align: end;
-}
-
 .quantile_low {
     color: #ababab;
 }
 
 .quantile_high {
     color: #ababab;
+}
+
+.headerRight {
+    text-align: end;
 }

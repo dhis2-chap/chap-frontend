@@ -69,13 +69,14 @@ export const useJobs = () => {
                         return pulledJob;
                     }
                 }
-                if (statusChanged) {
-                    queryClient.invalidateQueries({ queryKey: ['backtests'] });
-                    queryClient.invalidateQueries({ queryKey: ['predictions'] });
-                }
                 return job;
             });
         });
+
+        if (statusChanged) {
+            queryClient.invalidateQueries({ queryKey: ['backtests'] });
+            queryClient.invalidateQueries({ queryKey: ['predictions'] });
+        }
     }, [activeJobsData]);
 
     return {

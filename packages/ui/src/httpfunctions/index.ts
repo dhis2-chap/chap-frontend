@@ -75,7 +75,6 @@ export type { VisualizationInfo } from './models/VisualizationInfo';
 
 export { AnalyticsService } from './services/AnalyticsService';
 export { CrudService } from './services/CrudService';
-export { DatasetPlotsService } from './services/DatasetPlotsService';
 export { DebugService } from './services/DebugService';
 export { DefaultService } from './services/DefaultService';
 export { JobsService } from './services/JobsService';

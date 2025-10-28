@@ -1,9 +1,0 @@
-.buttons {
-    display: flex;
-    justify-content: right;
-    gap: 1rem;
-}
-
-.text {
-    text-align: right;
-}
