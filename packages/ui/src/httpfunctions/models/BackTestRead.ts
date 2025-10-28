@@ -9,6 +9,7 @@ export type BackTestRead = {
     modelId: string;
     name?: (string | null);
     created?: (string | null);
+    modelTemplateVersion?: (string | null);
     id: number;
     orgUnits?: Array<string>;
     splitPeriods?: Array<string>;

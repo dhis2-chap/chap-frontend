@@ -1,0 +1,131 @@
+.headerContainer {
+    border-radius: 3px;
+    border: 1px solid #d5dde5;
+    /* grey400 */
+}
+
+.headerContainerChildrenVisible {
+    border-bottom-width: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.headerCollapsible {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    font-weight: 500;
+    font-size: 16px;
+    color: #404b5a;
+    /* grey800 */
+}
+
+.children {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+    border: 1px solid #d5dde5;
+    /* grey400 */
+    border-top-width: 0;
+    transform-origin: 50% 0%;
+}
+
+.childrenOpen {
+    animation: slidein 200ms normal forwards ease-in-out;
+}
+
+.childrenClose {
+    animation: slideout 200ms normal forwards ease-in-out;
+    transform-origin: 100% 0%;
+}
+
+.toggleButton {
+    margin: 0 0 0 4px;
+    height: 24px;
+    border-radius: 3px;
+    color: #6c7787;
+    /* grey600 */
+    background: transparent;
+    border: none;
+}
+
+.toggleButton:hover {
+    background: #f3f5f7;
+    /* grey200 */
+    color: #404b5a;
+    /* grey800 */
+}
+
+.toggleButtonOpen {
+    animation: flipOpen 200ms normal forwards linear;
+}
+
+.toggleButtonClose {
+    animation: flipClose 200ms normal forwards linear;
+}
+
+.toggleButtonCloseInit {
+    transform: rotateX(180deg);
+}
+
+.container {
+    border-radius: 3px;
+    border: 1px solid #d5dde5;
+    /* grey400 */
+}
+
+.headerNonCollapsible {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    font-weight: 500;
+    font-size: 16px;
+    color: #404b5a;
+    /* grey800 */
+}
+
+.borderless {
+    border: none;
+}
+
+@keyframes slidein {
+    from {
+        transform: scaleY(0);
+    }
+
+    to {
+        transform: scaleY(1);
+    }
+}
+
+@keyframes slideout {
+    from {
+        transform: scaleY(1);
+    }
+
+    to {
+        transform: scaleY(0);
+    }
+}
+
+@keyframes flipOpen {
+    from {
+        transform: rotateX(180deg);
+    }
+
+    to {
+        transform: rotateX(0);
+    }
+}
+
+@keyframes flipClose {
+    from {
+        transform: rotateX(0);
+    }
+
+    to {
+        transform: rotateX(180deg);
+    }
+}

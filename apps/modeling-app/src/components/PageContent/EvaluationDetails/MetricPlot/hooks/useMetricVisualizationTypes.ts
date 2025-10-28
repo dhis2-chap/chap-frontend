@@ -6,10 +6,10 @@ type Props = {
     evaluationId?: number;
 };
 
-export const useCustomVisualizationTypes = ({ evaluationId }: Props) => {
+export const useMetricVisualizationTypes = ({ evaluationId }: Props) => {
     const { data, error, isLoading } = useQuery<VisualizationInfo[], ApiError>({
-        queryKey: ['custom-visualization-types', evaluationId],
-        queryFn: () => VisualizationService.listVisualizationsVisualizationBacktestIdGet(
+        queryKey: ['metric-visualization-types', evaluationId],
+        queryFn: () => VisualizationService.getAvilableMetricPlotsVisualizationMetricPlotsBacktestIdGet(
             evaluationId!,
         ),
         enabled: typeof evaluationId === 'number' && evaluationId > 0,
@@ -20,7 +20,7 @@ export const useCustomVisualizationTypes = ({ evaluationId }: Props) => {
 
     useEffect(() => {
         if (!error) return;
-        console.error('useCustomVisualizationTypes: error loading visualization types', {
+        console.error('useMetricVisualizationTypes: error loading visualization types', {
             message: error?.message,
             error,
             evaluationId,

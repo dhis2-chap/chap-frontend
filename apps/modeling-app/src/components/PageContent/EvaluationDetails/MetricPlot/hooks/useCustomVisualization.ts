@@ -12,7 +12,7 @@ export const useCustomVisualization = ({
     visualizationId,
     metricId,
 }: UseVisualizationParams) => {
-    const { data, isLoading, error } = useQuery<unknown, ApiError>({
+    const { data, isLoading, isFetching, error } = useQuery<unknown, ApiError>({
         queryKey: [
             'custom-visualizations',
             evaluationId,
@@ -20,7 +20,7 @@ export const useCustomVisualization = ({
             metricId,
         ],
         queryFn: () =>
-            VisualizationService.generateVisualizationVisualizationVisualizationNameBacktestIdMetricIdGet(
+            VisualizationService.generateVisualizationVisualizationMetricPlotsVisualizationNameBacktestIdMetricIdGet(
                 visualizationId!,
                 Number(evaluationId),
                 metricId!,
@@ -38,6 +38,7 @@ export const useCustomVisualization = ({
     return {
         visualization: data,
         isLoading,
+        isFetching,
         error,
     };
 };

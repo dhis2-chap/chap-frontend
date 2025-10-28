@@ -1,19 +1,18 @@
 import React from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import i18n from '@dhis2/d2-i18n';
 import { PageHeader } from '../../features/common-features/PageHeader/PageHeader';
-import { EvaluationSummary } from '../../components/EvaluationSummary/EvaluationSummary.container';
+import { EvaluationDetails } from '../../components/PageContent/EvaluationDetails';
 import { Button, IconArrowLeft16 } from '@dhis2/ui';
 
 export const EvaluationDetailsPage: React.FC = () => {
-    const { evaluationId } = useParams<{ evaluationId: string }>();
     const navigate = useNavigate();
 
     return (
         <>
             <PageHeader
                 pageTitle={i18n.t('Evaluation details')}
-                pageDescription={i18n.t('Inspect a single evaluation and view its visualizations.')}
+                pageDescription={i18n.t('Deep dive into a specific evaluation run and assess its performance and reliability.')}
             />
             <div>
                 <Button
@@ -27,9 +26,7 @@ export const EvaluationDetailsPage: React.FC = () => {
                 </Button>
             </div>
 
-            <EvaluationSummary
-                evaluationId={evaluationId ? Number(evaluationId) : undefined}
-            />
+            <EvaluationDetails />
         </>
     );
 };

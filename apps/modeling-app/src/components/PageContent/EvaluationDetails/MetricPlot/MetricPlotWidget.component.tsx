@@ -1,22 +1,22 @@
 import React, { useEffect } from 'react';
-import { Card } from '@dhis2-chap/ui';
 import { CircularLoader, NoticeBox } from '@dhis2/ui';
 import { VegaEmbed } from 'react-vega';
 import i18n from '@dhis2/d2-i18n';
 import { useCustomVisualization } from './hooks/useCustomVisualization';
-import styles from './EvaluationSummary.module.css';
+import styles from './MetricPlotWidget.module.css';
 
-type EvaluationSummaryProps = {
-    evaluationId?: number;
+type Props = {
+    evaluationId: number;
     selectedVisualizationId?: string;
     selectedMetricId?: string;
 };
 
-export const EvaluationSummaryComponent: React.FC<EvaluationSummaryProps> = ({
+export const MetricPlotWidgetComponent = ({
     evaluationId,
     selectedVisualizationId,
     selectedMetricId,
-}) => {
+}: Props) => {
+    const selectionComplete = !!selectedVisualizationId && !!selectedMetricId;
     const {
         visualization,
         isLoading: isVisualizationLoading,
@@ -38,9 +38,16 @@ export const EvaluationSummaryComponent: React.FC<EvaluationSummaryProps> = ({
         });
     }, [visualizationError, evaluationId, selectedVisualizationId, selectedMetricId]);
 
-    const isLoading = isVisualizationLoading || !selectedVisualizationId;
+    if (!selectionComplete) {
+        return (
+            <div className={styles.emptyState}>
+                <p>{i18n.t('Please select a visualization and metric.')}</p>
+                <p>{i18n.t('Keep in mind that this is advanced functionality and may not be suitable for all users.')}</p>
+            </div>
+        );
+    }
 
-    if (isLoading) {
+    if (isVisualizationLoading) {
         return (
             <div className={styles.loadingContainer}>
                 <CircularLoader />
@@ -48,7 +55,7 @@ export const EvaluationSummaryComponent: React.FC<EvaluationSummaryProps> = ({
         );
     }
 
-    if (visualizationError || !visualization) {
+    if (visualizationError) {
         return (
             <div className={styles.errorContainer}>
                 <NoticeBox title={i18n.t('Unable to load data')} error>
@@ -58,8 +65,16 @@ export const EvaluationSummaryComponent: React.FC<EvaluationSummaryProps> = ({
         );
     }
 
+    if (!visualization) {
+        return (
+            <div className={styles.errorContainer}>
+                {i18n.t('No visualization found')}
+            </div>
+        );
+    }
+
     return (
-        <Card>
+        <div className={styles.card}>
             <div className={styles.visualizationContainer}>
                 <VegaEmbed
                     spec={visualization}
@@ -82,6 +97,6 @@ export const EvaluationSummaryComponent: React.FC<EvaluationSummaryProps> = ({
                     }}
                 />
             </div>
-        </Card>
+        </div>
     );
 };
