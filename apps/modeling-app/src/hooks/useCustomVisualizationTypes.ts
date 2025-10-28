@@ -9,7 +9,7 @@ type Props = {
 export const useCustomVisualizationTypes = ({ evaluationId }: Props) => {
     const { data, error, isLoading } = useQuery<VisualizationInfo[], ApiError>({
         queryKey: ['custom-visualization-types', evaluationId],
-        queryFn: () => VisualizationService.listVisualizationsVisualizationBacktestIdGet(
+        queryFn: () => VisualizationService.getAvilableMetricPlotsVisualizationMetricPlotsBacktestIdGet(
             evaluationId!,
         ),
         enabled: typeof evaluationId === 'number' && evaluationId > 0,

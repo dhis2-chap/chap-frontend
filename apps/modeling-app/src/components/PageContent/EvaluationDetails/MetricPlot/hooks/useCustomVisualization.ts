@@ -20,7 +20,7 @@ export const useCustomVisualization = ({
             metricId,
         ],
         queryFn: () =>
-            VisualizationService.generateVisualizationVisualizationVisualizationNameBacktestIdMetricIdGet(
+            VisualizationService.generateVisualizationVisualizationMetricPlotsVisualizationNameBacktestIdMetricIdGet(
                 visualizationId!,
                 Number(evaluationId),
                 metricId!,

@@ -1,22 +1,21 @@
 import React, { useEffect } from 'react';
-import { Card } from '@dhis2-chap/ui';
 import { CircularLoader, NoticeBox } from '@dhis2/ui';
 import { VegaEmbed } from 'react-vega';
 import i18n from '@dhis2/d2-i18n';
 import { useCustomVisualization } from './hooks/useCustomVisualization';
-import styles from './EvaluationSummary.module.css';
+import styles from './MetricPlotWidget.module.css';
 
-type EvaluationSummaryProps = {
-    evaluationId?: number;
+type Props = {
+    evaluationId: number;
     selectedVisualizationId?: string;
     selectedMetricId?: string;
 };
 
-export const EvaluationSummaryComponent: React.FC<EvaluationSummaryProps> = ({
+export const MetricPlotWidgetComponent = ({
     evaluationId,
     selectedVisualizationId,
     selectedMetricId,
-}) => {
+}: Props) => {
     const {
         visualization,
         isLoading: isVisualizationLoading,
@@ -59,7 +58,7 @@ export const EvaluationSummaryComponent: React.FC<EvaluationSummaryProps> = ({
     }
 
     return (
-        <Card>
+        <div className={styles.card}>
             <div className={styles.visualizationContainer}>
                 <VegaEmbed
                     spec={visualization}
@@ -82,6 +81,6 @@ export const EvaluationSummaryComponent: React.FC<EvaluationSummaryProps> = ({
                     }}
                 />
             </div>
-        </Card>
+        </div>
     );
 };

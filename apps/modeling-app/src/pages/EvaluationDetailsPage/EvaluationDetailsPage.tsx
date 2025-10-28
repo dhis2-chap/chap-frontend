@@ -1,12 +1,11 @@
 import React from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import i18n from '@dhis2/d2-i18n';
 import { PageHeader } from '../../features/common-features/PageHeader/PageHeader';
-import { EvaluationSummary } from '../../components/EvaluationSummary/EvaluationSummary.container';
+import { EvaluationDetails } from '../../components/PageContent/EvaluationDetails';
 import { Button, IconArrowLeft16 } from '@dhis2/ui';
 
 export const EvaluationDetailsPage: React.FC = () => {
-    const { evaluationId } = useParams<{ evaluationId: string }>();
     const navigate = useNavigate();
 
     return (
@@ -27,9 +26,7 @@ export const EvaluationDetailsPage: React.FC = () => {
                 </Button>
             </div>
 
-            <EvaluationSummary
-                evaluationId={evaluationId ? Number(evaluationId) : undefined}
-            />
+            <EvaluationDetails />
         </>
     );
 };
