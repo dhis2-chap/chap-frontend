@@ -1,12 +1,15 @@
 .chartContainer {
     display: flex;
-    inline-size: 100%;
+    max-height: 60vh;
 }
 
 .chart {
-    inline-size: 100%;
+    width: 80%;
+    height: 100%;
 }
 
 .menu {
-    min-inline-size: 130px;
+    width: 20%;
+    overflow-y: auto;
+    max-height: 100%;
 }

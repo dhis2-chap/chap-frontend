@@ -30,7 +30,8 @@ import styles from './BacktestsTable.module.css';
 import { BacktestActionsMenu } from './BacktestActionsMenu';
 import { BacktestsTableFilters } from './BacktestsTableFilters';
 import { BatchActions } from './BatchActions';
-import { RunningJobsIndicator } from './RunningJobsIndicator';
+import { RunningJobsIndicator } from '../RunningJobsIndicator';
+import { JOB_TYPES } from '../../hooks/useJobs';
 import { useBacktestsTableFilters } from './hooks/useBacktestsTableFilters';
 
 const columnHelper = createColumnHelper<BackTestRead>();
@@ -181,7 +182,7 @@ export const BacktestsTable = ({ backtests, models }: Props) => {
                     </div>
 
                     <div className={styles.rightSection}>
-                        <RunningJobsIndicator />
+                        <RunningJobsIndicator jobType={JOB_TYPES.CREATE_BACKTEST_WITH_DATA} />
                         <Button
                             primary
                             icon={<IconAdd16 />}
@@ -212,10 +213,7 @@ export const BacktestsTable = ({ backtests, models }: Props) => {
                                 >
                                     {header.isPlaceholder
                                         ? null
-                                        : flexRender(
-                                                header.column.columnDef.header,
-                                                header.getContext(),
-                                            )}
+                                        : flexRender(header.column.columnDef.header, header.getContext())}
                                 </DataTableColumnHeader>
                             ))}
                         </DataTableRow>

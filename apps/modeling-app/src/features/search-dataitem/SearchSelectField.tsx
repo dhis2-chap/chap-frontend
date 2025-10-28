@@ -5,7 +5,7 @@ import styles from './SearchSelectField.module.css';
 import { Label, Layer, Popper, IconChevronDown16, IconCross16 } from '@dhis2/ui';
 import { useApiDataQuery } from '../../utils/useApiDataQuery';
 import { useDebounce } from '../../hooks/useDebounce';
-import { dimensionItemTypeSchema } from '../../components/NewEvaluationFormContainer/NewEvaluationForm/hooks/useFormController';
+import { dimensionItemTypeSchema } from '../../components/ModelExecutionForm/hooks/useModelExecutionFormState';
 
 interface Option {
     id: string;
@@ -47,7 +47,7 @@ const DIMENSION_ITEM_TYPE_LABELS = {
     DATA_ELEMENT: i18n.t('Data Element'),
 };
 
-const SearchSelectField = ({
+export const SearchSelectField = ({
     feature,
     onChangeSearchSelectField,
     defaultValue,
@@ -222,5 +222,3 @@ const SearchSelectField = ({
         </div>
     );
 };
-
-export default SearchSelectField;

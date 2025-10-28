@@ -3,11 +3,9 @@ import Highcharts from 'highcharts';
 import accessibility from 'highcharts/modules/accessibility';
 import highchartsMore from 'highcharts/highcharts-more';
 import exporting from 'highcharts/modules/exporting';
-import React, { useState } from 'react';
+import React, { useMemo } from 'react';
 import HighchartsReact from 'highcharts-react-official';
-import styles from './UncertaintyAreaChart.module.css';
-import { Menu, MenuItem } from '@dhis2/ui';
-import { FullPredictionResponseExtended } from '../../../interfaces/Prediction';
+import { PredictionOrgUnitSeries } from '../../../interfaces/Prediction';
 import { createFixedPeriodFromPeriodId } from '@dhis2/multi-calendar-dates';
 
 accessibility(Highcharts);
@@ -15,31 +13,29 @@ exporting(Highcharts);
 highchartsMore(Highcharts);
 
 const getChartOptions = (
-    data: any,
+    series: PredictionOrgUnitSeries,
     predictionTargetName: string,
 ): Highcharts.Options => {
-    const median = data
-        .filter((d: any) => d.dataElement === 'median')
-        .map((d: any) => [d.period, d.value]);
+    const median: Highcharts.PointOptionsObject[] = series.points
+        .map(p => ({ name: p.period, y: p.quantiles.median }));
 
-    const range = data
-        .filter((d: any) => d.dataElement === 'quantile_low')
-        .map((d: any) => [
-            d.period,
-            d.value,
-            data.filter(
-                (x: any) =>
-                    x.dataElement === 'quantile_high' && x.period === d.period,
-            )[0].value,
-        ]);
+    const range: Highcharts.PointOptionsObject[] = series.points
+        .map(p => ({
+            name: p.period,
+            low: p.quantiles.quantile_low,
+            high: p.quantiles.quantile_high,
+        }));
 
     return {
         title: {
+            style: {
+                fontSize: '0.8rem',
+            },
             text: i18n.t(
                 'Prediction for {{predictionTargetName}} for {{orgUnitName}}',
                 {
                     predictionTargetName,
-                    orgUnitName: data[0].displayName,
+                    orgUnitName: series.orgUnitName ?? '',
                 },
             ),
         },
@@ -57,7 +53,7 @@ const getChartOptions = (
                     }).displayName;
                 },
                 style: {
-                    fontSize: '0.9rem',
+                    fontSize: '0.8rem',
                 },
             },
         },
@@ -70,7 +66,7 @@ const getChartOptions = (
             text: 'CHAP',
         },
         chart: {
-            height: 490,
+            height: (9 / 16 * 100) + '%',
             marginBottom: 125,
         },
         plotOptions: {
@@ -102,57 +98,24 @@ const getChartOptions = (
 };
 
 interface PredicationChartProps {
-    data: FullPredictionResponseExtended;
+    series: PredictionOrgUnitSeries;
     predictionTargetName: string;
 }
 
-function groupByOrgUnit(data: any) {
-    const orgUnits = [...new Set(data.map((item: any) => item.orgUnit))];
-    return orgUnits.map(orgUnit =>
-        data.filter((item: any) => item.orgUnit === orgUnit),
-    );
-}
-
 export const UncertaintyAreaChart = ({
-    data,
+    series,
     predictionTargetName,
 }: PredicationChartProps) => {
-    const matrix = groupByOrgUnit(data.dataValues);
-
-    const [options, setOptions] = useState<Highcharts.Options | undefined>(
-        getChartOptions(matrix[0], predictionTargetName),
-    );
-    const [indexOfSelectedOrgUnit, setIndexOfSelectedOrgUnit] = useState(0);
-
-    const onSelectOrgUnit = (index: number) => {
-        setIndexOfSelectedOrgUnit(index);
-        setOptions(getChartOptions(matrix[index], predictionTargetName));
-    };
+    const options: Highcharts.Options | undefined = useMemo(() => {
+        if (!series || series.points.length === 0) return undefined;
+        return getChartOptions(series, predictionTargetName);
+    }, [series, predictionTargetName]);
 
     return (
-        <>
-            <div className={styles.chartContainer}>
-                <div>
-                    <Menu dense>
-                        {matrix.map((orgUnitData: any, index: number) => (
-                            <MenuItem
-                                className={styles.menu}
-                                active={indexOfSelectedOrgUnit == index}
-                                key={index}
-                                label={orgUnitData[0].displayName}
-                                onClick={() => onSelectOrgUnit(index)}
-                            />
-                        ))}
-                    </Menu>
-                </div>
-                <div className={styles.chart}>
-                    <HighchartsReact
-                        highcharts={Highcharts}
-                        constructorType="chart"
-                        options={options}
-                    />
-                </div>
-            </div>
-        </>
+        <HighchartsReact
+            highcharts={Highcharts}
+            constructorType="chart"
+            options={options}
+        />
     );
 };

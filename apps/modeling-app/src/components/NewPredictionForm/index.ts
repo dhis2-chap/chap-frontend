@@ -1,0 +1,1 @@
+export { NewPredictionForm } from './NewPredictionForm';

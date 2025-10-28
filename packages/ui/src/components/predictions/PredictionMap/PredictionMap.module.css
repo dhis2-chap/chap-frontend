@@ -3,6 +3,7 @@
     flex-direction: row;
     gap: 15px;
     inline-size: 100%;
+    flex-wrap: wrap;
 }
 
 .predictionMapCard {
@@ -10,4 +11,5 @@
     flex-direction: column;
     flex-grow: 1;
     block-size: 320px;
+    min-width: 200px;
 }
