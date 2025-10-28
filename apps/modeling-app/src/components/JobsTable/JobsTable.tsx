@@ -30,6 +30,7 @@ import { StatusCell } from './TableCells/StatusCell';
 import { JobTypeCell } from './TableCells/JobTypeCell';
 import { JobActionsMenu } from './JobActionsMenu/JobActionsMenu';
 import { JOB_STATUSES } from '../../hooks/useJobs';
+import { useJobsTableFilters } from './hooks/useJobsTableFilters';
 
 const columnHelper = createColumnHelper<JobDescription>();
 
@@ -122,14 +123,21 @@ type Props = {
 };
 
 export const JobsTable = ({ jobs }: Props) => {
+    const { search, status, type } = useJobsTableFilters();
+
     const table = useReactTable({
         data: jobs || [],
         columns,
-        initialState: {
+        state: {
             sorting: [{ id: 'start_time', desc: true }],
             columnVisibility: {
                 id: false,
             },
+            columnFilters: [
+                ...(search ? [{ id: 'name', value: search }] : []),
+                ...(status ? [{ id: 'status', value: status }] : []),
+                ...(type ? [{ id: 'type', value: type }] : []),
+            ],
         },
         getRowId: row => row.id.toString(),
         enableRowSelection: false,
@@ -145,9 +153,7 @@ export const JobsTable = ({ jobs }: Props) => {
         <div>
             <div className={styles.buttonContainer}>
                 <div className={styles.leftSection}>
-                    <JobsTableFilters
-                        table={table}
-                    />
+                    <JobsTableFilters />
                 </div>
             </div>
             <DataTable>

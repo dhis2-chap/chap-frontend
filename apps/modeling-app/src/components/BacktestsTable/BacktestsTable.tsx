@@ -148,7 +148,7 @@ export const BacktestsTable = ({ backtests, models }: Props) => {
     const table = useReactTable({
         data: backtests || [],
         columns,
-        initialState: {
+        state: {
             sorting: [{ id: 'created', desc: true }],
             columnFilters: [
                 ...(modelId ? [{ id: 'configuredModel.id', value: modelId }] : []),
@@ -176,7 +176,6 @@ export const BacktestsTable = ({ backtests, models }: Props) => {
                 <div className={styles.buttonContainer}>
                     <div className={styles.leftSection}>
                         <BacktestsTableFilters
-                            table={table}
                             models={models}
                         />
                     </div>

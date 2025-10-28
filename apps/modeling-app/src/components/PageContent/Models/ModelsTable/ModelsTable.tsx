@@ -136,7 +136,7 @@ export const ModelsTable = ({ models }: Props) => {
     const table = useReactTable({
         data: models || [],
         columns,
-        initialState: {
+        state: {
             columnFilters: [
                 ...(search ? [{ id: 'name', value: search }] : []),
             ],
@@ -155,7 +155,7 @@ export const ModelsTable = ({ models }: Props) => {
         <div>
             <div className={styles.buttonContainer}>
                 <div className={styles.leftSection}>
-                    <ModelsTableFilters table={table} />
+                    <ModelsTableFilters />
                 </div>
                 <div className={styles.rightSection}>
                     <Button
