@@ -154,3 +154,23 @@ export const convertServerToClientPeriod = (periodId: string, periodType: keyof 
         return periodId;
     }
 };
+
+export const sortSplitPeriods = (splitPeriods: string[], periodType: keyof typeof PERIOD_TYPES): string[] => {
+    if (periodType.toUpperCase() === PERIOD_TYPES.MONTH) {
+        return splitPeriods.sort((a, b) => {
+            const dateA = parse(a, 'yyyyMM', new Date());
+            const dateB = parse(b, 'yyyyMM', new Date());
+            return dateA.getTime() - dateB.getTime();
+        });
+    }
+    if (periodType.toUpperCase() === PERIOD_TYPES.WEEK) {
+        return splitPeriods.sort((a, b) => {
+            const dateA = parse(a, 'RRRR-\'W\'II', new Date());
+            const dateB = parse(b, 'RRRR-\'W\'II', new Date());
+            return dateA.getTime() - dateB.getTime();
+        });
+    }
+
+    console.error('Unsupported period type provided:', periodType);
+    return splitPeriods;
+};

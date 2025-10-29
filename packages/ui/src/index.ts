@@ -15,6 +15,7 @@ export type {
     ModelData,
 } from './interfaces/Evaluation';
 export { ResultPlot } from './components/evaluation/ResultPlot/ResultPlot';
+export { ComparisonPlot } from './components/evaluation/ComparisonPlot/ComparisonPlot';
 export { ComparisonPlotList } from './components/evaluation/ComparisonPlotList/ComparisonPlotList';
 export { ComparionPlotWrapper } from './components/evaluation/ComparionPlotWrapper/ComparionPlotWrapper';
 export { PredictionTable } from './components/predictions/PredictionTable/PredictionTable';
