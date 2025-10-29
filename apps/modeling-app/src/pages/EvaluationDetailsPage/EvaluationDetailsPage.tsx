@@ -12,7 +12,7 @@ export const EvaluationDetailsPage: React.FC = () => {
         <>
             <PageHeader
                 pageTitle={i18n.t('Evaluation details')}
-                pageDescription={i18n.t('Deep dive into a specific evaluation runs to assess its performance and reliability.')}
+                pageDescription={i18n.t('Deep dive into a specific evaluation run to assess its performance and reliability.')}
             />
             <div>
                 <Button
