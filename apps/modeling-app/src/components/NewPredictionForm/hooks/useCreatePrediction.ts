@@ -14,10 +14,16 @@ import { ModelExecutionFormValues } from '../../ModelExecutionForm/hooks/useMode
 import { prepareBacktestData } from '../../ModelExecutionForm/utils/prepareBacktestData';
 import { validateClimateData } from '../../ModelExecutionForm/utils/validateClimateData';
 import { ImportSummaryCorrected } from '../../ModelExecutionForm/types';
+import { PERIOD_TYPES } from '@/components/ModelExecutionForm';
 
 type Props = {
     onSuccess?: () => void;
     onError?: (error: ApiError) => void;
+};
+
+export const N_PERIODS = {
+    [PERIOD_TYPES.MONTH]: 3,
+    [PERIOD_TYPES.WEEK]: 12,
 };
 
 export const useCreatePrediction = ({ onSuccess, onError }: Props = {}) => {
@@ -108,6 +114,8 @@ export const useCreatePrediction = ({ onSuccess, onError }: Props = {}) => {
                 dataSources,
                 dataToBeFetched: [],
                 modelId: model.name,
+                nPeriods: N_PERIODS[formData.periodType],
+                type: 'forecasting' as const,
             };
 
             return AnalyticsService.makePredictionAnalyticsMakePredictionPost(predictionRequest);
