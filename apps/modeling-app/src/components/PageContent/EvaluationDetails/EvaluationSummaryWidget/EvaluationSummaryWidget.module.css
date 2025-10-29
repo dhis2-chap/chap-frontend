@@ -1,5 +1,8 @@
 .container {
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
 .loadingContainer {
@@ -20,8 +23,24 @@
     color: var(--colors-grey500);
 }
 
+.errorCardHeader {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--colors-yellow800);
+}
+
+.errorCardContent {
+    padding: 16px;
+    padding-top: 0px;
+    line-height: 1.5;
+    display: flex;
+    flex-direction: column;
+}
+
 .content {
     padding: 16px;
+    padding-top: 8px;
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -48,4 +67,10 @@
 .label {
     font-size: 0.8rem;
     color: var(--colors-grey700);
+}
+
+.periodValues {
+    display: flex;
+    align-items: center;
+    gap: 4px;
 }

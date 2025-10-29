@@ -1,26 +1,17 @@
 import React from 'react';
 import i18n from '@dhis2/d2-i18n';
-import { Pill, Widget } from '@dhis2-chap/ui';
+import { Widget } from '@dhis2-chap/ui';
 import styles from './EvaluationSummaryWidget.module.css';
 import { useBacktestById } from '@/hooks/useBacktestById';
 import { CircularLoader } from '@dhis2/ui';
-import { convertServerToClientPeriod } from '@/utils/timePeriodUtils';
-import { PERIOD_TYPES } from '@/components/ModelExecutionForm';
+import { PeriodView } from './Sections/PeriodView';
+import { RegionView } from './Sections/RegionView';
+import { ModelView } from './Sections/ModelView';
+import { ModelVersionWarningView } from './Sections/ModelVersionWarningView';
+import { useModels } from '@/hooks/useModels';
 
 type Props = {
     evaluationId: number;
-};
-
-const periodConverter = (period: string | null | undefined, periodType: string | null | undefined) => {
-    if (!period || !periodType) {
-        return undefined;
-    }
-    try {
-        return convertServerToClientPeriod(period, periodType as keyof typeof PERIOD_TYPES);
-    } catch (error) {
-        console.error('Failed to convert period id to extended ISO8601 format:', error);
-        return period;
-    }
 };
 
 const WidgetWrapper = ({ children }: { children: React.ReactNode }) => {
@@ -36,8 +27,9 @@ const WidgetWrapper = ({ children }: { children: React.ReactNode }) => {
 
 export const EvaluationSummaryWidget = ({ evaluationId }: Props) => {
     const { backtest, isLoading, error } = useBacktestById(evaluationId);
+    const { models, isLoading: isModelsLoading, error: modelsError } = useModels();
 
-    if (isLoading) {
+    if (isLoading || isModelsLoading) {
         return (
             <WidgetWrapper>
                 <div className={styles.loadingContainer}>
@@ -47,7 +39,7 @@ export const EvaluationSummaryWidget = ({ evaluationId }: Props) => {
         );
     }
 
-    if (error || !backtest) {
+    if (error || !backtest || modelsError) {
         return (
             <WidgetWrapper>
                 <div className={styles.errorContainer}>
@@ -61,6 +53,10 @@ export const EvaluationSummaryWidget = ({ evaluationId }: Props) => {
 
     return (
         <div className={styles.container}>
+            <ModelVersionWarningView
+                modelTemplateVersion={backtest.modelTemplateVersion}
+                configuredModelTemplateVersion={backtest.configuredModel.modelTemplate.version}
+            />
             <WidgetWrapper>
                 <div className={styles.content}>
                     <div className={styles.row}>
@@ -71,40 +67,16 @@ export const EvaluationSummaryWidget = ({ evaluationId }: Props) => {
                             {backtest.name}
                         </span>
                     </div>
-                    <div className={styles.row}>
-                        <span className={styles.label}>
-                            {i18n.t('Model')}
-                        </span>
-                        <span className={styles.value}>
-                            {backtest.configuredModel.name}
-                        </span>
-                    </div>
-                    <div className={styles.row}>
-                        <span className={styles.label}>
-                            {i18n.t('Start period')}
-                        </span>
-                        <span className={styles.value}>
-                            {periodConverter(backtest.dataset.firstPeriod, backtest.dataset.periodType)}
-                        </span>
-                    </div>
-                    <div className={styles.row}>
-                        <span className={styles.label}>
-                            {i18n.t('End period')}
-                        </span>
-                        <span className={styles.value}>
-                            {periodConverter(backtest.dataset.lastPeriod, backtest.dataset.periodType)}
-                        </span>
-                    </div>
-                    <div className={styles.row}>
-                        <span className={styles.label}>
-                            {i18n.t('Regions')}
-                        </span>
-                        <span className={styles.value}>
-                            <Pill>
-                                {backtest.dataset.orgUnits ? i18n.t('{{count}} regions', { count: backtest.dataset.orgUnits.length }) : i18n.t('None')}
-                            </Pill>
-                        </span>
-                    </div>
+                    <ModelView
+                        models={models}
+                        configuredModelId={backtest.configuredModel.id}
+                    />
+                    <PeriodView
+                        periodType={backtest.dataset.periodType}
+                        firstPeriod={backtest.dataset.firstPeriod}
+                        lastPeriod={backtest.dataset.lastPeriod}
+                    />
+                    <RegionView orgUnits={backtest.dataset.orgUnits} />
                 </div>
             </WidgetWrapper>
         </div>
