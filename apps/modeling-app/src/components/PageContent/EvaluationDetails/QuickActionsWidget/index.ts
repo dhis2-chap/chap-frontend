@@ -1,1 +1,1 @@
-export { QuickActionsWidgetComponent as QuickActionsWidget } from './QuickActionsWidget.component';
+export { QuickActionsWidget } from './QuickActionsWidget';

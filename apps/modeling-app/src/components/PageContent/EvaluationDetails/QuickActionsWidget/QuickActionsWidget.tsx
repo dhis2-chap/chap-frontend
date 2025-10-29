@@ -10,7 +10,7 @@ type Props = {
     evaluationId: number;
 };
 
-export const QuickActionsWidgetComponent = ({ evaluationId }: Props) => {
+export const QuickActionsWidget = ({ evaluationId }: Props) => {
     const navigate = useNavigate();
     const [copyModalIsOpen, setCopyModalIsOpen] = useState(false);
 
