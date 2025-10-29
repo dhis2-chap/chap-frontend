@@ -6,6 +6,7 @@ import { ModelExecutionResultWidget } from './ModelExecutionResultWidget';
 import styles from './EvaluationDetails.module.css';
 import { useBacktestById } from '@/hooks/useBacktestById';
 import { CircularLoader, NoticeBox } from '@dhis2/ui';
+import { EvaluationSummaryWidget } from './EvaluationSummaryWidget';
 
 type Props = {
     evaluationId: number;
@@ -61,7 +62,9 @@ export const EvaluationDetailsComponent = ({ evaluationId }: Props) => {
                 />
             </div>
             <div className={styles.rightColumn}>
-
+                <EvaluationSummaryWidget
+                    evaluationId={evaluationId}
+                />
             </div>
         </div>
     );
