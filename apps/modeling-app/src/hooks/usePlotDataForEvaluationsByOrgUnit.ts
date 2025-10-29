@@ -124,9 +124,7 @@ const plotResultToViewData = (
 
 /**
  * Hook to fetch plot data for a single organization unit with all split points.
- * This is more efficient than fetching data for all org units when only one is needed.
- * Uses useQueries to fetch evaluation entries and actual cases in parallel.
- */
+ **/
 export const usePlotDataForEvaluationsByOrgUnit = (
     backtest: BackTestRead,
     orgUnitId: string | undefined,
@@ -142,8 +140,8 @@ export const usePlotDataForEvaluationsByOrgUnit = (
                     return await AnalyticsService.getEvaluationEntriesAnalyticsEvaluationEntryGet(
                         backtest.id,
                         quantiles,
-                        undefined, // splitPeriod - we want all split periods
-                        [orgUnitId], // only fetch data for the selected org unit
+                        undefined,
+                        [orgUnitId],
                     );
                 },
                 enabled: !!backtest && !!orgUnitId,
