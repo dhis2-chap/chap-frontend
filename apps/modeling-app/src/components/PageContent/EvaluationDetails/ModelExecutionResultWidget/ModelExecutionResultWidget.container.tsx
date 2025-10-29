@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { CircularLoader, NoticeBox } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
-import { usePlotDataForEvaluations } from '../../../../hooks/usePlotDataForEvaluations';
+import { usePlotDataForOrgUnit } from '../../../../hooks/usePlotDataForOrgUnit';
 import { useOrgUnitsById } from '../../../../hooks/useOrgUnitsById';
 import { ModelExecutionResultWidgetComponent } from './ModelExecutionResultWidget.component';
 import styles from './ModelExecutionResultWidget.module.css';
@@ -33,10 +33,6 @@ export const ModelExecutionResultWidget = ({ backtest }: Props) => {
     const [selectedOrgUnitId, setSelectedOrgUnitId] = useState<string | undefined>(orgUnitIds[0]);
     const [selectedSplitPeriod, setSelectedSplitPeriod] = useState<string | undefined>(splitPeriods[0]);
 
-    const evaluations = useMemo(() => {
-        return backtest ? [backtest] : [];
-    }, [backtest]);
-
     const {
         data: orgUnitsData,
         isLoading: isOrgUnitsLoading,
@@ -44,12 +40,10 @@ export const ModelExecutionResultWidget = ({ backtest }: Props) => {
     } = useOrgUnitsById(orgUnitIds);
 
     const {
-        combined,
+        viewData,
         isLoading: isPlotDataLoading,
         error: plotDataError,
-    } = usePlotDataForEvaluations(evaluations, {
-        orgUnits: orgUnitIds,
-    });
+    } = usePlotDataForOrgUnit(backtest, selectedOrgUnitId);
 
     const orgUnitsMap = useMemo(() => {
         const map = new Map<string, { id: string; displayName: string }>();
@@ -60,7 +54,7 @@ export const ModelExecutionResultWidget = ({ backtest }: Props) => {
     }, [orgUnitsData]);
 
     const { dataForSplitPeriod, periods } = useMemo(() => {
-        const dataForSplitPeriod = combined.viewData
+        const dataForSplitPeriod = viewData
             .filter(v => v.splitPoint === selectedSplitPeriod)
             .flatMap(v =>
                 v.evaluation.map(e => ({
@@ -72,7 +66,7 @@ export const ModelExecutionResultWidget = ({ backtest }: Props) => {
             .sort((a, b) => a.orgUnitName.localeCompare(b.orgUnitName));
         const periods = dataForSplitPeriod[0]?.models[0].data.periods ?? [];
         return { dataForSplitPeriod, periods };
-    }, [combined.viewData, selectedSplitPeriod, orgUnitsMap]);
+    }, [viewData, selectedSplitPeriod, orgUnitsMap]);
 
     if (isPlotDataLoading || isOrgUnitsLoading) {
         return (
