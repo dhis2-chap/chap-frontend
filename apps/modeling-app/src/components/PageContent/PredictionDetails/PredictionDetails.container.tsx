@@ -3,23 +3,17 @@ import i18n from '@dhis2/d2-i18n';
 import { CircularLoader, NoticeBox } from '@dhis2/ui';
 import { useParams } from 'react-router-dom';
 import { PredictionDetailsComponent } from './PredictionDetails.component';
-import usePredictionById from './hooks/usePredictionById';
-import useOrgUnits from '../../../hooks/useOrgUnits';
+import { usePredictionById } from './hooks/usePredictionById';
 import styles from './PredictionDetails.module.css';
+import { useModels } from '@/hooks/useModels';
 
 export const PredictionDetails: React.FC = () => {
     const { predictionId } = useParams<{ predictionId: string }>();
     const { prediction, isLoading: isPredictionLoading, error: predictionError } = usePredictionById(predictionId);
-    const { orgUnits, loading: isOrgUnitsLoading, error: orgUnitsError } = useOrgUnits();
+    const { models, isLoading: isModelsLoading, error: modelsError } = useModels();
 
-    const isLoading = isPredictionLoading || isOrgUnitsLoading;
-    const hasError = predictionError || orgUnitsError;
-
-    const orgUnitMap = useMemo(() => new Map(
-        orgUnits
-            ?.organisationUnits
-            ?.map(ou => [ou.id, ou]),
-    ), [orgUnits]);
+    const isLoading = isPredictionLoading || isModelsLoading;
+    const hasError = predictionError || modelsError;
 
     if (isLoading) {
         return (
@@ -33,13 +27,13 @@ export const PredictionDetails: React.FC = () => {
         return (
             <div className={styles.errorContainer}>
                 <NoticeBox error title={i18n.t('Error loading prediction')}>
-                    {predictionError?.message || orgUnitsError?.message || i18n.t('An unknown error occurred')}
+                    {predictionError?.message || i18n.t('An unknown error occurred')}
                 </NoticeBox>
             </div>
         );
     }
 
-    if (!prediction) {
+    if (!prediction || !models) {
         return (
             <div className={styles.errorContainer}>
                 <NoticeBox error title={i18n.t('Prediction not found')}>
@@ -48,11 +42,22 @@ export const PredictionDetails: React.FC = () => {
             </div>
         );
     }
+    const model = useMemo(() => models.find(m => m.name === prediction.modelId), [models, prediction]);
+
+    if (!model) {
+        return (
+            <div className={styles.errorContainer}>
+                <NoticeBox error title={i18n.t('Model not found')}>
+                    {i18n.t('The model you are looking for does not exist or you do not have permission to access it.')}
+                </NoticeBox>
+            </div>
+        );
+    }
 
     return (
         <PredictionDetailsComponent
             prediction={prediction}
-            orgUnits={orgUnitMap}
+            model={model}
         />
     );
 };

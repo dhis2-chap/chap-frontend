@@ -1,0 +1,121 @@
+import React, { useMemo, useState } from 'react';
+import { CircularLoader, NoticeBox } from '@dhis2/ui';
+import i18n from '@dhis2/d2-i18n';
+import { usePredictionEntries } from '../hooks/usePredictionEntries';
+import { useOrgUnitsById } from '../../../../hooks/useOrgUnitsById';
+import { useDataItemById } from '../../../../hooks/useDataItemById';
+import { PredictionResultWidgetComponent } from './PredictionResultWidget.component';
+import styles from './PredictionResultWidget.module.css';
+import { Widget, PredictionInfo, ModelSpecRead, buildPredictionSeries } from '@dhis2-chap/ui';
+
+type Props = {
+    prediction: PredictionInfo;
+    model: ModelSpecRead;
+};
+
+const WidgetWrapper = ({ children }: { children: React.ReactNode }) => {
+    return (
+        <Widget
+            header={i18n.t('Prediction result')}
+            open
+            onOpen={() => {}}
+            onClose={() => {}}
+        >
+            {children}
+        </Widget>
+    );
+};
+
+export const PredictionResultWidget = ({ prediction, model }: Props) => {
+    const {
+        predictionEntries,
+        isLoading: isPredictionEntriesLoading,
+        error: predictionEntriesError,
+    } = usePredictionEntries(prediction.id);
+
+    const orgUnitIds = useMemo(() => {
+        const uniqueOrgUnits = new Set(predictionEntries.map(entry => entry.orgUnit));
+        return Array.from(uniqueOrgUnits);
+    }, [predictionEntries]);
+
+    const {
+        data: orgUnitsData,
+        isLoading: isOrgUnitsLoading,
+        error: orgUnitsError,
+    } = useOrgUnitsById(orgUnitIds);
+
+    const predictionTargetId: string = prediction.dataset.dataSources?.find(
+        ds => ds.covariate === model.target.name,
+    )?.dataElementId ?? '';
+
+    const { dataItem, isLoading: isDataItemLoading } = useDataItemById(predictionTargetId);
+
+    const [selectedTab, setSelectedTab] = useState<'chart' | 'table' | 'map'>('chart');
+    const [selectedOrgUnitId, setSelectedOrgUnitId] = useState<string | undefined>(undefined);
+    const [open, setOpen] = useState(true);
+
+    const orgUnitsMap = useMemo(() => {
+        const map = new Map<string, { id: string; displayName: string }>();
+        orgUnitsData?.organisationUnits?.forEach((ou) => {
+            map.set(ou.id, ou);
+        });
+        return map;
+    }, [orgUnitsData]);
+
+    const series = useMemo(() => {
+        if (!predictionEntries.length || !orgUnitsMap.size) return [];
+        return buildPredictionSeries(predictionEntries, orgUnitsMap, predictionTargetId);
+    }, [predictionEntries, orgUnitsMap, predictionTargetId]);
+
+    if (isPredictionEntriesLoading || isOrgUnitsLoading || isDataItemLoading) {
+        return (
+            <WidgetWrapper>
+                <div className={styles.loadingContainer}>
+                    <CircularLoader />
+                </div>
+            </WidgetWrapper>
+        );
+    }
+
+    if (predictionEntriesError || orgUnitsError) {
+        return (
+            <WidgetWrapper>
+                <div className={styles.errorContainer}>
+                    <NoticeBox title={i18n.t('Unable to load data')} error>
+                        <p>{i18n.t('There was a problem loading required data. See the browser console for details.')}</p>
+                    </NoticeBox>
+                </div>
+            </WidgetWrapper>
+        );
+    }
+
+    if (!series || series.length === 0) {
+        return (
+            <WidgetWrapper>
+                <div className={styles.errorContainer}>
+                    <NoticeBox title={i18n.t('No data available')} warning>
+                        <p>{i18n.t('No prediction data found.')}</p>
+                    </NoticeBox>
+                </div>
+            </WidgetWrapper>
+        );
+    }
+
+    return (
+        <Widget
+            header={i18n.t('Prediction result')}
+            open={open}
+            onOpen={() => setOpen(true)}
+            onClose={() => setOpen(false)}
+        >
+            <PredictionResultWidgetComponent
+                series={series}
+                predictionTargetName={dataItem?.displayName ?? predictionTargetId}
+                selectedOrgUnitId={selectedOrgUnitId}
+                selectedTab={selectedTab}
+                onSelectOrgUnit={setSelectedOrgUnitId}
+                onSelectTab={setSelectedTab}
+            />
+        </Widget>
+    );
+};

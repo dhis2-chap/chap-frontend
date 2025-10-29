@@ -1,124 +1,28 @@
-import React, { useMemo, useState } from 'react';
+import React from 'react';
 import styles from './PredictionDetails.module.css';
-import i18n from '@dhis2/d2-i18n';
-import { TabBar, Tab, Menu, MenuItem, CircularLoader } from '@dhis2/ui';
-import {
-    Card,
-    PredictionRead,
-    PredictionTable,
-    UncertaintyAreaChart,
-    buildPredictionSeries,
-    PredictionOrgUnitSeries,
-    PredictionMap,
-} from '@dhis2-chap/ui';
-import { useDataItemById } from '../../../hooks/useDataItemById';
+import { PredictionInfo, ModelSpecRead } from '@dhis2-chap/ui';
+import { PredictionResultWidget } from './PredictionResultWidget/PredictionResultWidget.container';
 
 type Props = {
-    prediction: PredictionRead;
-    orgUnits: Map<string, { id: string; displayName: string }>;
+    prediction: PredictionInfo;
+    model: ModelSpecRead;
 };
 
 export const PredictionDetailsComponent = ({
     prediction,
-    orgUnits,
+    model,
 }: Props) => {
-    const [selectedTab, setSelectedTab] = useState<'chart' | 'table' | 'map'>('chart');
-    const [selectedOrgUnitId, setSelectedOrgUnitId] = useState<string | undefined>(undefined);
-
-    const predictionTargetId: string = prediction.metaData?.dataItemMapper?.find(
-        (m: { featureName: string }) => m.featureName === 'disease_cases',
-        // TODO: remove this once we have the working id from the API
-    )?.dataItemId ?? 'A0Y0q8g6DHw';
-
-    const { dataItem, isLoading: isDataItemLoading } = useDataItemById(predictionTargetId);
-
-    const series: PredictionOrgUnitSeries[] = useMemo(() => {
-        const map: Map<string, { id: string; displayName: string }> = new Map();
-        orgUnits.forEach((val, key) => map.set(key, { id: val.id, displayName: val.displayName }));
-        return buildPredictionSeries(prediction, map, predictionTargetId);
-    }, [prediction, orgUnits, predictionTargetId]);
-
-    const selectedSeries: PredictionOrgUnitSeries | undefined = useMemo(() => {
-        if (!series.length) return undefined;
-        if (selectedOrgUnitId) return series.find(s => s.orgUnitId === selectedOrgUnitId);
-        return series[0];
-    }, [series, selectedOrgUnitId]);
-
-    if (isDataItemLoading) {
-        return (
-            <div className={styles.loadingContainer}>
-                <CircularLoader />
-            </div>
-        );
-    }
-
-    if (!series || series.length === 0) {
-        return <p>{i18n.t('Prediction not found')}</p>;
-    }
-
     return (
-        <div>
-            <Card className={styles.card}>
-                <TabBar className={styles.tabBar}>
-                    <Tab
-                        selected={selectedTab === 'chart'}
-                        onClick={() => setSelectedTab('chart')}
-                    >
-                        {i18n.t('Chart')}
-                    </Tab>
-                    <Tab
-                        selected={selectedTab === 'table'}
-                        onClick={() => setSelectedTab('table')}
-                    >
-                        {i18n.t('Table')}
-                    </Tab>
-                    <Tab
-                        selected={selectedTab === 'map'}
-                        onClick={() => setSelectedTab('map')}
-                    >
-                        {i18n.t('Map')}
-                    </Tab>
-                </TabBar>
-                <div className={styles.container}>
-                    <div className={styles.menu}>
-                        <Menu dense>
-                            {series.map(s => (
-                                <MenuItem
-                                    active={selectedTab !== 'map' && selectedSeries?.orgUnitId === s.orgUnitId}
-                                    disabled={selectedTab === 'map'}
-                                    key={s.orgUnitId}
-                                    label={s.orgUnitName}
-                                    onClick={() => setSelectedOrgUnitId(s.orgUnitId)}
-                                />
-                            ))}
-                        </Menu>
-                    </div>
+        <div className={styles.container}>
+            <div className={styles.leftColumn}>
+                <PredictionResultWidget
+                    prediction={prediction}
+                    model={model}
+                />
+            </div>
+            <div className={styles.rightColumn}>
 
-                    {selectedTab === 'chart' && selectedSeries && (
-                        <div className={styles.content}>
-                            <UncertaintyAreaChart
-                                predictionTargetName={dataItem?.displayName ?? predictionTargetId}
-                                series={selectedSeries}
-                            />
-                        </div>
-                    )}
-                    {selectedTab === 'table' && selectedSeries && (
-                        <div className={styles.content}>
-                            <PredictionTable
-                                series={selectedSeries}
-                            />
-                        </div>
-                    )}
-                    {selectedTab === 'map' && (
-                        <div className={styles.content}>
-                            <PredictionMap
-                                series={series}
-                                predictionTargetName={dataItem?.displayName ?? predictionTargetId}
-                            />
-                        </div>
-                    )}
-                </div>
-            </Card>
+            </div>
         </div>
     );
 };

@@ -1,4 +1,4 @@
-import { FullPredictionResponse, PredictionResponse, PredictionRead } from '../httpfunctions';
+import { FullPredictionResponse, PredictionResponse, PredictionInfo } from '../httpfunctions';
 
 export interface FullPredictionResponseExtended extends FullPredictionResponse {
     diseaseId: string;
@@ -26,4 +26,4 @@ export interface PredictionOrgUnitSeries {
 }
 
 // Re-export type for convenience in downstream apps
-export type { PredictionRead };
+export type { PredictionInfo };

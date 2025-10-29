@@ -1,27 +1,22 @@
-.card {
-    margin-top: 20px;
-}
-
 .container {
+    margin-top: 24px;
     display: flex;
-    max-height: 60vh;
-    gap: 10px;
+    flex-direction: row;
+    gap: 16px;
 }
 
-.tabBar {
-    margin-bottom: 10px;
-    margin-left: 20%;
+.leftColumn {
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
-.content {
-    width: 80%;
-    height: 100%;
-}
-
-.menu {
-    width: 20%;
-    overflow-y: auto;
-    max-height: 100%;
+.rightColumn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
 .loadingContainer {
@@ -32,6 +27,9 @@
 }
 
 .errorContainer {
-    margin-top: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 300px;
 }
 
