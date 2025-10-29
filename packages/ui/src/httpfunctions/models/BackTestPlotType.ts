@@ -2,9 +2,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type ForecastRead = {
-    period: string;
-    orgUnit: string;
-    values?: Array<number>;
+export type BackTestPlotType = {
+    id: string;
+    displayName: string;
 };
 

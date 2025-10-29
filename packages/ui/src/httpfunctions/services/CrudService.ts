@@ -17,9 +17,8 @@ import type { JobResponse } from '../models/JobResponse';
 import type { ModelConfigurationCreate } from '../models/ModelConfigurationCreate';
 import type { ModelSpecRead } from '../models/ModelSpecRead';
 import type { ModelTemplateRead } from '../models/ModelTemplateRead';
-import type { PredictionBaseRead } from '../models/PredictionBaseRead';
 import type { PredictionCreate } from '../models/PredictionCreate';
-import type { PredictionRead } from '../models/PredictionRead';
+import type { PredictionInfo } from '../models/PredictionInfo';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
@@ -161,10 +160,10 @@ export class CrudService {
     }
     /**
      * Get Predictions
-     * @returns PredictionBaseRead Successful Response
+     * @returns PredictionInfo Successful Response
      * @throws ApiError
      */
-    public static getPredictionsCrudPredictionsGet(): CancelablePromise<Array<PredictionBaseRead>> {
+    public static getPredictionsCrudPredictionsGet(): CancelablePromise<Array<PredictionInfo>> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/crud/predictions',
@@ -192,12 +191,12 @@ export class CrudService {
     /**
      * Get Prediction
      * @param predictionId
-     * @returns PredictionRead Successful Response
+     * @returns PredictionInfo Successful Response
      * @throws ApiError
      */
     public static getPredictionCrudPredictionsPredictionIdGet(
         predictionId: number,
-    ): CancelablePromise<PredictionRead> {
+    ): CancelablePromise<PredictionInfo> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/crud/predictions/{predictionId}',

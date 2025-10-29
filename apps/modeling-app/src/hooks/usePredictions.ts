@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
-import { CrudService, ApiError, type PredictionBaseRead } from '@dhis2-chap/ui';
+import { CrudService, ApiError, type PredictionInfo } from '@dhis2-chap/ui';
 
 export const usePredictions = () => {
-    const { data, error, isLoading } = useQuery<PredictionBaseRead[], ApiError>({
+    const { data, error, isLoading } = useQuery<PredictionInfo[], ApiError>({
         queryKey: ['predictions'],
         queryFn: () => CrudService.getPredictionsCrudPredictionsGet(),
         staleTime: 5 * 60 * 1000,

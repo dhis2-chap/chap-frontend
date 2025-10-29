@@ -33,6 +33,7 @@ export type {
     PredictionOrgUnitSeries,
     PredictionPointVM,
     QuantileKey,
+    PredictionInfo,
 } from './interfaces/Prediction';
 
 export type {
@@ -47,4 +48,4 @@ export {
     disableQueue,
     getQueue,
 } from './httpfunctions/core/request';
-export { buildPredictionSeries, computeQuantile } from './utils/PredictionViewModel';
+export { buildPredictionSeries } from './utils/PredictionViewModel';

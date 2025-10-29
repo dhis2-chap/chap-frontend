@@ -1,72 +1,52 @@
 import { createFixedPeriodFromPeriodId } from '@dhis2/multi-calendar-dates';
-import type { PredictionRead } from '../httpfunctions';
+import type { PredictionEntry } from '../httpfunctions';
 import type {
     PredictionOrgUnitSeries,
     PredictionPointVM,
     QuantileKey,
 } from '../interfaces/Prediction';
 
-const QUANTILES: Array<[QuantileKey, number]> = [
-    ['quantile_low', 0.1],
-    ['median', 0.5],
-    ['quantile_high', 0.9],
-];
-
-export function computeQuantile(quantile: number, values?: number[]): number {
-    if (!values || values.length === 0) return 0;
-    const sorted = [...values].sort((a, b) => a - b);
-    const n = sorted.length;
-    const index = quantile * (n - 1);
-    const lowerIndex = Math.floor(index);
-    const upperIndex = Math.ceil(index);
-    if (lowerIndex === upperIndex) {
-        return Math.round(sorted[lowerIndex]);
-    }
-    return Math.round(
-        sorted[lowerIndex]
-        + (sorted[upperIndex] - sorted[lowerIndex])
-        * (index - lowerIndex),
-    );
-}
+// Map quantile values to their keys
+const QUANTILE_MAP: Record<number, QuantileKey> = {
+    0.1: 'quantile_low',
+    0.5: 'median',
+    0.9: 'quantile_high',
+};
 
 export type OrgUnitsById = Map<string, { displayName: string }>;
 
+const createPredictionPoint = (period: string): PredictionPointVM => ({
+    period,
+    periodLabel: createFixedPeriodFromPeriodId({
+        periodId: period,
+        calendar: 'gregory',
+    }).displayName,
+    quantiles: {} as Record<QuantileKey, number>,
+});
+
 export function buildPredictionSeries(
-    prediction: PredictionRead,
+    predictionEntries: PredictionEntry[],
     orgUnitsById: OrgUnitsById,
     targetId: string,
 ): PredictionOrgUnitSeries[] {
-    const byOrgUnit = new Map<string, PredictionOrgUnitSeries>();
+    const byOrgUnit = predictionEntries.reduce((acc, entry) => {
+        const quantileKey = QUANTILE_MAP[entry.quantile];
+        if (!quantileKey) return acc;
 
-    for (const forecast of prediction.forecasts) {
-        const existing = byOrgUnit.get(forecast.orgUnit);
-        const base: PredictionOrgUnitSeries = existing ?? {
+        const orgUnitData = acc.get(entry.orgUnit) ?? acc.set(entry.orgUnit, new Map()).get(entry.orgUnit)!;
+        const point = orgUnitData.get(entry.period) ?? orgUnitData.set(entry.period, createPredictionPoint(entry.period)).get(entry.period)!;
+
+        point.quantiles[quantileKey] = entry.value;
+        return acc;
+    }, new Map<string, Map<string, PredictionPointVM>>());
+
+    return Array.from(byOrgUnit.entries())
+        .map(([orgUnitId, periodsMap]) => ({
             targetId,
-            orgUnitId: forecast.orgUnit,
-            orgUnitName: orgUnitsById.get(forecast.orgUnit)?.displayName ?? forecast.orgUnit,
-            points: [],
-        };
-
-        const point: PredictionPointVM = {
-            period: forecast.period,
-            periodLabel: createFixedPeriodFromPeriodId({
-                periodId: forecast.period,
-                calendar: 'gregory',
-            }).displayName,
-            quantiles: QUANTILES.reduce((acc, [key, q]) => {
-                acc[key] = computeQuantile(q, forecast.values);
-                return acc;
-            }, {} as Record<QuantileKey, number>),
-        };
-
-        base.points.push(point);
-        byOrgUnit.set(forecast.orgUnit, base);
-    }
-
-    return Array.from(byOrgUnit.values())
-        .map(series => ({
-            ...series,
-            points: series.points.sort((a, b) => a.period.localeCompare(b.period)),
-        }))
-        .sort((a, b) => a.orgUnitName.localeCompare(b.orgUnitName));
+            orgUnitId,
+            orgUnitName: orgUnitsById.get(orgUnitId)?.displayName ?? orgUnitId,
+            points: Array.from(periodsMap.values()).sort((a, b) =>
+                a.period.localeCompare(b.period),
+            ),
+        }));
 }

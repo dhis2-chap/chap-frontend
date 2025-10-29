@@ -22,7 +22,7 @@ import {
     getPaginationRowModel,
     Column,
 } from '@tanstack/react-table';
-import { PredictionBaseRead, ModelSpecRead } from '@dhis2-chap/ui';
+import { PredictionInfo, ModelSpecRead } from '@dhis2-chap/ui';
 import styles from './PredictionsTable.module.css';
 import { PredictionsTableFilters } from './PredictionsTableFilters';
 import { RunningJobsIndicator } from '../RunningJobsIndicator';
@@ -31,7 +31,7 @@ import { PredictionActionsMenu } from './PredictionActionsMenu';
 import { Link } from 'react-router-dom';
 import { usePredictionsTableFilters } from './hooks/usePredictionsTableFilters';
 
-const columnHelper = createColumnHelper<PredictionBaseRead>();
+const columnHelper = createColumnHelper<PredictionInfo>();
 
 const columns = [
     columnHelper.accessor('id', {
@@ -77,12 +77,12 @@ const columns = [
     }),
 ];
 
-const getSortDirection = (column: Column<PredictionBaseRead>) => {
+const getSortDirection = (column: Column<PredictionInfo>) => {
     return column.getIsSorted() || 'default';
 };
 
 type Props = {
-    predictions: PredictionBaseRead[];
+    predictions: PredictionInfo[];
     models: ModelSpecRead[];
 };
 
