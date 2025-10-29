@@ -1,7 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { CircularLoader, NoticeBox } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
-import { usePlotDataForOrgUnit } from '../../../../hooks/usePlotDataForOrgUnit';
 import { useOrgUnitsById } from '../../../../hooks/useOrgUnitsById';
 import { ModelExecutionResultWidgetComponent } from './ModelExecutionResultWidget.component';
 import styles from './ModelExecutionResultWidget.module.css';
@@ -39,12 +38,6 @@ export const ModelExecutionResultWidget = ({ backtest }: Props) => {
         error: orgUnitsError,
     } = useOrgUnitsById(orgUnitIds);
 
-    const {
-        viewData,
-        isLoading: isPlotDataLoading,
-        error: plotDataError,
-    } = usePlotDataForOrgUnit(backtest, selectedOrgUnitId);
-
     const orgUnitsMap = useMemo(() => {
         const map = new Map<string, { id: string; displayName: string }>();
         orgUnitsData?.organisationUnits?.forEach((ou) => {
@@ -53,22 +46,7 @@ export const ModelExecutionResultWidget = ({ backtest }: Props) => {
         return map;
     }, [orgUnitsData]);
 
-    const { dataForSplitPeriod, periods } = useMemo(() => {
-        const dataForSplitPeriod = viewData
-            .filter(v => v.splitPoint === selectedSplitPeriod)
-            .flatMap(v =>
-                v.evaluation.map(e => ({
-                    ...e,
-                    orgUnitName:
-                        orgUnitsMap.get(e.orgUnitId)?.displayName ?? e.orgUnitId,
-                })),
-            )
-            .sort((a, b) => a.orgUnitName.localeCompare(b.orgUnitName));
-        const periods = dataForSplitPeriod[0]?.models[0].data.periods ?? [];
-        return { dataForSplitPeriod, periods };
-    }, [viewData, selectedSplitPeriod, orgUnitsMap]);
-
-    if (isPlotDataLoading || isOrgUnitsLoading) {
+    if (isOrgUnitsLoading) {
         return (
             <WidgetWrapper>
                 <div className={styles.loadingContainer}>
@@ -78,7 +56,7 @@ export const ModelExecutionResultWidget = ({ backtest }: Props) => {
         );
     }
 
-    if (plotDataError || orgUnitsError) {
+    if (orgUnitsError) {
         return (
             <WidgetWrapper>
                 <div className={styles.errorContainer}>
@@ -92,13 +70,12 @@ export const ModelExecutionResultWidget = ({ backtest }: Props) => {
 
     return (
         <ModelExecutionResultWidgetComponent
+            backtest={backtest}
             orgUnitIds={orgUnitIds}
             orgUnitsMap={orgUnitsMap}
             splitPeriods={splitPeriods}
             selectedOrgUnitId={selectedOrgUnitId}
             selectedSplitPeriod={selectedSplitPeriod}
-            dataForDisplay={dataForSplitPeriod.find(e => e.orgUnitId === selectedOrgUnitId)}
-            periods={periods}
             onSelectOrgUnit={setSelectedOrgUnitId}
             onSelectSplitPeriod={setSelectedSplitPeriod}
         />

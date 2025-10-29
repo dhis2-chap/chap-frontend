@@ -1,6 +1,5 @@
 import {
     AnalyticsService,
-    ApiError,
     BackTestRead,
     createHighChartsData,
     DataElement,
@@ -13,7 +12,7 @@ import {
     joinRealAndPredictedData,
 } from '@dhis2-chap/ui';
 import { useMemo } from 'react';
-import { useQuery, UseQueryOptions } from '@tanstack/react-query';
+import { useQueries } from '@tanstack/react-query';
 
 const quantiles = [0.1, 0.25, 0.5, 0.75, 0.9];
 
@@ -126,51 +125,68 @@ const plotResultToViewData = (
 /**
  * Hook to fetch plot data for a single organization unit with all split points.
  * This is more efficient than fetching data for all org units when only one is needed.
+ * Uses useQueries to fetch evaluation entries and actual cases in parallel.
  */
-export const usePlotDataForOrgUnit = (
+export const usePlotDataForEvaluationsByOrgUnit = (
     backtest: BackTestRead,
     orgUnitId: string | undefined,
 ) => {
-    const queryOptions: UseQueryOptions<
-        PlotDataRequestResult,
-        Error | ApiError,
-        PlotDataResult | undefined
-    > = {
-        queryKey: ['evaluation-entry-single-orgunit', backtest.id, orgUnitId],
-        queryFn: async () => {
-            if (!orgUnitId) {
-                throw new Error('orgUnitId is required');
-            }
-            const evaluationEntries =
-                await AnalyticsService.getEvaluationEntriesAnalyticsEvaluationEntryGet(
-                    backtest.id,
-                    quantiles,
-                    undefined, // splitPeriod - we want all split periods
-                    [orgUnitId], // only fetch data for the selected org unit
-                );
-            const actualCases =
-                await AnalyticsService.getActualCasesAnalyticsActualCasesBacktestIdGet(
-                    backtest.id,
-                    [orgUnitId], // only fetch data for the selected org unit
-                );
-            const data: [EvaluationEntry[], DataList] = [evaluationEntries, actualCases];
-            return {
-                data,
-                evaluation: backtest,
-            };
-        },
-        select: select,
-        enabled: !!backtest && !!orgUnitId,
-        staleTime: 300000, // 5 minutes
-        cacheTime: 300000, // 5 minutes
-        retry: 0,
-    };
+    const queries = useQueries({
+        queries: [
+            {
+                queryKey: ['evaluation-entries', backtest.id, orgUnitId],
+                queryFn: async () => {
+                    if (!orgUnitId) {
+                        throw new Error('orgUnitId is required');
+                    }
+                    return await AnalyticsService.getEvaluationEntriesAnalyticsEvaluationEntryGet(
+                        backtest.id,
+                        quantiles,
+                        undefined, // splitPeriod - we want all split periods
+                        [orgUnitId], // only fetch data for the selected org unit
+                    );
+                },
+                enabled: !!backtest && !!orgUnitId,
+                staleTime: 5 * 60 * 1000, // 5 minutes
+                cacheTime: 5 * 60 * 1000, // 5 minutes
+                retry: 0,
+            },
+            {
+                queryKey: ['actual-cases', backtest.id, orgUnitId],
+                queryFn: async () => {
+                    if (!orgUnitId) {
+                        throw new Error('orgUnitId is required');
+                    }
+                    return await AnalyticsService.getActualCasesAnalyticsActualCasesBacktestIdGet(
+                        backtest.id,
+                        [orgUnitId],
+                    );
+                },
+                enabled: !!backtest && !!orgUnitId,
+                staleTime: 5 * 60 * 1000, // 5 minutes
+                cacheTime: 5 * 60 * 1000, // 5 minutes
+                retry: 0,
+            },
+        ],
+    });
 
-    const {
-        data,
-        isLoading,
-        error,
-    } = useQuery(queryOptions);
+    const [evaluationEntriesQuery, actualCasesQuery] = queries;
+
+    const isLoading = evaluationEntriesQuery.isLoading || actualCasesQuery.isLoading;
+    const error = evaluationEntriesQuery.error || actualCasesQuery.error;
+
+    const data = useMemo(() => {
+        if (!evaluationEntriesQuery.data || !actualCasesQuery.data) {
+            return undefined;
+        }
+
+        const plotDataResult: PlotDataRequestResult = {
+            data: [evaluationEntriesQuery.data, actualCasesQuery.data],
+            evaluation: backtest,
+        };
+
+        return select(plotDataResult);
+    }, [evaluationEntriesQuery.data, actualCasesQuery.data, backtest]);
 
     const viewData = useMemo(() => {
         if (!data || !orgUnitId) {
@@ -179,5 +195,9 @@ export const usePlotDataForOrgUnit = (
         return plotResultToViewData(data, orgUnitId);
     }, [data, orgUnitId]);
 
-    return { viewData, isLoading, error: error as ApiError | undefined };
+    return {
+        viewData,
+        isLoading,
+        error,
+    };
 };
