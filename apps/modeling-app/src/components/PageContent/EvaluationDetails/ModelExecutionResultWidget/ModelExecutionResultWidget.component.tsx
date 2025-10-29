@@ -11,10 +11,6 @@ type Props = {
     orgUnitIds: string[];
     orgUnitsMap: Map<string, { id: string; displayName: string }>;
     splitPeriods: string[];
-    selectedOrgUnitId: string | undefined;
-    selectedSplitPeriod: string | undefined;
-    onSelectOrgUnit: (orgUnitId: string) => void;
-    onSelectSplitPeriod: (splitPeriod: string) => void;
 };
 
 const STATUSES = {
@@ -29,11 +25,9 @@ export const ModelExecutionResultWidgetComponent = ({
     orgUnitIds,
     orgUnitsMap,
     splitPeriods,
-    selectedOrgUnitId,
-    selectedSplitPeriod,
-    onSelectOrgUnit,
-    onSelectSplitPeriod,
 }: Props) => {
+    const [selectedOrgUnitId, setSelectedOrgUnitId] = useState<string | undefined>(orgUnitIds[0]);
+    const [selectedSplitPeriod, setSelectedSplitPeriod] = useState<string | undefined>(splitPeriods[0]);
     const [open, setOpen] = useState(true);
 
     const {
@@ -87,7 +81,7 @@ export const ModelExecutionResultWidgetComponent = ({
                                         active={selectedOrgUnitId === orgUnitId}
                                         key={orgUnitId}
                                         label={orgUnitsMap.get(orgUnitId)?.displayName ?? orgUnitId}
-                                        onClick={() => onSelectOrgUnit(orgUnitId)}
+                                        onClick={() => setSelectedOrgUnitId(orgUnitId)}
                                     />
                                 ))}
                             </Menu>
@@ -124,7 +118,7 @@ export const ModelExecutionResultWidgetComponent = ({
                         <SplitPeriodSlider
                             splitPeriods={splitPeriods}
                             selectedSplitPeriod={selectedSplitPeriod ?? splitPeriods[0]}
-                            onChange={onSelectSplitPeriod}
+                            onChange={setSelectedSplitPeriod}
                             periods={periods}
                         />
                     </div>

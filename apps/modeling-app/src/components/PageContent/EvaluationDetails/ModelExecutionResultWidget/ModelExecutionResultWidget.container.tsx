@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { CircularLoader, NoticeBox } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { useOrgUnitsById } from '../../../../hooks/useOrgUnitsById';
@@ -28,9 +28,6 @@ const WidgetWrapper = ({ children }: { children: React.ReactNode }) => {
 export const ModelExecutionResultWidget = ({ backtest }: Props) => {
     const orgUnitIds = backtest.orgUnits ?? [];
     const splitPeriods = sortSplitPeriods(backtest.splitPeriods ?? [], backtest.dataset.periodType as keyof typeof PERIOD_TYPES);
-
-    const [selectedOrgUnitId, setSelectedOrgUnitId] = useState<string | undefined>(orgUnitIds[0]);
-    const [selectedSplitPeriod, setSelectedSplitPeriod] = useState<string | undefined>(splitPeriods[0]);
 
     const {
         data: orgUnitsData,
@@ -74,10 +71,6 @@ export const ModelExecutionResultWidget = ({ backtest }: Props) => {
             orgUnitIds={orgUnitIds}
             orgUnitsMap={orgUnitsMap}
             splitPeriods={splitPeriods}
-            selectedOrgUnitId={selectedOrgUnitId}
-            selectedSplitPeriod={selectedSplitPeriod}
-            onSelectOrgUnit={setSelectedOrgUnitId}
-            onSelectSplitPeriod={setSelectedSplitPeriod}
         />
     );
 };
