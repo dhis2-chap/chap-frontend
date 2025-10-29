@@ -8,7 +8,7 @@ export const usePredictionEntries = (predictionId: number | undefined) => {
         queryKey: ['predictionEntries', predictionId, STANDARD_QUANTILES],
         queryFn: () => AnalyticsService.getPredictionEntriesAnalyticsPredictionEntryPredictionIdGet(
             predictionId as number,
-            STANDARD_QUANTILES
+            STANDARD_QUANTILES,
         ),
         enabled: !!predictionId,
         staleTime: 5 * 60 * 1000,
@@ -23,4 +23,3 @@ export const usePredictionEntries = (predictionId: number | undefined) => {
         isError,
     };
 };
-

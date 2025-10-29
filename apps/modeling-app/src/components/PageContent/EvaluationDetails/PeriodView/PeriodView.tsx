@@ -64,4 +64,3 @@ export const PeriodView = ({ periodType, firstPeriod, lastPeriod }: Props) => {
         </>
     );
 };
-
