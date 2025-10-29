@@ -5,17 +5,14 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2025-10-28T19:28:13.037Z\n"
-"PO-Revision-Date: 2025-10-28T19:28:13.038Z\n"
-
-msgid "View"
-msgstr "View"
+"POT-Creation-Date: 2025-10-29T00:31:47.654Z\n"
+"PO-Revision-Date: 2025-10-29T00:31:47.655Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
 
-msgid "Detailed metrics"
-msgstr "Detailed metrics"
+msgid "Compare"
+msgstr "Compare"
 
 msgid "Rename"
 msgstr "Rename"
@@ -26,8 +23,8 @@ msgstr "Delete"
 msgid "{{name}} (Copy)"
 msgstr "{{name}} (Copy)"
 
-msgid "Copy evaluation"
-msgstr "Copy evaluation"
+msgid "Create new based on..."
+msgstr "Create new based on..."
 
 msgid "Cancel"
 msgstr "Cancel"
@@ -37,6 +34,9 @@ msgstr "Failed to load evaluation data. Please try again."
 
 msgid "Close"
 msgstr "Close"
+
+msgid "Select which attributes to copy to the new run{{escape}}"
+msgstr "Select which attributes to copy to the new run{{escape}}"
 
 msgid "Name"
 msgstr "Name"
@@ -59,8 +59,8 @@ msgstr "Period type"
 msgid "Period range"
 msgstr "Period range"
 
-msgid "Copy to new evaluation"
-msgstr "Copy to new evaluation"
+msgid "Create"
+msgstr "Create"
 
 msgid "Delete evaluation"
 msgstr "Delete evaluation"
@@ -614,6 +614,26 @@ msgstr "No organisation units match your search"
 msgid "You cannot select more than {{max}} organisation units at a time"
 msgstr "You cannot select more than {{max}} organisation units at a time"
 
+msgid "Unable to load data"
+msgstr "Unable to load data"
+
+msgid ""
+"There was a problem loading required data. See the browser console for "
+"details."
+msgstr ""
+"There was a problem loading required data. See the browser console for "
+"details."
+
+msgid "No data available"
+msgstr "No data available"
+
+msgid ""
+"The evaluation you are looking for does not exist or you do not have "
+"permission to access it."
+msgstr ""
+"The evaluation you are looking for does not exist or you do not have "
+"permission to access it."
+
 msgid "Invalid evaluation ID"
 msgstr "Invalid evaluation ID"
 
@@ -629,9 +649,6 @@ msgid ""
 msgstr ""
 "Keep in mind that this is advanced functionality and may not be suitable "
 "for all users."
-
-msgid "Unable to load data"
-msgstr "Unable to load data"
 
 msgid ""
 "There was a problem loading the visualization. See the browser console for "
@@ -661,13 +678,6 @@ msgstr "View Source"
 msgid "Save as SVG"
 msgstr "Save as SVG"
 
-msgid ""
-"There was a problem loading required data. See the browser console for "
-"details."
-msgstr ""
-"There was a problem loading required data. See the browser console for "
-"details."
-
 msgid "Metric plot"
 msgstr "Metric plot"
 
@@ -684,14 +694,23 @@ msgstr "Select visualization"
 msgid "Select metric"
 msgstr "Select metric"
 
+msgid "Evaluation result"
+msgstr "Evaluation result"
+
+msgid "Evaluation"
+msgstr "Evaluation"
+
+msgid "No data available for the selected organization unit and split period."
+msgstr "No data available for the selected organization unit and split period."
+
+msgid "Result"
+msgstr "Result"
+
 msgid "Quick actions"
 msgstr "Quick actions"
 
 msgid "Compare with..."
 msgstr "Compare with..."
-
-msgid "Create new"
-msgstr "Create new"
 
 msgid "Error loading jobs"
 msgstr "Error loading jobs"
@@ -841,6 +860,9 @@ msgstr ""
 "Are you sure you want to delete this prediction? This action cannot be "
 "undone."
 
+msgid "View"
+msgstr "View"
+
 msgid "Periods"
 msgstr "Periods"
 
@@ -867,9 +889,6 @@ msgstr "Evaluate"
 
 msgid "Overview"
 msgstr "Overview"
-
-msgid "Compare"
-msgstr "Compare"
 
 msgid "Predict"
 msgstr "Predict"
@@ -903,9 +922,6 @@ msgstr "Compare evaluations"
 msgid "Compare evaluations to assess model, co-variates and data performance."
 msgstr "Compare evaluations to assess model, co-variates and data performance."
 
-msgid "Back to evaluations"
-msgstr "Back to evaluations"
-
 msgid "Select base evaluation"
 msgstr "Select base evaluation"
 
@@ -918,9 +934,6 @@ msgstr ""
 
 msgid "An error occurred while fetching chart data "
 msgstr "An error occurred while fetching chart data "
-
-msgid "Evaluation"
-msgstr "Evaluation"
 
 msgid ""
 "Select two evaluations to compare their results. The\n"
@@ -1165,6 +1178,9 @@ msgstr ""
 "Deep dive into a specific evaluation run and assess its performance and "
 "reliability."
 
+msgid "Back to evaluations"
+msgstr "Back to evaluations"
+
 msgid "Error loading evaluations"
 msgstr "Error loading evaluations"
 
@@ -1239,3 +1255,11 @@ msgstr ""
 msgctxt ") instead."
 msgid "Spaces are not allowed. Use dashes (-) or underscores ("
 msgstr "Spaces are not allowed. Use dashes (-) or underscores (_) instead."
+
+msgctxt "Application title"
+msgid "__MANIFEST_APP_TITLE"
+msgstr "Modeling"
+
+msgctxt "Application description"
+msgid "__MANIFEST_APP_DESCRIPTION"
+msgstr ""
