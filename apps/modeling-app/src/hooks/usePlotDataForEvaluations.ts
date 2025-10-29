@@ -149,7 +149,7 @@ export const usePlotDataForEvaluations = (
                                 evaluation.id,
                                 quantiles,
                                 splitPeriod,
-                                
+
                                 orgUnits,
                             );
                         const actualCases =
