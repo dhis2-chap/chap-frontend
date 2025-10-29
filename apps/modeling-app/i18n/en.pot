@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2025-10-29T00:31:47.654Z\n"
-"PO-Revision-Date: 2025-10-29T00:31:47.655Z\n"
+"POT-Creation-Date: 2025-10-29T14:10:16.221Z\n"
+"PO-Revision-Date: 2025-10-29T14:10:16.222Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -640,6 +640,33 @@ msgstr "Invalid evaluation ID"
 msgid "The evaluation ID is invalid. Please try again."
 msgstr "The evaluation ID is invalid. Please try again."
 
+msgid "Summary"
+msgstr "Summary"
+
+msgid "There was an error loading the evaluation summary. Please try again later."
+msgstr "There was an error loading the evaluation summary. Please try again later."
+
+msgid "Model updated"
+msgstr "Model updated"
+
+msgid ""
+"The model used to run this evaluation has been updated. You can still view "
+"the results of the run, but the metadata may not be accurate."
+msgstr ""
+"The model used to run this evaluation has been updated. You can still view "
+"the results of the run, but the metadata may not be accurate."
+
+msgid "Training period"
+msgstr "Training period"
+
+msgid "Regions"
+msgstr "Regions"
+
+msgid "{{count}} regions"
+msgid_plural "{{count}} regions"
+msgstr[0] "{{count}} region"
+msgstr[1] "{{count}} regions"
+
 msgid "Please select a visualization and metric."
 msgstr "Please select a visualization and metric."
 
@@ -705,6 +732,12 @@ msgstr "No data available for the selected organization unit and split period."
 
 msgid "Result"
 msgstr "Result"
+
+msgid "Start period"
+msgstr "Start period"
+
+msgid "End period"
+msgstr "End period"
 
 msgid "Quick actions"
 msgstr "Quick actions"
@@ -828,8 +861,28 @@ msgstr "Model created successfully"
 msgid "Failed to create model"
 msgstr "Failed to create model"
 
+msgid "Error loading prediction"
+msgstr "Error loading prediction"
+
 msgid "Prediction not found"
 msgstr "Prediction not found"
+
+msgid ""
+"The prediction you are looking for does not exist or you do not have "
+"permission to access it."
+msgstr ""
+"The prediction you are looking for does not exist or you do not have "
+"permission to access it."
+
+msgid ""
+"The model you are looking for does not exist or you do not have permission "
+"to access it."
+msgstr ""
+"The model you are looking for does not exist or you do not have permission "
+"to access it."
+
+msgid "Prediction result"
+msgstr "Prediction result"
 
 msgid "Chart"
 msgstr "Chart"
@@ -840,15 +893,8 @@ msgstr "Table"
 msgid "Map"
 msgstr "Map"
 
-msgid "Error loading prediction"
-msgstr "Error loading prediction"
-
-msgid ""
-"The prediction you are looking for does not exist or you do not have "
-"permission to access it."
-msgstr ""
-"The prediction you are looking for does not exist or you do not have "
-"permission to access it."
+msgid "No prediction data found."
+msgstr "No prediction data found."
 
 msgid "Delete prediction"
 msgstr "Delete prediction"
@@ -1172,10 +1218,10 @@ msgid "Evaluation details"
 msgstr "Evaluation details"
 
 msgid ""
-"Deep dive into a specific evaluation run and assess its performance and "
+"Deep dive into a specific evaluation run to assess its performance and "
 "reliability."
 msgstr ""
-"Deep dive into a specific evaluation run and assess its performance and "
+"Deep dive into a specific evaluation run to assess its performance and "
 "reliability."
 
 msgid "Back to evaluations"
