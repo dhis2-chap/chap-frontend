@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2025-10-28T21:40:49.004Z\n"
-"PO-Revision-Date: 2025-10-28T21:40:49.005Z\n"
+"POT-Creation-Date: 2025-10-29T00:31:47.654Z\n"
+"PO-Revision-Date: 2025-10-29T00:31:47.655Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -614,6 +614,26 @@ msgstr "No organisation units match your search"
 msgid "You cannot select more than {{max}} organisation units at a time"
 msgstr "You cannot select more than {{max}} organisation units at a time"
 
+msgid "Unable to load data"
+msgstr "Unable to load data"
+
+msgid ""
+"There was a problem loading required data. See the browser console for "
+"details."
+msgstr ""
+"There was a problem loading required data. See the browser console for "
+"details."
+
+msgid "No data available"
+msgstr "No data available"
+
+msgid ""
+"The evaluation you are looking for does not exist or you do not have "
+"permission to access it."
+msgstr ""
+"The evaluation you are looking for does not exist or you do not have "
+"permission to access it."
+
 msgid "Invalid evaluation ID"
 msgstr "Invalid evaluation ID"
 
@@ -629,9 +649,6 @@ msgid ""
 msgstr ""
 "Keep in mind that this is advanced functionality and may not be suitable "
 "for all users."
-
-msgid "Unable to load data"
-msgstr "Unable to load data"
 
 msgid ""
 "There was a problem loading the visualization. See the browser console for "
@@ -661,13 +678,6 @@ msgstr "View Source"
 msgid "Save as SVG"
 msgstr "Save as SVG"
 
-msgid ""
-"There was a problem loading required data. See the browser console for "
-"details."
-msgstr ""
-"There was a problem loading required data. See the browser console for "
-"details."
-
 msgid "Metric plot"
 msgstr "Metric plot"
 
@@ -684,8 +694,8 @@ msgstr "Select visualization"
 msgid "Select metric"
 msgstr "Select metric"
 
-msgid "Model execution result"
-msgstr "Model execution result"
+msgid "Evaluation result"
+msgstr "Evaluation result"
 
 msgid "Evaluation"
 msgstr "Evaluation"
@@ -693,11 +703,8 @@ msgstr "Evaluation"
 msgid "No data available for the selected organization unit and split period."
 msgstr "No data available for the selected organization unit and split period."
 
-msgid "No data available"
-msgstr "No data available"
-
-msgid "No organization units or split periods found for this evaluation."
-msgstr "No organization units or split periods found for this evaluation."
+msgid "Result"
+msgstr "Result"
 
 msgid "Quick actions"
 msgstr "Quick actions"
@@ -1248,3 +1255,11 @@ msgstr ""
 msgctxt ") instead."
 msgid "Spaces are not allowed. Use dashes (-) or underscores ("
 msgstr "Spaces are not allowed. Use dashes (-) or underscores (_) instead."
+
+msgctxt "Application title"
+msgid "__MANIFEST_APP_TITLE"
+msgstr "Modeling"
+
+msgctxt "Application description"
+msgid "__MANIFEST_APP_DESCRIPTION"
+msgstr ""
