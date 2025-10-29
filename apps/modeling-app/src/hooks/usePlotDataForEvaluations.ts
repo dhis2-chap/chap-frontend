@@ -103,7 +103,8 @@ export const usePlotDataForEvaluations = (
 
             const plotQueryWithAllUnits = queryClient
                 .getQueryCache()
-                .find(plotQueryKey, {
+                .find({
+                    queryKey: plotQueryKey,
                     exact: false,
                     predicate: (query) => {
                         const queryKeyOrgUnits = (
@@ -148,6 +149,7 @@ export const usePlotDataForEvaluations = (
                                 evaluation.id,
                                 quantiles,
                                 splitPeriod,
+                                
                                 orgUnits,
                             );
                         const actualCases =

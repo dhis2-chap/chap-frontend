@@ -2,49 +2,54 @@ import React, { useMemo, useState } from 'react';
 import { CircularLoader, NoticeBox } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { usePlotDataForEvaluations } from '../../../../hooks/usePlotDataForEvaluations';
-import { useBacktestById } from '../../../../hooks/useBacktestById';
 import { useOrgUnitsById } from '../../../../hooks/useOrgUnitsById';
 import { ModelExecutionResultWidgetComponent } from './ModelExecutionResultWidget.component';
 import styles from './ModelExecutionResultWidget.module.css';
+import { BackTestRead, Widget } from '@dhis2-chap/ui';
+import { sortSplitPeriods } from '@/utils/timePeriodUtils';
+import { PERIOD_TYPES } from '@/components/ModelExecutionForm/constants';
 
 type Props = {
-    evaluationId: number;
+    backtest: BackTestRead;
 };
 
-export const ModelExecutionResultWidget = ({ evaluationId }: Props) => {
-    const { backtest, isLoading: isBacktestLoading, error: backtestError } = useBacktestById(evaluationId);
+const WidgetWrapper = ({ children }: { children: React.ReactNode }) => {
+    return (
+        <Widget
+            header={i18n.t('Result')}
+            open
+            onOpen={() => { }}
+            onClose={() => { }}
+        >
+            {children}
+        </Widget>
+    );
+};
+
+export const ModelExecutionResultWidget = ({ backtest }: Props) => {
+    const orgUnitIds = backtest.orgUnits ?? [];
+    const splitPeriods = sortSplitPeriods(backtest.splitPeriods ?? [], backtest.dataset.periodType as keyof typeof PERIOD_TYPES);
+
+    const [selectedOrgUnitId, setSelectedOrgUnitId] = useState<string | undefined>(orgUnitIds[0]);
+    const [selectedSplitPeriod, setSelectedSplitPeriod] = useState<string | undefined>(splitPeriods[0]);
 
     const evaluations = useMemo(() => {
         return backtest ? [backtest] : [];
     }, [backtest]);
 
     const {
+        data: orgUnitsData,
+        isLoading: isOrgUnitsLoading,
+        error: orgUnitsError,
+    } = useOrgUnitsById(orgUnitIds);
+
+    const {
         combined,
         isLoading: isPlotDataLoading,
         error: plotDataError,
-    } = usePlotDataForEvaluations(evaluations, {});
-
-    const [selectedOrgUnitId, setSelectedOrgUnitId] = useState<string | undefined>(undefined);
-    const [selectedSplitPeriod, setSelectedSplitPeriod] = useState<string | undefined>(undefined);
-
-    const { orgUnitIds, splitPeriods } = useMemo(() => {
-        const orgUnitsSet = new Set<string>();
-        const splitPeriodsSet = new Set<string>();
-
-        combined.viewData.forEach((view) => {
-            splitPeriodsSet.add(view.splitPoint);
-            view.evaluation.forEach((evaluation) => {
-                orgUnitsSet.add(evaluation.orgUnitId);
-            });
-        });
-
-        const orgUnitIds = Array.from(orgUnitsSet).sort();
-        const splitPeriods = Array.from(splitPeriodsSet).sort();
-
-        return { orgUnitIds, splitPeriods };
-    }, [combined.viewData]);
-
-    const { data: orgUnitsData, isLoading: isOrgUnitsLoading, error: orgUnitsError } = useOrgUnitsById(orgUnitIds);
+    } = usePlotDataForEvaluations(evaluations, {
+        orgUnits: orgUnitIds,
+    });
 
     const orgUnitsMap = useMemo(() => {
         const map = new Map<string, { id: string; displayName: string }>();
@@ -54,62 +59,40 @@ export const ModelExecutionResultWidget = ({ evaluationId }: Props) => {
         return map;
     }, [orgUnitsData]);
 
-    const effectiveSelectedOrgUnit = selectedOrgUnitId ?? orgUnitIds[0];
+    const { dataForSplitPeriod, periods } = useMemo(() => {
+        const dataForSplitPeriod = combined.viewData
+            .filter(v => v.splitPoint === selectedSplitPeriod)
+            .flatMap(v =>
+                v.evaluation.map(e => ({
+                    ...e,
+                    orgUnitName:
+                        orgUnitsMap.get(e.orgUnitId)?.displayName ?? e.orgUnitId,
+                })),
+            )
+            .sort((a, b) => a.orgUnitName.localeCompare(b.orgUnitName));
+        const periods = dataForSplitPeriod[0]?.models[0].data.periods ?? [];
+        return { dataForSplitPeriod, periods };
+    }, [combined.viewData, selectedSplitPeriod, orgUnitsMap]);
 
-    const effectiveSelectedSplitPeriod = selectedSplitPeriod ?? splitPeriods[0];
-
-    const dataForDisplay = useMemo(() => {
-        if (!effectiveSelectedOrgUnit || !effectiveSelectedSplitPeriod) {
-            return undefined;
-        }
-
-        const viewForSplitPeriod = combined.viewData.find(
-            v => v.splitPoint === effectiveSelectedSplitPeriod,
-        );
-
-        if (!viewForSplitPeriod) {
-            return undefined;
-        }
-
-        const orgUnitData = viewForSplitPeriod.evaluation.find(
-            e => e.orgUnitId === effectiveSelectedOrgUnit,
-        );
-
-        return orgUnitData;
-    }, [combined.viewData, effectiveSelectedOrgUnit, effectiveSelectedSplitPeriod]);
-
-    const periods = useMemo(() => {
-        if (!dataForDisplay || !dataForDisplay.models || dataForDisplay.models.length === 0) {
-            return [];
-        }
-        return dataForDisplay.models[0]?.data?.periods ?? [];
-    }, [dataForDisplay]);
-
-    if (isBacktestLoading || isPlotDataLoading || isOrgUnitsLoading) {
+    if (isPlotDataLoading || isOrgUnitsLoading) {
         return (
-            <div className={styles.loadingContainer}>
-                <CircularLoader />
-            </div>
+            <WidgetWrapper>
+                <div className={styles.loadingContainer}>
+                    <CircularLoader />
+                </div>
+            </WidgetWrapper>
         );
     }
 
-    if (backtestError || plotDataError || orgUnitsError) {
+    if (plotDataError || orgUnitsError) {
         return (
-            <div className={styles.errorContainer}>
-                <NoticeBox title={i18n.t('Unable to load data')} error>
-                    <p>{i18n.t('There was a problem loading required data. See the browser console for details.')}</p>
-                </NoticeBox>
-            </div>
-        );
-    }
-
-    if (!backtest || orgUnitIds.length === 0 || splitPeriods.length === 0) {
-        return (
-            <div className={styles.errorContainer}>
-                <NoticeBox title={i18n.t('No data available')} warning>
-                    <p>{i18n.t('No organization units or split periods found for this evaluation.')}</p>
-                </NoticeBox>
-            </div>
+            <WidgetWrapper>
+                <div className={styles.errorContainer}>
+                    <NoticeBox title={i18n.t('Unable to load data')} error>
+                        <p>{i18n.t('There was a problem loading required data. See the browser console for details.')}</p>
+                    </NoticeBox>
+                </div>
+            </WidgetWrapper>
         );
     }
 
@@ -118,9 +101,9 @@ export const ModelExecutionResultWidget = ({ evaluationId }: Props) => {
             orgUnitIds={orgUnitIds}
             orgUnitsMap={orgUnitsMap}
             splitPeriods={splitPeriods}
-            selectedOrgUnitId={effectiveSelectedOrgUnit}
-            selectedSplitPeriod={effectiveSelectedSplitPeriod}
-            dataForDisplay={dataForDisplay}
+            selectedOrgUnitId={selectedOrgUnitId}
+            selectedSplitPeriod={selectedSplitPeriod}
+            dataForDisplay={dataForSplitPeriod.find(e => e.orgUnitId === selectedOrgUnitId)}
             periods={periods}
             onSelectOrgUnit={setSelectedOrgUnitId}
             onSelectSplitPeriod={setSelectedSplitPeriod}

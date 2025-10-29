@@ -9,8 +9,8 @@ type Props = {
     orgUnitIds: string[];
     orgUnitsMap: Map<string, { id: string; displayName: string }>;
     splitPeriods: string[];
-    selectedOrgUnitId: string;
-    selectedSplitPeriod: string;
+    selectedOrgUnitId: string | undefined;
+    selectedSplitPeriod: string | undefined;
     dataForDisplay?: EvaluationPerOrgUnit;
     periods: string[];
     onSelectOrgUnit: (orgUnitId: string) => void;
@@ -28,14 +28,14 @@ export const ModelExecutionResultWidgetComponent = ({
     onSelectOrgUnit,
     onSelectSplitPeriod,
 }: Props) => {
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(true);
 
     const model = dataForDisplay?.models?.[0];
 
     return (
         <div className={styles.container}>
             <Widget
-                header={i18n.t('Model execution result')}
+                header={i18n.t('Evaluation result')}
                 open={open}
                 onOpen={() => setOpen(true)}
                 onClose={() => setOpen(false)}
@@ -61,6 +61,7 @@ export const ModelExecutionResultWidgetComponent = ({
                                     data={model.data}
                                     modelName={model.modelName}
                                     syncZoom={false}
+                                    nameLabel={i18n.t('Evaluation')}
                                 />
                             ) : (
                                 <div className={styles.emptyState}>
@@ -74,7 +75,7 @@ export const ModelExecutionResultWidgetComponent = ({
                         <div className={styles.sliderContainer}>
                             <SplitPeriodSlider
                                 splitPeriods={splitPeriods}
-                                selectedSplitPeriod={selectedSplitPeriod}
+                                selectedSplitPeriod={selectedSplitPeriod ?? splitPeriods[0]}
                                 onChange={onSelectSplitPeriod}
                                 periods={periods}
                             />

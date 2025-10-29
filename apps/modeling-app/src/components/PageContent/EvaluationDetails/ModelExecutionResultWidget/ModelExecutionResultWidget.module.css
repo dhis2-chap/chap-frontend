@@ -22,6 +22,7 @@
     flex-direction: column;
     gap: 1rem;
     position: relative;
+    padding-inline: 16px;
 }
 
 .mainLayout {
@@ -35,7 +36,7 @@
     width: 200px;
     border-inline-end: 1px solid var(--colors-grey300);
     overflow-y: auto;
-    max-height: 600px;
+    max-height: 400px;
 }
 
 .plotArea {
@@ -57,11 +58,10 @@
 .sliderContainer {
     position: sticky;
     bottom: 0;
-    margin-block-start: 1rem;
     padding-block: 1rem;
     padding-inline: 1rem;
     background-color: var(--colors-grey050);
     border-radius: 4px;
-    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
     z-index: 1;
 }
