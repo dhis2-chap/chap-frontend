@@ -18,8 +18,8 @@ const WidgetWrapper = ({ children }: { children: React.ReactNode }) => {
         <Widget
             header={i18n.t('Prediction result')}
             open
-            onOpen={() => {}}
-            onClose={() => {}}
+            onOpen={() => { }}
+            onClose={() => { }}
         >
             {children}
         </Widget>
@@ -28,15 +28,15 @@ const WidgetWrapper = ({ children }: { children: React.ReactNode }) => {
 
 export const PredictionResultWidget = ({ prediction, model }: Props) => {
     const {
+        orgUnits: orgUnitIds = [],
+        dataset,
+    } = prediction;
+
+    const {
         predictionEntries,
         isLoading: isPredictionEntriesLoading,
         error: predictionEntriesError,
     } = usePredictionEntries(prediction.id);
-
-    const orgUnitIds = useMemo(() => {
-        const uniqueOrgUnits = new Set(predictionEntries.map(entry => entry.orgUnit));
-        return Array.from(uniqueOrgUnits);
-    }, [predictionEntries]);
 
     const {
         data: orgUnitsData,
@@ -44,15 +44,14 @@ export const PredictionResultWidget = ({ prediction, model }: Props) => {
         error: orgUnitsError,
     } = useOrgUnitsById(orgUnitIds);
 
-    const predictionTargetId: string = prediction.dataset.dataSources?.find(
-        ds => ds.covariate === model.target.name,
+    const predictionTargetId: string = dataset.dataSources?.find(
+        dataSource => dataSource.covariate === model.target.name,
     )?.dataElementId ?? '';
 
     const { dataItem, isLoading: isDataItemLoading } = useDataItemById(predictionTargetId);
 
     const [selectedTab, setSelectedTab] = useState<'chart' | 'table' | 'map'>('chart');
     const [selectedOrgUnitId, setSelectedOrgUnitId] = useState<string | undefined>(undefined);
-    const [open, setOpen] = useState(true);
 
     const orgUnitsMap = useMemo(() => {
         const map = new Map<string, { id: string; displayName: string }>();
@@ -102,20 +101,13 @@ export const PredictionResultWidget = ({ prediction, model }: Props) => {
     }
 
     return (
-        <Widget
-            header={i18n.t('Prediction result')}
-            open={open}
-            onOpen={() => setOpen(true)}
-            onClose={() => setOpen(false)}
-        >
-            <PredictionResultWidgetComponent
-                series={series}
-                predictionTargetName={dataItem?.displayName ?? predictionTargetId}
-                selectedOrgUnitId={selectedOrgUnitId}
-                selectedTab={selectedTab}
-                onSelectOrgUnit={setSelectedOrgUnitId}
-                onSelectTab={setSelectedTab}
-            />
-        </Widget>
+        <PredictionResultWidgetComponent
+            series={series}
+            predictionTargetName={dataItem?.displayName ?? predictionTargetId}
+            selectedOrgUnitId={selectedOrgUnitId}
+            selectedTab={selectedTab}
+            onSelectOrgUnit={setSelectedOrgUnitId}
+            onSelectTab={setSelectedTab}
+        />
     );
 };

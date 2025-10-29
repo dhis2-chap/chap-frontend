@@ -15,41 +15,31 @@ const QUANTILE_MAP: Record<number, QuantileKey> = {
 
 export type OrgUnitsById = Map<string, { displayName: string }>;
 
+const createPredictionPoint = (period: string): PredictionPointVM => ({
+    period,
+    periodLabel: createFixedPeriodFromPeriodId({
+        periodId: period,
+        calendar: 'gregory',
+    }).displayName,
+    quantiles: {} as Record<QuantileKey, number>,
+});
+
 export function buildPredictionSeries(
     predictionEntries: PredictionEntry[],
     orgUnitsById: OrgUnitsById,
     targetId: string,
 ): PredictionOrgUnitSeries[] {
-    // Group by orgUnit, then by period
-    const byOrgUnit = new Map<string, Map<string, PredictionPointVM>>();
-
-    for (const entry of predictionEntries) {
+    const byOrgUnit = predictionEntries.reduce((acc, entry) => {
         const quantileKey = QUANTILE_MAP[entry.quantile];
-        if (!quantileKey) continue; // Skip unknown quantiles
+        if (!quantileKey) return acc;
 
-        let orgUnitData = byOrgUnit.get(entry.orgUnit);
-        if (!orgUnitData) {
-            orgUnitData = new Map();
-            byOrgUnit.set(entry.orgUnit, orgUnitData);
-        }
-
-        let point = orgUnitData.get(entry.period);
-        if (!point) {
-            point = {
-                period: entry.period,
-                periodLabel: createFixedPeriodFromPeriodId({
-                    periodId: entry.period,
-                    calendar: 'gregory',
-                }).displayName,
-                quantiles: {} as Record<QuantileKey, number>,
-            };
-            orgUnitData.set(entry.period, point);
-        }
+        const orgUnitData = acc.get(entry.orgUnit) ?? acc.set(entry.orgUnit, new Map()).get(entry.orgUnit)!;
+        const point = orgUnitData.get(entry.period) ?? orgUnitData.set(entry.period, createPredictionPoint(entry.period)).get(entry.period)!;
 
         point.quantiles[quantileKey] = entry.value;
-    }
+        return acc;
+    }, new Map<string, Map<string, PredictionPointVM>>());
 
-    // Convert to the final structure
     return Array.from(byOrgUnit.entries())
         .map(([orgUnitId, periodsMap]) => ({
             targetId,
@@ -58,6 +48,5 @@ export function buildPredictionSeries(
             points: Array.from(periodsMap.values()).sort((a, b) =>
                 a.period.localeCompare(b.period),
             ),
-        }))
-        .sort((a, b) => a.orgUnitName.localeCompare(b.orgUnitName));
+        }));
 }

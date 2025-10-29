@@ -11,6 +11,7 @@ export const PredictionDetails: React.FC = () => {
     const { predictionId } = useParams<{ predictionId: string }>();
     const { prediction, isLoading: isPredictionLoading, error: predictionError } = usePredictionById(predictionId);
     const { models, isLoading: isModelsLoading, error: modelsError } = useModels();
+    const model = useMemo(() => models?.find(m => m.name === prediction?.modelId), [models, prediction]);
 
     const isLoading = isPredictionLoading || isModelsLoading;
     const hasError = predictionError || modelsError;
@@ -33,7 +34,7 @@ export const PredictionDetails: React.FC = () => {
         );
     }
 
-    if (!prediction || !models) {
+    if (!prediction) {
         return (
             <div className={styles.errorContainer}>
                 <NoticeBox error title={i18n.t('Prediction not found')}>
@@ -42,7 +43,6 @@ export const PredictionDetails: React.FC = () => {
             </div>
         );
     }
-    const model = useMemo(() => models.find(m => m.name === prediction.modelId), [models, prediction]);
 
     if (!model) {
         return (
