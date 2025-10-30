@@ -31,6 +31,7 @@ import { JobTypeCell } from './TableCells/JobTypeCell';
 import { JobActionsMenu } from './JobActionsMenu/JobActionsMenu';
 import { JOB_STATUSES } from '../../hooks/useJobs';
 import { useJobsTableFilters } from './hooks/useJobsTableFilters';
+import { useTablePaginationParams } from '../../hooks/useTablePaginationParams';
 
 const columnHelper = createColumnHelper<JobDescription>();
 
@@ -124,6 +125,7 @@ type Props = {
 
 export const JobsTable = ({ jobs }: Props) => {
     const { search, status, type } = useJobsTableFilters();
+    const { pageIndex, pageSize, setPageIndex, setPageSize } = useTablePaginationParams();
 
     const table = useReactTable({
         data: jobs || [],
@@ -138,6 +140,10 @@ export const JobsTable = ({ jobs }: Props) => {
                 ...(status ? [{ id: 'status', value: status }] : []),
                 ...(type ? [{ id: 'type', value: type }] : []),
             ],
+            pagination: {
+                pageIndex,
+                pageSize,
+            },
         },
         getRowId: row => row.id.toString(),
         enableRowSelection: false,
@@ -208,13 +214,16 @@ export const JobsTable = ({ jobs }: Props) => {
                     <DataTableRow>
                         <DataTableCell colSpan={String(table.getAllColumns().length)}>
                             <Pagination
-                                page={table.getState().pagination.pageIndex + 1}
-                                pageSize={table.getState().pagination.pageSize}
-                                onPageSizeChange={(pageSize: number) => table.setPageSize(pageSize)}
+                                page={pageIndex + 1}
+                                pageSize={pageSize}
+                                onPageSizeChange={(newPageSize: number) => {
+                                    setPageSize(newPageSize);
+                                    setPageIndex(0);
+                                }}
                                 pageCount={table.getPageCount()}
                                 total={table.getRowCount()}
                                 isLastPage={!table.getCanNextPage()}
-                                onPageChange={(page: number) => table.setPageIndex(page - 1)}
+                                onPageChange={(page: number) => setPageIndex(page - 1)}
                             />
                         </DataTableCell>
                     </DataTableRow>
