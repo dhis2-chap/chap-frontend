@@ -40,7 +40,7 @@
     display: flex;
     gap: 12px;
     align-items: center;
-    margin-bottom: 16px;
+    margin-block-end: 16px;
 }
 
 .singleSelectContainer {
@@ -49,7 +49,7 @@
 
 
 .errorContainer {
-    padding-top: 16px;
+    padding-block-start: 16px;
 }
 
 .content {
@@ -69,8 +69,3 @@
     height: 100%;
 }
 
-.metricDescription {
-    font-size: 0.8rem;
-    color: var(--colors-grey700);
-    margin-bottom: 16px;
-}

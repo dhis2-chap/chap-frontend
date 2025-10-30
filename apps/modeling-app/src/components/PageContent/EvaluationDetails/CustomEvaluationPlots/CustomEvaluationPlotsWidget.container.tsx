@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { CircularLoader, IconInfo16, MenuItem, NoticeBox, SingleSelect, Tooltip } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
-import styles from './MetricPlotWidget.module.css';
-import { MetricPlotWidgetComponent } from './MetricPlotWidget.component';
-import { useMetricVisualizationTypes } from './hooks/useMetricVisualizationTypes';
-import { useMetricsForBacktest } from './hooks/useMetricsForBacktest';
+import styles from './CustomEvaluationPlotsWidget.module.css';
+import { CustomEvaluationPlotsWidgetComponent } from './CustomEvaluationPlotsWidget.component';
+import { useCustomEvaluationPlotTypes } from './hooks/useCustomEvaluationPlotTypes';
 import { Widget } from '@dhis2-chap/ui';
 
 type Props = {
@@ -12,23 +11,21 @@ type Props = {
 };
 
 const WidgetWrapper = ({ children, open, onOpen, onClose }: { children: React.ReactNode; open: boolean; onOpen: () => void; onClose: () => void }) => {
-    const header = (
-        <div className={styles.header}>
-            <span>{i18n.t('Metric plot')}</span>
-            <Tooltip
-                content={i18n.t('Metric plots are advanced functionality and may be misinterpreted. Use with caution.')}
-                placement="top"
-            >
-                <span className={styles.tooltip}>
-                    <IconInfo16 />
-                </span>
-            </Tooltip>
-        </div>
-    );
-
     return (
         <Widget
-            header={header}
+            header={(
+                <div className={styles.header}>
+                    <span>{i18n.t('Evaluation plots')}</span>
+                    <Tooltip
+                        content={i18n.t('Evaluation plots are configured system-wide and defined by system administrators / model developers. If you experience issues, please contact your system administrator.')}
+                        placement="top"
+                    >
+                        <span className={styles.tooltip}>
+                            <IconInfo16 />
+                        </span>
+                    </Tooltip>
+                </div>
+            )}
             open={open}
             onOpen={onOpen}
             onClose={onClose}
@@ -40,24 +37,17 @@ const WidgetWrapper = ({ children, open, onOpen, onClose }: { children: React.Re
     );
 };
 
-export const MetricPlotWidget = ({ evaluationId }: Props) => {
+export const CustomEvaluationPlotsWidget = ({ evaluationId }: Props) => {
     const [open, setOpen] = useState(false);
     const {
-        visualizationTypes,
+        customEvaluationPlotTypes,
         isLoading: isTypesLoading,
         error: typesError,
-    } = useMetricVisualizationTypes({ evaluationId });
-
-    const {
-        metrics,
-        isLoading: isMetricsLoading,
-        error: metricsError,
-    } = useMetricsForBacktest({ evaluationId });
+    } = useCustomEvaluationPlotTypes();
 
     const [selectedVisualizationId, setVisualizationId] = useState<string | undefined>(undefined);
-    const [selectedMetricId, setMetricId] = useState<string | undefined>(undefined);
 
-    if (isTypesLoading || isMetricsLoading) {
+    if (isTypesLoading) {
         return (
             <div className={styles.container}>
                 <WidgetWrapper open={open} onOpen={() => setOpen(true)} onClose={() => setOpen(false)}>
@@ -69,7 +59,7 @@ export const MetricPlotWidget = ({ evaluationId }: Props) => {
         );
     }
 
-    if (typesError || metricsError) {
+    if (typesError) {
         return (
             <div className={styles.container}>
                 <WidgetWrapper open={open} onOpen={() => setOpen(true)} onClose={() => setOpen(false)}>
@@ -94,32 +84,16 @@ export const MetricPlotWidget = ({ evaluationId }: Props) => {
                             placeholder={i18n.t('Select visualization')}
                             onChange={e => setVisualizationId(e.selected)}
                         >
-                            {(visualizationTypes ?? []).map(v => (
+                            {(customEvaluationPlotTypes ?? []).map(v => (
                                 <MenuItem key={v.id} value={v.id} label={v.displayName} />
                             ))}
                         </SingleSelect>
                     </div>
-                    <div className={styles.singleSelectContainer}>
-                        <SingleSelect
-                            dense
-                            selected={selectedMetricId}
-                            placeholder={i18n.t('Select metric')}
-                            onChange={e => setMetricId(e.selected)}
-                        >
-                            {(metrics ?? []).map(m => (
-                                <MenuItem key={m.id} value={m.id} label={m.displayName} />
-                            ))}
-                        </SingleSelect>
-                    </div>
-                </div>
-                <div className={styles.metricDescription}>
-                    {metrics?.find(m => m.id === selectedMetricId)?.description}
                 </div>
 
-                <MetricPlotWidgetComponent
+                <CustomEvaluationPlotsWidgetComponent
                     evaluationId={evaluationId}
                     selectedVisualizationId={selectedVisualizationId}
-                    selectedMetricId={selectedMetricId}
                 />
             </WidgetWrapper>
         </div>

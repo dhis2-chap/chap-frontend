@@ -2,47 +2,42 @@ import React, { useEffect } from 'react';
 import { CircularLoader, NoticeBox } from '@dhis2/ui';
 import { VegaEmbed } from 'react-vega';
 import i18n from '@dhis2/d2-i18n';
-import { useCustomMetricVisualization } from './hooks/useCustomMetricVisualization';
-import styles from './MetricPlotWidget.module.css';
+import { useCustomEvaluationPlotVisualization } from './hooks/useCustomEvaluationPlotVisualization';
+import styles from './CustomEvaluationPlotsWidget.module.css';
 
 type Props = {
     evaluationId: number;
     selectedVisualizationId?: string;
-    selectedMetricId?: string;
 };
 
-export const MetricPlotWidgetComponent = ({
+export const CustomEvaluationPlotsWidgetComponent = ({
     evaluationId,
     selectedVisualizationId,
-    selectedMetricId,
 }: Props) => {
-    const selectionComplete = !!selectedVisualizationId && !!selectedMetricId;
+    const selectionComplete = !!selectedVisualizationId;
     const {
         visualization,
         isLoading: isVisualizationLoading,
         error: visualizationError,
-    } = useCustomMetricVisualization({
+    } = useCustomEvaluationPlotVisualization({
         evaluationId,
         visualizationId: selectedVisualizationId,
-        metricId: selectedMetricId,
     });
 
     useEffect(() => {
         if (!visualizationError) return;
-        console.error('EvaluationSummary: visualization load error', {
+        console.error('CustomEvaluationPlotsWidget: visualization load error', {
             message: visualizationError?.message,
             error: visualizationError,
             evaluationId,
             selectedVisualizationId,
-            selectedMetricId,
         });
-    }, [visualizationError, evaluationId, selectedVisualizationId, selectedMetricId]);
+    }, [visualizationError, evaluationId, selectedVisualizationId]);
 
     if (!selectionComplete) {
         return (
             <div className={styles.emptyState}>
-                <p>{i18n.t('Please select a visualization and metric.')}</p>
-                <p>{i18n.t('Keep in mind that this is advanced functionality and may not be suitable for all users.')}</p>
+                <p>{i18n.t('Please select a visualization.')}</p>
             </div>
         );
     }
