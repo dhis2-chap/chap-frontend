@@ -1,7 +1,7 @@
 import React from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { MetricPlotWidget } from './MetricPlot';
-import { BacktestPlotWidget } from './BacktestPlot';
+import { CustomEvaluationPlotsWidget } from './CustomEvaluationPlots';
 import { QuickActionsWidget } from './QuickActionsWidget';
 import { ModelExecutionResultWidget } from './ModelExecutionResultWidget';
 import styles from './EvaluationDetails.module.css';
@@ -58,7 +58,7 @@ export const EvaluationDetailsComponent = ({ evaluationId }: Props) => {
                 <ModelExecutionResultWidget
                     backtest={backtest}
                 />
-                <BacktestPlotWidget
+                <CustomEvaluationPlotsWidget
                     evaluationId={evaluationId}
                 />
                 <MetricPlotWidget

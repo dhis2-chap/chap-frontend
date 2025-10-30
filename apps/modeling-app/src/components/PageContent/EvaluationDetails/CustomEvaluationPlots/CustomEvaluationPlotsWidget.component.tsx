@@ -2,15 +2,15 @@ import React, { useEffect } from 'react';
 import { CircularLoader, NoticeBox } from '@dhis2/ui';
 import { VegaEmbed } from 'react-vega';
 import i18n from '@dhis2/d2-i18n';
-import { useBacktestPlotVisualization } from './hooks/useBacktestPlotVisualization';
-import styles from './BacktestPlotWidget.module.css';
+import { useCustomEvaluationPlotVisualization } from './hooks/useCustomEvaluationPlotVisualization';
+import styles from './CustomEvaluationPlotsWidget.module.css';
 
 type Props = {
     evaluationId: number;
     selectedVisualizationId?: string;
 };
 
-export const BacktestPlotWidgetComponent = ({
+export const CustomEvaluationPlotsWidgetComponent = ({
     evaluationId,
     selectedVisualizationId,
 }: Props) => {
@@ -19,14 +19,14 @@ export const BacktestPlotWidgetComponent = ({
         visualization,
         isLoading: isVisualizationLoading,
         error: visualizationError,
-    } = useBacktestPlotVisualization({
+    } = useCustomEvaluationPlotVisualization({
         evaluationId,
         visualizationId: selectedVisualizationId,
     });
 
     useEffect(() => {
         if (!visualizationError) return;
-        console.error('BacktestPlotWidget: visualization load error', {
+        console.error('CustomEvaluationPlotsWidget: visualization load error', {
             message: visualizationError?.message,
             error: visualizationError,
             evaluationId,
