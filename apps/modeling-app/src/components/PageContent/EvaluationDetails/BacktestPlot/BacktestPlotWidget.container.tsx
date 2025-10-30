@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CircularLoader, MenuItem, NoticeBox, SingleSelect } from '@dhis2/ui';
+import { CircularLoader, IconInfo16, MenuItem, NoticeBox, SingleSelect, Tooltip } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import styles from './BacktestPlotWidget.module.css';
 import { BacktestPlotWidgetComponent } from './BacktestPlotWidget.component';
@@ -13,7 +13,19 @@ type Props = {
 const WidgetWrapper = ({ children, open, onOpen, onClose }: { children: React.ReactNode; open: boolean; onOpen: () => void; onClose: () => void }) => {
     return (
         <Widget
-            header={i18n.t('Backtest plot')}
+            header={(
+                <div className={styles.header}>
+                    <span>{i18n.t('Evaluation plots')}</span>
+                    <Tooltip
+                        content={i18n.t('Evaluation plots are configured system-wide and defined by system administrators / model developers. If you experience issues, please contact your system administrator.')}
+                        placement="top"
+                    >
+                        <span className={styles.tooltip}>
+                            <IconInfo16 />
+                        </span>
+                    </Tooltip>
+                </div>
+            )}
             open={open}
             onOpen={onOpen}
             onClose={onClose}

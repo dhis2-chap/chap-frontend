@@ -7,14 +7,14 @@ type UseVisualizationParams = {
     metricId?: string;
 };
 
-export const useCustomVisualization = ({
+export const useCustomMetricVisualization = ({
     evaluationId,
     visualizationId,
     metricId,
 }: UseVisualizationParams) => {
     const { data, isLoading, isFetching, error } = useQuery<unknown, ApiError>({
         queryKey: [
-            'custom-visualizations',
+            'custom-metric-visualizations',
             evaluationId,
             visualizationId,
             metricId,
@@ -33,6 +33,7 @@ export const useCustomVisualization = ({
         staleTime: 5 * 60 * 1000,
         cacheTime: 5 * 60 * 1000,
         retry: 0,
+        refetchOnWindowFocus: false,
     });
 
     return {

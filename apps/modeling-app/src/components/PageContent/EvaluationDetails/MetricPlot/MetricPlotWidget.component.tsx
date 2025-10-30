@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { CircularLoader, NoticeBox } from '@dhis2/ui';
 import { VegaEmbed } from 'react-vega';
 import i18n from '@dhis2/d2-i18n';
-import { useCustomVisualization } from './hooks/useCustomVisualization';
+import { useCustomMetricVisualization } from './hooks/useCustomMetricVisualization';
 import styles from './MetricPlotWidget.module.css';
 
 type Props = {
@@ -21,7 +21,7 @@ export const MetricPlotWidgetComponent = ({
         visualization,
         isLoading: isVisualizationLoading,
         error: visualizationError,
-    } = useCustomVisualization({
+    } = useCustomMetricVisualization({
         evaluationId,
         visualizationId: selectedVisualizationId,
         metricId: selectedMetricId,
@@ -55,6 +55,7 @@ export const MetricPlotWidgetComponent = ({
         );
     }
 
+    // TODO - these plots are expected to fail sometimes, so we should make this less scary and critical
     if (visualizationError) {
         return (
             <div className={styles.errorContainer}>

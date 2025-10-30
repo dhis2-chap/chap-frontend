@@ -68,3 +68,9 @@
     justify-content: center;
     height: 100%;
 }
+
+.metricDescription {
+    font-size: 0.8rem;
+    color: var(--colors-grey700);
+    margin-bottom: 16px;
+}

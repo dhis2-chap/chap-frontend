@@ -50,6 +50,7 @@ export const BacktestPlotWidgetComponent = ({
         );
     }
 
+    // TODO - these plots are expected to fail sometimes, so we should make this less scary and critical
     if (visualizationError) {
         return (
             <div className={styles.errorContainer}>

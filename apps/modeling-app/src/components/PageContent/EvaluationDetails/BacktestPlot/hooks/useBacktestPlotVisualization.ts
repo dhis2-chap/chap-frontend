@@ -28,6 +28,7 @@ export const useBacktestPlotVisualization = ({
         staleTime: 5 * 60 * 1000,
         cacheTime: 5 * 60 * 1000,
         retry: 0,
+        refetchOnWindowFocus: false,
     });
 
     return {

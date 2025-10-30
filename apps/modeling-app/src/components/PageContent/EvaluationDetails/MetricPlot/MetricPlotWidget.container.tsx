@@ -16,7 +16,7 @@ const WidgetWrapper = ({ children, open, onOpen, onClose }: { children: React.Re
         <div className={styles.header}>
             <span>{i18n.t('Metric plot')}</span>
             <Tooltip
-                content={i18n.t('Metric plots are advanced functionality and can easily be misinterpreted. Use with caution.')}
+                content={i18n.t('Metric plots are advanced functionality and may be misinterpreted. Use with caution.')}
                 placement="top"
             >
                 <span className={styles.tooltip}>
@@ -111,6 +111,9 @@ export const MetricPlotWidget = ({ evaluationId }: Props) => {
                             ))}
                         </SingleSelect>
                     </div>
+                </div>
+                <div className={styles.metricDescription}>
+                    {metrics?.find(m => m.id === selectedMetricId)?.description}
                 </div>
 
                 <MetricPlotWidgetComponent
