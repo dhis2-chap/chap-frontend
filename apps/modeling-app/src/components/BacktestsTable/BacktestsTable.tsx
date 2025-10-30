@@ -33,6 +33,7 @@ import { BatchActions } from './BatchActions';
 import { RunningJobsIndicator } from '../RunningJobsIndicator';
 import { JOB_TYPES } from '../../hooks/useJobs';
 import { useBacktestsTableFilters } from './hooks/useBacktestsTableFilters';
+import { useTablePaginationParams } from '../../hooks/useTablePaginationParams';
 
 const columnHelper = createColumnHelper<BackTestRead>();
 
@@ -144,6 +145,7 @@ type Props = {
 export const BacktestsTable = ({ backtests, models }: Props) => {
     const navigate = useNavigate();
     const { modelId, search } = useBacktestsTableFilters();
+    const { pageIndex, pageSize, setPageIndex, setPageSize } = useTablePaginationParams();
 
     const table = useReactTable({
         data: backtests || [],
@@ -154,6 +156,10 @@ export const BacktestsTable = ({ backtests, models }: Props) => {
                 ...(modelId ? [{ id: 'configuredModel.id', value: modelId }] : []),
                 ...(search ? [{ id: 'name', value: search }] : []),
             ],
+            pagination: {
+                pageIndex,
+                pageSize,
+            },
         },
         meta: {
             models,
@@ -244,13 +250,16 @@ export const BacktestsTable = ({ backtests, models }: Props) => {
                     <DataTableRow>
                         <DataTableCell colSpan={String(table.getAllColumns().length)}>
                             <Pagination
-                                page={table.getState().pagination.pageIndex + 1}
-                                pageSize={table.getState().pagination.pageSize}
-                                onPageSizeChange={(pageSize: number) => table.setPageSize(pageSize)}
+                                page={pageIndex + 1}
+                                pageSize={pageSize}
+                                onPageSizeChange={(newPageSize: number) => {
+                                    setPageSize(newPageSize);
+                                    setPageIndex(0);
+                                }}
                                 pageCount={table.getPageCount()}
                                 total={table.getRowCount()}
                                 isLastPage={!table.getCanNextPage()}
-                                onPageChange={(page: number) => table.setPageIndex(page - 1)}
+                                onPageChange={(page: number) => setPageIndex(page - 1)}
                             />
                         </DataTableCell>
                     </DataTableRow>

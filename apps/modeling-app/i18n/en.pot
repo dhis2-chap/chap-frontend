@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2025-10-29T14:38:32.550Z\n"
-"PO-Revision-Date: 2025-10-29T14:38:32.551Z\n"
+"POT-Creation-Date: 2025-10-30T12:37:17.027Z\n"
+"PO-Revision-Date: 2025-10-30T12:37:17.027Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -726,6 +726,9 @@ msgstr "Evaluation result"
 
 msgid "Evaluation"
 msgstr "Evaluation"
+
+msgid "There was an error loading the data."
+msgstr "There was an error loading the data."
 
 msgid "No data available for the selected organization unit and split period."
 msgstr "No data available for the selected organization unit and split period."
