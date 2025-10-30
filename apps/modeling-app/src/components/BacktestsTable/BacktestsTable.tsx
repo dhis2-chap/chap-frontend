@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
     DataTable,
     DataTableHead,
@@ -24,6 +24,7 @@ import {
     getPaginationRowModel,
     Column,
     RowSelectionState,
+    SortingState,
 } from '@tanstack/react-table';
 import { BackTestRead, ModelSpecRead, Pill } from '@dhis2-chap/ui';
 import { Link, useNavigate } from 'react-router-dom';
@@ -145,30 +146,23 @@ type Props = {
 
 export const BacktestsTable = ({ backtests, models }: Props) => {
     const navigate = useNavigate();
-    const { modelId, search } = useBacktestsTableFilters();
+    const { columnFilters } = useBacktestsTableFilters();
     const { pageIndex, pageSize, setPageIndex, setPageSize } = useTablePaginationParams();
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
-
-    useEffect(() => {
-        setRowSelection({});
-    }, [pageIndex, pageSize, modelId, search]);
+    const [sorting, setSorting] = useState<SortingState>([{ id: 'created', desc: true }]);
 
     const table = useReactTable({
         data: backtests || [],
         columns,
         state: {
-            sorting: [{ id: 'created', desc: true }],
-            columnFilters: [
-                ...(modelId ? [{ id: 'configuredModel.id', value: modelId }] : []),
-                ...(search ? [{ id: 'name', value: search }] : []),
-            ],
+            sorting,
+            columnFilters,
             pagination: {
                 pageIndex,
                 pageSize,
             },
             rowSelection,
         },
-        onRowSelectionChange: setRowSelection,
         meta: {
             models,
         },
@@ -178,6 +172,8 @@ export const BacktestsTable = ({ backtests, models }: Props) => {
         getCoreRowModel: getCoreRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
+        onRowSelectionChange: setRowSelection,
+        onSortingChange: setSorting,
     });
 
     const hasVisibleRows = table.getRowModel().rows.length > 0;
@@ -217,7 +213,8 @@ export const BacktestsTable = ({ backtests, models }: Props) => {
                                 <DataTableColumnHeader
                                     key={header.id}
                                     fixed
-                                    top
+                                    // @ts-expect-error - top is expected to be a string in the code, but types is set to boolean | undefined
+                                    top=""
                                     {...(header.column.getCanSort() ? {
                                         sortDirection: getSortDirection(header.column),
                                         sortIconTitle: i18n.t('Sort by {{column}}', { column: header.column.id }),
