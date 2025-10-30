@@ -47,7 +47,7 @@ export const PeriodView = ({ periodType, firstPeriod, lastPeriod, nPeriods }: Pr
             )}
             <div className={styles.row}>
                 <span className={styles.label}>
-                    {i18n.t('Prediction period')}
+                    {i18n.t('Training period')}
                 </span>
                 <span className={clsx(styles.value, styles.periodValues)}>
                     {firstPeriod && (
@@ -68,7 +68,7 @@ export const PeriodView = ({ periodType, firstPeriod, lastPeriod, nPeriods }: Pr
             {nPeriods && (
                 <div className={styles.row}>
                     <span className={styles.label}>
-                        {i18n.t('Number of periods')}
+                        {i18n.t('Predicted periods')}
                     </span>
                     <span className={styles.value}>
                         {nPeriods}
