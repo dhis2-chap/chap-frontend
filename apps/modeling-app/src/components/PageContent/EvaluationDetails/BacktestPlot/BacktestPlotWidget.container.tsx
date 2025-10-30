@@ -10,6 +10,21 @@ type Props = {
     evaluationId: number;
 };
 
+const WidgetWrapper = ({ children, open, onOpen, onClose }: { children: React.ReactNode; open: boolean; onOpen: () => void; onClose: () => void }) => {
+    return (
+        <Widget
+            header={i18n.t('Backtest plot')}
+            open={open}
+            onOpen={onOpen}
+            onClose={onClose}
+        >
+            <div className={styles.content}>
+                {children}
+            </div>
+        </Widget>
+    );
+};
+
 export const BacktestPlotWidget = ({ evaluationId }: Props) => {
     const [open, setOpen] = useState(false);
     const {
@@ -22,52 +37,53 @@ export const BacktestPlotWidget = ({ evaluationId }: Props) => {
 
     if (isTypesLoading) {
         return (
-            <div className={styles.loadingContainer}>
-                <CircularLoader />
+            <div className={styles.container}>
+                <WidgetWrapper open={open} onOpen={() => setOpen(true)} onClose={() => setOpen(false)}>
+                    <div className={styles.loadingContainer}>
+                        <CircularLoader />
+                    </div>
+                </WidgetWrapper>
             </div>
         );
     }
 
     if (typesError) {
         return (
-            <div className={styles.errorContainer}>
-                <NoticeBox title={i18n.t('Unable to load data')} error>
-                    <p>{i18n.t('There was a problem loading required data. See the browser console for details.')}</p>
-                </NoticeBox>
+            <div className={styles.container}>
+                <WidgetWrapper open={open} onOpen={() => setOpen(true)} onClose={() => setOpen(false)}>
+                    <div className={styles.errorContainer}>
+                        <NoticeBox title={i18n.t('Unable to load data')} error>
+                            <p>{i18n.t('There was a problem loading required data. See the browser console for details.')}</p>
+                        </NoticeBox>
+                    </div>
+                </WidgetWrapper>
             </div>
         );
     }
 
     return (
         <div className={styles.container}>
-            <Widget
-                header={i18n.t('Backtest plot')}
-                open={open}
-                onOpen={() => setOpen(true)}
-                onClose={() => setOpen(false)}
-            >
-                <div className={styles.content}>
-                    <div className={styles.controlsRow}>
-                        <div className={styles.singleSelectContainer}>
-                            <SingleSelect
-                                dense
-                                selected={selectedVisualizationId}
-                                placeholder={i18n.t('Select visualization')}
-                                onChange={e => setVisualizationId(e.selected)}
-                            >
-                                {(backtestPlotTypes ?? []).map(v => (
-                                    <MenuItem key={v.id} value={v.id} label={v.displayName} />
-                                ))}
-                            </SingleSelect>
-                        </div>
+            <WidgetWrapper open={open} onOpen={() => setOpen(true)} onClose={() => setOpen(false)}>
+                <div className={styles.controlsRow}>
+                    <div className={styles.singleSelectContainer}>
+                        <SingleSelect
+                            dense
+                            selected={selectedVisualizationId}
+                            placeholder={i18n.t('Select visualization')}
+                            onChange={e => setVisualizationId(e.selected)}
+                        >
+                            {(backtestPlotTypes ?? []).map(v => (
+                                <MenuItem key={v.id} value={v.id} label={v.displayName} />
+                            ))}
+                        </SingleSelect>
                     </div>
-
-                    <BacktestPlotWidgetComponent
-                        evaluationId={evaluationId}
-                        selectedVisualizationId={selectedVisualizationId}
-                    />
                 </div>
-            </Widget>
+
+                <BacktestPlotWidgetComponent
+                    evaluationId={evaluationId}
+                    selectedVisualizationId={selectedVisualizationId}
+                />
+            </WidgetWrapper>
         </div>
     );
 };
