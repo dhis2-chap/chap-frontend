@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './PredictionDetails.module.css';
 import { PredictionInfo, ModelSpecRead } from '@dhis2-chap/ui';
 import { PredictionResultWidget } from './PredictionResultWidget/PredictionResultWidget.container';
+import { PredictionSummaryWidget } from './PredictionSummaryWidget';
 import { QuickActionsWidget } from './QuickActionsWidget';
 
 type Props = {
@@ -25,7 +26,9 @@ export const PredictionDetailsComponent = ({
                 />
             </div>
             <div className={styles.rightColumn}>
-
+                <PredictionSummaryWidget
+                    predictionId={prediction.id}
+                />
             </div>
         </div>
     );
