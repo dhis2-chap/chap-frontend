@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     DataTable,
     DataTableHead,
@@ -23,6 +23,7 @@ import {
     getFilteredRowModel,
     getPaginationRowModel,
     Column,
+    RowSelectionState,
 } from '@tanstack/react-table';
 import { BackTestRead, ModelSpecRead, Pill } from '@dhis2-chap/ui';
 import { Link, useNavigate } from 'react-router-dom';
@@ -146,6 +147,11 @@ export const BacktestsTable = ({ backtests, models }: Props) => {
     const navigate = useNavigate();
     const { modelId, search } = useBacktestsTableFilters();
     const { pageIndex, pageSize, setPageIndex, setPageSize } = useTablePaginationParams();
+    const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+
+    useEffect(() => {
+        setRowSelection({});
+    }, [pageIndex, pageSize, modelId, search]);
 
     const table = useReactTable({
         data: backtests || [],
@@ -160,7 +166,9 @@ export const BacktestsTable = ({ backtests, models }: Props) => {
                 pageIndex,
                 pageSize,
             },
+            rowSelection,
         },
+        onRowSelectionChange: setRowSelection,
         meta: {
             models,
         },
