@@ -15,14 +15,14 @@ export const RegionView = ({ orgUnits }: Props) => {
     return (
         <div className={styles.row}>
             <span className={styles.label}>
-                {i18n.t('Regions')}
+                {i18n.t('Locations')}
             </span>
             <span className={styles.value}>
                 <Tag variant="info">
-                    {i18n.t('{{count}} regions', {
+                    {i18n.t('{{count}} locations', {
                         count: orgUnits.length,
-                        defaultValue: '{{count}} region',
-                        defaultValue_plural: '{{count}} regions',
+                        defaultValue: '{{count}} location',
+                        defaultValue_plural: '{{count}} locations',
                     })}
                 </Tag>
             </span>

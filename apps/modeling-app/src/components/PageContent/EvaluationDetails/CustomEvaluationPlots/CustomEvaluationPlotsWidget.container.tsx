@@ -10,7 +10,15 @@ type Props = {
     evaluationId: number;
 };
 
-const WidgetWrapper = ({ children, open, onOpen, onClose }: { children: React.ReactNode; open: boolean; onOpen: () => void; onClose: () => void }) => {
+type WidgetWrapperProps = {
+    children: React.ReactNode;
+    open: boolean;
+    onOpen: () => void;
+    onClose: () => void;
+    className?: string;
+};
+
+const WidgetWrapper = ({ children, open, onOpen, onClose }: WidgetWrapperProps) => {
     return (
         <Widget
             header={(

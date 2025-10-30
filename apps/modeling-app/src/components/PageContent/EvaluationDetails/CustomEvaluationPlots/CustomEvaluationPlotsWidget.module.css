@@ -50,6 +50,7 @@
 
 .errorContainer {
     padding-block-start: 16px;
+    height: 60vh
 }
 
 .content {
