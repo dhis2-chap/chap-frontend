@@ -1,38 +1,34 @@
 import { useQuery } from '@tanstack/react-query';
 import { ApiError, VisualizationService } from '@dhis2-chap/ui';
 
-type UseVisualizationParams = {
+type UseCustomEvaluationPlotVisualizationParams = {
     evaluationId?: number;
     visualizationId?: string;
-    metricId?: string;
 };
 
-export const useCustomVisualization = ({
+export const useCustomEvaluationPlotVisualization = ({
     evaluationId,
     visualizationId,
-    metricId,
-}: UseVisualizationParams) => {
+}: UseCustomEvaluationPlotVisualizationParams) => {
     const { data, isLoading, isFetching, error } = useQuery<unknown, ApiError>({
         queryKey: [
-            'custom-visualizations',
+            'custom-evaluation-plot-visualization',
             evaluationId,
             visualizationId,
-            metricId,
         ],
         queryFn: () =>
-            VisualizationService.generateVisualizationVisualizationMetricPlotsVisualizationNameBacktestIdMetricIdGet(
+            VisualizationService.generateBacktestPlotsVisualizationBacktestPlotsVisualizationNameBacktestIdGet(
                 visualizationId!,
                 Number(evaluationId),
-                metricId!,
             ),
         enabled:
             typeof evaluationId === 'number' &&
             evaluationId > 0 &&
-            !!visualizationId &&
-            !!metricId,
+            !!visualizationId,
         staleTime: 5 * 60 * 1000,
         cacheTime: 5 * 60 * 1000,
         retry: 0,
+        refetchOnWindowFocus: false,
     });
 
     return {

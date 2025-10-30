@@ -614,8 +614,42 @@ msgstr "No organisation units match your search"
 msgid "You cannot select more than {{max}} organisation units at a time"
 msgstr "You cannot select more than {{max}} organisation units at a time"
 
+msgid "Please select a visualization."
+msgstr "Please select a visualization."
+
 msgid "Unable to load data"
 msgstr "Unable to load data"
+
+msgid ""
+"There was a problem loading the visualization. See the browser console for "
+"details."
+msgstr ""
+"There was a problem loading the visualization. See the browser console for "
+"details."
+
+msgid "No visualization found"
+msgstr "No visualization found"
+
+msgid "Click to view actions"
+msgstr "Click to view actions"
+
+msgid "View Compiled Vega"
+msgstr "View Compiled Vega"
+
+msgid "Open in Vega Editor"
+msgstr "Open in Vega Editor"
+
+msgid "Save as PNG"
+msgstr "Save as PNG"
+
+msgid "View Source"
+msgstr "View Source"
+
+msgid "Save as SVG"
+msgstr "Save as SVG"
+
+msgid "Backtest plot"
+msgstr "Backtest plot"
 
 msgid ""
 "There was a problem loading required data. See the browser console for "
@@ -623,6 +657,9 @@ msgid ""
 msgstr ""
 "There was a problem loading required data. See the browser console for "
 "details."
+
+msgid "Select visualization"
+msgstr "Select visualization"
 
 msgid "No data available"
 msgstr "No data available"
@@ -677,34 +714,6 @@ msgstr ""
 "Keep in mind that this is advanced functionality and may not be suitable "
 "for all users."
 
-msgid ""
-"There was a problem loading the visualization. See the browser console for "
-"details."
-msgstr ""
-"There was a problem loading the visualization. See the browser console for "
-"details."
-
-msgid "No visualization found"
-msgstr "No visualization found"
-
-msgid "Click to view actions"
-msgstr "Click to view actions"
-
-msgid "View Compiled Vega"
-msgstr "View Compiled Vega"
-
-msgid "Open in Vega Editor"
-msgstr "Open in Vega Editor"
-
-msgid "Save as PNG"
-msgstr "Save as PNG"
-
-msgid "View Source"
-msgstr "View Source"
-
-msgid "Save as SVG"
-msgstr "Save as SVG"
-
 msgid "Metric plot"
 msgstr "Metric plot"
 
@@ -714,9 +723,6 @@ msgid ""
 msgstr ""
 "Metric plots are advanced functionality and can easily be misinterpreted. "
 "Use with caution."
-
-msgid "Select visualization"
-msgstr "Select visualization"
 
 msgid "Select metric"
 msgstr "Select metric"
