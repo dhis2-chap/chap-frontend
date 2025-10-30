@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2025-10-29T14:38:32.550Z\n"
-"PO-Revision-Date: 2025-10-29T14:38:32.551Z\n"
+"POT-Creation-Date: 2025-10-30T12:14:52.934Z\n"
+"PO-Revision-Date: 2025-10-30T12:14:52.934Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -614,8 +614,39 @@ msgstr "No organisation units match your search"
 msgid "You cannot select more than {{max}} organisation units at a time"
 msgstr "You cannot select more than {{max}} organisation units at a time"
 
+msgid "Please select a visualization."
+msgstr "Please select a visualization."
+
 msgid "Unable to load data"
 msgstr "Unable to load data"
+
+msgid ""
+"There was a problem loading the visualization. See the browser console for "
+"details."
+msgstr ""
+"There was a problem loading the visualization. See the browser console for "
+"details."
+
+msgid "No visualization found"
+msgstr "No visualization found"
+
+msgid "Click to view actions"
+msgstr "Click to view actions"
+
+msgid "View Compiled Vega"
+msgstr "View Compiled Vega"
+
+msgid "Open in Vega Editor"
+msgstr "Open in Vega Editor"
+
+msgid "Save as PNG"
+msgstr "Save as PNG"
+
+msgid "View Source"
+msgstr "View Source"
+
+msgid "Save as SVG"
+msgstr "Save as SVG"
 
 msgid ""
 "There was a problem loading required data. See the browser console for "
@@ -623,6 +654,12 @@ msgid ""
 msgstr ""
 "There was a problem loading required data. See the browser console for "
 "details."
+
+msgid "Backtest plot"
+msgstr "Backtest plot"
+
+msgid "Select visualization"
+msgstr "Select visualization"
 
 msgid "No data available"
 msgstr "No data available"
@@ -677,34 +714,6 @@ msgstr ""
 "Keep in mind that this is advanced functionality and may not be suitable "
 "for all users."
 
-msgid ""
-"There was a problem loading the visualization. See the browser console for "
-"details."
-msgstr ""
-"There was a problem loading the visualization. See the browser console for "
-"details."
-
-msgid "No visualization found"
-msgstr "No visualization found"
-
-msgid "Click to view actions"
-msgstr "Click to view actions"
-
-msgid "View Compiled Vega"
-msgstr "View Compiled Vega"
-
-msgid "Open in Vega Editor"
-msgstr "Open in Vega Editor"
-
-msgid "Save as PNG"
-msgstr "Save as PNG"
-
-msgid "View Source"
-msgstr "View Source"
-
-msgid "Save as SVG"
-msgstr "Save as SVG"
-
 msgid "Metric plot"
 msgstr "Metric plot"
 
@@ -715,9 +724,6 @@ msgstr ""
 "Metric plots are advanced functionality and can easily be misinterpreted. "
 "Use with caution."
 
-msgid "Select visualization"
-msgstr "Select visualization"
-
 msgid "Select metric"
 msgstr "Select metric"
 
@@ -726,6 +732,9 @@ msgstr "Evaluation result"
 
 msgid "Evaluation"
 msgstr "Evaluation"
+
+msgid "There was an error loading the data."
+msgstr "There was an error loading the data."
 
 msgid "No data available for the selected organization unit and split period."
 msgstr "No data available for the selected organization unit and split period."
@@ -1301,3 +1310,11 @@ msgstr ""
 msgctxt ") instead."
 msgid "Spaces are not allowed. Use dashes (-) or underscores ("
 msgstr "Spaces are not allowed. Use dashes (-) or underscores (_) instead."
+
+msgctxt "Application title"
+msgid "__MANIFEST_APP_TITLE"
+msgstr "Modeling"
+
+msgctxt "Application description"
+msgid "__MANIFEST_APP_DESCRIPTION"
+msgstr ""
