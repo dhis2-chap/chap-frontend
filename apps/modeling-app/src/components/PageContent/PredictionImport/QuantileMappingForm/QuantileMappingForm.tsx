@@ -64,7 +64,7 @@ export const QuantileMappingForm = ({ prediction }: Props) => {
     });
     const { quantile_low, quantile_high, median } = useWatch({ control });
 
-    const updateQuantile = (quantile: QuantileKey, id: string | null) => {
+    const updateQuantile = (quantile: 'quantile_low' | 'median' | 'quantile_high', id: string | null) => {
         if (id) {
             clearErrors(quantile);
         }

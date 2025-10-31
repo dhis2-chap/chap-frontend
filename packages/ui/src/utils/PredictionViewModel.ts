@@ -9,7 +9,9 @@ import type {
 // Map quantile values to their keys
 const QUANTILE_MAP: Record<number, QuantileKey> = {
     0.1: 'quantile_low',
+    0.25: 'quantile_mid_low',
     0.5: 'median',
+    0.75: 'quantile_mid_high',
     0.9: 'quantile_high',
 };
 
