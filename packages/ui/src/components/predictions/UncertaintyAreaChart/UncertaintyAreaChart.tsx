@@ -33,6 +33,49 @@ const getChartOptions = (
             high: p.quantiles.quantile_mid_high,
         }));
 
+    const actualCases: Highcharts.PointOptionsObject[] | undefined = series.actualCases
+        ?.map(ac => ({ name: ac.period, y: ac.value }));
+
+    const chartSeries: Highcharts.SeriesOptionsType[] = [
+        // median
+        {
+            type: 'line',
+            data: median,
+            name: i18n.t('Quantile median'),
+            color: '#004bbd',
+            zIndex: 3,
+        },
+        {
+            type: 'arearange',
+            name: i18n.t('Quantiles Outer'),
+            data: outerRange,
+            zIndex: 0,
+            lineWidth: 0,
+            color: '#c4dcf2',
+            fillOpacity: 1,
+        },
+        {
+            type: 'arearange',
+            name: i18n.t('Quantiles Middle'),
+            data: midRange,
+            zIndex: 1,
+            lineWidth: 0,
+            color: '#9bbdff',
+            fillOpacity: 1,
+        },
+    ];
+
+    if (actualCases && actualCases.length > 0) {
+        chartSeries.unshift({
+            type: 'line',
+            data: actualCases,
+            name: i18n.t('Actual Cases'),
+            color: '#f68000',
+            zIndex: 4,
+            lineWidth: 2.5,
+        });
+    }
+
     return {
         title: {
             style: {
@@ -66,7 +109,7 @@ const getChartOptions = (
         },
         yAxis: {
             title: {
-                text: 'Number of cases',
+                text: i18n.t('Number of cases'),
             },
         },
         credits: {
@@ -81,34 +124,7 @@ const getChartOptions = (
                 lineWidth: 5,
             },
         },
-        series: [
-            // median
-            {
-                type: 'line',
-                data: median,
-                name: i18n.t('Quantile median'),
-                color: '#004bbd',
-                zIndex: 3,
-            },
-            {
-                type: 'arearange',
-                name: i18n.t('Quantiles Outer'),
-                data: outerRange,
-                zIndex: 0,
-                lineWidth: 0,
-                color: '#c4dcf2',
-                fillOpacity: 1,
-            },
-            {
-                type: 'arearange',
-                name: i18n.t('Quantiles Middle'),
-                data: midRange,
-                zIndex: 1,
-                lineWidth: 0,
-                color: '#9bbdff',
-                fillOpacity: 1,
-            },
-        ],
+        series: chartSeries,
     };
 };
 

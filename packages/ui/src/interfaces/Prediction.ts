@@ -23,6 +23,7 @@ export interface PredictionOrgUnitSeries {
     orgUnitId: string;
     orgUnitName: string;
     points: PredictionPointVM[];
+    actualCases?: Array<{ period: string; value: number }>;
 }
 
 // Re-export type for convenience in downstream apps
