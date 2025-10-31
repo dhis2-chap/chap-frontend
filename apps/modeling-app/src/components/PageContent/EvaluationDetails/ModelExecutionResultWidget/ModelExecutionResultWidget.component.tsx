@@ -5,6 +5,7 @@ import { Widget, ResultPlot, BackTestRead } from '@dhis2-chap/ui';
 import { SplitPeriodSlider } from '../../../../features/evaluation-compare/SplitPeriodSlider';
 import styles from './ModelExecutionResultWidget.module.css';
 import { usePlotDataForEvaluationsByOrgUnit } from '@/hooks/usePlotDataForEvaluationsByOrgUnit';
+import { ALL_LOCATIONS_ORG_UNIT } from './ModelExecutionResultWidget.container';
 
 type Props = {
     backtest: BackTestRead;
@@ -26,7 +27,7 @@ export const ModelExecutionResultWidgetComponent = ({
     orgUnitsMap,
     splitPeriods,
 }: Props) => {
-    const [selectedOrgUnitId, setSelectedOrgUnitId] = useState<string | undefined>(orgUnitIds[0]);
+    const [selectedOrgUnitId, setSelectedOrgUnitId] = useState<string | undefined>(ALL_LOCATIONS_ORG_UNIT.id);
     const [selectedSplitPeriod, setSelectedSplitPeriod] = useState<string | undefined>(splitPeriods[0]);
     const [open, setOpen] = useState(true);
 
@@ -76,6 +77,11 @@ export const ModelExecutionResultWidgetComponent = ({
                     <div className={styles.mainLayout}>
                         <div className={styles.sidebar}>
                             <Menu dense>
+                                <MenuItem
+                                    active={selectedOrgUnitId === ALL_LOCATIONS_ORG_UNIT.id}
+                                    label={ALL_LOCATIONS_ORG_UNIT.displayName}
+                                    onClick={() => setSelectedOrgUnitId(ALL_LOCATIONS_ORG_UNIT.id)}
+                                />
                                 {orgUnitIds.map(orgUnitId => (
                                     <MenuItem
                                         active={selectedOrgUnitId === orgUnitId}

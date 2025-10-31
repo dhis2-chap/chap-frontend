@@ -1,0 +1,40 @@
+.customNoticeBox {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacers-dp12);
+    padding: var(--spacers-dp16);
+    border: 0.5px solid var(--colors-grey400);
+    border-radius: 4px;
+    background-color: var(--colors-grey100);
+    margin-block-start: var(--spacers-dp16);
+}
+
+.customNoticeBox>span:first-child {
+    display: flex;
+    align-items: center;
+    color: var(--colors-grey600);
+}
+
+.customNoticeBox .title {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--colors-grey900);
+}
+
+.customNoticeBox .description {
+    font-size: 14px;
+    color: var(--colors-grey700);
+}
+
+.dataItemSelects {
+    display: flex;
+    flex-direction: column;
+    max-width: 80%;
+    margin: auto;
+    margin-top: var(--spacers-dp16);
+}
+
+.buttonStrip {
+    margin-top: var(--spacers-dp8);
+}

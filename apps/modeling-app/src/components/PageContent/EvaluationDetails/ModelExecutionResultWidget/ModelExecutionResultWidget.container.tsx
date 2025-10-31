@@ -12,6 +12,11 @@ type Props = {
     backtest: BackTestRead;
 };
 
+export const ALL_LOCATIONS_ORG_UNIT = {
+    id: ':adm0',
+    displayName: i18n.t('All locations') as string,
+};
+
 const WidgetWrapper = ({ children }: { children: React.ReactNode }) => {
     return (
         <Widget
@@ -40,6 +45,7 @@ export const ModelExecutionResultWidget = ({ backtest }: Props) => {
         orgUnitsData?.organisationUnits?.forEach((ou) => {
             map.set(ou.id, ou);
         });
+        map.set(ALL_LOCATIONS_ORG_UNIT.id, ALL_LOCATIONS_ORG_UNIT);
         return map;
     }, [orgUnitsData]);
 
