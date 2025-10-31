@@ -114,7 +114,7 @@ export const useCreatePrediction = ({ onSuccess, onError }: Props = {}) => {
                 dataSources,
                 dataToBeFetched: [],
                 modelId: model.name,
-                nPeriods: N_PERIODS[formData.periodType],
+                nPeriods: N_PERIODS[formData.periodType.toUpperCase() as keyof typeof N_PERIODS],
                 type: 'forecasting' as const,
             };
 

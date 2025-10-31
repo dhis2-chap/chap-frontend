@@ -1,4 +1,3 @@
-import { createFixedPeriodFromPeriodId } from '@dhis2/multi-calendar-dates';
 import type { PredictionEntry, DataElement } from '../httpfunctions';
 import type {
     PredictionOrgUnitSeries,
@@ -17,14 +16,13 @@ const QUANTILE_MAP: Record<number, QuantileKey> = {
 
 export type OrgUnitsById = Map<string, { displayName: string }>;
 
-const createPredictionPoint = (period: string): PredictionPointVM => ({
-    period,
-    periodLabel: createFixedPeriodFromPeriodId({
-        periodId: period,
-        calendar: 'gregory',
-    }).displayName,
-    quantiles: {} as Record<QuantileKey, number>,
-});
+const createPredictionPoint = (period: string): PredictionPointVM => {
+    return ({
+        period,
+        periodLabel: period,
+        quantiles: {} as Record<QuantileKey, number>,
+    });
+};
 
 export function buildPredictionSeries(
     predictionEntries: PredictionEntry[],
@@ -52,8 +50,8 @@ export function buildPredictionSeries(
                 a.period.localeCompare(b.period),
             ),
             actualCases: actualCases
-                ?.filter(ac => ac.ou === orgUnitId && ac.value !== null)
-                .map(ac => ({ period: ac.pe, value: ac.value as number }))
+                ?.filter(ac => ac.ou === orgUnitId)
+                .map(ac => ({ period: ac.pe, value: ac.value ?? null }))
                 .sort((a, b) => a.period.localeCompare(b.period)),
         }));
 }

@@ -8,6 +8,8 @@ import { useActualCasesByDatasetId } from '../../../../hooks/useActualCasesByDat
 import { PredictionResultWidgetComponent } from './PredictionResultWidget.component';
 import styles from './PredictionResultWidget.module.css';
 import { Widget, PredictionInfo, ModelSpecRead, buildPredictionSeries } from '@dhis2-chap/ui';
+import { getLastNPeriods } from '@/utils/timePeriodUtils';
+import { PERIOD_TYPES } from '@/components/ModelExecutionForm/constants';
 
 type Props = {
     prediction: PredictionInfo;
@@ -25,6 +27,12 @@ const WidgetWrapper = ({ children }: { children: React.ReactNode }) => {
             {children}
         </Widget>
     );
+};
+
+const PERIODS_BY_PERIOD_TYPE = {
+    [PERIOD_TYPES.DAY]: 365 * 2,
+    [PERIOD_TYPES.WEEK]: 52 * 2,
+    [PERIOD_TYPES.MONTH]: 12 * 2,
 };
 
 export const PredictionResultWidget = ({ prediction, model }: Props) => {
@@ -45,11 +53,24 @@ export const PredictionResultWidget = ({ prediction, model }: Props) => {
         error: orgUnitsError,
     } = useOrgUnitsById(orgUnitIds);
 
+    const periods = useMemo(() => {
+        if (!dataset.lastPeriod) return undefined;
+        return getLastNPeriods(
+            dataset.lastPeriod,
+            dataset.periodType as keyof typeof PERIOD_TYPES,
+            PERIODS_BY_PERIOD_TYPE[dataset.periodType?.toUpperCase() as keyof typeof PERIODS_BY_PERIOD_TYPE],
+        );
+    }, [dataset]);
+
     const {
         data: actualCasesData,
         isLoading: isActualCasesLoading,
         error: actualCasesError,
-    } = useActualCasesByDatasetId(dataset?.id, orgUnitIds);
+    } = useActualCasesByDatasetId({
+        datasetId: dataset?.id,
+        orgUnits: orgUnitIds,
+        periods,
+    });
 
     const predictionTargetId: string = dataset.dataSources?.find(
         dataSource => dataSource.covariate === model.target.name,

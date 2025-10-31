@@ -1,12 +1,11 @@
+import React, { useMemo } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import Highcharts from 'highcharts';
 import accessibility from 'highcharts/modules/accessibility';
 import highchartsMore from 'highcharts/highcharts-more';
 import exporting from 'highcharts/modules/exporting';
-import React, { useMemo } from 'react';
 import HighchartsReact from 'highcharts-react-official';
 import { PredictionOrgUnitSeries } from '../../../interfaces/Prediction';
-import { createFixedPeriodFromPeriodId } from '@dhis2/multi-calendar-dates';
 
 accessibility(Highcharts);
 exporting(Highcharts);
@@ -44,6 +43,7 @@ const getChartOptions = (
             name: i18n.t('Quantile median'),
             color: '#004bbd',
             zIndex: 3,
+            connectNulls: false,
         },
         {
             type: 'arearange',
@@ -53,6 +53,7 @@ const getChartOptions = (
             lineWidth: 0,
             color: '#c4dcf2',
             fillOpacity: 1,
+            connectNulls: false,
         },
         {
             type: 'arearange',
@@ -62,6 +63,7 @@ const getChartOptions = (
             lineWidth: 0,
             color: '#9bbdff',
             fillOpacity: 1,
+            connectNulls: false,
         },
     ];
 
@@ -72,7 +74,11 @@ const getChartOptions = (
             name: i18n.t('Actual Cases'),
             color: '#f68000',
             zIndex: 4,
+            marker: {
+                enabled: false,
+            },
             lineWidth: 2.5,
+            connectNulls: false,
         });
     }
 
@@ -97,10 +103,7 @@ const getChartOptions = (
             labels: {
                 enabled: true,
                 formatter: function () {
-                    return createFixedPeriodFromPeriodId({
-                        periodId: this.value.toString(),
-                        calendar: 'gregory',
-                    }).displayName;
+                    return this.value.toString();
                 },
                 style: {
                     fontSize: '0.8rem',
@@ -118,6 +121,7 @@ const getChartOptions = (
         chart: {
             height: (9 / 16 * 100) + '%',
             marginBottom: 125,
+            zooming: { type: 'x' },
         },
         plotOptions: {
             series: {

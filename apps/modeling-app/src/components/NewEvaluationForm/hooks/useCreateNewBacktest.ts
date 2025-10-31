@@ -119,7 +119,7 @@ export const useCreateNewBacktest = ({
                 dataSources,
                 dataToBeFetched: [],
                 modelId: model.name,
-                nPeriods: N_PERIODS[formData.periodType],
+                nPeriods: N_PERIODS[formData.periodType.toUpperCase() as keyof typeof N_PERIODS],
                 nSplits: N_SPLITS,
                 stride: STRIDE,
             };
