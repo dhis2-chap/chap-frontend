@@ -112,7 +112,7 @@ export class AnalyticsService {
      * Get Evaluation Entries
      * Return quantiles for the forecasts in a backtest. Can optionally be filtered on split period and org units.
      *
-     * NOTE: If org_units is set to [":adm0"], the sum over all regions is returned.
+     * NOTE: If org_units is set to ["adm0"], the sum over all regions is returned.
      * @param backtestId
      * @param quantiles
      * @param splitPeriod
@@ -207,15 +207,17 @@ export class AnalyticsService {
      * Get Actual Cases
      * Return the actual disease cases corresponding to a backtest. Can optionally be filtered on org units.
      *
-     * Note: If org_units is set to [":adm0"], the sum over all regions is returned.
+     * Note: If org_units is set to ["adm0"], the sum over all regions is returned.
      * @param backtestId
      * @param orgUnits
+     * @param isDatasetId
      * @returns DataList Successful Response
      * @throws ApiError
      */
     public static getActualCasesAnalyticsActualCasesBacktestIdGet(
         backtestId: number,
         orgUnits?: Array<string>,
+        isDatasetId: boolean = false,
     ): CancelablePromise<DataList> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -225,6 +227,7 @@ export class AnalyticsService {
             },
             query: {
                 'orgUnits': orgUnits,
+                'isDatasetId': isDatasetId,
             },
             errors: {
                 422: `Validation Error`,
