@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2025-10-30T21:59:41.873Z\n"
-"PO-Revision-Date: 2025-10-30T21:59:41.874Z\n"
+"POT-Creation-Date: 2025-10-31T01:22:10.736Z\n"
+"PO-Revision-Date: 2025-10-31T01:22:10.737Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -920,11 +920,54 @@ msgstr "There was an error loading the prediction summary. Please try again late
 msgid "Predicted periods"
 msgstr "Predicted periods"
 
-msgid "Importing predictions to DHIS2 will be added shortly"
-msgstr "Importing predictions to DHIS2 will be added shortly"
-
 msgid "Import"
 msgstr "Import"
+
+msgid "Guide"
+msgstr "Guide"
+
+msgid "Loading"
+msgstr "Loading"
+
+msgid "Start typing to search for data items"
+msgstr "Start typing to search for data items"
+
+msgid "No matches found"
+msgstr "No matches found"
+
+msgid "Select a data item..."
+msgstr "Select a data item..."
+
+msgid "Clear selection"
+msgstr "Clear selection"
+
+msgid "Search for indicators, data elements, or program indicators"
+msgstr "Search for indicators, data elements, or program indicators"
+
+msgid "Import forecasted values"
+msgstr "Import forecasted values"
+
+msgid ""
+"Importing forecasted values into DHIS2 requires you to set up three data "
+"elements for the quantiles outputted by the model."
+msgstr ""
+"Importing forecasted values into DHIS2 requires you to set up three data "
+"elements for the quantiles outputted by the model."
+
+msgid "Quantile high"
+msgstr "Quantile high"
+
+msgid "Median"
+msgstr "Median"
+
+msgid "Quantile low"
+msgstr "Quantile low"
+
+msgid "Failed to post prediction data"
+msgstr "Failed to post prediction data"
+
+msgid "Prediction data posted successfully"
+msgstr "Prediction data posted successfully"
 
 msgid "Delete prediction"
 msgstr "Delete prediction"
@@ -1028,60 +1071,6 @@ msgstr ""
 msgid "Split period"
 msgstr "Split period"
 
-msgid "Add required Data Elements"
-msgstr "Add required Data Elements"
-
-msgid ""
-"This app requires specific DHIS2 Data Elements to import data into. If you "
-"have not already added them, go to the "
-msgstr ""
-"This app requires specific DHIS2 Data Elements to import data into. If you "
-"have not already added them, go to the "
-
-msgid "-app and create the Data Elements listed below."
-msgstr "-app and create the Data Elements listed below."
-
-msgid ""
-"NB! Make sure the CODE property for each data element is exactly the same "
-"as below."
-msgstr ""
-"NB! Make sure the CODE property for each data element is exactly the same "
-"as below."
-
-msgid ""
-"Properties in the new Data Element form not specified in the tables below "
-"should have the default value."
-msgstr ""
-"Properties in the new Data Element form not specified in the tables below "
-"should have the default value."
-
-msgid "Short name"
-msgstr "Short name"
-
-msgid "Code"
-msgstr "Code"
-
-msgid "Domain type"
-msgstr "Domain type"
-
-msgid "Aggregate"
-msgstr "Aggregate"
-
-msgid "Aggregation levels"
-msgstr "Aggregation levels"
-
-msgid "Assign all org unit levels"
-msgstr "Assign all org unit levels"
-
-msgid "Select data element"
-msgstr "Select data element"
-
-msgid "It seems like you missing Data Elements for CHAP prediction."
-msgstr "It seems like you missing Data Elements for CHAP prediction."
-
-msgid "Add data elements"
-msgstr "Add data elements"
-
 msgid "Organisation unit level"
 msgstr "Organisation unit level"
 
@@ -1096,18 +1085,6 @@ msgstr "Indicator"
 
 msgid "Program Indicator"
 msgstr "Program Indicator"
-
-msgid "Loading"
-msgstr "Loading"
-
-msgid "Start typing to search for data items"
-msgstr "Start typing to search for data items"
-
-msgid "No matches found"
-msgstr "No matches found"
-
-msgid "Search for indicators, data elements, or program indicators"
-msgstr "Search for indicators, data elements, or program indicators"
 
 msgid "No compatible evaluations found"
 msgstr "No compatible evaluations found"
@@ -1226,6 +1203,9 @@ msgstr "You do not have permission to add or modify routes."
 msgid "If you think this is an error, please contact your system administrator."
 msgstr "If you think this is an error, please contact your system administrator."
 
+msgid "Code"
+msgstr "Code"
+
 msgid "URL"
 msgstr "URL"
 
@@ -1313,6 +1293,15 @@ msgstr "Prediction details"
 msgid "View the details of a prediction."
 msgstr "View the details of a prediction."
 
+msgid "Import prediction"
+msgstr "Import prediction"
+
+msgid "Import the forecasted values of this prediction into DHIS2."
+msgstr "Import the forecasted values of this prediction into DHIS2."
+
+msgid "Back to prediction details"
+msgstr "Back to prediction details"
+
 msgid "Error loading predictions"
 msgstr "Error loading predictions"
 
@@ -1331,3 +1320,11 @@ msgstr ""
 msgctxt ") instead."
 msgid "Spaces are not allowed. Use dashes (-) or underscores ("
 msgstr "Spaces are not allowed. Use dashes (-) or underscores (_) instead."
+
+msgctxt "Application title"
+msgid "__MANIFEST_APP_TITLE"
+msgstr "Modeling"
+
+msgctxt "Application description"
+msgid "__MANIFEST_APP_DESCRIPTION"
+msgstr ""
