@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2025-10-31T01:22:10.736Z\n"
-"PO-Revision-Date: 2025-10-31T01:22:10.737Z\n"
+"POT-Creation-Date: 2025-10-31T02:04:42.746Z\n"
+"PO-Revision-Date: 2025-10-31T02:04:42.746Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -757,11 +757,30 @@ msgstr "Start period"
 msgid "End period"
 msgstr "End period"
 
+msgid "Create prediction"
+msgstr "Create prediction"
+
+msgid "Create prediction from evaluation"
+msgstr "Create prediction from evaluation"
+
+msgid ""
+"You should only do predictions on well-tested and reliable models that have "
+"shown promise when evaluated. Do you still want to continue?"
+msgstr ""
+"You should only do predictions on well-tested and reliable models that have "
+"shown promise when evaluated. Do you still want to continue?"
+
+msgid "Continue"
+msgstr "Continue"
+
 msgid "Quick actions"
 msgstr "Quick actions"
 
 msgid "Compare with..."
 msgstr "Compare with..."
+
+msgid "Predict"
+msgstr "Predict"
 
 msgid "Error loading jobs"
 msgstr "Error loading jobs"
@@ -1008,9 +1027,6 @@ msgstr "Evaluate"
 
 msgid "Overview"
 msgstr "Overview"
-
-msgid "Predict"
-msgstr "Predict"
 
 msgid "Models"
 msgstr "Models"
@@ -1320,11 +1336,3 @@ msgstr ""
 msgctxt ") instead."
 msgid "Spaces are not allowed. Use dashes (-) or underscores ("
 msgstr "Spaces are not allowed. Use dashes (-) or underscores (_) instead."
-
-msgctxt "Application title"
-msgid "__MANIFEST_APP_TITLE"
-msgstr "Modeling"
-
-msgctxt "Application description"
-msgid "__MANIFEST_APP_DESCRIPTION"
-msgstr ""

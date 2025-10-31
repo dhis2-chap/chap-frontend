@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Button, ButtonStrip, IconVisualizationLineMulti16, IconDuplicate16 } from '@dhis2/ui';
+import { Button, ButtonStrip, IconVisualizationLineMulti16, IconDuplicate16, IconExportItems24 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { useNavigate } from 'react-router-dom';
 import { Widget } from '@dhis2-chap/ui';
 import { CopyBacktestModal } from '../../../BacktestsTable/BacktestActionsMenu/CopyBacktestModal';
+import { PredictFromEvaluationModal } from './PredictFromEvaluationModal';
 import styles from './QuickActionsWidget.module.css';
 
 type Props = {
@@ -13,6 +14,7 @@ type Props = {
 export const QuickActionsWidget = ({ evaluationId }: Props) => {
     const navigate = useNavigate();
     const [copyModalIsOpen, setCopyModalIsOpen] = useState(false);
+    const [predictModalIsOpen, setPredictModalIsOpen] = useState(false);
 
     const handleCompareWith = () => {
         navigate(`/evaluate/compare?baseEvaluation=${evaluationId}&returnTo=${encodeURIComponent(`/evaluate/${evaluationId}`)}`);
@@ -20,6 +22,10 @@ export const QuickActionsWidget = ({ evaluationId }: Props) => {
 
     const handleCreateNew = () => {
         setCopyModalIsOpen(true);
+    };
+
+    const handlePredict = () => {
+        setPredictModalIsOpen(true);
     };
 
     return (
@@ -44,6 +50,13 @@ export const QuickActionsWidget = ({ evaluationId }: Props) => {
                         >
                             {i18n.t('Create new based on...')}
                         </Button>
+                        <Button
+                            onClick={handlePredict}
+                            dataTest="quick-action-predict"
+                            icon={<IconExportItems24 />}
+                        >
+                            {i18n.t('Predict...')}
+                        </Button>
                     </ButtonStrip>
                 </div>
             </Widget>
@@ -52,6 +65,14 @@ export const QuickActionsWidget = ({ evaluationId }: Props) => {
                 <CopyBacktestModal
                     id={evaluationId}
                     onClose={() => setCopyModalIsOpen(false)}
+                    returnTo={`/evaluate/${evaluationId}`}
+                />
+            )}
+
+            {predictModalIsOpen && (
+                <PredictFromEvaluationModal
+                    id={evaluationId}
+                    onClose={() => setPredictModalIsOpen(false)}
                     returnTo={`/evaluate/${evaluationId}`}
                 />
             )}
