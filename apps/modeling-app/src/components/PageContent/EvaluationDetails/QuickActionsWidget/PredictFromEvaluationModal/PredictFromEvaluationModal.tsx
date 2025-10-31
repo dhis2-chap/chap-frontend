@@ -106,7 +106,7 @@ export const PredictFromEvaluationModal = ({ id, onClose, returnTo }: PredictFro
 
     return (
         <Modal onClose={onClose} dataTest="predict-from-evaluation-modal">
-            <ModalTitle>{i18n.t('Create prediction from evaluation')}</ModalTitle>
+            <ModalTitle>{i18n.t('Create prediction')}</ModalTitle>
             <ModalContent>
                 <p className={styles.description}>
                     {i18n.t('You should only do predictions on well-tested and reliable models that have shown promise when evaluated. Do you still want to continue?')}

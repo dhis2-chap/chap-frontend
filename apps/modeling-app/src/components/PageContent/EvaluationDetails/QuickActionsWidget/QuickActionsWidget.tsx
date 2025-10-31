@@ -55,7 +55,7 @@ export const QuickActionsWidget = ({ evaluationId }: Props) => {
                             dataTest="quick-action-predict"
                             icon={<IconExportItems24 />}
                         >
-                            {i18n.t('Predict')}
+                            {i18n.t('Predict...')}
                         </Button>
                     </ButtonStrip>
                 </div>
