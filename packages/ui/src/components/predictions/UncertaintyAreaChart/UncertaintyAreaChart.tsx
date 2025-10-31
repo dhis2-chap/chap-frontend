@@ -19,11 +19,18 @@ const getChartOptions = (
     const median: Highcharts.PointOptionsObject[] = series.points
         .map(p => ({ name: p.period, y: p.quantiles.median }));
 
-    const range: Highcharts.PointOptionsObject[] = series.points
+    const outerRange: Highcharts.PointOptionsObject[] = series.points
         .map(p => ({
             name: p.period,
             low: p.quantiles.quantile_low,
             high: p.quantiles.quantile_high,
+        }));
+
+    const midRange: Highcharts.PointOptionsObject[] = series.points
+        .map(p => ({
+            name: p.period,
+            low: p.quantiles.quantile_mid_low,
+            high: p.quantiles.quantile_mid_high,
         }));
 
     return {
@@ -81,17 +88,25 @@ const getChartOptions = (
                 data: median,
                 name: i18n.t('Quantile median'),
                 color: '#004bbd',
-                zIndex: 2,
+                zIndex: 3,
             },
-            // high
             {
                 type: 'arearange',
-                name: i18n.t('Range'),
-                data: range,
+                name: i18n.t('Quantiles Outer'),
+                data: outerRange,
+                zIndex: 0,
+                lineWidth: 0,
+                color: '#c4dcf2',
+                fillOpacity: 1,
+            },
+            {
+                type: 'arearange',
+                name: i18n.t('Quantiles Middle'),
+                data: midRange,
                 zIndex: 1,
                 lineWidth: 0,
-                color: '#004bbd',
-                fillOpacity: 0.4,
+                color: '#9bbdff',
+                fillOpacity: 1,
             },
         ],
     };

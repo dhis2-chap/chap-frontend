@@ -10,7 +10,7 @@ export interface PredictionResponseExtended extends PredictionResponse {
 }
 
 // New, normalized view-models for predictions
-export type QuantileKey = 'quantile_low' | 'median' | 'quantile_high';
+export type QuantileKey = 'quantile_low' | 'quantile_mid_low' | 'median' | 'quantile_mid_high' | 'quantile_high';
 
 export interface PredictionPointVM {
     period: string;
