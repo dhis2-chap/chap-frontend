@@ -3,12 +3,14 @@ import { useAlert, useDataEngine } from '@dhis2/app-runtime';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ApiError, AnalyticsService, PredictionEntry, QuantileKey } from '@dhis2-chap/ui';
 
-const STANDARD_QUANTILES = [0.1, 0.5, 0.9];
+const STANDARD_QUANTILES = [0.1, 0.25, 0.5, 0.75, 0.9];
 
 type QuantileMapping = {
     quantileLowId: string;
     quantileMedianId: string;
     quantileHighId: string;
+    quantileMidLowId: string;
+    quantileMidHighId: string;
 };
 
 type PostPredictionDataVariables = {
@@ -25,11 +27,15 @@ const QUANTILE_STRINGS = {
     QUANTILE_LOW: 'quantile_low',
     MEDIAN: 'median',
     QUANTILE_HIGH: 'quantile_high',
+    QUANTILE_MID_LOW: 'quantile_mid_low',
+    QUANTILE_MID_HIGH: 'quantile_mid_high',
 } as const;
 
 const QUANTILE_MAP: Record<number, QuantileKey> = {
     0.1: QUANTILE_STRINGS.QUANTILE_LOW,
+    0.25: QUANTILE_STRINGS.QUANTILE_MID_LOW,
     0.5: QUANTILE_STRINGS.MEDIAN,
+    0.75: QUANTILE_STRINGS.QUANTILE_MID_HIGH,
     0.9: QUANTILE_STRINGS.QUANTILE_HIGH,
 };
 
@@ -49,6 +55,10 @@ const mapQuantileKeyToDataElement = (
             return quantileMapping.quantileMedianId;
         case QUANTILE_STRINGS.QUANTILE_HIGH:
             return quantileMapping.quantileHighId;
+        case QUANTILE_STRINGS.QUANTILE_MID_LOW:
+            return quantileMapping.quantileMidLowId;
+        case QUANTILE_STRINGS.QUANTILE_MID_HIGH:
+            return quantileMapping.quantileMidHighId;
         default:
             throw new Error(`Unknown quantile key: ${quantileKey}`);
     }
