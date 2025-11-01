@@ -49,7 +49,42 @@
 
 
 .errorContainer {
-    padding-top: 16px;
+    padding-block-start: 16px;
+}
+
+.mutedErrorContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60vh;
+    padding: 16px;
+}
+
+.mutedErrorContent {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    max-width: 600px;
+    color: var(--colors-grey700);
+}
+
+.mutedErrorText {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.mutedErrorPrimary {
+    margin: 0;
+    font-size: 0.95rem;
+    color: var(--colors-grey800);
+}
+
+.mutedErrorSecondary {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--colors-grey600);
+    line-height: 1.4;
 }
 
 .content {
