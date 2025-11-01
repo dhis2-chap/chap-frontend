@@ -11,6 +11,7 @@ import { usePostPredictionData } from '../hooks/usePostPredictionData';
 import { useNavigationBlocker } from '@/hooks/useNavigationBlocker';
 import { NavigationConfirmModal } from '@/components/NavigationConfirmModal';
 import { useNavigate } from 'react-router-dom';
+import type { QuantileKey } from '../types';
 
 type Props = {
     prediction: PredictionInfo;
