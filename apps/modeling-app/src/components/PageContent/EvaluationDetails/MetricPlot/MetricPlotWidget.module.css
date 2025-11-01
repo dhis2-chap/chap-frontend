@@ -50,6 +50,7 @@
 
 .errorContainer {
     padding-block-start: 16px;
+    height: 60vh
 }
 
 .mutedErrorContainer {
@@ -62,8 +63,11 @@
 
 .mutedErrorContent {
     display: flex;
+    flex-direction: column;
+    justify-content: center;
     gap: 12px;
-    align-items: flex-start;
+    text-align: center;
+    align-items: center;
     max-width: 600px;
     color: var(--colors-grey700);
 }

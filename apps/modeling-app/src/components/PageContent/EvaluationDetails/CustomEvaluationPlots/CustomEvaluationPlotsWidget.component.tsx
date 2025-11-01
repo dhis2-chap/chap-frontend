@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { CircularLoader, IconWarning16 } from '@dhis2/ui';
+import { CircularLoader, IconWarning24 } from '@dhis2/ui';
 import { VegaEmbed } from 'react-vega';
 import i18n from '@dhis2/d2-i18n';
 import { useCustomEvaluationPlotVisualization } from './hooks/useCustomEvaluationPlotVisualization';
@@ -54,13 +54,13 @@ export const CustomEvaluationPlotsWidgetComponent = ({
         return (
             <div className={styles.mutedErrorContainer}>
                 <div className={styles.mutedErrorContent}>
-                    <IconWarning16 />
+                    <IconWarning24 />
                     <div className={styles.mutedErrorText}>
                         <p className={styles.mutedErrorPrimary}>
                             {i18n.t('This plot has encountered an unexpected error and could not be displayed.')}
                         </p>
                         <p className={styles.mutedErrorSecondary}>
-                            {i18n.t('This visualization is provided by external contributors and may occasionally fail due to issues in the contributed plot definition.')}
+                            {i18n.t('This visualization is provided by external contributors and may occasionally fail due to issues in the contributed plot definition. Please contact your system administrator if you experience issues with this visualization.')}
                         </p>
                     </div>
                 </div>
