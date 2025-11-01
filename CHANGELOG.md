@@ -1,3 +1,43 @@
+# [3.0.0](https://github.com/dhis2-chap/chap-frontend/compare/v2.2.4...v3.0.0) (2025-11-01)
+
+
+* feat!: release v3 of the modeling app (#131) ([fa5e614](https://github.com/dhis2-chap/chap-frontend/commit/fa5e614e5d2f81359a223c0711d46b3cfa701ecf)), closes [#131](https://github.com/dhis2-chap/chap-frontend/issues/131)
+
+
+### Bug Fixes
+
+* control table params via URL [skip release] ([709de23](https://github.com/dhis2-chap/chap-frontend/commit/709de23d116fd8aa69b107919ae1cf2503deab32))
+* ensure models search input is always controlled [skip release] ([4295a56](https://github.com/dhis2-chap/chap-frontend/commit/4295a5609a464adddc1cc1c3d84e2c8618ab9ece))
+
+
+### Features
+
+* add 'Include archived' checkbox to models table [skip release] ([ce630a1](https://github.com/dhis2-chap/chap-frontend/commit/ce630a190177a09d4e99341ad667d353d74dc9b0))
+* add archive model functionality [skip release] ([08956f5](https://github.com/dhis2-chap/chap-frontend/commit/08956f5dfaa21fd8124a9146c4045e226f5ec68e))
+* add backtest plot widget to evaluation details page [skip release] ([f431791](https://github.com/dhis2-chap/chap-frontend/commit/f431791a8bbe8331eb82e79742e2dba422973595))
+* add configured model creation flow [skip release] ([1bd6470](https://github.com/dhis2-chap/chap-frontend/commit/1bd6470fafeaef1251d45a4a9b97fd7d94ea8197))
+* add create new evaluation based on existing [skip release] ([d6f8bc7](https://github.com/dhis2-chap/chap-frontend/commit/d6f8bc7943c1c50fc818710ce16a8fc28ce88b95))
+* add custom metric plots [skip release] ([2777761](https://github.com/dhis2-chap/chap-frontend/commit/2777761e0774e6205e0175ef066450323577375f))
+* add evaluation summary widget [skip release] ([2278cd3](https://github.com/dhis2-chap/chap-frontend/commit/2278cd3dcb36f1b6f2fb28fe9353a8953aaaf65d))
+* add evaluations dashboard with metric plot [skip release] ([123167a](https://github.com/dhis2-chap/chap-frontend/commit/123167ae05eaf7d80d754aded86e305c987b2862))
+* add ModelExecutionResultWidget to evaluation details page [skip release] ([4c11291](https://github.com/dhis2-chap/chap-frontend/commit/4c11291626d73b972492f4f00225690a85a5d7a1))
+* add models page [skip release] ([80222ef](https://github.com/dhis2-chap/chap-frontend/commit/80222efb7313365fe9659b92053c01a772dfa3af))
+* add Predict button to evaluation quick actions [skip release] ([8360788](https://github.com/dhis2-chap/chap-frontend/commit/83607885bccb376ccea3e5cf00975defc16938a5))
+* add predictions pages [skip release] ([f40a70b](https://github.com/dhis2-chap/chap-frontend/commit/f40a70ba1cf51c2a731fb9f254c77d31b59655da))
+* add PredictionSummaryWidget component [skip release] ([88480ae](https://github.com/dhis2-chap/chap-frontend/commit/88480ae24ca0439ed7bccc90749760bd65c0b8cc))
+* add quick actions widget to predictions page [skip release] ([f5f26db](https://github.com/dhis2-chap/chap-frontend/commit/f5f26db9ca6ebbf4c5bb531072aa7ca640fec236))
+* add QuickActionsWidget to EvaluationDetails page [skip release] ([7de76d1](https://github.com/dhis2-chap/chap-frontend/commit/7de76d1eef136efa6698ef5d78ced6f9124ddd34))
+* create new import page for predictions [skip release] ([1b49846](https://github.com/dhis2-chap/chap-frontend/commit/1b49846a7f3044d00f889d0fe9d60d2ecb866497))
+* extract jobs content into separate folder [skip release] ([843f869](https://github.com/dhis2-chap/chap-frontend/commit/843f869dcc6ad951ceef99b839a762ddf9e66a97))
+* move backtest filtering to URL parameters [skip release] ([8396ead](https://github.com/dhis2-chap/chap-frontend/commit/8396ead36143259cbb02cc1b29dd465747d7d585))
+* persist warning dismissal state using localStorage [skip release] ([4e9192f](https://github.com/dhis2-chap/chap-frontend/commit/4e9192fb9e8409782afd34111850bdd335a2e9fc))
+* replace CRPS column with locations in evaluations table [skip release] ([4764a1b](https://github.com/dhis2-chap/chap-frontend/commit/4764a1b4b109a8d24282099a704d186a17d8f6eb))
+
+
+### BREAKING CHANGES
+
+* The modeling app will now require CHAP v1.1.0 or higher to work.
+
 ## [2.2.4](https://github.com/dhis2-chap/chap-frontend/compare/v2.2.3...v2.2.4) (2025-08-29)
 
 
