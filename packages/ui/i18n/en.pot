@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2025-09-23T10:04:12.780Z\n"
-"PO-Revision-Date: 2025-09-23T10:04:12.782Z\n"
+"POT-Creation-Date: 2025-10-31T13:42:38.500Z\n"
+"PO-Revision-Date: 2025-10-31T13:42:38.501Z\n"
 
 msgid "Median Prediction for {{predictionTargetName}}"
 msgstr "Median Prediction for {{predictionTargetName}}"
@@ -14,20 +14,38 @@ msgstr "Median Prediction for {{predictionTargetName}}"
 msgid "Quantiles"
 msgstr "Quantiles"
 
+msgid "Quantile 0.1 (low)"
+msgstr "Quantile 0.1 (low)"
+
+msgid "Quantile 0.25"
+msgstr "Quantile 0.25"
+
+msgid "Quantile 0.5 (median)"
+msgstr "Quantile 0.5 (median)"
+
+msgid "Quantile 0.75"
+msgstr "Quantile 0.75"
+
+msgid "Quantile 0.9 (high)"
+msgstr "Quantile 0.9 (high)"
+
 msgid "Quantile median"
 msgstr "Quantile median"
 
-msgid "quantile low"
-msgstr "quantile low"
+msgid "Quantiles Outer"
+msgstr "Quantiles Outer"
 
-msgid "quantile high"
-msgstr "quantile high"
+msgid "Quantiles Middle"
+msgstr "Quantiles Middle"
+
+msgid "Actual Cases"
+msgstr "Actual Cases"
 
 msgid "Prediction for {{predictionTargetName}} for {{orgUnitName}}"
 msgstr "Prediction for {{predictionTargetName}} for {{orgUnitName}}"
 
-msgid "Range"
-msgstr "Range"
+msgid "Number of cases"
+msgstr "Number of cases"
 
 msgid "More"
 msgstr "More"

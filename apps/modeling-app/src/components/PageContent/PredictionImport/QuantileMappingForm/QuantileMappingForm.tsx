@@ -20,6 +20,8 @@ export const quantileMappingSchema = z.object({
     quantile_low: z.string().min(1, { message: 'Quantile low is required' }),
     quantile_high: z.string().min(1, { message: 'Quantile high is required' }),
     median: z.string().min(1, { message: 'Median is required' }),
+    quantile_mid_low: z.string().min(1, { message: 'Quantile mid low is required' }),
+    quantile_mid_high: z.string().min(1, { message: 'Quantile mid high is required' }),
 });
 
 export const QuantileMappingForm = ({ prediction }: Props) => {
@@ -36,6 +38,8 @@ export const QuantileMappingForm = ({ prediction }: Props) => {
             quantile_low: '',
             quantile_high: '',
             median: '',
+            quantile_mid_low: '',
+            quantile_mid_high: '',
         },
     });
     const { mutateAsync, isPending } = usePostPredictionData({
@@ -51,6 +55,8 @@ export const QuantileMappingForm = ({ prediction }: Props) => {
                 quantileLowId: data.quantile_low,
                 quantileHighId: data.quantile_high,
                 quantileMedianId: data.median,
+                quantileMidLowId: data.quantile_mid_low,
+                quantileMidHighId: data.quantile_mid_high,
             },
         });
     };
@@ -62,7 +68,7 @@ export const QuantileMappingForm = ({ prediction }: Props) => {
     } = useNavigationBlocker({
         shouldBlock: !isPending && isDirty,
     });
-    const { quantile_low, quantile_high, median } = useWatch({ control });
+    const { quantile_low, quantile_high, median, quantile_mid_low, quantile_mid_high } = useWatch({ control });
 
     const updateQuantile = (quantile: QuantileKey, id: string | null) => {
         if (id) {
@@ -83,7 +89,7 @@ export const QuantileMappingForm = ({ prediction }: Props) => {
                 </span>
 
                 <span className={styles.description}>
-                    {i18n.t('Importing forecasted values into DHIS2 requires you to set up three data elements for the quantiles outputted by the model.')}
+                    {i18n.t('Importing forecasted values into DHIS2 requires you to set up five data elements for the quantiles outputted by the model.')}
                 </span>
             </div>
 
@@ -96,10 +102,22 @@ export const QuantileMappingForm = ({ prediction }: Props) => {
                         error={errors.quantile_high?.message}
                     />
                     <DataItemSelect
+                        label={i18n.t('Quantile mid high')}
+                        value={quantile_mid_high}
+                        onChange={id => updateQuantile('quantile_mid_high', id)}
+                        error={errors.quantile_mid_high?.message}
+                    />
+                    <DataItemSelect
                         label={i18n.t('Median')}
                         value={median}
                         onChange={id => updateQuantile('median', id)}
                         error={errors.median?.message}
+                    />
+                    <DataItemSelect
+                        label={i18n.t('Quantile mid low')}
+                        value={quantile_mid_low}
+                        onChange={id => updateQuantile('quantile_mid_low', id)}
+                        error={errors.quantile_mid_low?.message}
                     />
                     <DataItemSelect
                         label={i18n.t('Quantile low')}

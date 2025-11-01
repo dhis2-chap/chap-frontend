@@ -4,6 +4,8 @@ import {
     format,
     addMonths,
     addWeeks,
+    subMonths,
+    subWeeks,
     startOfISOWeek,
     endOfISOWeek,
     startOfMonth,
@@ -53,7 +55,7 @@ const getWeeks = (start: string, end: string): Period[] => {
         while (!isAfter(currentDate, endWeekStart)) {
             const isoYear = getISOWeekYear(currentDate);
             const weekNumber = getISOWeek(currentDate);
-            const weekString = `${isoYear}W${String(weekNumber).padStart(2, '0')}`;
+            const weekString = `${isoYear}W${String(weekNumber)}`;
 
             const weekStart = startOfISOWeek(currentDate);
             const weekEnd = endOfISOWeek(currentDate);
@@ -173,4 +175,68 @@ export const sortSplitPeriods = (splitPeriods: string[], periodType: keyof typeo
 
     console.error('Unsupported period type provided:', periodType);
     return splitPeriods;
+};
+
+// Get the last N periods including the base period in server format
+// e.g. getLastNPeriods('202412', 'MONTH', 12) returns ['202401', '202402', ..., '202412']
+export const getLastNPeriods = (
+    basePeriod: string,
+    periodType: keyof typeof PERIOD_TYPES,
+    count: number,
+): string[] => {
+    try {
+        if (count <= 0) {
+            console.error('Count must be greater than 0');
+            return [];
+        }
+
+        if (periodType.toUpperCase() === PERIOD_TYPES.MONTH) {
+            const baseDate = parse(basePeriod, 'yyyyMM', new Date());
+
+            if (!isValid(baseDate)) {
+                console.error('Invalid month period id provided:', basePeriod);
+                return [];
+            }
+
+            const periods: string[] = [];
+            const startDate = subMonths(baseDate, count - 1);
+
+            let currentDate = startDate;
+            for (let i = 0; i < count; i++) {
+                periods.push(format(currentDate, 'yyyyMM'));
+                currentDate = addMonths(currentDate, 1);
+            }
+
+            return periods;
+        }
+
+        if (periodType.toUpperCase() === PERIOD_TYPES.WEEK) {
+            const baseDate = parse(basePeriod, 'RRRR\'W\'II', new Date());
+
+            if (!isValid(baseDate)) {
+                console.error('Invalid week period id provided:', basePeriod);
+                return [];
+            }
+
+            const periods: string[] = [];
+            const startDate = subWeeks(startOfISOWeek(baseDate), count - 1);
+
+            let currentDate = startDate;
+            for (let i = 0; i < count; i++) {
+                const isoYear = getISOWeekYear(currentDate);
+                const weekNumber = getISOWeek(currentDate);
+                const weekString = `${isoYear}W${String(weekNumber).padStart(2, '0')}`;
+                periods.push(weekString);
+                currentDate = addWeeks(currentDate, 1);
+            }
+
+            return periods;
+        }
+
+        console.error('Unsupported period type provided:', periodType);
+        return [];
+    } catch (error) {
+        console.error('Error generating last N periods:', error);
+        return [];
+    }
 };

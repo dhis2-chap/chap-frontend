@@ -1,12 +1,11 @@
+import React, { useMemo } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import Highcharts from 'highcharts';
 import accessibility from 'highcharts/modules/accessibility';
 import highchartsMore from 'highcharts/highcharts-more';
 import exporting from 'highcharts/modules/exporting';
-import React, { useMemo } from 'react';
 import HighchartsReact from 'highcharts-react-official';
 import { PredictionOrgUnitSeries } from '../../../interfaces/Prediction';
-import { createFixedPeriodFromPeriodId } from '@dhis2/multi-calendar-dates';
 
 accessibility(Highcharts);
 exporting(Highcharts);
@@ -19,12 +18,69 @@ const getChartOptions = (
     const median: Highcharts.PointOptionsObject[] = series.points
         .map(p => ({ name: p.period, y: p.quantiles.median }));
 
-    const range: Highcharts.PointOptionsObject[] = series.points
+    const outerRange: Highcharts.PointOptionsObject[] = series.points
         .map(p => ({
             name: p.period,
             low: p.quantiles.quantile_low,
             high: p.quantiles.quantile_high,
         }));
+
+    const midRange: Highcharts.PointOptionsObject[] = series.points
+        .map(p => ({
+            name: p.period,
+            low: p.quantiles.quantile_mid_low,
+            high: p.quantiles.quantile_mid_high,
+        }));
+
+    const actualCases: Highcharts.PointOptionsObject[] | undefined = series.actualCases
+        ?.map(ac => ({ name: ac.period, y: ac.value }));
+
+    const chartSeries: Highcharts.SeriesOptionsType[] = [
+        // median
+        {
+            type: 'line',
+            data: median,
+            name: i18n.t('Quantile median'),
+            color: '#004bbd',
+            zIndex: 3,
+            connectNulls: false,
+        },
+        {
+            type: 'arearange',
+            name: i18n.t('Quantiles Outer'),
+            data: outerRange,
+            zIndex: 0,
+            lineWidth: 0,
+            color: '#c4dcf2',
+            fillOpacity: 1,
+            connectNulls: false,
+        },
+        {
+            type: 'arearange',
+            name: i18n.t('Quantiles Middle'),
+            data: midRange,
+            zIndex: 1,
+            lineWidth: 0,
+            color: '#9bbdff',
+            fillOpacity: 1,
+            connectNulls: false,
+        },
+    ];
+
+    if (actualCases && actualCases.length > 0) {
+        chartSeries.unshift({
+            type: 'line',
+            data: actualCases,
+            name: i18n.t('Actual Cases'),
+            color: '#f68000',
+            zIndex: 4,
+            marker: {
+                enabled: false,
+            },
+            lineWidth: 2.5,
+            connectNulls: false,
+        });
+    }
 
     return {
         title: {
@@ -47,10 +103,7 @@ const getChartOptions = (
             labels: {
                 enabled: true,
                 formatter: function () {
-                    return createFixedPeriodFromPeriodId({
-                        periodId: this.value.toString(),
-                        calendar: 'gregory',
-                    }).displayName;
+                    return this.value.toString();
                 },
                 style: {
                     fontSize: '0.8rem',
@@ -59,7 +112,7 @@ const getChartOptions = (
         },
         yAxis: {
             title: {
-                text: 'Number of cases',
+                text: i18n.t('Number of cases'),
             },
         },
         credits: {
@@ -68,32 +121,14 @@ const getChartOptions = (
         chart: {
             height: (9 / 16 * 100) + '%',
             marginBottom: 125,
+            zooming: { type: 'x' },
         },
         plotOptions: {
             series: {
                 lineWidth: 5,
             },
         },
-        series: [
-            // median
-            {
-                type: 'line',
-                data: median,
-                name: i18n.t('Quantile median'),
-                color: '#004bbd',
-                zIndex: 2,
-            },
-            // high
-            {
-                type: 'arearange',
-                name: i18n.t('Range'),
-                data: range,
-                zIndex: 1,
-                lineWidth: 0,
-                color: '#004bbd',
-                fillOpacity: 0.4,
-            },
-        ],
+        series: chartSeries,
     };
 };
 

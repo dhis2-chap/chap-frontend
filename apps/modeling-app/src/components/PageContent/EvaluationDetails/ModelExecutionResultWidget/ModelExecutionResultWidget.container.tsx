@@ -13,7 +13,7 @@ type Props = {
 };
 
 export const ALL_LOCATIONS_ORG_UNIT = {
-    id: ':adm0',
+    id: 'adm0',
     displayName: i18n.t('All locations') as string,
 };
 

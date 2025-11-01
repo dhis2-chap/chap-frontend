@@ -8,11 +8,9 @@ export { OpenAPI } from './core/OpenAPI';
 export type { OpenAPIConfig } from './core/OpenAPI';
 
 export { AuthorAssessedStatus } from './models/AuthorAssessedStatus';
+export type { BackTest } from './models/BackTest';
 export type { BackTestCreate } from './models/BackTestCreate';
 export type { BacktestDomain } from './models/BacktestDomain';
-export type { BackTestForecast } from './models/BackTestForecast';
-export type { BackTestFull } from './models/BackTestFull';
-export type { BackTestMetric } from './models/BackTestMetric';
 export type { BackTestPlotType } from './models/BackTestPlotType';
 export type { BackTestRead } from './models/BackTestRead';
 export type { BackTestUpdate } from './models/BackTestUpdate';

@@ -4,9 +4,12 @@ import i18n from '@dhis2/d2-i18n';
 import { usePredictionEntries } from '../hooks/usePredictionEntries';
 import { useOrgUnitsById } from '../../../../hooks/useOrgUnitsById';
 import { useDataItemById } from '../../../../hooks/useDataItemById';
+import { useActualCasesByDatasetId } from '../../../../hooks/useActualCasesByDatasetId';
 import { PredictionResultWidgetComponent } from './PredictionResultWidget.component';
 import styles from './PredictionResultWidget.module.css';
 import { Widget, PredictionInfo, ModelSpecRead, buildPredictionSeries } from '@dhis2-chap/ui';
+import { getLastNPeriods } from '@/utils/timePeriodUtils';
+import { PERIOD_TYPES } from '@/components/ModelExecutionForm/constants';
 
 type Props = {
     prediction: PredictionInfo;
@@ -24,6 +27,12 @@ const WidgetWrapper = ({ children }: { children: React.ReactNode }) => {
             {children}
         </Widget>
     );
+};
+
+const PERIODS_BY_PERIOD_TYPE = {
+    [PERIOD_TYPES.DAY]: 365 * 2,
+    [PERIOD_TYPES.WEEK]: 52 * 2,
+    [PERIOD_TYPES.MONTH]: 12 * 2,
 };
 
 export const PredictionResultWidget = ({ prediction, model }: Props) => {
@@ -44,6 +53,25 @@ export const PredictionResultWidget = ({ prediction, model }: Props) => {
         error: orgUnitsError,
     } = useOrgUnitsById(orgUnitIds);
 
+    const periods = useMemo(() => {
+        if (!dataset.lastPeriod) return undefined;
+        return getLastNPeriods(
+            dataset.lastPeriod,
+            dataset.periodType as keyof typeof PERIOD_TYPES,
+            PERIODS_BY_PERIOD_TYPE[dataset.periodType?.toUpperCase() as keyof typeof PERIODS_BY_PERIOD_TYPE],
+        );
+    }, [dataset]);
+
+    const {
+        data: actualCasesData,
+        isLoading: isActualCasesLoading,
+        error: actualCasesError,
+    } = useActualCasesByDatasetId({
+        datasetId: dataset?.id,
+        orgUnits: orgUnitIds,
+        periods,
+    });
+
     const predictionTargetId: string = dataset.dataSources?.find(
         dataSource => dataSource.covariate === model.target.name,
     )?.dataElementId ?? '';
@@ -63,10 +91,15 @@ export const PredictionResultWidget = ({ prediction, model }: Props) => {
 
     const series = useMemo(() => {
         if (!predictionEntries.length || !orgUnitsMap.size) return [];
-        return buildPredictionSeries(predictionEntries, orgUnitsMap, predictionTargetId);
-    }, [predictionEntries, orgUnitsMap, predictionTargetId]);
+        return buildPredictionSeries(
+            predictionEntries,
+            orgUnitsMap,
+            predictionTargetId,
+            actualCasesData?.data,
+        );
+    }, [predictionEntries, orgUnitsMap, predictionTargetId, actualCasesData]);
 
-    if (isPredictionEntriesLoading || isOrgUnitsLoading || isDataItemLoading) {
+    if (isPredictionEntriesLoading || isOrgUnitsLoading || isDataItemLoading || isActualCasesLoading) {
         return (
             <WidgetWrapper>
                 <div className={styles.loadingContainer}>
@@ -76,7 +109,7 @@ export const PredictionResultWidget = ({ prediction, model }: Props) => {
         );
     }
 
-    if (predictionEntriesError || orgUnitsError) {
+    if (predictionEntriesError || orgUnitsError || actualCasesError) {
         return (
             <WidgetWrapper>
                 <div className={styles.errorContainer}>

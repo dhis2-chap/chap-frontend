@@ -2,8 +2,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { BackTest } from '../models/BackTest';
 import type { BackTestCreate } from '../models/BackTestCreate';
-import type { BackTestFull } from '../models/BackTestFull';
 import type { BackTestRead } from '../models/BackTestRead';
 import type { BackTestUpdate } from '../models/BackTestUpdate';
 import type { Body_create_dataset_csv_crud_datasets_csvFile_post } from '../models/Body_create_dataset_csv_crud_datasets_csvFile_post';
@@ -77,15 +77,35 @@ export class CrudService {
     /**
      * Get Backtest
      * @param backtestId
-     * @returns BackTestFull Successful Response
+     * @returns BackTest Successful Response
      * @throws ApiError
      */
-    public static getBacktestCrudBacktestsBacktestIdGet(
+    public static getBacktestCrudBacktestsBacktestIdFullGet(
         backtestId: number,
-    ): CancelablePromise<BackTestFull> {
+    ): CancelablePromise<BackTest> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/crud/backtests/{backtestId}',
+            url: '/crud/backtests/{backtestId}/full',
+            path: {
+                'backtestId': backtestId,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
+     * Get Backtest Info
+     * @param backtestId
+     * @returns BackTestRead Successful Response
+     * @throws ApiError
+     */
+    public static getBacktestInfoCrudBacktestsBacktestIdInfoGet(
+        backtestId: number,
+    ): CancelablePromise<BackTestRead> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/crud/backtests/{backtestId}/info',
             path: {
                 'backtestId': backtestId,
             },
@@ -133,26 +153,6 @@ export class CrudService {
             },
             body: requestBody,
             mediaType: 'application/json',
-            errors: {
-                422: `Validation Error`,
-            },
-        });
-    }
-    /**
-     * Get Backtest Info
-     * @param backtestId
-     * @returns BackTestRead Successful Response
-     * @throws ApiError
-     */
-    public static getBacktestInfoCrudBacktestsBacktestIdInfoGet(
-        backtestId: number,
-    ): CancelablePromise<BackTestRead> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/crud/backtests/{backtestId}/info',
-            path: {
-                'backtestId': backtestId,
-            },
             errors: {
                 422: `Validation Error`,
             },
