@@ -1,7 +1,7 @@
 import React from 'react';
 import * as z from 'zod';
 import i18n from '@dhis2/d2-i18n';
-import { PredictionInfo } from '@dhis2-chap/ui';
+import { PredictionInfo, QuantileKey } from '@dhis2-chap/ui';
 import { Button, ButtonStrip, IconImportItems24 } from '@dhis2/ui';
 import styles from './QuantileMappingForm.module.css';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -11,7 +11,6 @@ import { usePostPredictionData } from '../hooks/usePostPredictionData';
 import { useNavigationBlocker } from '@/hooks/useNavigationBlocker';
 import { NavigationConfirmModal } from '@/components/NavigationConfirmModal';
 import { useNavigate } from 'react-router-dom';
-import type { QuantileKey } from '../types';
 
 type Props = {
     prediction: PredictionInfo;
