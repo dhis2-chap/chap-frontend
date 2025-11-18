@@ -55,7 +55,6 @@ export const useCreateNewBacktest = ({
                 orgUnitsWithoutGeometry,
             } = await prepareBacktestData(formData, dataEngine, queryClient);
 
-            // Check if there are no valid org units
             if (orgUnitIds.length === 0) {
                 setHasNoValidOrgUnits(true);
                 return {
@@ -113,7 +112,6 @@ export const useCreateNewBacktest = ({
                 queryClient,
             );
 
-            // Check if there are no valid org units
             if (orgUnitIds.length === 0) {
                 setHasNoValidOrgUnits(true);
                 return {
@@ -123,7 +121,6 @@ export const useCreateNewBacktest = ({
                 };
             }
 
-            // Filter to only include org units with geometry
             const orgUnitsWithGeometry = orgUnitResponse.geojson.organisationUnits.filter(ou => ou.geometry);
 
             const filteredGeoJson: FeatureCollectionModel = {
