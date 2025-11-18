@@ -92,11 +92,6 @@ export const prepareBacktestData = async (
         ORG_UNITS_QUERY(orgUnitIds),
     ) as OrgUnitResponse;
 
-    // Temporary test: set first org unit geometry to empty
-    if (orgUnitResponse.geojson.organisationUnits.length > 0) {
-        orgUnitResponse.geojson.organisationUnits[0].geometry = null as any;
-    }
-
     if (!cachedOrgUnitResponse) {
         queryClient.setQueryData(['new-backtest-data', 'org-units', hash], orgUnitResponse);
     }
