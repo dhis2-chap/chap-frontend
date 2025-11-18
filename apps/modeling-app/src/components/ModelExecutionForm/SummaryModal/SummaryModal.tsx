@@ -18,6 +18,7 @@ import {
     SingleSelectField,
     SingleSelectOption,
     NoticeBox,
+    Tooltip,
 } from '@dhis2/ui';
 import {
     createColumnHelper,
@@ -143,15 +144,32 @@ export const SummaryModal: React.FC<SummaryModalProps> = ({
                             {(importSummary.orgUnitsWithoutGeometry?.length ?? 0) <= 6
                                 ? i18n.t('{{count}} location lacks geometry data and will not be included in the evaluation: {{orgUnits}}', {
                                         count: importSummary.orgUnitsWithoutGeometry?.length ?? 0,
-                                        orgUnits: importSummary.orgUnitsWithoutGeometry?.join(', '),
+                                        orgUnits: importSummary.orgUnitsWithoutGeometry?.map(id => orgUnitNames.get(id) || id).join(', '),
                                         defaultValue: '{{count}} location lacks geometry data and will not be included in the evaluation: {{orgUnits}}',
                                         defaultValue_plural: '{{count}} locations lack geometry data and will not be included in the evaluation: {{orgUnits}}',
                                     })
-                                : i18n.t('{{count}} locations lack geometry data and will not be included in the evaluation.', {
-                                        count: importSummary.orgUnitsWithoutGeometry?.length ?? 0,
-                                        defaultValue: '{{count}} location lacks geometry data and will not be included in the evaluation.',
-                                        defaultValue_plural: '{{count}} locations lack geometry data and will not be included in the evaluation.',
-                                    })}
+                                : (
+                                        <Tooltip
+                                            placement="bottom"
+                                            content={(
+                                                <div style={{ maxHeight: '300px', overflowY: 'auto', padding: '4px' }}>
+                                                    <ul style={{ margin: 0, paddingLeft: '20px', listStyleType: '">"' }}>
+                                                        {importSummary.orgUnitsWithoutGeometry?.map((id, index) => (
+                                                            <li key={index} style={{ paddingLeft: '8px' }}>{orgUnitNames.get(id) || id}</li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+                                            )}
+                                        >
+                                            <span>
+                                                {i18n.t('{{count}} locations lack geometry data and will not be included in the evaluation.', {
+                                                    count: importSummary.orgUnitsWithoutGeometry?.length ?? 0,
+                                                    defaultValue: '{{count}} location lacks geometry data and will not be included in the evaluation.',
+                                                    defaultValue_plural: '{{count}} locations lack geometry data and will not be included in the evaluation.',
+                                                })}
+                                            </span>
+                                        </Tooltip>
+                                    )}
                         </NoticeBox>
                     )}
                     {hasImportedItems && importSummary.rejected.length === 0 ? (
