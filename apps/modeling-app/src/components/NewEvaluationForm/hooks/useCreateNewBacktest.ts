@@ -51,6 +51,7 @@ export const useCreateNewBacktest = ({
                 periods,
                 orgUnitIds,
                 hash,
+                orgUnitsWithoutGeometry,
             } = await prepareBacktestData(formData, dataEngine, queryClient);
 
             const validation = validateClimateData(observations, formData, periods, orgUnitIds);
@@ -68,6 +69,7 @@ export const useCreateNewBacktest = ({
                         reason: i18n.t('Missing data for covariate'),
                         period: [item.period],
                     })),
+                    orgUnitsWithoutGeometry,
                 };
             }
 
@@ -75,6 +77,7 @@ export const useCreateNewBacktest = ({
                 id: null,
                 importedCount: orgUnitIds.length,
                 rejected: [],
+                orgUnitsWithoutGeometry,
             };
         },
         onSuccess: () => {

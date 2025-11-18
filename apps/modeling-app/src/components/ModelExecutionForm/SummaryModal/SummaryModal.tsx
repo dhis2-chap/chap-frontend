@@ -60,6 +60,7 @@ export const SummaryModal: React.FC<SummaryModalProps> = ({
     const queryClient = useQueryClient();
     const hasRejectedItems = importSummary.rejected.length > 0;
     const hasImportedItems = importSummary.importedCount > 0;
+    const hasOrgUnitsWithoutGeometry = (importSummary.orgUnitsWithoutGeometry?.length ?? 0) > 0;
 
     const orgUnitNames: Map<string, string> = useMemo(() => {
         const defaultMap = new Map();
@@ -134,6 +135,19 @@ export const SummaryModal: React.FC<SummaryModalProps> = ({
             <ModalTitle>{i18n.t('Import Summary')}</ModalTitle>
             <ModalContent>
                 <div className={styles.modalContent}>
+                    {hasOrgUnitsWithoutGeometry && (
+                        <NoticeBox
+                            title={i18n.t('Locations without geometry excluded')}
+                            warning
+                        >
+                            {i18n.t('{{count}} location lacks geometry data and will not be included in the evaluation: {{orgUnits}}', {
+                                count: importSummary.orgUnitsWithoutGeometry?.length ?? 0,
+                                orgUnits: importSummary.orgUnitsWithoutGeometry?.map(ou => ou.displayName).join(', '),
+                                defaultValue: '{{count}} location lacks geometry data and will not be included in the evaluation: {{orgUnits}}',
+                                defaultValue_plural: '{{count}} locations lack geometry data and will not be included in the evaluation: {{orgUnits}}',
+                            })}
+                        </NoticeBox>
+                    )}
                     {hasImportedItems && importSummary.rejected.length === 0 ? (
                         <NoticeBox
                             title={i18n.t('Valid import')}

@@ -9,4 +9,5 @@ export type ImportSummaryCorrected = Omit<ImportSummaryResponse, 'rejected'> & {
         reason: string;
         period: string[];
     }[];
+    orgUnitsWithoutGeometry?: { id: string; displayName: string }[];
 };

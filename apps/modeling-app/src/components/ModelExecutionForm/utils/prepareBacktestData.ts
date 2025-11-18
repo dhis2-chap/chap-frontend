@@ -28,6 +28,7 @@ export type PreparedBacktestData = {
     orgUnitIds: string[];
     hash: string;
     dataSources: DataSource[];
+    orgUnitsWithoutGeometry: { id: string; displayName: string }[];
 };
 
 export const prepareBacktestData = async (
@@ -67,44 +68,43 @@ export const prepareBacktestData = async (
     ];
 
     // Create a unique hash of the data elements, periods, and org units for caching
+    console.log('jj selected org units', formData.orgUnits);
     const hash = await generateBacktestDataHash(dataItems, periods, formData.orgUnits.map(ou => ou.id));
 
+    // First, fetch org units to check for geometry
+    const selectedOrgUnitIds = formData.orgUnits.map(ou => ou.id);
+    const cachedOrgUnitResponse = queryClient.getQueryData(['new-backtest-data', 'org-units', hash]) as OrgUnitResponse | undefined;
+
+    console.log('jj cached org unit response', cachedOrgUnitResponse);
+    const orgUnitResponse = cachedOrgUnitResponse || await dataEngine.query(
+        ORG_UNITS_QUERY(selectedOrgUnitIds),
+    ) as OrgUnitResponse;
+
+    // Temporary test: set first org unit geometry to empty
+    if (orgUnitResponse.geojson.organisationUnits.length > 0) {
+        orgUnitResponse.geojson.organisationUnits[0].geometry = null as any;
+    }
+
+    // Filter out org units without geometry
+    const orgUnitsWithGeometry = orgUnitResponse.geojson.organisationUnits.filter(ou => ou.geometry);
+    const orgUnitsWithoutGeometry = orgUnitResponse.geojson.organisationUnits.filter(ou => !ou.geometry);
+    const orgUnitIdsWithGeometry = orgUnitsWithGeometry.map(ou => ou.id);
+
+    // Now fetch analytics only for org units that have geometry
     const cachedAnalyticsResponse = queryClient.getQueryData(['new-backtest-data', 'analytics', hash]) as AnalyticsResponse | undefined;
+    console.log('jj cached analytics response', cachedAnalyticsResponse);
 
     const analyticsResponse = cachedAnalyticsResponse || await dataEngine.query(
         ANALYTICS_QUERY(
             dataItems,
             periods,
-            formData.orgUnits.map(ou => ou.id),
+            orgUnitIdsWithGeometry,
         ),
     ) as AnalyticsResponse;
 
-    if (!cachedAnalyticsResponse) {
-        queryClient.setQueryData(['new-backtest-data', 'analytics', hash], analyticsResponse);
-    }
-
-    const orgUnitIds: string[] = analyticsResponse.response.metaData.dimensions.ou;
-
-    const cachedOrgUnitResponse = queryClient.getQueryData(['new-backtest-data', 'org-units', hash]) as OrgUnitResponse | undefined;
-
-    const orgUnitResponse = cachedOrgUnitResponse || await dataEngine.query(
-        ORG_UNITS_QUERY(orgUnitIds),
-    ) as OrgUnitResponse;
-
-    if (!cachedOrgUnitResponse) {
-        queryClient.setQueryData(['new-backtest-data', 'org-units', hash], orgUnitResponse);
-    }
-
-    const orgUnitsWithoutGeometry = orgUnitResponse.geojson.organisationUnits.filter(ou => !ou.geometry);
-
-    if (orgUnitsWithoutGeometry.length > 0) {
-        throw new Error(
-            i18n.t('The following org units have no geometry{{escape}} {{orgUnitsWithoutGeometry}}', {
-                orgUnitsWithoutGeometry: orgUnitsWithoutGeometry.map(ou => ou.displayName).join(', '),
-                escape: ':',
-            }),
-        );
-    }
+    // if (!cachedAnalyticsResponse) {
+    //     queryClient.setQueryData(['new-backtest-data', 'analytics', hash], analyticsResponse);
+    // }
 
     const convertDhis2AnalyticsToChap = (data: [string, string, string, string][]): ObservationBase[] => {
         return data.map((row) => {
@@ -137,8 +137,9 @@ export const prepareBacktestData = async (
         periods,
         observations,
         orgUnitResponse,
-        orgUnitIds,
+        orgUnitIds: orgUnitIdsWithGeometry,
         hash,
         dataSources,
+        orgUnitsWithoutGeometry: orgUnitsWithoutGeometry.map(ou => ({ id: ou.id, displayName: ou.displayName })),
     };
 };
