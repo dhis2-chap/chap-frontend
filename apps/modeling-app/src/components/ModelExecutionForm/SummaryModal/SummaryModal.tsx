@@ -159,11 +159,17 @@ export const SummaryModal: React.FC<SummaryModalProps> = ({
                             title={i18n.t('Valid import')}
                             valid
                         >
-                            {i18n.t('All {{count}} locations can be successfully imported', {
-                                count: importSummary.importedCount,
-                                defaultValue: '{{count}} location can be successfully imported',
-                                defaultValue_plural: 'All {{count}} locations can be successfully imported',
-                            })}
+                            {hasOrgUnitsWithoutGeometry
+                                ? i18n.t('The {{count}} valid locations can be successfully imported', {
+                                        count: importSummary.importedCount,
+                                        defaultValue: 'The {{count}} valid location can be successfully imported',
+                                        defaultValue_plural: 'The {{count}} valid locations can be successfully imported',
+                                    })
+                                : i18n.t('All {{count}} locations can be successfully imported', {
+                                        count: importSummary.importedCount,
+                                        defaultValue: '{{count}} location can be successfully imported',
+                                        defaultValue_plural: 'All {{count}} locations can be successfully imported',
+                                    })}
                         </NoticeBox>
                     ) : null}
                     {hasImportedItems && importSummary.rejected.length > 0 ? (
