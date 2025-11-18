@@ -143,7 +143,7 @@ export const SummaryModal: React.FC<SummaryModalProps> = ({
                             {(importSummary.orgUnitsWithoutGeometry?.length ?? 0) <= 6
                                 ? i18n.t('{{count}} location lacks geometry data and will not be included in the evaluation: {{orgUnits}}', {
                                         count: importSummary.orgUnitsWithoutGeometry?.length ?? 0,
-                                        orgUnits: importSummary.orgUnitsWithoutGeometry?.map(ou => ou.displayName).join(', '),
+                                        orgUnits: importSummary.orgUnitsWithoutGeometry?.join(', '),
                                         defaultValue: '{{count}} location lacks geometry data and will not be included in the evaluation: {{orgUnits}}',
                                         defaultValue_plural: '{{count}} locations lack geometry data and will not be included in the evaluation: {{orgUnits}}',
                                     })
