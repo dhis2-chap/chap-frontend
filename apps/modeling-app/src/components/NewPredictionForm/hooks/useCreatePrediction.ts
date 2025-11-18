@@ -31,6 +31,7 @@ export const useCreatePrediction = ({ onSuccess, onError }: Props = {}) => {
     const queryClient = useQueryClient();
     const navigate = useNavigate();
     const [summaryModalOpen, setSummaryModalOpen] = useState<boolean>(false);
+    const [hasNoValidOrgUnits, setHasNoValidOrgUnits] = useState<boolean>(false);
 
     const {
         mutate: validateAndDryRun,
@@ -45,7 +46,19 @@ export const useCreatePrediction = ({ onSuccess, onError }: Props = {}) => {
                 periods,
                 orgUnitIds,
                 hash,
+                orgUnitsWithoutGeometry,
             } = await prepareBacktestData(formData, dataEngine, queryClient);
+
+            if (orgUnitIds.length === 0) {
+                setHasNoValidOrgUnits(true);
+                return {
+                    id: null,
+                    importedCount: 0,
+                    hash,
+                    rejected: [],
+                    orgUnitsWithoutGeometry,
+                };
+            }
 
             const validation = validateClimateData(observations, formData, periods, orgUnitIds);
 
@@ -63,6 +76,7 @@ export const useCreatePrediction = ({ onSuccess, onError }: Props = {}) => {
                         reason: i18n.t('Missing data for covariate'),
                         period: [item.period],
                     })),
+                    orgUnitsWithoutGeometry,
                 };
             }
 
@@ -70,6 +84,7 @@ export const useCreatePrediction = ({ onSuccess, onError }: Props = {}) => {
                 id: null,
                 importedCount: orgUnitIds.length,
                 rejected: [],
+                orgUnitsWithoutGeometry,
             };
         },
         onSuccess: () => {
@@ -86,15 +101,22 @@ export const useCreatePrediction = ({ onSuccess, onError }: Props = {}) => {
         error,
     } = useMutation<JobResponse, ApiError, ModelExecutionFormValues>({
         mutationFn: async (formData: ModelExecutionFormValues) => {
-            const { model, observations, orgUnitResponse, dataSources } = await prepareBacktestData(
+            const { model, observations, orgUnitResponse, orgUnitIds, dataSources } = await prepareBacktestData(
                 formData,
                 dataEngine,
                 queryClient,
             );
 
+            if (orgUnitIds.length === 0) {
+                setHasNoValidOrgUnits(true);
+                throw new Error('No valid organization units with geometry');
+            }
+
+            const orgUnitsWithGeometry = orgUnitResponse.geojson.organisationUnits.filter(ou => ou.geometry);
+
             const geojson: FeatureCollectionModel = {
                 type: 'FeatureCollection',
-                features: orgUnitResponse.geojson.organisationUnits.map(ou => ({
+                features: orgUnitsWithGeometry.map(ou => ({
                     id: ou.id,
                     type: 'Feature',
                     geometry: ou.geometry,
@@ -144,5 +166,7 @@ export const useCreatePrediction = ({ onSuccess, onError }: Props = {}) => {
         error: validationError || error,
         summaryModalOpen,
         closeSummaryModal: () => setSummaryModalOpen(false),
+        hasNoValidOrgUnits,
+        dismissHasNoValidOrgUnits: () => setHasNoValidOrgUnits(false),
     };
 };
