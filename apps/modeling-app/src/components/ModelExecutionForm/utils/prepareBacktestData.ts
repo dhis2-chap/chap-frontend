@@ -71,13 +71,31 @@ export const prepareBacktestData = async (
     console.log('jj selected org units', formData.orgUnits);
     const hash = await generateBacktestDataHash(dataItems, periods, formData.orgUnits.map(ou => ou.id));
 
-    // First, fetch org units to check for geometry
-    const selectedOrgUnitIds = formData.orgUnits.map(ou => ou.id);
+    // First, fetch analytics to get the actual org unit IDs (accounts for level selection)
+    const cachedAnalyticsResponse = queryClient.getQueryData(['new-backtest-data', 'analytics', hash]) as AnalyticsResponse | undefined;
+    console.log('jj cached analytics response', cachedAnalyticsResponse);
+
+    const analyticsResponse = cachedAnalyticsResponse || await dataEngine.query(
+        ANALYTICS_QUERY(
+            dataItems,
+            periods,
+            formData.orgUnits.map(ou => ou.id),
+        ),
+    ) as AnalyticsResponse;
+
+    // if (!cachedAnalyticsResponse) {
+    //     queryClient.setQueryData(['new-backtest-data', 'analytics', hash], analyticsResponse);
+    // }
+
+    // Get the actual org unit IDs from analytics response (these account for level selection)
+    const orgUnitIds: string[] = analyticsResponse.response.metaData.dimensions.ou;
+
+    // Now fetch org units to check for geometry
     const cachedOrgUnitResponse = queryClient.getQueryData(['new-backtest-data', 'org-units', hash]) as OrgUnitResponse | undefined;
 
     console.log('jj cached org unit response', cachedOrgUnitResponse);
     const orgUnitResponse = cachedOrgUnitResponse || await dataEngine.query(
-        ORG_UNITS_QUERY(selectedOrgUnitIds),
+        ORG_UNITS_QUERY(orgUnitIds),
     ) as OrgUnitResponse;
 
     // Temporary test: set first org unit geometry to empty
@@ -90,44 +108,31 @@ export const prepareBacktestData = async (
     const orgUnitsWithoutGeometry = orgUnitResponse.geojson.organisationUnits.filter(ou => !ou.geometry);
     const orgUnitIdsWithGeometry = orgUnitsWithGeometry.map(ou => ou.id);
 
-    // Now fetch analytics only for org units that have geometry
-    const cachedAnalyticsResponse = queryClient.getQueryData(['new-backtest-data', 'analytics', hash]) as AnalyticsResponse | undefined;
-    console.log('jj cached analytics response', cachedAnalyticsResponse);
-
-    const analyticsResponse = cachedAnalyticsResponse || await dataEngine.query(
-        ANALYTICS_QUERY(
-            dataItems,
-            periods,
-            orgUnitIdsWithGeometry,
-        ),
-    ) as AnalyticsResponse;
-
-    // if (!cachedAnalyticsResponse) {
-    //     queryClient.setQueryData(['new-backtest-data', 'analytics', hash], analyticsResponse);
-    // }
-
+    // Filter observations to only include org units with geometry
     const convertDhis2AnalyticsToChap = (data: [string, string, string, string][]): ObservationBase[] => {
-        return data.map((row) => {
-            const dataItemId = row[0];
-            const dataLayer = formData
-                .targetMapping
-                .dataItem
-                .id === dataItemId ? formData.targetMapping : formData.covariateMappings.find(mapping => mapping.dataItem.id === dataItemId);
+        return data
+            .filter(row => orgUnitIdsWithGeometry.includes(row[1])) // Only include org units with geometry
+            .map((row) => {
+                const dataItemId = row[0];
+                const dataLayer = formData
+                    .targetMapping
+                    .dataItem
+                    .id === dataItemId ? formData.targetMapping : formData.covariateMappings.find(mapping => mapping.dataItem.id === dataItemId);
 
-            if (!dataLayer) {
-                throw new Error(i18n.t('Data layer not found for data item id{{escape}} {{dataItemId}}', {
-                    dataItemId,
-                    escape: ':',
-                }));
-            }
+                if (!dataLayer) {
+                    throw new Error(i18n.t('Data layer not found for data item id{{escape}} {{dataItemId}}', {
+                        dataItemId,
+                        escape: ':',
+                    }));
+                }
 
-            return {
-                featureName: dataLayer.covariateName,
-                orgUnit: row[1],
-                period: row[2],
-                value: parseFloat(row[3]),
-            };
-        });
+                return {
+                    featureName: dataLayer.covariateName,
+                    orgUnit: row[1],
+                    period: row[2],
+                    value: parseFloat(row[3]),
+                };
+            });
     };
 
     const observations = convertDhis2AnalyticsToChap(analyticsResponse.response.rows);
