@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { FormProvider } from 'react-hook-form';
 import { Card } from '@dhis2-chap/ui';
 import { useEvaluationFormController } from './hooks/useEvaluationFormController';
+import { NoValidOrgUnitsError } from '../ModelExecutionForm/types';
 import { ModelExecutionFormValues } from '../ModelExecutionForm/hooks/useModelExecutionFormState';
 import styles from './NewEvaluationForm.module.css';
 import { Button, ButtonStrip, IconArrowRightMulti16, NoticeBox } from '@dhis2/ui';
@@ -16,6 +17,8 @@ type NewEvaluationFormProps = {
 };
 
 export const NewEvaluationFormComponent = ({ initialValues }: NewEvaluationFormProps = {}) => {
+    const [hasNoValidOrgUnits, setHasNoValidOrgUnits] = useState<boolean>(false);
+
     const {
         methods,
         handleSubmit,
@@ -27,9 +30,18 @@ export const NewEvaluationFormComponent = ({ initialValues }: NewEvaluationFormP
         closeSummaryModal,
         handleDryRun,
         isValidationLoading,
-        hasNoValidOrgUnits,
-        dismissHasNoValidOrgUnits,
     } = useEvaluationFormController(initialValues);
+
+    // Check if error is NoValidOrgUnitsError
+    useEffect(() => {
+        setHasNoValidOrgUnits(error instanceof NoValidOrgUnitsError);
+    }, [error]);
+
+    // Watch org units and dismiss error when they change
+    const orgUnits = methods.watch('orgUnits');
+    useEffect(() => {
+        setHasNoValidOrgUnits(false);
+    }, [orgUnits]);
 
     const {
         showConfirmModal,
@@ -47,7 +59,6 @@ export const NewEvaluationFormComponent = ({ initialValues }: NewEvaluationFormP
                         <ModelExecutionFormFields
                             onSubmit={handleSubmit}
                             methods={methods}
-                            onOrgUnitSelectorOpen={dismissHasNoValidOrgUnits}
                             actions={(
                                 <div className={styles.buttons}>
                                     <ButtonStrip end>
@@ -82,7 +93,7 @@ export const NewEvaluationFormComponent = ({ initialValues }: NewEvaluationFormP
                             </NoticeBox>
                         )}
 
-                        {!!error && !importSummary && (
+                        {!!error && !importSummary && !(error instanceof NoValidOrgUnitsError) && (
                             <NoticeBox
                                 error
                                 title={i18n.t('There was an error')}

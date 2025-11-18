@@ -13,7 +13,7 @@ import {
 import { ModelExecutionFormValues } from '../../ModelExecutionForm/hooks/useModelExecutionFormState';
 import { prepareBacktestData } from '../../ModelExecutionForm/utils/prepareBacktestData';
 import { validateClimateData } from '../../ModelExecutionForm/utils/validateClimateData';
-import { ImportSummaryCorrected } from '../../ModelExecutionForm/types';
+import { ImportSummaryCorrected, NoValidOrgUnitsError } from '../../ModelExecutionForm/types';
 import { PERIOD_TYPES } from '@/components/ModelExecutionForm';
 
 type Props = {
@@ -31,7 +31,6 @@ export const useCreatePrediction = ({ onSuccess, onError }: Props = {}) => {
     const queryClient = useQueryClient();
     const navigate = useNavigate();
     const [summaryModalOpen, setSummaryModalOpen] = useState<boolean>(false);
-    const [hasNoValidOrgUnits, setHasNoValidOrgUnits] = useState<boolean>(false);
 
     const {
         mutate: validateAndDryRun,
@@ -50,14 +49,7 @@ export const useCreatePrediction = ({ onSuccess, onError }: Props = {}) => {
             } = await prepareBacktestData(formData, dataEngine, queryClient);
 
             if (orgUnitIds.length === 0) {
-                setHasNoValidOrgUnits(true);
-                return {
-                    id: null,
-                    importedCount: 0,
-                    hash,
-                    rejected: [],
-                    orgUnitsWithoutGeometry,
-                };
+                throw new NoValidOrgUnitsError();
             }
 
             const validation = validateClimateData(observations, formData, periods, orgUnitIds);
@@ -108,8 +100,7 @@ export const useCreatePrediction = ({ onSuccess, onError }: Props = {}) => {
             );
 
             if (orgUnitIds.length === 0) {
-                setHasNoValidOrgUnits(true);
-                throw new Error('No valid organization units with geometry');
+                throw new NoValidOrgUnitsError();
             }
 
             const orgUnitsWithGeometry = orgUnitResponse.geojson.organisationUnits.filter(ou => ou.geometry);
@@ -166,7 +157,5 @@ export const useCreatePrediction = ({ onSuccess, onError }: Props = {}) => {
         error: validationError || error,
         summaryModalOpen,
         closeSummaryModal: () => setSummaryModalOpen(false),
-        hasNoValidOrgUnits,
-        dismissHasNoValidOrgUnits: () => setHasNoValidOrgUnits(false),
     };
 };
