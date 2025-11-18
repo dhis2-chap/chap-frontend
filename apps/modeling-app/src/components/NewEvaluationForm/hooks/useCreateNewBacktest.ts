@@ -94,15 +94,18 @@ export const useCreateNewBacktest = ({
         error,
     } = useMutation<ImportSummaryCorrected, ApiError, ModelExecutionFormValues>({
         mutationFn: async (formData: ModelExecutionFormValues) => {
-            const { model, observations, orgUnitResponse, dataSources } = await prepareBacktestData(
+            const { model, observations, orgUnitResponse, dataSources, orgUnitsWithoutGeometry } = await prepareBacktestData(
                 formData,
                 dataEngine,
                 queryClient,
             );
 
+            // Filter to only include org units with geometry
+            const orgUnitsWithGeometry = orgUnitResponse.geojson.organisationUnits.filter(ou => ou.geometry);
+
             const filteredGeoJson: FeatureCollectionModel = {
                 type: 'FeatureCollection',
-                features: orgUnitResponse.geojson.organisationUnits.map(ou => ({
+                features: orgUnitsWithGeometry.map(ou => ({
                     id: ou.id,
                     type: 'Feature',
                     geometry: ou.geometry,
