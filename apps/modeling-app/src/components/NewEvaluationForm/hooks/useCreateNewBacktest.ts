@@ -107,7 +107,7 @@ export const useCreateNewBacktest = ({
         error,
     } = useMutation<ImportSummaryCorrected, ApiError, ModelExecutionFormValues>({
         mutationFn: async (formData: ModelExecutionFormValues) => {
-            const { model, observations, orgUnitResponse, orgUnitIds, dataSources, hash } = await prepareBacktestData(
+            const { model, observations, orgUnitResponse, orgUnitIds, dataSources } = await prepareBacktestData(
                 formData,
                 dataEngine,
                 queryClient,
@@ -119,7 +119,6 @@ export const useCreateNewBacktest = ({
                 return {
                     id: null,
                     importedCount: 0,
-                    hash,
                     rejected: [],
                 };
             }
