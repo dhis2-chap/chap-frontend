@@ -36,6 +36,7 @@ export const useCreateNewBacktest = ({
     const queryClient = useQueryClient();
     const navigate = useNavigate();
     const [summaryModalOpen, setSummaryModalOpen] = useState<boolean>(false);
+    const [hasNoValidOrgUnits, setHasNoValidOrgUnits] = useState<boolean>(false);
 
     // TODO - remove this once the validation is done in the backend
     const {
@@ -53,6 +54,18 @@ export const useCreateNewBacktest = ({
                 hash,
                 orgUnitsWithoutGeometry,
             } = await prepareBacktestData(formData, dataEngine, queryClient);
+
+            // Check if there are no valid org units
+            if (orgUnitIds.length === 0) {
+                setHasNoValidOrgUnits(true);
+                return {
+                    id: null,
+                    importedCount: 0,
+                    hash,
+                    rejected: [],
+                    orgUnitsWithoutGeometry,
+                };
+            }
 
             const validation = validateClimateData(observations, formData, periods, orgUnitIds);
 
@@ -94,11 +107,22 @@ export const useCreateNewBacktest = ({
         error,
     } = useMutation<ImportSummaryCorrected, ApiError, ModelExecutionFormValues>({
         mutationFn: async (formData: ModelExecutionFormValues) => {
-            const { model, observations, orgUnitResponse, dataSources, orgUnitsWithoutGeometry } = await prepareBacktestData(
+            const { model, observations, orgUnitResponse, orgUnitIds, dataSources, hash } = await prepareBacktestData(
                 formData,
                 dataEngine,
                 queryClient,
             );
+
+            // Check if there are no valid org units
+            if (orgUnitIds.length === 0) {
+                setHasNoValidOrgUnits(true);
+                return {
+                    id: null,
+                    importedCount: 0,
+                    hash,
+                    rejected: [],
+                };
+            }
 
             // Filter to only include org units with geometry
             const orgUnitsWithGeometry = orgUnitResponse.geojson.organisationUnits.filter(ou => ou.geometry);
@@ -158,5 +182,7 @@ export const useCreateNewBacktest = ({
         error: validationError || error,
         summaryModalOpen,
         closeSummaryModal: () => setSummaryModalOpen(false),
+        hasNoValidOrgUnits,
+        dismissHasNoValidOrgUnits: () => setHasNoValidOrgUnits(false),
     };
 };

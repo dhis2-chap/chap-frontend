@@ -27,6 +27,8 @@ export const NewEvaluationFormComponent = ({ initialValues }: NewEvaluationFormP
         closeSummaryModal,
         handleDryRun,
         isValidationLoading,
+        hasNoValidOrgUnits,
+        dismissHasNoValidOrgUnits,
     } = useEvaluationFormController(initialValues);
 
     const {
@@ -45,6 +47,7 @@ export const NewEvaluationFormComponent = ({ initialValues }: NewEvaluationFormP
                         <ModelExecutionFormFields
                             onSubmit={handleSubmit}
                             methods={methods}
+                            onOrgUnitSelectorOpen={dismissHasNoValidOrgUnits}
                             actions={(
                                 <div className={styles.buttons}>
                                     <ButtonStrip end>
@@ -60,7 +63,7 @@ export const NewEvaluationFormComponent = ({ initialValues }: NewEvaluationFormP
                                             loading={isSubmitting}
                                             onClick={handleStartJob}
                                             icon={<IconArrowRightMulti16 />}
-                                            disabled={isValidationLoading}
+                                            disabled={isValidationLoading || hasNoValidOrgUnits}
                                         >
                                             {i18n.t('Start import')}
                                         </Button>
@@ -68,6 +71,16 @@ export const NewEvaluationFormComponent = ({ initialValues }: NewEvaluationFormP
                                 </div>
                             )}
                         />
+
+                        {hasNoValidOrgUnits && (
+                            <NoticeBox
+                                error
+                                title={i18n.t('No valid locations')}
+                                className={styles.errorNotice}
+                            >
+                                {i18n.t('None of the selected locations have geometry data. Please select different locations to proceed with the evaluation.')}
+                            </NoticeBox>
+                        )}
 
                         {!!error && !importSummary && (
                             <NoticeBox

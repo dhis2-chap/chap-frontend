@@ -68,12 +68,10 @@ export const prepareBacktestData = async (
     ];
 
     // Create a unique hash of the data elements, periods, and org units for caching
-    console.log('jj selected org units', formData.orgUnits);
     const hash = await generateBacktestDataHash(dataItems, periods, formData.orgUnits.map(ou => ou.id));
 
     // First, fetch analytics to get the actual org unit IDs (accounts for level selection)
     const cachedAnalyticsResponse = queryClient.getQueryData(['new-backtest-data', 'analytics', hash]) as AnalyticsResponse | undefined;
-    console.log('jj cached analytics response', cachedAnalyticsResponse);
 
     const analyticsResponse = cachedAnalyticsResponse || await dataEngine.query(
         ANALYTICS_QUERY(
@@ -93,7 +91,6 @@ export const prepareBacktestData = async (
     // Now fetch org units to check for geometry
     const cachedOrgUnitResponse = queryClient.getQueryData(['new-backtest-data', 'org-units', hash]) as OrgUnitResponse | undefined;
 
-    console.log('jj cached org unit response', cachedOrgUnitResponse);
     const orgUnitResponse = cachedOrgUnitResponse || await dataEngine.query(
         ORG_UNITS_QUERY(orgUnitIds),
     ) as OrgUnitResponse;

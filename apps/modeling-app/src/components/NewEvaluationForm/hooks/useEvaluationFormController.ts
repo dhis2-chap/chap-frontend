@@ -13,6 +13,8 @@ export const useEvaluationFormController = (initialValues?: Partial<ModelExecuti
         summaryModalOpen,
         closeSummaryModal,
         error,
+        hasNoValidOrgUnits,
+        dismissHasNoValidOrgUnits,
     } = useCreateNewBacktest({
         onSuccess: () => {
             methods.reset();
@@ -41,5 +43,7 @@ export const useEvaluationFormController = (initialValues?: Partial<ModelExecuti
         summaryModalOpen,
         closeSummaryModal,
         error,
+        hasNoValidOrgUnits,
+        dismissHasNoValidOrgUnits,
     };
 };
