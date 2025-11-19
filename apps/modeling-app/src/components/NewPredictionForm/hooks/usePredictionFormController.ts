@@ -13,8 +13,6 @@ export const usePredictionFormController = (initialValues?: Partial<ModelExecuti
         summaryModalOpen,
         closeSummaryModal,
         error,
-        hasNoValidOrgUnits,
-        dismissHasNoValidOrgUnits,
     } = useCreatePrediction({
         onSuccess: () => {
             methods.reset();
@@ -43,7 +41,5 @@ export const usePredictionFormController = (initialValues?: Partial<ModelExecuti
         summaryModalOpen,
         closeSummaryModal,
         error,
-        hasNoValidOrgUnits,
-        dismissHasNoValidOrgUnits,
     };
 };
