@@ -1,0 +1,110 @@
+.container {
+    padding: var(--spacers-dp16);
+}
+
+.loadingContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 300px;
+}
+
+.errorContainer {
+    padding: var(--spacers-dp16);
+}
+
+.markdownContent {
+    line-height: 1.6;
+}
+
+.markdownContent h1 {
+    font-size: 2rem;
+    margin-block-end: var(--spacers-dp16);
+    color: var(--colors-grey900);
+}
+
+.markdownContent h2 {
+    font-size: 1.5rem;
+    margin-block-start: var(--spacers-dp24);
+    margin-block-end: var(--spacers-dp12);
+    color: var(--colors-grey800);
+}
+
+.markdownContent h3 {
+    font-size: 1.25rem;
+    margin-block-start: var(--spacers-dp16);
+    margin-block-end: var(--spacers-dp8);
+    color: var(--colors-grey800);
+}
+
+.markdownContent p {
+    margin-block-end: var(--spacers-dp12);
+    color: var(--colors-grey700);
+}
+
+.markdownContent ul,
+.markdownContent ol {
+    margin-block-end: var(--spacers-dp12);
+    padding-inline-start: var(--spacers-dp24);
+}
+
+.markdownContent li {
+    margin-block-end: var(--spacers-dp4);
+    color: var(--colors-grey700);
+}
+
+.markdownContent code {
+    background-color: var(--colors-grey200);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 0.9em;
+}
+
+.markdownContent pre {
+    background-color: var(--colors-grey200);
+    padding: var(--spacers-dp12);
+    border-radius: 4px;
+    overflow-x: auto;
+    margin-block-end: var(--spacers-dp12);
+}
+
+.markdownContent pre code {
+    background-color: transparent;
+    padding: 0;
+}
+
+.markdownContent blockquote {
+    border-inline-start: 4px solid var(--colors-grey400);
+    padding-inline-start: var(--spacers-dp16);
+    margin-block: var(--spacers-dp12);
+    color: var(--colors-grey600);
+    font-style: italic;
+}
+
+.markdownContent a {
+    color: var(--colors-blue700);
+    text-decoration: none;
+}
+
+.markdownContent a:hover {
+    text-decoration: underline;
+}
+
+.markdownContent table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-block-end: var(--spacers-dp12);
+}
+
+.markdownContent th,
+.markdownContent td {
+    border: 1px solid var(--colors-grey300);
+    padding: var(--spacers-dp8);
+    text-align: start;
+}
+
+.markdownContent th {
+    background-color: var(--colors-grey100);
+    font-weight: 600;
+}
