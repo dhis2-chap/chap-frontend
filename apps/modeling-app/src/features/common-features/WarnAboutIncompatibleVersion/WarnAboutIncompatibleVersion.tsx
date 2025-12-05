@@ -1,25 +1,25 @@
-import { NoticeBox } from '@dhis2/ui';
-import React from 'react';
-import style from './WarnAboutIncompatibleVersion.module.css';
-import { DefaultService } from '@dhis2-chap/ui';
-import { useConfig } from '@dhis2/app-runtime';
-import { useRoute } from '../../../hooks/useRoute';
-import chapConfig from '../../../chap.json';
-import { useChapStatus } from '../../settings/ChapSettings/hooks/useChapStatus';
-import { isVersionCompatible } from '../../../utils/compareVersions';
-import { useQuery } from '@tanstack/react-query';
-import i18n from '@dhis2/d2-i18n';
+import { NoticeBox } from '@dhis2/ui'
+import React from 'react'
+import style from './WarnAboutIncompatibleVersion.module.css'
+import { DefaultService } from '@dhis2-chap/ui'
+import { useConfig } from '@dhis2/app-runtime'
+import { useRoute } from '../../../hooks/useRoute'
+import chapConfig from '../../../chap.json'
+import { useChapStatus } from '../../settings/ChapSettings/hooks/useChapStatus'
+import { isVersionCompatible } from '../../../utils/compareVersions'
+import { useQuery } from '@tanstack/react-query'
+import i18n from '@dhis2/d2-i18n'
 
 const WarnAboutIncompatibleVersion = () => {
-    const { appVersion } = useConfig();
-    const appVersionFull = appVersion?.full;
+    const { appVersion } = useConfig()
+    const appVersionFull = appVersion?.full
 
-    const { route } = useRoute();
-    const { status } = useChapStatus({ route });
+    const { route } = useRoute()
+    const { status } = useChapStatus({ route })
 
     const clientCompatibleCheck =
         status &&
-        isVersionCompatible(status.chap_core_version, chapConfig.minChapVersion);
+        isVersionCompatible(status.chap_core_version, chapConfig.minChapVersion)
 
     const { data: backendCompatibleCheck, isError } = useQuery({
         queryKey: ['is-compatible', route?.url, appVersionFull],
@@ -28,12 +28,12 @@ const WarnAboutIncompatibleVersion = () => {
         enabled: !!appVersionFull,
         staleTime: Infinity,
         cacheTime: Infinity,
-    });
+    })
 
     const anyNotCompatible =
-        clientCompatibleCheck === false
-        || backendCompatibleCheck?.compatible === false
-        || isError;
+        clientCompatibleCheck === false ||
+        backendCompatibleCheck?.compatible === false ||
+        isError
 
     return (
         <>
@@ -46,7 +46,7 @@ const WarnAboutIncompatibleVersion = () => {
                         <NoticeBox error title="Incompatible versions">
                             <div>
                                 {i18n.t(
-                                    'The version of the Modeling App is not compatible with the backend (Chap core).',
+                                    'The version of the Modeling App is not compatible with the backend (Chap core).'
                                 )}
                             </div>
                             <br />
@@ -79,7 +79,7 @@ const WarnAboutIncompatibleVersion = () => {
                                                 chapMinVersion:
                                                     chapConfig.minChapVersion,
                                                 escape: ':',
-                                            },
+                                            }
                                         )}
                                     </i>
                                 </p>
@@ -89,7 +89,7 @@ const WarnAboutIncompatibleVersion = () => {
                 </div>
             )}
         </>
-    );
-};
+    )
+}
 
-export default WarnAboutIncompatibleVersion;
+export default WarnAboutIncompatibleVersion
