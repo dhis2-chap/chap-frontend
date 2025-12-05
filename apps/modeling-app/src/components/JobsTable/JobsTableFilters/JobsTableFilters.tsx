@@ -5,24 +5,20 @@ import {
     MenuItem,
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
-import { Table } from '@tanstack/react-table';
-import { JobDescription } from '@dhis2-chap/ui';
 import styles from './JobsTableFilters.module.css';
 import { JOB_STATUSES, JOB_TYPES } from '../../../hooks/useJobs';
+import { useJobsTableFilters } from '../hooks/useJobsTableFilters';
 
-type Props = {
-    table: Table<JobDescription>;
-}
-
-export const JobsTableFilters = ({ table }: Props) => {
+export const JobsTableFilters = () => {
+    const { search, setSearch, status, setStatus, type, setType } = useJobsTableFilters();
     return (
         <>
             <div className={styles.inputContainer}>
                 <Input
                     dense
                     placeholder={i18n.t('Search')}
-                    value={table.getColumn('name')?.getFilterValue() as string | undefined ?? ''}
-                    onChange={(e) => table.getColumn('name')?.setFilterValue(e.value)}
+                    value={search}
+                    onChange={e => setSearch(e.value || undefined)}
                 />
             </div>
 
@@ -31,9 +27,9 @@ export const JobsTableFilters = ({ table }: Props) => {
                     dense
                     clearable
                     clearText={i18n.t('Clear')}
-                    selected={table.getColumn('status')?.getFilterValue() as string | undefined}
+                    selected={status}
                     placeholder={i18n.t('Status')}
-                    onChange={(e) => table.getColumn('status')?.setFilterValue(e.selected)}
+                    onChange={e => setStatus(e.selected)}
                 >
                     <MenuItem
                         label={i18n.t('Pending')}
@@ -63,9 +59,9 @@ export const JobsTableFilters = ({ table }: Props) => {
                     dense
                     clearable
                     clearText={i18n.t('Clear')}
-                    selected={table.getColumn('type')?.getFilterValue() as string | undefined}
+                    selected={type}
                     placeholder={i18n.t('Type')}
-                    onChange={(e) => table.getColumn('type')?.setFilterValue(e.selected)}
+                    onChange={e => setType(e.selected)}
                 >
                     <MenuItem
                         label={i18n.t('Create evaluation')}

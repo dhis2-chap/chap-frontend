@@ -14,7 +14,7 @@ interface DeleteBacktestModalProps {
     id: number;
     onClose: () => void;
     // We might want to pass the name to display in the modal, though it's not used in the current message
-    // name?: string | null | undefined; 
+    // name?: string | null | undefined;
 }
 
 export const DeleteBacktestModal = ({
@@ -33,6 +33,7 @@ export const DeleteBacktestModal = ({
     return (
         <Modal
             onClose={onClose}
+            small
             dataTest="delete-backtest-modal"
         >
             <ModalTitle>
@@ -67,4 +68,4 @@ export const DeleteBacktestModal = ({
             </ModalActions>
         </Modal>
     );
-}; 
+};

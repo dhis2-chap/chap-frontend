@@ -1,65 +1,101 @@
-import React from 'react'
-import { type UseFormReturn } from 'react-hook-form'
-import styles from './NewEvaluationForm.module.css'
-import { PeriodSelector } from './Sections/PeriodSelector'
-import { NameInput } from './Sections/NameInput'
-import { LocationSelector } from './Sections/LocationSelector'
-import { ModelSelector } from './Sections/ModelSelector/ModelSelector'
-import { DatasetConfiguration } from './Sections/DatasetConfiguration'
-import { OrganisationUnit } from '../OrganisationUnitSelector'
-import { EvaluationFormValues } from './hooks/useFormController'
+import React from 'react';
+import i18n from '@dhis2/d2-i18n';
+import { FormProvider } from 'react-hook-form';
+import { Card } from '@dhis2-chap/ui';
+import { useEvaluationFormController } from './hooks/useEvaluationFormController';
+import { ModelExecutionFormValues } from '../ModelExecutionForm/hooks/useModelExecutionFormState';
+import styles from './NewEvaluationForm.module.css';
+import { Button, ButtonStrip, IconArrowRightMulti16, NoticeBox } from '@dhis2/ui';
+import { ModelExecutionFormFields } from '../ModelExecutionForm/ModelExecutionFormFields';
+import { useNavigationBlocker } from '../../hooks/useNavigationBlocker';
+import { NavigationConfirmModal } from '../NavigationConfirmModal';
+import { SummaryModal } from '../ModelExecutionForm/SummaryModal';
 
-type Props = {
-    onSubmit: (data: EvaluationFormValues) => void
-    methods: UseFormReturn<EvaluationFormValues>
-    onUpdateOrgUnits: (orgUnits: OrganisationUnit[]) => void
-}
+type NewEvaluationFormProps = {
+    initialValues?: Partial<ModelExecutionFormValues>;
+};
 
-export const NewEvaluationFormComponent = ({
-    onSubmit,
-    methods,
-    onUpdateOrgUnits,
-}: Props) => {
-    const handleFormSubmit = (data: EvaluationFormValues) => {
-        onSubmit(data)
-    }
+export const NewEvaluationFormComponent = ({ initialValues }: NewEvaluationFormProps = {}) => {
+    const {
+        methods,
+        handleSubmit,
+        handleStartJob,
+        isSubmitting,
+        error,
+        importSummary,
+        summaryModalOpen,
+        closeSummaryModal,
+        handleDryRun,
+        isValidationLoading,
+    } = useEvaluationFormController(initialValues);
 
     const {
-        control,
-        handleSubmit,
-        formState: { errors },
-    } = methods
+        showConfirmModal,
+        handleConfirmNavigation,
+        handleCancelNavigation,
+    } = useNavigationBlocker({
+        shouldBlock: !isSubmitting && methods.formState.isDirty,
+    });
 
     return (
         <>
-            <div className={styles.formWrapper}>
-                <form onSubmit={handleSubmit(handleFormSubmit)}>
-                    <NameInput
-                        control={control}
-                        errors={errors}
-                    />
+            <FormProvider {...methods}>
+                <div className={styles.container}>
+                    <Card>
+                        <ModelExecutionFormFields
+                            onSubmit={handleSubmit}
+                            methods={methods}
+                            actions={(
+                                <div className={styles.buttons}>
+                                    <ButtonStrip end>
+                                        <Button
+                                            onClick={handleDryRun}
+                                            loading={isValidationLoading}
+                                            primary
+                                        >
+                                            {i18n.t('Start dry run')}
+                                        </Button>
 
-                    <PeriodSelector
-                        control={control}
-                        errors={errors}
-                    />
+                                        <Button
+                                            loading={isSubmitting}
+                                            onClick={handleStartJob}
+                                            icon={<IconArrowRightMulti16 />}
+                                            disabled={isValidationLoading}
+                                        >
+                                            {i18n.t('Start import')}
+                                        </Button>
+                                    </ButtonStrip>
+                                </div>
+                            )}
+                        />
 
-                    <LocationSelector
-                        control={control}
-                        errors={errors}
-                        onUpdateOrgUnits={onUpdateOrgUnits}
-                    />
+                        {!!error && !importSummary && (
+                            <NoticeBox
+                                error
+                                title={i18n.t('There was an error')}
+                                className={styles.errorNotice}
+                            >
+                                {error.message}
+                            </NoticeBox>
+                        )}
 
-                    <ModelSelector
-                        control={control}
-                    />
+                        {importSummary && summaryModalOpen && (
+                            <SummaryModal
+                                importSummary={importSummary}
+                                periodType={methods.getValues('periodType')}
+                                onClose={closeSummaryModal}
+                            />
+                        )}
+                    </Card>
+                </div>
+            </FormProvider>
 
-                    <DatasetConfiguration
-                        control={control}
-                        errors={errors}
-                    />
-                </form>
-            </div>
+            {showConfirmModal && (
+                <NavigationConfirmModal
+                    onConfirm={handleConfirmNavigation}
+                    onCancel={handleCancelNavigation}
+                />
+            )}
         </>
-    )
-}
+    );
+};

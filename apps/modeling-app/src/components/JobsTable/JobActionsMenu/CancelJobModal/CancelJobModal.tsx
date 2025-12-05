@@ -47,4 +47,4 @@ export const CancelJobModal = ({ id, onClose, onCancel }: Props) => {
             </ModalActions>
         </Modal>
     );
-}; 
+};

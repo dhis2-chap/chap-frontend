@@ -1,2 +1,1 @@
-
-export { JobsTableFilters } from './JobsTableFilters'
+export { JobsTableFilters } from './JobsTableFilters';

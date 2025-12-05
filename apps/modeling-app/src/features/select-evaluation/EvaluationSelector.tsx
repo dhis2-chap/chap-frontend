@@ -1,24 +1,24 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react';
 import {
     Help,
     SingleSelect,
     SingleSelectOption,
     SingleSelectProps,
-} from '@dhis2/ui'
-import { useQuery } from '@tanstack/react-query'
+} from '@dhis2/ui';
+import { useQuery } from '@tanstack/react-query';
 import {
     AnalyticsService,
-    BackTestRead
-} from '@dhis2-chap/ui'
-import css from './EvaluationSelector.module.css'
-import i18n from '@dhis2/d2-i18n'
+    BackTestRead,
+} from '@dhis2-chap/ui';
+import css from './EvaluationSelector.module.css';
+import i18n from '@dhis2/d2-i18n';
 
 type EvaluationCompatibleSelector = Omit<
     EvaluationSelectorBaseProps,
     'available'
 > & {
-    compatibleEvaluationId?: number
-}
+    compatibleEvaluationId?: number;
+};
 
 export const EvaluationCompatibleSelector = ({
     onSelect,
@@ -36,19 +36,19 @@ export const EvaluationCompatibleSelector = ({
         queryKey: ['backtests', 'compatible', compatibleEvaluationId],
         queryFn: () => {
             if (!compatibleEvaluationId) {
-                return Promise.resolve([] as BackTestRead[])
+                return Promise.resolve([] as BackTestRead[]);
             }
             return AnalyticsService.getCompatibleBacktestsAnalyticsCompatibleBacktestsBacktestIdGet(
-                compatibleEvaluationId
-            )
+                compatibleEvaluationId,
+            );
         },
         enabled: compatibleEvaluationId != undefined,
         staleTime: 60 * 5 * 1000,
         cacheTime: 60 * 5 * 1000,
-    })
+    });
     // allow inline onSelect function
-    const onSelectRef = React.useRef(onSelect)
-    onSelectRef.current = onSelect
+    const onSelectRef = React.useRef(onSelect);
+    onSelectRef.current = onSelect;
 
     // clear selection if no longer compatible
     // eg, there's a new compatibleEvaluationId, the data is loaded and
@@ -58,25 +58,25 @@ export const EvaluationCompatibleSelector = ({
             selected &&
             compatibleEvaluationId != undefined &&
             isSuccess &&
-            !compatibleEvaluations.some((e) => e.id == selected?.id)
+            !compatibleEvaluations.some(e => e.id == selected?.id)
         ) {
-            onSelectRef.current(undefined)
+            onSelectRef.current(undefined);
         }
-    }, [compatibleEvaluations, compatibleEvaluationId, isSuccess])
+    }, [compatibleEvaluations, compatibleEvaluationId, isSuccess]);
 
     const getListMessage = () => {
         if (isSuccess && compatibleEvaluations?.length === 0) {
-            return <Help>{i18n.t('No compatible evaluations found')}</Help>
+            return <Help>{i18n.t('No compatible evaluations found')}</Help>;
         }
         if (error) {
             return (
                 <Help error>
                     {(error as Error).message ?? error.toString()}
                 </Help>
-            )
+            );
         }
-        return null
-    }
+        return null;
+    };
 
     return (
         <div className={css.selectorWrapper}>
@@ -92,15 +92,15 @@ export const EvaluationCompatibleSelector = ({
                 placeholder={i18n.t('Select evaluation to compare with')}
             />
         </div>
-    )
-}
+    );
+};
 
 interface EvaluationSelectorBaseProps
     extends Omit<SingleSelectProps, 'selected' | 'onChange'> {
-    onSelect: (evaluation: BackTestRead | undefined) => void
-    selected?: BackTestRead | undefined
-    available: BackTestRead[]
-    listMessage?: React.ReactNode
+    onSelect: (evaluation: BackTestRead | undefined) => void;
+    selected?: BackTestRead | undefined;
+    available: BackTestRead[];
+    listMessage?: React.ReactNode;
 }
 
 export const EvaluationSelectorBase = ({
@@ -113,27 +113,26 @@ export const EvaluationSelectorBase = ({
     const { availableMap, availableList } = useMemo(() => {
         const availableMap = new Map(
             available.map(
-                (evaluation) => [evaluation.id.toString(), evaluation] as const
-            )
-        )
+                evaluation => [evaluation.id.toString(), evaluation] as const,
+            ),
+        );
         // selected crashes if selected is not in available, so always add it
         if (selected && !availableMap.has(selected.id.toString())) {
-            availableMap.set(selected?.id.toString(), selected)
+            availableMap.set(selected?.id.toString(), selected);
         }
 
         return {
             availableMap,
             availableList: Array.from(availableMap.values()),
-        }
-    }, [available, singleSelectProps.loading, selected])
+        };
+    }, [available, singleSelectProps.loading, selected]);
 
     return (
         <div className={css.selectorWrapper}>
             <SingleSelect
                 className={css.selector}
                 onChange={({ selected: newSelected }) =>
-                    onSelect(availableMap.get(newSelected))
-                }
+                    onSelect(availableMap.get(newSelected))}
                 selected={selected?.id.toString() || ''}
                 clearable
                 filterable
@@ -150,14 +149,15 @@ export const EvaluationSelectorBase = ({
                 {listMessage && (
                     <div className={css.messageWrapper}>{listMessage}</div>
                 )}
-                {availableList.map((evaluation) => (
+                {availableList.map(evaluation => (
                     <SingleSelectOption
                         key={evaluation.id}
                         value={evaluation.id.toString()}
                         label={evaluation.name ?? evaluation.id.toString()}
-                    ></SingleSelectOption>
+                    >
+                    </SingleSelectOption>
                 ))}
             </SingleSelect>
         </div>
-    )
-}
+    );
+};

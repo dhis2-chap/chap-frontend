@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react"
+import React, { useRef, useState } from 'react';
 import {
     Button,
     FlyoutMenu,
@@ -10,26 +10,26 @@ import {
     MenuItem,
     Popper,
     SharingDialog,
-} from "@dhis2/ui"
-import i18n from "@dhis2/d2-i18n"
-import { EditRoute } from "../EditRoute"
-import type { Route } from "../../../../hooks/useRoute"
-import { DeleteRouteModal } from "../DeleteRouteModal"
-import { useQueryClient } from "@tanstack/react-query";
-import styles from "./RouteActions.module.css"
+} from '@dhis2/ui';
+import i18n from '@dhis2/d2-i18n';
+import { EditRoute } from '../EditRoute';
+import type { Route } from '../../../../hooks/useRoute';
+import { DeleteRouteModal } from '../DeleteRouteModal';
+import { useQueryClient } from '@tanstack/react-query';
+import styles from './RouteActions.module.css';
 
 type Props = {
-    route: Route
-}
+    route: Route;
+};
 
 export const RouteActions = ({ route }: Props) => {
     const queryClient = useQueryClient();
 
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false)
-    const [isSharingDialogOpen, setIsSharingDialogOpen] = useState(false)
-    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
-    const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
-    const popperRef = useRef<HTMLDivElement>(null)
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [isSharingDialogOpen, setIsSharingDialogOpen] = useState(false);
+    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+    const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+    const popperRef = useRef<HTMLDivElement>(null);
 
     return (
         <>
@@ -59,8 +59,8 @@ export const RouteActions = ({ route }: Props) => {
                                     <MenuItem
                                         dense
                                         onClick={() => {
-                                            setIsEditDialogOpen(true)
-                                            setIsDropdownOpen(false)
+                                            setIsEditDialogOpen(true);
+                                            setIsDropdownOpen(false);
                                         }}
                                         label={i18n.t('Edit')}
                                         icon={<IconEdit16 />}
@@ -68,8 +68,8 @@ export const RouteActions = ({ route }: Props) => {
                                     <MenuItem
                                         dense
                                         onClick={() => {
-                                            setIsSharingDialogOpen(true)
-                                            setIsDropdownOpen(false)
+                                            setIsSharingDialogOpen(true);
+                                            setIsDropdownOpen(false);
                                         }}
                                         label={i18n.t('Sharing')}
                                         icon={<IconShare16 />}
@@ -78,8 +78,8 @@ export const RouteActions = ({ route }: Props) => {
                                         dense
                                         destructive
                                         onClick={() => {
-                                            setIsDeleteDialogOpen(true)
-                                            setIsDropdownOpen(false)
+                                            setIsDeleteDialogOpen(true);
+                                            setIsDropdownOpen(false);
                                         }}
                                         label={i18n.t('Delete')}
                                         icon={<IconDelete16 />}
@@ -96,8 +96,8 @@ export const RouteActions = ({ route }: Props) => {
                     id={route.id}
                     type="route"
                     onClose={() => {
-                        queryClient.invalidateQueries({ queryKey: ['routes'] })
-                        setIsSharingDialogOpen(false)
+                        queryClient.invalidateQueries({ queryKey: ['routes'] });
+                        setIsSharingDialogOpen(false);
                     }}
                 />
             )}
@@ -116,5 +116,5 @@ export const RouteActions = ({ route }: Props) => {
                 />
             )}
         </>
-    )
-}
+    );
+};

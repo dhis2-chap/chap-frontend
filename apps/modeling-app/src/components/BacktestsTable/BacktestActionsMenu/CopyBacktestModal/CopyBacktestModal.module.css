@@ -1,0 +1,22 @@
+.description {
+  margin-bottom: 16px;
+}
+
+.attributesList {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+.dependentAttribute {
+  margin-inline-start: 16px;
+  padding: 8px 12px;
+  border-inline-start: 3px solid var(--colors-grey300);
+  transition: opacity 100ms ease-in-out;
+  display: flex;
+  gap: 8px;
+}
+
+.dependentAttributeDisabled {
+  opacity: 0.6;
+}

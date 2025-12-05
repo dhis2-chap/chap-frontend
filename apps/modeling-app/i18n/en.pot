@@ -5,17 +5,62 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2025-08-27T12:08:19.418Z\n"
-"PO-Revision-Date: 2025-08-27T12:08:19.419Z\n"
+"POT-Creation-Date: 2025-11-01T14:32:32.298Z\n"
+"PO-Revision-Date: 2025-11-01T14:32:32.299Z\n"
 
-msgid "View"
-msgstr "View"
+msgid "Create new..."
+msgstr "Create new..."
+
+msgid "Compare"
+msgstr "Compare"
 
 msgid "Rename"
 msgstr "Rename"
 
 msgid "Delete"
 msgstr "Delete"
+
+msgid "{{name}} (Copy)"
+msgstr "{{name}} (Copy)"
+
+msgid "Create new based on..."
+msgstr "Create new based on..."
+
+msgid "Cancel"
+msgstr "Cancel"
+
+msgid "Failed to load evaluation data. Please try again."
+msgstr "Failed to load evaluation data. Please try again."
+
+msgid "Close"
+msgstr "Close"
+
+msgid "Select which attributes to copy to the new run{{escape}}"
+msgstr "Select which attributes to copy to the new run{{escape}}"
+
+msgid "Name"
+msgstr "Name"
+
+msgid "Untitled"
+msgstr "Untitled"
+
+msgid "Organisation units"
+msgstr "Organisation units"
+
+msgid "Model"
+msgstr "Model"
+
+msgid "Data sources"
+msgstr "Data sources"
+
+msgid "Period type"
+msgstr "Period type"
+
+msgid "Period range"
+msgstr "Period range"
+
+msgid "Create"
+msgstr "Create"
 
 msgid "Delete evaluation"
 msgstr "Delete evaluation"
@@ -27,17 +72,11 @@ msgstr ""
 "Are you sure you want to delete this evaluation? This action cannot be "
 "undone."
 
-msgid "Cancel"
-msgstr "Cancel"
-
 msgid "Name is required"
 msgstr "Name is required"
 
 msgid "Rename evaluation"
 msgstr "Rename evaluation"
-
-msgid "Name"
-msgstr "Name"
 
 msgid "Save"
 msgstr "Save"
@@ -48,20 +87,13 @@ msgstr "ID"
 msgid "Created"
 msgstr "Created"
 
-msgid "Model"
-msgstr "Model"
+msgid "Locations"
+msgstr "Locations"
 
-msgid "CRPS (Norm)"
-msgstr "CRPS (Norm)"
-
-msgid ""
-"Normalized CRPS (Continuous Ranked Probability Score) shows how close a "
-"model's predicted range of outcomes is to the actual result on a 0 - 1 "
-"scale. Lower values indicate better probabilistic accuracy"
-msgstr ""
-"Normalized CRPS (Continuous Ranked Probability Score) shows how close a "
-"model's predicted range of outcomes is to the actual result on a 0 - 1 "
-"scale. Lower values indicate better probabilistic accuracy"
+msgid "Evaluated on {{count}} locations"
+msgid_plural "Evaluated on {{count}} locations"
+msgstr[0] "Evaluated on {{count}} locations"
+msgstr[1] "Evaluated on {{count}} locations"
 
 msgid "Actions"
 msgstr "Actions"
@@ -88,12 +120,6 @@ msgid "{{count}} evaluations selected"
 msgid_plural "{{count}} evaluations selected"
 msgstr[0] "{{count}} evaluation selected"
 msgstr[1] "{{count}} evaluations selected"
-
-msgid "There are running jobs in the background"
-msgstr "There are running jobs in the background"
-
-msgid "Running jobs"
-msgstr "Running jobs"
 
 msgid "Evaluations deleted"
 msgstr "Evaluations deleted"
@@ -137,9 +163,6 @@ msgstr "Sorry, an unexpected error has occurred."
 
 msgid "Inspect dataset"
 msgstr "Inspect dataset"
-
-msgid "Close"
-msgstr "Close"
 
 msgid "Cancel job"
 msgstr "Cancel job"
@@ -240,31 +263,6 @@ msgstr "Create dataset"
 msgid "Cancelled"
 msgstr "Cancelled"
 
-msgid "Unsaved changes"
-msgstr "Unsaved changes"
-
-msgid ""
-"You have unsaved changes that will be lost if you leave this page. Are you "
-"sure you want to continue?"
-msgstr ""
-"You have unsaved changes that will be lost if you leave this page. Are you "
-"sure you want to continue?"
-
-msgid "Leave page"
-msgstr "Leave page"
-
-msgid "Back to evaluations"
-msgstr "Back to evaluations"
-
-msgid "There was an error"
-msgstr "There was an error"
-
-msgid "Start dry run"
-msgstr "Start dry run"
-
-msgid "Start import"
-msgstr "Start import"
-
 msgid "Map Data Items"
 msgstr "Map Data Items"
 
@@ -310,9 +308,6 @@ msgstr "Target \"{{targetName}}\" must be mapped to a data item"
 
 msgid "Covariate \"{{covariateName}}\" must be mapped to a data item"
 msgstr "Covariate \"{{covariateName}}\" must be mapped to a data item"
-
-msgid "Organisation Units"
-msgstr "Organisation Units"
 
 msgid "Select organisation units"
 msgstr "Select organisation units"
@@ -411,14 +406,8 @@ msgstr "Assessment Status"
 msgid "Select model"
 msgstr "Select model"
 
-msgid "Evaluation name"
-msgstr "Evaluation name"
-
 msgid "EWARS Evaluation 22-24"
 msgstr "EWARS Evaluation 22-24"
-
-msgid "Period type"
-msgstr "Period type"
 
 msgid "From period"
 msgstr "From period"
@@ -497,9 +486,6 @@ msgstr "No rejected items match the current filters"
 msgid "No items to display"
 msgstr "No items to display"
 
-msgid "Missing data for covariate"
-msgstr "Missing data for covariate"
-
 msgid "Missing id for org unit"
 msgstr "Missing id for org unit"
 
@@ -543,6 +529,37 @@ msgstr ""
 msgid "Data layer not found for data item id{{escape}} {{dataItemId}}"
 msgstr "Data layer not found for data item id{{escape}} {{dataItemId}}"
 
+msgid "Unsaved changes"
+msgstr "Unsaved changes"
+
+msgid ""
+"You have unsaved changes that will be lost if you leave this page. Are you "
+"sure you want to continue?"
+msgstr ""
+"You have unsaved changes that will be lost if you leave this page. Are you "
+"sure you want to continue?"
+
+msgid "Leave page"
+msgstr "Leave page"
+
+msgid "Start dry run"
+msgstr "Start dry run"
+
+msgid "Start import"
+msgstr "Start import"
+
+msgid "There was an error"
+msgstr "There was an error"
+
+msgid "Error loading models"
+msgstr "Error loading models"
+
+msgid "An unknown error occurred"
+msgstr "An unknown error occurred"
+
+msgid "Missing data for covariate"
+msgstr "Missing data for covariate"
+
 msgid "{{count}} org units"
 msgid_plural "{{count}} org units"
 msgstr[0] "{{count}} org unit"
@@ -582,6 +599,9 @@ msgstr "Select a group"
 msgid "Deselect all"
 msgstr "Deselect all"
 
+msgid "Organisation Units"
+msgstr "Organisation Units"
+
 msgid "Search organisation units"
 msgstr "Search organisation units"
 
@@ -594,17 +614,431 @@ msgstr "No organisation units match your search"
 msgid "You cannot select more than {{max}} organisation units at a time"
 msgstr "You cannot select more than {{max}} organisation units at a time"
 
+msgid "Please select a visualization."
+msgstr "Please select a visualization."
+
+msgid "This plot has encountered an unexpected error and could not be displayed."
+msgstr "This plot has encountered an unexpected error and could not be displayed."
+
+msgid ""
+"This visualization is provided by external contributors and may "
+"occasionally fail due to issues in the contributed plot definition."
+msgstr ""
+"This visualization is provided by external contributors and may "
+"occasionally fail due to issues in the contributed plot definition."
+
+msgid "No visualization found"
+msgstr "No visualization found"
+
+msgid "Click to view actions"
+msgstr "Click to view actions"
+
+msgid "View Compiled Vega"
+msgstr "View Compiled Vega"
+
+msgid "Open in Vega Editor"
+msgstr "Open in Vega Editor"
+
+msgid "Save as PNG"
+msgstr "Save as PNG"
+
+msgid "View Source"
+msgstr "View Source"
+
+msgid "Save as SVG"
+msgstr "Save as SVG"
+
+msgid "Evaluation plots"
+msgstr "Evaluation plots"
+
+msgid ""
+"Evaluation plots are configured system-wide and defined by system "
+"administrators / model developers. If you experience issues, please contact "
+"your system administrator."
+msgstr ""
+"Evaluation plots are configured system-wide and defined by system "
+"administrators / model developers. If you experience issues, please contact "
+"your system administrator."
+
+msgid "Unable to load data"
+msgstr "Unable to load data"
+
+msgid ""
+"There was a problem loading required data. See the browser console for "
+"details."
+msgstr ""
+"There was a problem loading required data. See the browser console for "
+"details."
+
+msgid "Select visualization"
+msgstr "Select visualization"
+
+msgid "No data available"
+msgstr "No data available"
+
+msgid ""
+"The evaluation you are looking for does not exist or you do not have "
+"permission to access it."
+msgstr ""
+"The evaluation you are looking for does not exist or you do not have "
+"permission to access it."
+
+msgid "Invalid evaluation ID"
+msgstr "Invalid evaluation ID"
+
+msgid "The evaluation ID is invalid. Please try again."
+msgstr "The evaluation ID is invalid. Please try again."
+
+msgid "Summary"
+msgstr "Summary"
+
+msgid "There was an error loading the evaluation summary. Please try again later."
+msgstr "There was an error loading the evaluation summary. Please try again later."
+
+msgid "Model updated"
+msgstr "Model updated"
+
+msgid ""
+"The model used to run this evaluation has been updated. You can still view "
+"the results of the run, but the metadata may not be accurate."
+msgstr ""
+"The model used to run this evaluation has been updated. You can still view "
+"the results of the run, but the metadata may not be accurate."
+
+msgid "Training period"
+msgstr "Training period"
+
+msgid "{{count}} locations"
+msgid_plural "{{count}} locations"
+msgstr[0] "{{count}} location"
+msgstr[1] "{{count}} locations"
+
+msgid "Please select a visualization and metric."
+msgstr "Please select a visualization and metric."
+
+msgid ""
+"Keep in mind that this is advanced functionality and may not be suitable "
+"for all users."
+msgstr ""
+"Keep in mind that this is advanced functionality and may not be suitable "
+"for all users."
+
+msgid "Metric plot"
+msgstr "Metric plot"
+
+msgid ""
+"Metric plots are advanced functionality and may be misinterpreted. Use with "
+"caution."
+msgstr ""
+"Metric plots are advanced functionality and may be misinterpreted. Use with "
+"caution."
+
+msgid "Select metric"
+msgstr "Select metric"
+
+msgid "Evaluation result"
+msgstr "Evaluation result"
+
+msgid "Evaluation"
+msgstr "Evaluation"
+
+msgid "There was an error loading the data."
+msgstr "There was an error loading the data."
+
+msgid "No data available for the selected organization unit and split period."
+msgstr "No data available for the selected organization unit and split period."
+
+msgid "All locations"
+msgstr "All locations"
+
+msgid "Result"
+msgstr "Result"
+
+msgid "Start period"
+msgstr "Start period"
+
+msgid "End period"
+msgstr "End period"
+
+msgid "Create prediction"
+msgstr "Create prediction"
+
+msgid ""
+"You should only do predictions on well-tested and reliable models that have "
+"shown promise when evaluated. Do you still want to continue?"
+msgstr ""
+"You should only do predictions on well-tested and reliable models that have "
+"shown promise when evaluated. Do you still want to continue?"
+
+msgid "Continue"
+msgstr "Continue"
+
+msgid "Quick actions"
+msgstr "Quick actions"
+
+msgid "Compare with..."
+msgstr "Compare with..."
+
+msgid "Predict..."
+msgstr "Predict..."
+
+msgid "Error loading jobs"
+msgstr "Error loading jobs"
+
+msgid "Are you sure you want to archive this model?"
+msgstr "Are you sure you want to archive this model?"
+
+msgid ""
+"You will still be able to view evaluations for this model, but you will not "
+"be able to create new evaluations or predictions."
+msgstr ""
+"You will still be able to view evaluations for this model, but you will not "
+"be able to create new evaluations or predictions."
+
+msgid "Archive"
+msgstr "Archive"
+
+msgid "View evaluations"
+msgstr "View evaluations"
+
+msgid "Model archived"
+msgstr "Model archived"
+
+msgid "Failed to archive model"
+msgstr "Failed to archive model"
+
+msgid "Author"
+msgstr "Author"
+
+msgid "Covariates"
+msgstr "Covariates"
+
+msgid "No covariate names available"
+msgstr "No covariate names available"
+
+msgid "Archived"
+msgstr "Archived"
+
+msgid "Active"
+msgstr "Active"
+
+msgid "New model"
+msgstr "New model"
+
+msgid "No models available"
+msgstr "No models available"
+
+msgid "Include archived"
+msgstr "Include archived"
+
+msgid "Error loading model templates"
+msgstr "Error loading model templates"
+
+msgid "No model templates found"
+msgstr "No model templates found"
+
+msgid ""
+"We could not find any available model templates. Please create templates or "
+"try again later."
+msgstr ""
+"We could not find any available model templates. Please create templates or "
+"try again later."
+
+msgid "This covariate has already been added."
+msgstr "This covariate has already been added."
+
+msgid "Additional continuous covariates"
+msgstr "Additional continuous covariates"
+
+msgid "Enter covariate name"
+msgstr "Enter covariate name"
+
+msgid "Add"
+msgstr "Add"
+
+msgid "Required"
+msgstr "Required"
+
+msgid "Remove"
+msgstr "Remove"
+
+msgid "Model template"
+msgstr "Model template"
+
+msgid "Select the base model template"
+msgstr "Select the base model template"
+
+msgid "Select a model template"
+msgstr "Select a model template"
+
+msgid "Deprecated model"
+msgstr "Deprecated model"
+
+msgid "This model is deprecated and may be removed in the future."
+msgstr "This model is deprecated and may be removed in the future."
+
+msgid "Type a value"
+msgstr "Type a value"
+
+msgid "The model name will be \"{{displayName}} [{{variantName}}]\""
+msgstr "The model name will be \"{{displayName}} [{{variantName}}]\""
+
+msgid "Provide a descriptive name for this variant"
+msgstr "Provide a descriptive name for this variant"
+
+msgid "Variant name"
+msgstr "Variant name"
+
+msgid "Model template is required"
+msgstr "Model template is required"
+
+msgid "Model created successfully"
+msgstr "Model created successfully"
+
+msgid "Failed to create model"
+msgstr "Failed to create model"
+
+msgid "Error loading prediction"
+msgstr "Error loading prediction"
+
+msgid "Prediction not found"
+msgstr "Prediction not found"
+
+msgid ""
+"The prediction you are looking for does not exist or you do not have "
+"permission to access it."
+msgstr ""
+"The prediction you are looking for does not exist or you do not have "
+"permission to access it."
+
+msgid ""
+"The model you are looking for does not exist or you do not have permission "
+"to access it."
+msgstr ""
+"The model you are looking for does not exist or you do not have permission "
+"to access it."
+
+msgid "Prediction result"
+msgstr "Prediction result"
+
+msgid "Chart"
+msgstr "Chart"
+
+msgid "Table"
+msgstr "Table"
+
+msgid "Map"
+msgstr "Map"
+
+msgid "No prediction data found."
+msgstr "No prediction data found."
+
+msgid "There was an error loading the prediction summary. Please try again later."
+msgstr "There was an error loading the prediction summary. Please try again later."
+
+msgid "Predicted periods"
+msgstr "Predicted periods"
+
+msgid "Import"
+msgstr "Import"
+
+msgid "Guide"
+msgstr "Guide"
+
+msgid "Loading"
+msgstr "Loading"
+
+msgid "Start typing to search for data items"
+msgstr "Start typing to search for data items"
+
+msgid "No matches found"
+msgstr "No matches found"
+
+msgid "Select a data item..."
+msgstr "Select a data item..."
+
+msgid "Clear selection"
+msgstr "Clear selection"
+
+msgid "Search for indicators, data elements, or program indicators"
+msgstr "Search for indicators, data elements, or program indicators"
+
+msgid "Import forecasted values"
+msgstr "Import forecasted values"
+
+msgid ""
+"Importing forecasted values into DHIS2 requires you to set up five data "
+"elements for the quantiles outputted by the model."
+msgstr ""
+"Importing forecasted values into DHIS2 requires you to set up five data "
+"elements for the quantiles outputted by the model."
+
+msgid "Quantile high"
+msgstr "Quantile high"
+
+msgid "Quantile mid high"
+msgstr "Quantile mid high"
+
+msgid "Median"
+msgstr "Median"
+
+msgid "Quantile mid low"
+msgstr "Quantile mid low"
+
+msgid "Quantile low"
+msgstr "Quantile low"
+
+msgid "Failed to post prediction data"
+msgstr "Failed to post prediction data"
+
+msgid "Prediction data posted successfully"
+msgstr "Prediction data posted successfully"
+
+msgid "Delete prediction"
+msgstr "Delete prediction"
+
+msgid ""
+"Are you sure you want to delete this prediction? This action cannot be "
+"undone."
+msgstr ""
+"Are you sure you want to delete this prediction? This action cannot be "
+"undone."
+
+msgid "View"
+msgstr "View"
+
+msgid "Periods"
+msgstr "Periods"
+
+msgid "New prediction"
+msgstr "New prediction"
+
+msgid "No predictions available"
+msgstr "No predictions available"
+
+msgid "Prediction deleted"
+msgstr "Prediction deleted"
+
+msgid "Failed to delete prediction"
+msgstr "Failed to delete prediction"
+
+msgid "There are running jobs in the background"
+msgstr "There are running jobs in the background"
+
+msgid "Running jobs"
+msgstr "Running jobs"
+
 msgid "Evaluate"
 msgstr "Evaluate"
 
 msgid "Overview"
 msgstr "Overview"
 
-msgid "Compare"
-msgstr "Compare"
-
 msgid "Predict"
 msgstr "Predict"
+
+msgid "Models"
+msgstr "Models"
 
 msgid "Jobs"
 msgstr "Jobs"
@@ -645,9 +1079,6 @@ msgstr ""
 msgid "An error occurred while fetching chart data "
 msgstr "An error occurred while fetching chart data "
 
-msgid "Evaluation"
-msgstr "Evaluation"
-
 msgid ""
 "Select two evaluations to compare their results. The\n"
 "                    selected evaluations must be compatible."
@@ -665,213 +1096,11 @@ msgstr ""
 msgid "Split period"
 msgstr "Split period"
 
-msgid "Add required Data Elements"
-msgstr "Add required Data Elements"
-
-msgid ""
-"This app requires specific DHIS2 Data Elements to import data into. If you "
-"have not already added them, go to the "
-msgstr ""
-"This app requires specific DHIS2 Data Elements to import data into. If you "
-"have not already added them, go to the "
-
-msgid "-app and create the Data Elements listed below."
-msgstr "-app and create the Data Elements listed below."
-
-msgid ""
-"NB! Make sure the CODE property for each data element is exactly the same "
-"as below."
-msgstr ""
-"NB! Make sure the CODE property for each data element is exactly the same "
-"as below."
-
-msgid ""
-"Properties in the new Data Element form not specified in the tables below "
-"should have the default value."
-msgstr ""
-"Properties in the new Data Element form not specified in the tables below "
-"should have the default value."
-
-msgid "Short name"
-msgstr "Short name"
-
-msgid "Code"
-msgstr "Code"
-
-msgid "Domain type"
-msgstr "Domain type"
-
-msgid "Aggregate"
-msgstr "Aggregate"
-
-msgid "Aggregation levels"
-msgstr "Aggregation levels"
-
-msgid "Assign all org unit levels"
-msgstr "Assign all org unit levels"
-
-msgid "Prediction for {{predictionTargetName}} for {{orgUnitName}}"
-msgstr "Prediction for {{predictionTargetName}} for {{orgUnitName}}"
-
-msgid "Quantile median"
-msgstr "Quantile median"
-
-msgid "Range"
-msgstr "Range"
-
-msgid "Quantile low"
-msgstr "Quantile low"
-
-msgid "Select data element for low quantile"
-msgstr "Select data element for low quantile"
-
-msgid "Select data element for median quantile"
-msgstr "Select data element for median quantile"
-
-msgid "Select data element for high quantile"
-msgstr "Select data element for high quantile"
-
-msgid "Import prediction"
-msgstr "Import prediction"
-
-msgid "Prediction has been imported."
-msgstr "Prediction has been imported."
-
-msgid "CHAP Core results"
-msgstr "CHAP Core results"
-
-msgid "Select data element"
-msgstr "Select data element"
-
-msgid "It seems like you missing Data Elements for CHAP prediction."
-msgstr "It seems like you missing Data Elements for CHAP prediction."
-
-msgid "Add data elements"
-msgstr "Add data elements"
-
-msgid ""
-"Job is still running. Please wait until it is finished before doing any "
-"actions."
-msgstr ""
-"Job is still running. Please wait until it is finished before doing any "
-"actions."
-
-msgid "Unknown error"
-msgstr "Unknown error"
-
-msgid "No model templates found."
-msgstr "No model templates found."
-
-msgid "Model Templates"
-msgstr "Model Templates"
-
-msgid "Configure new models based on generic model templates"
-msgstr "Configure new models based on generic model templates"
-
-msgid "Back to settings"
-msgstr "Back to settings"
-
-msgid "Configure Model"
-msgstr "Configure Model"
-
-msgid "Model Template"
-msgstr "Model Template"
-
-msgid "Select a model template"
-msgstr "Select a model template"
-
-msgid "Configured Model Name"
-msgstr "Configured Model Name"
-
-msgid "Enter something to identify your model, e.g. \"Debug\" or \"Malaria\""
-msgstr "Enter something to identify your model, e.g. \"Debug\" or \"Malaria\""
-
-msgid "Your model will be saved as {{modelName}} [{{configuredModelName}}]"
-msgstr "Your model will be saved as {{modelName}} [{{configuredModelName}}]"
-
-msgid "Additional continuous covariates"
-msgstr "Additional continuous covariates"
-
-msgid "Enter covariate name"
-msgstr "Enter covariate name"
-
-msgid "Add"
-msgstr "Add"
-
-msgid "Required"
-msgstr "Required"
-
-msgid "Remove"
-msgstr "Remove"
-
-msgid "Please check covariates"
-msgstr "Please check covariates"
-
-msgid "Template is required"
-msgstr "Template is required"
-
-msgid "Covariate name is required"
-msgstr "Covariate name is required"
-
-msgid "Covariate name cannot contain spaces"
-msgstr "Covariate name cannot contain spaces"
-
-msgid "Covariate already exists"
-msgstr "Covariate already exists"
-
-msgid "Model Parameters"
-msgstr "Model Parameters"
-
-msgid "Enter item"
-msgstr "Enter item"
-
-msgid "Please enter a valid number"
-msgstr "Please enter a valid number"
-
-msgid "Please enter a whole number"
-msgstr "Please enter a whole number"
-
-msgid "Invalid input"
-msgstr "Invalid input"
-
-msgid "Enter a whole number"
-msgstr "Enter a whole number"
-
-msgid "Enter a number (use , or . for decimal)"
-msgstr "Enter a number (use , or . for decimal)"
-
-msgid "Please enter a valid number or leave empty"
-msgstr "Please enter a valid number or leave empty"
-
-msgid "Please enter a whole number or leave empty"
-msgstr "Please enter a whole number or leave empty"
-
-msgid "Enter a whole number or leave empty for null"
-msgstr "Enter a whole number or leave empty for null"
-
-msgid "Enter a number (use , or . for decimal) or leave empty for null"
-msgstr "Enter a number (use , or . for decimal) or leave empty for null"
-
-msgid "Leave empty for null"
-msgstr "Leave empty for null"
-
-msgid "Model configured"
-msgstr "Model configured"
-
-msgid "Failed to configure model"
-msgstr "Failed to configure model"
-
-msgid "Prediction for Northern Province"
-msgstr "Prediction for Northern Province"
-
 msgid "Organisation unit level"
 msgstr "Organisation unit level"
 
 msgid "Organisation unit level to import data to"
 msgstr "Organisation unit level to import data to"
-
-msgid "Organisation units"
-msgstr "Organisation units"
 
 msgid "Data Element"
 msgstr "Data Element"
@@ -881,18 +1110,6 @@ msgstr "Indicator"
 
 msgid "Program Indicator"
 msgstr "Program Indicator"
-
-msgid "Loading"
-msgstr "Loading"
-
-msgid "Start typing to search for data items"
-msgstr "Start typing to search for data items"
-
-msgid "No matches found"
-msgstr "No matches found"
-
-msgid "Search for indicators, data elements, or program indicators"
-msgstr "Search for indicators, data elements, or program indicators"
 
 msgid "No compatible evaluations found"
 msgstr "No compatible evaluations found"
@@ -943,40 +1160,6 @@ msgstr ""
 
 msgid "Your server is not secure"
 msgstr "Your server is not secure"
-
-msgid "Model settings"
-msgstr "Model settings"
-
-msgid "An error occurred while loading models."
-msgstr "An error occurred while loading models."
-
-msgid ""
-"Please try to reload the page. If the problem persists, contact your system "
-"administrator."
-msgstr ""
-"Please try to reload the page. If the problem persists, contact your system "
-"administrator."
-
-msgid "Model templates"
-msgstr "Model templates"
-
-msgid ""
-"Model templates are base models that can be configured to fit your data "
-"with different parameters and covariates. This is still an advanced feature "
-"and should be used with caution."
-msgstr ""
-"Model templates are base models that can be configured to fit your data "
-"with different parameters and covariates. This is still an advanced feature "
-"and should be used with caution."
-
-msgid "Configured models"
-msgstr "Configured models"
-
-msgid "Configure"
-msgstr "Configure"
-
-msgid "Models configured"
-msgstr "Models configured"
 
 msgid "Route configuration"
 msgstr "Route configuration"
@@ -1045,6 +1228,9 @@ msgstr "You do not have permission to add or modify routes."
 msgid "If you think this is an error, please contact your system administrator."
 msgstr "If you think this is an error, please contact your system administrator."
 
+msgid "Code"
+msgstr "Code"
+
 msgid "URL"
 msgstr "URL"
 
@@ -1063,17 +1249,21 @@ msgstr "Error saving route"
 msgid "Route saved successfully"
 msgstr "Route saved successfully"
 
-msgid "Start month"
-msgstr "Start month"
+msgid "Evaluation details"
+msgstr "Evaluation details"
 
-msgid "End month"
-msgstr "End month"
+msgid ""
+"Deep dive into a specific evaluation run to assess its performance and "
+"reliability."
+msgstr ""
+"Deep dive into a specific evaluation run to assess its performance and "
+"reliability."
+
+msgid "Back to evaluations"
+msgstr "Back to evaluations"
 
 msgid "Error loading evaluations"
 msgstr "Error loading evaluations"
-
-msgid "An unknown error occurred"
-msgstr "An unknown error occurred"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -1094,22 +1284,64 @@ msgstr "To get started, create a route that points to a running CHAP server."
 msgid "Route and servers are configured on the settings page."
 msgstr "Route and servers are configured on the settings page."
 
-msgid "Error loading jobs"
-msgstr "Error loading jobs"
-
 msgid "Active jobs"
 msgstr "Active jobs"
 
 msgid "View and manage currently running jobs and their status."
 msgstr "View and manage currently running jobs and their status."
 
+msgid "Manage configured models available in your system."
+msgstr "Manage configured models available in your system."
+
+msgid ""
+"Configure a new model with custom settings or parameters based on a model "
+"template."
+msgstr ""
+"Configure a new model with custom settings or parameters based on a model "
+"template."
+
+msgid "Back to models"
+msgstr "Back to models"
+
 msgid "Create a new evaluation to assess the performance of a model"
 msgstr "Create a new evaluation to assess the performance of a model"
 
-msgctxt "Application title"
-msgid "__MANIFEST_APP_TITLE"
-msgstr "Modeling"
+msgid "Create a new prediction to forecast outcomes using a model"
+msgstr "Create a new prediction to forecast outcomes using a model"
 
-msgctxt "Application description"
-msgid "__MANIFEST_APP_DESCRIPTION"
+msgid "Back to predictions"
+msgstr "Back to predictions"
+
+msgid "Prediction details"
+msgstr "Prediction details"
+
+msgid "View the details of a prediction."
+msgstr "View the details of a prediction."
+
+msgid "Import prediction"
+msgstr "Import prediction"
+
+msgid "Import the forecasted values of this prediction into DHIS2."
+msgstr "Import the forecasted values of this prediction into DHIS2."
+
+msgid "Back to prediction details"
+msgstr "Back to prediction details"
+
+msgid "Error loading predictions"
+msgstr "Error loading predictions"
+
+msgid "Predictions"
+msgstr "Predictions"
+
+msgid ""
+"Forecasted trends generated by applying a predictive model to current data. "
+"These can be reviewed and imported into DHIS2 to support decision-making in "
+"the field."
 msgstr ""
+"Forecasted trends generated by applying a predictive model to current data. "
+"These can be reviewed and imported into DHIS2 to support decision-making in "
+"the field."
+
+msgctxt ") instead."
+msgid "Spaces are not allowed. Use dashes (-) or underscores ("
+msgstr "Spaces are not allowed. Use dashes (-) or underscores (_) instead."

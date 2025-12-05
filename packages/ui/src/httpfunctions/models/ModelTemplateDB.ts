@@ -5,7 +5,6 @@
 import type { AuthorAssessedStatus } from './AuthorAssessedStatus';
 import type { PeriodType } from './PeriodType';
 /**
- * TODO: Maybe remove Spec from name, or find common convention for all models.
  * Just a mixin here to get the model info flat in the database.
  */
 export type ModelTemplateDB = {
@@ -26,5 +25,6 @@ export type ModelTemplateDB = {
     name: string;
     id?: (number | null);
     sourceUrl?: (string | null);
+    version?: (string | null);
 };
 

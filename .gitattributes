@@ -1,0 +1,6 @@
+# use the "theirs" driver for this generated file
+# this is to not get merge conflicts when updating the pot file
+i18n/en.pot merge=theirs
+
+# Use this command to set the driver
+# git config merge.theirs.driver "git checkout --theirs -- %A"

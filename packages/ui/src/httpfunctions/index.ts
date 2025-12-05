@@ -1,32 +1,33 @@
 /* generated using openapi-typescript-codegen -- do not edit */
 /* istanbul ignore file */
 /* tslint:disable */
-/* eslint-disable */
+
 export { ApiError } from './core/ApiError';
 export { CancelablePromise, CancelError } from './core/CancelablePromise';
 export { OpenAPI } from './core/OpenAPI';
 export type { OpenAPIConfig } from './core/OpenAPI';
 
 export { AuthorAssessedStatus } from './models/AuthorAssessedStatus';
+export type { BackTest } from './models/BackTest';
 export type { BackTestCreate } from './models/BackTestCreate';
 export type { BacktestDomain } from './models/BacktestDomain';
-export type { BackTestForecast } from './models/BackTestForecast';
-export type { BackTestFull } from './models/BackTestFull';
-export type { BackTestMetric } from './models/BackTestMetric';
+export type { BackTestPlotType } from './models/BackTestPlotType';
 export type { BackTestRead } from './models/BackTestRead';
 export type { BackTestUpdate } from './models/BackTestUpdate';
 export type { Body_create_dataset_csv_crud_datasets_csvFile_post } from './models/Body_create_dataset_csv_crud_datasets_csvFile_post';
+export type { chap_core__rest_api__v1__jobs__DataBaseResponse } from './models/chap_core__rest_api__v1__jobs__DataBaseResponse';
+export type { ChapDataSource } from './models/ChapDataSource';
 export type { CompatibilityResponse } from './models/CompatibilityResponse';
 export type { ConfiguredModelDB } from './models/ConfiguredModelDB';
-export type { ConfiguredModelRead } from './models/ConfiguredModelRead';
+export type { ConfiguredModelRead_Input } from './models/ConfiguredModelRead_Input';
+export type { ConfiguredModelRead_Output } from './models/ConfiguredModelRead_Output';
 export type { Coordinates } from './models/Coordinates';
-export type { DataBaseResponse } from './models/DataBaseResponse';
 export type { DataElement } from './models/DataElement';
 export type { DataList } from './models/DataList';
 export type { DatasetCreate } from './models/DatasetCreate';
+export type { DataSetInfo } from './models/DataSetInfo';
 export type { DatasetMakeRequest } from './models/DatasetMakeRequest';
 export type { DataSetMeta } from './models/DataSetMeta';
-export type { DataSetRead } from './models/DataSetRead';
 export type { DataSetWithObservations } from './models/DataSetWithObservations';
 export type { DataSource } from './models/DataSource';
 export type { DebugEntry } from './models/DebugEntry';
@@ -37,7 +38,6 @@ export type { FeatureCollectionModel } from './models/FeatureCollectionModel';
 export type { FeatureModel } from './models/FeatureModel';
 export type { FeatureType } from './models/FeatureType';
 export type { FetchRequest } from './models/FetchRequest';
-export type { ForecastRead } from './models/ForecastRead';
 export type { FullPredictionResponse } from './models/FullPredictionResponse';
 export type { HealthResponse } from './models/HealthResponse';
 export type { HTTPValidationError } from './models/HTTPValidationError';
@@ -48,6 +48,7 @@ export type { LineStringModel } from './models/LineStringModel';
 export type { MakeBacktestRequest } from './models/MakeBacktestRequest';
 export type { MakeBacktestWithDataRequest } from './models/MakeBacktestWithDataRequest';
 export type { MakePredictionRequest } from './models/MakePredictionRequest';
+export type { Metric } from './models/Metric';
 export type { ModelConfigurationCreate } from './models/ModelConfigurationCreate';
 export type { ModelSpec } from './models/ModelSpec';
 export type { ModelSpecRead } from './models/ModelSpecRead';
@@ -56,22 +57,22 @@ export type { ModelTemplateRead } from './models/ModelTemplateRead';
 export type { MultiLineStringModel } from './models/MultiLineStringModel';
 export type { MultiPointModel } from './models/MultiPointModel';
 export type { MultiPolygonModel } from './models/MultiPolygonModel';
-export type { NewClass } from './models/NewClass';
 export type { ObservationBase } from './models/ObservationBase';
 export { PeriodType } from './models/PeriodType';
 export type { PointModel } from './models/PointModel';
 export type { PolygonModel } from './models/PolygonModel';
 export type { PredictionCreate } from './models/PredictionCreate';
 export type { PredictionEntry } from './models/PredictionEntry';
-export type { PredictionRead } from './models/PredictionRead';
-export type { PredictionRequest } from './models/PredictionRequest';
+export type { PredictionInfo } from './models/PredictionInfo';
 export type { PredictionResponse } from './models/PredictionResponse';
 export type { State } from './models/State';
 export type { SystemInfoResponse } from './models/SystemInfoResponse';
 export type { ValidationError } from './models/ValidationError';
+export type { VisualizationInfo } from './models/VisualizationInfo';
 
 export { AnalyticsService } from './services/AnalyticsService';
 export { CrudService } from './services/CrudService';
 export { DebugService } from './services/DebugService';
 export { DefaultService } from './services/DefaultService';
 export { JobsService } from './services/JobsService';
+export { VisualizationService } from './services/VisualizationService';

@@ -10,16 +10,18 @@ type Props = {
 export const ConditionalTooltip = (props: Props) => {
     const { enabled, children, ...passOnProps } = props;
 
-    return enabled ?
-        (<Tooltip {...passOnProps}>
-            {({ onMouseOver, onMouseOut, ref }) => (
-                <span
-                    ref={ref}
-                    onMouseEnter={onMouseOver}
-                    onMouseLeave={onMouseOut}
-                >
-                    {children}
-                </span>
-            )}
-        </Tooltip>) : children;
-}; 
+    return enabled
+        ? (
+                <Tooltip {...passOnProps}>
+                    {({ onMouseOver, onMouseOut, ref }) => (
+                        <span
+                            ref={ref}
+                            onMouseEnter={onMouseOver}
+                            onMouseLeave={onMouseOut}
+                        >
+                            {children}
+                        </span>
+                    )}
+                </Tooltip>
+            ) : children;
+};

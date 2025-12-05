@@ -3,36 +3,41 @@ import {
     RouterProvider,
     Navigate,
     Outlet,
-} from 'react-router-dom'
-import ErrorPage from './components/ErrorPage'
-import './locales'
-import './App.module.css'
-import PageWrapper from './components/PageWrapper'
-import EvaluationPageLegacy from './pages/EvaluationPageLegacy'
-import ModelTemplatesPage from './pages/ModelTemplatesPage'
-import PredictionOverview from './features/predictions-overview/PredictionOverview'
-import { SetChapUrl } from './features/route-api/SetChapUrl'
-import { SettingsPage } from './features/settings/Settings'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import { CssReset, CssVariables } from '@dhis2/ui'
-import { Layout } from './components/layout/Layout'
-import { RouteValidator } from './components/RouteValidator'
-import InfoAboutReportingBugs from './features/common-features/InfoAboutReportingBugs/InfoAboutReportingBugs'
-import WarnAboutIncompatibleVersion from './features/common-features/WarnAboutIncompatibleVersion/WarnAboutIncompatibleVersion'
-import { EvaluationPage } from './pages/EvaluationPage'
-import { ChapValidator } from './components/ChapValidator'
-import { NewEvaluationPage } from './pages/NewEvaluationPage'
-import { JobsPage } from './pages/JobsPage'
-import { EvaluationComparePage } from './pages/EvaluationCompare'
-import { GetStartedPage } from './pages/GetStartedPage'
-import { SyncUrlWithGlobalShell } from './utils/syncUrlWithGlobalShell'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+} from 'react-router-dom';
+import ErrorPage from './components/ErrorPage';
+import React from 'react';
+import './locales';
+import './App.module.css';
+import PageWrapper from './components/PageWrapper';
+import { SetChapUrl } from './features/route-api/SetChapUrl';
+import { SettingsPage } from './features/settings/Settings';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { CssReset, CssVariables } from '@dhis2/ui';
+import { Layout } from './components/layout/Layout';
+import { RouteValidator } from './components/RouteValidator';
+import InfoAboutReportingBugs from './features/common-features/InfoAboutReportingBugs/InfoAboutReportingBugs';
+import WarnAboutIncompatibleVersion from './features/common-features/WarnAboutIncompatibleVersion/WarnAboutIncompatibleVersion';
+import { EvaluationPage } from './pages/EvaluationPage';
+import { EvaluationDetailsPage } from './pages/EvaluationDetailsPage';
+import { ChapValidator } from './components/ChapValidator';
+import { NewEvaluationPage } from './pages/NewEvaluationPage';
+import { JobsPage } from './pages/JobsPage';
+import { EvaluationComparePage } from './pages/EvaluationCompare';
+import { GetStartedPage } from './pages/GetStartedPage';
+import { PredictionsPage } from './pages/PredictionsPage';
+import { PredictionDetailsPage } from './pages/PredictionDetailsPage';
+import { ModelsPage } from './pages/ModelsPage';
+import { NewConfiguredModelPage } from './pages/NewConfiguredModelPage';
+import { SyncUrlWithGlobalShell } from './utils/syncUrlWithGlobalShell';
+import { NewPredictionPage } from './pages/NewPredictionPage';
+import { PredictionImportPage } from './pages/PredictionImportPage';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 export type RouteHandle = {
-    fullWidth?: boolean
-    /* whether to automatically collapse the sidebar when route is active*/
-    collapseSidebar?: boolean
-}
+    fullWidth?: boolean;
+    /* whether to automatically collapse the sidebar when route is active */
+    collapseSidebar?: boolean;
+};
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -41,14 +46,14 @@ const queryClient = new QueryClient({
             retry: false,
         },
     },
-})
+});
 
 const router = createHashRouter([
     {
         element: (
             <>
                 <SyncUrlWithGlobalShell />
-                <Layout />,
+                <Layout />
             </>
         ),
         errorElement: <ErrorPage />,
@@ -92,19 +97,64 @@ const router = createHashRouter([
                                     collapseSidebar: true,
                                 } satisfies RouteHandle,
                             },
+                            {
+                                path: ':evaluationId',
+                                handle: {
+                                    collapseSidebar: true,
+                                } satisfies RouteHandle,
+                                element: <EvaluationDetailsPage />,
+                            },
                         ],
-                    },
-                    {
-                        path: '/evaluate-old',
-                        element: <EvaluationPageLegacy />,
                     },
                     {
                         path: '/jobs',
                         element: <JobsPage />,
                     },
                     {
-                        path: '/predict',
-                        element: <PredictionOverview />,
+                        path: '/predictions',
+                        children: [
+                            {
+                                index: true,
+                                element: <PredictionsPage />,
+                            },
+                            {
+                                path: ':predictionId/import',
+                                handle: {
+                                    collapseSidebar: true,
+                                } satisfies RouteHandle,
+                                element: <PredictionImportPage />,
+                            },
+                            {
+                                path: ':predictionId',
+                                handle: {
+                                    collapseSidebar: true,
+                                } satisfies RouteHandle,
+                                element: <PredictionDetailsPage />,
+                            },
+                            {
+                                path: 'new',
+                                handle: {
+                                    collapseSidebar: true,
+                                } satisfies RouteHandle,
+                                element: <NewPredictionPage />,
+                            },
+                        ],
+                    },
+                    {
+                        path: '/models',
+                        children: [
+                            {
+                                index: true,
+                                element: <ModelsPage />,
+                            },
+                            {
+                                path: 'new',
+                                element: <NewConfiguredModelPage />,
+                                handle: {
+                                    collapseSidebar: true,
+                                } satisfies RouteHandle,
+                            },
+                        ],
                     },
                 ],
             },
@@ -123,10 +173,6 @@ const router = createHashRouter([
                                 index: true,
                                 element: <SettingsPage />,
                             },
-                            {
-                                path: 'models',
-                                element: <ModelTemplatesPage />,
-                            },
                         ],
                     },
                 ],
@@ -140,7 +186,7 @@ const router = createHashRouter([
             },
         ],
     },
-])
+]);
 
 const App = () => {
     return (
@@ -154,7 +200,7 @@ const App = () => {
                 <ReactQueryDevtools position="bottom-right" />
             </QueryClientProvider>
         </>
-    )
-}
+    );
+};
 
-export default App
+export default App;

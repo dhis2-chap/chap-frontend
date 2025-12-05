@@ -25,5 +25,6 @@ export type ModelTemplateRead = {
     allowFreeAdditionalContinuousCovariates?: boolean;
     name: string;
     id: number;
+    version?: (string | null);
 };
 

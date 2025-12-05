@@ -1,1 +1,1 @@
-export { NavigationConfirmModal } from './NavigationConfirmModal' 
+export { NavigationConfirmModal } from './NavigationConfirmModal';

@@ -1,5 +1,5 @@
-import { useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 /* When the app is running in the Global Shell, the URL is not updated.
     The Global Shell is listening to "popstate" events to update the URL.
@@ -14,13 +14,13 @@ import { useLocation } from 'react-router-dom'
 export const SyncUrlWithGlobalShell = ({
     children,
 }: {
-    children?: React.ReactNode
+    children?: React.ReactNode;
 }) => {
-    const location = useLocation()
+    const location = useLocation();
 
     useEffect(() => {
-        dispatchEvent(new PopStateEvent('popstate'))
-    }, [location.key])
+        dispatchEvent(new PopStateEvent('popstate'));
+    }, [location.key]);
 
-    return children
-}
+    return children;
+};

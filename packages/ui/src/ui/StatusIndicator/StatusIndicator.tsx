@@ -9,7 +9,7 @@ export type Props = {
     label: string;
     variant?: StatusIndicatorVariant;
     active?: boolean;
-}
+};
 
 export const StatusIndicator = ({
     label,
@@ -27,4 +27,4 @@ export const StatusIndicator = ({
             </div>
         </Pill>
     );
-}; 
+};

@@ -1,14 +1,14 @@
-import React, { useEffect } from "react";
-import { Card, CircularLoader, colors, NoticeBox } from "@dhis2/ui";
-import i18n from "@dhis2/d2-i18n";
+import React, { useEffect } from 'react';
+import { Card, CircularLoader, colors, NoticeBox } from '@dhis2/ui';
+import i18n from '@dhis2/d2-i18n';
 import styles from './ChapSettings.module.css';
-import { Route } from "../../../hooks/useRoute";
-import { useChapStatus } from "./hooks/useChapStatus";
-import { ServerSecurityNotices } from "./ServerSecurityNotices";
+import { Route } from '../../../hooks/useRoute';
+import { useChapStatus } from './hooks/useChapStatus';
+import { ServerSecurityNotices } from './ServerSecurityNotices';
 
 type Props = {
-    route: Route
-}
+    route: Route;
+};
 
 const Wrapper = ({ children }: { children: React.ReactNode }) => {
     return (
@@ -39,7 +39,7 @@ export const ChapSettings = ({ route }: Props) => {
                     <CircularLoader />
                 </div>
             </Wrapper>
-        )
+        );
     }
 
     if (error || !status) {
@@ -51,7 +51,7 @@ export const ChapSettings = ({ route }: Props) => {
                     </NoticeBox>
                 </div>
             </Wrapper>
-        )
+        );
     }
 
     return (
@@ -91,4 +91,4 @@ export const ChapSettings = ({ route }: Props) => {
             </div>
         </Wrapper>
     );
-}; 
+};

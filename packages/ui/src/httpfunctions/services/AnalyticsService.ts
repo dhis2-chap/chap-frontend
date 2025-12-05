@@ -4,9 +4,9 @@
 /* eslint-disable */
 import type { BacktestDomain } from '../models/BacktestDomain';
 import type { BackTestRead } from '../models/BackTestRead';
+import type { ChapDataSource } from '../models/ChapDataSource';
 import type { DataList } from '../models/DataList';
 import type { DatasetMakeRequest } from '../models/DatasetMakeRequest';
-import type { DataSource } from '../models/DataSource';
 import type { EvaluationEntry } from '../models/EvaluationEntry';
 import type { ImportSummaryResponse } from '../models/ImportSummaryResponse';
 import type { JobResponse } from '../models/JobResponse';
@@ -85,8 +85,34 @@ export class AnalyticsService {
         });
     }
     /**
+     * Get Prediction Entry
+     * return
+     * @param predictionId
+     * @param quantiles
+     * @returns PredictionEntry Successful Response
+     * @throws ApiError
+     */
+    public static getPredictionEntryAnalyticsPredictionEntryGet(
+        predictionId: number,
+        quantiles: Array<number>,
+    ): CancelablePromise<Array<PredictionEntry>> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/analytics/prediction-entry',
+            query: {
+                'predictionId': predictionId,
+                'quantiles': quantiles,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
      * Get Evaluation Entries
      * Return quantiles for the forecasts in a backtest. Can optionally be filtered on split period and org units.
+     *
+     * NOTE: If org_units is set to ["adm0"], the sum over all regions is returned.
      * @param backtestId
      * @param quantiles
      * @param splitPeriod
@@ -180,14 +206,18 @@ export class AnalyticsService {
     /**
      * Get Actual Cases
      * Return the actual disease cases corresponding to a backtest. Can optionally be filtered on org units.
+     *
+     * Note: If org_units is set to ["adm0"], the sum over all regions is returned.
      * @param backtestId
      * @param orgUnits
+     * @param isDatasetId
      * @returns DataList Successful Response
      * @throws ApiError
      */
     public static getActualCasesAnalyticsActualCasesBacktestIdGet(
         backtestId: number,
         orgUnits?: Array<string>,
+        isDatasetId: boolean = false,
     ): CancelablePromise<DataList> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -197,6 +227,7 @@ export class AnalyticsService {
             },
             query: {
                 'orgUnits': orgUnits,
+                'isDatasetId': isDatasetId,
             },
             errors: {
                 422: `Validation Error`,
@@ -205,10 +236,10 @@ export class AnalyticsService {
     }
     /**
      * Get Data Sources
-     * @returns DataSource Successful Response
+     * @returns ChapDataSource Successful Response
      * @throws ApiError
      */
-    public static getDataSourcesAnalyticsDataSourcesGet(): CancelablePromise<Array<DataSource>> {
+    public static getDataSourcesAnalyticsDataSourcesGet(): CancelablePromise<Array<ChapDataSource>> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/analytics/data-sources',

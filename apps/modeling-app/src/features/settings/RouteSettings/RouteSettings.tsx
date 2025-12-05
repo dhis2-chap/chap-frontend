@@ -1,12 +1,12 @@
-import React, { useEffect } from "react"
-import { Card, CircularLoader } from "@dhis2/ui"
-import i18n from "@dhis2/d2-i18n"
-import { useRoute } from "../../../hooks/useRoute"
-import styles from './RouteSettings.module.css'
-import { CreateRoute } from "./CreateRoute/CreateRoute"
-import { RouteActions } from "./RouteActions"
-import { PublicAccessWarning } from "./PublicAccessWarning";
-import { useAuthority } from "../../../hooks/useAuthority";
+import React, { useEffect } from 'react';
+import { Card, CircularLoader } from '@dhis2/ui';
+import i18n from '@dhis2/d2-i18n';
+import { useRoute } from '../../../hooks/useRoute';
+import styles from './RouteSettings.module.css';
+import { CreateRoute } from './CreateRoute/CreateRoute';
+import { RouteActions } from './RouteActions';
+import { PublicAccessWarning } from './PublicAccessWarning';
+import { useAuthority } from '../../../hooks/useAuthority';
 
 const RouteWrapper = ({ children }: { children: React.ReactNode }) => {
     return (
@@ -18,11 +18,11 @@ const RouteWrapper = ({ children }: { children: React.ReactNode }) => {
                 {children}
             </div>
         </Card>
-    )
-}
+    );
+};
 
-const ROUTE_AUTHORITY_PRIVATE_ADD = 'F_ROUTE_PRIVATE_ADD'
-const ROUTE_AUTHORITY_PUBLIC_ADD = 'F_ROUTE_PUBLIC_ADD'
+const ROUTE_AUTHORITY_PRIVATE_ADD = 'F_ROUTE_PRIVATE_ADD';
+const ROUTE_AUTHORITY_PUBLIC_ADD = 'F_ROUTE_PUBLIC_ADD';
 
 export const RouteSettings = () => {
     const {
@@ -35,14 +35,14 @@ export const RouteSettings = () => {
         hasAuthority: canAddRoute,
         isLoading: canAddRouteLoading,
     } = useAuthority({
-        authority: [ROUTE_AUTHORITY_PRIVATE_ADD, ROUTE_AUTHORITY_PUBLIC_ADD]
-    })
+        authority: [ROUTE_AUTHORITY_PRIVATE_ADD, ROUTE_AUTHORITY_PUBLIC_ADD],
+    });
 
     useEffect(() => {
         if (routeError) {
-            console.error(routeError)
+            console.error(routeError);
         }
-    }, [routeError])
+    }, [routeError]);
 
     if (isRouteLoading || canAddRouteLoading) {
         return (
@@ -51,7 +51,7 @@ export const RouteSettings = () => {
                     <CircularLoader />
                 </div>
             </RouteWrapper>
-        )
+        );
     }
 
     if (routeError) {
@@ -63,7 +63,7 @@ export const RouteSettings = () => {
                     <p className={styles.mutedText}>{i18n.t('If the problem persists, please contact your system administrator.')}</p>
                 </div>
             </RouteWrapper>
-        )
+        );
     }
 
     if (!canAddRoute) {
@@ -75,7 +75,7 @@ export const RouteSettings = () => {
                     <p className={styles.mutedText}>{i18n.t('If you think this is an error, please contact your system administrator.')}</p>
                 </div>
             </RouteWrapper>
-        )
+        );
     }
 
     if (!route) {
@@ -83,7 +83,7 @@ export const RouteSettings = () => {
             <RouteWrapper>
                 <CreateRoute />
             </RouteWrapper>
-        )
+        );
     }
 
     return (
@@ -124,5 +124,5 @@ export const RouteSettings = () => {
                 </div>
             </div>
         </RouteWrapper>
-    )
-}
+    );
+};

@@ -1,0 +1,1 @@
+export { DeleteModelModal } from './DeleteModelModal';

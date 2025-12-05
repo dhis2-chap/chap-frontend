@@ -1,0 +1,16 @@
+.loaderContainer {
+    display: flex;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.errorContainer {
+    margin-block: 1rem;
+}
+
+.formFields {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-block: 16px;
+}

@@ -1,0 +1,76 @@
+.container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.loadingContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+}
+
+.errorContainer {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    padding: 16px;
+}
+
+.errorContainer p {
+    color: var(--colors-grey500);
+}
+
+.errorCardHeader {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--colors-yellow800);
+}
+
+.errorCardContent {
+    padding: 16px;
+    padding-block-start: 0px;
+    line-height: 1.5;
+    display: flex;
+    flex-direction: column;
+}
+
+.content {
+    padding: 16px;
+    padding-block-start: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.row {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-block-end: 4px;
+    border-block-end: 1px solid var(--colors-grey300);
+}
+
+.row:last-child {
+    border-block-end: none;
+}
+
+.value {
+    color: var(--colors-grey900);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.label {
+    font-size: 0.8rem;
+    color: var(--colors-grey700);
+}
+
+.periodValues {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}

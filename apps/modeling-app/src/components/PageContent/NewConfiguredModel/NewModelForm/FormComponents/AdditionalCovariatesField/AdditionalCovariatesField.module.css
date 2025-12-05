@@ -1,0 +1,60 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.inputRow {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    width: 100%;
+}
+
+.inputRow>div {
+    flex: 1;
+}
+
+.addButton {
+    margin-bottom: 2px;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.listItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 8px;
+    border: 1px solid #d8dde3;
+    border-radius: 4px;
+    background-color: #f5f7fa;
+}
+
+.listText {
+    font-size: 14px;
+}
+
+.requiredBadge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 8px;
+    margin: 4px 0px;
+    border-radius: 4px;
+    background-color: #e8ecf1;
+    color: #0d1e32;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.removeButton {
+    margin: 0;
+}

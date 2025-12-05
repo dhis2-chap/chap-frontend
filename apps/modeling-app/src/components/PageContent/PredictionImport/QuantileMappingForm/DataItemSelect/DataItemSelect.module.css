@@ -1,0 +1,174 @@
+.dataItemSelect {
+    margin-block-end: 1rem;
+}
+
+.label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: #374151;
+}
+
+.selectContainer {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.triggerButton {
+    width: 100%;
+    padding: 0.375rem 0.5rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    font-size: 14px;
+    background-color: white;
+    cursor: pointer;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: left;
+    gap: 0.5rem;
+    min-height: 2rem;
+}
+
+.triggerButton:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.triggerButton:hover {
+    border-color: #9ca3af;
+}
+
+.triggerButton.hasError {
+    border-color: #dc2626;
+}
+
+.triggerButton.hasError:focus {
+    border-color: #dc2626;
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+}
+
+.triggerText {
+    flex: 1;
+    color: #374151;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+    font-size: 14px;
+    line-height: 1.25;
+}
+
+.triggerButton:not(.hasSelection) .triggerText {
+    color: #9ca3af;
+}
+
+.iconContainer {
+    display: flex;
+    align-items: center;
+    gap: 0.125rem;
+    flex-shrink: 0;
+    height: 1.25rem;
+}
+
+.clearButton {
+    background: none;
+    border: none;
+    color: #6b7280;
+    cursor: pointer;
+    padding: 0.125rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 0.25rem;
+}
+
+.clearButton:hover {
+    color: #374151;
+    background-color: #f3f4f6;
+}
+
+.dropdownIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6b7280;
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+.dropDown {
+    background-color: white;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    min-width: 120%;
+    max-width: 400px;
+}
+
+.searchContainer {
+    padding: 0.75rem;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.searchInput {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    background-color: white;
+}
+
+.searchInput:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.resultsList {
+    max-height: 200px;
+    overflow-y: auto;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.dropDownItem {
+    padding: 0.5rem 0.75rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #f3f4f6;
+    font-size: 0.8125rem;
+    line-height: 1.25;
+}
+
+.dropDownItem:hover {
+    background-color: #f9fafb;
+}
+
+.dropDownItem:last-child {
+    border-bottom: none;
+}
+
+.infoSearchItem {
+    padding: 0.5rem 0.75rem;
+    color: #6b7280;
+    font-style: italic;
+    text-align: center;
+    font-size: 0.8125rem;
+}
+
+.errorText {
+    color: #dc2626;
+    font-size: 0.875rem;
+    margin-block-start: 4px;
+    margin-block-end: 0;
+}

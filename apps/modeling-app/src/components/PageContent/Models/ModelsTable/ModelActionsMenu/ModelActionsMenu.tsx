@@ -1,0 +1,67 @@
+import React, { useState } from 'react';
+import {
+    FlyoutMenu,
+    MenuItem,
+    IconView16,
+    IconMore16,
+    IconArchive16,
+} from '@dhis2/ui';
+import i18n from '@dhis2/d2-i18n';
+import { OverflowButton } from '@dhis2-chap/ui';
+import { DeleteModelModal } from './DeleteModelModal';
+import { useNavigate } from 'react-router-dom';
+
+type Props = {
+    id: number;
+    archived: boolean;
+};
+
+export const ModelActionsMenu = ({ id, archived }: Props) => {
+    const [flyoutMenuIsOpen, setFlyoutMenuIsOpen] = useState(false);
+    const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
+    const navigate = useNavigate();
+
+    const navigateToEvaluations = () => {
+        navigate(`/evaluate?modelId=${id}`);
+    };
+
+    return (
+        <>
+            <OverflowButton
+                small
+                open={flyoutMenuIsOpen}
+                icon={<IconMore16 />}
+                onClick={() => setFlyoutMenuIsOpen(prev => !prev)}
+                component={(
+                    <FlyoutMenu dense>
+                        <MenuItem
+                            label={i18n.t('View evaluations')}
+                            dataTest="model-overflow-view"
+                            icon={<IconView16 />}
+                            onClick={navigateToEvaluations}
+                        />
+                        {!archived && (
+                            <MenuItem
+                                label={i18n.t('Archive')}
+                                dataTest="model-overflow-archive"
+                                destructive
+                                icon={<IconArchive16 />}
+                                onClick={() => {
+                                    setDeleteModalIsOpen(true);
+                                    setFlyoutMenuIsOpen(false);
+                                }}
+                            />
+                        )}
+                    </FlyoutMenu>
+                )}
+            />
+
+            {deleteModalIsOpen && (
+                <DeleteModelModal
+                    id={id}
+                    onClose={() => setDeleteModalIsOpen(false)}
+                />
+            )}
+        </>
+    );
+};

@@ -1,36 +1,36 @@
-import { onError } from './index'
-import { useDataEngine } from '@dhis2/app-runtime'
+import { onError } from './index';
+import { useDataEngine } from '@dhis2/app-runtime';
 
-type DataEngine = ReturnType<typeof useDataEngine>
+type DataEngine = ReturnType<typeof useDataEngine>;
 
 interface OrganisationUnitLevel {
-    id: string
-    level: number
-    displayName: string
-    name: string
+    id: string;
+    level: number;
+    displayName: string;
+    name: string;
 }
 
 interface OrganisationUnitGroup {
-    id: string
-    displayName: string
-    name: string
+    id: string;
+    displayName: string;
+    name: string;
 }
 
 interface OrganisationUnit {
-    id: string
-    displayName: string
-    name: string
-    path?: string
-    level?: number
+    id: string;
+    displayName: string;
+    name: string;
+    path?: string;
+    level?: number;
     parent?: {
-        id: string
-        name: string
-    }
-    children?: Array<{ level: number }>
+        id: string;
+        name: string;
+    };
+    children?: Array<{ level: number }>;
 }
 
 interface QueryParams {
-    displayNameProp?: string
+    displayNameProp?: string;
 }
 
 const orgUnitLevelsQuery = {
@@ -39,7 +39,7 @@ const orgUnitLevelsQuery = {
         fields: `id,level,${displayNameProp}~rename(displayName),name`,
         paging: false,
     }),
-}
+};
 
 const orgUnitGroupsQuery = {
     resource: 'organisationUnitGroups',
@@ -47,7 +47,7 @@ const orgUnitGroupsQuery = {
         fields: `id,${displayNameProp}~rename(displayName),name`,
         paging: false,
     }),
-}
+};
 
 const orgUnitRootsQuery = {
     resource: 'organisationUnits',
@@ -56,7 +56,7 @@ const orgUnitRootsQuery = {
         userDataViewFallback: true,
         paging: false,
     },
-}
+};
 
 const orgUnitsQuery = {
     resource: 'organisationUnits',
@@ -66,7 +66,7 @@ const orgUnitsQuery = {
         userDataViewFallback: true,
         paging: false,
     }),
-}
+};
 
 const orgUnitQuery = {
     resource: 'organisationUnits',
@@ -76,22 +76,22 @@ const orgUnitQuery = {
         userDataViewFallback: true,
         paging: false,
     },
-}
+};
 
 export const apiFetchOrganisationUnitLevels = async (dataEngine: DataEngine): Promise<OrganisationUnitLevel[]> => {
     const orgUnitLevelsData = await dataEngine.query(
         { orgUnitLevels: orgUnitLevelsQuery },
         {
             onError,
-        }
-    )
+        },
+    );
 
-    return (orgUnitLevelsData as any).orgUnitLevels.organisationUnitLevels
-}
+    return (orgUnitLevelsData as any).orgUnitLevels.organisationUnitLevels;
+};
 
 export const apiFetchOrganisationUnitGroups = async (
     dataEngine: DataEngine,
-    displayNameProp?: string
+    displayNameProp?: string,
 ): Promise<OrganisationUnitGroup[]> => {
     const orgUnitGroupsData = await dataEngine.query(
         { orgUnitGroups: orgUnitGroupsQuery },
@@ -100,27 +100,27 @@ export const apiFetchOrganisationUnitGroups = async (
                 displayNameProp,
             },
             onError,
-        }
-    )
+        },
+    );
 
-    return (orgUnitGroupsData as any).orgUnitGroups.organisationUnitGroups
-}
+    return (orgUnitGroupsData as any).orgUnitGroups.organisationUnitGroups;
+};
 
 export const apiFetchOrganisationUnitRoots = async (dataEngine: DataEngine): Promise<OrganisationUnit[]> => {
     const orgUnitRootsData = await dataEngine.query(
         { orgUnitRoots: orgUnitRootsQuery },
         {
             onError,
-        }
-    )
+        },
+    );
 
-    return (orgUnitRootsData as any).orgUnitRoots.organisationUnits
-}
+    return (orgUnitRootsData as any).orgUnitRoots.organisationUnits;
+};
 
 // TODO: Unused, previously used to load all org units for the tree, but that is done by the ui component internally now, remove?
 export const apiFetchOrganisationUnits = async (
     dataEngine: DataEngine,
-    displayNameProp?: string
+    displayNameProp?: string,
 ): Promise<OrganisationUnit[]> => {
     const orgUnitsData = await dataEngine.query(
         { orgUnits: orgUnitsQuery },
@@ -129,11 +129,11 @@ export const apiFetchOrganisationUnits = async (
                 displayNameProp,
             },
             onError,
-        }
-    )
+        },
+    );
 
-    return (orgUnitsData as any).orgUnits.organisationUnits
-}
+    return (orgUnitsData as any).orgUnits.organisationUnits;
+};
 
 export const apiFetchOrganisationUnit = async (dataEngine: DataEngine, id: string): Promise<OrganisationUnit> => {
     const orgUnitData = await dataEngine.query(
@@ -142,8 +142,8 @@ export const apiFetchOrganisationUnit = async (dataEngine: DataEngine, id: strin
         {
             variables: { id },
             onError,
-        }
-    )
+        },
+    );
 
-    return (orgUnitData as any).orgUnit
-} 
+    return (orgUnitData as any).orgUnit;
+};

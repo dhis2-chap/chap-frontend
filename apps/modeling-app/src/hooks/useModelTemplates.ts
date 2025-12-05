@@ -1,24 +1,18 @@
-import { useQuery } from "@tanstack/react-query";
-import { ApiError, CrudService, ModelTemplateRead } from "@dhis2-chap/ui";
-import { Route } from "./useRoute";
+import { useQuery } from '@tanstack/react-query';
+import { ApiError, CrudService, ModelTemplateRead } from '@dhis2-chap/ui';
 
-type Props = {
-    route: Route | undefined
-}
-
-export const useModelTemplates = ({ route }: Props) => {
+export const useModelTemplates = () => {
     const { data: modelTemplates, error, isLoading } = useQuery<ModelTemplateRead[], ApiError>({
-        queryKey: ['modelTemplates', route?.url],
+        queryKey: ['modelTemplates'],
         queryFn: () => CrudService.listModelTemplatesCrudModelTemplatesGet(),
-        enabled: !!route,
         retry: 0,
         staleTime: 5 * 60 * 1000,
         cacheTime: 5 * 60 * 1000,
-    })
+    });
 
     return {
         modelTemplates,
         error,
         isLoading,
-    }
-}
+    };
+};

@@ -1,34 +1,43 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState } from 'react';
+import { z } from 'zod';
 import i18n from '@dhis2/d2-i18n';
-import styles from './SearchSelectField.module.css'
-import { Label, Layer, Popper, IconChevronDown16, IconCross16 } from '@dhis2/ui'
-import { useApiDataQuery } from '../../utils/useApiDataQuery'
-import { useDebounce } from '../../hooks/useDebounce'
+import styles from './SearchSelectField.module.css';
+import { Label, Layer, Popper, IconChevronDown16, IconCross16 } from '@dhis2/ui';
+import { useApiDataQuery } from '../../utils/useApiDataQuery';
+import { useDebounce } from '../../hooks/useDebounce';
+import { dimensionItemTypeSchema } from '../../components/ModelExecutionForm/hooks/useModelExecutionFormState';
 
 interface Option {
-    id: string
-    displayName: string
-    dimensionItemType: string
+    id: string;
+    displayName: string;
+    dimensionItemType: z.infer<typeof dimensionItemTypeSchema>;
 }
 
 interface DataItemsResponse {
-    dataItems: Option[]
+    dataItems: Option[];
 }
 
 type Feature = {
-    id: string
-    name: string
-    displayName: string
-    description: string
-}
+    id: string;
+    name: string;
+    displayName: string;
+    description: string;
+};
 
 interface SearchSelectFieldProps {
-    feature: Feature
+    feature: Feature;
     onChangeSearchSelectField: (
         feature: Feature,
         dataItemId: string,
-        dataItemDisplayName: string
-    ) => void
+        dataItemDisplayName: string,
+        dimensionItemType: z.infer<typeof dimensionItemTypeSchema>
+    ) => void;
+    defaultValue?: {
+        id: string;
+        displayName: string;
+        dimensionItemType: string | null | undefined;
+    };
+    onResetField: () => void;
 }
 
 const DIMENSION_ITEM_TYPE_LABELS = {
@@ -36,20 +45,31 @@ const DIMENSION_ITEM_TYPE_LABELS = {
     INDICATOR: i18n.t('Indicator'),
     PROGRAM_INDICATOR: i18n.t('Program Indicator'),
     DATA_ELEMENT: i18n.t('Data Element'),
-}
+};
 
-const SearchSelectField = ({
+export const SearchSelectField = ({
     feature,
     onChangeSearchSelectField,
+    defaultValue,
+    onResetField,
 }: SearchSelectFieldProps) => {
-    const [searchQuery, setSearchQuery] = useState<string>('')
-    const [selectedOption, setSelectedOption] = useState<Option | null>(null)
-    const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false)
+    const [searchQuery, setSearchQuery] = useState<string>('');
+    const [selectedOption, setSelectedOption] = useState<Option | null>(() => {
+        if (defaultValue && defaultValue.id && defaultValue.displayName) {
+            return {
+                id: defaultValue.id,
+                displayName: defaultValue.displayName,
+                dimensionItemType: defaultValue.dimensionItemType as z.infer<typeof dimensionItemTypeSchema>,
+            };
+        }
+        return null;
+    });
+    const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
 
-    const debouncedQuery = useDebounce(searchQuery, 300)
+    const debouncedQuery = useDebounce(searchQuery, 300);
 
-    const anchorRef = useRef<HTMLDivElement>(null)
-    const searchInputRef = useRef<HTMLInputElement>(null)
+    const anchorRef = useRef<HTMLDivElement>(null);
+    const searchInputRef = useRef<HTMLInputElement>(null);
 
     const { data, isLoading } = useApiDataQuery<DataItemsResponse>({
         queryKey: ['dataItems', debouncedQuery],
@@ -68,66 +88,66 @@ const SearchSelectField = ({
         },
         staleTime: 5 * 60 * 1000,
         cacheTime: 10 * 60 * 1000,
-    })
+    });
 
-    const dataItems = data?.dataItems || []
+    const dataItems = data?.dataItems || [];
 
     const handleTriggerClick = () => {
-        setIsDropdownOpen(!isDropdownOpen)
-        setSearchQuery('')
+        setIsDropdownOpen(!isDropdownOpen);
+        setSearchQuery('');
 
         // Focus the search input when dropdown opens
         if (!isDropdownOpen) {
             setTimeout(() => {
                 if (searchInputRef.current) {
-                    searchInputRef.current.focus()
+                    searchInputRef.current.focus();
                 }
-            }, 100)
+            }, 100);
         }
-    }
+    };
 
     const handleBackdropClick = () => {
-        setIsDropdownOpen(false)
-        setSearchQuery('')
-    }
+        setIsDropdownOpen(false);
+        setSearchQuery('');
+    };
 
     const handleSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const newQuery = event.target.value
-        setSearchQuery(newQuery)
-    }
+        const newQuery = event.target.value;
+        setSearchQuery(newQuery);
+    };
 
     const handleOptionClick = (option: Option) => {
-        setSelectedOption(option)
-        setSearchQuery('')
-        setIsDropdownOpen(false)
-        onChangeSearchSelectField(feature, option.id, option.displayName)
-    }
+        setSelectedOption(option);
+        setSearchQuery('');
+        setIsDropdownOpen(false);
+        onChangeSearchSelectField(feature, option.id, option.displayName, option.dimensionItemType);
+    };
 
     const handleClearSelection = (event: React.MouseEvent) => {
-        event.stopPropagation() // Prevent trigger click
-        setSelectedOption(null)
-        setSearchQuery('')
-        onChangeSearchSelectField(feature, '', '')
-    }
+        event.stopPropagation();
+        setSelectedOption(null);
+        setSearchQuery('');
+        onResetField();
+    };
 
     const renderList = () => {
         if (isLoading) {
-            return <li className={styles.infoSearchItem}>{i18n.t('Loading')}</li>
+            return <li className={styles.infoSearchItem}>{i18n.t('Loading')}</li>;
         }
         if (dataItems.length === 0 && searchQuery.length === 0) {
             return (
                 <li className={styles.infoSearchItem}>
                     {i18n.t('Start typing to search for data items')}
                 </li>
-            )
+            );
         }
         if (dataItems.length === 0 && searchQuery.length > 0) {
-            return <li className={styles.infoSearchItem}>{i18n.t('No matches found')}</li>
+            return <li className={styles.infoSearchItem}>{i18n.t('No matches found')}</li>;
         }
 
         return (
             <>
-                {dataItems.map((option) => (
+                {dataItems.map(option => (
                     <li
                         key={option.id}
                         onClick={() => handleOptionClick(option)}
@@ -140,8 +160,8 @@ const SearchSelectField = ({
                     </li>
                 ))}
             </>
-        )
-    }
+        );
+    };
 
     return (
         <div className={styles.searchSelectField}>
@@ -200,7 +220,5 @@ const SearchSelectField = ({
                 </Layer>
             )}
         </div>
-    )
-}
-
-export default SearchSelectField
+    );
+};

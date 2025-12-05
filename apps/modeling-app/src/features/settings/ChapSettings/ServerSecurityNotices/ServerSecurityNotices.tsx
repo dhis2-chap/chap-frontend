@@ -1,9 +1,9 @@
-import React from "react";
-import { NoticeBox } from "@dhis2/ui";
-import i18n from "@dhis2/d2-i18n";
+import React from 'react';
+import { NoticeBox } from '@dhis2/ui';
+import i18n from '@dhis2/d2-i18n';
 import styles from '../ChapSettings.module.css';
-import { useRoute } from "../../../../hooks/useRoute";
-import { useQuery } from "@tanstack/react-query";
+import { useRoute } from '../../../../hooks/useRoute';
+import { useQuery } from '@tanstack/react-query';
 
 export const ServerSecurityNotices = () => {
     const { route } = useRoute();
@@ -15,7 +15,7 @@ export const ServerSecurityNotices = () => {
         staleTime: Infinity,
         cacheTime: Infinity,
         refetchOnWindowFocus: false,
-    })
+    });
 
     if (isLoading) {
         return null;
@@ -28,7 +28,7 @@ export const ServerSecurityNotices = () => {
                     {i18n.t('CHAP currently does not have it\'s own authentication service. Make sure to secure it by blocking public access on your server firewall.')}
                 </span>
             </NoticeBox>
-        )
+        );
     }
 
     return (
@@ -41,4 +41,4 @@ export const ServerSecurityNotices = () => {
             </NoticeBox>
         </>
     );
-}; 
+};

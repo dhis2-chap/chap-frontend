@@ -1,12 +1,12 @@
-import React from 'react'
-import styles from './PageHeader.module.css'
-import { Button, IconAdd16 } from '@dhis2/ui'
+import React from 'react';
+import styles from './PageHeader.module.css';
+import { Button, IconAdd16 } from '@dhis2/ui';
 
 interface PageHeaderProps {
-    pageTitle: string
-    pageDescription?: string
-    setDrawerOpen?: (isOpen: boolean) => void
-    setDrawerOpenText?: string
+    pageTitle: string;
+    pageDescription?: string;
+    setDrawerOpen?: (isOpen: boolean) => void;
+    setDrawerOpenText?: string;
 }
 
 export const PageHeader = ({
@@ -31,5 +31,5 @@ export const PageHeader = ({
                 </Button>
             )}
         </div>
-    )
-}
+    );
+};

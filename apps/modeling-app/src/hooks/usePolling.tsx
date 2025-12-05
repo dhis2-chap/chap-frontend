@@ -1,53 +1,53 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react';
 
 const usePolling = (callback: () => void, delay: number) => {
-    const savedCallback = useRef<() => void>()
-    const intervalId = useRef<ReturnType<typeof setInterval> | null>(null)
+    const savedCallback = useRef<() => void>();
+    const intervalId = useRef<NodeJS.Timeout | null>(null);
 
     const startPolling = () => {
         if (intervalId.current === null && document.visibilityState === 'visible') {
             intervalId.current = setInterval(() => {
                 if (savedCallback.current) {
-                    savedCallback.current()
+                    savedCallback.current();
                 }
-            }, delay)
+            }, delay);
         }
-    }
+    };
 
     const stopPolling = () => {
         if (intervalId.current !== null) {
-            clearInterval(intervalId.current)
-            intervalId.current = null
+            clearInterval(intervalId.current);
+            intervalId.current = null;
         }
-    }
+    };
 
     // Save the latest callback
     useEffect(() => {
-        savedCallback.current = callback
-    }, [callback])
+        savedCallback.current = callback;
+    }, [callback]);
 
     // Handle visibility changes
     useEffect(() => {
         const handleVisibilityChange = () => {
             if (document.visibilityState === 'visible') {
-                startPolling()
+                startPolling();
             } else {
-                stopPolling()
+                stopPolling();
             }
-        }
+        };
 
-        document.addEventListener('visibilitychange', handleVisibilityChange)
+        document.addEventListener('visibilitychange', handleVisibilityChange);
 
         // Initial start
         if (document.visibilityState === 'visible') {
-            startPolling()
+            startPolling();
         }
 
         return () => {
-            stopPolling()
-            document.removeEventListener('visibilitychange', handleVisibilityChange)
-        }
-    }, [delay])
-}
+            stopPolling();
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+        };
+    }, [delay]);
+};
 
-export default usePolling
+export default usePolling;

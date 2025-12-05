@@ -17,9 +17,9 @@ const PAGE_STATUS = {
     LOADING: 'loading',
     ERROR: 'error',
     SUCCESS: 'success',
-}
+};
 
-const getPageStatus = ({ isLoading, error }: { isLoading: boolean, error: ApiError | Error | null }) => {
+const getPageStatus = ({ isLoading, error }: { isLoading: boolean; error: ApiError | Error | null }) => {
     if (isLoading) {
         return PAGE_STATUS.LOADING;
     }
@@ -54,12 +54,17 @@ export const ViewJobLogsModal = ({ jobId, status, onClose }: ViewJobLogsModalPro
         }
     }, [logs]);
 
-
     const pageStatus = getPageStatus({ isLoading, error });
 
     return (
         <Modal onClose={onClose} fluid={pageStatus === PAGE_STATUS.SUCCESS}>
-            <ModalTitle>{i18n.t('Job Logs')} - {jobId}</ModalTitle>
+            <ModalTitle>
+                {i18n.t('Job Logs')}
+                {' '}
+                -
+                {' '}
+                {jobId}
+            </ModalTitle>
             <ModalContent className={styles.modal}>
                 {pageStatus === PAGE_STATUS.LOADING && (
                     <div className={styles.loading}>
@@ -104,4 +109,4 @@ export const ViewJobLogsModal = ({ jobId, status, onClose }: ViewJobLogsModalPro
             </ModalActions>
         </Modal>
     );
-}; 
+};

@@ -44,4 +44,4 @@ export const StatusCell = ({ status }: StatusCellProps) => {
             active={active}
         />
     ) : null;
-}; 
+};

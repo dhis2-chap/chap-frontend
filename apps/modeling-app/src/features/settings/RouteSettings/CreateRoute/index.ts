@@ -1,2 +1,1 @@
-
-export { CreateRoute } from './CreateRoute'
+export { CreateRoute } from './CreateRoute';

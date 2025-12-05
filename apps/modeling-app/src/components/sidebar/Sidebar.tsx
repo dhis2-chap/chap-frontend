@@ -1,20 +1,20 @@
-import i18n from '@dhis2/d2-i18n'
-import { IconChevronLeft24 } from '@dhis2/ui'
-import cx from 'classnames'
-import React, { useEffect, useState } from 'react'
-import { NavLink } from 'react-router-dom'
-import styles from './Sidebar.module.css'
-import { Sidenav, SidenavItems, SidenavLink, SidenavParent } from './sidenav'
+import i18n from '@dhis2/d2-i18n';
+import { IconChevronLeft24 } from '@dhis2/ui';
+import cx from 'classnames';
+import React, { useEffect, useState } from 'react';
+import { NavLink } from 'react-router-dom';
+import styles from './Sidebar.module.css';
+import { Sidenav, SidenavItems, SidenavLink, SidenavParent } from './sidenav';
 
 type LinkItem = {
-    to: string
-    label: string
-}
+    to: string;
+    label: string;
+};
 interface SidebarNavLinkProps {
-    label: string
-    to: string
-    disabled?: boolean
-    end?: boolean
+    label: string;
+    to: string;
+    disabled?: boolean;
+    end?: boolean;
 }
 
 const SidebarNavLink = ({ to, label, disabled, end }: SidebarNavLinkProps) => {
@@ -26,13 +26,13 @@ const SidebarNavLink = ({ to, label, disabled, end }: SidebarNavLinkProps) => {
             label={label}
             end={end}
         />
-    )
-}
+    );
+};
 
 interface SidebarParentProps {
-    initiallyOpen?: boolean
-    label: string
-    links: LinkItem[]
+    initiallyOpen?: boolean;
+    label: string;
+    links: LinkItem[];
 }
 
 const SidebarParent = ({
@@ -40,14 +40,14 @@ const SidebarParent = ({
     links = [],
     initiallyOpen = true,
 }: SidebarParentProps) => {
-    const [isOpen, setIsOpen] = useState(initiallyOpen)
+    const [isOpen, setIsOpen] = useState(initiallyOpen);
 
     const handleOpen = () => {
-        setIsOpen(!isOpen)
-    }
+        setIsOpen(!isOpen);
+    };
 
     if (links.length === 1) {
-        return <SidebarNavLink to={links[0].to} label={links[0].label} end />
+        return <SidebarNavLink to={links[0].to} label={links[0].label} end />;
     }
 
     return (
@@ -56,28 +56,28 @@ const SidebarParent = ({
                 <SidebarNavLink key={label} to={to} label={label} end />
             ))}
         </SidenavParent>
-    )
-}
+    );
+};
 
 export const Sidebar = ({
     className,
     hideSidebar,
 }: {
-    className?: string
-    hideSidebar?: boolean
+    className?: string;
+    hideSidebar?: boolean;
 }) => {
-    const collapsedExternally = React.useRef<boolean>(false)
-    const [collapsed, setCollapsed] = useState(false)
+    const collapsedExternally = React.useRef<boolean>(false);
+    const [collapsed, setCollapsed] = useState(false);
 
     useEffect(() => {
         // only react if explicitly defined
         // however, do react if it has been changed externally
         // eg. so that it reopen when navigating away from a collapsed route
         if (hideSidebar !== undefined || collapsedExternally.current) {
-            setCollapsed(!!hideSidebar)
-            collapsedExternally.current = !!hideSidebar
+            setCollapsed(!!hideSidebar);
+            collapsedExternally.current = !!hideSidebar;
         }
-    }, [hideSidebar])
+    }, [hideSidebar]);
 
     return (
         <aside
@@ -100,7 +100,8 @@ export const Sidebar = ({
                             },
                         ]}
                     />
-                    <SidebarNavLink to="/predict" label={i18n.t('Predict')} />
+                    <SidebarNavLink to="/predictions" label={i18n.t('Predict')} />
+                    <SidebarNavLink to="/models" label={i18n.t('Models')} />
                     <SidebarNavLink to="/jobs" label={i18n.t('Jobs')} />
                     <SidebarNavLink to="/settings" label={i18n.t('Settings')} />
                 </SidenavItems>
@@ -119,7 +120,7 @@ export const Sidebar = ({
                 </div>
             </button>
         </aside>
-    )
-}
+    );
+};
 
-export default Sidebar
+export default Sidebar;

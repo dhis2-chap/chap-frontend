@@ -1,13 +1,18 @@
-import { ApiError, CrudService, ModelSpecRead } from "@dhis2-chap/ui";
-import { useQuery } from "@tanstack/react-query";
+import { ApiError, CrudService, ModelSpecRead } from '@dhis2-chap/ui';
+import { useQuery } from '@tanstack/react-query';
 
-export const useModels = () => {
+type Props = {
+    includeArchived?: boolean;
+};
+
+export const useModels = ({ includeArchived = false }: Props = {}) => {
     const { data, error, isLoading } = useQuery<ModelSpecRead[], ApiError>({
         queryKey: ['models'],
-        queryFn: () => CrudService.listModelsCrudModelsGet(),
+        queryFn: () => CrudService.listConfiguredModelsCrudConfiguredModelsGet(),
         staleTime: Infinity,
         cacheTime: Infinity,
         retry: 0,
+        select: data => includeArchived ? data : data.filter(model => !model.archived),
     });
 
     return {
@@ -15,4 +20,4 @@ export const useModels = () => {
         error,
         isLoading,
     };
-}
+};

@@ -7,28 +7,28 @@
  * @returns {number} - Comparison result: -1, 0, or 1.
  */
 export const compareVersions = (version1: string, version2: string): number => {
-    const v1Parts = version1.split('.').map(Number)
-    const v2Parts = version2.split('.').map(Number)
+    const v1Parts = version1.split('.').map(Number);
+    const v2Parts = version2.split('.').map(Number);
 
-    const maxLength = Math.max(v1Parts.length, v2Parts.length)
+    const maxLength = Math.max(v1Parts.length, v2Parts.length);
 
     for (let i = 0; i < maxLength; i++) {
-        const part1 = v1Parts[i] || 0
-        const part2 = v2Parts[i] || 0
+        const part1 = v1Parts[i] || 0;
+        const part2 = v2Parts[i] || 0;
 
         if (part1 < part2) {
-            return -1
+            return -1;
         } else if (part1 > part2) {
-            return 1
+            return 1;
         }
     }
 
-    return 0
-}
+    return 0;
+};
 
 export const isVersionCompatible = (
     version: string,
-    minimumVersion: string
+    minimumVersion: string,
 ): boolean => {
-    return compareVersions(version, minimumVersion) >= 0
-}
+    return compareVersions(version, minimumVersion) >= 0;
+};
