@@ -1,7 +1,7 @@
 import path from 'path';
 import { defineConfig } from 'vite';
 
-const viteConfig = defineConfig(() => {
+const viteConfig = defineConfig(async () => {
     return {
         server: {
             fs: {
@@ -9,6 +9,7 @@ const viteConfig = defineConfig(() => {
             },
         },
         resolve: { alias: { '@': path.resolve(__dirname, 'src') } },
+        clearScreen: true,
     };
 });
 
