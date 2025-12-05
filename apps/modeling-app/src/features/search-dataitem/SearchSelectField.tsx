@@ -30,7 +30,7 @@ interface SearchSelectFieldProps {
         feature: Feature,
         dataItemId: string,
         dataItemDisplayName: string,
-        dimensionItemType: z.infer<typeof dimensionItemTypeSchema>
+        dimensionItemType: z.infer<typeof dimensionItemTypeSchema>,
     ) => void;
     defaultValue?: {
         id: string;

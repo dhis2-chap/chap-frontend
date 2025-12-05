@@ -1,8 +1,7 @@
 import path from 'path';
 import { defineConfig } from 'vite';
 
-const viteConfig = defineConfig(async (configEnv) => {
-    const { mode } = configEnv;
+const viteConfig = defineConfig(() => {
     return {
         server: {
             fs: {

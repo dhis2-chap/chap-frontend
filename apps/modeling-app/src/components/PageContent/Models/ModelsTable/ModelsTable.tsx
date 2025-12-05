@@ -182,7 +182,6 @@ export const ModelsTable = ({ models }: Props) => {
                                 <DataTableColumnHeader
                                     key={header.id}
                                     fixed
-                                    top
                                     {...(header.column.getCanSort() ? {
                                         sortDirection: getSortDirection(header.column),
                                         sortIconTitle: i18n.t('Sort by {{column}}', { column: header.column.id }),

@@ -5,7 +5,7 @@ const config = {
         lib: './src/index.ts',
     },
 
-    viteConfigExtensions: './viteConfigExtensions.mts',
+    viteConfigExtensions: './vite.config.mts',
 }
 
 module.exports = config

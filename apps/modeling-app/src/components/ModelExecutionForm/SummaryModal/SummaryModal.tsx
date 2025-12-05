@@ -235,8 +235,6 @@ export const SummaryModal: React.FC<SummaryModalProps> = ({
                                                     <DataTableColumnHeader
                                                         key={header.id}
                                                         fixed
-                                                        // @ts-expect-error - top is expected to be a string in the code, but types is set to boolean | undefined
-                                                        top="0"
                                                         {...(header.column.getCanSort() ? {
                                                             sortDirection: getSortDirection(header.column),
                                                             sortIconTitle: i18n.t('Sort by {{column}}', { column: header.column.id }),
