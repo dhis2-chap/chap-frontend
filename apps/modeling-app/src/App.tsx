@@ -31,6 +31,7 @@ import { NewConfiguredModelPage } from './pages/NewConfiguredModelPage';
 import { SyncUrlWithGlobalShell } from './utils/syncUrlWithGlobalShell';
 import { NewPredictionPage } from './pages/NewPredictionPage';
 import { PredictionImportPage } from './pages/PredictionImportPage';
+import { GuidesPage } from './pages/GuidesPage';
 
 export type RouteHandle = {
     fullWidth?: boolean;
@@ -145,6 +146,10 @@ const router = createHashRouter([
                                 } satisfies RouteHandle,
                             },
                         ],
+                    },
+                    {
+                        path: '/guides',
+                        element: <GuidesPage />,
                     },
                 ],
             },
