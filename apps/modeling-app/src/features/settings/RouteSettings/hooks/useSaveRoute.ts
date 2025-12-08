@@ -53,6 +53,7 @@ export const useSaveRoute = ({ onSuccess, onError }: UseSaveRouteOptions = {}) =
                     data: {
                         ...(existingRoute || {}),
                         url: url,
+                        responseTimeoutSeconds: existingRoute.responseTimeoutSeconds ?? 30,
                     },
                 };
                 return engine.mutate(updateMutation);
@@ -68,6 +69,7 @@ export const useSaveRoute = ({ onSuccess, onError }: UseSaveRouteOptions = {}) =
                         headers: {
                             'Content-Type': 'application/json',
                         },
+                        responseTimeoutSeconds: 30,
                     },
                 };
                 return engine.mutate(createMutation);
