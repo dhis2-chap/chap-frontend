@@ -19,11 +19,13 @@ import styles from './LocationSelector.module.css';
 type Props = {
     control: Control<ModelExecutionFormValues>;
     errors: FieldErrors<ModelExecutionFormValues>;
+    onOrgUnitSelectorOpen?: () => void;
 };
 
 export const LocationSelector = ({
     control,
     errors,
+    onOrgUnitSelectorOpen,
 }: Props) => {
     const { setValue } = useFormContext<ModelExecutionFormValues>();
     const selectedOrgUnits = useWatch({ control, name: 'orgUnits' });
@@ -45,7 +47,10 @@ export const LocationSelector = ({
                 <Label>{i18n.t('Organisation units')}</Label>
                 <p className={styles.mutedText}>{getSelectionSummary(selectedOrgUnits)}</p>
                 <Button
-                    onClick={() => setIsOrgUnitModalOpen(true)}
+                    onClick={() => {
+                        setIsOrgUnitModalOpen(true);
+                        onOrgUnitSelectorOpen?.();
+                    }}
                     disabled={isLoadingOrgUnits}
                     loading={isLoadingOrgUnits}
                     icon={<IconDimensionOrgUnit16 />}

@@ -13,7 +13,7 @@ import {
 import { ModelExecutionFormValues } from '../../ModelExecutionForm/hooks/useModelExecutionFormState';
 import { prepareBacktestData } from '../../ModelExecutionForm/utils/prepareBacktestData';
 import { validateClimateData } from '../../ModelExecutionForm/utils/validateClimateData';
-import { ImportSummaryCorrected } from '../../ModelExecutionForm/types';
+import { ImportSummaryCorrected, NoValidOrgUnitsError } from '../../ModelExecutionForm/types';
 import { PERIOD_TYPES } from '@/components/ModelExecutionForm';
 
 type Props = {
@@ -45,7 +45,12 @@ export const useCreatePrediction = ({ onSuccess, onError }: Props = {}) => {
                 periods,
                 orgUnitIds,
                 hash,
+                orgUnitsWithoutGeometry,
             } = await prepareBacktestData(formData, dataEngine, queryClient);
+
+            if (orgUnitIds.length === 0) {
+                throw new NoValidOrgUnitsError();
+            }
 
             const validation = validateClimateData(observations, formData, periods, orgUnitIds);
 
@@ -63,6 +68,7 @@ export const useCreatePrediction = ({ onSuccess, onError }: Props = {}) => {
                         reason: i18n.t('Missing data for covariate'),
                         period: [item.period],
                     })),
+                    orgUnitsWithoutGeometry,
                 };
             }
 
@@ -70,6 +76,7 @@ export const useCreatePrediction = ({ onSuccess, onError }: Props = {}) => {
                 id: null,
                 importedCount: orgUnitIds.length,
                 rejected: [],
+                orgUnitsWithoutGeometry,
             };
         },
         onSuccess: () => {
@@ -86,15 +93,21 @@ export const useCreatePrediction = ({ onSuccess, onError }: Props = {}) => {
         error,
     } = useMutation<JobResponse, ApiError, ModelExecutionFormValues>({
         mutationFn: async (formData: ModelExecutionFormValues) => {
-            const { model, observations, orgUnitResponse, dataSources } = await prepareBacktestData(
+            const { model, observations, orgUnitResponse, orgUnitIds, dataSources } = await prepareBacktestData(
                 formData,
                 dataEngine,
                 queryClient,
             );
 
+            if (orgUnitIds.length === 0) {
+                throw new NoValidOrgUnitsError();
+            }
+
+            const orgUnitsWithGeometry = orgUnitResponse.geojson.organisationUnits.filter(ou => ou.geometry);
+
             const geojson: FeatureCollectionModel = {
                 type: 'FeatureCollection',
-                features: orgUnitResponse.geojson.organisationUnits.map(ou => ({
+                features: orgUnitsWithGeometry.map(ou => ({
                     id: ou.id,
                     type: 'Feature',
                     geometry: ou.geometry,

@@ -9,4 +9,12 @@ export type ImportSummaryCorrected = Omit<ImportSummaryResponse, 'rejected'> & {
         reason: string;
         period: string[];
     }[];
+    orgUnitsWithoutGeometry?: string[];
 };
+
+export class NoValidOrgUnitsError extends Error {
+    constructor(message: string = 'No valid organization units with geometry') {
+        super(message);
+        this.name = 'NoValidOrgUnitsError';
+    }
+}

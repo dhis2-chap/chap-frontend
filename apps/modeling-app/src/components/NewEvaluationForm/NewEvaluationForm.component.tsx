@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { FormProvider } from 'react-hook-form';
 import { Card } from '@dhis2-chap/ui';
 import { useEvaluationFormController } from './hooks/useEvaluationFormController';
+import { NoValidOrgUnitsError } from '../ModelExecutionForm/types';
 import { ModelExecutionFormValues } from '../ModelExecutionForm/hooks/useModelExecutionFormState';
 import styles from './NewEvaluationForm.module.css';
 import { Button, ButtonStrip, IconArrowRightMulti16, NoticeBox } from '@dhis2/ui';
@@ -16,6 +17,8 @@ type NewEvaluationFormProps = {
 };
 
 export const NewEvaluationFormComponent = ({ initialValues }: NewEvaluationFormProps = {}) => {
+    const [hasNoValidOrgUnits, setHasNoValidOrgUnits] = useState<boolean>(false);
+
     const {
         methods,
         handleSubmit,
@@ -28,6 +31,17 @@ export const NewEvaluationFormComponent = ({ initialValues }: NewEvaluationFormP
         handleDryRun,
         isValidationLoading,
     } = useEvaluationFormController(initialValues);
+
+    // Check if error is NoValidOrgUnitsError
+    useEffect(() => {
+        setHasNoValidOrgUnits(error instanceof NoValidOrgUnitsError);
+    }, [error]);
+
+    // Watch org units and dismiss error when they change
+    const orgUnits = methods.watch('orgUnits');
+    useEffect(() => {
+        setHasNoValidOrgUnits(false);
+    }, [orgUnits]);
 
     const {
         showConfirmModal,
@@ -60,7 +74,7 @@ export const NewEvaluationFormComponent = ({ initialValues }: NewEvaluationFormP
                                             loading={isSubmitting}
                                             onClick={handleStartJob}
                                             icon={<IconArrowRightMulti16 />}
-                                            disabled={isValidationLoading}
+                                            disabled={isValidationLoading || hasNoValidOrgUnits}
                                         >
                                             {i18n.t('Start import')}
                                         </Button>
@@ -69,7 +83,17 @@ export const NewEvaluationFormComponent = ({ initialValues }: NewEvaluationFormP
                             )}
                         />
 
-                        {!!error && !importSummary && (
+                        {hasNoValidOrgUnits && (
+                            <NoticeBox
+                                error
+                                title={i18n.t('No valid locations')}
+                                className={styles.errorNotice}
+                            >
+                                {i18n.t('None of the selected locations have geometry data. Please select different locations to proceed with the evaluation.')}
+                            </NoticeBox>
+                        )}
+
+                        {!!error && !importSummary && !(error instanceof NoValidOrgUnitsError) && (
                             <NoticeBox
                                 error
                                 title={i18n.t('There was an error')}

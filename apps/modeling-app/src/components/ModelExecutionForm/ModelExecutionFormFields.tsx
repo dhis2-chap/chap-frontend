@@ -14,6 +14,7 @@ type Props = {
     onSubmit: (data: ModelExecutionFormValues) => void;
     actions?: React.ReactNode;
     footer?: React.ReactNode;
+    onOrgUnitSelectorOpen?: () => void;
 };
 
 export const ModelExecutionFormFields = ({
@@ -21,6 +22,7 @@ export const ModelExecutionFormFields = ({
     onSubmit,
     actions,
     footer,
+    onOrgUnitSelectorOpen,
 }: Props) => {
     const {
         control,
@@ -44,6 +46,7 @@ export const ModelExecutionFormFields = ({
                 <LocationSelector
                     control={control}
                     errors={errors}
+                    onOrgUnitSelectorOpen={onOrgUnitSelectorOpen}
                 />
 
                 <ModelSelector

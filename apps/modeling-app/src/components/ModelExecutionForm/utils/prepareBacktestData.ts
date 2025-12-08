@@ -28,6 +28,7 @@ export type PreparedBacktestData = {
     orgUnitIds: string[];
     hash: string;
     dataSources: DataSource[];
+    orgUnitsWithoutGeometry: string[];
 };
 
 export const prepareBacktestData = async (
@@ -95,39 +96,35 @@ export const prepareBacktestData = async (
         queryClient.setQueryData(['new-backtest-data', 'org-units', hash], orgUnitResponse);
     }
 
+    // Filter out org units without geometry
     const orgUnitsWithoutGeometry = orgUnitResponse.geojson.organisationUnits.filter(ou => !ou.geometry);
+    const orgUnitIdsWithGeometry = orgUnitResponse.geojson.organisationUnits.filter(ou => ou.geometry).map(ou => ou.id);
 
-    if (orgUnitsWithoutGeometry.length > 0) {
-        throw new Error(
-            i18n.t('The following org units have no geometry{{escape}} {{orgUnitsWithoutGeometry}}', {
-                orgUnitsWithoutGeometry: orgUnitsWithoutGeometry.map(ou => ou.displayName).join(', '),
-                escape: ':',
-            }),
-        );
-    }
-
+    // Filter observations to only include org units with geometry
     const convertDhis2AnalyticsToChap = (data: [string, string, string, string][]): ObservationBase[] => {
-        return data.map((row) => {
-            const dataItemId = row[0];
-            const dataLayer = formData
-                .targetMapping
-                .dataItem
-                .id === dataItemId ? formData.targetMapping : formData.covariateMappings.find(mapping => mapping.dataItem.id === dataItemId);
+        return data
+            .filter(row => orgUnitIdsWithGeometry.includes(row[1])) // Only include org units with geometry
+            .map((row) => {
+                const dataItemId = row[0];
+                const dataLayer = formData
+                    .targetMapping
+                    .dataItem
+                    .id === dataItemId ? formData.targetMapping : formData.covariateMappings.find(mapping => mapping.dataItem.id === dataItemId);
 
-            if (!dataLayer) {
-                throw new Error(i18n.t('Data layer not found for data item id{{escape}} {{dataItemId}}', {
-                    dataItemId,
-                    escape: ':',
-                }));
-            }
+                if (!dataLayer) {
+                    throw new Error(i18n.t('Data layer not found for data item id{{escape}} {{dataItemId}}', {
+                        dataItemId,
+                        escape: ':',
+                    }));
+                }
 
-            return {
-                featureName: dataLayer.covariateName,
-                orgUnit: row[1],
-                period: row[2],
-                value: parseFloat(row[3]),
-            };
-        });
+                return {
+                    featureName: dataLayer.covariateName,
+                    orgUnit: row[1],
+                    period: row[2],
+                    value: parseFloat(row[3]),
+                };
+            });
     };
 
     const observations = convertDhis2AnalyticsToChap(analyticsResponse.response.rows);
@@ -137,8 +134,9 @@ export const prepareBacktestData = async (
         periods,
         observations,
         orgUnitResponse,
-        orgUnitIds,
+        orgUnitIds: orgUnitIdsWithGeometry,
         hash,
         dataSources,
+        orgUnitsWithoutGeometry: orgUnitsWithoutGeometry.map(ou => ou.displayName),
     };
 };

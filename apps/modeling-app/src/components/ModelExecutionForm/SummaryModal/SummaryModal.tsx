@@ -18,6 +18,7 @@ import {
     SingleSelectField,
     SingleSelectOption,
     NoticeBox,
+    Tooltip,
 } from '@dhis2/ui';
 import {
     createColumnHelper,
@@ -60,6 +61,7 @@ export const SummaryModal: React.FC<SummaryModalProps> = ({
     const queryClient = useQueryClient();
     const hasRejectedItems = importSummary.rejected.length > 0;
     const hasImportedItems = importSummary.importedCount > 0;
+    const hasOrgUnitsWithoutGeometry = (importSummary.orgUnitsWithoutGeometry?.length ?? 0) > 0;
 
     const orgUnitNames: Map<string, string> = useMemo(() => {
         const defaultMap = new Map();
@@ -134,16 +136,58 @@ export const SummaryModal: React.FC<SummaryModalProps> = ({
             <ModalTitle>{i18n.t('Import Summary')}</ModalTitle>
             <ModalContent>
                 <div className={styles.modalContent}>
+                    {hasOrgUnitsWithoutGeometry && (
+                        <NoticeBox
+                            title={i18n.t('Locations without geometry excluded')}
+                            warning
+                        >
+                            {(importSummary.orgUnitsWithoutGeometry?.length ?? 0) <= 6
+                                ? i18n.t('{{count}} location lacks geometry data and will not be included in the evaluation: {{orgUnits}}', {
+                                        count: importSummary.orgUnitsWithoutGeometry?.length ?? 0,
+                                        orgUnits: importSummary.orgUnitsWithoutGeometry?.map(id => orgUnitNames.get(id) || id).join(', '),
+                                        defaultValue: '{{count}} location lacks geometry data and will not be included in the evaluation: {{orgUnits}}',
+                                        defaultValue_plural: '{{count}} locations lack geometry data and will not be included in the evaluation: {{orgUnits}}',
+                                    })
+                                : (
+                                        <Tooltip
+                                            placement="bottom"
+                                            content={(
+                                                <div style={{ maxHeight: '300px', overflowY: 'auto', padding: '4px' }}>
+                                                    <ul style={{ margin: 0, paddingLeft: '20px', listStyleType: '">"' }}>
+                                                        {importSummary.orgUnitsWithoutGeometry?.map((id, index) => (
+                                                            <li key={index} style={{ paddingLeft: '8px' }}>{orgUnitNames.get(id) || id}</li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+                                            )}
+                                        >
+                                            <span>
+                                                {i18n.t('{{count}} locations lack geometry data and will not be included in the evaluation.', {
+                                                    count: importSummary.orgUnitsWithoutGeometry?.length ?? 0,
+                                                    defaultValue: '{{count}} location lacks geometry data and will not be included in the evaluation.',
+                                                    defaultValue_plural: '{{count}} locations lack geometry data and will not be included in the evaluation.',
+                                                })}
+                                            </span>
+                                        </Tooltip>
+                                    )}
+                        </NoticeBox>
+                    )}
                     {hasImportedItems && importSummary.rejected.length === 0 ? (
                         <NoticeBox
                             title={i18n.t('Valid import')}
                             valid
                         >
-                            {i18n.t('All {{count}} locations can be successfully imported', {
-                                count: importSummary.importedCount,
-                                defaultValue: '{{count}} location can be successfully imported',
-                                defaultValue_plural: 'All {{count}} locations can be successfully imported',
-                            })}
+                            {hasOrgUnitsWithoutGeometry
+                                ? i18n.t('The {{count}} valid locations can be successfully imported', {
+                                        count: importSummary.importedCount,
+                                        defaultValue: 'The {{count}} valid location can be successfully imported',
+                                        defaultValue_plural: 'The {{count}} valid locations can be successfully imported',
+                                    })
+                                : i18n.t('All {{count}} locations can be successfully imported', {
+                                        count: importSummary.importedCount,
+                                        defaultValue: '{{count}} location can be successfully imported',
+                                        defaultValue_plural: 'All {{count}} locations can be successfully imported',
+                                    })}
                         </NoticeBox>
                     ) : null}
                     {hasImportedItems && importSummary.rejected.length > 0 ? (
