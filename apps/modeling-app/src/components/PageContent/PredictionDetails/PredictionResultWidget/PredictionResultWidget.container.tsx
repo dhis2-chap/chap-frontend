@@ -91,12 +91,13 @@ export const PredictionResultWidget = ({ prediction, model }: Props) => {
 
     const series = useMemo(() => {
         if (!predictionEntries.length || !orgUnitsMap.size) return [];
-        return buildPredictionSeries(
+        const builtSeries = buildPredictionSeries(
             predictionEntries,
             orgUnitsMap,
             predictionTargetId,
             actualCasesData?.data,
         );
+        return builtSeries.sort((a, b) => a.orgUnitName.localeCompare(b.orgUnitName));
     }, [predictionEntries, orgUnitsMap, predictionTargetId, actualCasesData]);
 
     if (isPredictionEntriesLoading || isOrgUnitsLoading || isDataItemLoading || isActualCasesLoading) {
