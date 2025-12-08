@@ -49,6 +49,14 @@ export const ModelExecutionResultWidget = ({ backtest }: Props) => {
         return map;
     }, [orgUnitsData]);
 
+    const sortedOrgUnitIds = useMemo(() => {
+        return [...orgUnitIds].sort((a, b) => {
+            const nameA = orgUnitsMap.get(a)?.displayName ?? '';
+            const nameB = orgUnitsMap.get(b)?.displayName ?? '';
+            return nameA.localeCompare(nameB);
+        });
+    }, [orgUnitIds, orgUnitsMap]);
+
     if (isOrgUnitsLoading) {
         return (
             <WidgetWrapper>
@@ -74,7 +82,7 @@ export const ModelExecutionResultWidget = ({ backtest }: Props) => {
     return (
         <ModelExecutionResultWidgetComponent
             backtest={backtest}
-            orgUnitIds={orgUnitIds}
+            orgUnitIds={sortedOrgUnitIds}
             orgUnitsMap={orgUnitsMap}
             splitPeriods={splitPeriods}
         />
