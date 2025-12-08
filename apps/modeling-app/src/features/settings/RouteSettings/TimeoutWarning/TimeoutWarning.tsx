@@ -16,7 +16,7 @@ export const TimeoutWarning = ({ route }: Props) => {
 
     return (
         <NoticeBox title={i18n.t('Low response timeout')}>
-            {i18n.t('The response timeout is currently set to {{timeout}} seconds. Consider increasing it to at least 10 seconds for a more reliable system.', { timeout: route.responseTimeoutSeconds })}
+            {i18n.t('The response timeout is currently set to {{timeout}} seconds. We recommend increasing it to 30 seconds for a more reliable system.', { timeout: route.responseTimeoutSeconds })}
         </NoticeBox>
     );
 };
