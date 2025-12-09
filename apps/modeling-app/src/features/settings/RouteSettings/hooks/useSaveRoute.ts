@@ -4,6 +4,7 @@ import i18n from '@dhis2/d2-i18n';
 import { useAlert } from '@dhis2/app-service-alerts';
 import { CHAP_MODELING_APP_AUTHORITY } from '../../../../utils/global-authorities';
 import type { Route } from '../../../../hooks/useRoute';
+import { RECOMMENDED_TIMEOUT_SECONDS } from '../constants';
 
 type SaveRouteVariables = {
     url: string;
@@ -53,6 +54,7 @@ export const useSaveRoute = ({ onSuccess, onError }: UseSaveRouteOptions = {}) =
                     data: {
                         ...(existingRoute || {}),
                         url: url,
+                        responseTimeoutSeconds: existingRoute.responseTimeoutSeconds ?? RECOMMENDED_TIMEOUT_SECONDS,
                     },
                 };
                 return engine.mutate(updateMutation);
@@ -68,6 +70,7 @@ export const useSaveRoute = ({ onSuccess, onError }: UseSaveRouteOptions = {}) =
                         headers: {
                             'Content-Type': 'application/json',
                         },
+                        responseTimeoutSeconds: RECOMMENDED_TIMEOUT_SECONDS,
                     },
                 };
                 return engine.mutate(createMutation);
