@@ -97,6 +97,7 @@ const getChartOptions = (
         },
         tooltip: {
             shared: true,
+            valueDecimals: 2,
         },
         xAxis: {
             type: 'category',

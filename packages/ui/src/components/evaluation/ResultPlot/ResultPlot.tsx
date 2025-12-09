@@ -152,6 +152,7 @@ const getOptions = ({
         tooltip: {
             shared: true,
             valueSuffix: ' cases',
+            valueDecimals: 2,
         },
         plotOptions: {
             series: {
