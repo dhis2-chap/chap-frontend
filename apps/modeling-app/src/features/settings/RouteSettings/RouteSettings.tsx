@@ -6,6 +6,7 @@ import styles from './RouteSettings.module.css';
 import { CreateRoute } from './CreateRoute/CreateRoute';
 import { RouteActions } from './RouteActions';
 import { PublicAccessWarning } from './PublicAccessWarning';
+import { TimeoutWarning } from './TimeoutWarning';
 import { useAuthority } from '../../../hooks/useAuthority';
 
 const RouteWrapper = ({ children }: { children: React.ReactNode }) => {
@@ -91,6 +92,8 @@ export const RouteSettings = () => {
             <div className={styles.settingsContainer}>
 
                 <PublicAccessWarning route={route} />
+
+                <TimeoutWarning route={route} />
 
                 <div className={styles.routeInfo}>
                     <div className={styles.routeInfoHeader}>

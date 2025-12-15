@@ -4,7 +4,7 @@ const RouteRequest = {
     resource: 'routes',
     params: {
         filter: `code:eq:chap`,
-        fields: 'id,code,name,displayName,url,authorities,disabled,headers,sharing[public]',
+        fields: 'id,code,name,displayName,url,authorities,disabled,headers,sharing[public],responseTimeoutSeconds',
     },
 };
 
@@ -19,6 +19,7 @@ export type Route = {
     sharing: {
         public: string;
     };
+    responseTimeoutSeconds?: number;
 };
 
 export const useRoute = () => {

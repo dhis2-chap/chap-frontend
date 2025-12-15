@@ -1,3 +1,10 @@
+# [3.1.0](https://github.com/dhis2-chap/chap-frontend/compare/v3.0.0...v3.1.0) (2025-12-09)
+
+
+### Features
+
+* add responseTimeoutSeconds handling to CHAP route [CLIM-260] ([7228f9e](https://github.com/dhis2-chap/chap-frontend/commit/7228f9eda0b40b7f023d1c28809ee8bf042c2f10))
+
 # [3.0.0](https://github.com/dhis2-chap/chap-frontend/compare/v2.2.4...v3.0.0) (2025-11-01)
 
 
