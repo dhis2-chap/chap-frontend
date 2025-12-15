@@ -1,24 +1,33 @@
-import { useDataQuery } from '@dhis2/app-runtime';
+import { useApiDataQuery } from '../utils/useApiDataQuery';
+
+type OrgUnitRoot = {
+    id: string;
+    name: string;
+    path: string;
+};
+
+type OrgUnitRootsResponse = {
+    organisationUnits: OrgUnitRoot[];
+};
 
 // Fetches the root org units associated with the current user with fallback to data capture org units
 const ORG_UNIT_ROOTS_QUERY = {
-    roots: {
-        resource: 'organisationUnits',
-        params: () => ({
-            fields: ['id', 'displayName~rename(name)', 'path'],
-            userDataViewFallback: true,
-        }),
+    resource: 'organisationUnits',
+    params: {
+        fields: ['id', 'displayName~rename(name)', 'path'],
+        userDataViewFallback: true,
     },
 };
 
-const useOrgUnitRoots = () => {
-    const { loading, error, data } = useDataQuery(ORG_UNIT_ROOTS_QUERY);
+export const useOrgUnitRoots = () => {
+    const { isLoading, error, data } = useApiDataQuery<OrgUnitRootsResponse>({
+        query: ORG_UNIT_ROOTS_QUERY,
+        queryKey: ['organisationUnitRoots'],
+    });
 
     return {
-        roots: (data?.roots as any)?.organisationUnits,
+        roots: data?.organisationUnits ?? [],
         error,
-        loading,
+        isLoading,
     };
 };
-
-export default useOrgUnitRoots;
