@@ -1,0 +1,17 @@
+[main]
+host = https://www.transifex.com
+lang_map = fa_AF: prs, uz@Cyrl: uz_UZ_Cyrl, uz@Latn: uz_UZ_Latn
+
+[o:hisp-uio:p:modeling-app:r:packages-ui-en-pot]
+file_filter  = packages/ui/i18n/<lang>.po
+source_file  = packages/ui/i18n/en.pot
+source_lang  = en
+type         = PO
+minimum_perc = 0
+
+[o:hisp-uio:p:modeling-app:r:apps-modeling-en-pot]
+file_filter  = apps/modeling-app/i18n/<lang>.po
+source_file  = apps/modeling-app/i18n/en.pot
+source_lang  = en
+type         = PO
+minimum_perc = 0
