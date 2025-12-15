@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2025-12-15T12:53:20.174Z\n"
-"PO-Revision-Date: 2025-12-15T12:53:20.175Z\n"
+"POT-Creation-Date: 2025-12-08T12:20:09.356Z\n"
+"PO-Revision-Date: 2025-12-08T12:20:09.356Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -1240,6 +1240,16 @@ msgstr "URL"
 
 msgid "Authorities"
 msgstr "Authorities"
+
+msgid "Low response timeout"
+msgstr "Low response timeout"
+
+msgid ""
+"The response timeout is currently set to {{timeout}} seconds. Consider "
+"increasing it to at least 10 seconds for a more reliable system."
+msgstr ""
+"The response timeout is currently set to {{timeout}} seconds. Consider "
+"increasing it to at least 10 seconds for a more reliable system."
 
 msgid "Error deleting route"
 msgstr "Error deleting route"
