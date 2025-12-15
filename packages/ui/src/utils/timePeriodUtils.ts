@@ -1,4 +1,3 @@
-import { PERIOD_TYPES } from '@/components/ModelExecutionForm/constants';
 import {
     parse,
     format,
@@ -17,6 +16,14 @@ import {
     isValid,
     getISOWeekYear,
 } from 'date-fns';
+
+export const PERIOD_TYPES = {
+    DAY: 'DAY',
+    WEEK: 'WEEK',
+    MONTH: 'MONTH',
+} as const;
+
+export type PeriodType = typeof PERIOD_TYPES[keyof typeof PERIOD_TYPES];
 
 export interface Period {
     startDate: Date | undefined;
@@ -157,24 +164,55 @@ export const convertServerToClientPeriod = (periodId: string, periodType: keyof 
     }
 };
 
-export const sortSplitPeriods = (splitPeriods: string[], periodType: keyof typeof PERIOD_TYPES): string[] => {
+/**
+ * Sort period strings chronologically based on the period type.
+ * Handles both monthly (yyyyMM) and weekly (RRRRWww) formats.
+ */
+export const sortPeriods = (periods: string[], periodType: keyof typeof PERIOD_TYPES): string[] => {
     if (periodType.toUpperCase() === PERIOD_TYPES.MONTH) {
-        return splitPeriods.sort((a, b) => {
+        return [...periods].sort((a, b) => {
             const dateA = parse(a, 'yyyyMM', new Date());
             const dateB = parse(b, 'yyyyMM', new Date());
+
+            if (!isValid(dateA)) console.error('Invalid month period id provided:', a);
+            if (!isValid(dateB)) console.error('Invalid month period id provided:', b);
+
             return dateA.getTime() - dateB.getTime();
         });
     }
     if (periodType.toUpperCase() === PERIOD_TYPES.WEEK) {
-        return splitPeriods.sort((a, b) => {
-            const dateA = parse(a, 'RRRR-\'W\'II', new Date());
-            const dateB = parse(b, 'RRRR-\'W\'II', new Date());
+        return [...periods].sort((a, b) => {
+            const dateA = parse(a, 'RRRR\'W\'II', new Date());
+            const dateB = parse(b, 'RRRR\'W\'II', new Date());
+
+            if (!isValid(dateA)) console.error('Invalid week period id provided:', a);
+            if (!isValid(dateB)) console.error('Invalid week period id provided:', b);
+
             return dateA.getTime() - dateB.getTime();
         });
     }
 
     console.error('Unsupported period type provided:', periodType);
-    return splitPeriods;
+    return periods;
+};
+
+/**
+ * Compare two period strings for sorting.
+ * Returns negative if a < b, positive if a > b, 0 if equal.
+ */
+export const comparePeriods = (a: string, b: string, periodType: keyof typeof PERIOD_TYPES): number => {
+    if (periodType.toUpperCase() === PERIOD_TYPES.MONTH) {
+        const dateA = parse(a, 'yyyyMM', new Date());
+        const dateB = parse(b, 'yyyyMM', new Date());
+        return dateA.getTime() - dateB.getTime();
+    }
+    if (periodType.toUpperCase() === PERIOD_TYPES.WEEK) {
+        const dateA = parse(a, 'RRRR\'W\'II', new Date());
+        const dateB = parse(b, 'RRRR\'W\'II', new Date());
+        return dateA.getTime() - dateB.getTime();
+    }
+    // Fallback to lexicographic comparison
+    return a.localeCompare(b);
 };
 
 // Get the last N periods including the base period in server format

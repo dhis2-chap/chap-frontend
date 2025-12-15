@@ -7,9 +7,7 @@ import { useDataItemById } from '../../../../hooks/useDataItemById';
 import { useActualCasesByDatasetId } from '../../../../hooks/useActualCasesByDatasetId';
 import { PredictionResultWidgetComponent } from './PredictionResultWidget.component';
 import styles from './PredictionResultWidget.module.css';
-import { Widget, PredictionInfo, ModelSpecRead, buildPredictionSeries } from '@dhis2-chap/ui';
-import { getLastNPeriods } from '@/utils/timePeriodUtils';
-import { PERIOD_TYPES } from '@/components/ModelExecutionForm/constants';
+import { Widget, PredictionInfo, ModelSpecRead, buildPredictionSeries, getLastNPeriods, PERIOD_TYPES } from '@dhis2-chap/ui';
 
 type Props = {
     prediction: PredictionInfo;
@@ -96,9 +94,10 @@ export const PredictionResultWidget = ({ prediction, model }: Props) => {
             orgUnitsMap,
             predictionTargetId,
             actualCasesData?.data,
+            dataset.periodType as keyof typeof PERIOD_TYPES,
         );
         return builtSeries.sort((a, b) => a.orgUnitName.localeCompare(b.orgUnitName));
-    }, [predictionEntries, orgUnitsMap, predictionTargetId, actualCasesData]);
+    }, [predictionEntries, orgUnitsMap, predictionTargetId, actualCasesData, dataset.periodType]);
 
     if (isPredictionEntriesLoading || isOrgUnitsLoading || isDataItemLoading || isActualCasesLoading) {
         return (

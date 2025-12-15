@@ -5,10 +5,10 @@ import {
     DataSource,
     ModelSpecRead,
     ObservationBase,
+    PERIOD_TYPES,
+    toDHIS2PeriodData,
 } from '@dhis2-chap/ui';
 import { useDataEngine } from '@dhis2/app-runtime';
-import { PERIOD_TYPES } from '../constants';
-import { toDHIS2PeriodData } from '@/utils/timePeriodUtils';
 import { AnalyticsResponse, OrgUnitResponse, ANALYTICS_QUERY, ORG_UNITS_QUERY } from './queryUtils';
 import { generateBacktestDataHash } from './hashUtils';
 

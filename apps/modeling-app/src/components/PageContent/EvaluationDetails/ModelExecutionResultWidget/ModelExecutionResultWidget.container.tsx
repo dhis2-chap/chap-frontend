@@ -4,9 +4,7 @@ import i18n from '@dhis2/d2-i18n';
 import { useOrgUnitsById } from '../../../../hooks/useOrgUnitsById';
 import { ModelExecutionResultWidgetComponent } from './ModelExecutionResultWidget.component';
 import styles from './ModelExecutionResultWidget.module.css';
-import { BackTestRead, Widget } from '@dhis2-chap/ui';
-import { sortSplitPeriods } from '@/utils/timePeriodUtils';
-import { PERIOD_TYPES } from '@/components/ModelExecutionForm/constants';
+import { BackTestRead, Widget, sortPeriods, PERIOD_TYPES } from '@dhis2-chap/ui';
 
 type Props = {
     backtest: BackTestRead;
@@ -32,7 +30,7 @@ const WidgetWrapper = ({ children }: { children: React.ReactNode }) => {
 
 export const ModelExecutionResultWidget = ({ backtest }: Props) => {
     const orgUnitIds = backtest.orgUnits ?? [];
-    const splitPeriods = sortSplitPeriods(backtest.splitPeriods ?? [], backtest.dataset.periodType as keyof typeof PERIOD_TYPES);
+    const splitPeriods = sortPeriods(backtest.splitPeriods ?? [], backtest.dataset.periodType as keyof typeof PERIOD_TYPES);
 
     const {
         data: orgUnitsData,
