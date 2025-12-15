@@ -31,6 +31,15 @@ export interface Period {
     id: string;
 }
 
+// This page seems ai-generated, but it's actually a result of manual labour.
+
+/**
+ * Converts a date range to an array of DHIS2 Period objects.
+ * @param start - The start date string
+ * @param end - The end date string
+ * @param periodType - The period type ('week' or 'month')
+ * @returns An array of Period objects
+ */
 export const toDHIS2PeriodData = (start: string, end: string, periodType: string): Period[] => {
     if (periodType === 'week') return getWeeks(start, end);
     if (periodType === 'month') return getMonths(start, end);
@@ -38,7 +47,12 @@ export const toDHIS2PeriodData = (start: string, end: string, periodType: string
     return [];
 };
 
-// This function takes in a start and end string in the format of "2024-W01" and returns an array of Period objects
+/**
+ * Generates an array of Period objects for each week in the given range.
+ * @param start - The start date in ISO week format (e.g., "2024-W01")
+ * @param end - The end date in ISO week format (e.g., "2024-W52")
+ * @returns An array of Period objects for each week in the range
+ */
 const getWeeks = (start: string, end: string): Period[] => {
     try {
         // Parse ISO week format (e.g., "2024-W01")
@@ -83,7 +97,12 @@ const getWeeks = (start: string, end: string): Period[] => {
     }
 };
 
-// This function takes in a start and end string in the format of "2024-01" and returns an array of Period objects
+/**
+ * Generates an array of Period objects for each month in the given range.
+ * @param start - The start date in month format (e.g., "2024-01")
+ * @param end - The end date in month format (e.g., "2024-12")
+ * @returns An array of Period objects for each month in the range
+ */
 const getMonths = (start: string, end: string): Period[] => {
     try {
         // Parse month format (e.g., "2024-01")
@@ -130,8 +149,15 @@ const getMonths = (start: string, end: string): Period[] => {
     }
 };
 
-// convert a basic ISO format to an extended ISO format
-// i.e. 202001 to 2020-01
+/**
+ * Converts a basic ISO format period to an extended ISO format.
+ * @param periodId - The period ID in basic format (e.g., "202001" for months, "2024W01" for weeks)
+ * @param periodType - The type of period ('month' or 'week')
+ * @returns The period ID in extended format (e.g., "2020-01" for months, "2024-W01" for weeks)
+ * @example
+ * convertServerToClientPeriod('202001', PERIOD_TYPES.MONTH) // returns '2020-01'
+ * convertServerToClientPeriod('2024W01', PERIOD_TYPES.WEEK) // returns '2024-W01'
+ */
 export const convertServerToClientPeriod = (periodId: string, periodType: keyof typeof PERIOD_TYPES): string => {
     try {
         if (periodType.toUpperCase() === PERIOD_TYPES.MONTH) {
@@ -165,58 +191,55 @@ export const convertServerToClientPeriod = (periodId: string, periodType: keyof 
 };
 
 /**
- * Sort period strings chronologically based on the period type.
- * Handles both monthly (yyyyMM) and weekly (RRRRWww) formats.
- */
-export const sortPeriods = (periods: string[], periodType: keyof typeof PERIOD_TYPES): string[] => {
-    if (periodType.toUpperCase() === PERIOD_TYPES.MONTH) {
-        return [...periods].sort((a, b) => {
-            const dateA = parse(a, 'yyyyMM', new Date());
-            const dateB = parse(b, 'yyyyMM', new Date());
-
-            if (!isValid(dateA)) console.error('Invalid month period id provided:', a);
-            if (!isValid(dateB)) console.error('Invalid month period id provided:', b);
-
-            return dateA.getTime() - dateB.getTime();
-        });
-    }
-    if (periodType.toUpperCase() === PERIOD_TYPES.WEEK) {
-        return [...periods].sort((a, b) => {
-            const dateA = parse(a, 'RRRR\'W\'II', new Date());
-            const dateB = parse(b, 'RRRR\'W\'II', new Date());
-
-            if (!isValid(dateA)) console.error('Invalid week period id provided:', a);
-            if (!isValid(dateB)) console.error('Invalid week period id provided:', b);
-
-            return dateA.getTime() - dateB.getTime();
-        });
-    }
-
-    console.error('Unsupported period type provided:', periodType);
-    return periods;
-};
-
-/**
- * Compare two period strings for sorting.
- * Returns negative if a < b, positive if a > b, 0 if equal.
+ * Compares two period strings for sorting.
+ * @param a - The first period string to compare
+ * @param b - The second period string to compare
+ * @param periodType - The type of period ('month' or 'week')
+ * @returns Negative if a < b, positive if a > b, 0 if equal
  */
 export const comparePeriods = (a: string, b: string, periodType: keyof typeof PERIOD_TYPES): number => {
     if (periodType.toUpperCase() === PERIOD_TYPES.MONTH) {
         const dateA = parse(a, 'yyyyMM', new Date());
         const dateB = parse(b, 'yyyyMM', new Date());
+
+        if (!isValid(dateA)) console.error('Invalid month period id provided:', a);
+        if (!isValid(dateB)) console.error('Invalid month period id provided:', b);
+
         return dateA.getTime() - dateB.getTime();
     }
     if (periodType.toUpperCase() === PERIOD_TYPES.WEEK) {
         const dateA = parse(a, 'RRRR\'W\'II', new Date());
         const dateB = parse(b, 'RRRR\'W\'II', new Date());
+
+        if (!isValid(dateA)) console.error('Invalid week period id provided:', a);
+        if (!isValid(dateB)) console.error('Invalid week period id provided:', b);
+
         return dateA.getTime() - dateB.getTime();
     }
-    // Fallback to lexicographic comparison
+
+    console.error('Unsupported period type provided:', periodType);
     return a.localeCompare(b);
 };
 
-// Get the last N periods including the base period in server format
-// e.g. getLastNPeriods('202412', 'MONTH', 12) returns ['202401', '202402', ..., '202412']
+/**
+ * Sorts period strings chronologically based on the period type.
+ * @param periods - An array of period strings to sort
+ * @param periodType - The type of period ('month' or 'week')
+ * @returns A new array with the periods sorted chronologically
+ */
+export const sortPeriods = (periods: string[], periodType: keyof typeof PERIOD_TYPES): string[] => {
+    return [...periods].sort((a, b) => comparePeriods(a, b, periodType));
+};
+
+/**
+ * Gets the last N periods including the base period in server format.
+ * @param basePeriod - The base period to count back from (e.g., "202412" for months, "2024W52" for weeks)
+ * @param periodType - The type of period ('month' or 'week')
+ * @param count - The number of periods to return (including the base period)
+ * @returns An array of period strings in chronological order
+ * @example
+ * getLastNPeriods('202412', 'MONTH', 12) // returns ['202401', '202402', ..., '202412']
+ */
 export const getLastNPeriods = (
     basePeriod: string,
     periodType: keyof typeof PERIOD_TYPES,

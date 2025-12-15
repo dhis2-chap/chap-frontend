@@ -6,7 +6,6 @@ import type {
 } from '../interfaces/Prediction';
 import { comparePeriods, PERIOD_TYPES } from './timePeriodUtils';
 
-// Map quantile values to their keys
 const QUANTILE_MAP: Record<number, QuantileKey> = {
     0.1: 'quantile_low',
     0.25: 'quantile_mid_low',
