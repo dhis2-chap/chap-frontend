@@ -31,7 +31,7 @@ export interface Period {
     id: string;
 }
 
-// This page seems ai-generated, but it's actually a result of manual labour.
+// This page seems ai-generated, but it's actually a result of hard manual labour.
 
 /**
  * Converts a date range to an array of DHIS2 Period objects.
