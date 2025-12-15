@@ -5,22 +5,18 @@ import MapItem from '../../maps/MapItem';
 import Choropleth from '../../maps/Choropleth';
 import Legend from '../../maps/Legend';
 import Basemap from '../../maps/Basemap';
-import { getEqualIntervals } from '../../maps/utils';
-import useOrgUnits from '../../../hooks/useOrgUnits';
+import { getEqualIntervals, FeatureCollection } from '../../maps/utils';
 import styles from './PredictionMap.module.css';
 
 interface PredictionMapProps {
     series: PredictionOrgUnitSeries[];
     predictionTargetName: string;
+    orgUnits: FeatureCollection;
 }
 
 const colors = ['#FFFFD4', '#FED98E', '#FE9929', '#D95F0E', '#993404'];
 
-export const PredictionMap = ({ series, predictionTargetName }: PredictionMapProps) => {
-    const orgUnitIds: string[] = Array.from(new Set(series.map(s => s.orgUnitId)));
-
-    const { orgUnits } = useOrgUnits(orgUnitIds);
-
+export const PredictionMap = ({ series, predictionTargetName, orgUnits }: PredictionMapProps) => {
     // collect periods and labels
     const periodToLabel = new Map<string, string>();
     for (const s of series) {
@@ -46,43 +42,41 @@ export const PredictionMap = ({ series, predictionTargetName }: PredictionMapPro
         }))),
     };
 
-    return orgUnits
-        ? (
-                <div>
-                    <div className={styles.predictionMapGroup}>
-                        {periods.map((period: string, index: number) => {
-                            return (
-                                <div className={styles.predictionMapCard} key={index}>
-                                    <h4>
-                                        {periodToLabel.get(period) || period}
-                                    </h4>
-                                    <MapItem
-                                        key={period}
-                                        index={index}
-                                        count={periods.length}
-                                        syncId="prediction-map"
-                                    >
-                                        <Basemap />
-                                        <Choropleth
-                                            period={period}
-                                            prediction={adaptedPrediction}
-                                            geojson={orgUnits}
-                                            bins={bins}
-                                            colors={colors}
-                                        />
-                                    </MapItem>
-                                </div>
-                            );
-                        })}
-                    </div>
-                    <Legend
-                        title={i18n.t('Median Prediction for {{predictionTargetName}}', {
-                            predictionTargetName,
-                        })}
-                        bins={bins}
-                        colors={colors}
-                    />
-                </div>
-            )
-        : null;
+    return (
+        <div>
+            <div className={styles.predictionMapGroup}>
+                {periods.map((period: string, index: number) => {
+                    return (
+                        <div className={styles.predictionMapCard} key={index}>
+                            <h4>
+                                {periodToLabel.get(period) || period}
+                            </h4>
+                            <MapItem
+                                key={period}
+                                index={index}
+                                count={periods.length}
+                                syncId="prediction-map"
+                            >
+                                <Basemap />
+                                <Choropleth
+                                    period={period}
+                                    prediction={adaptedPrediction}
+                                    geojson={orgUnits}
+                                    bins={bins}
+                                    colors={colors}
+                                />
+                            </MapItem>
+                        </div>
+                    );
+                })}
+            </div>
+            <Legend
+                title={i18n.t('Median Prediction for {{predictionTargetName}}', {
+                    predictionTargetName,
+                })}
+                bins={bins}
+                colors={colors}
+            />
+        </div>
+    );
 };

@@ -6,9 +6,9 @@ import {
     UncertaintyAreaChart,
     PredictionTable,
     PredictionOrgUnitSeries,
-    PredictionMap,
     Widget,
 } from '@dhis2-chap/ui';
+import { PredictionMapWrapper } from './PredictionMapWrapper/PredictionMapWrapper';
 
 type Props = {
     series: PredictionOrgUnitSeries[];
@@ -87,7 +87,7 @@ export const PredictionResultWidgetComponent = ({
                                 />
                             )}
                             {selectedTab === 'map' && (
-                                <PredictionMap
+                                <PredictionMapWrapper
                                     series={series}
                                     predictionTargetName={predictionTargetName}
                                 />

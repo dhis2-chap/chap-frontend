@@ -31,12 +31,22 @@ import { NewConfiguredModelPage } from './pages/NewConfiguredModelPage';
 import { SyncUrlWithGlobalShell } from './utils/syncUrlWithGlobalShell';
 import { NewPredictionPage } from './pages/NewPredictionPage';
 import { PredictionImportPage } from './pages/PredictionImportPage';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 export type RouteHandle = {
     fullWidth?: boolean;
     /* whether to automatically collapse the sidebar when route is active */
     collapseSidebar?: boolean;
 };
+
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            refetchOnWindowFocus: false,
+            retry: false,
+        },
+    },
+});
 
 const router = createHashRouter([
     {
@@ -181,12 +191,14 @@ const router = createHashRouter([
 const App = () => {
     return (
         <>
-            <CssReset />
-            <CssVariables theme spacers colors elevations />
-            <SetChapUrl>
-                <RouterProvider router={router} />
-            </SetChapUrl>
-            <ReactQueryDevtools position="bottom-right" />
+            <QueryClientProvider client={queryClient}>
+                <CssReset />
+                <CssVariables theme spacers colors elevations />
+                <SetChapUrl>
+                    <RouterProvider router={router} />
+                </SetChapUrl>
+                <ReactQueryDevtools position="bottom-right" />
+            </QueryClientProvider>
         </>
     );
 };

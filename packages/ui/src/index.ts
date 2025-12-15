@@ -49,3 +49,7 @@ export {
     getQueue,
 } from './httpfunctions/core/request';
 export { buildPredictionSeries } from './utils/PredictionViewModel';
+
+// Map utilities
+export { parseOrgUnits } from './components/maps/utils';
+export type { FeatureCollection } from './components/maps/utils';

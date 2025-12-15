@@ -39,7 +39,7 @@ interface GeoFeature {
     };
 }
 
-interface FeatureCollection {
+export interface FeatureCollection {
     type: 'FeatureCollections';
     features: GeoFeature[];
 }
