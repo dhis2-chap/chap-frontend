@@ -39,12 +39,12 @@ export interface Period {
  * Converts a date range to an array of DHIS2 Period objects.
  * @param start - The start date string
  * @param end - The end date string
- * @param periodType - The period type ('week' or 'month')
+ * @param periodType - The period type (PERIOD_TYPES.WEEK or PERIOD_TYPES.MONTH)
  * @returns An array of Period objects
  */
-export const toDHIS2PeriodData = (start: string, end: string, periodType: string): Period[] => {
-    if (periodType === 'week') return getWeeks(start, end);
-    if (periodType === 'month') return getMonths(start, end);
+export const toDHIS2PeriodData = (start: string, end: string, periodType: keyof typeof PERIOD_TYPES): Period[] => {
+    if (periodType.toUpperCase() === PERIOD_TYPES.WEEK) return getWeeks(start, end);
+    if (periodType.toUpperCase() === PERIOD_TYPES.MONTH) return getMonths(start, end);
     console.error('Invalid period type:', periodType);
     return [];
 };

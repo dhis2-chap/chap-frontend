@@ -16,7 +16,7 @@ const calculatePeriods = (periodType: keyof typeof PERIOD_TYPES, fromDate: strin
     const selectedPeriodType = PERIOD_TYPES[periodType];
     if (!selectedPeriodType) return [];
 
-    const dateRange = toDHIS2PeriodData(fromDate, toDate, selectedPeriodType.toLowerCase());
+    const dateRange = toDHIS2PeriodData(fromDate, toDate, periodType);
     return dateRange.map(period => period.id);
 };
 
