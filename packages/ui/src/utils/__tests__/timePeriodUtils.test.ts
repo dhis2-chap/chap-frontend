@@ -58,9 +58,12 @@ describe('toDHIS2PeriodData', () => {
 
     describe('week periods', () => {
         it('should generate correct week periods for a single week', () => {
+            // ISO week 1 of 2024 starts on Monday 2024-01-01 and ends on Sunday 2024-01-07
             const result = toDHIS2PeriodData('2024-W01', '2024-W01', PERIOD_TYPES.WEEK);
             expect(result).toHaveLength(1);
             expect(result[0].id).toBe('2024W1');
+            expect(result[0].startDate).toEqual(new Date('2024-01-01'));
+            expect(result[0].endDate).toEqual(new Date('2024-01-07'));
         });
 
         it('should generate correct week periods for multiple weeks', () => {
@@ -71,11 +74,17 @@ describe('toDHIS2PeriodData', () => {
             expect(result[2].id).toBe('2024W3');
         });
 
-        it('should include correct start and end dates for each week period', () => {
+        it('should include correct start and end dates for week periods crossing years', () => {
+            // ISO week 52 of 2023 starts on Monday 2023-12-25 and ends on Sunday 2023-12-31
             // ISO week 1 of 2024 starts on Monday 2024-01-01 and ends on Sunday 2024-01-07
-            const result = toDHIS2PeriodData('2024-W01', '2024-W01', PERIOD_TYPES.WEEK);
-            expect(result[0].startDate).toEqual(new Date('2024-01-01'));
-            expect(result[0].endDate).toEqual(new Date('2024-01-07'));
+            const result = toDHIS2PeriodData('2023-W52', '2024-W01', PERIOD_TYPES.WEEK);
+            expect(result).toHaveLength(2);
+            expect(result[0].id).toBe('2023W52');
+            expect(result[0].startDate).toEqual(new Date('2023-12-25'));
+            expect(result[0].endDate).toEqual(new Date('2023-12-31'));
+            expect(result[1].id).toBe('2024W1');
+            expect(result[1].startDate).toEqual(new Date('2024-01-01'));
+            expect(result[1].endDate).toEqual(new Date('2024-01-07'));
         });
     });
 
