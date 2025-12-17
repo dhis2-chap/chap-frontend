@@ -25,6 +25,8 @@ export const PERIOD_TYPES = {
     ANY: 'ANY',
 } as const;
 
+export const MAX_YEAR_SPAN = 100;
+
 export type PeriodType = typeof PERIOD_TYPES[keyof typeof PERIOD_TYPES];
 
 export interface Period {
@@ -39,12 +41,12 @@ export interface Period {
  * Converts a date range to an array of DHIS2 Period objects.
  * @param start - The start date string
  * @param end - The end date string
- * @param periodType - The period type ('week' or 'month')
+ * @param periodType - The period type (PERIOD_TYPES.WEEK or PERIOD_TYPES.MONTH)
  * @returns An array of Period objects
  */
-export const toDHIS2PeriodData = (start: string, end: string, periodType: string): Period[] => {
-    if (periodType === 'week') return getWeeks(start, end);
-    if (periodType === 'month') return getMonths(start, end);
+export const toDHIS2PeriodData = (start: string, end: string, periodType: keyof typeof PERIOD_TYPES): Period[] => {
+    if (periodType.toUpperCase() === PERIOD_TYPES.WEEK) return getWeeks(start, end);
+    if (periodType.toUpperCase() === PERIOD_TYPES.MONTH) return getMonths(start, end);
     console.error('Invalid period type:', periodType);
     return [];
 };
@@ -67,7 +69,7 @@ const getWeeks = (start: string, end: string): Period[] => {
         }
 
         const yearDifference = getISOWeekYear(endDate) - getISOWeekYear(startDate);
-        if (yearDifference > 100) {
+        if (yearDifference > MAX_YEAR_SPAN) {
             return [];
         }
 
@@ -117,9 +119,9 @@ const getMonths = (start: string, end: string): Period[] => {
             return [];
         }
 
-        // Safety check for unreasonable date ranges
+        // Safety check for date ranges exceeding MAX_YEAR_SPAN
         const yearDifference = endDate.getFullYear() - startDate.getFullYear();
-        if (yearDifference > 100) {
+        if (yearDifference > MAX_YEAR_SPAN) {
             return [];
         }
 

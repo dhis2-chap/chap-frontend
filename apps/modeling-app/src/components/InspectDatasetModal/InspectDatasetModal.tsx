@@ -32,7 +32,7 @@ export const InspectDatasetModal = ({
         const selectedPeriodType = PERIOD_TYPES[periodType];
         if (!selectedPeriodType) return [];
 
-        const dateRange = toDHIS2PeriodData(fromDate, toDate, selectedPeriodType.toLowerCase());
+        const dateRange = toDHIS2PeriodData(fromDate, toDate, selectedPeriodType);
         return dateRange.map(period => ({
             id: period.id,
         }));
