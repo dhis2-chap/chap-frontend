@@ -317,11 +317,7 @@ describe('getLastNPeriods', () => {
 
         it('should handle periods spanning years', () => {
             const result = getLastNPeriods('2024W02', PERIOD_TYPES.WEEK, 4);
-            expect(result).toHaveLength(4);
-            expect(result[0]).toMatch(/^2023W/);
-            expect(result[1]).toMatch(/^2023W/);
-            expect(result[2]).toBe('2024W01');
-            expect(result[3]).toBe('2024W02');
+            expect(result).toEqual(['2023W51', '2023W52', '2024W01', '2024W02']);
         });
 
         it('should return single period when count is 1', () => {
