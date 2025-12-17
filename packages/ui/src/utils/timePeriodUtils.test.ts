@@ -88,7 +88,7 @@ describe('convertServerToClientPeriod', () => {
         });
 
         it('should handle lowercase period type', () => {
-            expect(convertServerToClientPeriod('202401', 'month' as keyof typeof PERIOD_TYPES)).toBe('2024-01');
+            expect(convertServerToClientPeriod('202401', PERIOD_TYPES.MONTH)).toBe('2024-01');
         });
 
         it('should return original value for invalid month format', () => {
@@ -103,7 +103,7 @@ describe('convertServerToClientPeriod', () => {
         });
 
         it('should handle lowercase period type', () => {
-            expect(convertServerToClientPeriod('2024W01', 'week' as keyof typeof PERIOD_TYPES)).toBe('2024-W01');
+            expect(convertServerToClientPeriod('2024W01', PERIOD_TYPES.WEEK)).toBe('2024-W01');
         });
 
         it('should return original value for invalid week format', () => {
