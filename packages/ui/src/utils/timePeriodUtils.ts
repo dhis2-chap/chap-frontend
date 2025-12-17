@@ -25,6 +25,8 @@ export const PERIOD_TYPES = {
     ANY: 'ANY',
 } as const;
 
+export const MAX_YEAR_SPAN = 100;
+
 export type PeriodType = typeof PERIOD_TYPES[keyof typeof PERIOD_TYPES];
 
 export interface Period {
@@ -67,7 +69,7 @@ const getWeeks = (start: string, end: string): Period[] => {
         }
 
         const yearDifference = getISOWeekYear(endDate) - getISOWeekYear(startDate);
-        if (yearDifference > 100) {
+        if (yearDifference > MAX_YEAR_SPAN) {
             return [];
         }
 
@@ -117,9 +119,9 @@ const getMonths = (start: string, end: string): Period[] => {
             return [];
         }
 
-        // Safety check for unreasonable date ranges
+        // Safety check for date ranges exceeding MAX_YEAR_SPAN
         const yearDifference = endDate.getFullYear() - startDate.getFullYear();
-        if (yearDifference > 100) {
+        if (yearDifference > MAX_YEAR_SPAN) {
             return [];
         }
 

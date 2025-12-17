@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import {
     PERIOD_TYPES,
+    MAX_YEAR_SPAN,
     toDHIS2PeriodData,
     convertServerToClientPeriod,
     comparePeriods,
@@ -114,7 +115,7 @@ describe('toDHIS2PeriodData', () => {
             expect(result).toEqual([]);
         });
 
-        it('should return empty array for unreasonable date range (>100 years)', () => {
+        it(`should return empty array for date range exceeding MAX_YEAR_SPAN (${MAX_YEAR_SPAN} years)`, () => {
             const result = toDHIS2PeriodData('1900-01', '2100-01', PERIOD_TYPES.MONTH);
             expect(result).toEqual([]);
         });
