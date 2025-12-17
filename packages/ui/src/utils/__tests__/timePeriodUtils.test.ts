@@ -43,10 +43,16 @@ describe('toDHIS2PeriodData', () => {
             expect(result[3].id).toBe('202402');
         });
 
-        it('should include start and end dates for each month period', () => {
+        it('should include correct start and end dates for each month period', () => {
             const result = toDHIS2PeriodData('2024-01', '2024-01', PERIOD_TYPES.MONTH);
-            expect(result[0].startDate).toBeDefined();
-            expect(result[0].endDate).toBeDefined();
+            expect(result[0].startDate).toEqual(new Date('2024-01-01'));
+            expect(result[0].endDate).toEqual(new Date('2024-01-31'));
+        });
+
+        it('should have correct start and end dates for February in a leap year', () => {
+            const result = toDHIS2PeriodData('2024-02', '2024-02', PERIOD_TYPES.MONTH);
+            expect(result[0].startDate).toEqual(new Date('2024-02-01'));
+            expect(result[0].endDate).toEqual(new Date('2024-02-29'));
         });
     });
 
@@ -65,16 +71,52 @@ describe('toDHIS2PeriodData', () => {
             expect(result[2].id).toBe('2024W3');
         });
 
-        it('should include start and end dates for each week period', () => {
+        it('should include correct start and end dates for each week period', () => {
+            // ISO week 1 of 2024 starts on Monday 2024-01-01 and ends on Sunday 2024-01-07
             const result = toDHIS2PeriodData('2024-W01', '2024-W01', PERIOD_TYPES.WEEK);
-            expect(result[0].startDate).toBeDefined();
-            expect(result[0].endDate).toBeDefined();
+            expect(result[0].startDate).toEqual(new Date('2024-01-01'));
+            expect(result[0].endDate).toEqual(new Date('2024-01-07'));
         });
     });
 
     describe('invalid inputs', () => {
         it('should return empty array for invalid period type', () => {
             const result = toDHIS2PeriodData('2024-01', '2024-03', 'invalid' as keyof typeof PERIOD_TYPES);
+            expect(result).toEqual([]);
+        });
+
+        it('should return empty array for invalid month date format', () => {
+            const result = toDHIS2PeriodData('invalid', '2024-03', PERIOD_TYPES.MONTH);
+            expect(result).toEqual([]);
+        });
+
+        it('should return empty array for invalid week date format', () => {
+            const result = toDHIS2PeriodData('invalid', '2024-W03', PERIOD_TYPES.WEEK);
+            expect(result).toEqual([]);
+        });
+
+        it('should return empty array for malformed month format', () => {
+            const result = toDHIS2PeriodData('2024/01', '2024/03', PERIOD_TYPES.MONTH);
+            expect(result).toEqual([]);
+        });
+
+        it('should return empty array for malformed week format', () => {
+            const result = toDHIS2PeriodData('2024-1', '2024-3', PERIOD_TYPES.WEEK);
+            expect(result).toEqual([]);
+        });
+
+        it('should return empty array for unreasonable date range (>100 years)', () => {
+            const result = toDHIS2PeriodData('1900-01', '2100-01', PERIOD_TYPES.MONTH);
+            expect(result).toEqual([]);
+        });
+
+        it('should handle end date before start date for months', () => {
+            const result = toDHIS2PeriodData('2024-03', '2024-01', PERIOD_TYPES.MONTH);
+            expect(result).toEqual([]);
+        });
+
+        it('should handle end date before start date for weeks', () => {
+            const result = toDHIS2PeriodData('2024-W03', '2024-W01', PERIOD_TYPES.WEEK);
             expect(result).toEqual([]);
         });
     });
