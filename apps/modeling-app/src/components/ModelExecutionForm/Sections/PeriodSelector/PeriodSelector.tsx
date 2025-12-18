@@ -8,7 +8,7 @@ import {
 import i18n from '@dhis2/d2-i18n';
 import { Controller, Control, FieldErrors, useWatch, useFormContext } from 'react-hook-form';
 import { ModelExecutionFormValues } from '../../hooks/useModelExecutionFormState';
-import { PERIOD_TYPES } from '../../constants';
+import { PERIOD_TYPES } from '@dhis2-chap/ui';
 import styles from './PeriodSelector.module.css';
 
 type Props = {

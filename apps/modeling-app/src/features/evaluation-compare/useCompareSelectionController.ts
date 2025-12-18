@@ -6,6 +6,7 @@ import {
 } from './useSearchParamSelections';
 import { useEvaluationOverlap } from '../../hooks/useEvaluationOverlap';
 import { useOrgUnitsById } from '../../hooks/useOrgUnitsById';
+import { sortPeriods, PERIOD_TYPES } from '@dhis2-chap/ui';
 
 export const useCompareSelectionController = ({
     maxSelectedOrgUnits = 10,
@@ -31,14 +32,24 @@ export const useCompareSelectionController = ({
         comparisonEvaluation: comparisonEvaluation?.id,
     });
 
-    const resolvedSplitPeriods = useMemo(
-        () =>
-            (evaluationOverlap.isSuccess
-                ? evaluationOverlap.data.splitPeriods
-                : baseEvaluation?.splitPeriods ?? []
-            ).sort(),
-        [evaluationOverlap.data, baseEvaluation?.splitPeriods],
-    );
+    const resolvedSplitPeriods = useMemo(() => {
+        const periodType = baseEvaluation?.dataset?.periodType;
+
+        const splitPeriods = evaluationOverlap.isSuccess
+            ? evaluationOverlap.data.splitPeriods
+            : baseEvaluation?.splitPeriods ?? [];
+
+        if (!periodType) {
+            // This should never happen, but if it does, return the split periods as is
+            console.error('No period type found for evaluation', baseEvaluation?.id);
+            return splitPeriods;
+        }
+
+        return sortPeriods(
+            splitPeriods,
+            periodType as keyof typeof PERIOD_TYPES,
+        );
+    }, [evaluationOverlap.data, evaluationOverlap.isSuccess, baseEvaluation?.splitPeriods, baseEvaluation?.dataset?.periodType]);
 
     const resolvedSelectedSplitPeriod =
         selectedSplitPeriod ?? resolvedSplitPeriods[0];

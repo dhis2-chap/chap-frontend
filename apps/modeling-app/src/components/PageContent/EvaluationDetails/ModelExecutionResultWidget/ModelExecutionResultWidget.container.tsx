@@ -4,9 +4,7 @@ import i18n from '@dhis2/d2-i18n';
 import { useOrgUnitsById } from '../../../../hooks/useOrgUnitsById';
 import { ModelExecutionResultWidgetComponent } from './ModelExecutionResultWidget.component';
 import styles from './ModelExecutionResultWidget.module.css';
-import { BackTestRead, Widget } from '@dhis2-chap/ui';
-import { sortSplitPeriods } from '@/utils/timePeriodUtils';
-import { PERIOD_TYPES } from '@/components/ModelExecutionForm/constants';
+import { BackTestRead, Widget, sortPeriods, PERIOD_TYPES } from '@dhis2-chap/ui';
 
 type Props = {
     backtest: BackTestRead;
@@ -32,7 +30,7 @@ const WidgetWrapper = ({ children }: { children: React.ReactNode }) => {
 
 export const ModelExecutionResultWidget = ({ backtest }: Props) => {
     const orgUnitIds = backtest.orgUnits ?? [];
-    const splitPeriods = sortSplitPeriods(backtest.splitPeriods ?? [], backtest.dataset.periodType as keyof typeof PERIOD_TYPES);
+    const splitPeriods = sortPeriods(backtest.splitPeriods ?? [], backtest.dataset.periodType as keyof typeof PERIOD_TYPES);
 
     const {
         data: orgUnitsData,
@@ -48,6 +46,14 @@ export const ModelExecutionResultWidget = ({ backtest }: Props) => {
         map.set(ALL_LOCATIONS_ORG_UNIT.id, ALL_LOCATIONS_ORG_UNIT);
         return map;
     }, [orgUnitsData]);
+
+    const sortedOrgUnitIds = useMemo(() => {
+        return [...orgUnitIds].sort((a, b) => {
+            const nameA = orgUnitsMap.get(a)?.displayName ?? '';
+            const nameB = orgUnitsMap.get(b)?.displayName ?? '';
+            return nameA.localeCompare(nameB);
+        });
+    }, [orgUnitIds, orgUnitsMap]);
 
     if (isOrgUnitsLoading) {
         return (
@@ -74,7 +80,7 @@ export const ModelExecutionResultWidget = ({ backtest }: Props) => {
     return (
         <ModelExecutionResultWidgetComponent
             backtest={backtest}
-            orgUnitIds={orgUnitIds}
+            orgUnitIds={sortedOrgUnitIds}
             orgUnitsMap={orgUnitsMap}
             splitPeriods={splitPeriods}
         />
