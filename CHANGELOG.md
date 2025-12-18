@@ -1,3 +1,10 @@
+## [3.1.1](https://github.com/dhis2-chap/chap-frontend/compare/v3.1.0...v3.1.1) (2025-12-18)
+
+
+### Bug Fixes
+
+* incorrect sorting for org units and periods [CLIM-192] ([#140](https://github.com/dhis2-chap/chap-frontend/issues/140)) ([42c37fa](https://github.com/dhis2-chap/chap-frontend/commit/42c37facdabc4d1b625288daa75e4fc8c3f239f5))
+
 # [3.1.0](https://github.com/dhis2-chap/chap-frontend/compare/v3.0.0...v3.1.0) (2025-12-09)
 
 

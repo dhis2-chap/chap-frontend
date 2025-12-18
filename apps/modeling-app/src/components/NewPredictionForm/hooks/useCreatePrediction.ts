@@ -14,7 +14,7 @@ import { ModelExecutionFormValues } from '../../ModelExecutionForm/hooks/useMode
 import { prepareBacktestData } from '../../ModelExecutionForm/utils/prepareBacktestData';
 import { validateClimateData } from '../../ModelExecutionForm/utils/validateClimateData';
 import { ImportSummaryCorrected } from '../../ModelExecutionForm/types';
-import { PERIOD_TYPES } from '@/components/ModelExecutionForm';
+import { PERIOD_TYPES } from '@dhis2-chap/ui';
 
 type Props = {
     onSuccess?: () => void;

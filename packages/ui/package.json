@@ -1,7 +1,7 @@
 {
     "name": "@dhis2-chap/ui",
     "type": "commonjs",
-    "version": "3.1.0",
+    "version": "3.1.1",
     "module": "./build/es/index.js",
     "types": "./build/types/index.d.ts",
     "license": "MIT",

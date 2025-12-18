@@ -5,10 +5,10 @@ import {
     DataSource,
     ModelSpecRead,
     ObservationBase,
+    PERIOD_TYPES,
+    toDHIS2PeriodData,
 } from '@dhis2-chap/ui';
 import { useDataEngine } from '@dhis2/app-runtime';
-import { PERIOD_TYPES } from '../constants';
-import { toDHIS2PeriodData } from '@/utils/timePeriodUtils';
 import { AnalyticsResponse, OrgUnitResponse, ANALYTICS_QUERY, ORG_UNITS_QUERY } from './queryUtils';
 import { generateBacktestDataHash } from './hashUtils';
 
@@ -16,7 +16,7 @@ const calculatePeriods = (periodType: keyof typeof PERIOD_TYPES, fromDate: strin
     const selectedPeriodType = PERIOD_TYPES[periodType];
     if (!selectedPeriodType) return [];
 
-    const dateRange = toDHIS2PeriodData(fromDate, toDate, selectedPeriodType.toLowerCase());
+    const dateRange = toDHIS2PeriodData(fromDate, toDate, selectedPeriodType);
     return dateRange.map(period => period.id);
 };
 
