@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import i18n from '@dhis2/d2-i18n';
 import { parseISO, isAfter, isEqual, isFuture } from 'date-fns';
-import { PERIOD_TYPES } from '../constants';
+import { PERIOD_TYPES } from '@dhis2-chap/ui';
 
 export const dimensionItemTypeSchema = z.enum(['DATA_ELEMENT', 'INDICATOR', 'PROGRAM_INDICATOR']);
 

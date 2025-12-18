@@ -7,9 +7,9 @@ import {
     FeatureCollectionModel,
     MakeBacktestWithDataRequest,
     ApiError,
+    PERIOD_TYPES,
 } from '@dhis2-chap/ui';
 import { useDataEngine } from '@dhis2/app-runtime';
-import { PERIOD_TYPES } from '../../ModelExecutionForm/constants';
 import { useNavigate } from 'react-router-dom';
 import { validateClimateData } from '../../ModelExecutionForm/utils/validateClimateData';
 import { prepareBacktestData } from '../../ModelExecutionForm/utils/prepareBacktestData';
