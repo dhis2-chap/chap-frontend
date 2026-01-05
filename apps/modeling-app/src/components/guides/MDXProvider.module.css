@@ -97,3 +97,13 @@
     font-weight: 600;
     color: #212934;
 }
+
+.img {
+    max-width: 60%;
+    height: auto;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    margin: 1rem 0;
+    display: block;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}

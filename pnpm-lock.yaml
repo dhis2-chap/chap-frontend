@@ -183,6 +183,9 @@ importers:
       remark-mdx-frontmatter:
         specifier: ^5.2.0
         version: 5.2.0
+      remark-mdx-images:
+        specifier: ^3.0.0
+        version: 3.0.0
       vite:
         specifier: 5.4.21
         version: 5.4.21(@types/node@24.10.1)(terser@5.44.1)
@@ -6375,6 +6378,10 @@ packages:
 
   remark-mdx-frontmatter@5.2.0:
     resolution: {integrity: sha512-U/hjUYTkQqNjjMRYyilJgLXSPF65qbLPdoESOkXyrwz2tVyhAnm4GUKhfXqOOS9W34M3545xEMq+aMpHgVjEeQ==}
+
+  remark-mdx-images@3.0.0:
+    resolution: {integrity: sha512-EKpqw11XUprx/kFQPEkH3GdPEqI63Wcq5GT120N2hGlKCSwOM09NtL1i3G9HQ4TBIR2aF471HF5YStME5ukbJw==}
+    deprecated: Use rehype-mdx-import-media instead
 
   remark-mdx@3.1.1:
     resolution: {integrity: sha512-Pjj2IYlUY3+D8x00UJsIOg5BEvfMyeI+2uLPn9VO9Wg4MEtN/VTIq2NEJQfde9PnX15KgtHyl9S0BcTnWrIuWg==}
@@ -15732,6 +15739,12 @@ snapshots:
       unified: 11.0.5
       unist-util-mdx-define: 1.1.2
       yaml: 2.8.2
+
+  remark-mdx-images@3.0.0:
+    dependencies:
+      '@types/mdast': 4.0.4
+      unified: 11.0.5
+      unist-util-visit: 5.0.0
 
   remark-mdx@3.1.1:
     dependencies:

@@ -46,6 +46,9 @@ const components = {
     strong: (props: React.HTMLAttributes<HTMLElement>) => (
         <strong className={styles.strong} {...props} />
     ),
+    img: (props: React.ImgHTMLAttributes<HTMLImageElement>) => (
+        <img className={styles.img} {...props} />
+    ),
     DataVisualization,
 };
 

@@ -1,7 +1,6 @@
 .layout {
     display: flex;
-    height: fit-content;
-    min-height: 100vh;
+    height: max-content;
     background-color: #f5f5f5;
     border-left: 1px solid var(--colors-grey700, #4a5768);
 }

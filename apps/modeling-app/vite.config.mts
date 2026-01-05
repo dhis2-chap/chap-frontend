@@ -5,6 +5,7 @@ const viteConfig = defineConfig(async () => {
     const mdx = await import('@mdx-js/rollup');
     const remarkFrontmatter = await import('remark-frontmatter');
     const remarkMdxFrontmatter = await import('remark-mdx-frontmatter');
+    const remarkMdxImages = await import('remark-mdx-images');
 
     return {
         plugins: [
@@ -13,6 +14,7 @@ const viteConfig = defineConfig(async () => {
                 remarkPlugins: [
                     remarkFrontmatter.default,
                     remarkMdxFrontmatter.default,
+                    remarkMdxImages.default,
                 ],
             }) as Plugin,
         ],

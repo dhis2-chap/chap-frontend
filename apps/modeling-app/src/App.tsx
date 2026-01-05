@@ -209,7 +209,7 @@ const App = () => {
                 <SetChapUrl>
                     <RouterProvider router={router} />
                 </SetChapUrl>
-                <ReactQueryDevtools position="bottom-right" />
+                {/* <ReactQueryDevtools position="bottom-right" /> */}
             </QueryClientProvider>
         </>
     );

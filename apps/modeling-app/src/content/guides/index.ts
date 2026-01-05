@@ -4,6 +4,9 @@ import type { MDXProps } from 'mdx/types';
 import GettingStarted, {
     frontmatter as gettingStartedFrontmatter,
 } from './getting-started.mdx';
+import CreatingAnEvaluation, {
+    frontmatter as creatingAnEvaluationFrontmatter,
+} from './creating-an-evaluation.mdx';
 
 export interface GuideFrontmatter {
     title: string;
@@ -29,6 +32,7 @@ const createGuide = (
 
 export const guides: Guide[] = [
     createGuide('getting-started', gettingStartedFrontmatter, GettingStarted),
+    createGuide('creating-an-evaluation', creatingAnEvaluationFrontmatter, CreatingAnEvaluation),
 ];
 
 export const getGuideBySlug = (slug: string): Guide | undefined => {

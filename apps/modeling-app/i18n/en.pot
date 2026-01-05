@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-01-05T17:13:56.394Z\n"
-"PO-Revision-Date: 2026-01-05T17:13:56.395Z\n"
+"POT-Creation-Date: 2026-01-05T21:49:31.920Z\n"
+"PO-Revision-Date: 2026-01-05T21:49:31.920Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -1311,6 +1311,9 @@ msgstr "To get started, create a route that points to a running CHAP server."
 
 msgid "Route and servers are configured on the settings page."
 msgstr "Route and servers are configured on the settings page."
+
+msgid "View guides"
+msgstr "View guides"
 
 msgid "Active jobs"
 msgstr "Active jobs"
