@@ -11,7 +11,6 @@ import './App.module.css';
 import PageWrapper from './components/PageWrapper';
 import { SetChapUrl } from './features/route-api/SetChapUrl';
 import { SettingsPage } from './features/settings/Settings';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { CssReset, CssVariables } from '@dhis2/ui';
 import { Layout } from './components/layout/Layout';
 import { RouteValidator } from './components/RouteValidator';

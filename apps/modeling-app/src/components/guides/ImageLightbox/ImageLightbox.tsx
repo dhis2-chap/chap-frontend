@@ -86,7 +86,7 @@ export const ImageLightbox = ({ src, alt, className, ...props }: ImageLightboxPr
                 )}
             </div>
         </div>,
-        document.body
+        document.body,
     ) : null;
 
     return (

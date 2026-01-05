@@ -1,3 +1,4 @@
+import React from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import styles from './DataVisualization.module.css';
@@ -27,8 +28,8 @@ export const DataVisualization = ({
     const categoryKey = keys[0];
     const valueKey = keys[1];
 
-    const categories = data.map((d) => String(d[categoryKey]));
-    const values = data.map((d) => Number(d[valueKey]));
+    const categories = data.map(d => String(d[categoryKey]));
+    const values = data.map(d => Number(d[valueKey]));
 
     const chartType = type === 'bar' ? 'column' : type;
 

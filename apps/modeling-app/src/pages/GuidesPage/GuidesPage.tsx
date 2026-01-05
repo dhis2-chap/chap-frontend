@@ -1,3 +1,4 @@
+import React from 'react';
 import { useParams, Navigate } from 'react-router-dom';
 import { getGuideBySlug, getFirstGuide } from '@/content/guides';
 import { GuidesLayout } from '@/components/guides/GuidesLayout';
@@ -26,7 +27,11 @@ export const GuidesPage = () => {
             <GuidesLayout>
                 <div className={styles.notFound}>
                     <h1>Guide not found</h1>
-                    <p>The guide "{guideSlug}" could not be found.</p>
+                    <p>
+                        The guide &quot;
+                        {guideSlug}
+                        &quot; could not be found.
+                    </p>
                 </div>
             </GuidesLayout>
         );
