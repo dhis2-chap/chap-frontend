@@ -6,7 +6,7 @@ import {
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { Table } from '@tanstack/react-table';
-import { ModelSpecRead, PeriodType, AuthorAssessedStatus } from '@dhis2-chap/ui';
+import { ModelSpecRead, AuthorAssessedStatus, PERIOD_TYPES } from '@dhis2-chap/ui';
 import styles from './ModelFilters.module.css';
 
 type Props = {
@@ -36,28 +36,30 @@ export const ModelFilters = ({ table }: Props) => {
                         onChange={e => table.getColumn('supportedPeriodType')?.setFilterValue(e.selected)}
                     >
                         <MenuItem
-                            key={PeriodType.WEEK}
+                            key={PERIOD_TYPES.WEEK}
                             className={styles.singleSelectMenuItem}
                             label={i18n.t('Weekly')}
-                            value={PeriodType.WEEK}
+                            value={PERIOD_TYPES.WEEK}
                         />
                         <MenuItem
-                            key={PeriodType.MONTH}
+                            key={PERIOD_TYPES.MONTH}
                             className={styles.singleSelectMenuItem}
                             label={i18n.t('Monthly')}
-                            value={PeriodType.MONTH}
+                            value={PERIOD_TYPES.MONTH}
                         />
                         <MenuItem
-                            key={PeriodType.YEAR}
+                            key={PERIOD_TYPES.YEAR}
                             className={styles.singleSelectMenuItem}
                             label={i18n.t('Yearly')}
-                            value={PeriodType.YEAR}
+                            value={PERIOD_TYPES.YEAR}
+                            disabled
                         />
                         <MenuItem
-                            key={PeriodType.ANY}
+                            key={PERIOD_TYPES.ANY}
                             className={styles.singleSelectMenuItem}
                             label={i18n.t('Any')}
-                            value={PeriodType.ANY}
+                            value={PERIOD_TYPES.ANY}
+                            disabled
                         />
                     </SingleSelect>
                 </div>

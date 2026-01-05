@@ -1,6 +1,5 @@
-import { AnalyticsService, BacktestDomain } from '@dhis2-chap/ui';
+import { AnalyticsService } from '@dhis2-chap/ui';
 import { useQuery } from '@tanstack/react-query';
-import { useCallback } from 'react';
 
 type UseBackTestOverlapOptions = {
     baseEvaluation?: number;
@@ -9,7 +8,8 @@ type UseBackTestOverlapOptions = {
 
 /**
  * Gets the overlap (eg. common) of split periods and organisation units between two evaluations
- *
+ * Note: splitPeriods are returned unsorted - sorting should be done by the consumer
+ * using the periodType from the evaluation's dataset.
  */
 export const useEvaluationOverlap = (options: UseBackTestOverlapOptions) => {
     const { baseEvaluation, comparisonEvaluation } = options;
@@ -23,12 +23,5 @@ export const useEvaluationOverlap = (options: UseBackTestOverlapOptions) => {
         },
         staleTime: 60 * 1000 * 5,
         enabled: !!baseEvaluation && !!comparisonEvaluation,
-        select: useCallback(
-            (data: BacktestDomain) => ({
-                ...data,
-                splitPeriods: data.splitPeriods.sort(),
-            }),
-            [],
-        ),
     });
 };
