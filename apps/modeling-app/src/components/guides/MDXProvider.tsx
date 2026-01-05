@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { MDXProvider as BaseMDXProvider } from '@mdx-js/react';
-import { Callout, Stepper, Step, DataVisualization } from './widgets';
+import { DataVisualization } from './widgets';
 import styles from './MDXProvider.module.css';
 
 interface MDXProviderProps {
@@ -45,9 +45,6 @@ const components = {
     strong: (props: React.HTMLAttributes<HTMLElement>) => (
         <strong className={styles.strong} {...props} />
     ),
-    Callout,
-    Stepper,
-    Step,
     DataVisualization,
 };
 
