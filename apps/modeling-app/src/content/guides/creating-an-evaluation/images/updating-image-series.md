@@ -8,13 +8,13 @@ This document describes how to reproduce the screenshots used in the "Creating a
 
 - Access to a running CHAP application (typically `localhost:3000`)
   - Use the following credentials:
-  - Server: `https://localhost:8080`
+  - Server: `http://localhost:8080`
   - Username: `birk`
   - Password: `Solololo1!`
-- If running locally on port 8080, always make sure to comment out the ReactQueryDevtools in the `apps/modeling-app/src/components/App.tsx` file. This is important so that the icon does not appear in the screenshots. Uncomment it when you are done taking the screenshots.
+- If running locally on port 8080, always make sure to comment out the ReactQueryDevtools in the `apps/modeling-app/src/App.tsx` file. This is important so that the icon does not appear in the screenshots. Uncomment it when you are done taking the screenshots.
 - A DHIS2 instance with the Lao PDR organisation unit hierarchy
 - The CHAP-EWARS Model available in the system
-- Browser window sized to **3456×2234** pixels for consistent screenshots
+- Browser window sized to **1728×1117** pixels for consistent screenshots
 
 ---
 
@@ -57,14 +57,14 @@ All images are stored in: `apps/modeling-app/src/content/guides/images/`
 
 1. Set the following values:
    - **Period type:** Monthly (keep the dropdown closed for the screenshot)
-   - **From period:** `01-2020` (displays as "januar 2020")
-   - **To period:** `12-2024` (displays as "desember 2024")
+   - **From period:** `2020-01` (displays as "januar 2020")
+   - **To period:** `2024-12` (displays as "desember 2024")
 2. Take a screenshot showing:
    - The Period type dropdown showing "Monthly"
    - Both date fields filled with the date range
    - The Organisation units section visible below
 
-**Note:** The date format in the input is `MM-YYYY` but displays in the local language format.
+**Note:** The date format in the input is `YYYY-MM` but displays in the local language format.
 
 ---
 
@@ -150,7 +150,7 @@ All images are stored in: `apps/modeling-app/src/content/guides/images/`
 
 ## Tips for Consistent Screenshots
 
-1. **Browser size:** Always use 3456×2234 pixels for consistency
+1. **Browser size:** Always use 1728×1117 pixels for consistency
 2. **Clean state:** Start from a fresh browser session to avoid cached data affecting the UI
 3. **Language:** The application uses the browser's locale for date formatting - screenshots show Norwegian locale (januar, desember)
 4. **Timing:** Wait for any loading spinners to complete before taking screenshots

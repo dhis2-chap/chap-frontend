@@ -2,6 +2,7 @@ import React from 'react';
 import type { ReactNode } from 'react';
 import { MDXProvider as BaseMDXProvider } from '@mdx-js/react';
 import { DataVisualization } from './widgets';
+import { ImageLightbox } from './ImageLightbox';
 import styles from './MDXProvider.module.css';
 
 interface MDXProviderProps {
@@ -47,7 +48,7 @@ const components = {
         <strong className={styles.strong} {...props} />
     ),
     img: (props: React.ImgHTMLAttributes<HTMLImageElement>) => (
-        <img className={styles.img} {...props} />
+        <ImageLightbox {...props} />
     ),
     DataVisualization,
 };

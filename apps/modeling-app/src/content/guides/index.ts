@@ -3,10 +3,10 @@ import type { MDXProps } from 'mdx/types';
 
 import GettingStarted, {
     frontmatter as gettingStartedFrontmatter,
-} from './getting-started.mdx';
+} from './getting-started/index.mdx';
 import CreatingAnEvaluation, {
     frontmatter as creatingAnEvaluationFrontmatter,
-} from './creating-an-evaluation.mdx';
+} from './creating-an-evaluation/index.mdx';
 
 export interface GuideFrontmatter {
     title: string;
