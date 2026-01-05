@@ -1,21 +1,21 @@
-# Getting Started with CHAP
+---
+title: Getting Started
+description: Introduction to CHAP and how to get started with the modeling app
+order: 1
+category: Basics
+---
 
-Welcome to the CHAP (Climate Health Adaptation Platform) modeling application. This guide will help you understand the basics of using the platform.
+# Getting Started
 
-## What is CHAP?
+Welcome to the Climate & Health Analytics Platform (CHAP). CHAP is an open platform for climate-informed disease forecasting. It connects researchers and epidemiological models to health practitioners, integrating directly with DHIS2—the world's leading health information system.
 
-CHAP is a platform for building climate-health models that can predict disease outbreaks based on climate data. It helps public health officials prepare for and respond to climate-sensitive diseases.
+## Platform Components
 
-## Key Features
-
-- **Model Configuration**: Set up predictive models with customizable parameters
-- **Data Integration**: Import climate and health data from various sources
-- **Visualization**: View predictions and historical data through interactive charts
-- **Evaluation**: Assess model performance with comprehensive metrics
+- **Chap Core**: Python engine for model orchestration, data pipelines, validation, and hyperparameter tuning
+- **Modeling App**: User interface for training models, visualizing predictions, and evaluating accuracy
+- **Climate App**: Import weather and environmental data from sources like ERA5-Land
 
 ## Sample Data Visualization
-
-Below is an example of how data might be visualized in CHAP:
 
 <DataVisualization
   type="line"
@@ -32,12 +32,7 @@ Below is an example of how data might be visualized in CHAP:
 
 ## Next Steps
 
-Once you've completed the initial setup, you can:
-
-1. Explore the **Models** section to see available prediction models
-2. Check the **Evaluation** section to understand model performance
-3. Review **Settings** to customize your experience
-
----
-
-*This guide is a work in progress. More detailed documentation will be added in future updates.*
+1. Select your health data and climate indicators
+2. Train a predictive model
+3. Evaluate model performance
+4. Generate forecasts

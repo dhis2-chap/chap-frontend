@@ -1,26 +1,34 @@
 import type { ComponentType } from 'react';
 import type { MDXProps } from 'mdx/types';
 
-import GettingStarted from './getting-started.mdx';
+import GettingStarted, {
+    frontmatter as gettingStartedFrontmatter,
+} from './getting-started.mdx';
 
-export interface Guide {
-    slug: string;
+export interface GuideFrontmatter {
     title: string;
     description: string;
     order: number;
     category: string;
+}
+
+export interface Guide extends GuideFrontmatter {
+    slug: string;
     Component: ComponentType<MDXProps>;
 }
 
+const createGuide = (
+    slug: string,
+    frontmatter: Record<string, unknown>,
+    Component: ComponentType<MDXProps>,
+): Guide => ({
+    slug,
+    ...(frontmatter as unknown as GuideFrontmatter),
+    Component,
+});
+
 export const guides: Guide[] = [
-    {
-        slug: 'getting-started',
-        title: 'Getting Started',
-        description: 'Introduction to CHAP and how to get started with the modeling app',
-        order: 1,
-        category: 'Basics',
-        Component: GettingStarted,
-    },
+    createGuide('getting-started', gettingStartedFrontmatter, GettingStarted),
 ];
 
 export const getGuideBySlug = (slug: string): Guide | undefined => {

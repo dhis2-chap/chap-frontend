@@ -3,11 +3,17 @@ import { defineConfig, type Plugin } from 'vite';
 
 const viteConfig = defineConfig(async () => {
     const mdx = await import('@mdx-js/rollup');
+    const remarkFrontmatter = await import('remark-frontmatter');
+    const remarkMdxFrontmatter = await import('remark-mdx-frontmatter');
 
     return {
         plugins: [
             mdx.default({
                 providerImportSource: '@mdx-js/react',
+                remarkPlugins: [
+                    remarkFrontmatter.default,
+                    remarkMdxFrontmatter.default,
+                ],
             }) as Plugin,
         ],
         server: {
