@@ -13,7 +13,9 @@
     },
     "devDependencies": {
         "@dhis2/cli-app-scripts": "12.8.0-alpha.3",
+        "@mdx-js/rollup": "^3.1.1",
         "@types/highcharts": "^5.0.44",
+        "@types/mdx": "^2.0.13",
         "vite": "5.4.21"
     },
     "peerDependencies": {
@@ -28,6 +30,7 @@
         "@dhis2/multi-calendar-dates": "^2.1.2",
         "@dhis2/ui": "^10.10.0",
         "@hookform/resolvers": "^5.0.1",
+        "@mdx-js/react": "^3.1.1",
         "@tanstack/react-query": "4",
         "@tanstack/react-query-devtools": "4",
         "@tanstack/react-table": "^8.21.3",

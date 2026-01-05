@@ -31,6 +31,7 @@ import { NewConfiguredModelPage } from './pages/NewConfiguredModelPage';
 import { SyncUrlWithGlobalShell } from './utils/syncUrlWithGlobalShell';
 import { NewPredictionPage } from './pages/NewPredictionPage';
 import { PredictionImportPage } from './pages/PredictionImportPage';
+import { GuidesPage } from './pages/GuidesPage';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 export type RouteHandle = {
@@ -183,6 +184,17 @@ const router = createHashRouter([
                     collapseSidebar: true,
                 } satisfies RouteHandle,
                 element: <GetStartedPage />,
+            },
+            {
+                path: '/guides',
+                element: <GuidesPage />,
+                handle: {
+                    collapseSidebar: true,
+                } satisfies RouteHandle,
+                children: [
+                    { index: true },
+                    { path: ':guideSlug' },
+                ],
             },
         ],
     },

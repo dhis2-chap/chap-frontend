@@ -1,0 +1,72 @@
+# Getting Started with CHAP
+
+Welcome to the CHAP (Climate Health Adaptation Platform) modeling application. This guide will help you understand the basics of using the platform.
+
+<Callout type="info">
+This is a placeholder guide. Content will be added as the platform evolves.
+</Callout>
+
+## What is CHAP?
+
+CHAP is a platform for building climate-health models that can predict disease outbreaks based on climate data. It helps public health officials prepare for and respond to climate-sensitive diseases.
+
+## Key Features
+
+- **Model Configuration**: Set up predictive models with customizable parameters
+- **Data Integration**: Import climate and health data from various sources
+- **Visualization**: View predictions and historical data through interactive charts
+- **Evaluation**: Assess model performance with comprehensive metrics
+
+<Callout type="tip">
+Start by exploring the sidebar to understand the different sections of the application.
+</Callout>
+
+## Getting Started Steps
+
+<Stepper>
+  <Step title="Configure your CHAP server">
+    First, ensure your CHAP server is running and accessible. The application needs to connect to a backend server to function properly.
+  </Step>
+  <Step title="Set up your organization unit hierarchy">
+    Navigate to the configuration section to set up your geographic hierarchy. This determines where predictions will be generated.
+  </Step>
+  <Step title="Import your data">
+    Import historical climate and health data that will be used to train your models.
+  </Step>
+  <Step title="Create a model">
+    Use the model builder to create and configure your predictive model based on your data and requirements.
+  </Step>
+</Stepper>
+
+## Sample Data Visualization
+
+Below is an example of how data might be visualized in CHAP:
+
+<DataVisualization
+  type="line"
+  title="Monthly Disease Cases"
+  data={[
+    { month: 'Jan', cases: 120 },
+    { month: 'Feb', cases: 150 },
+    { month: 'Mar', cases: 200 },
+    { month: 'Apr', cases: 180 },
+    { month: 'May', cases: 160 },
+    { month: 'Jun', cases: 140 },
+  ]}
+/>
+
+<Callout type="warning">
+The data shown above is sample data for demonstration purposes only.
+</Callout>
+
+## Next Steps
+
+Once you've completed the initial setup, you can:
+
+1. Explore the **Models** section to see available prediction models
+2. Check the **Evaluation** section to understand model performance
+3. Review **Settings** to customize your experience
+
+---
+
+*This guide is a work in progress. More detailed documentation will be added in future updates.*
