@@ -58,16 +58,6 @@ const orgUnitRootsQuery = {
     },
 };
 
-const orgUnitsQuery = {
-    resource: 'organisationUnits',
-    params: ({ displayNameProp }: { displayNameProp?: string }) => ({
-        fields: `id,path,${displayNameProp}~rename(displayName),children::isNotEmpty`,
-        level: 1,
-        userDataViewFallback: true,
-        paging: false,
-    }),
-};
-
 const orgUnitQuery = {
     resource: 'organisationUnits',
     id: ({ id }: { id: string }) => id,
@@ -115,24 +105,6 @@ export const apiFetchOrganisationUnitRoots = async (dataEngine: DataEngine): Pro
     );
 
     return (orgUnitRootsData as any).orgUnitRoots.organisationUnits;
-};
-
-// TODO: Unused, previously used to load all org units for the tree, but that is done by the ui component internally now, remove?
-export const apiFetchOrganisationUnits = async (
-    dataEngine: DataEngine,
-    displayNameProp?: string,
-): Promise<OrganisationUnit[]> => {
-    const orgUnitsData = await dataEngine.query(
-        { orgUnits: orgUnitsQuery },
-        {
-            variables: {
-                displayNameProp,
-            },
-            onError,
-        },
-    );
-
-    return (orgUnitsData as any).orgUnits.organisationUnits;
 };
 
 export const apiFetchOrganisationUnit = async (dataEngine: DataEngine, id: string): Promise<OrganisationUnit> => {
