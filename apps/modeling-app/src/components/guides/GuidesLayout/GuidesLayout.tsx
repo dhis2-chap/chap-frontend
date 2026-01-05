@@ -1,7 +1,7 @@
-import type { ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { IconArrowLeft24 } from '@dhis2/ui-icons';
-import { GuidesSidebar } from './GuidesSidebar';
+import { GuidesSidebar } from '../GuidesSidebar';
 import styles from './GuidesLayout.module.css';
 
 interface GuidesLayoutProps {

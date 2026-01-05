@@ -1,5 +1,6 @@
+import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { guides, getCategories, getGuidesByCategory } from '@/content/guides';
+import { getCategories, getGuidesByCategory } from '@/content/guides';
 import styles from './GuidesSidebar.module.css';
 
 export const GuidesSidebar = () => {
@@ -7,18 +8,16 @@ export const GuidesSidebar = () => {
 
     return (
         <nav className={styles.sidebar}>
-            <div className={styles.title}>Guides</div>
-            {categories.map((category) => (
+            {categories.map(category => (
                 <div key={category} className={styles.category}>
                     <div className={styles.categoryTitle}>{category}</div>
                     <ul className={styles.guideList}>
-                        {getGuidesByCategory(category).map((guide) => (
+                        {getGuidesByCategory(category).map(guide => (
                             <li key={guide.slug} className={styles.guideItem}>
                                 <NavLink
                                     to={`/guides/${guide.slug}`}
                                     className={({ isActive }) =>
-                                        `${styles.guideLink} ${isActive ? styles.active : ''}`
-                                    }
+                                        `${styles.guideLink} ${isActive ? styles.active : ''}`}
                                 >
                                     {guide.title}
                                 </NavLink>

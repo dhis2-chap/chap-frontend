@@ -24,17 +24,17 @@ export const guides: Guide[] = [
 ];
 
 export const getGuideBySlug = (slug: string): Guide | undefined => {
-    return guides.find((guide) => guide.slug === slug);
+    return guides.find(guide => guide.slug === slug);
 };
 
 export const getGuidesByCategory = (category: string): Guide[] => {
     return guides
-        .filter((guide) => guide.category === category)
+        .filter(guide => guide.category === category)
         .sort((a, b) => a.order - b.order);
 };
 
 export const getCategories = (): string[] => {
-    return [...new Set(guides.map((guide) => guide.category))];
+    return [...new Set(guides.map(guide => guide.category))];
 };
 
 export const getFirstGuide = (): Guide | undefined => {
