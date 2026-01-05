@@ -7,7 +7,6 @@ import {
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import css from './OrganisationUnitMultiSelect.module.css';
-const DEFAULT_MAX_SELECTED = 10;
 
 type DisplayableOrgUnit = {
     id: string;
@@ -27,7 +26,7 @@ const OrganisationUnitMultiSelect = ({
     available,
     selected,
     onSelect,
-    maxSelections = DEFAULT_MAX_SELECTED,
+    maxSelections,
     ...multiSelectProps
 }: OrganisationUnitMultiSelectProps) => {
     // we want to batch updates to prevent fetching data based on selected orgunits
@@ -83,7 +82,10 @@ const OrganisationUnitMultiSelect = ({
                     // dont batch updates on chip deletion
                     onSelect({ selected });
                 } else {
-                    setPendingSelectedOrgUnits(selected.slice(0, maxSelections));
+                    const limitedSelection = maxSelections
+                        ? selected.slice(0, maxSelections)
+                        : selected;
+                    setPendingSelectedOrgUnits(limitedSelection);
                 }
             }}
             onBlur={() => {
@@ -101,7 +103,7 @@ const OrganisationUnitMultiSelect = ({
             inputMaxHeight="26px"
             {...multiSelectProps}
         >
-            {selected.length >= maxSelections && (
+            {maxSelections && selected.length >= maxSelections && (
                 <Help className={css.help} warning>
                     {i18n.t(
                         'You cannot select more than {{max}} organisation units at a time',

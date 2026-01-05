@@ -8,9 +8,7 @@ import { useEvaluationOverlap } from '../../hooks/useEvaluationOverlap';
 import { useOrgUnitsById } from '../../hooks/useOrgUnitsById';
 import { sortPeriods, PERIOD_TYPES } from '@dhis2-chap/ui';
 
-export const useCompareSelectionController = ({
-    maxSelectedOrgUnits = 10,
-} = {}) => {
+export const useCompareSelectionController = () => {
     const {
         evaluations,
         baseEvaluation,
@@ -75,9 +73,7 @@ export const useCompareSelectionController = ({
         useOrgUnitsById(availableOrgUnitIds);
 
     const [selectedOrgUnits, setSelectedOrgUnits] = useSelectedOrgUnits({
-        initialValue: orgUnitsData?.organisationUnits
-            .map(ou => ou.id)
-            .slice(0, maxSelectedOrgUnits),
+        initialValue: orgUnitsData?.organisationUnits.map(ou => ou.id),
     });
 
     const compatibleSelectedOrgUnits = useMemo(

@@ -23,8 +23,6 @@ import { SplitPeriodSlider } from './SplitPeriodSlider';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ID_MAIN_LAYOUT } from '../../components/layout/Layout';
 
-const MAX_SELECTED_ORG_UNITS = 10;
-
 export const EvaluationCompare = () => {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
@@ -51,9 +49,7 @@ export const EvaluationCompare = () => {
         setBaseEvaluation,
         setComparisonEvaluation,
         setSelectedSplitPeriod: setSelectedSplitPoint,
-    } = useCompareSelectionController({
-        maxSelectedOrgUnits: MAX_SELECTED_ORG_UNITS,
-    });
+    } = useCompareSelectionController();
 
     const {
         combined,
@@ -126,7 +122,6 @@ export const EvaluationCompare = () => {
                             setSelectedOrgUnits(selected)}
                         available={orgUnits ?? []}
                         inputMaxHeight="52px"
-                        maxSelections={MAX_SELECTED_ORG_UNITS}
                     />
                 </div>
                 {plotDataLoading && (
