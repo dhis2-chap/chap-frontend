@@ -84,6 +84,5 @@ The app uses TanStack Query for server state. API calls go through the generated
 
 ## Git 
 
-- Use the github CLI (gh) when using git.
 - When creating a new branch, use the conventional commit prefixes: `feat/`, `fix/`, `docs/`, `refactor/`, etc.
 - When committing, use the conventional commit format: `feat: add new feature`, `fix: fix bug`, `docs: update documentation`, `refactor: refactor code`, etc.
