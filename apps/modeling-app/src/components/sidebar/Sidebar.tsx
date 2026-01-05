@@ -4,7 +4,13 @@ import cx from 'classnames';
 import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import styles from './Sidebar.module.css';
-import { Sidenav, SidenavItems, SidenavLink, SidenavParent } from './sidenav';
+import {
+    Sidenav,
+    SidenavFooter,
+    SidenavItems,
+    SidenavLink,
+    SidenavParent,
+} from './sidenav';
 
 type LinkItem = {
     to: string;
@@ -103,9 +109,13 @@ export const Sidebar = ({
                     <SidebarNavLink to="/predictions" label={i18n.t('Predict')} />
                     <SidebarNavLink to="/models" label={i18n.t('Models')} />
                     <SidebarNavLink to="/jobs" label={i18n.t('Jobs')} />
-                    <SidebarNavLink to="/settings" label={i18n.t('Settings')} />
-                    <SidebarNavLink to="/guides" label={i18n.t('Guides')} />
                 </SidenavItems>
+                <SidenavFooter>
+                    <SidenavItems>
+                        <SidebarNavLink to="/guides" label={i18n.t('Guides')} />
+                        <SidebarNavLink to="/settings" label={i18n.t('Settings')} />
+                    </SidenavItems>
+                </SidenavFooter>
             </Sidenav>
             <button
                 className={styles.collapseButton}
