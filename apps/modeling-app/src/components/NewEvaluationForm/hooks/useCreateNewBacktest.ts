@@ -7,20 +7,24 @@ import {
     FeatureCollectionModel,
     MakeBacktestWithDataRequest,
     ApiError,
+    PERIOD_TYPES,
 } from '@dhis2-chap/ui';
 import { useDataEngine } from '@dhis2/app-runtime';
-import { PERIOD_TYPES } from '../../ModelExecutionForm/constants';
 import { useNavigate } from 'react-router-dom';
 import { validateClimateData } from '../../ModelExecutionForm/utils/validateClimateData';
 import { prepareBacktestData } from '../../ModelExecutionForm/utils/prepareBacktestData';
 import { ImportSummaryCorrected } from '../../ModelExecutionForm/types';
 
 const N_SPLITS = 10;
-const STRIDE = 1;
 
 const N_PERIODS = {
     [PERIOD_TYPES.MONTH]: 3,
     [PERIOD_TYPES.WEEK]: 12,
+};
+
+const N_STRIDES = {
+    [PERIOD_TYPES.MONTH]: 1,
+    [PERIOD_TYPES.WEEK]: 4,
 };
 
 type Props = {
@@ -121,7 +125,7 @@ export const useCreateNewBacktest = ({
                 modelId: model.name,
                 nPeriods: N_PERIODS[formData.periodType.toUpperCase() as keyof typeof N_PERIODS],
                 nSplits: N_SPLITS,
-                stride: STRIDE,
+                stride: N_STRIDES[formData.periodType.toUpperCase() as keyof typeof N_STRIDES],
             };
 
             return AnalyticsService.createBacktestWithDataAnalyticsCreateBacktestWithDataPost(backtestRequest, false) as unknown as Promise<ImportSummaryCorrected>;

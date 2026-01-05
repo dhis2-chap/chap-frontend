@@ -14,7 +14,8 @@
         "format": "d2-style apply",
         "start": "turbo start",
         "build": "turbo build",
-        "cp-build": "rm -rf ./build && cp -r apps/modeling-app/build ."
+        "cp-build": "rm -rf ./build && cp -r apps/modeling-app/build .",
+        "test": "vitest run"
     },
     "dependencies": {
         "@dhis2/app-runtime": "3.14.6",
@@ -36,12 +37,13 @@
         "react-dom": "^18.3.1",
         "turbo": "^2.5.6",
         "typescript": "^5.7.2",
-        "typescript-eslint": "^8.43.0"
+        "typescript-eslint": "^8.43.0",
+        "vitest": "^4.0.16"
     },
     "resolutions": {
         "i18next": "20.5.0",
         "@dhis2/app-runtime": "3.14.6",
         "@dhis2/cli-app-scripts": "12.8.0-alpha.3"
     },
-    "version": "3.1.0"
+    "version": "3.1.2"
 }

@@ -46,6 +46,21 @@ jobs:
 
       - run: pnpm linter:check
 
+  test:
+    runs-on: ubuntu-latest
+    needs: [install]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'yarn'
+          cache-dependency-path: '**/yarn.lock'
+
+      - run: yarn install --frozen-lockfile
+
+      - run: yarn test
+
   build:
     runs-on: ubuntu-latest
     needs: [install]
@@ -106,7 +121,7 @@ jobs:
       - run: pnpm tsc:check
 
   release:
-    needs: [install, lint, typescript, build]
+    needs: [install, lint, test, typescript, build]
     # Skips forks
     if: ${{ !github.event.repository.fork }}
     runs-on: ubuntu-latest

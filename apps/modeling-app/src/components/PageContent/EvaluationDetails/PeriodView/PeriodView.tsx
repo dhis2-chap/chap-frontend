@@ -1,7 +1,6 @@
 import React from 'react';
 import i18n from '@dhis2/d2-i18n';
-import { convertServerToClientPeriod } from '@/utils/timePeriodUtils';
-import { PERIOD_TYPES } from '@/components/ModelExecutionForm';
+import { convertServerToClientPeriod, PERIOD_TYPES } from '@dhis2-chap/ui';
 import styles from '../EvaluationSummaryWidget/EvaluationSummaryWidget.module.css';
 
 type Props = {

@@ -1,11 +1,9 @@
 import { useEffect, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import { z } from 'zod';
-import { ModelSpecRead } from '@dhis2-chap/ui';
+import { ModelSpecRead, PERIOD_TYPES, convertServerToClientPeriod } from '@dhis2-chap/ui';
 import { useOrgUnitsById } from '../../../hooks/useOrgUnitsById';
 import { ModelExecutionFormValues } from '../../../components/ModelExecutionForm/hooks/useModelExecutionFormState';
-import { PERIOD_TYPES } from '../../../components/ModelExecutionForm/constants';
-import { convertServerToClientPeriod } from '@/utils/timePeriodUtils';
 import { useDataItemByIds } from './useDataItemById';
 import { CovariateMapping } from '../../../components/ModelExecutionForm/hooks/useModelExecutionFormState';
 

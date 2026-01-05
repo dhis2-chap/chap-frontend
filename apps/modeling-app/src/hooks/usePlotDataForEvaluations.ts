@@ -19,6 +19,7 @@ import {
     useQueryClient,
     UseQueryOptions,
 } from '@tanstack/react-query';
+import { sortPeriods, PERIOD_TYPES } from '@dhis2-chap/ui';
 
 const quantiles = [0.1, 0.25, 0.5, 0.75, 0.9];
 
@@ -210,9 +211,15 @@ const plotResultToViewData = (
 ): EvaluationForSplitPoint[] => {
     const evaluationData = data.flatMap(d => d.evaluationEntries);
 
-    const allSplitPeriods = Array.from(
+    const periodType = data[0]?.evaluation?.dataset?.periodType;
+
+    const uniqueSplitPeriods = Array.from(
         new Set(evaluationData.map(item => item.splitPeriod)),
     );
+
+    const allSplitPeriods = periodType
+        ? sortPeriods(uniqueSplitPeriods, periodType as keyof typeof PERIOD_TYPES)
+        : uniqueSplitPeriods;
     const allOrgunits = Array.from(
         new Set(evaluationData.map(item => item.orgUnit)),
     );

@@ -49,6 +49,16 @@ export {
     getQueue,
 } from './httpfunctions/core/request';
 export { buildPredictionSeries } from './utils/PredictionViewModel';
+export {
+    PERIOD_TYPES,
+    type PeriodType,
+    type Period,
+    toDHIS2PeriodData,
+    convertServerToClientPeriod,
+    sortPeriods,
+    comparePeriods,
+    getLastNPeriods,
+} from './utils/timePeriodUtils';
 
 // Map utilities
 export { parseOrgUnits } from './components/maps/utils';

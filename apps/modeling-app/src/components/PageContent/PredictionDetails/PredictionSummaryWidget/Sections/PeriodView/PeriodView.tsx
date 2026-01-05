@@ -1,9 +1,7 @@
 import React from 'react';
 import i18n from '@dhis2/d2-i18n';
-import { convertServerToClientPeriod } from '@/utils/timePeriodUtils';
-import { PERIOD_TYPES } from '@/components/ModelExecutionForm';
+import { convertServerToClientPeriod, PERIOD_TYPES, Tag } from '@dhis2-chap/ui';
 import styles from '../../PredictionSummaryWidget.module.css';
-import { Tag } from '@dhis2-chap/ui';
 import { IconChevronRight16 } from '@dhis2/ui';
 import clsx from 'clsx';
 
