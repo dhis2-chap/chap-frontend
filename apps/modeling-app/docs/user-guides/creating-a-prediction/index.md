@@ -5,7 +5,7 @@ order: 2
 category: User Guides
 ---
 
-## What is a Prediction?
+## Creating a Prediction
 
 A prediction uses a trained model to forecast future disease cases based on your current data. Unlike an evaluation (which tests model accuracy on historical data), a prediction generates forecasts that can be imported into DHIS2 to support decision-making in the field.
 

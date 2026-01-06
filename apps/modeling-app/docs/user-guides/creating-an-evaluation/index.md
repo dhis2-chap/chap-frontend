@@ -5,7 +5,7 @@ order: 1
 category: User Guides
 ---
 
-## What is an Evaluation?
+## Creating an Evaluation
 
 An evaluation tests how accurately a predictive model performs using your historical data. It compares actual outcomes with predicted values across specified time periods and locations, giving you confidence in the model before using it for forecasting.
 
