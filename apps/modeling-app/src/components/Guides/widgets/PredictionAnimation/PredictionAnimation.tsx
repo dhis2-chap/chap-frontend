@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import Highcharts from 'highcharts';
 import highchartsMore from 'highcharts/highcharts-more';
 import HighchartsReact from 'highcharts-react-official';
@@ -7,79 +7,103 @@ import styles from './PredictionAnimation.module.css';
 // Initialize highcharts-more for arearange support
 highchartsMore(Highcharts);
 
-// Simulated evaluation data - 2 years of actual cases and model predictions
-const PERIODS = [
-    // Year 1
-    'Jan \'23', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
-    // Year 2
-    'Jan \'24', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+// Generate period IDs in YYYYMM format for 5 years
+const generatePeriods = (startYear: number, numYears: number): string[] => {
+    const periods: string[] = [];
+    for (let year = startYear; year < startYear + numYears; year++) {
+        for (let month = 1; month <= 12; month++) {
+            periods.push(`${year}${month.toString().padStart(2, '0')}`);
+        }
+    }
+    return periods;
+};
+
+const PERIODS = generatePeriods(2020, 5);
+
+const SHORT_MONTH_NAMES = [
+    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
 ];
+
+const formatPeriod = (periodId: string): string => {
+    const year = periodId.slice(2, 4);
+    const month = parseInt(periodId.slice(4, 6)) - 1;
+    return `${SHORT_MONTH_NAMES[month]} '${year}`;
+};
 
 // Actual observed cases (orange line) - seasonal pattern with Jan peak
 // Pattern: Jan=peak, Feb-Mar=declining, Apr-Oct=low baseline, Nov-Dec=rising
+// Includes natural year-to-year variation and occasional mini-breakouts
 const ACTUAL_CASES = [
-    // Year 1 (2023)
-    118, 88, 65, 40, 30, 24, 22, 26, 28, 35, 58, 85,
-    // Year 2 (2024)
-    122, 90, 68, 42, 32, 25, 23, 28, 30, 38, 62, 88,
+    // Year 1 (2020) - baseline year
+    68, 51, 38, 24, 17, 14, 13, 15, 17, 21, 34, 49,
+    // Year 2 (2021) - mini-breakout in late summer
+    71, 53, 39, 25, 18, 15, 14, 22, 28, 24, 37, 53,
+    // Year 3 (2022) - slightly higher peak, early fall spike
+    78, 58, 43, 27, 19, 16, 15, 17, 19, 32, 41, 56,
+    // Year 4 (2023) - quieter year
+    69, 52, 38, 23, 16, 13, 12, 14, 16, 20, 33, 50,
+    // Year 5 (2024) - moderate year
+    74, 55, 41, 26, 19, 15, 14, 17, 19, 24, 38, 54,
 ];
 
-// Prediction start index (Aug '24 = index 19)
-const PREDICTION_START_INDEX = 19;
+// Prediction start index (Aug '24 = index 55)
+const PREDICTION_START_INDEX = 55;
 
 // Model predictions with confidence intervals - only for Aug, Sep, Oct '24 (3 months)
 // Shows prediction for period just before the seasonal rise begins
 const PREDICTIONS = {
     // 50th percentile (blue line)
-    median: [26, 28, 36],
+    median: [16, 18, 22],
     // 25th percentile
-    quantileMidLow: [20, 22, 28],
+    quantileMidLow: [12, 14, 17],
     // 75th percentile
-    quantileMidHigh: [32, 34, 46],
+    quantileMidHigh: [20, 22, 28],
     // 10th percentile - wide range showing uncertainty
-    quantileLow: [14, 16, 20],
+    quantileLow: [8, 10, 12],
     // 90th percentile - wide range showing uncertainty
-    quantileHigh: [38, 42, 58],
+    quantileHigh: [24, 26, 36],
 };
 
-// Step 2: Predictions moved 1 month later (Sep '24 = index 20)
-const PREDICTION_START_INDEX_STEP2 = 20;
+// Step 2: Predictions moved 1 month later (Sep '24 = index 56)
+const PREDICTION_START_INDEX_STEP2 = 56;
 
 // Predictions for Sep, Oct, Nov '24 - intermediate position with moderate uncertainty
 const PREDICTIONS_STEP2 = {
     // 50th percentile (blue line) - slightly lower than actual cases
-    median: [26, 32, 52],
+    median: [17, 21, 33],
     // 25th percentile - moderately wider
-    quantileMidLow: [22, 28, 46],
+    quantileMidLow: [14, 18, 28],
     // 75th percentile - moderately wider
-    quantileMidHigh: [38, 50, 76],
+    quantileMidHigh: [24, 31, 47],
     // 10th percentile - moderate uncertainty
-    quantileLow: [14, 18, 34],
+    quantileLow: [9, 11, 21],
     // 90th percentile - moderate uncertainty
-    quantileHigh: [48, 62, 92],
+    quantileHigh: [30, 39, 58],
 };
 
-// Step 3: Predictions moved 3 months later (Oct '24 = index 21)
-const PREDICTION_START_INDEX_STEP3 = 21;
+// Step 3: Predictions moved 1 month later (Oct '24 = index 57)
+const PREDICTION_START_INDEX_STEP3 = 57;
 
 // Predictions for Oct, Nov, Dec '24 - follows seasonal rise with wider uncertainty
 const PREDICTIONS_STEP3 = {
     // 50th percentile (blue line) - lower than actual cases (more deviation)
-    median: [34, 52, 72],
+    median: [21, 32, 45],
     // 25th percentile - wider range
-    quantileMidLow: [28, 42, 58],
+    quantileMidLow: [17, 26, 36],
     // 75th percentile - wider range
-    quantileMidHigh: [44, 66, 92],
+    quantileMidHigh: [27, 41, 57],
     // 10th percentile - much wider showing increased uncertainty
-    quantileLow: [20, 32, 46],
+    quantileLow: [7, 14, 20],
     // 90th percentile - much wider showing increased uncertainty
-    quantileHigh: [52, 82, 120],
+    quantileHigh: [38, 60, 85],
 };
 
 export type PredictionAnimationStep = 0 | 1 | 2 | 3 | 4;
 
 interface PredictionAnimationProps {
     step?: PredictionAnimationStep;
+    showButtons?: boolean;
 }
 
 // Colors matching app charts
@@ -97,10 +121,10 @@ const getCurrentPredictionData = (step: PredictionAnimationStep): {
     predictions: PredictionData;
     startIndex: number;
 } => {
-    if (step >= 3) {
+    if (step >= 4) {
         return { predictions: PREDICTIONS_STEP3, startIndex: PREDICTION_START_INDEX_STEP3 };
     }
-    if (step >= 2) {
+    if (step >= 3) {
         return { predictions: PREDICTIONS_STEP2, startIndex: PREDICTION_START_INDEX_STEP2 };
     }
     return { predictions: PREDICTIONS, startIndex: PREDICTION_START_INDEX };
@@ -151,10 +175,10 @@ const buildSeries = (
     const predictionData = buildPredictionSeries(predictions, startIndex);
 
     return [
-        // Outer quantile range (90% confidence) - render first (lowest zIndex)
+        // Outer quantile range (80% prediction interval) - render first (lowest zIndex)
         {
-            type: 'arearange' as const,
-            name: '90% Confidence',
+            type: 'areasplinerange' as const,
+            name: '80% prediction interval',
             data: predictionData.outerRange,
             color: COLORS.outerQuantile,
             visible: visibility.outerQuantile,
@@ -164,10 +188,10 @@ const buildSeries = (
             fillOpacity: 1,
             marker: { enabled: false },
         },
-        // Middle quantile range (50% confidence)
+        // Middle quantile range (50% prediction interval)
         {
-            type: 'arearange' as const,
-            name: '50% Confidence',
+            type: 'areasplinerange' as const,
+            name: '50% prediction interval',
             data: predictionData.midRange,
             color: COLORS.middleQuantile,
             visible: visibility.middleQuantile,
@@ -179,8 +203,8 @@ const buildSeries = (
         },
         // Predicted cases line (median)
         {
-            type: 'line' as const,
-            name: 'Predicted Cases',
+            type: 'spline' as const,
+            name: 'Median prediction',
             data: predictionData.median,
             color: COLORS.predicted,
             visible: visibility.predictedLine,
@@ -191,7 +215,7 @@ const buildSeries = (
         },
         // Actual cases line (always on top)
         {
-            type: 'line' as const,
+            type: 'spline' as const,
             name: 'Real Cases',
             data: buildActualCasesSeries(),
             color: COLORS.actual,
@@ -204,9 +228,14 @@ const buildSeries = (
     ];
 };
 
+// Zoom configuration for step 1 - show last 8 months to clearly display quantiles
+const ZOOM_START_INDEX = 52; // May '24
+const ZOOM_END_INDEX = 59;   // Dec '24
+
 const getChartOptions = (step: PredictionAnimationStep): Highcharts.Options => {
     const visibility = getSeriesVisibility(step);
     const { predictions, startIndex } = getCurrentPredictionData(step);
+    const isZoomed = step === 1;
 
     return {
         chart: {
@@ -222,19 +251,27 @@ const getChartOptions = (step: PredictionAnimationStep): Highcharts.Options => {
         credits: {
             enabled: false,
         },
+        exporting: {
+            enabled: false,
+        },
         xAxis: {
             categories: PERIODS,
+            min: isZoomed ? ZOOM_START_INDEX : undefined,
+            max: isZoomed ? ZOOM_END_INDEX : undefined,
             labels: {
-                step: 3,
+                step: isZoomed ? 1 : 6,
+                formatter: function () {
+                    return formatPeriod(this.value.toString());
+                },
                 style: {
-                    fontSize: '11px',
+                    fontSize: '0.75rem',
                     color: '#4a5768',
                 },
             },
             title: {
-                text: 'Month',
+                text: 'Period',
                 style: {
-                    fontSize: '12px',
+                    fontSize: '0.8rem',
                     fontWeight: '500',
                     color: '#212934',
                 },
@@ -252,7 +289,7 @@ const getChartOptions = (step: PredictionAnimationStep): Highcharts.Options => {
             gridLineColor: COLORS.gridLine,
             gridLineDashStyle: 'Dash',
             min: 0,
-            max: 150,
+            max: isZoomed ? 45 : 95,
         },
         tooltip: {
             shared: true,
@@ -274,13 +311,13 @@ const getChartOptions = (step: PredictionAnimationStep): Highcharts.Options => {
                     duration: 500,
                 },
             },
-            line: {
+            spline: {
                 lineWidth: 2.5,
                 marker: {
                     enabled: false,
                 },
             },
-            arearange: {
+            areasplinerange: {
                 lineWidth: 0,
                 fillOpacity: 1,
                 marker: {
@@ -292,21 +329,48 @@ const getChartOptions = (step: PredictionAnimationStep): Highcharts.Options => {
     };
 };
 
-export const PredictionAnimation = ({ step = 0 }: PredictionAnimationProps) => {
-    const options = useMemo(() => getChartOptions(step), [step]);
+export const PredictionAnimation = ({ step = 0, showButtons = false }: PredictionAnimationProps) => {
+    const [internalStep, setInternalStep] = useState<PredictionAnimationStep>(2);
+    const currentStep = showButtons ? internalStep : step;
 
-    // Use key to force re-render when prediction position changes
-    const chartKey = step >= 3 ? 'step3' : step >= 2 ? 'step2' : step >= 1 ? 'step1' : 'step0';
+    const options = useMemo(() => getChartOptions(currentStep), [currentStep]);
+
+    const handlePrevious = () => {
+        setInternalStep(prev => (prev > 2 ? (prev - 1) as PredictionAnimationStep : prev));
+    };
+
+    const handleNext = () => {
+        setInternalStep(prev => (prev < 4 ? (prev + 1) as PredictionAnimationStep : prev));
+    };
 
     return (
         <div className={styles.container}>
             <div className={styles.chartWrapper}>
                 <HighchartsReact
-                    key={chartKey}
                     highcharts={Highcharts}
                     options={options}
                 />
             </div>
+            {showButtons && (
+                <div className={styles.buttonContainer}>
+                    <button
+                        className={styles.navButton}
+                        onClick={handlePrevious}
+                        disabled={internalStep <= 2}
+                        aria-label="Previous step"
+                    >
+                        ←
+                    </button>
+                    <button
+                        className={styles.navButton}
+                        onClick={handleNext}
+                        disabled={internalStep >= 4}
+                        aria-label="Next step"
+                    >
+                        →
+                    </button>
+                </div>
+            )}
         </div>
     );
 };
