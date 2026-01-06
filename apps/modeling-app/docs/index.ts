@@ -1,9 +1,10 @@
 import type { ComponentType } from 'react';
 import type { MDXProps } from 'mdx/types';
 
+// We import this from the user-guides folder even though it's a basic guide, but that's just to get the sync to work correctly
 import GettingStarted, {
     frontmatter as gettingStartedFrontmatter,
-} from './basics/getting-started/index.mdx';
+} from './user-guides/getting-started/index.md';
 import CreatingAnEvaluation, {
     frontmatter as creatingAnEvaluationFrontmatter,
 } from './user-guides/creating-an-evaluation/index.md';
