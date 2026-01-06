@@ -230,7 +230,7 @@ const buildSeries = (
 
 // Zoom configuration for step 1 - show last 8 months to clearly display quantiles
 const ZOOM_START_INDEX = 52; // May '24
-const ZOOM_END_INDEX = 59;   // Dec '24
+const ZOOM_END_INDEX = 59; // Dec '24
 
 const getChartOptions = (step: PredictionAnimationStep): Highcharts.Options => {
     const visibility = getSeriesVisibility(step);
