@@ -11,6 +11,8 @@ const viteConfig = defineConfig(async () => {
         plugins: [
             mdx.default({
                 providerImportSource: '@mdx-js/react',
+                mdExtensions: [],
+                mdxExtensions: ['.mdx', '.md'],
                 remarkPlugins: [
                     remarkFrontmatter.default,
                     remarkMdxFrontmatter.default,
