@@ -1,8 +1,8 @@
 import React from 'react';
 import { useParams, Navigate } from 'react-router-dom';
 import { getGuideBySlug, getFirstGuide } from '@docs/index';
-import { GuidesLayout } from '@/components/guides/GuidesLayout';
-import { GuideContent } from '@/components/guides/GuideContent';
+import { GuidesLayout } from '@/components/Guides/GuidesLayout';
+import { GuideContent } from '@/components/Guides/GuideContent';
 import styles from './GuidesPage.module.css';
 
 export const GuidesPage = () => {
