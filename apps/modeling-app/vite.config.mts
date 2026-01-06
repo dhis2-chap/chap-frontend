@@ -25,7 +25,12 @@ const viteConfig = defineConfig(async () => {
                 allow: [path.resolve(__dirname, '../..')],
             },
         },
-        resolve: { alias: { '@': path.resolve(__dirname, 'src') } },
+        resolve: {
+            alias: {
+                '@': path.resolve(__dirname, 'src'),
+                '@docs': path.resolve(__dirname, 'docs'),
+            },
+        },
         clearScreen: true,
     };
 });

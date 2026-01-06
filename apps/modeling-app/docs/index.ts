@@ -3,13 +3,13 @@ import type { MDXProps } from 'mdx/types';
 
 import GettingStarted, {
     frontmatter as gettingStartedFrontmatter,
-} from './getting-started/index.mdx';
+} from './basics/getting-started/index.mdx';
 import CreatingAnEvaluation, {
     frontmatter as creatingAnEvaluationFrontmatter,
-} from './creating-an-evaluation/index.md';
+} from './user-guides/creating-an-evaluation/index.md';
 import WhatIsAnEvaluation, {
     frontmatter as whatIsAnEvaluationFrontmatter,
-} from './what-is-an-evaluation/index.mdx';
+} from './basics/what-is-an-evaluation/index.mdx';
 
 export interface GuideFrontmatter {
     title: string;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams, Navigate } from 'react-router-dom';
-import { getGuideBySlug, getFirstGuide } from '@/content/guides';
+import { getGuideBySlug, getFirstGuide } from '@docs/index';
 import { GuidesLayout } from '@/components/guides/GuidesLayout';
 import { GuideContent } from '@/components/guides/GuideContent';
 import styles from './GuidesPage.module.css';
