@@ -6,7 +6,7 @@ import GettingStarted, {
 } from './getting-started/index.mdx';
 import CreatingAnEvaluation, {
     frontmatter as creatingAnEvaluationFrontmatter,
-} from './creating-an-evaluation/index.mdx';
+} from './creating-an-evaluation/index.md';
 import WhatIsAnEvaluation, {
     frontmatter as whatIsAnEvaluationFrontmatter,
 } from './what-is-an-evaluation/index.mdx';
