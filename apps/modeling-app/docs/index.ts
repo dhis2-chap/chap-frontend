@@ -8,6 +8,9 @@ import GettingStarted, {
 import CreatingAnEvaluation, {
     frontmatter as creatingAnEvaluationFrontmatter,
 } from './user-guides/creating-an-evaluation/index.md';
+import CreatingAPrediction, {
+    frontmatter as creatingAPredictionFrontmatter,
+} from './user-guides/creating-a-prediction/index.md';
 import WhatIsAnEvaluation, {
     frontmatter as whatIsAnEvaluationFrontmatter,
 } from './basics/what-is-an-evaluation/index.mdx';
@@ -38,6 +41,7 @@ export const guides: Guide[] = [
     createGuide('getting-started', gettingStartedFrontmatter, GettingStarted),
     createGuide('what-is-an-evaluation', whatIsAnEvaluationFrontmatter, WhatIsAnEvaluation),
     createGuide('creating-an-evaluation', creatingAnEvaluationFrontmatter, CreatingAnEvaluation),
+    createGuide('creating-a-prediction', creatingAPredictionFrontmatter, CreatingAPrediction),
 ];
 
 export const getGuideBySlug = (slug: string): Guide | undefined => {
