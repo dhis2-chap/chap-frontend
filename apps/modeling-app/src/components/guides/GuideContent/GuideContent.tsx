@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Guide } from '@docs/index';
-import { MDXProvider } from './MDXProvider';
+import { MDXProvider } from '../MDXProvider';
 import styles from './GuideContent.module.css';
 
 interface GuideContentProps {
