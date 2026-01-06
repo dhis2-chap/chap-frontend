@@ -7,6 +7,9 @@ import GettingStarted, {
 import CreatingAnEvaluation, {
     frontmatter as creatingAnEvaluationFrontmatter,
 } from './creating-an-evaluation/index.mdx';
+import WhatIsAnEvaluation, {
+    frontmatter as whatIsAnEvaluationFrontmatter,
+} from './what-is-an-evaluation/index.mdx';
 
 export interface GuideFrontmatter {
     title: string;
@@ -32,6 +35,7 @@ const createGuide = (
 
 export const guides: Guide[] = [
     createGuide('getting-started', gettingStartedFrontmatter, GettingStarted),
+    createGuide('what-is-an-evaluation', whatIsAnEvaluationFrontmatter, WhatIsAnEvaluation),
     createGuide('creating-an-evaluation', creatingAnEvaluationFrontmatter, CreatingAnEvaluation),
 ];
 

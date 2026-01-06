@@ -1,0 +1,112 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px;
+    background-color: var(--colors-grey100, #f3f5f7);
+    border-radius: 8px;
+    margin: 24px 0;
+}
+
+.chart {
+    width: 100%;
+    max-width: 650px;
+    height: auto;
+}
+
+.gridLine {
+    stroke: var(--colors-grey300, #d5dde5);
+    stroke-width: 1;
+    stroke-dasharray: 4 4;
+}
+
+.axisLabel {
+    font-size: 11px;
+    fill: var(--colors-grey700, #4a5768);
+    font-family: inherit;
+}
+
+.axisTitle {
+    font-size: 12px;
+    fill: var(--colors-grey800, #212934);
+    font-weight: 500;
+    font-family: inherit;
+}
+
+/* Quantile area fills - matching the evaluation chart colors */
+.outerQuantileArea {
+    fill: #c4dcf2;
+    stroke: none;
+}
+
+.middleQuantileArea {
+    fill: #9bbdff;
+    stroke: none;
+}
+
+/* Line styles matching the evaluation chart */
+.actualLine {
+    fill: none;
+    stroke: #f68000;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.predictedLine {
+    fill: none;
+    stroke: #004bbd;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* Legend styles */
+.legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 16px;
+    font-size: 12px;
+    color: var(--colors-grey800, #212934);
+    justify-content: center;
+}
+
+.legendItem {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.actualLegend {
+    display: inline-block;
+    width: 20px;
+    height: 3px;
+    background-color: #f68000;
+    border-radius: 2px;
+}
+
+.predictedLegend {
+    display: inline-block;
+    width: 20px;
+    height: 3px;
+    background-color: #004bbd;
+    border-radius: 2px;
+}
+
+.outerQuantileLegend {
+    display: inline-block;
+    width: 16px;
+    height: 12px;
+    background-color: #c4dcf2;
+    border-radius: 2px;
+}
+
+.middleQuantileLegend {
+    display: inline-block;
+    width: 16px;
+    height: 12px;
+    background-color: #9bbdff;
+    border-radius: 2px;
+}
+

@@ -20,6 +20,7 @@ pnpm build                    # Build all packages
 
 # Code Quality
 pnpm linter:check             # Run ESLint
+pnpm linter:check -- --fix    # Run ESLint and fix errors
 pnpm tsc:check                # TypeScript type checking
 pnpm format                   # Format code with d2-style
 

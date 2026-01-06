@@ -1,0 +1,31 @@
+---
+title: What is an Evaluation?
+description: Understanding how time series prediction models are evaluated
+order: 2
+category: Basics
+---
+
+## What is an Evaluation?
+
+An **evaluation** tests how well a predictive model performs using your historical data. Before you use a model to forecast future disease cases, you need to know: *can this model actually make accurate predictions?*
+
+This is what an evaluation does.
+
+Let's say that this is your disease data for the last 2 years, aggregated by month. This shows a clear seasonal pattern, with a peak in January and a low in July.
+
+<PredictionAnimation step={0} />
+
+From here, we want to know whether this is enough data to train a model that can make accurate predictions. 
+To answer this question, we can create an evaluation in the modeling app. An evaluation takes in a set of parameters defined by the model you are using, and splits the data into training and test sets automatically. 
+It then generates a range of predictions for the test set, and compares them to the actual values.
+
+See how to do this in the [Creating an Evaluation](#/guides/creating-an-evaluation) guide.
+
+After creating the evaluation, it will look something like this.
+
+<PredictionAnimation step={1} />
+
+
+<PredictionAnimation step={2} />
+
+<PredictionAnimation step={3} />
