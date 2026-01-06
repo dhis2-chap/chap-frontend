@@ -17,7 +17,7 @@ From the main navigation, click on **Evaluate** in the sidebar to access the eva
 
 Click the **New evaluation** button to start creating a new evaluation.
 
-![Evaluations page with New evaluation button](./images/eval-step-1-navigate.png)
+![Evaluations page with New evaluation button](images/eval-step-1-navigate.png)
 
 ---
 
@@ -25,7 +25,7 @@ Click the **New evaluation** button to start creating a new evaluation.
 
 Give your evaluation a descriptive name that helps you identify it later. For example: "Malaria Model Evaluation 2023-2024" or "Weekly Cholera Backtest".
 
-![Name input field](./images/eval-step-2-name.png)
+![Name input field](images/eval-step-2-name.png)
 
 ---
 
@@ -39,7 +39,7 @@ Select the time period settings for your evaluation:
 
 The evaluation will use historical data within this range to test the model's predictions.
 
-![Period configuration with type and date range](./images/eval-step-3-period.png)
+![Period configuration with type and date range](images/eval-step-3-period.png)
 
 ---
 
@@ -49,7 +49,7 @@ Click on the location selector to open the organization unit tree. Select one or
 
 You can select individual facilities, districts, or higher-level units depending on your needs. At least one organization unit must be selected.
 
-![Organization unit selection modal](./images/eval-step-4-orgunits.png)
+![Organization unit selection modal](images/eval-step-4-orgunits.png)
 
 ---
 
@@ -59,7 +59,7 @@ Click on the model selector to choose which predictive model to evaluate. The mo
 
 Select the model you want to test against your data. Only one model can be selected per evaluation.
 
-![Model selection modal](./images/eval-step-5-model.png)
+![Model selection modal](images/eval-step-5-model.png)
 
 ---
 
@@ -73,7 +73,7 @@ After selecting a model, you need to map the model's variables to your DHIS2 dat
 
 You can click **Inspect dataset** to preview the actual data that will be used before submitting.
 
-![Data mapping configuration modal](./images/eval-step-6-mapping.png)
+![Data mapping configuration modal](images/eval-step-6-mapping.png)
 
 ---
 
@@ -87,7 +87,7 @@ Once all fields are configured:
 
 The evaluation will be queued as a background job. You can monitor its progress on the Jobs page.
 
-![Form summary and submit buttons](./images/eval-step-7-submit.png)
+![Form summary and submit buttons](images/eval-step-7-submit.png)
 
 ---
 
