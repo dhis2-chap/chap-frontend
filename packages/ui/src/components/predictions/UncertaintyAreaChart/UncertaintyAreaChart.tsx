@@ -40,14 +40,14 @@ const getChartOptions = (
         {
             type: 'line',
             data: median,
-            name: i18n.t('Quantile median'),
+            name: i18n.t('Median prediction'),
             color: '#004bbd',
             zIndex: 3,
             connectNulls: false,
         },
         {
             type: 'arearange',
-            name: i18n.t('Quantiles Outer'),
+            name: i18n.t('80% prediction interval'),
             data: outerRange,
             zIndex: 0,
             lineWidth: 0,
@@ -57,7 +57,7 @@ const getChartOptions = (
         },
         {
             type: 'arearange',
-            name: i18n.t('Quantiles Middle'),
+            name: i18n.t('50% prediction interval'),
             data: midRange,
             zIndex: 1,
             lineWidth: 0,
@@ -97,6 +97,7 @@ const getChartOptions = (
         },
         tooltip: {
             shared: true,
+            valueDecimals: 2,
         },
         xAxis: {
             type: 'category',
