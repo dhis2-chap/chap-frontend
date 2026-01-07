@@ -11,6 +11,9 @@ import CreatingAnEvaluation, {
 import CreatingAPrediction, {
     frontmatter as creatingAPredictionFrontmatter,
 } from './user-guides/creating-a-prediction/index.md';
+import WhatIsAModel, {
+    frontmatter as whatIsAModelFrontmatter,
+} from './basics/what-is-a-model/index.mdx';
 import WhatIsAnEvaluation, {
     frontmatter as whatIsAnEvaluationFrontmatter,
 } from './basics/what-is-an-evaluation/index.mdx';
@@ -39,6 +42,7 @@ const createGuide = (
 
 export const guides: Guide[] = [
     createGuide('getting-started', gettingStartedFrontmatter, GettingStarted),
+    createGuide('what-is-a-model', whatIsAModelFrontmatter, WhatIsAModel),
     createGuide('what-is-an-evaluation', whatIsAnEvaluationFrontmatter, WhatIsAnEvaluation),
     createGuide('creating-an-evaluation', creatingAnEvaluationFrontmatter, CreatingAnEvaluation),
     createGuide('creating-a-prediction', creatingAPredictionFrontmatter, CreatingAPrediction),

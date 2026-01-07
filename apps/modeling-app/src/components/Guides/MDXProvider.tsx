@@ -42,7 +42,7 @@ const components = {
     ),
     hr: () => <hr className={styles.hr} />,
     a: (props: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
-        <a className={styles.a} {...props} />
+        <a className={styles.a} target="_self" {...props} />
     ),
     strong: (props: React.HTMLAttributes<HTMLElement>) => (
         <strong className={styles.strong} {...props} />

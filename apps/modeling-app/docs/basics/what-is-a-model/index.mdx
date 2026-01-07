@@ -1,0 +1,65 @@
+---
+title: Models
+description: Understanding what predictive models are and how they work
+order: 1
+category: Basics
+---
+
+# What is a Model?
+
+A **model** is a mathematical tool that learns patterns from historical data and uses those patterns to make predictions about the future.
+
+In CHAP, we work specifically with **time series prediction models**. A time series is just data collected over time - like monthly disease case counts, weekly rainfall measurements, or daily temperatures. These models look at how values change over time and use that history to forecast what comes next.
+
+For example, a model might learn that malaria cases tend to rise a few weeks after heavy rainfall, or that dengue peaks every year in the same season. It uses these patterns to predict future cases.
+
+CHAP itself is agnostic to the specific disease or domain. The same principles apply whether you're predicting malaria, dengue, cholera, or something outside health entirely. What matters is that you have time series data with patterns worth learning.
+
+## What makes time series special?
+
+Imagine you've been working in public health for years. Over time, you start noticing things: cases spike after the rainy season, outbreaks cluster in certain districts, January is always bad, etc. You're not doing complex math -you're recognizing patterns from experience.
+A time series model does something similar, but with math instead of intuition.
+
+You give it historical data - say, four years of monthly case counts alongside climate variables. The model looks for the same kinds of patterns you might notice:
+
+- **Trends**: Are cases generally increasing or decreasing over time?
+- **Seasonality**: Do cases peak at the same time every year?
+- **Lagged relationships**: Does rainfall this month predict cases next month?
+
+`[VISUALIZATION: A single time series line (e.g., 2-3 years of monthly data) that shows clear seasonality. User can toggle or hover to highlight: "this is a trend," "this is seasonality," "this is an unusual spike." Simple annotations, nothing interactive beyond hover/toggle.]`
+
+## How does a model learn these patterns?
+
+You give the model historical data - say, four years of monthly case counts alongside climate variables like rainfall and temperature.
+
+The model looks for relationships: *when rainfall goes up, do cases follow? By how much? After how long? Is there a consistent seasonal pattern?*
+
+It encodes these relationships as numbers (called **parameters**). Through a process called **training**, the model adjusts these numbers repeatedly until its predictions start matching the historical data. When the predictions align well with what actually happened, we say the model has "learned" the patterns.
+
+## What does a model produce?
+
+When a time series model makes a prediction, it doesn't give you a single number. It gives you a **range of possible outcomes** for each future time point.
+
+This range represents **uncertainty** - the model's way of saying "I expect around 45 cases next month, but it could reasonably be as low as 30 or as high as 70."
+
+Why the uncertainty? Because the future is inherently unpredictable. Weather might behave unusually. An intervention might change things. Data might be incomplete. A good model tells you not just what it expects, but how confident it is.
+
+The narrower the range, the more confident the model. The wider the range, the more uncertainty. Both are valuable information for planning.
+
+## Different models, different approaches
+
+CHAP can work with many different models. Some are simple - they might just look at last year's pattern and assume this year will be similar. Others are more complex - they might incorporate temperature, rainfall, humidity, and even data from neighboring regions.
+
+No single model is "best" for every situation. A simple model might work well when you have limited or inconsistent data. A complex model might capture more nuance but needs more data to learn properly.
+
+When someone uploads a model to your CHAP instance, your job is to figure out: *does this model actually work for our data and context?*
+
+That's where evaluation comes in.
+
+## Next: What is an Evaluation?
+
+A model that has learned patterns isn't automatically useful. You need to test it: when the model predicts future values, how close are those predictions to what actually happened?
+
+This is called an **evaluation** - and it's how you move from "we have a model" to "we have a model we can trust."
+
+→ Continue to [What is an Evaluation?](#/guides/what-is-an-evaluation)
