@@ -2,17 +2,30 @@
 title: Getting Started
 description: Introduction to CHAP and how to begin using the Modeling App
 order: 0
-category: Basics
 ---
 
-### Welcome to the Modeling App
-This application connects your DHIS2 data to the Climate & Health Modeling Platform (CHAP).
-CHAP is an open platform for climate-informed disease forecasting, enabling collaboration between researchers, epidemiological models, and health practitioners.
+# Getting Started
 
-The Modeling App is designed to be simple and intuitive. However, understanding a few core concepts will help you navigate the platform more effectively:
+The Modeling App connects your DHIS2 health data to CHAP (Climate & Health Modeling Platform) - an open platform for climate-informed disease forecasting.
 
-- How to perform the initial setup of the platform
-- What models are and how they function
-- How to evaluate whether a model produces accurate predictions using your data
-- Iterate on model configurations to get better results
-- How to generate predictions using a validated model
+You probably already see patterns in your data. Cases rise after the rains. Certain districts get hit first. Some months are always worse. The Modeling App takes these patterns and turns them into forecasts - predictions of what's coming, not just descriptions of what happened.
+
+## How it works
+
+Researchers and model developers build predictive models and upload them to your CHAP instance. Your job is to figure out whether those models actually work for your context - and if they do, use them to plan ahead.
+
+The app supports four main workflows:
+
+- **Evaluate** – Test a model against your historical data to see if its predictions are accurate
+- **Predict** – Generate forecasts for future time periods
+- **Configure** – Adjust model settings to better fit your context
+- **Compare** – Run multiple models side-by-side to find what works best
+
+## New to predictive modeling?
+
+Start here:
+
+1. [Models](#/guides/what-is-a-model) – What these models are and how they learn from data
+2. [Evaluating a model](#/guides/what-is-an-evaluation) – How to test whether a model's predictions can be trusted
+
+If you're already comfortable with the concepts, skip ahead to the user guides to understand how to use the app.

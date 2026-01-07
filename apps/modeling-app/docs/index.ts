@@ -22,7 +22,7 @@ export interface GuideFrontmatter {
     title: string;
     description: string;
     order: number;
-    category: string;
+    category?: string;
 }
 
 export interface Guide extends GuideFrontmatter {
@@ -58,8 +58,14 @@ export const getGuidesByCategory = (category: string): Guide[] => {
         .sort((a, b) => a.order - b.order);
 };
 
+export const getRootGuides = (): Guide[] => {
+    return guides
+        .filter(guide => !guide.category)
+        .sort((a, b) => a.order - b.order);
+};
+
 export const getCategories = (): string[] => {
-    return [...new Set(guides.map(guide => guide.category))];
+    return [...new Set(guides.map(guide => guide.category).filter((c): c is string => !!c))];
 };
 
 export const getFirstGuide = (): Guide | undefined => {
