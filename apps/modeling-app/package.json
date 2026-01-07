@@ -1,6 +1,6 @@
 {
     "name": "@dhis2-chap/modeling-app",
-    "version": "3.1.2",
+    "version": "3.2.0",
     "description": "",
     "license": "BSD-3-Clause",
     "private": true,
@@ -16,7 +16,7 @@
         "@types/highcharts": "^5.0.44"
     },
     "dependencies": {
-        "@dhis2-chap/ui": "3.1.2",
+        "@dhis2-chap/ui": "3.2.0",
         "@dhis2/analytics": "^26.9.3",
         "@dhis2/app-runtime": "^3.13.0",
         "@dhis2/d2-i18n": "1.1.3",
