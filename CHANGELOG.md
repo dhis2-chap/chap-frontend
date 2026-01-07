@@ -1,3 +1,10 @@
+## [3.1.2](https://github.com/dhis2-chap/chap-frontend/compare/v3.1.1...v3.1.2) (2025-12-18)
+
+
+### Bug Fixes
+
+* set stride dynamically based on period type [CLIM-150] ([#142](https://github.com/dhis2-chap/chap-frontend/issues/142)) ([d7b7be0](https://github.com/dhis2-chap/chap-frontend/commit/d7b7be020cfb73f5daabd234c2507a0e3612b4c1))
+
 ## [3.1.1](https://github.com/dhis2-chap/chap-frontend/compare/v3.1.0...v3.1.1) (2025-12-18)
 
 
