@@ -1,7 +1,7 @@
 import React from 'react';
 import type { ReactNode } from 'react';
 import { MDXProvider as BaseMDXProvider } from '@mdx-js/react';
-import { DataVisualization, PredictionAnimation } from './widgets';
+import { DataVisualization, ModelOutputChart, PredictionAnimation } from './widgets';
 import { ImageLightbox } from './ImageLightbox';
 import styles from './MDXProvider.module.css';
 
@@ -51,6 +51,7 @@ const components = {
         <ImageLightbox {...props} />
     ),
     DataVisualization,
+    ModelOutputChart,
     PredictionAnimation,
 };
 
