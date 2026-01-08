@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-01-08T15:44:48.056Z\n"
-"PO-Revision-Date: 2026-01-08T15:44:48.057Z\n"
+"POT-Creation-Date: 2026-01-08T16:23:46.064Z\n"
+"PO-Revision-Date: 2026-01-08T16:23:46.064Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -160,6 +160,9 @@ msgstr "Oops!"
 
 msgid "Sorry, an unexpected error has occurred."
 msgstr "Sorry, an unexpected error has occurred."
+
+msgid "Click to expand"
+msgstr "Click to expand"
 
 msgid "Inspect dataset"
 msgstr "Inspect dataset"

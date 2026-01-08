@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
+import i18n from '@dhis2/d2-i18n';
 import { createPortal } from 'react-dom';
 import styles from './ImageLightbox.module.css';
 
@@ -122,7 +123,7 @@ export const ImageLightbox = ({ src, alt, className, ...props }: ImageLightboxPr
                         <line x1="21" y1="3" x2="14" y2="10" />
                         <line x1="3" y1="21" x2="10" y2="14" />
                     </svg>
-                    <span>Click to expand</span>
+                    <span>{i18n.t('Click to expand')}</span>
                 </span>
             </button>
             {modal}
