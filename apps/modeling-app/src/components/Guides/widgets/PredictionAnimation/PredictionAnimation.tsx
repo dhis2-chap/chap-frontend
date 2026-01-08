@@ -5,10 +5,12 @@ import HighchartsReact from 'highcharts-react-official';
 import styles from './PredictionAnimation.module.css';
 import { usePredictionChart, type PredictionAnimationStep } from './usePredictionChart';
 
-// Initialize highcharts-more for arearange support
 highchartsMore(Highcharts);
 
 export type { PredictionAnimationStep };
+
+const INTERACTIVE_STEPS: readonly PredictionAnimationStep[] = [2, 3, 4] as const;
+const INITIAL_INTERACTIVE_STEP = INTERACTIVE_STEPS[0];
 
 interface NavigationButtonsProps {
     step: PredictionAnimationStep;
@@ -17,19 +19,29 @@ interface NavigationButtonsProps {
 
 const NavigationButtons = ({ step, setStep }: NavigationButtonsProps) => {
     const handlePrevious = () => {
-        setStep(prev => (prev > 2 ? (prev - 1) as PredictionAnimationStep : prev));
+        const currentIndex = INTERACTIVE_STEPS.indexOf(step);
+        if (currentIndex > 0) {
+            setStep(INTERACTIVE_STEPS[currentIndex - 1]);
+        }
     };
 
     const handleNext = () => {
-        setStep(prev => (prev < 4 ? (prev + 1) as PredictionAnimationStep : prev));
+        const currentIndex = INTERACTIVE_STEPS.indexOf(step);
+        if (currentIndex < INTERACTIVE_STEPS.length - 1) {
+            setStep(INTERACTIVE_STEPS[currentIndex + 1]);
+        }
     };
+
+    const currentIndex = INTERACTIVE_STEPS.indexOf(step);
+    const isFirstStep = currentIndex <= 0;
+    const isLastStep = currentIndex >= INTERACTIVE_STEPS.length - 1;
 
     return (
         <div className={styles.buttonContainer}>
             <button
                 className={styles.navButton}
                 onClick={handlePrevious}
-                disabled={step <= 2}
+                disabled={isFirstStep}
                 aria-label="Previous step"
             >
                 ←
@@ -37,7 +49,7 @@ const NavigationButtons = ({ step, setStep }: NavigationButtonsProps) => {
             <button
                 className={styles.navButton}
                 onClick={handleNext}
-                disabled={step >= 4}
+                disabled={isLastStep}
                 aria-label="Next step"
             >
                 →
@@ -52,7 +64,7 @@ interface PredictionAnimationProps {
 }
 
 export const PredictionAnimation = ({ step = 0, showButtons = false }: PredictionAnimationProps) => {
-    const [internalStep, setInternalStep] = useState<PredictionAnimationStep>(2);
+    const [internalStep, setInternalStep] = useState<PredictionAnimationStep>(INITIAL_INTERACTIVE_STEP);
     const currentStep = showButtons ? internalStep : step;
     const options = usePredictionChart(currentStep);
 
