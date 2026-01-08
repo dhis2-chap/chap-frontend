@@ -28,11 +28,11 @@
     },
     "dependencies": {
         "@dhis2/d2-i18n": "1.2.0",
-        "date-fns": "^4.1.0",
         "@dhis2/maps-gl": "^4.1.2",
         "@dhis2/multi-calendar-dates": "^2.1.2",
         "@dhis2/ui": "^10.10.0",
         "classnames": "^2.5.1",
+        "date-fns": "^4.1.0",
         "highcharts": "11.4.8",
         "highcharts-react-official": "^3.2.1",
         "p-queue": "^8.1.0",

@@ -1,0 +1,24 @@
+.noGuides,
+.notFound {
+    text-align: center;
+    padding: 48px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.notFound h1 {
+    margin: 0 0 16px 0;
+    font-size: 24px;
+    color: #212934;
+}
+
+.notFound p {
+    margin: 0;
+    color: #6e7a8a;
+}
+
+.noGuides {
+    color: #6e7a8a;
+    font-size: 16px;
+}

@@ -1,0 +1,46 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 24px auto;
+    border-radius: 8px;
+}
+
+.chartWrapper {
+    width: 100%;
+    padding: 32px 32px 0 0;
+    max-width: 750px;
+    background-color: var(--colors-grey100, #f3f5f7);
+    margin: 0 auto;
+}
+
+.buttonContainer {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.navButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--colors-grey400, #a0adba);
+    border-radius: 4px;
+    background-color: var(--colors-white, #fff);
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.15s, border-color 0.15s;
+}
+
+.navButton:hover:not(:disabled) {
+    background-color: var(--colors-grey200, #e8edf2);
+    border-color: var(--colors-grey500, #6e7a8a);
+}
+
+.navButton:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}

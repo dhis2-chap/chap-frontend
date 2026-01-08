@@ -8,3 +8,5 @@
 .cursor
 .DS_Store
 .turbo
+.playwright-mcp
+.playwright-mcp/**

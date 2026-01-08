@@ -5,11 +5,15 @@
         "paths": {
             "@/*": [
                 "src/*"
+            ],
+            "@docs/*": [
+                "docs/*"
             ]
         }
     },
     "include": [
-        "src/**/*"
+        "src/**/*",
+        "docs/**/*"
     ],
     "exclude": [
         "node_modules",

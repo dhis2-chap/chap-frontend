@@ -1,0 +1,15 @@
+.container {
+    margin: 24px 0;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    padding: 16px;
+    background-color: #fff;
+}
+
+.noData {
+    padding: 40px;
+    text-align: center;
+    color: #666;
+    font-style: italic;
+}

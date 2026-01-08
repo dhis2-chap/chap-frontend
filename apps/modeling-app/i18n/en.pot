@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2025-12-15T14:25:00.070Z\n"
-"PO-Revision-Date: 2025-12-15T14:25:00.071Z\n"
+"POT-Creation-Date: 2026-01-08T16:23:46.064Z\n"
+"PO-Revision-Date: 2026-01-08T16:23:46.064Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -160,6 +160,9 @@ msgstr "Oops!"
 
 msgid "Sorry, an unexpected error has occurred."
 msgstr "Sorry, an unexpected error has occurred."
+
+msgid "Click to expand"
+msgstr "Click to expand"
 
 msgid "Inspect dataset"
 msgstr "Inspect dataset"
@@ -1047,6 +1050,9 @@ msgstr "Models"
 msgid "Jobs"
 msgstr "Jobs"
 
+msgid "Guides"
+msgstr "Guides"
+
 msgid "Settings"
 msgstr "Settings"
 
@@ -1309,6 +1315,9 @@ msgstr "To get started, create a route that points to a running CHAP server."
 msgid "Route and servers are configured on the settings page."
 msgstr "Route and servers are configured on the settings page."
 
+msgid "View guides"
+msgstr "View guides"
+
 msgid "Active jobs"
 msgstr "Active jobs"
 
@@ -1370,11 +1379,3 @@ msgstr ""
 msgctxt ") instead."
 msgid "Spaces are not allowed. Use dashes (-) or underscores ("
 msgstr "Spaces are not allowed. Use dashes (-) or underscores (_) instead."
-
-msgctxt "Application title"
-msgid "__MANIFEST_APP_TITLE"
-msgstr "Modeling"
-
-msgctxt "Application description"
-msgid "__MANIFEST_APP_DESCRIPTION"
-msgstr ""

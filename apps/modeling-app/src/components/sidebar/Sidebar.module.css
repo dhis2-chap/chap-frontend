@@ -55,7 +55,7 @@
     visibility: visible;
     position: absolute;
     inset-block-end: 0;
-    inset-inline-end: 0;
+    inset-inline-start: 0;
     cursor: pointer;
     width: 36px;
     height: 36px;

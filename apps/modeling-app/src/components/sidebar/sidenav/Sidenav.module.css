@@ -172,6 +172,7 @@ html {
 /* Footer */
 .sidenav-footer {
     margin-top: auto;
+    padding-bottom: 52px;
 }
 
 .sidenav-filter {
