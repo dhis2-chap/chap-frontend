@@ -1,3 +1,4 @@
+import React from 'react';
 import {
     createHashRouter,
     RouterProvider,
@@ -5,7 +6,6 @@ import {
     Outlet,
 } from 'react-router-dom';
 import ErrorPage from './components/ErrorPage';
-import React from 'react';
 import './locales';
 import './App.module.css';
 import PageWrapper from './components/PageWrapper';

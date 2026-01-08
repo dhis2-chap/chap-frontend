@@ -1,5 +1,5 @@
 import path from 'path';
-import { defineConfig, type Plugin } from 'vite';
+import { defineConfig } from 'vite';
 
 const viteConfig = defineConfig(async () => {
     const mdx = await import('@mdx-js/rollup');
@@ -18,7 +18,7 @@ const viteConfig = defineConfig(async () => {
                     remarkMdxFrontmatter.default,
                     remarkMdxImages.default,
                 ],
-            }) as Plugin,
+            }),
         ],
         server: {
             fs: {
