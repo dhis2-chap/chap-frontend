@@ -2,7 +2,7 @@
     "name": "@dhis2-chap/ui",
     "packageManager": "pnpm@10.14.0",
     "type": "commonjs",
-    "version": "3.1.2",
+    "version": "3.2.0",
     "module": "./build/es/index.js",
     "types": "./build/types/index.d.ts",
     "license": "MIT",

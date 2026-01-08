@@ -32,6 +32,7 @@ import { NewPredictionPage } from './pages/NewPredictionPage';
 import { PredictionImportPage } from './pages/PredictionImportPage';
 import { GuidesPage } from './pages/GuidesPage';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 export type RouteHandle = {
     fullWidth?: boolean;
@@ -208,7 +209,7 @@ const App = () => {
                 <SetChapUrl>
                     <RouterProvider router={router} />
                 </SetChapUrl>
-                {/* <ReactQueryDevtools position="bottom-right" /> */}
+                <ReactQueryDevtools position="bottom-right" />
             </QueryClientProvider>
         </>
     );
