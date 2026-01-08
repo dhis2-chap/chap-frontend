@@ -9,6 +9,7 @@ const viteConfig = defineConfig(async () => {
             },
         },
         resolve: { alias: { '@': path.resolve(__dirname, 'src') } },
+        clearScreen: true,
     };
 });
 

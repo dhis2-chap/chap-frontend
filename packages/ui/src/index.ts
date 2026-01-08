@@ -59,3 +59,7 @@ export {
     comparePeriods,
     getLastNPeriods,
 } from './utils/timePeriodUtils';
+
+// Map utilities
+export { parseOrgUnits } from './components/maps/utils';
+export type { FeatureCollection } from './components/maps/utils';

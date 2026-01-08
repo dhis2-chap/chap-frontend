@@ -1,24 +1,33 @@
-import { useDataQuery } from '@dhis2/app-runtime';
+import { useApiDataQuery } from '../utils/useApiDataQuery';
+
+type OrgUnitLevel = {
+    id: string;
+    name: string;
+    level: number;
+};
+
+type OrgUnitLevelsResponse = {
+    organisationUnitLevels: OrgUnitLevel[];
+};
 
 const ORG_UNIT_LEVELS_QUERY = {
-    levels: {
-        resource: 'organisationUnitLevels',
-        params: {
-            fields: ['id', 'displayName~rename(name)', 'level'],
-            order: 'level:asc',
-            paging: false,
-        },
+    resource: 'organisationUnitLevels',
+    params: {
+        fields: ['id', 'displayName~rename(name)', 'level'],
+        order: 'level:asc',
+        paging: false,
     },
 };
 
-const useOrgUnitLevels = () => {
-    const { loading, error, data } = useDataQuery(ORG_UNIT_LEVELS_QUERY);
+export const useOrgUnitLevels = () => {
+    const { isLoading, error, data } = useApiDataQuery<OrgUnitLevelsResponse>({
+        query: ORG_UNIT_LEVELS_QUERY,
+        queryKey: ['organisationUnitLevels'],
+    });
 
     return {
-        levels: (data?.levels as any)?.organisationUnitLevels as [],
+        levels: data?.organisationUnitLevels ?? [],
         error,
-        loading,
+        isLoading,
     };
 };
-
-export default useOrgUnitLevels;

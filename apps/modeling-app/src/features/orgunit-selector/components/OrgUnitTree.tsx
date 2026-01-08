@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { OrganisationUnitTree } from '@dhis2/ui';
 
 import React from 'react';
-import useOrgUnitRoots from '../../../hooks/useOrgUnitRoots';
+import { useOrgUnitRoots } from '../../../hooks/useOrgUnitRoots';
 
 interface OrgUnitTreeProps {
     selectedOrgUnits: any[];

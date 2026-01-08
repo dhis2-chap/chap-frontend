@@ -11,7 +11,7 @@ type Props = {
         featureName: string,
         dataItemId: string,
         dataItemDisplayName: string,
-        dimensionItemType: z.infer<typeof dimensionItemTypeSchema>
+        dimensionItemType: z.infer<typeof dimensionItemTypeSchema>,
     ) => void;
     existingMapping?: z.infer<typeof dataItemSchema>;
     onResetField: () => void;
