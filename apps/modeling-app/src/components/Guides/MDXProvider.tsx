@@ -4,6 +4,7 @@ import { MDXProvider as BaseMDXProvider } from '@mdx-js/react';
 import { DataVisualization, ModelOutputChart, PredictionAnimation } from './widgets';
 import { ImageLightbox } from './ImageLightbox';
 import styles from './MDXProvider.module.css';
+import { Link } from 'react-router-dom';
 
 interface MDXProviderProps {
     children: ReactNode;
@@ -42,7 +43,7 @@ const components = {
     ),
     hr: () => <hr className={styles.hr} />,
     a: (props: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
-        <a className={styles.a} target="_self" {...props} />
+        <Link className={styles.a} to={props.href as string} {...props} />
     ),
     strong: (props: React.HTMLAttributes<HTMLElement>) => (
         <strong className={styles.strong} {...props} />
