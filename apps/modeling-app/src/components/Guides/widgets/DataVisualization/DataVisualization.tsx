@@ -1,3 +1,8 @@
+/**
+ * MOCK IMPLEMENTATION - For documentation/guides only.
+ * This component displays a static example chart for illustrative purposes.
+ * Do NOT use this component in the actual application.
+ */
 import React from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';

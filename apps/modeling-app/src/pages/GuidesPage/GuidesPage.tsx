@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useParams, Navigate } from 'react-router-dom';
+import i18n from '@dhis2/d2-i18n';
 import { getGuideBySlug, getFirstGuide } from '@docs/index';
 import { GuidesLayout } from '@/components/Guides/GuidesLayout';
 import { GuideContent } from '@/components/Guides/GuideContent';
@@ -22,7 +23,7 @@ export const GuidesPage = () => {
         }
         return (
             <GuidesLayout>
-                <div className={styles.noGuides}>No guides available</div>
+                <div className={styles.noGuides}>{i18n.t('No guides available')}</div>
             </GuidesLayout>
         );
     }
@@ -33,11 +34,9 @@ export const GuidesPage = () => {
         return (
             <GuidesLayout>
                 <div className={styles.notFound}>
-                    <h1>Guide not found</h1>
+                    <h1>{i18n.t('Guide not found')}</h1>
                     <p>
-                        The guide &quot;
-                        {guideSlug}
-                        &quot; could not be found.
+                        {i18n.t('The guide "{{guideSlug}}" could not be found.', { guideSlug })}
                     </p>
                 </div>
             </GuidesLayout>

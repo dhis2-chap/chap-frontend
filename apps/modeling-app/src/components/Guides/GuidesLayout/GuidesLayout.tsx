@@ -1,6 +1,7 @@
 import React, { type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { IconArrowLeft24 } from '@dhis2/ui-icons';
+import i18n from '@dhis2/d2-i18n';
 import { GuidesSidebar } from '../GuidesSidebar';
 import styles from './GuidesLayout.module.css';
 
@@ -15,7 +16,7 @@ export const GuidesLayout = ({ children }: GuidesLayoutProps) => {
                 <div className={styles.backLink}>
                     <Link to="/" className={styles.backLinkAnchor}>
                         <IconArrowLeft24 />
-                        <span>Back to app</span>
+                        <span>{i18n.t('Back to app')}</span>
                     </Link>
                 </div>
                 <GuidesSidebar />
