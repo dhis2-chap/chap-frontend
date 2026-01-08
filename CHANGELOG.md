@@ -1,3 +1,10 @@
+# [3.2.0](https://github.com/dhis2-chap/chap-frontend/compare/v3.1.2...v3.2.0) (2026-01-07)
+
+
+### Features
+
+* show percentage interval confidence in tooltip [CLIM-153] ([cb003b6](https://github.com/dhis2-chap/chap-frontend/commit/cb003b6ab9a899cba68a87899d4b495eeeff2fb0))
+
 ## [3.1.2](https://github.com/dhis2-chap/chap-frontend/compare/v3.1.1...v3.1.2) (2025-12-18)
 
 
