@@ -54,8 +54,8 @@ pnpm generate-localhost       # Generate from running backend at localhost:8000
 
 - **App.tsx**: Main router configuration with route definitions
 - **pages/**: Page components corresponding to routes
-- **components/**: Reusable UI components
-- **features/**: Feature-specific modules with business logic
+- **components/**: Reusable components
+- **features/**: Feature-specific modules with business logic [WILL BE REMOVED, DO NOT ADD NEW FEATURES HERE, ADD NEW FEATURES TO COMPONENTS]
 - **hooks/**: Custom React hooks for data fetching and state
 - **content/**: MDX content files (guides)
 
@@ -65,6 +65,12 @@ pnpm generate-localhost       # Generate from running backend at localhost:8000
 - **components/**: Shared visualization components (charts, maps, plots)
 - **ui/**: Basic UI primitives (Card, Pill, Tag, etc.)
 - **utils/**: Shared utilities including time period handling
+
+# i18n and translations
+
+- All strings should be translated using the `i18n.t('string')` function.
+- Translations will be automatically generated and managed, do not edit the translation files manually.
+- Import as `import i18n from '@dhis2/d2-i18n';`
 
 ### Data Flow
 
