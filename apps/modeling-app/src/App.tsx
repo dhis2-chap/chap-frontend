@@ -10,7 +10,12 @@ import './locales';
 import './App.module.css';
 import PageWrapper from './components/PageWrapper';
 import { SetChapUrl } from './features/route-api/SetChapUrl';
-import { SettingsPage } from './features/settings/Settings';
+import { SettingsLayout } from './features/settings/SettingsLayout';
+import { GeneralSettings } from './features/settings/GeneralSettings';
+import {
+    DataMaintenanceCard,
+    DataPruningPage,
+} from './features/settings/DataMaintenance';
 import { CssReset, CssVariables } from '@dhis2/ui';
 import { Layout } from './components/layout/Layout';
 import { RouteValidator } from './components/RouteValidator';
@@ -161,18 +166,29 @@ const router = createHashRouter([
             },
             {
                 path: '/settings',
+                handle: {
+                    collapseSidebar: true,
+                } satisfies RouteHandle,
                 element: (
                     <PageWrapper>
-                        <Outlet />
+                        <SettingsLayout />
                     </PageWrapper>
                 ),
                 children: [
                     {
-                        path: '/settings',
+                        index: true,
+                        element: <GeneralSettings />,
+                    },
+                    {
+                        path: 'data-maintenance',
                         children: [
                             {
                                 index: true,
-                                element: <SettingsPage />,
+                                element: <DataMaintenanceCard />,
+                            },
+                            {
+                                path: 'pruning',
+                                element: <DataPruningPage />,
                             },
                         ],
                     },
