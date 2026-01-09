@@ -303,3 +303,38 @@ All feedback loops passed:
 - Lint: pnpm linter:check passed
 
 Remaining: guides-refactor (Phase 6: Optional Refactor)
+
+## 2026-01-09: Phase 6 - Guides Refactor
+
+Completed guides-refactor task:
+- Refactored GuidesLayout.tsx to use NestedSidebarLayout component
+- Removed unused imports (Link, IconArrowLeft24, i18n, styles)
+- Component now simply wraps children with NestedSidebarLayout
+- GuidesSidebar passed as sidebar prop
+- All existing functionality preserved
+- GuidesLayout.module.css is now unused (can be deleted in future cleanup)
+
+Files modified:
+- apps/modeling-app/src/components/Guides/GuidesLayout/GuidesLayout.tsx
+
+All feedback loops passed:
+- TypeScript: pnpm tsc:check passed
+- Tests: pnpm test passed (62 tests)
+- Lint: pnpm linter:check passed
+
+UI verification with Playwright:
+- Navigated to /guides - sidebar with Back to app link displayed
+- Guide navigation (Getting Started, Models, etc.) works correctly
+- Content renders properly in main area
+
+## PRD COMPLETE
+
+All 22 tasks in the PRD have been completed and verified:
+- Phase 1: NestedSidebar Components (3 tasks)
+- Phase 2: Settings Restructure (4 tasks)
+- Phase 3: Data Maintenance Card (2 tasks)
+- Phase 4: Data Pruning Page (8 tasks)
+- Phase 5: Router Configuration (1 task)
+- Verification tasks (7 tasks)
+- Cross-cutting tasks (1 task)
+- Phase 6: Optional Refactor (1 task)

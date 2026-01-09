@@ -318,7 +318,7 @@
         "All existing functionality preserved",
         "Guides navigation continues to work correctly"
       ],
-      "passes": false
+      "passes": true
     }
   ]
 }
