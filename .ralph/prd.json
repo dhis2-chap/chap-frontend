@@ -146,7 +146,7 @@
         "Confirm button disabled until text matches 'delete'",
         "Cancel button closes modal without action"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "pruning-results-modal",

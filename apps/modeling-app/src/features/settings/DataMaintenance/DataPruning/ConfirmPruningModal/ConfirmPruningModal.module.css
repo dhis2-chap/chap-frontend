@@ -1,0 +1,32 @@
+.dataElementsSection {
+    margin-top: var(--spacers-dp16);
+}
+
+.sectionTitle {
+    margin: 0 0 var(--spacers-dp8) 0;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--colors-grey900);
+}
+
+.dataElementsList {
+    margin: 0;
+    padding-left: var(--spacers-dp24);
+    list-style-type: disc;
+}
+
+.dataElementItem {
+    padding: var(--spacers-dp4) 0;
+    font-size: 14px;
+    color: var(--colors-grey800);
+}
+
+.confirmationSection {
+    margin-top: var(--spacers-dp24);
+}
+
+.confirmationPrompt {
+    margin: 0 0 var(--spacers-dp8) 0;
+    font-size: 14px;
+    color: var(--colors-grey800);
+}
