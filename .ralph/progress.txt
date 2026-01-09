@@ -54,3 +54,87 @@ All feedback loops passed:
 - TypeScript: pnpm tsc:check passed
 - Tests: pnpm test passed (62 tests)
 - Lint: pnpm linter:check passed
+
+## 2026-01-09: Phase 2 - Settings Restructure (Task 3 of 3)
+
+Completed settings-layout task:
+- Created SettingsLayout component wrapping content with NestedSidebarLayout
+- Uses SettingsSidebar component as the sidebar prop
+- Renders <Outlet /> from react-router-dom for child routes
+- Back link defaults to '/' (home) via NestedSidebarLayout defaults
+
+Files created:
+- apps/modeling-app/src/features/settings/SettingsLayout.tsx
+
+Commit: d4d648c - feat: add SettingsLayout component for settings page structure
+
+All feedback loops passed:
+- TypeScript: pnpm tsc:check passed
+- Tests: pnpm test passed (62 tests)
+- Lint: pnpm linter:check passed
+
+## 2026-01-09: Phase 3 - Data Maintenance Card
+
+Completed both data-maintenance-card and data-maintenance-authority tasks:
+- Created DataMaintenanceCard component with Card layout from @dhis2/ui
+- Card displays 'Data Maintenance' title and 'Data Pruning' section
+- Description explains permanent deletion of ALL data values for selected data elements
+- Button 'Go to Data Pruning' navigates to /settings/data-maintenance/pruning
+- Authority check using useAuthority hook with { authority: 'ALL' }
+- Button disabled when isSuperUser is false
+- ConditionalTooltip shows on hover when button is disabled, explaining authority requirement
+- All user-facing strings use i18n.t() for translation support
+
+Files created:
+- apps/modeling-app/src/features/settings/DataMaintenance/DataMaintenanceCard/DataMaintenanceCard.tsx
+- apps/modeling-app/src/features/settings/DataMaintenance/DataMaintenanceCard/DataMaintenanceCard.module.css
+- apps/modeling-app/src/features/settings/DataMaintenance/DataMaintenanceCard/index.ts
+- apps/modeling-app/src/features/settings/DataMaintenance/index.ts
+
+Commit: 56f4308 - feat: add DataMaintenanceCard component with authority check
+
+All feedback loops passed:
+- TypeScript: pnpm tsc:check passed
+- Tests: pnpm test passed (62 tests)
+- Lint: pnpm linter:check passed
+
+## 2026-01-09: Phase 4 - Data Pruning Page (Task 1 of 8)
+
+Completed data-element-selector task:
+- Created DataElementSelector component adapted from SearchSelectField pattern
+- Queries /dataElements endpoint (not dataItems)
+- Accepts excludeIds prop to filter already-selected items from dropdown
+- Accepts showRemoveButton prop to show/hide remove button
+- Search input debounced with 300ms delay using useDebounce hook
+- Remove button (X) visible when showRemoveButton is true
+- All user-facing strings use i18n.t() for translation support
+
+Files created:
+- apps/modeling-app/src/features/settings/DataMaintenance/DataPruning/DataElementSelector/DataElementSelector.tsx
+- apps/modeling-app/src/features/settings/DataMaintenance/DataPruning/DataElementSelector/DataElementSelector.module.css
+- apps/modeling-app/src/features/settings/DataMaintenance/DataPruning/DataElementSelector/index.ts
+
+Commit: 4aa3822 - feat: add DataElementSelector component for data pruning
+
+All feedback loops passed:
+- TypeScript: pnpm tsc:check passed
+- Tests: pnpm test passed (62 tests)
+- Lint: pnpm linter:check passed
+
+## 2026-01-09: Phase 4 - Data Pruning Page (Task 2 of 8)
+
+Completed use-data-pruning-hook task:
+- Created useDataPruning hook for sending POST requests to prune data elements
+- Uses useMutation from TanStack Query for mutation management
+- Sends POST requests to /maintenance/dataPruning/dataElements/{id} using dataEngine.mutate
+- Uses Promise.allSettled to handle parallel requests for all selected data elements
+- Maps results to array with dataElement, success, and optional error properties
+- Returns pruneDataElements, pruneDataElementsAsync, isPending, results, error, and reset
+
+Files created:
+- apps/modeling-app/src/features/settings/DataMaintenance/DataPruning/hooks/useDataPruning.ts
+
+All feedback loops passed:
+- TypeScript: pnpm tsc:check passed
+- Tests: pnpm test passed (62 tests)
+- Lint: pnpm linter:check passed

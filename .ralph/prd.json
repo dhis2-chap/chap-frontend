@@ -130,7 +130,7 @@
         "Uses Promise.allSettled to handle parallel requests",
         "Maps results to array with dataElement, success, and optional error properties"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "confirm-pruning-modal",
