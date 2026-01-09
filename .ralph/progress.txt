@@ -134,7 +134,172 @@ Completed use-data-pruning-hook task:
 Files created:
 - apps/modeling-app/src/features/settings/DataMaintenance/DataPruning/hooks/useDataPruning.ts
 
+Commit: 6e9f00e - feat: add useDataPruning hook for data element pruning
+
 All feedback loops passed:
 - TypeScript: pnpm tsc:check passed
 - Tests: pnpm test passed (62 tests)
 - Lint: pnpm linter:check passed
+
+## 2026-01-09: Phase 4 - Data Pruning Page (Task 3 of 8)
+
+Completed confirm-pruning-modal task:
+- Created ConfirmPruningModal component with Modal from @dhis2/ui
+- Error NoticeBox warns about irreversible action (permanent deletion across all org units and time periods)
+- Lists all data elements to be pruned
+- Input field requires typing 'delete' (case-insensitive) to enable confirm button
+- Confirm button uses destructive styling and is disabled until text matches
+- Cancel button closes modal without action
+- isPending prop disables all interactions during mutation
+- All user-facing strings use i18n.t() for translation support
+
+Files created:
+- apps/modeling-app/src/features/settings/DataMaintenance/DataPruning/ConfirmPruningModal/ConfirmPruningModal.tsx
+- apps/modeling-app/src/features/settings/DataMaintenance/DataPruning/ConfirmPruningModal/ConfirmPruningModal.module.css
+- apps/modeling-app/src/features/settings/DataMaintenance/DataPruning/ConfirmPruningModal/index.ts
+
+Commit: e6493d7 - feat: add ConfirmPruningModal component for data pruning confirmation
+
+All feedback loops passed:
+- TypeScript: pnpm tsc:check passed
+- Tests: pnpm test passed (62 tests)
+- Lint: pnpm linter:check passed
+
+## 2026-01-09: Phase 4 - Data Pruning Page (Task 4 of 8)
+
+Completed pruning-results-modal task:
+- Created PruningResultsModal component with Modal from @dhis2/ui
+- Displays success count and failure count in summary section
+- Lists each data element with result indicator (checkmark for success, X for failure)
+- Failed items show error message below the data element name
+- Uses IconCheckmark16 and IconCross16 from @dhis2/ui-icons
+- Close button returns user to Data Pruning page (onClose callback)
+- Styled with color-coded backgrounds (green for success, red for failure)
+- All user-facing strings use i18n.t() for translation support
+
+Files created:
+- apps/modeling-app/src/features/settings/DataMaintenance/DataPruning/PruningResultsModal/PruningResultsModal.tsx
+- apps/modeling-app/src/features/settings/DataMaintenance/DataPruning/PruningResultsModal/PruningResultsModal.module.css
+- apps/modeling-app/src/features/settings/DataMaintenance/DataPruning/PruningResultsModal/index.ts
+
+Commit: 96a29d5 - feat: add PruningResultsModal component for displaying pruning results
+
+All feedback loops passed:
+- TypeScript: pnpm tsc:check passed
+- Tests: pnpm test passed (62 tests)
+- Lint: pnpm linter:check passed
+
+## 2026-01-09: Phase 4 - Data Pruning Page (Task 5 of 8)
+
+Completed data-pruning-page-layout task:
+- Created DataPruningPage component with complete data pruning UI
+- Warning NoticeBox (error style) displays at top explaining destructive action
+- Initial state shows one empty DataElementSelector
+- 'Add another data element' button visible when < 10 items
+- 'Add another data element' button hidden when 10 items reached
+- Maximum of 10 data elements can be added
+- Also implements interactions: search/select, duplicate prevention via excludeIds, remove buttons
+- Also implements actions: Cancel button navigates to /settings/data-maintenance, Prune Data button opens ConfirmPruningModal, disabled when no data elements selected
+- Also implements access control: checks isSuperUser on mount, shows access denied message with back button for unauthorized users
+- All user-facing strings use i18n.t() for translation support
+
+Files created:
+- apps/modeling-app/src/features/settings/DataMaintenance/DataPruning/DataPruningPage.tsx
+- apps/modeling-app/src/features/settings/DataMaintenance/DataPruning/DataPruningPage.module.css
+- apps/modeling-app/src/features/settings/DataMaintenance/DataPruning/index.ts
+
+Files modified:
+- apps/modeling-app/src/features/settings/DataMaintenance/index.ts (added DataPruningPage export)
+
+Commit: cfab5ee - feat: add DataPruningPage component for data element pruning
+
+All feedback loops passed:
+- TypeScript: pnpm tsc:check passed
+- Tests: pnpm test passed (62 tests)
+- Lint: pnpm linter:check passed
+- Build: pnpm build passed
+
+## 2026-01-09: Phase 5 - Router Configuration
+
+Completed router-configuration task:
+- Updated App.tsx router to integrate all settings components
+- /settings uses SettingsLayout with collapseSidebar: true handle
+- /settings index route renders GeneralSettings (RouteSettings + ChapSettings)
+- /settings/data-maintenance index route renders DataMaintenanceCard
+- /settings/data-maintenance/pruning renders DataPruningPage
+- All routes properly nested under /settings parent
+
+Files modified:
+- apps/modeling-app/src/App.tsx
+
+Commit: 6188246 - feat: add settings routes for data maintenance feature
+
+All feedback loops passed:
+- TypeScript: pnpm tsc:check passed
+- Tests: pnpm test passed (62 tests)
+- Lint: pnpm linter:check passed
+
+UI verification with Playwright:
+- Navigated to /settings - sidebar with General and Data Maintenance items displayed
+- General page shows RouteSettings and ChapSettings cards
+- Data Maintenance page shows DataMaintenanceCard with Data Pruning section
+- Go to Data Pruning button navigates to /settings/data-maintenance/pruning
+- Data Pruning page shows warning NoticeBox, DataElementSelector, and action buttons
+
+## 2026-01-09: Verification - All Core Features Complete
+
+Completed comprehensive UI verification with Playwright for all remaining tasks:
+
+Verified data-pruning-page-interactions:
+- Search and select data elements in dropdown works
+- Duplicate prevention works (selected elements excluded from dropdown)
+- Remove button visible when more than 1 item
+- Remove button hidden when only 1 item
+
+Verified data-pruning-page-actions:
+- Cancel button navigates to /settings/data-maintenance
+- Prune Data button opens ConfirmPruningModal
+- Prune Data button disabled when no data elements selected
+
+Verified data-pruning-access-control:
+- Code review confirms isSuperUser check on component mount
+- Unauthorized users see access denied message with back button
+- Authorized users see full pruning form
+
+Verified settings-sidebar-navigation:
+- Settings page displays sidebar with General and Data Maintenance items
+- Navigation between items works correctly
+- Back to app link present
+
+Verified authority-check-behavior:
+- User with ALL authority sees enabled button
+- Button navigates to /settings/data-maintenance/pruning
+
+Verified pruning-form-behavior:
+- Warning notice box displays at top
+- Initial state shows one empty dropdown
+- Can search/select data elements
+- Add another data element button works
+- Duplicate prevention via filtered dropdown
+
+Verified confirmation-flow:
+- Prune Data opens confirmation modal
+- Modal shows list of selected data elements
+- Delete Data button disabled until 'delete' typed
+- Cancel closes modal without action
+
+Verified api-integration (code review):
+- useDataPruning hook uses Promise.allSettled for parallel requests
+- POST requests to /maintenance/dataPruning/dataElements/{id}
+- Results mapped to success/failure with error messages
+
+Verified i18n-support (code review):
+- All components use i18n.t() for user-facing strings
+- Navigation labels, card titles, button labels, warnings, and modal content all translated
+
+All feedback loops passed:
+- TypeScript: pnpm tsc:check passed
+- Tests: pnpm test passed (62 tests)
+- Lint: pnpm linter:check passed
+
+Remaining: guides-refactor (Phase 6: Optional Refactor)

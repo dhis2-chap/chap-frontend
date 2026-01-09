@@ -188,7 +188,7 @@
         "Remove button hidden when only 1 item exists",
         "Removing an item removes it from the list"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "data-pruning-page-actions",
@@ -199,7 +199,7 @@
         "'Prune Data' button opens ConfirmPruningModal",
         "'Prune Data' button disabled when no data elements selected"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "data-pruning-access-control",
@@ -211,7 +211,7 @@
         "Access denied view includes back button",
         "Authorized users see the full pruning form"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "router-configuration",
@@ -225,7 +225,7 @@
         "/settings/data-maintenance/pruning renders DataPruningPage",
         "All routes properly nested under /settings parent"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "settings-sidebar-navigation",
@@ -239,7 +239,7 @@
         "Clicking 'Data Maintenance' shows DataMaintenanceCard",
         "'Back to app' link navigates to home (/)"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "authority-check-behavior",
@@ -251,7 +251,7 @@
         "User with ALL authority sees enabled button",
         "Clicking enabled button navigates to /settings/data-maintenance/pruning"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "pruning-form-behavior",
@@ -267,7 +267,7 @@
         "Can remove individual items with X button",
         "X button hidden when only 1 item"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "confirmation-flow",
@@ -280,7 +280,7 @@
         "Case-insensitive matching works (DELETE, Delete, delete all work)",
         "Cancel closes modal without action"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "api-integration",
@@ -293,7 +293,7 @@
         "Failed items show X with error message",
         "Closing results modal resets form to initial state"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "i18n-support",
@@ -306,7 +306,7 @@
         "Warning and error messages use i18n.t()",
         "Modal content uses i18n.t()"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "guides-refactor",
