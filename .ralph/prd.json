@@ -77,7 +77,7 @@
         "Renders <Outlet /> from react-router-dom for child routes",
         "Back link navigates to home ('/')"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "data-maintenance-card",
@@ -90,7 +90,7 @@
         "Description explains pruning permanently deletes ALL data values for selected data elements",
         "Button labeled 'Go to Data Pruning' navigates to '/settings/data-maintenance/pruning'"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "data-maintenance-authority",
@@ -103,7 +103,7 @@
         "Tooltip explains authority requirement",
         "Button enabled when user has ALL authority"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "data-element-selector",

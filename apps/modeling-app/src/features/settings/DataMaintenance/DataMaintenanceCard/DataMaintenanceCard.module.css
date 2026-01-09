@@ -1,0 +1,38 @@
+.container {
+    padding: 24px;
+}
+
+.header {
+    margin-block-end: 24px;
+}
+
+.header h2 {
+    margin: 0;
+    color: #1a1a1a;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.section {
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.section h3 {
+    margin: 0 0 12px 0;
+    color: #1a1a1a;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.description {
+    margin: 0 0 16px 0;
+    color: #666;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.buttonContainer {
+    display: inline-block;
+}
