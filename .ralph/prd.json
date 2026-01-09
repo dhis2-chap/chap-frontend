@@ -13,7 +13,7 @@
         "Back link navigates to backLinkTo prop value",
         "Dark theme styles copied from GuidesLayout.module.css"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "nested-sidebar-nav",
@@ -27,7 +27,7 @@
         "Active link styling applied via NavLink className",
         "Styles copied from GuidesSidebar.module.css"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "nested-sidebar-exports",
@@ -39,7 +39,7 @@
         "Exports NestedSidebar component",
         "Exports SidebarItem, SidebarCategory, and prop types"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "settings-sidebar",
@@ -52,7 +52,7 @@
         "Categories include 'Data Maintenance' linking to '/settings/data-maintenance'",
         "Labels use i18n.t() for translation support"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "general-settings",
@@ -64,7 +64,7 @@
         "Renders ChapSettings component",
         "Maintains existing layout and styling"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "settings-layout",

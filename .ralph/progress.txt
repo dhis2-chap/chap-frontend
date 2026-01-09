@@ -1,0 +1,56 @@
+## 2026-01-09: Phase 1 - NestedSidebar Components
+
+Completed all Phase 1 tasks:
+- Created NestedSidebarLayout component with two-column layout (sidebar + content)
+- Created NestedSidebar navigation component supporting categories and NavLinks
+- Created barrel exports at components/NestedSidebar/index.ts
+
+Files created:
+- apps/modeling-app/src/components/NestedSidebar/NestedSidebarLayout.tsx
+- apps/modeling-app/src/components/NestedSidebar/NestedSidebarLayout.module.css
+- apps/modeling-app/src/components/NestedSidebar/NestedSidebar.tsx
+- apps/modeling-app/src/components/NestedSidebar/NestedSidebar.module.css
+- apps/modeling-app/src/components/NestedSidebar/index.ts
+
+Commit: 90a9afc - feat: add NestedSidebar components for nested navigation layouts
+
+All feedback loops passed:
+- TypeScript: pnpm tsc:check passed
+- Tests: pnpm test passed (62 tests)
+- Lint: pnpm linter:check passed
+- Build: pnpm build passed
+
+## 2026-01-09: Phase 2 - Settings Restructure (Task 1 of 3)
+
+Completed settings-sidebar task:
+- Created SettingsSidebar component using NestedSidebar
+- Navigation items: 'General' (/settings) and 'Data Maintenance' (/settings/data-maintenance)
+- All labels use i18n.t() for translation support
+
+Files created:
+- apps/modeling-app/src/features/settings/SettingsSidebar/SettingsSidebar.tsx
+- apps/modeling-app/src/features/settings/SettingsSidebar/index.ts
+
+Commit: 094d067 - feat: add SettingsSidebar component for settings navigation
+
+All feedback loops passed:
+- TypeScript: pnpm tsc:check passed
+- Tests: pnpm test passed (62 tests)
+- Lint: pnpm linter:check passed
+
+## 2026-01-09: Phase 2 - Settings Restructure (Task 2 of 3)
+
+Completed general-settings task:
+- Created GeneralSettings component containing RouteSettings and ChapSettings
+- Component uses useRoute hook to conditionally render ChapSettings
+- Maintained existing layout and styling from Settings.tsx
+
+Files created:
+- apps/modeling-app/src/features/settings/GeneralSettings/GeneralSettings.tsx
+- apps/modeling-app/src/features/settings/GeneralSettings/GeneralSettings.module.css
+- apps/modeling-app/src/features/settings/GeneralSettings/index.ts
+
+All feedback loops passed:
+- TypeScript: pnpm tsc:check passed
+- Tests: pnpm test passed (62 tests)
+- Lint: pnpm linter:check passed
