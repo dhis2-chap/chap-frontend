@@ -117,7 +117,7 @@
         "Search input is debounced with 300ms delay",
         "Remove button (X) visible when showRemoveButton is true"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "use-data-pruning-hook",
