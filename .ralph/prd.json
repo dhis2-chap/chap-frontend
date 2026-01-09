@@ -161,7 +161,7 @@
         "Close button returns to Data Pruning page",
         "Closing modal resets form state"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "data-pruning-page-layout",
@@ -175,7 +175,7 @@
         "'Add another data element' button hidden when 10 items",
         "Maximum of 10 data elements can be added"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "data-pruning-page-interactions",

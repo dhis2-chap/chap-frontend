@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-01-08T16:23:46.064Z\n"
-"PO-Revision-Date: 2026-01-08T16:23:46.064Z\n"
+"POT-Creation-Date: 2026-01-09T01:34:46.821Z\n"
+"PO-Revision-Date: 2026-01-09T01:34:46.822Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -160,6 +160,9 @@ msgstr "Oops!"
 
 msgid "Sorry, an unexpected error has occurred."
 msgstr "Sorry, an unexpected error has occurred."
+
+msgid "Back to app"
+msgstr "Back to app"
 
 msgid "Click to expand"
 msgstr "Click to expand"
@@ -1171,6 +1174,109 @@ msgstr ""
 msgid "Your server is not secure"
 msgstr "Your server is not secure"
 
+msgid "Data Maintenance"
+msgstr "Data Maintenance"
+
+msgid "Data Pruning"
+msgstr "Data Pruning"
+
+msgid ""
+"Permanently delete ALL data values for selected data elements across all "
+"organisation units and time periods. This action cannot be undone."
+msgstr ""
+"Permanently delete ALL data values for selected data elements across all "
+"organisation units and time periods. This action cannot be undone."
+
+msgid "You need ALL authority to perform data pruning operations"
+msgstr "You need ALL authority to perform data pruning operations"
+
+msgid "Go to Data Pruning"
+msgstr "Go to Data Pruning"
+
+msgid "Confirm Data Pruning"
+msgstr "Confirm Data Pruning"
+
+msgid ""
+"You are about to permanently delete ALL data values for the selected data "
+"elements across all organisation units and time periods. This action is "
+"irreversible."
+msgstr ""
+"You are about to permanently delete ALL data values for the selected data "
+"elements across all organisation units and time periods. This action is "
+"irreversible."
+
+msgid "Type \"delete\" to confirm"
+msgstr "Type \"delete\" to confirm"
+
+msgid "Delete Data"
+msgstr "Delete Data"
+
+msgid "Loading..."
+msgstr "Loading..."
+
+msgid "Start typing to search for data elements"
+msgstr "Start typing to search for data elements"
+
+msgid "Select a data element..."
+msgstr "Select a data element..."
+
+msgid "Remove data element"
+msgstr "Remove data element"
+
+msgid "Search for data elements"
+msgstr "Search for data elements"
+
+msgid "Access Denied"
+msgstr "Access Denied"
+
+msgid ""
+"You do not have the required authority to access this page. Data pruning "
+"operations require ALL authority."
+msgstr ""
+"You do not have the required authority to access this page. Data pruning "
+"operations require ALL authority."
+
+msgid "Go Back"
+msgstr "Go Back"
+
+msgid ""
+"Data pruning will permanently delete ALL data values for the selected data "
+"elements across all organisation units and time periods. This action cannot "
+"be undone."
+msgstr ""
+"Data pruning will permanently delete ALL data values for the selected data "
+"elements across all organisation units and time periods. This action cannot "
+"be undone."
+
+msgid "Select Data Elements to Prune"
+msgstr "Select Data Elements to Prune"
+
+msgid ""
+"Select up to {{max}} data elements whose data values you want to "
+"permanently delete."
+msgstr ""
+"Select up to {{max}} data elements whose data values you want to "
+"permanently delete."
+
+msgid "Add another data element"
+msgstr "Add another data element"
+
+msgid "Prune Data"
+msgstr "Prune Data"
+
+msgid "Pruning Results"
+msgstr "Pruning Results"
+
+msgid "{{count}} successful"
+msgid_plural "{{count}} successful"
+msgstr[0] "{{count}} successful"
+msgstr[1] "{{count}} successful"
+
+msgid "{{count}} failed"
+msgid_plural "{{count}} failed"
+msgstr[0] "{{count}} failed"
+msgstr[1] "{{count}} failed"
+
 msgid "Route configuration"
 msgstr "Route configuration"
 
@@ -1280,6 +1386,9 @@ msgstr "Error saving route"
 msgid "Route saved successfully"
 msgstr "Route saved successfully"
 
+msgid "General"
+msgstr "General"
+
 msgid "Evaluation details"
 msgstr "Evaluation details"
 
@@ -1317,6 +1426,15 @@ msgstr "Route and servers are configured on the settings page."
 
 msgid "View guides"
 msgstr "View guides"
+
+msgid "No guides available"
+msgstr "No guides available"
+
+msgid "Guide not found"
+msgstr "Guide not found"
+
+msgid "The guide \"{{guideSlug}}\" could not be found."
+msgstr "The guide \"{{guideSlug}}\" could not be found."
 
 msgid "Active jobs"
 msgstr "Active jobs"
@@ -1379,3 +1497,11 @@ msgstr ""
 msgctxt ") instead."
 msgid "Spaces are not allowed. Use dashes (-) or underscores ("
 msgstr "Spaces are not allowed. Use dashes (-) or underscores (_) instead."
+
+msgctxt "Application title"
+msgid "__MANIFEST_APP_TITLE"
+msgstr "Modeling"
+
+msgctxt "Application description"
+msgid "__MANIFEST_APP_DESCRIPTION"
+msgstr ""

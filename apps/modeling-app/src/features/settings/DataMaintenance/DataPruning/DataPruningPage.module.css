@@ -1,0 +1,73 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    max-width: 70%;
+}
+
+.accessDenied {
+    padding: 48px;
+    text-align: center;
+}
+
+.accessDenied h2 {
+    margin: 0 0 16px 0;
+    color: #1a1a1a;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.accessDenied p {
+    margin: 0 0 24px 0;
+    color: #666;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.formContainer {
+    padding: 24px;
+}
+
+.title {
+    margin: 0 0 8px 0;
+    color: #1a1a1a;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.description {
+    margin: 0 0 24px 0;
+    color: #666;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.selectorList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-block-end: 16px;
+}
+
+.selectorRow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.rowNumber {
+    color: #666;
+    font-size: 14px;
+    min-width: 24px;
+}
+
+.addButton {
+    margin-block-end: 24px;
+}
+
+.actions {
+    display: flex;
+    gap: 12px;
+    padding-block-start: 24px;
+    border-block-start: 1px solid #e0e0e0;
+}
