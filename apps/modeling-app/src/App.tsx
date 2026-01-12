@@ -1,3 +1,4 @@
+import React from 'react';
 import {
     createHashRouter,
     RouterProvider,
@@ -5,13 +6,11 @@ import {
     Outlet,
 } from 'react-router-dom';
 import ErrorPage from './components/ErrorPage';
-import React from 'react';
 import './locales';
 import './App.module.css';
 import PageWrapper from './components/PageWrapper';
 import { SetChapUrl } from './features/route-api/SetChapUrl';
 import { SettingsPage } from './features/settings/Settings';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { CssReset, CssVariables } from '@dhis2/ui';
 import { Layout } from './components/layout/Layout';
 import { RouteValidator } from './components/RouteValidator';
@@ -31,7 +30,9 @@ import { NewConfiguredModelPage } from './pages/NewConfiguredModelPage';
 import { SyncUrlWithGlobalShell } from './utils/syncUrlWithGlobalShell';
 import { NewPredictionPage } from './pages/NewPredictionPage';
 import { PredictionImportPage } from './pages/PredictionImportPage';
+import { GuidesPage } from './pages/GuidesPage';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 export type RouteHandle = {
     fullWidth?: boolean;
@@ -183,6 +184,17 @@ const router = createHashRouter([
                     collapseSidebar: true,
                 } satisfies RouteHandle,
                 element: <GetStartedPage />,
+            },
+            {
+                path: '/guides',
+                element: <GuidesPage />,
+                handle: {
+                    collapseSidebar: true,
+                } satisfies RouteHandle,
+                children: [
+                    { index: true },
+                    { path: ':guideSlug' },
+                ],
             },
         ],
     },

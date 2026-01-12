@@ -53,9 +53,14 @@ export const GetStartedPage = () => {
                     </a>
                 </div>
 
-                <Button onClick={() => navigate('/settings')}>
-                    {i18n.t('Configure settings')}
-                </Button>
+                <div className={styles.actions}>
+                    <Button primary onClick={() => navigate('/guides')}>
+                        {i18n.t('View guides')}
+                    </Button>
+                    <Button onClick={() => navigate('/settings')}>
+                        {i18n.t('Configure settings')}
+                    </Button>
+                </div>
             </div>
         </div>
     );
