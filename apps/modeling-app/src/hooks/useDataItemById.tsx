@@ -1,13 +1,13 @@
-import { useApiDataQuery } from '../utils/useApiDataQuery'
+import { useApiDataQuery } from '../utils/useApiDataQuery';
 
 type DataItem = {
-    id: string
-    displayName: string
-}
+    id: string;
+    displayName: string;
+};
 
 type DataItemsResult = {
-    dataItems: DataItem[]
-}
+    dataItems: DataItem[];
+};
 
 export const useDataItemById = (id: string | undefined) => {
     const { data, error, isLoading } = useApiDataQuery<
@@ -25,15 +25,15 @@ export const useDataItemById = (id: string | undefined) => {
             },
         },
         select: (result: DataItemsResult) => {
-            return result.dataItems[0]
+            return result.dataItems[0];
         },
         staleTime: Infinity,
         cacheTime: Infinity,
-    })
+    });
 
     return {
         dataItem: data,
         error,
         isLoading,
-    }
-}
+    };
+};

@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-01-19T12:56:41.893Z\n"
-"PO-Revision-Date: 2026-01-19T12:56:41.893Z\n"
+"POT-Creation-Date: 2026-01-19T14:19:48.220Z\n"
+"PO-Revision-Date: 2026-01-19T14:19:48.221Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -1207,6 +1207,15 @@ msgstr "Remove data element"
 msgid "Search for data elements"
 msgstr "Search for data elements"
 
+msgid "At least one slot is required"
+msgstr "At least one slot is required"
+
+msgid "Maximum {{max}} data elements allowed"
+msgstr "Maximum {{max}} data elements allowed"
+
+msgid "Select at least one data element"
+msgstr "Select at least one data element"
+
 msgid "Access Denied"
 msgstr "Access Denied"
 
@@ -1233,22 +1242,19 @@ msgstr ""
 msgid "Add another"
 msgstr "Add another"
 
-msgid "Prune Data"
-msgstr "Prune Data"
+msgid "Prune values"
+msgstr "Prune values"
 
 msgid "Results"
 msgstr "Results"
 
-msgid "{{count}} data elements pruned successfully"
-msgid_plural "{{count}} data elements pruned successfully"
-msgstr[0] "{{count}} data elements pruned successfully"
-msgstr[1] "{{count}} data elements pruned successfully"
+msgid "All {{count}} data elements were successfully pruned."
+msgid_plural "All {{count}} data elements were successfully pruned."
+msgstr[0] "All {{count}} data elements were successfully pruned."
+msgstr[1] "All {{count}} data elements were successfully pruned."
 
 msgid "{{failureCount}} of {{totalCount}} data elements failed to be pruned"
 msgstr "{{failureCount}} of {{totalCount}} data elements failed to be pruned"
-
-msgid "Successful"
-msgstr "Successful"
 
 msgid "Error"
 msgstr "Error"
@@ -1476,3 +1482,11 @@ msgstr ""
 msgctxt ") instead."
 msgid "Spaces are not allowed. Use dashes (-) or underscores ("
 msgstr "Spaces are not allowed. Use dashes (-) or underscores (_) instead."
+
+msgctxt "Application title"
+msgid "__MANIFEST_APP_TITLE"
+msgstr "Modeling"
+
+msgctxt "Application description"
+msgid "__MANIFEST_APP_DESCRIPTION"
+msgstr ""

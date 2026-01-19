@@ -1,16 +1,16 @@
-import { useApiDataQuery } from '../utils/useApiDataQuery'
+import { useApiDataQuery } from '../utils/useApiDataQuery';
 
 type App = {
-    key: string
-    displayName: string
-    version: string
-    pluginLaunchUrl: string
-}
+    key: string;
+    displayName: string;
+    version: string;
+    pluginLaunchUrl: string;
+};
 
 type UseAppsOptions = {
-    enabled?: boolean
-    select?: (apps: App[]) => App[]
-}
+    enabled?: boolean;
+    select?: (apps: App[]) => App[];
+};
 
 export const useApps = ({ enabled = true, select }: UseAppsOptions = {}) => {
     const {
@@ -29,11 +29,11 @@ export const useApps = ({ enabled = true, select }: UseAppsOptions = {}) => {
         staleTime: Infinity,
         enabled,
         select,
-    })
+    });
 
     return {
         apps,
         isLoading,
         error,
-    }
-}
+    };
+};

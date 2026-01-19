@@ -9,7 +9,7 @@
 
     For more info see https://github.com/dhis2-chap/chap-frontend-monorepo/pull/76
 */
-import PQueue from 'p-queue'
+import PQueue from 'p-queue';
 
 /* generated using openapi-typescript-codegen -- do not edit */
 /* istanbul ignore file */

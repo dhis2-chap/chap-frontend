@@ -1,30 +1,30 @@
-import { useMutation } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query';
 
 const copyToClipboardFn = async (text: string): Promise<void> => {
     if (!navigator?.clipboard) {
-        throw new Error('Clipboard API not available')
+        throw new Error('Clipboard API not available');
     }
-    await navigator.clipboard.writeText(text)
-}
+    await navigator.clipboard.writeText(text);
+};
 
 type Props = {
-    onSuccess?: () => void
-    onError?: () => void
-}
+    onSuccess?: () => void;
+    onError?: () => void;
+};
 
 export const useCopyToClipboard = ({ onSuccess, onError }: Props = {}) => {
     const mutation = useMutation<void, Error, string>({
         mutationFn: copyToClipboardFn,
         onSuccess: () => {
             setTimeout(() => {
-                mutation.reset()
-            }, 1500)
-            onSuccess?.()
+                mutation.reset();
+            }, 1500);
+            onSuccess?.();
         },
         onError: () => {
-            onError?.()
+            onError?.();
         },
-    })
+    });
 
     return {
         copy: mutation.mutate,
@@ -32,5 +32,5 @@ export const useCopyToClipboard = ({ onSuccess, onError }: Props = {}) => {
         isLoading: mutation.isLoading,
         error: mutation.error,
         reset: mutation.reset,
-    }
-}
+    };
+};

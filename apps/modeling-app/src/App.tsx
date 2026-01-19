@@ -1,46 +1,46 @@
-import React from 'react'
+import React from 'react';
 import {
     createHashRouter,
     RouterProvider,
     Navigate,
     Outlet,
-} from 'react-router-dom'
-import ErrorPage from './components/ErrorPage'
-import './locales'
-import './App.module.css'
-import PageWrapper from './components/PageWrapper'
-import { SetChapUrl } from './features/route-api/SetChapUrl'
-import { SettingsLayout } from './features/settings/SettingsLayout'
-import { GeneralSettings } from './features/settings/GeneralSettings'
-import { DataPruningPage } from './features/settings/DataPruning'
-import { CssReset, CssVariables } from '@dhis2/ui'
-import { Layout } from './components/layout/Layout'
-import { RouteValidator } from './components/RouteValidator'
-import InfoAboutReportingBugs from './features/common-features/InfoAboutReportingBugs/InfoAboutReportingBugs'
-import WarnAboutIncompatibleVersion from './features/common-features/WarnAboutIncompatibleVersion/WarnAboutIncompatibleVersion'
-import { EvaluationPage } from './pages/EvaluationPage'
-import { EvaluationDetailsPage } from './pages/EvaluationDetailsPage'
-import { ChapValidator } from './components/ChapValidator'
-import { NewEvaluationPage } from './pages/NewEvaluationPage'
-import { JobsPage } from './pages/JobsPage'
-import { EvaluationComparePage } from './pages/EvaluationCompare'
-import { GetStartedPage } from './pages/GetStartedPage'
-import { PredictionsPage } from './pages/PredictionsPage'
-import { PredictionDetailsPage } from './pages/PredictionDetailsPage'
-import { ModelsPage } from './pages/ModelsPage'
-import { NewConfiguredModelPage } from './pages/NewConfiguredModelPage'
-import { SyncUrlWithGlobalShell } from './utils/syncUrlWithGlobalShell'
-import { NewPredictionPage } from './pages/NewPredictionPage'
-import { PredictionImportPage } from './pages/PredictionImportPage'
-import { GuidesPage } from './pages/GuidesPage'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+} from 'react-router-dom';
+import ErrorPage from './components/ErrorPage';
+import './locales';
+import './App.module.css';
+import PageWrapper from './components/PageWrapper';
+import { SetChapUrl } from './features/route-api/SetChapUrl';
+import { SettingsLayout } from './features/settings/SettingsLayout';
+import { GeneralSettings } from './features/settings/GeneralSettings';
+import { DataPruningPage } from './features/settings/DataPruning';
+import { CssReset, CssVariables } from '@dhis2/ui';
+import { Layout } from './components/layout/Layout';
+import { RouteValidator } from './components/RouteValidator';
+import InfoAboutReportingBugs from './features/common-features/InfoAboutReportingBugs/InfoAboutReportingBugs';
+import WarnAboutIncompatibleVersion from './features/common-features/WarnAboutIncompatibleVersion/WarnAboutIncompatibleVersion';
+import { EvaluationPage } from './pages/EvaluationPage';
+import { EvaluationDetailsPage } from './pages/EvaluationDetailsPage';
+import { ChapValidator } from './components/ChapValidator';
+import { NewEvaluationPage } from './pages/NewEvaluationPage';
+import { JobsPage } from './pages/JobsPage';
+import { EvaluationComparePage } from './pages/EvaluationCompare';
+import { GetStartedPage } from './pages/GetStartedPage';
+import { PredictionsPage } from './pages/PredictionsPage';
+import { PredictionDetailsPage } from './pages/PredictionDetailsPage';
+import { ModelsPage } from './pages/ModelsPage';
+import { NewConfiguredModelPage } from './pages/NewConfiguredModelPage';
+import { SyncUrlWithGlobalShell } from './utils/syncUrlWithGlobalShell';
+import { NewPredictionPage } from './pages/NewPredictionPage';
+import { PredictionImportPage } from './pages/PredictionImportPage';
+import { GuidesPage } from './pages/GuidesPage';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 export type RouteHandle = {
-    fullWidth?: boolean
+    fullWidth?: boolean;
     /* whether to automatically collapse the sidebar when route is active */
-    collapseSidebar?: boolean
-}
+    collapseSidebar?: boolean;
+};
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -49,7 +49,7 @@ const queryClient = new QueryClient({
             retry: false,
         },
     },
-})
+});
 
 const router = createHashRouter([
     {
@@ -196,7 +196,7 @@ const router = createHashRouter([
             },
         ],
     },
-])
+]);
 
 const App = () => {
     return (
@@ -210,7 +210,7 @@ const App = () => {
                 <ReactQueryDevtools position="bottom-right" />
             </QueryClientProvider>
         </>
-    )
-}
+    );
+};
 
-export default App
+export default App;

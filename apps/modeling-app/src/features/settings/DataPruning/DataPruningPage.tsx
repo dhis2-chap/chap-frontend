@@ -1,7 +1,9 @@
-import React, { useState, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
 import { Button, Card, IconAdd16 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
+import { useForm, useFieldArray, Controller } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import { useAuthority } from '../../../hooks/useAuthority';
 import { DataElementSelector, DataElement } from './DataElementSelector';
 import { ConfirmPruningModal } from './ConfirmPruningModal';
@@ -11,23 +13,41 @@ import styles from './DataPruningPage.module.css';
 
 const MAX_DATA_ELEMENTS = 10;
 
-interface DataElementSlot {
-    id: string;
-    dataElement: DataElement | null;
-}
+const dataElementSchema = z.object({
+    id: z.string().min(1),
+    displayName: z.string(),
+}).nullable();
 
-const createEmptySlot = (): DataElementSlot => ({
-    id: crypto.randomUUID(),
-    dataElement: null,
+const slotSchema = z.object({
+    dataElement: dataElementSchema,
 });
 
+const dataPruningFormSchema = z.object({
+    slots: z
+        .array(slotSchema)
+        .min(1, { message: i18n.t('At least one slot is required') })
+        .max(MAX_DATA_ELEMENTS, { message: i18n.t('Maximum {{max}} data elements allowed', { max: MAX_DATA_ELEMENTS }) }),
+});
+
+type DataPruningFormValues = z.infer<typeof dataPruningFormSchema>;
+
 export const DataPruningPage = () => {
-    const navigate = useNavigate();
     const { isSuperUser, isLoading: isAuthorityLoading } = useAuthority({ authority: 'ALL' });
 
-    const [slots, setSlots] = useState<DataElementSlot[]>([createEmptySlot()]);
     const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
     const [pruningResults, setPruningResults] = useState<PruningResult[] | null>(null);
+
+    const methods = useForm<DataPruningFormValues>({
+        resolver: zodResolver(dataPruningFormSchema),
+        defaultValues: {
+            slots: [{ dataElement: null }],
+        },
+    });
+
+    const { fields, append, remove } = useFieldArray({
+        control: methods.control,
+        name: 'slots',
+    });
 
     const { pruneDataElementsAsync, isPending, reset } = useDataPruning({
         onSuccess: (results) => {
@@ -36,66 +56,63 @@ export const DataPruningPage = () => {
         },
     });
 
-    const selectedDataElements = useMemo(
-        () => slots.filter(slot => slot.dataElement !== null).map(slot => slot.dataElement as DataElement),
-        [slots],
-    );
+    const watchedSlots = methods.watch('slots');
 
-    const selectedIds = useMemo(
-        () => selectedDataElements.map(de => de.id),
-        [selectedDataElements],
-    );
+    const getSelectedDataElements = (): DataElement[] => {
+        return watchedSlots
+            .filter(slot => slot.dataElement !== null)
+            .map(slot => slot.dataElement as DataElement);
+    };
 
-    const handleDataElementChange = (slotId: string, dataElement: DataElement | null) => {
-        setSlots(prevSlots =>
-            prevSlots.map(slot =>
-                slot.id === slotId
-                    ? { ...slot, dataElement }
-                    : slot,
-            ),
-        );
+    const getExcludedIds = (currentIndex: number): string[] => {
+        return watchedSlots
+            .filter((slot, index) => index !== currentIndex && slot.dataElement !== null)
+            .map(slot => slot.dataElement!.id);
     };
 
     const handleAddSlot = () => {
-        if (slots.length < MAX_DATA_ELEMENTS) {
-            setSlots(prevSlots => [...prevSlots, createEmptySlot()]);
-        }
-    };
-
-    const handleRemoveSlot = (slotId: string) => {
-        if (slots.length > 1) {
-            setSlots(prevSlots => prevSlots.filter(slot => slot.id !== slotId));
+        if (fields.length < MAX_DATA_ELEMENTS) {
+            append({ dataElement: null });
         }
     };
 
     const handleCloseResultsModal = () => {
         setPruningResults(null);
         reset();
-        setSlots([createEmptySlot()]);
+        methods.reset({ slots: [{ dataElement: null }] });
     };
 
+    const onSubmit = () => {
+        const selectedDataElements = getSelectedDataElements();
+
+        if (selectedDataElements.length === 0) {
+            methods.setError('slots', {
+                type: 'manual',
+                message: i18n.t('Select at least one data element'),
+            });
+            return;
+        }
+
+        setIsConfirmModalOpen(true);
+    };
+
+    const selectedDataElements = getSelectedDataElements();
     const isPruneButtonDisabled = selectedDataElements.length === 0;
-    const showAddButton = slots.length < MAX_DATA_ELEMENTS;
+    const showAddButton = fields.length < MAX_DATA_ELEMENTS;
 
     if (isAuthorityLoading) {
         return null;
     }
 
-    if (!isSuperUser) {
+    if (isSuperUser) {
         return (
             <div className={styles.container}>
                 <Card>
                     <div className={styles.accessDenied}>
-                        <h2>{i18n.t('Access Denied')}</h2>
-                        <p>
-                            {i18n.t('You do not have the required authority to access this page. Data pruning operations require ALL authority.')}
+                        <h2>{i18n.t('Missing authority')}</h2>
+                        <p className={styles.mutedText}>
+                            {i18n.t('You do not have the required authority to access this page. Data pruning operations requires a superuser authority.')}
                         </p>
-                        <Button
-                            onClick={() => navigate('/settings')}
-                            primary
-                        >
-                            {i18n.t('Go Back')}
-                        </Button>
                     </div>
                 </Card>
             </div>
@@ -114,17 +131,23 @@ export const DataPruningPage = () => {
                     </div>
 
                     <div className={styles.selectorList}>
-                        {slots.map((slot, index) => (
-                            <div key={slot.id} className={styles.selectorRow}>
+                        {fields.map((field, index) => (
+                            <div key={field.id} className={styles.selectorRow}>
                                 <span className={styles.rowNumber}>
                                     {`${index + 1}.`}
                                 </span>
-                                <DataElementSelector
-                                    value={slot.dataElement}
-                                    onChange={dataElement => handleDataElementChange(slot.id, dataElement)}
-                                    excludeIds={selectedIds.filter(id => id !== slot.dataElement?.id)}
-                                    showRemoveButton={slots.length > 1}
-                                    onRemove={() => handleRemoveSlot(slot.id)}
+                                <Controller
+                                    name={`slots.${index}.dataElement`}
+                                    control={methods.control}
+                                    render={({ field: controllerField }) => (
+                                        <DataElementSelector
+                                            value={controllerField.value}
+                                            onChange={controllerField.onChange}
+                                            excludeIds={getExcludedIds(index)}
+                                            showRemoveButton={fields.length > 1}
+                                            onRemove={() => remove(index)}
+                                        />
+                                    )}
                                 />
                             </div>
                         ))}
@@ -144,7 +167,7 @@ export const DataPruningPage = () => {
 
                     <div className={styles.actions}>
                         <Button
-                            onClick={() => setIsConfirmModalOpen(true)}
+                            onClick={onSubmit}
                             destructive
                             disabled={isPruneButtonDisabled}
                         >

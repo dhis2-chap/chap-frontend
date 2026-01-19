@@ -7,4 +7,4 @@ export {
     getFirstGuide,
     type Guide,
     type GuideFrontmatter,
-} from './guides'
+} from './guides';
