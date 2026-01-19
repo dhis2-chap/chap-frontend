@@ -1,11 +1,11 @@
 #!/bin/bash
 
-claude --permission-mode acceptEdits "@.ralph/prd.md @.ralph/progress.txt \
+claude --permission-mode acceptEdits "@.ralph/prd.json @.ralph/progress.txt \
 1. Read the PRD and progress file. \
 2. Find the next incomplete task and implement it. \
-3. Commit your changes. \
-4. Update progress.txt with what you did. \
-5. Change "passes" to "true" in the PRD file for the task you did.
+3. Change "passes" to "true" in the prd.json file for the task you did. \
+4. Commit your changes. \
+5. Update progress.txt with what you did. \
 
 When choosing the next task, prioritize in this order:
 1. Architectural decisions and core abstractions

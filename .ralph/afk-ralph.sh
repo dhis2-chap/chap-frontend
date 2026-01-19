@@ -7,12 +7,37 @@ if [ -z "$1" ]; then
 fi
 
 for ((i=1; i<=$1; i++)); do
-  result=$(claude --permission-mode acceptEdits -p "@PRD.md @progress.txt \
-  1. Find the highest-priority task and implement it. \
-  2. Run your tests and type checks. \
-  3. Update the PRD with what was done. \
-  4. Append your progress to progress.txt. \
-  5. Commit your changes. \
+  result=$(claude --permission-mode acceptEdits -p "@.ralph/prd.json @.ralph/progress.txt \
+  1. Read the PRD and progress file. \
+  2. Find the next incomplete task and implement it. \
+  3. Change "passes" to "true" in the prd.json file for the task you did. \
+  4. Commit your changes. \
+  5. Update progress.txt with what you did. \
+
+  When choosing the next task, prioritize in this order: \
+  1. Architectural decisions and core abstractions \
+  2. Integration points between modules \
+  3. Unknown unknowns and spike work \
+  4. Standard features and implementation \
+  5. Polish, cleanup, and quick wins \
+  Fail fast on risky work. Save easy wins for later. \
+
+  Before committing, run ALL feedback loops:
+  1. TypeScript: pnpm tsc:check (must pass with no errors) \
+  2. Tests: pnpm test (must pass) \
+  3. Lint: pnpm linter:check (must pass) \
+  4. If doing UI changes, use the Playwright MCP to verify the changes. Use birk / Solololo1! as the username and password. The app is running at http://localhost:3000. \
+  Do NOT commit if any feedback loop fails. Fix issues first. \
+
+  This codebase will outlive you. Every shortcut you take becomes \
+  someone else's burden. Every hack compounds into technical debt \
+  that slows the whole team down. \
+
+  You are not just writing code. You are shaping the future of this \
+  project. The patterns you establish will be copied. The corners \
+  you cut will be cut again. \
+  Fight entropy. Leave the codebase better than you found it. \
+
   ONLY WORK ON A SINGLE TASK. \
   If the PRD is complete, output <promise>COMPLETE</promise>.")
 

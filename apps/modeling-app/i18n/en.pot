@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-01-09T01:34:46.821Z\n"
-"PO-Revision-Date: 2026-01-09T01:34:46.822Z\n"
+"POT-Creation-Date: 2026-01-19T09:29:34.632Z\n"
+"PO-Revision-Date: 2026-01-19T09:29:34.633Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -160,9 +160,6 @@ msgstr "Oops!"
 
 msgid "Sorry, an unexpected error has occurred."
 msgstr "Sorry, an unexpected error has occurred."
-
-msgid "Back to app"
-msgstr "Back to app"
 
 msgid "Click to expand"
 msgstr "Click to expand"
@@ -547,6 +544,9 @@ msgstr ""
 
 msgid "Leave page"
 msgstr "Leave page"
+
+msgid "Back to app"
+msgstr "Back to app"
 
 msgid "Start dry run"
 msgstr "Start dry run"
@@ -1497,11 +1497,3 @@ msgstr ""
 msgctxt ") instead."
 msgid "Spaces are not allowed. Use dashes (-) or underscores ("
 msgstr "Spaces are not allowed. Use dashes (-) or underscores (_) instead."
-
-msgctxt "Application title"
-msgid "__MANIFEST_APP_TITLE"
-msgstr "Modeling"
-
-msgctxt "Application description"
-msgid "__MANIFEST_APP_DESCRIPTION"
-msgstr ""

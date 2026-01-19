@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, NoticeBox, Card } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
-import { useAuthority } from '../../../../hooks/useAuthority';
+import { useAuthority } from '../../../hooks/useAuthority';
 import { DataElementSelector, DataElement } from './DataElementSelector';
 import { ConfirmPruningModal } from './ConfirmPruningModal';
 import { PruningResultsModal } from './PruningResultsModal';
@@ -69,7 +69,7 @@ export const DataPruningPage = () => {
     };
 
     const handleCancel = () => {
-        navigate('/settings/data-maintenance');
+        navigate('/settings');
     };
 
     const handleOpenConfirmModal = () => {
@@ -107,7 +107,7 @@ export const DataPruningPage = () => {
                             {i18n.t('You do not have the required authority to access this page. Data pruning operations require ALL authority.')}
                         </p>
                         <Button
-                            onClick={() => navigate('/settings/data-maintenance')}
+                            onClick={() => navigate('/settings')}
                             primary
                         >
                             {i18n.t('Go Back')}
@@ -129,10 +129,12 @@ export const DataPruningPage = () => {
 
             <Card>
                 <div className={styles.formContainer}>
-                    <h2 className={styles.title}>{i18n.t('Select Data Elements to Prune')}</h2>
-                    <p className={styles.description}>
-                        {i18n.t('Select up to {{max}} data elements whose data values you want to permanently delete.', { max: MAX_DATA_ELEMENTS })}
-                    </p>
+                    <div className={styles.header}>
+                        <h2>{i18n.t('Select Data Elements to Prune')}</h2>
+                        <p className={styles.description}>
+                            {i18n.t('Select up to {{max}} data elements whose data values you want to permanently delete.', { max: MAX_DATA_ELEMENTS })}
+                        </p>
+                    </div>
 
                     <div className={styles.selectorList}>
                         {slots.map((slot, index) => (

@@ -10,8 +10,8 @@ const getSettingsCategories = (): SidebarCategory[] => [
                 label: i18n.t('General'),
             },
             {
-                to: '/settings/data-maintenance',
-                label: i18n.t('Data Maintenance'),
+                to: '/settings/data-pruning',
+                label: i18n.t('Data Pruning'),
             },
         ],
     },
