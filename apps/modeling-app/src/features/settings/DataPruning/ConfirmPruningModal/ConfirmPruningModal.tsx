@@ -37,14 +37,15 @@ export const ConfirmPruningModal = ({
     return (
         <Modal
             onClose={onClose}
+            large
             dataTest="confirm-pruning-modal"
         >
             <ModalTitle>
-                {i18n.t('Confirm Data Pruning')}
+                {i18n.t('Confirm')}
             </ModalTitle>
             <ModalContent>
                 <NoticeBox
-                    title={i18n.t('Warning: This action cannot be undone')}
+                    title={i18n.t('This action cannot be undone')}
                     error
                 >
                     {i18n.t('You are about to permanently delete ALL data values for the selected data elements across all organisation units and time periods. This action is irreversible.')}
@@ -93,7 +94,7 @@ export const ConfirmPruningModal = ({
                         loading={isPending}
                         dataTest="confirm-pruning-button"
                     >
-                        {i18n.t('Delete Data')}
+                        {i18n.t('Delete')}
                     </Button>
                 </ButtonStrip>
             </ModalActions>

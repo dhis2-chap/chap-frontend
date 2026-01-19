@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, NoticeBox, Card } from '@dhis2/ui';
+import { Button, Card, IconAdd16 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { useAuthority } from '../../../hooks/useAuthority';
 import { DataElementSelector, DataElement } from './DataElementSelector';
@@ -120,19 +120,12 @@ export const DataPruningPage = () => {
 
     return (
         <div className={styles.container}>
-            <NoticeBox
-                title={i18n.t('Warning: Destructive Action')}
-                error
-            >
-                {i18n.t('Data pruning will permanently delete ALL data values for the selected data elements across all organisation units and time periods. This action cannot be undone.')}
-            </NoticeBox>
-
             <Card>
                 <div className={styles.formContainer}>
                     <div className={styles.header}>
-                        <h2>{i18n.t('Select Data Elements to Prune')}</h2>
+                        <h2>{i18n.t('Prune data values')}</h2>
                         <p className={styles.description}>
-                            {i18n.t('Select up to {{max}} data elements whose data values you want to permanently delete.', { max: MAX_DATA_ELEMENTS })}
+                            {i18n.t('Select data elements whose data values you want to permanently delete across all organisation units and time periods.', { max: MAX_DATA_ELEMENTS })}
                         </p>
                     </div>
 
@@ -160,17 +153,12 @@ export const DataPruningPage = () => {
                             small
                             className={styles.addButton}
                         >
-                            {i18n.t('Add another data element')}
+                            <IconAdd16 />
+                            {i18n.t('Add another')}
                         </Button>
                     )}
 
                     <div className={styles.actions}>
-                        <Button
-                            onClick={handleCancel}
-                            secondary
-                        >
-                            {i18n.t('Cancel')}
-                        </Button>
                         <Button
                             onClick={handleOpenConfirmModal}
                             destructive

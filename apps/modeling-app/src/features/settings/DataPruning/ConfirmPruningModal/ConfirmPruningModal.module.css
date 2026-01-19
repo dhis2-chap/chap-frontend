@@ -1,5 +1,5 @@
 .dataElementsSection {
-    margin-top: var(--spacers-dp16);
+    margin-block-start: var(--spacers-dp16);
 }
 
 .sectionTitle {
@@ -11,7 +11,7 @@
 
 .dataElementsList {
     margin: 0;
-    padding-left: var(--spacers-dp24);
+    padding-inline-start: var(--spacers-dp24);
     list-style-type: disc;
 }
 
@@ -22,7 +22,7 @@
 }
 
 .confirmationSection {
-    margin-top: var(--spacers-dp24);
+    margin-block-start: var(--spacers-dp24);
 }
 
 .confirmationPrompt {
