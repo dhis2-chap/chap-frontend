@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-01-19T09:29:34.632Z\n"
-"PO-Revision-Date: 2026-01-19T09:29:34.633Z\n"
+"POT-Creation-Date: 2026-01-19T12:56:41.893Z\n"
+"PO-Revision-Date: 2026-01-19T12:56:41.893Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -1174,27 +1174,11 @@ msgstr ""
 msgid "Your server is not secure"
 msgstr "Your server is not secure"
 
-msgid "Data Maintenance"
-msgstr "Data Maintenance"
+msgid "Confirm"
+msgstr "Confirm"
 
-msgid "Data Pruning"
-msgstr "Data Pruning"
-
-msgid ""
-"Permanently delete ALL data values for selected data elements across all "
-"organisation units and time periods. This action cannot be undone."
-msgstr ""
-"Permanently delete ALL data values for selected data elements across all "
-"organisation units and time periods. This action cannot be undone."
-
-msgid "You need ALL authority to perform data pruning operations"
-msgstr "You need ALL authority to perform data pruning operations"
-
-msgid "Go to Data Pruning"
-msgstr "Go to Data Pruning"
-
-msgid "Confirm Data Pruning"
-msgstr "Confirm Data Pruning"
+msgid "This action cannot be undone"
+msgstr "This action cannot be undone"
 
 msgid ""
 "You are about to permanently delete ALL data values for the selected data "
@@ -1207,9 +1191,6 @@ msgstr ""
 
 msgid "Type \"delete\" to confirm"
 msgstr "Type \"delete\" to confirm"
-
-msgid "Delete Data"
-msgstr "Delete Data"
 
 msgid "Loading..."
 msgstr "Loading..."
@@ -1239,43 +1220,38 @@ msgstr ""
 msgid "Go Back"
 msgstr "Go Back"
 
-msgid ""
-"Data pruning will permanently delete ALL data values for the selected data "
-"elements across all organisation units and time periods. This action cannot "
-"be undone."
-msgstr ""
-"Data pruning will permanently delete ALL data values for the selected data "
-"elements across all organisation units and time periods. This action cannot "
-"be undone."
-
-msgid "Select Data Elements to Prune"
-msgstr "Select Data Elements to Prune"
+msgid "Prune data values"
+msgstr "Prune data values"
 
 msgid ""
-"Select up to {{max}} data elements whose data values you want to "
-"permanently delete."
+"Select data elements whose data values you want to permanently delete "
+"across all organisation units and time periods."
 msgstr ""
-"Select up to {{max}} data elements whose data values you want to "
-"permanently delete."
+"Select data elements whose data values you want to permanently delete "
+"across all organisation units and time periods."
 
-msgid "Add another data element"
-msgstr "Add another data element"
+msgid "Add another"
+msgstr "Add another"
 
 msgid "Prune Data"
 msgstr "Prune Data"
 
-msgid "Pruning Results"
-msgstr "Pruning Results"
+msgid "Results"
+msgstr "Results"
 
-msgid "{{count}} successful"
-msgid_plural "{{count}} successful"
-msgstr[0] "{{count}} successful"
-msgstr[1] "{{count}} successful"
+msgid "{{count}} data elements pruned successfully"
+msgid_plural "{{count}} data elements pruned successfully"
+msgstr[0] "{{count}} data elements pruned successfully"
+msgstr[1] "{{count}} data elements pruned successfully"
 
-msgid "{{count}} failed"
-msgid_plural "{{count}} failed"
-msgstr[0] "{{count}} failed"
-msgstr[1] "{{count}} failed"
+msgid "{{failureCount}} of {{totalCount}} data elements failed to be pruned"
+msgstr "{{failureCount}} of {{totalCount}} data elements failed to be pruned"
+
+msgid "Successful"
+msgstr "Successful"
+
+msgid "Error"
+msgstr "Error"
 
 msgid "Route configuration"
 msgstr "Route configuration"
@@ -1388,6 +1364,9 @@ msgstr "Route saved successfully"
 
 msgid "General"
 msgstr "General"
+
+msgid "Data Pruning"
+msgstr "Data Pruning"
 
 msgid "Evaluation details"
 msgstr "Evaluation details"
