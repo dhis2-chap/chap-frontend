@@ -18,12 +18,12 @@
 
 .filtersContainer > * {
   flex: 1;
-  min-width: 200px;
+  min-inline-size: 200px;
 }
 
 .tableContainer {
-  min-height: 200px;
-  max-height: 400px;
+  min-block-size: 200px;
+  max-block-size: 400px;
   overflow-y: auto;
 }
 

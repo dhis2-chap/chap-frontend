@@ -1,20 +1,20 @@
 .inputContainer {
     margin-inline-end: var(--spacers-dp8);
-    width: 200px;
+    inline-size: 200px;
     transition: width 0.3s ease;
 }
 
 .inputContainer:focus-within {
-    width: 300px;
+    inline-size: 300px;
 }
 
 .singleSelectContainer {
     margin-inline-end: var(--spacers-dp8);
-    width: 200px;
+    inline-size: 200px;
 }
 
 .singleSelectMenuItem {
-    max-width: 100%;
+    max-inline-size: 100%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

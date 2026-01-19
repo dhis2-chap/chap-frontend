@@ -1,7 +1,7 @@
 .wrapper {
     display: flex;
     flex-direction: column;
-    width: 100%;
+    inline-size: 100%;
     padding: 6px;
     gap: var(--spacers-dp8);
 }
@@ -13,7 +13,7 @@
 .labelsContainer {
     display: flex;
     justify-content: space-between;
-    width: 100%;
+    inline-size: 100%;
     font-size: 12px;
     color: #666;
 }
@@ -32,29 +32,29 @@
 .selectedLabel {
     position: absolute;
     text-align: center;
-    width: 100%;
+    inline-size: 100%;
 }
 
 .track {
-    height: 6px;
-    width: 100%;
+    block-size: 6px;
+    inline-size: 100%;
     background-color: var(--colors-grey400);
 }
 
 .thumb {
-    width: 54px;
-    height: 54px;
+    inline-size: 54px;
+    block-size: 54px;
     outline: none;
 }
 
 .thumb svg {
-    width: 100%;
-    height: auto;
+    inline-size: 100%;
+    block-size: auto;
     fill: var(--colors-blue600);
 }
 
 .mark {
     background-color: var(--colors-grey500);
-    height: 10px;
-    width: 2px;
+    block-size: 10px;
+    inline-size: 2px;
 }

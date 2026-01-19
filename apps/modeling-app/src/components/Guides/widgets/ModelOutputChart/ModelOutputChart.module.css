@@ -5,5 +5,5 @@
     overflow: hidden;
     padding: 16px;
     background-color: #fff;
-    width: 80%;
+    inline-size: 80%;
 }

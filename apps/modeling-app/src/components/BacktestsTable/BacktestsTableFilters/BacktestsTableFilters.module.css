@@ -1,14 +1,14 @@
 .inputContainer {
-    width: 200px;
+    inline-size: 200px;
     transition: width 0.3s ease;
 }
 
 .inputContainer:focus-within {
-    width: 300px;
+    inline-size: 300px;
 }
 
 .singleSelectContainer {
-    min-width: 250px;
+    min-inline-size: 250px;
 }
 
 /* This feels wrong, but it works */
@@ -17,6 +17,6 @@
 }
 
 .singleSelectMenuItem {
-    width: 100%;
+    inline-size: 100%;
     text-overflow: ellipsis;
 } 

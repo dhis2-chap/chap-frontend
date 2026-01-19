@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react'
 
 /**
  * Hook that debounces a value by delaying its update until after the specified delay
@@ -7,17 +7,17 @@ import { useEffect, useState } from 'react';
  * @returns The debounced value
  */
 export const useDebounce = <T>(value: T, delay: number = 300): T => {
-    const [debouncedValue, setDebouncedValue] = useState<T>(value);
+    const [debouncedValue, setDebouncedValue] = useState<T>(value)
 
     useEffect(() => {
         const handler = setTimeout(() => {
-            setDebouncedValue(value);
-        }, delay);
+            setDebouncedValue(value)
+        }, delay)
 
         return () => {
-            clearTimeout(handler);
-        };
-    }, [value, delay]);
+            clearTimeout(handler)
+        }
+    }, [value, delay])
 
-    return debouncedValue;
-};
+    return debouncedValue
+}

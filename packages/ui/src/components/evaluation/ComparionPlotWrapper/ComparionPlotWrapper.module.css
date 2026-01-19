@@ -13,7 +13,7 @@
 
 .filterCheckbox {
     overflow-x: auto;
-    max-height: 500px;
+    max-block-size: 500px;
 }
 
 .filter {

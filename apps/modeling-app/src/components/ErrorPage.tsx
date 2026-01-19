@@ -1,18 +1,18 @@
-import React from 'react';
-import i18n from '@dhis2/d2-i18n';
-import { useRouteError, isRouteErrorResponse } from 'react-router-dom';
+import React from 'react'
+import i18n from '@dhis2/d2-i18n'
+import { useRouteError, isRouteErrorResponse } from 'react-router-dom'
 
 const ErrorPage = () => {
-    const error = useRouteError();
+    const error = useRouteError()
 
-    console.error(error);
+    console.error(error)
     if (!isRouteErrorResponse(error)) {
         return (
             <div id="error-page">
                 <h1>{i18n.t('Oops!')}</h1>
                 <p>{i18n.t('Sorry, an unexpected error has occurred.')}</p>
             </div>
-        );
+        )
     }
 
     return (
@@ -23,7 +23,7 @@ const ErrorPage = () => {
                 <i>{error.statusText}</i>
             </p>
         </div>
-    );
-};
+    )
+}
 
-export default ErrorPage;
+export default ErrorPage

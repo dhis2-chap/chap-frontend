@@ -2,25 +2,25 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%;
+    block-size: 100%;
 }
 
 .noChapContainer {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%;
+    block-size: 100%;
 }
 
 .noChapIcon {
-    width: 64px;
-    height: 64px;
+    inline-size: 64px;
+    block-size: 64px;
     color: #404b5a;
 }
 
 .noChapIcon svg {
-    width: 100%;
-    height: 100%;
+    inline-size: 100%;
+    block-size: 100%;
 }
 
 .noChapContent {
