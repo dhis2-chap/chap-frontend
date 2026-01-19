@@ -68,22 +68,6 @@ export const DataPruningPage = () => {
         }
     };
 
-    const handleCancel = () => {
-        navigate('/settings');
-    };
-
-    const handleOpenConfirmModal = () => {
-        setIsConfirmModalOpen(true);
-    };
-
-    const handleCloseConfirmModal = () => {
-        setIsConfirmModalOpen(false);
-    };
-
-    const handleConfirmPruning = async () => {
-        await pruneDataElementsAsync(selectedDataElements);
-    };
-
     const handleCloseResultsModal = () => {
         setPruningResults(null);
         reset();
@@ -160,11 +144,11 @@ export const DataPruningPage = () => {
 
                     <div className={styles.actions}>
                         <Button
-                            onClick={handleOpenConfirmModal}
+                            onClick={() => setIsConfirmModalOpen(true)}
                             destructive
                             disabled={isPruneButtonDisabled}
                         >
-                            {i18n.t('Prune Data')}
+                            {i18n.t('Prune values')}
                         </Button>
                     </div>
                 </div>
@@ -173,8 +157,8 @@ export const DataPruningPage = () => {
             {isConfirmModalOpen && (
                 <ConfirmPruningModal
                     dataElements={selectedDataElements}
-                    onClose={handleCloseConfirmModal}
-                    onConfirm={handleConfirmPruning}
+                    onClose={() => setIsConfirmModalOpen(false)}
+                    onConfirm={() => pruneDataElementsAsync(selectedDataElements)}
                     isPending={isPending}
                 />
             )}

@@ -26,6 +26,8 @@
 }
 
 .formContainer {
+    --row-number-width: 24px;
+    --row-gap: 12px;
     padding: 24px;
 }
 
@@ -58,7 +60,7 @@
     display: flex;
     align-items: center;
     block-size: 100%;
-    gap: 12px;
+    gap: var(--row-gap);
 }
 
 .selectorRow > *:last-child {
@@ -69,12 +71,13 @@
 .rowNumber {
     color: #666;
     font-size: 14px;
-    min-inline-size: 24px;
+    min-inline-size: var(--row-number-width);
 }
 
 .addButton {
     display: flex;
     align-items: center;
+    margin-inline-start: calc(var(--row-number-width) + var(--row-gap));
     margin-block-end: 24px;
     gap: 8px;
 }
