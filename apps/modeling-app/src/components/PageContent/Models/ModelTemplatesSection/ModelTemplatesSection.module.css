@@ -1,0 +1,46 @@
+.container {
+    margin-top: 24px;
+}
+
+.header {
+    margin-bottom: 16px;
+}
+
+.title {
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0 0 4px 0;
+}
+
+.description {
+    font-size: 14px;
+    color: var(--colors-grey700);
+    margin: 0;
+}
+
+.addForm {
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.selectContainer {
+    flex: 1;
+    max-width: 400px;
+}
+
+.addButtonContainer {
+    padding-bottom: 4px;
+}
+
+.loadingContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+}
+
+.errorContainer {
+    margin: 16px 0;
+}

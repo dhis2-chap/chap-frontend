@@ -2,6 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { ApprovedTemplate } from '../models/ApprovedTemplate';
 import type { BackTest } from '../models/BackTest';
 import type { BackTestCreate } from '../models/BackTestCreate';
 import type { BackTestRead } from '../models/BackTestRead';
@@ -16,6 +17,7 @@ import type { DebugEntry } from '../models/DebugEntry';
 import type { JobResponse } from '../models/JobResponse';
 import type { ModelConfigurationCreate } from '../models/ModelConfigurationCreate';
 import type { ModelSpecRead } from '../models/ModelSpecRead';
+import type { ModelTemplateCreate } from '../models/ModelTemplateCreate';
 import type { ModelTemplateRead } from '../models/ModelTemplateRead';
 import type { PredictionCreate } from '../models/PredictionCreate';
 import type { PredictionInfo } from '../models/PredictionInfo';
@@ -347,6 +349,62 @@ export class CrudService {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/crud/model-templates',
+        });
+    }
+    /**
+     * Add Model Template
+     * Add a model template from a whitelisted GitHub URL.
+     * The url+version must be in the approved whitelist.
+     * @param requestBody
+     * @returns ModelTemplateRead Successful Response
+     * @throws ApiError
+     */
+    public static addModelTemplateCrudModelTemplatesPost(
+        requestBody: ModelTemplateCreate,
+    ): CancelablePromise<ModelTemplateRead> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/crud/model-templates',
+            body: requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
+     * List Available Model Templates
+     * Lists whitelisted model templates that can be added.
+     * Fetches from remote whitelist URLs configured in config/approved_model_repos.yaml.
+     * @returns ApprovedTemplate Successful Response
+     * @throws ApiError
+     */
+    public static listAvailableModelTemplatesCrudModelTemplatesAvailableGet(): CancelablePromise<Array<ApprovedTemplate>> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/crud/model-templates/available',
+        });
+    }
+    /**
+     * Delete Model Template
+     * Delete a model template by ID.
+     * This will cascade delete all configured models using this template.
+     * @param modelTemplateId
+     * @returns any Successful Response
+     * @throws ApiError
+     */
+    public static deleteModelTemplateCrudModelTemplatesModelTemplateIdDelete(
+        modelTemplateId: number,
+    ): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'DELETE',
+            url: '/crud/model-templates/{modelTemplateId}',
+            path: {
+                'modelTemplateId': modelTemplateId,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
         });
     }
     /**

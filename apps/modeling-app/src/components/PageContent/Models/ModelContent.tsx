@@ -4,6 +4,7 @@ import { CircularLoader, NoticeBox } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import styles from './ModelContent.module.css';
 import { ModelsTable } from './ModelsTable';
+import { ModelTemplatesSection } from './ModelTemplatesSection';
 import { useModels } from '../../../hooks/useModels';
 import { useModelsTableFilters } from './ModelsTable/hooks/useModelsTableFilters';
 
@@ -30,8 +31,11 @@ export const ModelContent: React.FC = () => {
     }
 
     return (
-        <Card className={styles.container}>
-            <ModelsTable models={models || []} />
-        </Card>
+        <>
+            <Card className={styles.container}>
+                <ModelsTable models={models || []} />
+            </Card>
+            <ModelTemplatesSection />
+        </>
     );
 };

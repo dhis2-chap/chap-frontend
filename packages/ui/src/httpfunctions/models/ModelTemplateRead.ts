@@ -20,7 +20,10 @@ export type ModelTemplateRead = {
     citationInfo?: (string | null);
     supportedPeriodType?: PeriodType;
     userOptions?: (Record<string, any> | null);
+    hpoSearchSpace?: (Record<string, any> | null);
     requiredCovariates?: Array<string>;
+    minPredictionLength?: (number | null);
+    maxPredictionLength?: (number | null);
     target?: string;
     allowFreeAdditionalContinuousCovariates?: boolean;
     name: string;

@@ -111,7 +111,6 @@ export class AnalyticsService {
     /**
      * Get Evaluation Entries
      * Return quantiles for the forecasts in a backtest. Can optionally be filtered on split period and org units.
-     *
      * NOTE: If org_units is set to ["adm0"], the sum over all regions is returned.
      * @param backtestId
      * @param quantiles
