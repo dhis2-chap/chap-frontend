@@ -2,7 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { ConfiguredModelRead_Output } from './ConfiguredModelRead_Output';
+import type { ConfiguredModelRead } from './ConfiguredModelRead';
 import type { DataSetMeta } from './DataSetMeta';
 export type BackTestRead = {
     datasetId: number;
@@ -15,6 +15,6 @@ export type BackTestRead = {
     splitPeriods?: Array<string>;
     dataset: DataSetMeta;
     aggregateMetrics: Record<string, number>;
-    configuredModel: ConfiguredModelRead_Output;
+    configuredModel: (ConfiguredModelRead | null);
 };
 

@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-01-08T16:23:46.064Z\n"
-"PO-Revision-Date: 2026-01-08T16:23:46.064Z\n"
+"POT-Creation-Date: 2026-01-20T11:35:34.748Z\n"
+"PO-Revision-Date: 2026-01-20T11:35:34.748Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -160,6 +160,9 @@ msgstr "Oops!"
 
 msgid "Sorry, an unexpected error has occurred."
 msgstr "Sorry, an unexpected error has occurred."
+
+msgid "Back to app"
+msgstr "Back to app"
 
 msgid "Click to expand"
 msgstr "Click to expand"
@@ -792,6 +795,60 @@ msgstr "Predict..."
 msgid "Error loading jobs"
 msgstr "Error loading jobs"
 
+msgid "Add model template"
+msgstr "Add model template"
+
+msgid "Select from available whitelisted templates"
+msgstr "Select from available whitelisted templates"
+
+msgid "Select a template to add"
+msgstr "Select a template to add"
+
+msgid "Add"
+msgstr "Add"
+
+msgid "Delete model template \"{{name}}\"?"
+msgstr "Delete model template \"{{name}}\"?"
+
+msgid ""
+"Deleting this model template will also delete all configured models that "
+"use it. This action cannot be undone."
+msgstr ""
+"Deleting this model template will also delete all configured models that "
+"use it. This action cannot be undone."
+
+msgid "Model Templates"
+msgstr "Model Templates"
+
+msgid "Error loading model templates"
+msgstr "Error loading model templates"
+
+msgid ""
+"Manage model templates. A model template can be used to make configured "
+"models. The table below shows all model templates that can be used. It is "
+"also possible to add model templates to the system by selecting a url and "
+"version from the select box."
+msgstr ""
+"Manage model templates. A model template can be used to make configured "
+"models. The table below shows all model templates that can be used. It is "
+"also possible to add model templates to the system by selecting a url and "
+"version from the select box."
+
+msgid "Could not load available templates"
+msgstr "Could not load available templates"
+
+msgid "Unable to fetch the list of available templates to add."
+msgstr "Unable to fetch the list of available templates to add."
+
+msgid "Author"
+msgstr "Author"
+
+msgid "Version"
+msgstr "Version"
+
+msgid "No model templates installed"
+msgstr "No model templates installed"
+
 msgid "Are you sure you want to archive this model?"
 msgstr "Are you sure you want to archive this model?"
 
@@ -814,9 +871,6 @@ msgstr "Model archived"
 msgid "Failed to archive model"
 msgstr "Failed to archive model"
 
-msgid "Author"
-msgstr "Author"
-
 msgid "Covariates"
 msgstr "Covariates"
 
@@ -838,9 +892,6 @@ msgstr "No models available"
 msgid "Include archived"
 msgstr "Include archived"
 
-msgid "Error loading model templates"
-msgstr "Error loading model templates"
-
 msgid "No model templates found"
 msgstr "No model templates found"
 
@@ -859,9 +910,6 @@ msgstr "Additional continuous covariates"
 
 msgid "Enter covariate name"
 msgstr "Enter covariate name"
-
-msgid "Add"
-msgstr "Add"
 
 msgid "Required"
 msgstr "Required"
@@ -1280,6 +1328,18 @@ msgstr "Error saving route"
 msgid "Route saved successfully"
 msgstr "Route saved successfully"
 
+msgid "Model template added"
+msgstr "Model template added"
+
+msgid "Failed to add model template"
+msgstr "Failed to add model template"
+
+msgid "Model template deleted"
+msgstr "Model template deleted"
+
+msgid "Failed to delete model template"
+msgstr "Failed to delete model template"
+
 msgid "Evaluation details"
 msgstr "Evaluation details"
 
@@ -1317,6 +1377,15 @@ msgstr "Route and servers are configured on the settings page."
 
 msgid "View guides"
 msgstr "View guides"
+
+msgid "No guides available"
+msgstr "No guides available"
+
+msgid "Guide not found"
+msgstr "Guide not found"
+
+msgid "The guide \"{{guideSlug}}\" could not be found."
+msgstr "The guide \"{{guideSlug}}\" could not be found."
 
 msgid "Active jobs"
 msgstr "Active jobs"
