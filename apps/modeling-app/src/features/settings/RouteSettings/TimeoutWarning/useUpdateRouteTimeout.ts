@@ -1,7 +1,6 @@
-import { useDataEngine } from '@dhis2/app-runtime';
+import { useDataEngine, useAlert } from '@dhis2/app-runtime';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import i18n from '@dhis2/d2-i18n';
-import { useAlert } from '@dhis2/app-service-alerts';
 import type { Route } from '../../../../hooks/useRoute';
 
 type UpdateRouteTimeoutVariables = {

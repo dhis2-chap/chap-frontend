@@ -1,0 +1,89 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    inline-size: 100%;
+    max-inline-size: 800px;
+}
+
+.accessDenied {
+    padding: 48px;
+}
+
+.accessDenied h2 {
+    margin: 0 0 16px 0;
+    color: #1a1a1a;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.accessDenied p {
+    margin: 0 0 24px 0;
+    color: #666;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.formContainer {
+    --row-number-width: 24px;
+    --row-gap: 12px;
+    padding: 24px;
+}
+
+.header {
+    margin-block-end: 24px;
+}
+
+.header h2 {
+    margin: 0;
+    color: #1a1a1a;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.description {
+    margin: 8px 0 0 0;
+    color: #666;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.selectorList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-block: 16px;
+}
+
+.selectorRow {
+    display: flex;
+    align-items: center;
+    block-size: 100%;
+    gap: var(--row-gap);
+}
+
+.selectorRow > *:last-child {
+    inline-size: 70%;
+    flex-shrink: 0;
+}
+
+.rowNumber {
+    color: #666;
+    font-size: 14px;
+    min-inline-size: var(--row-number-width);
+}
+
+.addButton {
+    display: flex;
+    align-items: center;
+    margin-block-end: 24px;
+    gap: 8px;
+}
+
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding-block-start: 24px;
+    border-block-start: 1px solid #e0e0e0;
+}
