@@ -10,12 +10,12 @@ const ROOT_PACKAGE = require(path.join(__dirname, '..', 'package.json'));
 
 const DRY_RUN = process.argv.includes('--dry-run');
 
-function log(message) {
+const log = (message) => {
     const prefix = DRY_RUN ? '[DRY-RUN] ' : '';
     console.log(`${prefix}${message}`);
-}
+};
 
-function validatePreConditions() {
+const validatePreConditions = () => {
     log('Validating pre-conditions...');
     const d2ConfigPath = path.join(APP_DIR, 'd2.config.js');
     if (!fs.existsSync(d2ConfigPath)) {
@@ -38,9 +38,9 @@ function validatePreConditions() {
 
     log(`  d2.config.js: OK (id=${d2Config.id}, minDHIS2Version=${d2Config.minDHIS2Version})`);
     return d2Config;
-}
+};
 
-async function main() {
+const main = async () => {
     if (DRY_RUN) {
         console.log('=== DRY RUN MODE - No actual publishing will occur ===\n');
     }
@@ -108,7 +108,7 @@ async function main() {
     log(`\nSuccessfully published ${version}`);
 }
 
-function extractChangelogForVersion(version) {
+const extractChangelogForVersion = (version) => {
     if (!fs.existsSync(CHANGELOG_PATH)) {
         return `Release v${version}`;
     }
@@ -123,7 +123,7 @@ function extractChangelogForVersion(version) {
     return versionSection
         ? `## ${versionSection.trim()}`
         : `Release v${version}`;
-}
+};
 
 main().catch(err => {
     console.error('Publish failed:', err.message);
