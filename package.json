@@ -4,10 +4,6 @@
     "packageManager": "pnpm@10.14.0",
     "license": "MIT",
     "private": true,
-    "workspaces": [
-        "packages/*",
-        "apps/*"
-    ],
     "scripts": {
         "linter:check": "turbo linter:check --parallel",
         "tsc:check": "turbo tsc:check --parallel",
@@ -40,10 +36,12 @@
         "typescript-eslint": "^8.43.0",
         "vitest": "^4.0.16"
     },
-    "resolutions": {
-        "i18next": "20.5.0",
-        "@dhis2/app-runtime": "3.14.6",
-        "@dhis2/cli-app-scripts": "12.8.0-alpha.3"
+    "pnpm": {
+        "overrides": {
+            "i18next": "20.5.0",
+            "@dhis2/app-runtime": "3.14.6",
+            "@dhis2/cli-app-scripts": "12.8.0-alpha.3"
+        }
     },
     "version": "3.2.0"
 }

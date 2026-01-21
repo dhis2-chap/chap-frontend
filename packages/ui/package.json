@@ -1,6 +1,5 @@
 {
     "name": "@dhis2-chap/ui",
-    "packageManager": "pnpm@10.14.0",
     "type": "commonjs",
     "version": "3.2.0",
     "module": "./build/es/index.js",
@@ -12,8 +11,8 @@
         "start": "concurrently -n build,types --hide types \"d2-app-scripts build --watch\" \"tsc --emitDeclarationOnly --outDir ./build/types --watch\"",
         "linter:check": "eslint . --config ../../eslint.config.mts",
         "deploy": "d2-app-scripts deploy",
-        "generate": "yarn openapi --input ./public/openapi.json --output ./src/httpfunctions --request ./src/queuedRequest.ts",
-        "generate-localhost": "yarn openapi --input http://localhost:8000/v1/openapi.json --output ./src/httpfunctions --request ./src/queuedRequest.ts",
+        "generate": "pnpm openapi --input ./public/openapi.json --output ./src/httpfunctions --request ./src/queuedRequest.ts",
+        "generate-localhost": "pnpm openapi --input http://localhost:8000/v1/openapi.json --output ./src/httpfunctions --request ./src/queuedRequest.ts",
         "tsc:check": "tsc --noEmit"
     },
     "main": "./build/cjs/index.js",
