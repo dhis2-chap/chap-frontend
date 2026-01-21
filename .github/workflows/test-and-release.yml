@@ -154,7 +154,6 @@ jobs:
         id: changesets
         uses: changesets/action@v1
         with:
-          version: pnpm changeset version
           publish: pnpm release:publish
           commit: "chore(release): version packages [skip release]"
           title: "chore(release): version packages"
