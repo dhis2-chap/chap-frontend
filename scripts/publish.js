@@ -61,6 +61,10 @@ async function main() {
     log('Building...');
     execSync('pnpm build', { stdio: 'inherit' });
 
+    if (!fs.existsSync(BUNDLE_DIR)) {
+        throw new Error('Bundle directory not found in build/bundle');
+    }
+
     const bundleFiles = fs.readdirSync(BUNDLE_DIR)
         .filter(f => f.endsWith('.zip'))
         .map(f => path.join(BUNDLE_DIR, f));
