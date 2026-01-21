@@ -5,6 +5,8 @@ import { useForm, useFieldArray, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useAuthority } from '../../../hooks/useAuthority';
+import { useNavigationBlocker } from '../../../hooks/useNavigationBlocker';
+import { NavigationConfirmModal } from '../../../components/NavigationConfirmModal/NavigationConfirmModal';
 import { DataElementSelector, DataElement } from './DataElementSelector';
 import { ConfirmPruningModal } from './ConfirmPruningModal';
 import { PruningResultsModal } from './PruningResultsModal';
@@ -54,6 +56,14 @@ export const DataPruningCard = () => {
             setPruningResults(results);
             setIsConfirmModalOpen(false);
         },
+    });
+
+    const {
+        showConfirmModal: showNavigationModal,
+        handleConfirmNavigation,
+        handleCancelNavigation,
+    } = useNavigationBlocker({
+        shouldBlock: !isPending && methods.formState.isDirty,
     });
 
     const watchedSlots = methods.watch('slots');
@@ -187,6 +197,13 @@ export const DataPruningCard = () => {
                 <PruningResultsModal
                     results={pruningResults}
                     onClose={handleCloseResultsModal}
+                />
+            )}
+
+            {showNavigationModal && (
+                <NavigationConfirmModal
+                    onConfirm={handleConfirmNavigation}
+                    onCancel={handleCancelNavigation}
                 />
             )}
         </div>
