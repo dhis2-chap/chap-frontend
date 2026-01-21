@@ -2,10 +2,10 @@ import { useMemo } from 'react';
 import { useLoggedInUser } from './useLoggedInUser';
 
 type Props = {
-    authority: string | string[];
+    authority?: string | string[];
 };
 
-export const useAuthority = ({ authority }: Props) => {
+export const useAuthority = ({ authority }: Props = {}) => {
     const { user, isLoading, error } = useLoggedInUser();
 
     const isSuperUser = useMemo(() => {
@@ -15,6 +15,7 @@ export const useAuthority = ({ authority }: Props) => {
 
     const hasAuthority = useMemo(() => {
         if (!user) return undefined;
+        if (!authority) return undefined;
         if (isSuperUser) return true;
 
         if (Array.isArray(authority)) {

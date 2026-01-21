@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-01-08T16:23:46.064Z\n"
-"PO-Revision-Date: 2026-01-08T16:23:46.064Z\n"
+"POT-Creation-Date: 2026-01-21T13:07:47.909Z\n"
+"PO-Revision-Date: 2026-01-21T13:07:47.910Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -160,6 +160,9 @@ msgstr "Oops!"
 
 msgid "Sorry, an unexpected error has occurred."
 msgstr "Sorry, an unexpected error has occurred."
+
+msgid "Back to app"
+msgstr "Back to app"
 
 msgid "Click to expand"
 msgstr "Click to expand"
@@ -1171,6 +1174,91 @@ msgstr ""
 msgid "Your server is not secure"
 msgstr "Your server is not secure"
 
+msgid "Confirm"
+msgstr "Confirm"
+
+msgid "This action cannot be undone"
+msgstr "This action cannot be undone"
+
+msgid ""
+"You are about to permanently delete ALL data values for the selected data "
+"elements across all organisation units and time periods. This action is "
+"irreversible."
+msgstr ""
+"You are about to permanently delete ALL data values for the selected data "
+"elements across all organisation units and time periods. This action is "
+"irreversible."
+
+msgid "Type \"delete\" to confirm"
+msgstr "Type \"delete\" to confirm"
+
+msgid "Loading..."
+msgstr "Loading..."
+
+msgid "Start typing to search for data elements"
+msgstr "Start typing to search for data elements"
+
+msgid "Select a data element..."
+msgstr "Select a data element..."
+
+msgid "Remove data element"
+msgstr "Remove data element"
+
+msgid "Search for data elements"
+msgstr "Search for data elements"
+
+msgid "At least one slot is required"
+msgstr "At least one slot is required"
+
+msgid "Maximum {{max}} data elements allowed"
+msgstr "Maximum {{max}} data elements allowed"
+
+msgid "Select at least one data element"
+msgstr "Select at least one data element"
+
+msgid "Missing authority"
+msgstr "Missing authority"
+
+msgid ""
+"You do not have the required authority to access this page. Data pruning "
+"operations requires a superuser authority."
+msgstr ""
+"You do not have the required authority to access this page. Data pruning "
+"operations requires a superuser authority."
+
+msgid "Prune data values"
+msgstr "Prune data values"
+
+msgid ""
+"Select data elements whose data values you want to permanently delete "
+"across all organisation units and time periods."
+msgstr ""
+"Select data elements whose data values you want to permanently delete "
+"across all organisation units and time periods."
+
+msgid "Add another"
+msgstr "Add another"
+
+msgid "Prune values"
+msgstr "Prune values"
+
+msgid "Results"
+msgstr "Results"
+
+msgid "All {{count}} data elements were successfully pruned."
+msgid_plural "All {{count}} data elements were successfully pruned."
+msgstr[0] "All {{count}} data elements were successfully pruned."
+msgstr[1] "All {{count}} data elements were successfully pruned."
+
+msgid "{{failureCount}} of {{totalCount}} data elements failed to be pruned"
+msgstr "{{failureCount}} of {{totalCount}} data elements failed to be pruned"
+
+msgid "Error"
+msgstr "Error"
+
+msgid "Please remember to rerun your analytics tables to update the system."
+msgstr "Please remember to rerun your analytics tables to update the system."
+
 msgid "Route configuration"
 msgstr "Route configuration"
 
@@ -1280,6 +1368,15 @@ msgstr "Error saving route"
 msgid "Route saved successfully"
 msgstr "Route saved successfully"
 
+msgid "General"
+msgstr "General"
+
+msgid "Data Pruning"
+msgstr "Data Pruning"
+
+msgid "Requires superuser authority"
+msgstr "Requires superuser authority"
+
 msgid "Evaluation details"
 msgstr "Evaluation details"
 
@@ -1317,6 +1414,15 @@ msgstr "Route and servers are configured on the settings page."
 
 msgid "View guides"
 msgstr "View guides"
+
+msgid "No guides available"
+msgstr "No guides available"
+
+msgid "Guide not found"
+msgstr "Guide not found"
+
+msgid "The guide \"{{guideSlug}}\" could not be found."
+msgstr "The guide \"{{guideSlug}}\" could not be found."
 
 msgid "Active jobs"
 msgstr "Active jobs"
