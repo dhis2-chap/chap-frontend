@@ -1,0 +1,1 @@
+export { ConfirmPruningModal } from './ConfirmPruningModal';
