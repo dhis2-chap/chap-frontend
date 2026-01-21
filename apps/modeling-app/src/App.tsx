@@ -192,7 +192,10 @@ const router = createHashRouter([
                 handle: {
                     collapseSidebar: true,
                 } satisfies RouteHandle,
-                children: [{ index: true }, { path: ':guideSlug' }],
+                children: [
+                    { index: true },
+                    { path: ':guideSlug' },
+                ],
             },
         ],
     },

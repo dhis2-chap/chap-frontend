@@ -14,7 +14,7 @@
 }
 
 .category {
-    margin-block-end: 20px;
+    margin-bottom: 20px;
 }
 
 .categoryTitle {
@@ -49,8 +49,8 @@
     text-decoration: none;
     font-size: 14px;
     transition: background-color 0.15s ease, color 0.15s ease;
-    border-inline-start: 3px solid transparent;
-    margin-inline-start: 1px;
+    border-left: 3px solid transparent;
+    margin-left: 1px;
 }
 
 .guideLink:hover {
@@ -61,6 +61,6 @@
 .guideLink.active {
     background-color: rgba(15, 45, 74, 0.25);
     color: #fff;
-    border-inline-start-color: #5b9bd5;
+    border-left-color: #5b9bd5;
     font-weight: 500;
 }

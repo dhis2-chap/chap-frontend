@@ -7,9 +7,9 @@
 }
 
 .chartWrapper {
-    inline-size: 100%;
+    width: 100%;
     padding: 32px 32px 0 0;
-    max-inline-size: 750px;
+    max-width: 750px;
     background-color: var(--colors-grey100, #f3f5f7);
     margin: 0 auto;
 }
@@ -18,15 +18,15 @@
     display: flex;
     justify-content: center;
     gap: 16px;
-    margin-block-start: 16px;
+    margin-top: 16px;
 }
 
 .navButton {
     display: flex;
     align-items: center;
     justify-content: center;
-    inline-size: 40px;
-    block-size: 40px;
+    width: 40px;
+    height: 40px;
     border: 1px solid var(--colors-grey400, #a0adba);
     border-radius: 4px;
     background-color: var(--colors-white, #fff);

@@ -28,8 +28,8 @@ html {
 
 /* wrapper */
 .sidenav-wrap {
-    inline-size: 100%;
-    block-size: 100%;
+    width: 100%;
+    height: 100%;
     background: var(--sidenav-dark-bg);
     overflow-y: auto;
     color: var(--colors-grey300);
@@ -50,11 +50,11 @@ html {
     background: var(--sidenav-dark-bg);
     color: var(--colors-grey300);
     font-size: 16px;
-    text-align: start;
+    text-align: left;
     display: flex;
     align-items: center;
-    inline-size: 100%;
-    min-block-size: 32px;
+    width: 100%;
+    min-height: 32px;
     padding: 8px 8px 8px 12px;
     cursor: pointer;
 }
@@ -81,9 +81,9 @@ html {
     background: var(--sidenav-dark-bg);
 }
 .sidenav-parent-chevron {
-    margin-inline-start: auto;
-    inline-size: 16px;
-    block-size: 16px;
+    margin-left: auto;
+    width: 16px;
+    height: 16px;
     transition: transform 0.1s linear;
 }
 .parent-is-open .sidenav-parent-chevron {
@@ -96,7 +96,7 @@ html {
 }
 .sidenav-link a {
     display: block;
-    min-block-size: 32px;
+    min-height: 32px;
     padding: 8px 8px 8px 12px;
     background: var(--sidenav-dark-bg);
     text-decoration: none;
@@ -142,22 +142,22 @@ html {
     background: var(--sidenav-dark-bg-selected);
 }
 .sidenav-item-icon {
-    margin-inline-end: 8px;
-    inline-size: 16px;
-    block-size: 16px;
+    margin-right: 8px;
+    width: 16px;
+    height: 16px;
 }
 /* indent inside a parent */
 .sidenav-parent .sidenav-link a {
-    padding-inline-start: var(--spacers-dp32);
+    padding-left: var(--spacers-dp32);
 }
 /* extra-indent if parent has an icon */
 .sidenav-parent-has-icon .sidenav-link {
-    padding-inline-start: var(--spacers-dp48);
+    padding-left: var(--spacers-dp48);
 }
 
 /* Divider */
 .sidenav-divider {
-    border-block-end: 1px solid var(--colors-grey700);
+    border-bottom: 1px solid var(--colors-grey700);
     margin: var(--spacers-dp8) var(--spacers-dp12);
 }
 
@@ -171,8 +171,8 @@ html {
 
 /* Footer */
 .sidenav-footer {
-    margin-block-start: auto;
-    padding-block-end: 52px;
+    margin-top: auto;
+    padding-bottom: 52px;
 }
 
 .sidenav-filter {

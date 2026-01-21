@@ -49,21 +49,9 @@ const createGuide = (
 export const guides: Guide[] = [
     createGuide('getting-started', gettingStartedFrontmatter, GettingStarted),
     createGuide('what-is-a-model', whatIsAModelFrontmatter, WhatIsAModel),
-    createGuide(
-        'what-is-an-evaluation',
-        whatIsAnEvaluationFrontmatter,
-        WhatIsAnEvaluation,
-    ),
-    createGuide(
-        'creating-an-evaluation',
-        creatingAnEvaluationFrontmatter,
-        CreatingAnEvaluation,
-    ),
-    createGuide(
-        'creating-a-prediction',
-        creatingAPredictionFrontmatter,
-        CreatingAPrediction,
-    ),
+    createGuide('what-is-an-evaluation', whatIsAnEvaluationFrontmatter, WhatIsAnEvaluation),
+    createGuide('creating-an-evaluation', creatingAnEvaluationFrontmatter, CreatingAnEvaluation),
+    createGuide('creating-a-prediction', creatingAPredictionFrontmatter, CreatingAPrediction),
 ];
 
 export const getGuideBySlug = (slug: string): Guide | undefined =>
@@ -72,9 +60,11 @@ export const getGuideBySlug = (slug: string): Guide | undefined =>
 export const getGuidesByCategory = (category: string): Guide[] =>
     getGuidesByCategoryHelper(guides, category);
 
-export const getRootGuides = (): Guide[] => getRootGuidesHelper(guides);
+export const getRootGuides = (): Guide[] =>
+    getRootGuidesHelper(guides);
 
-export const getCategories = (): string[] => getCategoriesHelper(guides);
+export const getCategories = (): string[] =>
+    getCategoriesHelper(guides);
 
 export const getFirstGuide = (): Guide | undefined =>
     getFirstGuideHelper(guides);
