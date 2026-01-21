@@ -27,7 +27,6 @@
     },
     "dependencies": {
         "@dhis2-chap/ui": "workspace:*",
-        "@dhis2/analytics": "^29.0.3",
         "@dhis2/app-runtime": "3.14.6",
         "@dhis2/d2-i18n": "1.2.0",
         "@dhis2/multi-calendar-dates": "^2.1.2",
