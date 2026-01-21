@@ -7,7 +7,11 @@ type Props = {
     periods?: string[];
 };
 
-export const useActualCasesByDatasetId = ({ datasetId, orgUnits, periods }: Props) => {
+export const useActualCasesByDatasetId = ({
+    datasetId,
+    orgUnits,
+    periods,
+}: Props) => {
     return useQuery<DataList, ApiError>({
         queryKey: ['actual-cases-by-dataset', datasetId, orgUnits, periods],
         queryFn: async () => {

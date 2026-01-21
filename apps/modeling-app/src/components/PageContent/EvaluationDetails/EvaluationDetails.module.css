@@ -1,5 +1,5 @@
 .container {
-    margin-top: 24px;
+    margin-block-start: 24px;
     display: flex;
     flex-direction: row;
     gap: 16px;
@@ -23,12 +23,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 300px;
+    min-block-size: 300px;
 }
 
 .errorContainer {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 300px;
+    min-block-size: 300px;
 }

@@ -9,7 +9,7 @@
     display: grid;
     grid-template-areas: 'sidebar' 'main' 'footer';
     font-size: 14px;
-    height: 100%;
+    block-size: 100%;
     background: var(--sidenav-dark-bg);
     grid-template-rows: auto 1fr;
     overflow: auto;
@@ -18,7 +18,7 @@
 .main {
     grid-area: main;
     background-color: var(--colors-grey200);
-    width: 100%;
+    inline-size: 100%;
     display: flex;
     flex-direction: column;
 }
@@ -28,8 +28,8 @@
 }
 
 .sidebar.hide {
-    width: 0px !important;
-    height: 0px;
+    inline-size: 0px !important;
+    block-size: 0px;
     visibility: hidden;
 }
 
@@ -37,27 +37,27 @@
     font-size: 28px;
     color: var(--colors-grey900);
     line-height: 40px;
-    padding-bottom: 8px;
+    padding-block-end: 8px;
 }
 
 .footer {
     grid-area: footer;
     padding: 0;
     background: var(--colors-white);
-    width: 100%;
+    inline-size: 100%;
     z-index: 1;
 }
 
 @media m-medium {
     .wrapper {
-        height: 100%;
+        block-size: 100%;
         display: grid;
         grid-template-columns: auto 1fr;
         grid-template-areas: 'sidebar main' 'sidebar footer';
         grid-template-rows: 1fr max-content;
     }
     .sidebar {
-        width: 240px;
+        inline-size: 240px;
         overflow-y: auto;
     }
     .main {

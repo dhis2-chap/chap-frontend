@@ -10,7 +10,11 @@ type DataItemsResult = {
 };
 
 export const useDataItemById = (id: string | undefined) => {
-    const { data, error, isLoading } = useApiDataQuery<DataItemsResult, Error, DataItem | undefined>({
+    const { data, error, isLoading } = useApiDataQuery<
+        DataItemsResult,
+        Error,
+        DataItem | undefined
+    >({
         queryKey: ['dataItem', id],
         enabled: !!id,
         query: {

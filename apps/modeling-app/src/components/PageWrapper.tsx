@@ -17,10 +17,7 @@ const style: React.CSSProperties = {
     width: '100%',
 };
 
-const ComponentWrapper = ({
-    children,
-    maxWidth,
-}: ComponentWrapperProps) => {
+const ComponentWrapper = ({ children, maxWidth }: ComponentWrapperProps) => {
     const fullWidthRoute = useMatches().some(
         match => !!(match.handle as RouteHandle)?.fullWidth,
     );
