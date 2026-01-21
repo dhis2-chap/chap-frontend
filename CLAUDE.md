@@ -71,6 +71,14 @@ pnpm generate-localhost       # Generate from running backend at localhost:8000
 - All strings should be translated using the `i18n.t('string')` function.
 - Translations will be automatically generated and managed, do not edit the translation files manually.
 - Import as `import i18n from '@dhis2/d2-i18n';`
+- **Symbol escaping**: Symbols like colons (`:`),  and other special characters must be escaped using interpolation to prevent translation extraction failures:
+  ```tsx
+  // ❌ Wrong - will cause translation extraction to fail
+  i18n.t('Data elements to be pruned:')
+
+  // ✅ Correct - escape symbols via interpolation
+  i18n.t('Data elements to be pruned{{colon}}', { colon: ':' })
+  ```
 
 ### Data Flow
 
