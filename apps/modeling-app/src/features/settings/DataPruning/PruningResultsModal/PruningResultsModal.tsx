@@ -103,6 +103,9 @@ export const PruningResultsModal = ({
                             </div>
                         </>
                     )}
+                    <p className={styles.reminderText}>
+                        {i18n.t('Please remember to rerun your analytics tables to update the system.')}
+                    </p>
                 </div>
             </ModalContent>
             <ModalActions>

@@ -9,7 +9,7 @@ import { DataElementSelector, DataElement } from './DataElementSelector';
 import { ConfirmPruningModal } from './ConfirmPruningModal';
 import { PruningResultsModal } from './PruningResultsModal';
 import { useDataPruning, PruningResult } from './hooks/useDataPruning';
-import styles from './DataPruningPage.module.css';
+import styles from './DataPruningCard.module.css';
 
 const MAX_DATA_ELEMENTS = 10;
 
@@ -31,8 +31,8 @@ const dataPruningFormSchema = z.object({
 
 type DataPruningFormValues = z.infer<typeof dataPruningFormSchema>;
 
-export const DataPruningPage = () => {
-    const { isSuperUser, isLoading: isAuthorityLoading } = useAuthority({ authority: 'ALL' });
+export const DataPruningCard = () => {
+    const { isSuperUser, isLoading: isAuthorityLoading } = useAuthority();
 
     const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
     const [pruningResults, setPruningResults] = useState<PruningResult[] | null>(null);
@@ -104,7 +104,7 @@ export const DataPruningPage = () => {
         return null;
     }
 
-    if (isSuperUser) {
+    if (!isSuperUser) {
         return (
             <div className={styles.container}>
                 <Card>
@@ -133,9 +133,6 @@ export const DataPruningPage = () => {
                     <div className={styles.selectorList}>
                         {fields.map((field, index) => (
                             <div key={field.id} className={styles.selectorRow}>
-                                <span className={styles.rowNumber}>
-                                    {`${index + 1}.`}
-                                </span>
                                 <Controller
                                     name={`slots.${index}.dataElement`}
                                     control={methods.control}

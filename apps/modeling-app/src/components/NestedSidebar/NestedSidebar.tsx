@@ -1,10 +1,13 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import { ConditionalTooltip } from '@/components/ConditionalTooltip';
 import styles from './NestedSidebar.module.css';
 
 export interface SidebarItem {
     to: string;
     label: string;
+    disabled?: boolean;
+    tooltip?: string;
 }
 
 export interface SidebarCategory {
@@ -27,14 +30,25 @@ export const NestedSidebar = ({ categories }: NestedSidebarProps) => {
                     <ul className={styles.itemList}>
                         {category.items.map(item => (
                             <li key={item.to} className={styles.item}>
-                                <NavLink
-                                    to={item.to}
-                                    className={({ isActive }) =>
-                                        `${styles.itemLink} ${isActive ? styles.active : ''}`}
-                                    end
+                                <ConditionalTooltip
+                                    enabled={!!item.disabled && !!item.tooltip}
+                                    content={item.tooltip}
                                 >
-                                    {item.label}
-                                </NavLink>
+                                    {item.disabled ? (
+                                        <span className={`${styles.itemLink} ${styles.disabled}`}>
+                                            {item.label}
+                                        </span>
+                                    ) : (
+                                        <NavLink
+                                            to={item.to}
+                                            className={({ isActive }) =>
+                                                `${styles.itemLink} ${isActive ? styles.active : ''}`}
+                                            end
+                                        >
+                                            {item.label}
+                                        </NavLink>
+                                    )}
+                                </ConditionalTooltip>
                             </li>
                         ))}
                     </ul>

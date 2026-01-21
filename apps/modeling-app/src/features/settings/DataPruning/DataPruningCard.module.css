@@ -76,7 +76,6 @@
 .addButton {
     display: flex;
     align-items: center;
-    margin-inline-start: calc(var(--row-number-width) + var(--row-gap));
     margin-block-end: 24px;
     gap: 8px;
 }

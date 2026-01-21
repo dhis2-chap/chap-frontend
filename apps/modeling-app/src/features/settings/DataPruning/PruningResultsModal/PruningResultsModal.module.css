@@ -36,3 +36,9 @@
     max-block-size: 300px;
     overflow-y: auto;
 }
+
+.reminderText {
+    color: var(--colors-grey700);
+    font-size: 0.875rem;
+    margin-top: var(--spacers-dp8);
+}

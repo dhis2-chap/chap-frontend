@@ -51,3 +51,9 @@
     border-inline-start-color: #5b9bd5;
     font-weight: 500;
 }
+
+.itemLink.disabled {
+    color: var(--colors-grey600, #5a6472);
+    cursor: not-allowed;
+    pointer-events: none;
+}

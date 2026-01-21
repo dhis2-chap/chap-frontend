@@ -12,7 +12,7 @@ import PageWrapper from './components/PageWrapper';
 import { SetChapUrl } from './features/route-api/SetChapUrl';
 import { SettingsLayout } from './features/settings/SettingsLayout';
 import { GeneralSettings } from './features/settings/GeneralSettings';
-import { DataPruningPage } from './features/settings/DataPruning';
+import { DataPruningCard } from './features/settings/DataPruning';
 import { CssReset, CssVariables } from '@dhis2/ui';
 import { Layout } from './components/layout/Layout';
 import { RouteValidator } from './components/RouteValidator';
@@ -175,7 +175,7 @@ const router = createHashRouter([
                     },
                     {
                         path: 'data-pruning',
-                        element: <DataPruningPage />,
+                        element: <DataPruningCard />,
                     },
                 ],
             },

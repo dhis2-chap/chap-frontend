@@ -1,1 +1,1 @@
-export { DataPruningPage } from './DataPruningPage';
+export { DataPruningCard } from './DataPruningCard';
