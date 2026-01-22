@@ -40,7 +40,7 @@ const WarnAboutIncompatibleVersion = () => {
             {anyNotCompatible && (
                 <div
                     className={style.warningMargin}
-                    style={{ maxWidth: '1400px' }}
+                    style={{ maxInlineSize: '1400px' }}
                 >
                     <div className={style.warningMarginInner}>
                         <NoticeBox error title="Incompatible versions">
