@@ -8,6 +8,7 @@ import styles from './EvaluationDetails.module.css';
 import { useBacktestById } from '@/hooks/useBacktestById';
 import { CircularLoader, NoticeBox } from '@dhis2/ui';
 import { EvaluationSummaryWidget } from './EvaluationSummaryWidget';
+import { useExperimentalFeature, FEATURES } from '@/features/settings/Experimental';
 
 type Props = {
     evaluationId: number;
@@ -15,6 +16,8 @@ type Props = {
 
 export const EvaluationDetailsComponent = ({ evaluationId }: Props) => {
     const { backtest, isLoading: isBacktestLoading, error: backtestError } = useBacktestById(evaluationId);
+    const { enabled: isMetricPlotsEnabled } = useExperimentalFeature(FEATURES.METRIC_PLOTS);
+    const { enabled: isEvaluationPlotsEnabled } = useExperimentalFeature(FEATURES.EVALUATION_PLOTS);
 
     if (isBacktestLoading) {
         return (
@@ -58,12 +61,16 @@ export const EvaluationDetailsComponent = ({ evaluationId }: Props) => {
                 <ModelExecutionResultWidget
                     backtest={backtest}
                 />
-                <CustomEvaluationPlotsWidget
-                    evaluationId={evaluationId}
-                />
-                <MetricPlotWidget
-                    evaluationId={evaluationId}
-                />
+                {isEvaluationPlotsEnabled && (
+                    <CustomEvaluationPlotsWidget
+                        evaluationId={evaluationId}
+                    />
+                )}
+                {isMetricPlotsEnabled && (
+                    <MetricPlotWidget
+                        evaluationId={evaluationId}
+                    />
+                )}
             </div>
             <div className={styles.rightColumn}>
                 <EvaluationSummaryWidget

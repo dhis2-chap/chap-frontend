@@ -19,6 +19,10 @@ export const SettingsSidebar = () => {
                     disabled: isLoading || !isSuperUser,
                     tooltip: i18n.t('Requires superuser authority'),
                 },
+                {
+                    to: '/settings/experimental',
+                    label: i18n.t('Experimental features'),
+                },
             ],
         },
     ];

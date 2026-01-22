@@ -13,6 +13,7 @@ import { SetChapUrl } from './features/route-api/SetChapUrl';
 import { SettingsLayout } from './features/settings/SettingsLayout';
 import { GeneralSettings } from './features/settings/GeneralSettings';
 import { DataPruningCard } from './features/settings/DataPruning';
+import { ExperimentalSettings } from './features/settings/Experimental';
 import { CssReset, CssVariables } from '@dhis2/ui';
 import { Layout } from './components/layout/Layout';
 import { RouteValidator } from './components/RouteValidator';
@@ -176,6 +177,10 @@ const router = createHashRouter([
                     {
                         path: 'data-pruning',
                         element: <DataPruningCard />,
+                    },
+                    {
+                        path: 'experimental',
+                        element: <ExperimentalSettings />,
                     },
                 ],
             },
