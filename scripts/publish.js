@@ -83,8 +83,11 @@ const main = async () => {
     const appHubExists = await checkAppHubVersionExists(d2Config.id, version);
 
     if (gitHubExists && appHubExists) {
-        log(`Version ${version} already published to both GitHub and App Hub. Skipping.`);
-        process.exit(0);
+        if (!DRY_RUN) {
+            log(`Version ${version} already published to both GitHub and App Hub. Skipping.`);
+            process.exit(0);
+        }
+        log(`Version ${version} already published to both GitHub and App Hub. Continuing for dry-run.`);
     }
 
     log(`  GitHub release ${tag}: ${gitHubExists ? 'exists' : 'not found'}`);
