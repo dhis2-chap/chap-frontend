@@ -10,7 +10,7 @@
 
 .asideWrapper {
     --animation-duration: 0.3s;
-    transition: ease width, max-height, visibility, var(--animation-duration);
+    transition: ease inline-size, max-block-size, visibility, var(--animation-duration);
     position: relative;
     overflow-x: hidden;
 }

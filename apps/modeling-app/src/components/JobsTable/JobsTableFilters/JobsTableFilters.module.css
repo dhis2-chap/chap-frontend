@@ -1,7 +1,7 @@
 .inputContainer {
     margin-inline-end: var(--spacers-dp8);
     inline-size: 200px;
-    transition: width 0.3s ease;
+    transition: inline-size 0.3s ease;
 }
 
 .inputContainer:focus-within {
