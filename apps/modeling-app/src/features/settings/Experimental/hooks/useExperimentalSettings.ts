@@ -50,7 +50,7 @@ export const useExperimentalSettings = () => {
 
             // If we had a 404 before (no data exists), create the key
             // Otherwise update the existing key
-            const isCreate = currentData === null;
+            const isCreate = currentData === null || currentData === undefined;
 
             const mutationConfig = {
                 resource: DATASTORE_RESOURCE,
