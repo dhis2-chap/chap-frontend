@@ -157,6 +157,7 @@ jobs:
           publish: pnpm release:publish
           commit: "chore(release): version packages [skip release]"
           title: "chore(release): version packages"
+          createGithubReleases: false
         env:
           GITHUB_TOKEN: ${{ secrets.DHIS2_BOT_GITHUB_TOKEN }}
           D2_APP_HUB_TOKEN: ${{ secrets.DHIS2_BOT_APPHUB_TOKEN }}
