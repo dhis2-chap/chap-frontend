@@ -5,8 +5,8 @@ const path = require('path');
 
 const APP_DIR = path.join(__dirname, '..', 'apps', 'modeling-app');
 const BUNDLE_DIR = path.join(APP_DIR, 'build', 'bundle');
-const CHANGELOG_PATH = path.join(__dirname, '..', 'CHANGELOG.md');
-const ROOT_PACKAGE = require(path.join(__dirname, '..', 'package.json'));
+const CHANGELOG_PATH = path.join(APP_DIR, 'CHANGELOG.md');
+const APP_PACKAGE = require(path.join(APP_DIR, 'package.json'));
 
 const DRY_RUN = process.argv.includes('--dry-run');
 
@@ -46,7 +46,7 @@ const main = async () => {
     }
 
     const d2Config = validatePreConditions();
-    const version = ROOT_PACKAGE.version;
+    const version = APP_PACKAGE.version;
     const tag = `v${version}`;
 
     log(`Publishing version ${version}...`);
