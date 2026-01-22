@@ -15,6 +15,35 @@ const log = (message) => {
     console.log(`${prefix}${message}`);
 };
 
+const checkGitHubReleaseExists = (version) => {
+    const tag = `v${version}`;
+    try {
+        execSync(`gh release view "${tag}"`, { stdio: 'pipe' });
+        return true;
+    } catch {
+        return false;
+    }
+};
+
+const checkAppHubVersionExists = async (appId, version) => {
+    const baseUrl = process.env.APPHUB_BASE_URL || 'https://apps.dhis2.org';
+    const url = `${baseUrl}/api/v1/apps/${appId}`;
+
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            log(`Warning: App Hub returned ${response.status}. Assuming version not published.`);
+            return false;
+        }
+        const app = await response.json();
+        const versions = app.versions || [];
+        return versions.some(v => v.version === version);
+    } catch (error) {
+        log(`Warning: Could not check App Hub (${error.message}). Assuming version not published.`);
+        return false;
+    }
+};
+
 const validatePreConditions = () => {
     log('Validating pre-conditions...');
     const d2ConfigPath = path.join(APP_DIR, 'd2.config.js');
@@ -49,6 +78,18 @@ const main = async () => {
     const version = APP_PACKAGE.version;
     const tag = `v${version}`;
 
+    log('Checking if version already exists...');
+    const gitHubExists = checkGitHubReleaseExists(version);
+    const appHubExists = await checkAppHubVersionExists(d2Config.id, version);
+
+    if (gitHubExists && appHubExists) {
+        log(`Version ${version} already published to both GitHub and App Hub. Skipping.`);
+        process.exit(0);
+    }
+
+    log(`  GitHub release ${tag}: ${gitHubExists ? 'exists' : 'not found'}`);
+    log(`  App Hub version ${version}: ${appHubExists ? 'exists' : 'not found'}`);
+
     log(`Publishing version ${version}...`);
 
     if (fs.existsSync(BUNDLE_DIR)) {
@@ -77,32 +118,40 @@ const main = async () => {
     const baseUrl = process.env.APPHUB_BASE_URL || 'https://apps.dhis2.org';
     const channel = process.env.APPHUB_CHANNEL || 'stable';
 
-    log(`Publishing to App Hub (channel: ${channel})...`);
-    if (!DRY_RUN) {
-        execSync(`pnpm d2-app-scripts publish --channel ${channel}`, {
-            cwd: APP_DIR,
-            stdio: 'inherit',
-            env: { ...process.env }
-        });
-    }
-    log(`  App Hub: ${baseUrl}/app/${d2Config.id}`);
-
-    log(`Creating GitHub release ${tag}...`);
-    const releaseNotes = extractChangelogForVersion(version);
-
-    if (!DRY_RUN) {
-        const releaseNotesFile = '/tmp/release-notes.md';
-        fs.writeFileSync(releaseNotesFile, releaseNotes);
-
-        execSync(
-            `gh release create "${tag}" ${bundleFiles.map(f => `"${f}"`).join(' ')} ` +
-            `--title "v${version}" --notes-file "${releaseNotesFile}"`,
-            { stdio: 'inherit' }
-        );
-
-        fs.unlinkSync(releaseNotesFile);
+    if (appHubExists) {
+        log(`Skipping App Hub publish - version ${version} already exists.`);
     } else {
-        log(`  Would create release with notes:\n${releaseNotes.slice(0, 200)}...`);
+        log(`Publishing to App Hub (channel: ${channel})...`);
+        if (!DRY_RUN) {
+            execSync(`pnpm d2-app-scripts publish --channel ${channel}`, {
+                cwd: APP_DIR,
+                stdio: 'inherit',
+                env: { ...process.env }
+            });
+        }
+        log(`  App Hub: ${baseUrl}/app/${d2Config.id}`);
+    }
+
+    if (gitHubExists) {
+        log(`Skipping GitHub release - ${tag} already exists.`);
+    } else {
+        log(`Creating GitHub release ${tag}...`);
+        const releaseNotes = extractChangelogForVersion(version);
+
+        if (!DRY_RUN) {
+            const releaseNotesFile = '/tmp/release-notes.md';
+            fs.writeFileSync(releaseNotesFile, releaseNotes);
+
+            execSync(
+                `gh release create "${tag}" ${bundleFiles.map(f => `"${f}"`).join(' ')} ` +
+                `--title "v${version}" --notes-file "${releaseNotesFile}"`,
+                { stdio: 'inherit' }
+            );
+
+            fs.unlinkSync(releaseNotesFile);
+        } else {
+            log(`  Would create release with notes:\n${releaseNotes.slice(0, 200)}...`);
+        }
     }
 
     log(`\nSuccessfully published ${version}`);
