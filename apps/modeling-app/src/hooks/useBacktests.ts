@@ -10,6 +10,8 @@ export const useBacktests = () => {
         staleTime: 5 * 60 * 1000,
         cacheTime: 5 * 60 * 1000,
         retry: 0,
+        refetchOnMount: 'always',
+        refetchOnWindowFocus: true,
     });
 
     return {
