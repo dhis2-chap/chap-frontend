@@ -1,0 +1,1 @@
+export { ModelTemplatesPlaceholder } from './ModelTemplatesPlaceholder';

@@ -5,9 +5,9 @@ type Props = {
     includeArchived?: boolean;
 };
 
-export const useModels = ({ includeArchived = false }: Props = {}) => {
+export const useConfiguredModels = ({ includeArchived = false }: Props = {}) => {
     const { data, error, isLoading } = useQuery<ModelSpecRead[], ApiError>({
-        queryKey: ['models'],
+        queryKey: ['configuredModels'],
         queryFn: () => CrudService.listConfiguredModelsCrudConfiguredModelsGet(),
         staleTime: Infinity,
         cacheTime: Infinity,

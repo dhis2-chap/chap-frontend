@@ -6,7 +6,7 @@ const PARAM_KEYS = {
     includeArchived: 'includeArchived',
 };
 
-export const useModelsTableFilters = () => {
+export const useConfiguredModelsTableFilters = () => {
     const [searchParams, setSearchParams] = useSearchParams();
 
     const search = searchParams.get(PARAM_KEYS.search) || '';

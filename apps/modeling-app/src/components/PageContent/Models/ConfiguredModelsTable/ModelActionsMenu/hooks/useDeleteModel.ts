@@ -30,7 +30,7 @@ export const useDeleteModel = ({ onSuccess, onError }: Props = {}) => {
             await CrudService.deleteConfiguredModelCrudConfiguredModelsConfiguredModelIdDelete(id);
         },
         onSuccess: (_, id) => {
-            queryClient.invalidateQueries({ queryKey: ['models'] });
+            queryClient.invalidateQueries({ queryKey: ['configuredModels'] });
             showSuccessAlert();
             onSuccess?.({ id });
         },

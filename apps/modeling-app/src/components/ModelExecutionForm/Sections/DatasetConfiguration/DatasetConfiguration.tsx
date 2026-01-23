@@ -10,7 +10,7 @@ import i18n from '@dhis2/d2-i18n';
 import cn from 'classnames';
 import { Control, FieldErrors, useFormContext, useWatch } from 'react-hook-form';
 import { ModelExecutionFormValues, CovariateMapping } from '../../../ModelExecutionForm/hooks/useModelExecutionFormState';
-import { useModels } from '../../../../hooks/useModels';
+import { useConfiguredModels } from '../../../../hooks/useConfiguredModels';
 import { DataMappingModal } from './DataMappingModal';
 import { useDatasetValidation } from './useDatasetValidation';
 import styles from './DatasetConfiguration.module.css';
@@ -35,7 +35,7 @@ export const DatasetConfiguration = ({
     const modelId = useWatch({ control, name: 'modelId' });
     const datasetValidation = useDatasetValidation();
     const mappingStatus = datasetValidation.getDetailedValidationSummary();
-    const { models } = useModels();
+    const { models } = useConfiguredModels();
     const { isCompatible: isDVCompatible, isLoading: isDVLoading } = useInstalledDVVersion();
 
     const selectedModel = models?.find(model => model.id.toString() === modelId);

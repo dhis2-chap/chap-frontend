@@ -8,7 +8,7 @@ import i18n from '@dhis2/d2-i18n';
 import cn from 'classnames';
 import { Control, useFormContext, useWatch } from 'react-hook-form';
 import { ModelExecutionFormValues } from '../../../ModelExecutionForm/hooks/useModelExecutionFormState';
-import { useModels } from '../../../../hooks/useModels';
+import { useConfiguredModels } from '../../../../hooks/useConfiguredModels';
 import { ModelSpecRead } from '@dhis2-chap/ui';
 import { ModelSelectionModal } from './ModelSelectionModal';
 import styles from './ModelSelector.module.css';
@@ -20,7 +20,7 @@ type Props = {
 export const ModelSelector = ({
     control,
 }: Props) => {
-    const { models, isLoading } = useModels();
+    const { models, isLoading } = useConfiguredModels();
     const [isModelModalOpen, setIsModelModalOpen] = useState(false);
     const methods = useFormContext<ModelExecutionFormValues>();
     const modelId = useWatch({ control, name: 'modelId' });

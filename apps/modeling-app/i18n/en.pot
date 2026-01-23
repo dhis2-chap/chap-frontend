@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-01-22T16:26:15.562Z\n"
-"PO-Revision-Date: 2026-01-22T16:26:15.563Z\n"
+"POT-Creation-Date: 2026-01-23T13:59:58.752Z\n"
+"PO-Revision-Date: 2026-01-23T13:59:58.752Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -795,27 +795,8 @@ msgstr "Predict..."
 msgid "Error loading jobs"
 msgstr "Error loading jobs"
 
-msgid "Are you sure you want to archive this model?"
-msgstr "Are you sure you want to archive this model?"
-
-msgid ""
-"You will still be able to view evaluations for this model, but you will not "
-"be able to create new evaluations or predictions."
-msgstr ""
-"You will still be able to view evaluations for this model, but you will not "
-"be able to create new evaluations or predictions."
-
-msgid "Archive"
-msgstr "Archive"
-
-msgid "View evaluations"
-msgstr "View evaluations"
-
-msgid "Model archived"
-msgstr "Model archived"
-
-msgid "Failed to archive model"
-msgstr "Failed to archive model"
+msgid "Error loading configured models"
+msgstr "Error loading configured models"
 
 msgid "Author"
 msgstr "Author"
@@ -840,6 +821,40 @@ msgstr "No models available"
 
 msgid "Include archived"
 msgstr "Include archived"
+
+msgid "Are you sure you want to archive this model?"
+msgstr "Are you sure you want to archive this model?"
+
+msgid ""
+"You will still be able to view evaluations for this model, but you will not "
+"be able to create new evaluations or predictions."
+msgstr ""
+"You will still be able to view evaluations for this model, but you will not "
+"be able to create new evaluations or predictions."
+
+msgid "Archive"
+msgstr "Archive"
+
+msgid "View evaluations"
+msgstr "View evaluations"
+
+msgid "Model archived"
+msgstr "Model archived"
+
+msgid "Failed to archive model"
+msgstr "Failed to archive model"
+
+msgid "Coming Soon"
+msgstr "Coming Soon"
+
+msgid "Model templates functionality will be available in a future release."
+msgstr "Model templates functionality will be available in a future release."
+
+msgid "Configured Models"
+msgstr "Configured Models"
+
+msgid "Model Templates"
+msgstr "Model Templates"
 
 msgid "Error loading model templates"
 msgstr "Error loading model templates"
@@ -1287,11 +1302,14 @@ msgstr "Turn on to access experimental features in the app"
 msgid "Available features"
 msgstr "Available features"
 
-msgid "Placeholder feature"
-msgstr "Placeholder feature"
+msgid "Metric plots"
+msgstr "Metric plots"
 
-msgid "This is a placeholder for future experimental features"
-msgstr "This is a placeholder for future experimental features"
+msgid "Show metric visualization plots in the evaluation dashboard"
+msgstr "Show metric visualization plots in the evaluation dashboard"
+
+msgid "Show evaluation visualization plots in the evaluation dashboard"
+msgstr "Show evaluation visualization plots in the evaluation dashboard"
 
 msgid "Settings saved successfully"
 msgstr "Settings saved successfully"
@@ -1470,8 +1488,12 @@ msgstr "Active jobs"
 msgid "View and manage currently running jobs and their status."
 msgstr "View and manage currently running jobs and their status."
 
-msgid "Manage configured models available in your system."
-msgstr "Manage configured models available in your system."
+msgid ""
+"Manage configured models and explore model templates available in your "
+"system."
+msgstr ""
+"Manage configured models and explore model templates available in your "
+"system."
 
 msgid ""
 "Configure a new model with custom settings or parameters based on a model "

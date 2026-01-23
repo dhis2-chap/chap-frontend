@@ -1,10 +1,10 @@
 import { Input, Checkbox } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
-import styles from './ModelsTableFilters.module.css';
-import { useModelsTableFilters } from '../hooks/useModelsTableFilters';
+import styles from './ConfiguredModelsTableFilters.module.css';
+import { useConfiguredModelsTableFilters } from '../hooks/useConfiguredModelsTableFilters';
 
-export const ModelsTableFilters = () => {
-    const { search, setSearch, includeArchived, setIncludeArchived } = useModelsTableFilters();
+export const ConfiguredModelsTableFilters = () => {
+    const { search, setSearch, includeArchived, setIncludeArchived } = useConfiguredModelsTableFilters();
 
     const handleSearchChange = (value: string | undefined) => {
         const searchValue = value || undefined;

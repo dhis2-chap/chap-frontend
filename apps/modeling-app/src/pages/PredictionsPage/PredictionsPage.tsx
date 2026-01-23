@@ -8,11 +8,11 @@ import styles from './PredictionsPage.module.css';
 import { usePredictions } from '../../hooks/usePredictions';
 import { PredictionsTable } from '../../components/PredictionsTable';
 import { PageHeader } from '../../features/common-features/PageHeader/PageHeader';
-import { useModels } from '../../hooks/useModels';
+import { useConfiguredModels } from '../../hooks/useConfiguredModels';
 
 export const PredictionsPage: React.FC = () => {
     const { predictions, error: predictionsError, isLoading: predictionsLoading } = usePredictions();
-    const { models, error: modelsError, isLoading: modelsLoading } = useModels();
+    const { models, error: modelsError, isLoading: modelsLoading } = useConfiguredModels();
 
     if (predictionsLoading || modelsLoading) {
         return (

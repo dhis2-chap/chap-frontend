@@ -23,10 +23,10 @@ import {
     Column,
 } from '@tanstack/react-table';
 import { ModelSpecRead, Pill } from '@dhis2-chap/ui';
-import styles from './ModelsTable.module.css';
+import styles from './ConfiguredModelsTable.module.css';
 import { ModelActionsMenu } from './ModelActionsMenu';
-import { ModelsTableFilters } from './ModelsTableFilters';
-import { useModelsTableFilters } from './hooks/useModelsTableFilters';
+import { ConfiguredModelsTableFilters } from './ConfiguredModelsTableFilters';
+import { useConfiguredModelsTableFilters } from './hooks/useConfiguredModelsTableFilters';
 import { useNavigate } from 'react-router-dom';
 import { useTablePaginationParams } from '../../../../hooks/useTablePaginationParams';
 
@@ -129,8 +129,8 @@ type Props = {
     models: ModelSpecRead[];
 };
 
-export const ModelsTable = ({ models }: Props) => {
-    const { search } = useModelsTableFilters();
+export const ConfiguredModelsTable = ({ models }: Props) => {
+    const { search } = useConfiguredModelsTableFilters();
     const navigate = useNavigate();
     const { pageIndex, pageSize, setPageIndex, setPageSize } = useTablePaginationParams();
 
@@ -160,7 +160,7 @@ export const ModelsTable = ({ models }: Props) => {
         <div>
             <div className={styles.buttonContainer}>
                 <div className={styles.leftSection}>
-                    <ModelsTableFilters />
+                    <ConfiguredModelsTableFilters />
                 </div>
                 <div className={styles.rightSection}>
                     <Button
