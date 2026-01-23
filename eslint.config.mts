@@ -30,6 +30,10 @@ export default defineConfig([
         rules: {
             '@stylistic/operator-linebreak': ['error', 'before', { overrides: { '=': 'after', '&&': 'after' } }],
             '@stylistic/multiline-ternary': 'off',
+            '@stylistic/padding-line-between-statements': [
+                'error',
+                { blankLine: 'never', prev: 'import', next: 'import' },
+            ],
         },
     },
     {
