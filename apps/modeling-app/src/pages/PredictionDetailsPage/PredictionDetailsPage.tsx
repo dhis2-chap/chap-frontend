@@ -1,4 +1,3 @@
-import React from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { useNavigate } from 'react-router-dom';
 import { Button, IconArrowLeft16 } from '@dhis2/ui';

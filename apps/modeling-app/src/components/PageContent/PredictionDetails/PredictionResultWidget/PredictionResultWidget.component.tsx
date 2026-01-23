@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styles from './PredictionResultWidget.module.css';
 import i18n from '@dhis2/d2-i18n';
 import { TabBar, Tab, Menu, MenuItem } from '@dhis2/ui';

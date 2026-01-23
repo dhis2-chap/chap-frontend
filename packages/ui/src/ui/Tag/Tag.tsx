@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { IconCross16 } from '@dhis2/ui';
 import cx from 'classnames';
 import styles from './Tag.module.css';

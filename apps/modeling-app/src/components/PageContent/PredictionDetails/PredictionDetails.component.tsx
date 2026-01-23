@@ -1,4 +1,3 @@
-import React from 'react';
 import styles from './PredictionDetails.module.css';
 import { PredictionInfo, ModelSpecRead } from '@dhis2-chap/ui';
 import { PredictionResultWidget } from './PredictionResultWidget/PredictionResultWidget.container';

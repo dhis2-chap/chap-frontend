@@ -1,4 +1,3 @@
-import React from 'react';
 import { InputField } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { Controller, useFormContext, useWatch } from 'react-hook-form';

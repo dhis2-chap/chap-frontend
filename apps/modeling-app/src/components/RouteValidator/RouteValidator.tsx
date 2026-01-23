@@ -1,4 +1,3 @@
-import React from 'react';
 import { useRoute } from '../../hooks/useRoute';
 import { CircularLoader } from '@dhis2/ui';
 import { Navigate } from 'react-router-dom';

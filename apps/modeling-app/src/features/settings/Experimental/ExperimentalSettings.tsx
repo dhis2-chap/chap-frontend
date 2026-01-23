@@ -1,4 +1,4 @@
-import React, { Card, CircularLoader, NoticeBox } from '@dhis2/ui';
+import { Card, CircularLoader, NoticeBox } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { useExperimentalSettings, FEATURES } from './hooks/useExperimentalSettings';
 import { ChoiceCard } from './ChoiceCard';

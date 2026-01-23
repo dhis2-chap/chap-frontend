@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { PredictionInfo } from '@dhis2-chap/ui';
 import { Tab, TabBar } from '@dhis2/ui';

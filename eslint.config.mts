@@ -44,6 +44,7 @@ export default defineConfig([
     },
     ...tseslint.configs.recommended,
     pluginReact.configs.flat.recommended,
+    pluginReact.configs.flat['jsx-runtime'],
     {
         files: ['**/*.{ts,tsx}'],
         settings: {
@@ -56,6 +57,7 @@ export default defineConfig([
         rules: {
             '@typescript-eslint/no-explicit-any': 'off',
             'indent': 'off',
+            'react/prop-types': 'off',
         },
     },
 ]);

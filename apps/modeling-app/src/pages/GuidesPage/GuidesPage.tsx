@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useParams, Navigate } from 'react-router-dom';
 import i18n from '@dhis2/d2-i18n';
 import { getGuideBySlug, getFirstGuide } from '@docs/index';

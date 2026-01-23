@@ -1,4 +1,3 @@
-import React from 'react';
 import { useDataItemById } from '@/hooks/useDataItemById';
 import { useApiDataQuery } from '@/utils/useApiDataQuery';
 import { DataItemSelectField } from './DataItemSelectField';

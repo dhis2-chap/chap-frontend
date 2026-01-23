@@ -1,4 +1,3 @@
-import React from 'react';
 import { CircularLoader } from '@dhis2/ui';
 import { PredictionOrgUnitSeries, PredictionMap } from '@dhis2-chap/ui';
 import { useOrgUnitGeometry } from '../../../../../hooks/useOrgUnitGeometry';

@@ -1,4 +1,3 @@
-import React from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { FormProvider } from 'react-hook-form';
 import { Card } from '@dhis2-chap/ui';

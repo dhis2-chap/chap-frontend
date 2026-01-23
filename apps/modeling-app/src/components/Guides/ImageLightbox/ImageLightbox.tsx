@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { createPortal } from 'react-dom';
 import styles from './ImageLightbox.module.css';

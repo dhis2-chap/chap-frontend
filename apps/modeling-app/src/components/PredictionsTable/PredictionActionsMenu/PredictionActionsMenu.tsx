@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { FlyoutMenu, MenuItem, IconDelete16, IconMore16, IconView16 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { OverflowButton } from '@dhis2-chap/ui';
