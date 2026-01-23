@@ -65,7 +65,7 @@ This project uses [Changesets](https://github.com/changesets/changesets) to mana
 
 ### Adding a Changeset
 
-When making changes that should be released, create a changeset:
+When making changes that should be part of the changelog or released, create a changeset:
 
 ```bash
 pnpm changeset
@@ -87,7 +87,7 @@ This will prompt you to:
 Include the ticket number at the end of your changeset description when applicable:
 
 ```
-Fixed the broken navigation link [CLIM-233]
+Fixed the broken navigation link [CLIM-XXX]
 ```
 
 ## License
