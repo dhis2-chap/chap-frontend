@@ -2,17 +2,17 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 100%;
+    inline-size: 100%;
     gap: 16px;
 }
 
 .inputContainer {
-    width: 200px;
-    transition: width 0.3s ease;
+    inline-size: 200px;
+    transition: inline-size 0.3s ease;
 }
 
 .inputContainer:focus-within {
-    width: 300px;
+    inline-size: 300px;
 }
 
 .filtersGroup {
@@ -22,7 +22,7 @@
 }
 
 .singleSelectContainer {
-    min-width: 200px;
+    min-inline-size: 200px;
 }
 
 .singleSelectContainer [data-test="dhis2-uicore-singleselect-clear"] {
@@ -30,6 +30,6 @@
 }
 
 .singleSelectMenuItem {
-    width: 100%;
+    inline-size: 100%;
     text-overflow: ellipsis;
 } 

@@ -1,7 +1,7 @@
 .widgetContainer {
     display: flex;
     flex-direction: column;
-    width: 100%;
+    inline-size: 100%;
 }
 
 .loadingContainer {
@@ -26,26 +26,26 @@
 }
 
 .tabBar {
-    margin-bottom: 1rem;
+    margin-block-end: 1rem;
 }
 
 .mainLayout {
     display: flex;
     gap: 1rem;
-    min-height: 400px;
+    min-block-size: 400px;
 }
 
 .sidebar {
     flex-shrink: 0;
-    width: 200px;
+    inline-size: 200px;
     border-inline-end: 1px solid var(--colors-grey300);
     overflow-y: auto;
-    max-height: 400px;
+    max-block-size: 400px;
 }
 
 .plotArea {
     flex: 1;
-    min-width: 0;
+    min-inline-size: 0;
     display: flex;
     flex-direction: column;
 }

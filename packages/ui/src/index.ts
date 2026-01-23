@@ -20,7 +20,15 @@ export { ComparisonPlotList } from './components/evaluation/ComparisonPlotList/C
 export { ComparionPlotWrapper } from './components/evaluation/ComparionPlotWrapper/ComparionPlotWrapper';
 export { PredictionTable } from './components/predictions/PredictionTable/PredictionTable';
 export { PredictionMap } from './components/predictions/PredictionMap/PredictionMap';
-export { OverflowButton, Ping, Pill, Card, StatusIndicator, Tag, Widget } from './ui';
+export {
+    OverflowButton,
+    Ping,
+    Pill,
+    Card,
+    StatusIndicator,
+    Tag,
+    Widget,
+} from './ui';
 
 export type { PillVariant } from './ui/Pill';
 export type { TagVariant } from './ui/Tag';
@@ -36,9 +44,7 @@ export type {
     PredictionInfo,
 } from './interfaces/Prediction';
 
-export type {
-    VisualizationInfo,
-} from './httpfunctions/models/VisualizationInfo';
+export type { VisualizationInfo } from './httpfunctions/models/VisualizationInfo';
 
 // Services
 export { CrudService } from './httpfunctions/services/CrudService';

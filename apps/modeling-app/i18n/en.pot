@@ -1189,8 +1189,14 @@ msgstr ""
 "elements across all organisation units and time periods. This action is "
 "irreversible."
 
-msgid "Type \"delete\" to confirm"
-msgstr "Type \"delete\" to confirm"
+msgid "Data elements to be pruned{{colon}}"
+msgstr "Data elements to be pruned{{colon}}"
+
+msgid "To confirm, type {{quote}}delete{{quote}} in the field below{{colon}}"
+msgstr "To confirm, type {{quote}}delete{{quote}} in the field below{{colon}}"
+
+msgid "Type {{quote}}delete{{quote}} to confirm"
+msgstr "Type {{quote}}delete{{quote}} to confirm"
 
 msgid "Loading..."
 msgstr "Loading..."

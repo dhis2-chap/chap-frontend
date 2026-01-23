@@ -12,11 +12,12 @@ type UseAppsOptions = {
     select?: (apps: App[]) => App[];
 };
 
-export const useApps = ({
-    enabled = true,
-    select,
-}: UseAppsOptions = {}) => {
-    const { data: apps, isLoading, error } = useApiDataQuery<App[]>({
+export const useApps = ({ enabled = true, select }: UseAppsOptions = {}) => {
+    const {
+        data: apps,
+        isLoading,
+        error,
+    } = useApiDataQuery<App[]>({
         queryKey: ['apps'],
         query: {
             resource: 'apps',

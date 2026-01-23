@@ -49,7 +49,7 @@ export const SetChapUrl = ({ children }: { children: React.ReactNode }) => {
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    height: '100vh',
+                    blockSize: '100vh',
                 }}
             >
                 <CircularLoader />

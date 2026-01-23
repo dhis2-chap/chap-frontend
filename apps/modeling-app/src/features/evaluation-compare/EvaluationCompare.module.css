@@ -28,19 +28,19 @@
 .selectorRow {
     display: flex;
     gap: var(--spacers-dp8);
-    width: 100%;
+    inline-size: 100%;
 }
 
 .selectorRow > div {
-    width: 100%;
+    inline-size: 100%;
 }
 
 .selectionToolbar {
-    max-width: 1400px;
+    max-inline-size: 1400px;
     display: flex;
     flex-direction: column;
     gap: var(--spacers-dp8);
-    width: 100%;
+    inline-size: 100%;
     align-self: center;
 }
 
@@ -50,7 +50,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100%;
+    block-size: 100%;
     gap: var(--spacers-dp16);
     padding-block-start: var(--spacers-dp16);
 }
@@ -85,8 +85,8 @@
 }
 
 .iconGroup > svg {
-    width: 32px;
-    height: 32px;
+    inline-size: 32px;
+    block-size: 32px;
 }
 
 .textGroup {
@@ -108,10 +108,10 @@
 .footerSlider {
     position: fixed;
     z-index: 1;
-    bottom: 0;
+    inset-block-end: 0;
     margin-block-end: var(--spacers-dp16);
-    width: 50%;
-    min-width: 350px;
+    inline-size: 50%;
+    min-inline-size: 350px;
     display: flex;
     align-self: center;
     border-radius: 10px;

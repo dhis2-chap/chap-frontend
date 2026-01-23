@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Card, IconAdd16 } from '@dhis2/ui';
+import { Button, Card, CircularLoader, IconAdd16 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { useForm, useFieldArray, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -111,7 +111,11 @@ export const DataPruningCard = () => {
     const showAddButton = fields.length < MAX_DATA_ELEMENTS;
 
     if (isAuthorityLoading) {
-        return null;
+        return (
+            <div className={styles.loadingContainer}>
+                <CircularLoader />
+            </div>
+        );
     }
 
     if (!isSuperUser) {

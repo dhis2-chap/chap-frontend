@@ -9,17 +9,14 @@ interface ComponentWrapperProps {
 export const defaultMaxWidth: string = '1400px';
 
 const style: React.CSSProperties = {
-    maxWidth: defaultMaxWidth,
-    marginLeft: 'auto',
-    marginRight: 'auto',
+    maxInlineSize: defaultMaxWidth,
+    marginInlineStart: 'auto',
+    marginInlineEnd: 'auto',
     padding: '20px 16px',
-    width: '100%',
+    inlineSize: '100%',
 };
 
-const ComponentWrapper = ({
-    children,
-    maxWidth,
-}: ComponentWrapperProps) => {
+const ComponentWrapper = ({ children, maxWidth }: ComponentWrapperProps) => {
     const fullWidthRoute = useMatches().some(
         match => !!(match.handle as RouteHandle)?.fullWidth,
     );
@@ -28,8 +25,8 @@ const ComponentWrapper = ({
         <div
             style={{
                 ...style,
-                maxWidth: fullWidthRoute ? 'none' : maxWidth || defaultMaxWidth,
-                width: '100%',
+                maxInlineSize: fullWidthRoute ? 'none' : maxWidth || defaultMaxWidth,
+                inlineSize: '100%',
             }}
         >
             {children}

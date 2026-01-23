@@ -53,7 +53,7 @@ export const ConfirmPruningModal = ({
 
                 <div className={styles.dataElementsSection}>
                     <h4 className={styles.sectionTitle}>
-                        {i18n.t('Data elements to be pruned:')}
+                        {i18n.t('Data elements to be pruned{{colon}}', { colon: ':' })}
                     </h4>
                     <ul className={styles.dataElementsList}>
                         {dataElements.map(dataElement => (
@@ -66,12 +66,12 @@ export const ConfirmPruningModal = ({
 
                 <div className={styles.confirmationSection}>
                     <p className={styles.confirmationPrompt}>
-                        {i18n.t('To confirm, type "delete" in the field below:')}
+                        {i18n.t('To confirm, type {{quote}}delete{{quote}} in the field below{{colon}}', { quote: '"', colon: ':' })}
                     </p>
                     <Input
                         value={confirmationText}
                         onChange={handleConfirmationChange}
-                        placeholder={i18n.t('Type "delete" to confirm')}
+                        placeholder={i18n.t('Type {{quote}}delete{{quote}} to confirm', { quote: '"' })}
                         dataTest="confirmation-input"
                         disabled={isPending}
                     />

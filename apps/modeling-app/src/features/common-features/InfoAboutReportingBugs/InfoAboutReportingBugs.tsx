@@ -25,7 +25,7 @@ const InfoAboutReportingBugs = () => {
             {!isWarningDismissed && (
                 <div
                     className={styles.infoAboutReportingBugsInner}
-                    style={{ maxWidth: '1400px' }}
+                    style={{ maxInlineSize: '1400px' }}
                 >
                     <div>
                         <span className={styles.icon}>

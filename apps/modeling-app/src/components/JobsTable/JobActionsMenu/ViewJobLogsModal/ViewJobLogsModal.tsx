@@ -92,7 +92,7 @@ export const ViewJobLogsModal = ({ jobId, status, onClose }: ViewJobLogsModalPro
                             {logs || i18n.t('No logs reported for this job')}
                         </pre>
 
-                        <div style={{ marginTop: '1rem' }}>
+                        <div style={{ marginBlockStart: '1rem' }}>
                             <StatusCell status={status} />
                         </div>
                     </div>
