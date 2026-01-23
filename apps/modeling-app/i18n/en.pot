@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-01-22T12:19:22.946Z\n"
-"PO-Revision-Date: 2026-01-22T12:19:22.947Z\n"
+"POT-Creation-Date: 2026-01-22T16:26:15.562Z\n"
+"PO-Revision-Date: 2026-01-22T16:26:15.563Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -1259,6 +1259,40 @@ msgstr "Error"
 msgid "Please remember to rerun your analytics tables to update the system."
 msgstr "Please remember to rerun your analytics tables to update the system."
 
+msgid "Experimental features"
+msgstr "Experimental features"
+
+msgid "Warning"
+msgstr "Warning"
+
+msgid ""
+"These features are experimental and may be unstable or change without "
+"notice."
+msgstr ""
+"These features are experimental and may be unstable or change without "
+"notice."
+
+msgid "Enable experimental features"
+msgstr "Enable experimental features"
+
+msgid "Turn on to access experimental features in the app"
+msgstr "Turn on to access experimental features in the app"
+
+msgid "Available features"
+msgstr "Available features"
+
+msgid "Placeholder feature"
+msgstr "Placeholder feature"
+
+msgid "This is a placeholder for future experimental features"
+msgstr "This is a placeholder for future experimental features"
+
+msgid "Settings saved successfully"
+msgstr "Settings saved successfully"
+
+msgid "Failed to save settings"
+msgstr "Failed to save settings"
+
 msgid "Route configuration"
 msgstr "Route configuration"
 
@@ -1485,11 +1519,3 @@ msgstr ""
 msgctxt ") instead."
 msgid "Spaces are not allowed. Use dashes (-) or underscores ("
 msgstr "Spaces are not allowed. Use dashes (-) or underscores (_) instead."
-
-msgctxt "Application title"
-msgid "__MANIFEST_APP_TITLE"
-msgstr "Modeling"
-
-msgctxt "Application description"
-msgid "__MANIFEST_APP_DESCRIPTION"
-msgstr ""

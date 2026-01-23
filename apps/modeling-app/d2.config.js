@@ -8,6 +8,9 @@ const config = {
     customAuthorities: [
         'F_CHAP_MODELING_APP',
     ],
+    additionalNamespaces: [
+        { namespace: 'modeling', authorities: ['F_CHAP_MODELING_APP'] },
+    ],
     entryPoints: {
         app: './src/App.tsx',
     },
