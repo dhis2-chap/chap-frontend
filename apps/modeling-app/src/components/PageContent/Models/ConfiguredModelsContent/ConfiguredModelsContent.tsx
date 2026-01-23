@@ -2,9 +2,9 @@ import { Card } from '@dhis2-chap/ui';
 import { CircularLoader, NoticeBox } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import styles from './ConfiguredModelsContent.module.css';
-import { ConfiguredModelsTable } from './ConfiguredModelsTable';
-import { useConfiguredModels } from '../../../hooks/useConfiguredModels';
-import { useConfiguredModelsTableFilters } from './ConfiguredModelsTable/hooks/useConfiguredModelsTableFilters';
+import { ConfiguredModelsTable } from '../ConfiguredModelsTable';
+import { useConfiguredModels } from '../../../../hooks/useConfiguredModels';
+import { useConfiguredModelsTableFilters } from '../ConfiguredModelsTable/hooks/useConfiguredModelsTableFilters';
 
 export const ConfiguredModelsContent: React.FC = () => {
     const { includeArchived } = useConfiguredModelsTableFilters();
@@ -22,7 +22,7 @@ export const ConfiguredModelsContent: React.FC = () => {
         return (
             <div className={styles.errorContainer}>
                 <NoticeBox error title={i18n.t('Error loading configured models')}>
-                    {error.message || i18n.t('An unknown error occurred')}
+                    {error?.message || i18n.t('An unknown error occurred')}
                 </NoticeBox>
             </div>
         );

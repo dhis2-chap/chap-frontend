@@ -169,7 +169,7 @@ export const ConfiguredModelsTable = ({ models }: Props) => {
                         small
                         onClick={() => navigate('/models/new')}
                     >
-                        {i18n.t('New model')}
+                        {i18n.t('Configure new')}
                     </Button>
                 </div>
             </div>

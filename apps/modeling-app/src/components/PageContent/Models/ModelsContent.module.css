@@ -1,3 +1,7 @@
 .container {
     margin-block-start: var(--spacers-dp16);
 }
+
+.tabsWrapper {
+    display: inline-block;
+}

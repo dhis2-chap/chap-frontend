@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-01-23T13:59:58.752Z\n"
-"PO-Revision-Date: 2026-01-23T13:59:58.752Z\n"
+"POT-Creation-Date: 2026-01-23T14:30:56.844Z\n"
+"PO-Revision-Date: 2026-01-23T14:30:56.845Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -853,8 +853,14 @@ msgstr "Model templates functionality will be available in a future release."
 msgid "Configured Models"
 msgstr "Configured Models"
 
+msgid "Variants of a model template"
+msgstr "Variants of a model template"
+
 msgid "Model Templates"
 msgstr "Model Templates"
+
+msgid "Base models "
+msgstr "Base models "
 
 msgid "Error loading model templates"
 msgstr "Error loading model templates"

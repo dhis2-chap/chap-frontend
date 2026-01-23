@@ -1,5 +1,5 @@
 .container {
-    margin: 16px 0;
+    margin-block-start: var(--spacers-dp8);
 }
 
 .loadingContainer {
@@ -7,8 +7,4 @@
     justify-content: center;
     align-items: center;
     block-size: 200px;
-}
-
-.errorContainer {
-    margin: 16px 0;
 }

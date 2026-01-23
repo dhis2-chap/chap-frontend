@@ -9,7 +9,9 @@ export const ModelsContent = () => {
 
     return (
         <div className={styles.container}>
-            <ModelsPageTabs />
+            <div className={styles.tabsWrapper}>
+                <ModelsPageTabs />
+            </div>
             {isConfiguredTab && <ConfiguredModelsContent />}
             {isTemplatesTab && <ModelTemplatesPlaceholder />}
         </div>
