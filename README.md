@@ -18,27 +18,27 @@ chap-frontend/
 ### Prerequisites
 
 - Node.js 20.x or higher
-- Yarn 1.22.19
+- pnpm 10.x or higher
 
 ### Installation and Development
 
 ```bash
 # Install dependencies
-yarn install
+pnpm install
 
 # Build all packages
-yarn build
+pnpm build
 
 # Start development server
-yarn start
+pnpm start
 ```
 
 ### Code Quality
 
 ```bash
-yarn linter:check    # Run linting
-yarn tsc:check       # Type checking
-yarn format          # Format code
+pnpm linter:check    # Run linting
+pnpm tsc:check       # Type checking
+pnpm format          # Format code
 ```
 
 ## API Client Generation
@@ -47,8 +47,8 @@ The UI package includes an auto-generated TypeScript API client from OpenAPI spe
 
 ```bash
 cd packages/ui
-yarn generate              # Generate from local spec
-yarn generate-localhost    # Generate from running backend
+pnpm generate              # Generate from local spec
+pnpm generate-localhost    # Generate from running backend
 ```
 
 ## Commit Standards
@@ -58,6 +58,37 @@ This project follows Conventional Commits:
 - `fix:` → Patch release
 - `feat:` → Minor release
 - `BREAKING CHANGE:` → Major release
+
+## Changeset Workflow
+
+This project uses [Changesets](https://github.com/changesets/changesets) to manage versioning and changelogs.
+
+### Adding a Changeset
+
+When making changes that should be released, create a changeset:
+
+```bash
+pnpm changeset
+```
+
+This will prompt you to:
+1. Select the packages affected by your change
+2. Choose the version bump type (patch, minor, or major)
+3. Write a summary of the changes
+
+### Version Bumps
+
+- `patch` → Bug fixes (1.0.0 → 1.0.1)
+- `minor` → New features (1.0.0 → 1.1.0)
+- `major` → Breaking changes (1.0.0 → 2.0.0)
+
+### Changeset Message Format
+
+Include the ticket number at the end of your changeset description when applicable:
+
+```
+Fixed the broken navigation link [CLIM-233]
+```
 
 ## License
 
