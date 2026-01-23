@@ -1,0 +1,14 @@
+.container {
+    margin-block-start: var(--spacers-dp8);
+}
+
+.loadingContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    block-size: 200px;
+}
+
+.errorContainer {
+    margin-block-start: var(--spacers-dp8);
+}

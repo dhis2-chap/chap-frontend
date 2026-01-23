@@ -1,6 +1,6 @@
 import { ModelsPageTabs } from './ModelsPageTabs';
 import { ConfiguredModelsContent } from './ConfiguredModelsContent';
-import { ModelTemplatesPlaceholder } from './ModelTemplatesPlaceholder';
+import { ModelTemplatesContent } from './ModelTemplatesContent';
 import { useModelsPageTab } from './hooks/useModelsPageTab';
 import styles from './ModelsContent.module.css';
 
@@ -13,7 +13,7 @@ export const ModelsContent = () => {
                 <ModelsPageTabs />
             </div>
             {isConfiguredTab && <ConfiguredModelsContent />}
-            {isTemplatesTab && <ModelTemplatesPlaceholder />}
+            {isTemplatesTab && <ModelTemplatesContent />}
         </div>
     );
 };

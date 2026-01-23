@@ -3,5 +3,5 @@
 }
 
 .tabsWrapper {
-    display: inline-block;
+    inline-size: 400px;
 }
