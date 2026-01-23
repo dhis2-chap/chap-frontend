@@ -1,4 +1,3 @@
-import React from 'react';
 import { useMatches } from 'react-router-dom';
 import { RouteHandle } from '../App';
 

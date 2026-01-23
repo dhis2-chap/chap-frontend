@@ -1,4 +1,4 @@
-import React, { type ReactNode } from 'react';
+import { type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { IconArrowLeft24 } from '@dhis2/ui-icons';
 import i18n from '@dhis2/d2-i18n';

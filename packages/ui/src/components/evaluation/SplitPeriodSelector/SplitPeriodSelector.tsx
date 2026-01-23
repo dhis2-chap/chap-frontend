@@ -3,7 +3,6 @@ import {
     SingleSelectFieldProps,
     SingleSelectOption,
 } from '@dhis2/ui';
-import React from 'react';
 import { getPeriodNameFromId } from '../../../utils/Time';
 
 interface SplitPeriodSelectorProps extends SingleSelectFieldProps {

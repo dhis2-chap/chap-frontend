@@ -1,4 +1,3 @@
-import React from 'react';
 import { Tooltip } from '@dhis2/ui';
 import { StatusIndicator } from '@dhis2-chap/ui';
 import i18n from '@dhis2/d2-i18n';

@@ -1,0 +1,102 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    inline-size: 100%;
+    max-inline-size: 800px;
+}
+
+.formContainer {
+    padding: 24px;
+}
+
+.header {
+    margin-block-end: 24px;
+}
+
+.header h2 {
+    margin: 0;
+    color: #1a1a1a;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.warningNotice {
+    margin-block-end: 24px;
+}
+
+.toggleList {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.choiceCard {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.choiceCard:hover {
+    background-color: #f5f5f5;
+}
+
+.choiceCardDisabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.choiceCardDisabled:hover {
+    background-color: transparent;
+}
+
+.choiceCardContent {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+    padding-inline-end: 16px;
+}
+
+.choiceCardTitle {
+    font-size: 14px;
+    font-weight: 500;
+    color: #1a1a1a;
+}
+
+.choiceCardDescription {
+    font-size: 13px;
+    color: #666;
+    line-height: 1.4;
+}
+
+.featureTogglesSection {
+    margin-block-start: 24px;
+    padding-block-start: 24px;
+    border-block-start: 1px solid #e0e0e0;
+}
+
+.featureTogglesHeader {
+    margin-block-end: 16px;
+}
+
+.featureTogglesHeader h3 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.loaderContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 48px;
+}

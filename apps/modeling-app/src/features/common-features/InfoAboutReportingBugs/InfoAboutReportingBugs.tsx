@@ -1,4 +1,3 @@
-import React from 'react';
 import styles from './InfoAboutReportingBugs.module.css';
 import { Button, IconCross16, IconWarning16 } from '@dhis2/ui';
 import { useLocalStorage } from '../../../hooks/useLocalStorage';

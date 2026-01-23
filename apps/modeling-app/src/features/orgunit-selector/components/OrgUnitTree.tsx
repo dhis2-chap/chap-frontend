@@ -1,8 +1,6 @@
 import i18n from '@dhis2/d2-i18n';
 import { useEffect } from 'react';
 import { OrganisationUnitTree } from '@dhis2/ui';
-
-import React from 'react';
 import { useOrgUnitRoots } from '../../../hooks/useOrgUnitRoots';
 
 interface OrgUnitTreeProps {

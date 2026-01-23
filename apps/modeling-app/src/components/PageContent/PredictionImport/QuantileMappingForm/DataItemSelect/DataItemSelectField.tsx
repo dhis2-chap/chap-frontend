@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { Label, Layer, Popper, IconChevronDown16, IconCross16 } from '@dhis2/ui';
 import { useApiDataQuery } from '@/utils/useApiDataQuery';

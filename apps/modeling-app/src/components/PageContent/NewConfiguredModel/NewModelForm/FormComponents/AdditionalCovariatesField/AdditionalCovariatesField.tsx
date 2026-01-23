@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { Button, InputField } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';

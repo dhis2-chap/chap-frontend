@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import { Modal, ModalTitle, ModalContent, ModalActions, Button, CircularLoader } from '@dhis2/ui';
 import { useQuery } from '@tanstack/react-query';
 import { ApiError, JobsService } from '@dhis2-chap/ui';

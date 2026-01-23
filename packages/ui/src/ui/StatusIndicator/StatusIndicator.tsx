@@ -1,4 +1,3 @@
-import React from 'react';
 import { Pill } from '../Pill';
 import { Ping } from '../Ping';
 import styles from './StatusIndicator.module.css';

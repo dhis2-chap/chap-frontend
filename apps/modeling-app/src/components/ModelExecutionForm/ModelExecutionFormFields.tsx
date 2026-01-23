@@ -1,4 +1,3 @@
-import React from 'react';
 import { type UseFormReturn } from 'react-hook-form';
 import { ModelExecutionFormValues } from './hooks/useModelExecutionFormState';
 import { NameInput } from './Sections/NameInput';
