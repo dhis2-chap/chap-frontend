@@ -1,3 +1,4 @@
+import React from 'react';
 import { Switch } from '@dhis2/ui';
 import styles from '../ExperimentalSettings.module.css';
 
