@@ -1,4 +1,3 @@
-import React from 'react';
 import cx from 'classnames';
 import type { PlainProps } from './iconButton.types';
 import styles from './iconButton.module.css';

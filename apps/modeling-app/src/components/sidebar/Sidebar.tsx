@@ -1,7 +1,7 @@
 import i18n from '@dhis2/d2-i18n';
 import { IconChevronLeft24 } from '@dhis2/ui';
 import cx from 'classnames';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import styles from './Sidebar.module.css';
 import {
@@ -72,7 +72,7 @@ export const Sidebar = ({
     className?: string;
     hideSidebar?: boolean;
 }) => {
-    const collapsedExternally = React.useRef<boolean>(false);
+    const collapsedExternally = useRef<boolean>(false);
     const [collapsed, setCollapsed] = useState(false);
 
     useEffect(() => {

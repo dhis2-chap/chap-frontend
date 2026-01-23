@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import {
     Modal,

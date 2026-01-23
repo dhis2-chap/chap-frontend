@@ -1,6 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import i18n from '@dhis2/d2-i18n';
-
 import { CrudService } from '@dhis2-chap/ui';
 import { useAlert } from '@dhis2/app-runtime';
 

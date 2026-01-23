@@ -1,4 +1,4 @@
-import React, { useMemo, useState, startTransition } from 'react';
+import { useMemo, useState, startTransition } from 'react';
 import {
     MultiSelect,
     MultiSelectOption,

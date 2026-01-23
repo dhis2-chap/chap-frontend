@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Card, ModelTemplateRead } from '@dhis2-chap/ui';
 import { z } from 'zod';

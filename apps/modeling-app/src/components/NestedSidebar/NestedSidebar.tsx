@@ -1,4 +1,3 @@
-import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { ConditionalTooltip } from '@/components/ConditionalTooltip';
 import styles from './NestedSidebar.module.css';

@@ -1,5 +1,3 @@
-import React from 'react';
-
 import styles from './OrgUnitSelector.module.css';
 import OrgUnitTree from './components/OrgUnitTree';
 import OrgUnitLevel from './components/OrgUnitLevel';

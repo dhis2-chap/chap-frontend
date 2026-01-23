@@ -1,4 +1,3 @@
-import React from 'react';
 import { Modal, ModalTitle, ModalContent, ModalActions, ButtonStrip, Button } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { useDeletePrediction } from '../../hooks/useDeletePrediction';

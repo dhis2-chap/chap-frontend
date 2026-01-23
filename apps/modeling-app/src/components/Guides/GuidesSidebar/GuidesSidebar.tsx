@@ -1,4 +1,3 @@
-import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { getCategories, getGuidesByCategory, getRootGuides } from '@docs/index';
 import styles from './GuidesSidebar.module.css';

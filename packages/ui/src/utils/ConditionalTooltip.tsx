@@ -1,4 +1,3 @@
-import React from 'react';
 import { Tooltip, type TooltipProps } from '@dhis2/ui';
 
 type Props = {

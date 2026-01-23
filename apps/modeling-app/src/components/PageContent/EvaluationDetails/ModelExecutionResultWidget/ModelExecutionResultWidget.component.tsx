@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { CircularLoader, Menu, MenuItem } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { Widget, ResultPlot, BackTestRead } from '@dhis2-chap/ui';

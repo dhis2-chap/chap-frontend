@@ -1,5 +1,4 @@
 import { NoticeBox } from '@dhis2/ui';
-import React from 'react';
 import style from './WarnAboutIncompatibleVersion.module.css';
 import { DefaultService } from '@dhis2-chap/ui';
 import { useConfig } from '@dhis2/app-runtime';

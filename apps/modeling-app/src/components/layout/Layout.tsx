@@ -1,4 +1,3 @@
-import React from 'react';
 import { Outlet, useMatches } from 'react-router-dom';
 import { Sidebar } from '../sidebar';
 import css from './Layout.module.css';

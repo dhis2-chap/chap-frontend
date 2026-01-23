@@ -1,4 +1,3 @@
-import React from 'react';
 import { Controller } from 'react-hook-form';
 import { SwitchField } from '@dhis2/ui';
 import { FieldProps } from '../types';

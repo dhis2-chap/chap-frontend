@@ -1,4 +1,3 @@
-import React from 'react';
 import { Plugin } from '@dhis2/app-runtime/experimental';
 
 export type VisualizationColumn = {

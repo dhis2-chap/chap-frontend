@@ -1,4 +1,3 @@
-import React from 'react';
 import { Button, ButtonStrip, IconImportItems24 } from '@dhis2/ui';
 import { Link } from 'react-router-dom';
 import i18n from '@dhis2/d2-i18n';
