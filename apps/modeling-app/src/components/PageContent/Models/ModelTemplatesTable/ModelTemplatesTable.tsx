@@ -1,4 +1,6 @@
+import { useState, useMemo } from 'react';
 import {
+    Button,
     DataTable,
     DataTableHead,
     DataTableRow,
@@ -6,6 +8,7 @@ import {
     DataTableCell,
     DataTableColumnHeader,
     DataTableFoot,
+    IconAdd16,
     Pagination,
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
@@ -24,7 +27,9 @@ import { useTablePaginationParams } from '../../../../hooks/useTablePaginationPa
 import { useTableSearchFilter } from '../../../../hooks/useTableSearchFilter';
 import { TableSearchFilter } from '../../../TableSearchFilter';
 import { modelStatusConfig } from '../../../../utils/modelStatusConfig';
+import { useExperimentalFeature, FEATURES } from '../../../../features/settings/Experimental';
 import styles from './ModelTemplatesTable.module.css';
+import { UploadTemplateModal } from './UploadTemplateModal';
 
 const labelByPeriodType: Record<string, string> = {
     month: i18n.t('Monthly'),
@@ -87,16 +92,21 @@ type Props = {
 };
 
 export const ModelTemplatesTable = ({ templates }: Props) => {
+    const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+    const { enabled: isUploadEnabled } = useExperimentalFeature(FEATURES.UPLOAD_MODEL_TEMPLATE);
     const { pageIndex, pageSize, setPageIndex, setPageSize } = useTablePaginationParams();
     const { search, setSearch } = useTableSearchFilter();
+
+    const columnFilters = useMemo(
+        () => (search ? [{ id: 'name', value: search }] : []),
+        [search],
+    );
 
     const table = useReactTable({
         data: templates || [],
         columns,
         state: {
-            columnFilters: [
-                ...(search ? [{ id: 'name', value: search }] : []),
-            ],
+            columnFilters,
             pagination: {
                 pageIndex,
                 pageSize,
@@ -115,11 +125,25 @@ export const ModelTemplatesTable = ({ templates }: Props) => {
     return (
         <div>
             <div className={styles.toolbar}>
-                <TableSearchFilter
-                    search={search}
-                    onSearchChange={setSearch}
-                    placeholder={i18n.t('Search templates')}
-                />
+                <div className={styles.leftSection}>
+                    <TableSearchFilter
+                        search={search}
+                        onSearchChange={setSearch}
+                        placeholder={i18n.t('Search templates')}
+                    />
+                </div>
+                {isUploadEnabled && (
+                    <div className={styles.rightSection}>
+                        <Button
+                            primary
+                            icon={<IconAdd16 />}
+                            small
+                            onClick={() => setIsUploadModalOpen(true)}
+                        >
+                            {i18n.t('Upload template')}
+                        </Button>
+                    </div>
+                )}
             </div>
             <DataTable>
                 <DataTableHead>
@@ -187,6 +211,11 @@ export const ModelTemplatesTable = ({ templates }: Props) => {
                     </DataTableRow>
                 </DataTableFoot>
             </DataTable>
+            {isUploadEnabled && isUploadModalOpen && (
+                <UploadTemplateModal
+                    onClose={() => setIsUploadModalOpen(false)}
+                />
+            )}
         </div>
     );
 };

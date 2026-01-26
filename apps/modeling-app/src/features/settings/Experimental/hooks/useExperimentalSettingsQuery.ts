@@ -1,6 +1,11 @@
 import { useDataEngine } from '@dhis2/app-runtime';
 import { useQuery } from '@tanstack/react-query';
-import { ExperimentalSettings, ExperimentalSettingsSchema, QUERY_KEY, DATASTORE_RESOURCE } from './useExperimentalSettings';
+import {
+    ExperimentalSettings,
+    ExperimentalSettingsSchema,
+    QUERY_KEY,
+    DATASTORE_RESOURCE,
+} from './useExperimentalSettings';
 
 export const useExperimentalSettingsQuery = () => {
     const engine = useDataEngine();

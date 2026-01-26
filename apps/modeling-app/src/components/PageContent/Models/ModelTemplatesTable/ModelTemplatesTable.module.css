@@ -1,4 +1,18 @@
 .toolbar {
     display: flex;
-    margin-bottom: 16px;
+    margin-block-end: var(--spacers-dp16);
+}
+
+.leftSection {
+    flex: 1;
+    display: flex;
+    gap: var(--spacers-dp8);
+    align-items: center;
+}
+
+.rightSection {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    gap: var(--spacers-dp4);
 }

@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-01-26T09:37:56.032Z\n"
-"PO-Revision-Date: 2026-01-26T09:37:56.032Z\n"
+"POT-Creation-Date: 2026-01-26T13:15:37.190Z\n"
+"PO-Revision-Date: 2026-01-26T13:15:37.191Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -847,8 +847,44 @@ msgstr "Failed to archive model"
 msgid "Error loading model templates"
 msgstr "Error loading model templates"
 
+msgid "Search templates"
+msgstr "Search templates"
+
+msgid "Upload template"
+msgstr "Upload template"
+
 msgid "No model templates available"
 msgstr "No model templates available"
+
+msgid "File must be a ZIP archive"
+msgstr "File must be a ZIP archive"
+
+msgid "Upload model template"
+msgstr "Upload model template"
+
+msgid "Template ZIP file"
+msgstr "Template ZIP file"
+
+msgid "Remove file"
+msgstr "Remove file"
+
+msgid "Drag and drop a ZIP file here"
+msgstr "Drag and drop a ZIP file here"
+
+msgid "or click to browse"
+msgstr "or click to browse"
+
+msgid "The ZIP file must contain an MLproject file at the root level."
+msgstr "The ZIP file must contain an MLproject file at the root level."
+
+msgid "Upload"
+msgstr "Upload"
+
+msgid "Model template uploaded successfully"
+msgstr "Model template uploaded successfully"
+
+msgid "Failed to upload model template"
+msgstr "Failed to upload model template"
 
 msgid "Configured Models"
 msgstr "Configured Models"
