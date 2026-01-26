@@ -38,7 +38,7 @@ export const EvaluationSummaryWidget = ({ evaluationId }: Props) => {
         );
     }
 
-    if (error || !backtest || modelsError) {
+    if (error || !backtest || !backtest.configuredModel || modelsError) {
         return (
             <WidgetWrapper>
                 <div className={styles.errorContainer}>

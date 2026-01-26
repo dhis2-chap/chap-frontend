@@ -37,7 +37,7 @@ export const PredictionSummaryWidget = ({ predictionId }: Props) => {
         );
     }
 
-    if (error || !prediction || modelsError) {
+    if (error || !prediction || !prediction.configuredModel || modelsError) {
         return (
             <WidgetWrapper>
                 <div className={styles.errorContainer}>

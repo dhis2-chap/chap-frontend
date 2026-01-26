@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-01-23T14:30:56.844Z\n"
-"PO-Revision-Date: 2026-01-23T14:30:56.845Z\n"
+"POT-Creation-Date: 2026-01-26T09:31:55.323Z\n"
+"PO-Revision-Date: 2026-01-26T09:31:55.324Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -813,8 +813,8 @@ msgstr "Archived"
 msgid "Active"
 msgstr "Active"
 
-msgid "New model"
-msgstr "New model"
+msgid "Configure new"
+msgstr "Configure new"
 
 msgid "No models available"
 msgstr "No models available"
@@ -844,26 +844,17 @@ msgstr "Model archived"
 msgid "Failed to archive model"
 msgstr "Failed to archive model"
 
-msgid "Coming Soon"
-msgstr "Coming Soon"
+msgid "Error loading model templates"
+msgstr "Error loading model templates"
 
-msgid "Model templates functionality will be available in a future release."
-msgstr "Model templates functionality will be available in a future release."
+msgid "No model templates available"
+msgstr "No model templates available"
 
 msgid "Configured Models"
 msgstr "Configured Models"
 
-msgid "Variants of a model template"
-msgstr "Variants of a model template"
-
 msgid "Model Templates"
 msgstr "Model Templates"
-
-msgid "Base models "
-msgstr "Base models "
-
-msgid "Error loading model templates"
-msgstr "Error loading model templates"
 
 msgid "No model templates found"
 msgstr "No model templates found"
@@ -1501,6 +1492,9 @@ msgstr ""
 "Manage configured models and explore model templates available in your "
 "system."
 
+msgid "New model"
+msgstr "New model"
+
 msgid ""
 "Configure a new model with custom settings or parameters based on a model "
 "template."
@@ -1553,3 +1547,11 @@ msgstr ""
 msgctxt ") instead."
 msgid "Spaces are not allowed. Use dashes (-) or underscores ("
 msgstr "Spaces are not allowed. Use dashes (-) or underscores (_) instead."
+
+msgctxt "Application title"
+msgid "__MANIFEST_APP_TITLE"
+msgstr "Modeling"
+
+msgctxt "Application description"
+msgid "__MANIFEST_APP_DESCRIPTION"
+msgstr ""
