@@ -29,5 +29,6 @@ export type ModelTemplateRead = {
     name: string;
     id: number;
     version?: (string | null);
+    sourceUrl?: (string | null);
 };
 

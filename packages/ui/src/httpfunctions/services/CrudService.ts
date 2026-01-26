@@ -8,6 +8,7 @@ import type { BackTestCreate } from '../models/BackTestCreate';
 import type { BackTestRead } from '../models/BackTestRead';
 import type { BackTestUpdate } from '../models/BackTestUpdate';
 import type { Body_create_dataset_csv_crud_datasets_csvFile_post } from '../models/Body_create_dataset_csv_crud_datasets_csvFile_post';
+import type { Body_upload_model_template_crud_model_templates_upload_post } from '../models/Body_upload_model_template_crud_model_templates_upload_post';
 import type { chap_core__rest_api__v1__jobs__DataBaseResponse } from '../models/chap_core__rest_api__v1__jobs__DataBaseResponse';
 import type { ConfiguredModelDB } from '../models/ConfiguredModelDB';
 import type { DatasetCreate } from '../models/DatasetCreate';
@@ -383,6 +384,28 @@ export class CrudService {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/crud/model-templates/available',
+        });
+    }
+    /**
+     * Upload Model Template
+     * Upload a model template as a zip file.
+     * The zip must contain an MLproject file at the root level.
+     * Skeleton implementation for frontend testing.
+     * @param formData
+     * @returns ModelTemplateRead Successful Response
+     * @throws ApiError
+     */
+    public static uploadModelTemplateCrudModelTemplatesUploadPost(
+        formData: Body_upload_model_template_crud_model_templates_upload_post,
+    ): CancelablePromise<ModelTemplateRead> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/crud/model-templates/upload',
+            formData: formData,
+            mediaType: 'multipart/form-data',
+            errors: {
+                422: `Validation Error`,
+            },
         });
     }
     /**

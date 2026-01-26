@@ -1,7 +1,7 @@
 /* generated using openapi-typescript-codegen -- do not edit */
 /* istanbul ignore file */
 /* tslint:disable */
-/* eslint-disable */
+
 export { ApiError } from './core/ApiError';
 export { CancelablePromise, CancelError } from './core/CancelablePromise';
 export { OpenAPI } from './core/OpenAPI';
@@ -16,6 +16,7 @@ export type { BackTestPlotType } from './models/BackTestPlotType';
 export type { BackTestRead } from './models/BackTestRead';
 export type { BackTestUpdate } from './models/BackTestUpdate';
 export type { Body_create_dataset_csv_crud_datasets_csvFile_post } from './models/Body_create_dataset_csv_crud_datasets_csvFile_post';
+export type { Body_upload_model_template_crud_model_templates_upload_post } from './models/Body_upload_model_template_crud_model_templates_upload_post';
 export type { chap_core__rest_api__v1__jobs__DataBaseResponse } from './models/chap_core__rest_api__v1__jobs__DataBaseResponse';
 export type { ChapDataSource } from './models/ChapDataSource';
 export type { CompatibilityResponse } from './models/CompatibilityResponse';
