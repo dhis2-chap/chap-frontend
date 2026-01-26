@@ -2,9 +2,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type Metric = {
-    id: string;
-    displayName: string;
-    description?: string;
+export type ApprovedTemplate = {
+    url: string;
+    versions: Record<string, string>;
 };
 

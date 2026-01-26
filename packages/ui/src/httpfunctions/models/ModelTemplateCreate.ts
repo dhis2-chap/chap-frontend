@@ -2,4 +2,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type Coordinates = any[];
+export type ModelTemplateCreate = {
+    url: string;
+    version: string;
+};
+

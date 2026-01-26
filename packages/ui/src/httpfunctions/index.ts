@@ -1,12 +1,13 @@
 /* generated using openapi-typescript-codegen -- do not edit */
 /* istanbul ignore file */
 /* tslint:disable */
-
+/* eslint-disable */
 export { ApiError } from './core/ApiError';
 export { CancelablePromise, CancelError } from './core/CancelablePromise';
 export { OpenAPI } from './core/OpenAPI';
 export type { OpenAPIConfig } from './core/OpenAPI';
 
+export type { ApprovedTemplate } from './models/ApprovedTemplate';
 export { AuthorAssessedStatus } from './models/AuthorAssessedStatus';
 export type { BackTest } from './models/BackTest';
 export type { BackTestCreate } from './models/BackTestCreate';
@@ -19,8 +20,7 @@ export type { chap_core__rest_api__v1__jobs__DataBaseResponse } from './models/c
 export type { ChapDataSource } from './models/ChapDataSource';
 export type { CompatibilityResponse } from './models/CompatibilityResponse';
 export type { ConfiguredModelDB } from './models/ConfiguredModelDB';
-export type { ConfiguredModelRead_Input } from './models/ConfiguredModelRead_Input';
-export type { ConfiguredModelRead_Output } from './models/ConfiguredModelRead_Output';
+export type { ConfiguredModelRead } from './models/ConfiguredModelRead';
 export type { Coordinates } from './models/Coordinates';
 export type { DataElement } from './models/DataElement';
 export type { DataList } from './models/DataList';
@@ -48,10 +48,11 @@ export type { LineStringModel } from './models/LineStringModel';
 export type { MakeBacktestRequest } from './models/MakeBacktestRequest';
 export type { MakeBacktestWithDataRequest } from './models/MakeBacktestWithDataRequest';
 export type { MakePredictionRequest } from './models/MakePredictionRequest';
-export type { Metric } from './models/Metric';
+export type { MetricInfo } from './models/MetricInfo';
 export type { ModelConfigurationCreate } from './models/ModelConfigurationCreate';
 export type { ModelSpec } from './models/ModelSpec';
 export type { ModelSpecRead } from './models/ModelSpecRead';
+export type { ModelTemplateCreate } from './models/ModelTemplateCreate';
 export type { ModelTemplateDB } from './models/ModelTemplateDB';
 export type { ModelTemplateRead } from './models/ModelTemplateRead';
 export type { MultiLineStringModel } from './models/MultiLineStringModel';
