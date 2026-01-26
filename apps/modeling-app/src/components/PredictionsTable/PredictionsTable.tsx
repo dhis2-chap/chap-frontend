@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import {
     DataTable,
     DataTableHead,
@@ -90,14 +91,17 @@ export const PredictionsTable = ({ predictions, models }: Props) => {
     const { search } = usePredictionsTableFilters();
     const { pageIndex, pageSize, setPageIndex, setPageSize } = useTablePaginationParams();
 
+    const columnFilters = useMemo(
+        () => (search ? [{ id: 'name', value: search }] : []),
+        [search],
+    );
+
     const table = useReactTable({
         data: predictions || [],
         columns,
         state: {
             sorting: [{ id: 'created', desc: true }],
-            columnFilters: [
-                ...(search ? [{ id: 'name', value: search }] : []),
-            ],
+            columnFilters,
             pagination: {
                 pageIndex,
                 pageSize,

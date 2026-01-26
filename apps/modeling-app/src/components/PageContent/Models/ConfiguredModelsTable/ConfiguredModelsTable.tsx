@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import {
     Button,
     DataTable,
@@ -134,13 +135,16 @@ export const ConfiguredModelsTable = ({ models }: Props) => {
     const navigate = useNavigate();
     const { pageIndex, pageSize, setPageIndex, setPageSize } = useTablePaginationParams();
 
+    const columnFilters = useMemo(
+        () => (search ? [{ id: 'name', value: search }] : []),
+        [search],
+    );
+
     const table = useReactTable({
         data: models || [],
         columns,
         state: {
-            columnFilters: [
-                ...(search ? [{ id: 'name', value: search }] : []),
-            ],
+            columnFilters,
             pagination: {
                 pageIndex,
                 pageSize,

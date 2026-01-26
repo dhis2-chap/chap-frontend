@@ -48,10 +48,10 @@ export const useBacktestsTableFilters = () => {
             setModelId,
             search,
             setSearch,
-            columnFilters: {
+            columnFilters: [
                 ...(modelId ? [{ id: 'configuredModel.id', value: modelId }] : []),
                 ...(search ? [{ id: 'name', value: search }] : []),
-            },
+            ],
         }),
         [modelId, setModelId, search, setSearch],
     );
