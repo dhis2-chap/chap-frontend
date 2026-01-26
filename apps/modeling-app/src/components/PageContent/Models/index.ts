@@ -1,1 +1,1 @@
-export { ModelContent } from './ModelContent';
+export { ModelsContent } from './ModelsContent';

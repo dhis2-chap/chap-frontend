@@ -2,11 +2,11 @@ import i18n from '@dhis2/d2-i18n';
 import { useInitialFormState } from '@/pages/NewEvaluationPage/hooks/useInitialFormState';
 import { CircularLoader, NoticeBox } from '@dhis2/ui';
 import styles from './NewPredictionContent.module.css';
-import { useModels } from '@/hooks/useModels';
+import { useConfiguredModels } from '@/hooks/useConfiguredModels';
 import { NewPredictionForm } from '@/components/NewPredictionForm';
 
 export const NewPredictionContent = () => {
-    const { models, isLoading: isModelsLoading, error: modelsError } = useModels();
+    const { models, isLoading: isModelsLoading, error: modelsError } = useConfiguredModels();
     const { initialValues, isLoading } = useInitialFormState({ models, isModelsLoading });
 
     if (isLoading) {

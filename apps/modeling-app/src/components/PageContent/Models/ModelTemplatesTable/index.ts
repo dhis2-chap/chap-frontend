@@ -1,0 +1,1 @@
+export { ModelTemplatesTable } from './ModelTemplatesTable';

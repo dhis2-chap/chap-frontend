@@ -164,7 +164,7 @@ export const CopyBacktestModal = ({ id, onClose, returnTo }: CopyBacktestModalPr
                         name="model"
                         checked={selectedAttributes.model}
                         onChange={() => handleAttributeChange('model')}
-                        value={String(backtest.configuredModel.id)}
+                        value={String(backtest.configuredModel?.id ?? '')}
                     />
 
                     <div

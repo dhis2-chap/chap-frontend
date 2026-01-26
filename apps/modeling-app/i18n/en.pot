@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-01-22T16:26:15.562Z\n"
-"PO-Revision-Date: 2026-01-22T16:26:15.563Z\n"
+"POT-Creation-Date: 2026-01-26T13:15:37.190Z\n"
+"PO-Revision-Date: 2026-01-26T13:15:37.191Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -795,6 +795,33 @@ msgstr "Predict..."
 msgid "Error loading jobs"
 msgstr "Error loading jobs"
 
+msgid "Error loading configured models"
+msgstr "Error loading configured models"
+
+msgid "Author"
+msgstr "Author"
+
+msgid "Covariates"
+msgstr "Covariates"
+
+msgid "No covariate names available"
+msgstr "No covariate names available"
+
+msgid "Archived"
+msgstr "Archived"
+
+msgid "Active"
+msgstr "Active"
+
+msgid "Configure new"
+msgstr "Configure new"
+
+msgid "No models available"
+msgstr "No models available"
+
+msgid "Include archived"
+msgstr "Include archived"
+
 msgid "Are you sure you want to archive this model?"
 msgstr "Are you sure you want to archive this model?"
 
@@ -817,32 +844,53 @@ msgstr "Model archived"
 msgid "Failed to archive model"
 msgstr "Failed to archive model"
 
-msgid "Author"
-msgstr "Author"
-
-msgid "Covariates"
-msgstr "Covariates"
-
-msgid "No covariate names available"
-msgstr "No covariate names available"
-
-msgid "Archived"
-msgstr "Archived"
-
-msgid "Active"
-msgstr "Active"
-
-msgid "New model"
-msgstr "New model"
-
-msgid "No models available"
-msgstr "No models available"
-
-msgid "Include archived"
-msgstr "Include archived"
-
 msgid "Error loading model templates"
 msgstr "Error loading model templates"
+
+msgid "Search templates"
+msgstr "Search templates"
+
+msgid "Upload template"
+msgstr "Upload template"
+
+msgid "No model templates available"
+msgstr "No model templates available"
+
+msgid "File must be a ZIP archive"
+msgstr "File must be a ZIP archive"
+
+msgid "Upload model template"
+msgstr "Upload model template"
+
+msgid "Template ZIP file"
+msgstr "Template ZIP file"
+
+msgid "Remove file"
+msgstr "Remove file"
+
+msgid "Drag and drop a ZIP file here"
+msgstr "Drag and drop a ZIP file here"
+
+msgid "or click to browse"
+msgstr "or click to browse"
+
+msgid "The ZIP file must contain an MLproject file at the root level."
+msgstr "The ZIP file must contain an MLproject file at the root level."
+
+msgid "Upload"
+msgstr "Upload"
+
+msgid "Model template uploaded successfully"
+msgstr "Model template uploaded successfully"
+
+msgid "Failed to upload model template"
+msgstr "Failed to upload model template"
+
+msgid "Configured Models"
+msgstr "Configured Models"
+
+msgid "Model Templates"
+msgstr "Model Templates"
 
 msgid "No model templates found"
 msgstr "No model templates found"
@@ -1287,11 +1335,14 @@ msgstr "Turn on to access experimental features in the app"
 msgid "Available features"
 msgstr "Available features"
 
-msgid "Placeholder feature"
-msgstr "Placeholder feature"
+msgid "Metric plots"
+msgstr "Metric plots"
 
-msgid "This is a placeholder for future experimental features"
-msgstr "This is a placeholder for future experimental features"
+msgid "Show metric visualization plots in the evaluation dashboard"
+msgstr "Show metric visualization plots in the evaluation dashboard"
+
+msgid "Show evaluation visualization plots in the evaluation dashboard"
+msgstr "Show evaluation visualization plots in the evaluation dashboard"
 
 msgid "Settings saved successfully"
 msgstr "Settings saved successfully"
@@ -1470,8 +1521,15 @@ msgstr "Active jobs"
 msgid "View and manage currently running jobs and their status."
 msgstr "View and manage currently running jobs and their status."
 
-msgid "Manage configured models available in your system."
-msgstr "Manage configured models available in your system."
+msgid ""
+"Manage configured models and explore model templates available in your "
+"system."
+msgstr ""
+"Manage configured models and explore model templates available in your "
+"system."
+
+msgid "New model"
+msgstr "New model"
 
 msgid ""
 "Configure a new model with custom settings or parameters based on a model "

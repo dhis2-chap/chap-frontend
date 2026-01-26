@@ -1,7 +1,9 @@
 import { Card, CircularLoader, NoticeBox } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
-import { useExperimentalSettings, FEATURES } from './hooks/useExperimentalSettings';
+import { useExperimentalSettings } from './hooks/useExperimentalSettings';
 import { ChoiceCard } from './ChoiceCard';
+import { FeatureToggle } from './FeatureToggle';
+import { featureConfigs } from './constants';
 import styles from './ExperimentalSettings.module.css';
 
 export const ExperimentalSettings = () => {
@@ -55,20 +57,15 @@ export const ExperimentalSettings = () => {
                                 <h3>{i18n.t('Available features')}</h3>
                             </div>
                             <div className={styles.toggleList}>
-                                <ChoiceCard
-                                    title={i18n.t('Metric plots')}
-                                    description={i18n.t('Show metric visualization plots in the evaluation dashboard')}
-                                    checked={settings.features[FEATURES.METRIC_PLOTS] ?? false}
-                                    onChange={() => toggleFeature(FEATURES.METRIC_PLOTS)}
-                                    disabled={isSaving}
-                                />
-                                <ChoiceCard
-                                    title={i18n.t('Evaluation plots')}
-                                    description={i18n.t('Show evaluation visualization plots in the evaluation dashboard')}
-                                    checked={settings.features[FEATURES.EVALUATION_PLOTS] ?? false}
-                                    onChange={() => toggleFeature(FEATURES.EVALUATION_PLOTS)}
-                                    disabled={isSaving}
-                                />
+                                {featureConfigs.map(feature => (
+                                    <FeatureToggle
+                                        key={feature.key}
+                                        feature={feature}
+                                        checked={settings.features[feature.key] ?? false}
+                                        onChange={() => toggleFeature(feature.key)}
+                                        disabled={isSaving}
+                                    />
+                                ))}
                             </div>
                         </div>
                     )}

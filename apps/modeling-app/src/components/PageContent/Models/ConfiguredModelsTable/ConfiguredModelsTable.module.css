@@ -1,0 +1,35 @@
+.buttonContainer {
+    display: flex;
+    margin-block-end: var(--spacers-dp16);
+}
+
+.leftSection {
+    flex: 1;
+    display: flex;
+    gap: var(--spacers-dp8);
+    align-items: center;
+}
+
+.rightSection {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    gap: var(--spacers-dp4);
+}
+
+.featuresCell {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacers-dp8);
+}
+
+.infoIcon {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    color: var(--colors-grey600);
+}
+
+.infoIcon:hover {
+    color: var(--colors-grey900);
+}

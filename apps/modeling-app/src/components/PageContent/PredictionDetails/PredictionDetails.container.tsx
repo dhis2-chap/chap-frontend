@@ -5,12 +5,12 @@ import { useParams } from 'react-router-dom';
 import { PredictionDetailsComponent } from './PredictionDetails.component';
 import { usePredictionById } from './hooks/usePredictionById';
 import styles from './PredictionDetails.module.css';
-import { useModels } from '@/hooks/useModels';
+import { useConfiguredModels } from '@/hooks/useConfiguredModels';
 
 export const PredictionDetails: React.FC = () => {
     const { predictionId } = useParams<{ predictionId: string }>();
     const { prediction, isLoading: isPredictionLoading, error: predictionError } = usePredictionById(predictionId);
-    const { models, isLoading: isModelsLoading, error: modelsError } = useModels();
+    const { models, isLoading: isModelsLoading, error: modelsError } = useConfiguredModels();
     const model = useMemo(() => models?.find(m => m.name === prediction?.modelId), [models, prediction]);
 
     const isLoading = isPredictionLoading || isModelsLoading;

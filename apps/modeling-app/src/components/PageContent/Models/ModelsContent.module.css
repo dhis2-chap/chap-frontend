@@ -1,0 +1,7 @@
+.container {
+    margin-block-start: var(--spacers-dp16);
+}
+
+.tabsWrapper {
+    inline-size: 400px;
+}

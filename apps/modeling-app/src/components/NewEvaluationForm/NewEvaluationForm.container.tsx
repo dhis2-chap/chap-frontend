@@ -3,10 +3,10 @@ import { CircularLoader, NoticeBox } from '@dhis2/ui';
 import { NewEvaluationFormComponent } from './NewEvaluationForm.component';
 import { useInitialFormState } from '../../pages/NewEvaluationPage/hooks/useInitialFormState';
 import styles from './NewEvaluationForm.module.css';
-import { useModels } from '../../hooks/useModels';
+import { useConfiguredModels } from '../../hooks/useConfiguredModels';
 
 export const NewEvaluationForm = () => {
-    const { models, isLoading: isModelsLoading, error: modelsError } = useModels();
+    const { models, isLoading: isModelsLoading, error: modelsError } = useConfiguredModels();
     const { initialValues, isLoading } = useInitialFormState({ models, isModelsLoading });
 
     if (isLoading || isModelsLoading) {

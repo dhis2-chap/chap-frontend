@@ -1,0 +1,9 @@
+.tabBar [role="tablist"] {
+    background: transparent !important;
+}
+
+.tab span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}

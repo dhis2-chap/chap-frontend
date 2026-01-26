@@ -1,0 +1,1 @@
+export { ModelTemplatesContent } from './ModelTemplatesContent';

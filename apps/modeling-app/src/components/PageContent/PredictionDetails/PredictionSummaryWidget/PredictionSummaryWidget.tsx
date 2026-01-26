@@ -6,7 +6,7 @@ import { CircularLoader } from '@dhis2/ui';
 import { PeriodView } from './Sections/PeriodView';
 import { RegionView } from './Sections/RegionView';
 import { ModelView } from './Sections/ModelView';
-import { useModels } from '@/hooks/useModels';
+import { useConfiguredModels } from '@/hooks/useConfiguredModels';
 
 type Props = {
     predictionId: number;
@@ -25,7 +25,7 @@ const WidgetWrapper = ({ children }: { children: React.ReactNode }) => {
 
 export const PredictionSummaryWidget = ({ predictionId }: Props) => {
     const { prediction, isLoading, error } = usePredictionById(predictionId.toString());
-    const { models, isLoading: isModelsLoading, error: modelsError } = useModels();
+    const { models, isLoading: isModelsLoading, error: modelsError } = useConfiguredModels();
 
     if (isLoading || isModelsLoading) {
         return (
@@ -37,7 +37,7 @@ export const PredictionSummaryWidget = ({ predictionId }: Props) => {
         );
     }
 
-    if (error || !prediction || modelsError) {
+    if (error || !prediction || !prediction.configuredModel || modelsError) {
         return (
             <WidgetWrapper>
                 <div className={styles.errorContainer}>

@@ -1,8 +1,8 @@
 import { useDataEngine, useAlert } from '@dhis2/app-runtime';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import i18n from '@dhis2/d2-i18n';
-import { useExperimentalSettingsQuery } from './useExperimentalSettingsQuery';
 import { z } from 'zod';
+import { useExperimentalSettingsQuery } from './useExperimentalSettingsQuery';
 
 export const ExperimentalSettingsSchema = z.object({
     version: z.number(),
@@ -20,13 +20,6 @@ export const defaultSettings: ExperimentalSettings = {
 
 export const QUERY_KEY = ['dataStore', 'modeling', 'experimental'];
 export const DATASTORE_RESOURCE = 'dataStore/modeling/experimental';
-
-export const FEATURES = {
-    METRIC_PLOTS: 'metricPlots',
-    EVALUATION_PLOTS: 'evaluationPlots',
-} as const;
-
-export type FeatureKey = typeof FEATURES[keyof typeof FEATURES];
 
 export const useExperimentalSettings = () => {
     const engine = useDataEngine();

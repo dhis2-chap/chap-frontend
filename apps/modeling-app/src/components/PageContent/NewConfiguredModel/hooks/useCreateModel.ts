@@ -29,7 +29,7 @@ export const useCreateModel = ({ onSuccess, onError }: UseCreateModelOptions = {
     const mutation = useMutation<ConfiguredModelDB, ApiError, ModelConfigurationCreate>({
         mutationFn: payload => CrudService.addModelCrudModelsPost(payload),
         onSuccess: (model) => {
-            queryClient.invalidateQueries({ queryKey: ['models'] });
+            queryClient.invalidateQueries({ queryKey: ['configuredModels'] });
             showSuccessAlert();
             onSuccess?.(model);
         },

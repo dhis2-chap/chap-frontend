@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import {
     DataTable,
     DataTableHead,
@@ -126,6 +127,15 @@ export const JobsTable = ({ jobs }: Props) => {
     const { search, status, type } = useJobsTableFilters();
     const { pageIndex, pageSize, setPageIndex, setPageSize } = useTablePaginationParams();
 
+    const columnFilters = useMemo(
+        () => [
+            ...(search ? [{ id: 'name', value: search }] : []),
+            ...(status ? [{ id: 'status', value: status }] : []),
+            ...(type ? [{ id: 'type', value: type }] : []),
+        ],
+        [search, status, type],
+    );
+
     const table = useReactTable({
         data: jobs || [],
         columns,
@@ -134,11 +144,7 @@ export const JobsTable = ({ jobs }: Props) => {
             columnVisibility: {
                 id: false,
             },
-            columnFilters: [
-                ...(search ? [{ id: 'name', value: search }] : []),
-                ...(status ? [{ id: 'status', value: status }] : []),
-                ...(type ? [{ id: 'type', value: type }] : []),
-            ],
+            columnFilters,
             pagination: {
                 pageIndex,
                 pageSize,

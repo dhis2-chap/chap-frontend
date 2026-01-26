@@ -7,7 +7,7 @@ import { PeriodView } from './Sections/PeriodView';
 import { RegionView } from './Sections/RegionView';
 import { ModelView } from './Sections/ModelView';
 import { ModelVersionWarningView } from './Sections/ModelVersionWarningView';
-import { useModels } from '@/hooks/useModels';
+import { useConfiguredModels } from '@/hooks/useConfiguredModels';
 
 type Props = {
     evaluationId: number;
@@ -26,7 +26,7 @@ const WidgetWrapper = ({ children }: { children: React.ReactNode }) => {
 
 export const EvaluationSummaryWidget = ({ evaluationId }: Props) => {
     const { backtest, isLoading, error } = useBacktestById(evaluationId);
-    const { models, isLoading: isModelsLoading, error: modelsError } = useModels();
+    const { models, isLoading: isModelsLoading, error: modelsError } = useConfiguredModels();
 
     if (isLoading || isModelsLoading) {
         return (
@@ -38,7 +38,7 @@ export const EvaluationSummaryWidget = ({ evaluationId }: Props) => {
         );
     }
 
-    if (error || !backtest || modelsError) {
+    if (error || !backtest || !backtest.configuredModel || modelsError) {
         return (
             <WidgetWrapper>
                 <div className={styles.errorContainer}>
