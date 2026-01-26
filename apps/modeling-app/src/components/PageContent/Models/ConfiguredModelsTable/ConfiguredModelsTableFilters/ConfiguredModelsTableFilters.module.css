@@ -3,12 +3,3 @@
     gap: 16px;
     align-items: center;
 }
-
-.inputContainer {
-    inline-size: 200px;
-    transition: inline-size 0.3s ease;
-}
-
-.inputContainer:focus-within {
-    inline-size: 300px;
-}

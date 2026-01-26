@@ -15,12 +15,16 @@ import {
     getCoreRowModel,
     useReactTable,
     getSortedRowModel,
+    getFilteredRowModel,
     getPaginationRowModel,
     Column,
 } from '@tanstack/react-table';
 import { ModelTemplateRead, Pill } from '@dhis2-chap/ui';
 import { useTablePaginationParams } from '../../../../hooks/useTablePaginationParams';
+import { useTableSearchFilter } from '../../../../hooks/useTableSearchFilter';
+import { TableSearchFilter } from '../../../TableSearchFilter';
 import { modelStatusConfig } from '../../../../utils/modelStatusConfig';
+import styles from './ModelTemplatesTable.module.css';
 
 const labelByPeriodType: Record<string, string> = {
     month: i18n.t('Monthly'),
@@ -36,6 +40,7 @@ const columns = [
     columnHelper.accessor(row => row.displayName || row.name, {
         id: 'name',
         header: i18n.t('Name'),
+        filterFn: 'includesString',
         cell: info => info.getValue() || undefined,
     }),
     columnHelper.accessor('author', {
@@ -83,11 +88,15 @@ type Props = {
 
 export const ModelTemplatesTable = ({ templates }: Props) => {
     const { pageIndex, pageSize, setPageIndex, setPageSize } = useTablePaginationParams();
+    const { search, setSearch } = useTableSearchFilter();
 
     const table = useReactTable({
         data: templates || [],
         columns,
         state: {
+            columnFilters: [
+                ...(search ? [{ id: 'name', value: search }] : []),
+            ],
             pagination: {
                 pageIndex,
                 pageSize,
@@ -97,6 +106,7 @@ export const ModelTemplatesTable = ({ templates }: Props) => {
         enableRowSelection: false,
         getSortedRowModel: getSortedRowModel(),
         getCoreRowModel: getCoreRowModel(),
+        getFilteredRowModel: getFilteredRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
     });
 
@@ -104,6 +114,13 @@ export const ModelTemplatesTable = ({ templates }: Props) => {
 
     return (
         <div>
+            <div className={styles.toolbar}>
+                <TableSearchFilter
+                    search={search}
+                    onSearchChange={setSearch}
+                    placeholder={i18n.t('Search templates')}
+                />
+            </div>
             <DataTable>
                 <DataTableHead>
                     {table.getHeaderGroups().map(headerGroup => (

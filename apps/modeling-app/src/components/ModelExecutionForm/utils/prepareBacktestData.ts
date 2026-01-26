@@ -35,7 +35,7 @@ export const prepareBacktestData = async (
     dataEngine: ReturnType<typeof useDataEngine>,
     queryClient: QueryClient,
 ): Promise<PreparedBacktestData> => {
-    const model = queryClient.getQueryData<ModelSpecRead[]>(['models'])
+    const model = queryClient.getQueryData<ModelSpecRead[]>(['configuredModels'])
         ?.find(model => model.id === Number(formData.modelId));
 
     if (!model) {

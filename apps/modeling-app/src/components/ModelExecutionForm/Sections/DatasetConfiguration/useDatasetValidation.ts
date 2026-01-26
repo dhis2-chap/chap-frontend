@@ -60,7 +60,7 @@ export const useDatasetValidation = () => {
 
     const getMissingMappings = (modelId: string, covariateMappings?: CovariateMapping[], targetMapping?: CovariateMapping) => {
         const model = getSelectedModel(modelId);
-        if (!model) return { missingCovariates: [], missingTarget: false };
+        if (!model) return { missingCovariates: [], missingTarget: true };
 
         const missingCovariates = model.covariates?.filter(covariate =>
             !covariateMappings?.some(mapping =>
@@ -92,9 +92,9 @@ export const useDatasetValidation = () => {
         if (!model) {
             return {
                 isValid: false,
-                hasMissingMappings: false,
+                hasMissingMappings: true,
                 missingCovariates: [],
-                missingTarget: false,
+                missingTarget: true,
                 totalCovariates: 0,
                 mappedCovariates: 0,
             };

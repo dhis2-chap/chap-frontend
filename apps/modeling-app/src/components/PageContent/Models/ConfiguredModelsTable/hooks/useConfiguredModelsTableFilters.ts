@@ -1,40 +1,23 @@
 import { useCallback, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { useTableSearchFilter } from '../../../../../hooks/useTableSearchFilter';
 
-const PARAM_KEYS = {
-    search: 'search',
-    includeArchived: 'includeArchived',
-};
+const INCLUDE_ARCHIVED_PARAM_KEY = 'includeArchived';
 
 export const useConfiguredModelsTableFilters = () => {
     const [searchParams, setSearchParams] = useSearchParams();
+    const { search, setSearch } = useTableSearchFilter();
 
-    const search = searchParams.get(PARAM_KEYS.search) || '';
-    const includeArchived = searchParams.get(PARAM_KEYS.includeArchived) === 'true';
-
-    const setSearch = useCallback(
-        (newSearch: string | undefined) => {
-            setSearchParams((prev) => {
-                const updatedParams = new URLSearchParams(prev);
-                if (newSearch) {
-                    updatedParams.set(PARAM_KEYS.search, newSearch);
-                } else {
-                    updatedParams.delete(PARAM_KEYS.search);
-                }
-                return updatedParams;
-            });
-        },
-        [setSearchParams],
-    );
+    const includeArchived = searchParams.get(INCLUDE_ARCHIVED_PARAM_KEY) === 'true';
 
     const setIncludeArchived = useCallback(
         (newIncludeArchived: boolean) => {
             setSearchParams((prev) => {
                 const updatedParams = new URLSearchParams(prev);
                 if (newIncludeArchived) {
-                    updatedParams.set(PARAM_KEYS.includeArchived, 'true');
+                    updatedParams.set(INCLUDE_ARCHIVED_PARAM_KEY, 'true');
                 } else {
-                    updatedParams.delete(PARAM_KEYS.includeArchived);
+                    updatedParams.delete(INCLUDE_ARCHIVED_PARAM_KEY);
                 }
                 return updatedParams;
             });
