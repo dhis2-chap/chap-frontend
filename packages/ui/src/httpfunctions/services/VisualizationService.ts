@@ -3,7 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { BackTestPlotType } from '../models/BackTestPlotType';
-import type { Metric } from '../models/Metric';
+import type { MetricInfo } from '../models/MetricInfo';
 import type { VisualizationInfo } from '../models/VisualizationInfo';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -32,13 +32,16 @@ export class VisualizationService {
     }
     /**
      * Get Available Metrics
+     * List available metrics for visualization.
+     *
+     * All metrics support detailed level visualization.
      * @param backtestId
-     * @returns Metric Successful Response
+     * @returns MetricInfo Successful Response
      * @throws ApiError
      */
     public static getAvailableMetricsVisualizationMetricsBacktestIdGet(
         backtestId: number,
-    ): CancelablePromise<Array<Metric>> {
+    ): CancelablePromise<Array<MetricInfo>> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/visualization/metrics/{backtest_id}',

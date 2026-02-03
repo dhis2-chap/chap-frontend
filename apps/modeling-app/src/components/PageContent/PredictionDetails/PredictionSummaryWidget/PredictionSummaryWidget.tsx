@@ -63,7 +63,7 @@ export const PredictionSummaryWidget = ({ predictionId }: Props) => {
                     </div>
                     <ModelView
                         models={models}
-                        configuredModelId={prediction.configuredModel.id}
+                        configuredModelId={prediction.configuredModel?.id}
                     />
                     <PeriodView
                         periodType={prediction.dataset.periodType}

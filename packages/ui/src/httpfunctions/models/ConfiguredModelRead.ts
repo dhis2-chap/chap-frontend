@@ -3,7 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { ModelTemplateDB } from './ModelTemplateDB';
-export type ConfiguredModelRead_Input = {
+export type ConfiguredModelRead = {
     userOptionValues?: (Record<string, any> | null);
     additionalContinuousCovariates?: Array<string>;
     name: string;

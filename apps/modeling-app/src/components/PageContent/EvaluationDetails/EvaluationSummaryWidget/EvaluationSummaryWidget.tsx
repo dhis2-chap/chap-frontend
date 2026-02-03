@@ -54,7 +54,7 @@ export const EvaluationSummaryWidget = ({ evaluationId }: Props) => {
         <div className={styles.container}>
             <ModelVersionWarningView
                 modelTemplateVersion={backtest.modelTemplateVersion}
-                configuredModelTemplateVersion={backtest.configuredModel.modelTemplate.version}
+                configuredModelTemplateVersion={backtest.configuredModel?.modelTemplate?.version}
             />
             <WidgetWrapper>
                 <div className={styles.content}>
@@ -68,7 +68,7 @@ export const EvaluationSummaryWidget = ({ evaluationId }: Props) => {
                     </div>
                     <ModelView
                         models={models}
-                        configuredModelId={backtest.configuredModel.id}
+                        configuredModelId={backtest.configuredModel?.id}
                     />
                     <PeriodView
                         periodType={backtest.dataset.periodType}
