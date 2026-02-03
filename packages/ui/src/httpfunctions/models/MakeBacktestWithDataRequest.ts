@@ -7,9 +7,9 @@ import type { FeatureCollectionModel } from './FeatureCollectionModel';
 import type { FetchRequest } from './FetchRequest';
 import type { ObservationBase } from './ObservationBase';
 export type MakeBacktestWithDataRequest = {
-    nPeriods: number;
-    nSplits: number;
-    stride: number;
+    nPeriods?: number;
+    nSplits?: number;
+    stride?: number;
     name: string;
     /**
      * A mapping of covariate names to data element IDs from which to source the data

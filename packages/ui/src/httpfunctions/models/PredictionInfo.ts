@@ -13,7 +13,7 @@ export type PredictionInfo = {
     metaData?: Record<string, any>;
     orgUnits?: Array<string>;
     id: number;
-    configuredModel: ConfiguredModelDB;
+    configuredModel: (ConfiguredModelDB | null);
     dataset: DataSetMeta;
 };
 

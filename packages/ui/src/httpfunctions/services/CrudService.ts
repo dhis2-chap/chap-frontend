@@ -2,13 +2,14 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { ApprovedTemplate } from '../models/ApprovedTemplate';
 import type { BackTest } from '../models/BackTest';
 import type { BackTestCreate } from '../models/BackTestCreate';
 import type { BackTestRead } from '../models/BackTestRead';
 import type { BackTestUpdate } from '../models/BackTestUpdate';
 import type { Body_create_dataset_csv_crud_datasets_csvFile_post } from '../models/Body_create_dataset_csv_crud_datasets_csvFile_post';
-import type { chap_core__rest_api__v1__jobs__DataBaseResponse } from '../models/chap_core__rest_api__v1__jobs__DataBaseResponse';
 import type { ConfiguredModelDB } from '../models/ConfiguredModelDB';
+import type { DataBaseResponse } from '../models/DataBaseResponse';
 import type { DatasetCreate } from '../models/DatasetCreate';
 import type { DataSetInfo } from '../models/DataSetInfo';
 import type { DataSetWithObservations } from '../models/DataSetWithObservations';
@@ -16,6 +17,7 @@ import type { DebugEntry } from '../models/DebugEntry';
 import type { JobResponse } from '../models/JobResponse';
 import type { ModelConfigurationCreate } from '../models/ModelConfigurationCreate';
 import type { ModelSpecRead } from '../models/ModelSpecRead';
+import type { ModelTemplateCreate } from '../models/ModelTemplateCreate';
 import type { ModelTemplateRead } from '../models/ModelTemplateRead';
 import type { PredictionCreate } from '../models/PredictionCreate';
 import type { PredictionInfo } from '../models/PredictionInfo';
@@ -301,12 +303,12 @@ export class CrudService {
     /**
      * Create Dataset Csv
      * @param formData
-     * @returns chap_core__rest_api__v1__jobs__DataBaseResponse Successful Response
+     * @returns DataBaseResponse Successful Response
      * @throws ApiError
      */
     public static createDatasetCsvCrudDatasetsCsvFilePost(
         formData: Body_create_dataset_csv_crud_datasets_csvFile_post,
-    ): CancelablePromise<chap_core__rest_api__v1__jobs__DataBaseResponse> {
+    ): CancelablePromise<DataBaseResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/crud/datasets/csvFile',
@@ -339,7 +341,7 @@ export class CrudService {
     }
     /**
      * List Model Templates
-     * Lists all model templates from the db.
+     * Lists all non-archived model templates from the db.
      * @returns ModelTemplateRead Successful Response
      * @throws ApiError
      */
@@ -347,6 +349,61 @@ export class CrudService {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/crud/model-templates',
+        });
+    }
+    /**
+     * Add Model Template
+     * Add a model template from a whitelisted GitHub URL.
+     * The url+version must be in the approved whitelist.
+     * @param requestBody
+     * @returns ModelTemplateRead Successful Response
+     * @throws ApiError
+     */
+    public static addModelTemplateCrudModelTemplatesPost(
+        requestBody: ModelTemplateCreate,
+    ): CancelablePromise<ModelTemplateRead> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/crud/model-templates',
+            body: requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
+     * List Available Model Templates
+     * Lists whitelisted model templates that can be added.
+     * Fetches from remote whitelist URLs configured in config/approved_model_repos.yaml.
+     * @returns ApprovedTemplate Successful Response
+     * @throws ApiError
+     */
+    public static listAvailableModelTemplatesCrudModelTemplatesAvailableGet(): CancelablePromise<Array<ApprovedTemplate>> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/crud/model-templates/available',
+        });
+    }
+    /**
+     * Delete Model Template
+     * Soft delete a model template by setting archived to True.
+     * @param modelTemplateId
+     * @returns any Successful Response
+     * @throws ApiError
+     */
+    public static deleteModelTemplateCrudModelTemplatesModelTemplateIdDelete(
+        modelTemplateId: number,
+    ): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'DELETE',
+            url: '/crud/model-templates/{modelTemplateId}',
+            path: {
+                'modelTemplateId': modelTemplateId,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
         });
     }
     /**

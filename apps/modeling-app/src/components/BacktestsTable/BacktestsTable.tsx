@@ -82,6 +82,7 @@ const columns = [
         header: i18n.t('Model'),
         filterFn: (row, columnId, filterValue) => {
             const configuredModelId = row.getValue(columnId) as string;
+            if (!configuredModelId) return false;
             return configuredModelId.toString() === filterValue.toString();
         },
         cell: (info) => {

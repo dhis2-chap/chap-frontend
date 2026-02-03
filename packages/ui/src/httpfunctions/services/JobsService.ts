@@ -2,7 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { chap_core__rest_api__v1__jobs__DataBaseResponse } from '../models/chap_core__rest_api__v1__jobs__DataBaseResponse';
+import type { DataBaseResponse } from '../models/DataBaseResponse';
 import type { EvaluationResponse } from '../models/EvaluationResponse';
 import type { FullPredictionResponse } from '../models/FullPredictionResponse';
 import type { JobDescription } from '../models/JobDescription';
@@ -163,12 +163,12 @@ export class JobsService {
     /**
      * Get Database Result
      * @param jobId
-     * @returns chap_core__rest_api__v1__jobs__DataBaseResponse Successful Response
+     * @returns DataBaseResponse Successful Response
      * @throws ApiError
      */
     public static getDatabaseResultJobsJobIdDatabaseResultGet(
         jobId: string,
-    ): CancelablePromise<chap_core__rest_api__v1__jobs__DataBaseResponse> {
+    ): CancelablePromise<DataBaseResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/jobs/{job_id}/database_result',

@@ -3,9 +3,9 @@
 /* tslint:disable */
 /* eslint-disable */
 export type MakeBacktestRequest = {
-    nPeriods: number;
-    nSplits: number;
-    stride: number;
+    nPeriods?: number;
+    nSplits?: number;
+    stride?: number;
     name: string;
     modelId: string;
     datasetId: number;

@@ -2,7 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type Metric = {
+export type MetricInfo = {
     id: string;
     displayName: string;
     description?: string;
