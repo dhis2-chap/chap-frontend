@@ -7,17 +7,20 @@ import {
     IconMore16,
     IconDuplicate16,
     IconVisualizationLineMulti16,
+    IconDownload16,
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { OverflowButton } from '@dhis2-chap/ui';
 import { EditBacktestModal } from './EditBacktestModal';
 import { DeleteBacktestModal } from './DeleteBacktestModal/DeleteBacktestModal';
 import { CopyBacktestModal } from './CopyBacktestModal';
+import { DownloadDatasetModal } from './DownloadDatasetModal';
 import { useNavigate } from 'react-router-dom';
 
 type Props = {
     id: number;
     name: string | null | undefined;
+    datasetId: number;
     onRename?: () => void;
     onDelete?: () => void;
 };
@@ -25,12 +28,14 @@ type Props = {
 export const BacktestActionsMenu = ({
     id,
     name,
+    datasetId,
 }: Props) => {
     const navigate = useNavigate();
     const [flyoutMenuIsOpen, setFlyoutMenuIsOpen] = useState(false);
     const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
     const [editModalIsOpen, setEditModalIsOpen] = useState(false);
     const [copyModalIsOpen, setCopyModalIsOpen] = useState(false);
+    const [downloadModalIsOpen, setDownloadModalIsOpen] = useState(false);
 
     const handleCompare = () => {
         navigate(`/evaluate/compare?baseEvaluation=${id}&returnTo=${encodeURIComponent('/evaluate')}`);
@@ -75,6 +80,15 @@ export const BacktestActionsMenu = ({
                             }}
                         />
                         <MenuItem
+                            label={i18n.t('Download dataset')}
+                            dataTest="backtest-overflow-download"
+                            icon={<IconDownload16 />}
+                            onClick={() => {
+                                setDownloadModalIsOpen(true);
+                                setFlyoutMenuIsOpen(false);
+                            }}
+                        />
+                        <MenuItem
                             label={i18n.t('Delete')}
                             dataTest="backtest-overflow-delete"
                             destructive
@@ -107,6 +121,13 @@ export const BacktestActionsMenu = ({
                 <DeleteBacktestModal
                     id={id}
                     onClose={() => setDeleteModalIsOpen(false)}
+                />
+            )}
+
+            {downloadModalIsOpen && (
+                <DownloadDatasetModal
+                    datasetId={datasetId}
+                    onClose={() => setDownloadModalIsOpen(false)}
                 />
             )}
         </>
