@@ -5,6 +5,7 @@ import { OverflowButton } from '@dhis2-chap/ui';
 import { DeletePredictionModal } from './DeletePredictionModal/DeletePredictionModal';
 import { DownloadDatasetModal } from '../../BacktestsTable/BacktestActionsMenu/DownloadDatasetModal';
 import { useNavigate } from 'react-router-dom';
+import { useIsFeatureAvailable, Features } from '../../../hooks/useIsFeatureAvailable';
 
 type Props = {
     id: number;
@@ -14,6 +15,7 @@ type Props = {
 
 export const PredictionActionsMenu = ({ id, datasetId }: Props) => {
     const navigate = useNavigate();
+    const { isAvailable: isDatasetDownloadAvailable } = useIsFeatureAvailable(Features.DATASET_DOWNLOAD);
     const [flyoutMenuIsOpen, setFlyoutMenuIsOpen] = useState(false);
     const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
     const [downloadModalIsOpen, setDownloadModalIsOpen] = useState(false);
@@ -38,15 +40,17 @@ export const PredictionActionsMenu = ({ id, datasetId }: Props) => {
                                 setFlyoutMenuIsOpen(false);
                             }}
                         />
-                        <MenuItem
-                            label={i18n.t('Download dataset')}
-                            dataTest="prediction-overflow-download"
-                            icon={<IconDownload16 />}
-                            onClick={() => {
-                                setDownloadModalIsOpen(true);
-                                setFlyoutMenuIsOpen(false);
-                            }}
-                        />
+                        {isDatasetDownloadAvailable && (
+                            <MenuItem
+                                label={i18n.t('Download dataset')}
+                                dataTest="prediction-overflow-download"
+                                icon={<IconDownload16 />}
+                                onClick={() => {
+                                    setDownloadModalIsOpen(true);
+                                    setFlyoutMenuIsOpen(false);
+                                }}
+                            />
+                        )}
                         <MenuItem
                             label={i18n.t('Delete')}
                             dataTest="prediction-overflow-delete"
