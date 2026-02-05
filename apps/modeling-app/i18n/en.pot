@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-02-03T11:31:19.720Z\n"
-"PO-Revision-Date: 2026-02-03T11:31:19.721Z\n"
+"POT-Creation-Date: 2026-02-05T09:35:41.480Z\n"
+"PO-Revision-Date: 2026-02-05T09:35:41.484Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -16,6 +16,9 @@ msgstr "Compare"
 
 msgid "Rename"
 msgstr "Rename"
+
+msgid "Download dataset"
+msgstr "Download dataset"
 
 msgid "Delete"
 msgstr "Delete"
@@ -71,6 +74,9 @@ msgid ""
 msgstr ""
 "Are you sure you want to delete this evaluation? This action cannot be "
 "undone."
+
+msgid "Download (CSV)"
+msgstr "Download (CSV)"
 
 msgid "Name is required"
 msgstr "Name is required"
