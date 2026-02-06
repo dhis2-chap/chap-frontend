@@ -67,7 +67,7 @@ export const SummaryModal: React.FC<SummaryModalProps> = ({
         }))
     ), [importSummary.rejected]);
 
-    const importedCount = importSummary.importedCount ?? importSummary.imported_count ?? 0;
+    const importedCount = importSummary.importedCount ?? 0;
     const hasRejectedItems = rejectedItems.length > 0;
     const hasImportedItems = importedCount > 0;
 

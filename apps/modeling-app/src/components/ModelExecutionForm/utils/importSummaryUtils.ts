@@ -6,9 +6,9 @@ const isRecord = (value: unknown): value is Record<string, unknown> => (
 );
 
 /**
- * This function is used to normalize the import summary response from the API.
- * It is only used on API responses that returns errors (4XX).
- * Since it's not returning the import summary but throwing an error, all properties are using the python snake_case naming convention.
+ * Normalizes the import summary from API error responses (4XX).
+ * The only snake_case field in error responses is `imported_count`, which is mapped to `importedCount`.
+ * All other fields (featureName, orgUnit, timePeriods, reason) are already camelCase.
  */
 export const normalizeImportSummary = (
     value: unknown,
@@ -18,28 +18,14 @@ export const normalizeImportSummary = (
         return null;
     }
 
-    const importedCount = value.imported_count;
-    const rejected = value.rejected;
-
-    if (typeof importedCount !== 'number' || !Array.isArray(rejected)) {
-        return null;
-    }
+    const importedCount = value.imported_count ?? value.importedCount;
+    const rejected = value.rejected ?? [];
 
     return {
         id: value.id ?? null,
         importedCount,
         hash,
-        rejected: rejected.map((item: unknown) => {
-            if (!isRecord(item)) {
-                return item;
-            }
-            return {
-                featureName: (item.feature_name as string) || (item.featureName as string),
-                orgUnit: (item.org_unit as string) || (item.orgUnit as string),
-                reason: item.reason as string,
-                timePeriods: (item.time_periods as string[]) || (item.timePeriods as string[]),
-            };
-        }),
+        rejected,
     } as ImportSummaryCorrected;
 };
 
