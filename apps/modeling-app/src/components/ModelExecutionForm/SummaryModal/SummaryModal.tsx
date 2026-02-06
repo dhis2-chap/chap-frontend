@@ -44,7 +44,7 @@ interface RejectedItem {
     reason: string;
     featureName: string;
     orgUnit: string;
-    period: string[];
+    timePeriods: string[];
 }
 
 const columnHelper = createColumnHelper<RejectedItem>();
@@ -58,7 +58,16 @@ export const SummaryModal: React.FC<SummaryModalProps> = ({
     onClose,
 }) => {
     const queryClient = useQueryClient();
-    const hasRejectedItems = importSummary.rejected.length > 0;
+    const rejectedItems = useMemo(() => (
+        importSummary.rejected.map(item => ({
+            reason: item.reason,
+            featureName: item.featureName,
+            orgUnit: item.orgUnit,
+            timePeriods: item.timePeriods ?? [],
+        }))
+    ), [importSummary.rejected]);
+
+    const hasRejectedItems = rejectedItems.length > 0;
     const hasImportedItems = importSummary.importedCount > 0;
 
     const orgUnitNames: Map<string, string> = useMemo(() => {
@@ -99,15 +108,25 @@ export const SummaryModal: React.FC<SummaryModalProps> = ({
             },
             cell: info => orgUnitNames.get(info.getValue()) || info.getValue(),
         }),
-        columnHelper.accessor('period', {
+        columnHelper.accessor('timePeriods', {
             header: i18n.t('Period'),
-            cell: info => info.getValue().join(', '),
+            cell: (info) => {
+                const periods = info.getValue();
+                if (periods.length <= 3) {
+                    return periods.join(', ');
+                }
+                const displayed = periods.slice(0, 3).join(', ');
+                return i18n.t('{{periods}} and {{count}} more', {
+                    periods: displayed,
+                    count: periods.length - 3,
+                });
+            },
             enableSorting: false,
         }),
     ];
 
     const table = useReactTable({
-        data: importSummary.rejected || [],
+        data: rejectedItems,
         columns,
         initialState: {
             sorting: [{ id: 'reason', desc: false }],
@@ -120,9 +139,8 @@ export const SummaryModal: React.FC<SummaryModalProps> = ({
         getPaginationRowModel: getPaginationRowModel(),
     });
 
-    // Get unique values for filters
-    const uniqueFeatureNames = Array.from(new Set(importSummary.rejected.map(item => item.featureName))).sort();
-    const uniqueOrgUnits = Array.from(new Set(importSummary.rejected.map(item => item.orgUnit))).sort();
+    const uniqueFeatureNames = Array.from(new Set(rejectedItems.map(item => item.featureName))).sort();
+    const uniqueOrgUnits = Array.from(new Set(rejectedItems.map(item => item.orgUnit))).sort();
 
     const featureNameFilter = table.getColumn('featureName')?.getFilterValue() as string;
     const orgUnitFilter = table.getColumn('orgUnit')?.getFilterValue() as string;
@@ -134,7 +152,7 @@ export const SummaryModal: React.FC<SummaryModalProps> = ({
             <ModalTitle>{i18n.t('Import Summary')}</ModalTitle>
             <ModalContent>
                 <div className={styles.modalContent}>
-                    {hasImportedItems && importSummary.rejected.length === 0 ? (
+                    {hasImportedItems && rejectedItems.length === 0 ? (
                         <NoticeBox
                             title={i18n.t('Valid import')}
                             valid
@@ -146,7 +164,7 @@ export const SummaryModal: React.FC<SummaryModalProps> = ({
                             })}
                         </NoticeBox>
                     ) : null}
-                    {hasImportedItems && importSummary.rejected.length > 0 ? (
+                    {hasImportedItems && rejectedItems.length > 0 ? (
                         <NoticeBox
                             title={i18n.t('Partial import')}
                             warning
@@ -158,7 +176,7 @@ export const SummaryModal: React.FC<SummaryModalProps> = ({
                             })}
                         </NoticeBox>
                     ) : null}
-                    {!hasImportedItems && importSummary.rejected.length > 0 ? (
+                    {!hasImportedItems && rejectedItems.length > 0 ? (
                         <NoticeBox
                             title={i18n.t('No locations imported')}
                             error
@@ -169,15 +187,15 @@ export const SummaryModal: React.FC<SummaryModalProps> = ({
 
                     <div className={styles.summaryStats}>
                         <div className={styles.statItem}>
-                            <div className={styles.statValue}>{importSummary.importedCount ?? 0}</div>
+                            <div className={styles.statValue}>{importSummary.importedCount}</div>
                             <div className={styles.statLabel}>{i18n.t('Valid')}</div>
                         </div>
                         <div className={styles.statItem}>
-                            <div className={styles.statValue}>{uniqueOrgUnits.length ?? 0}</div>
+                            <div className={styles.statValue}>{uniqueOrgUnits.length}</div>
                             <div className={styles.statLabel}>{i18n.t('Rejected')}</div>
                         </div>
                         <div className={styles.statItem}>
-                            <div className={styles.statValue}>{(importSummary.importedCount ?? 0) + (uniqueOrgUnits.length ?? 0)}</div>
+                            <div className={styles.statValue}>{importSummary.importedCount + uniqueOrgUnits.length}</div>
                             <div className={styles.statLabel}>{i18n.t('Total')}</div>
                         </div>
                     </div>

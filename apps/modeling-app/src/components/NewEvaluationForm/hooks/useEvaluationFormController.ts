@@ -7,7 +7,7 @@ export const useEvaluationFormController = (initialValues?: Partial<ModelExecuti
     const {
         createNewBacktest,
         validateAndDryRun,
-        validationResult,
+        importSummary,
         isSubmitting,
         isValidationLoading,
         summaryModalOpen,
@@ -37,7 +37,7 @@ export const useEvaluationFormController = (initialValues?: Partial<ModelExecuti
         handleDryRun,
         isSubmitting,
         isValidationLoading,
-        importSummary: validationResult,
+        importSummary,
         summaryModalOpen,
         closeSummaryModal,
         error,

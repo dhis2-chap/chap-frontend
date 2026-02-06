@@ -6,7 +6,6 @@ import { ModelExecutionFormFields } from '../ModelExecutionForm/ModelExecutionFo
 import { ModelExecutionFormValues } from '../ModelExecutionForm/hooks/useModelExecutionFormState';
 import { usePredictionFormController } from './hooks/usePredictionFormController';
 import styles from './NewPredictionForm.module.css';
-import { SummaryModal } from '../ModelExecutionForm/SummaryModal';
 import { useNavigationBlocker } from '../../hooks/useNavigationBlocker';
 import { NavigationConfirmModal } from '../NavigationConfirmModal';
 
@@ -19,12 +18,7 @@ export const NewPredictionForm = ({ initialValues }: NewPredictionFormProps = {}
         methods,
         handleSubmit,
         handleStartPrediction,
-        handleDryRun,
         isSubmitting,
-        isValidationLoading,
-        importSummary,
-        summaryModalOpen,
-        closeSummaryModal,
         error,
     } = usePredictionFormController(initialValues);
 
@@ -48,19 +42,9 @@ export const NewPredictionForm = ({ initialValues }: NewPredictionFormProps = {}
                                 <div className={styles.buttons}>
                                     <ButtonStrip end>
                                         <Button
-                                            type="button"
-                                            onClick={handleDryRun}
-                                            loading={isValidationLoading}
-                                            primary
-                                        >
-                                            {i18n.t('Start dry run')}
-                                        </Button>
-
-                                        <Button
                                             loading={isSubmitting}
                                             onClick={handleStartPrediction}
                                             icon={<IconArrowRightMulti16 />}
-                                            disabled={isValidationLoading}
                                             dataTest="prediction-start-button"
                                         >
                                             {i18n.t('Start import')}
@@ -80,13 +64,6 @@ export const NewPredictionForm = ({ initialValues }: NewPredictionFormProps = {}
                             </NoticeBox>
                         )}
 
-                        {importSummary && summaryModalOpen && (
-                            <SummaryModal
-                                importSummary={importSummary}
-                                periodType={methods.getValues('periodType')}
-                                onClose={closeSummaryModal}
-                            />
-                        )}
                     </Card>
                 </div>
             </FormProvider>
