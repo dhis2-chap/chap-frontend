@@ -102,7 +102,7 @@ export const useCreateNewBacktest = ({
                     hash,
                 } as unknown as ImportSummaryCorrected;
             } catch (error) {
-                if (error instanceof ApiError) {
+                if (error instanceof ApiError && error.status === 400) {
                     const summary = getImportSummaryFromApiError(error, hash);
                     if (summary) {
                         return summary;
@@ -163,9 +163,23 @@ export const useCreateNewBacktest = ({
         },
     });
 
+    const downloadRequest = async (formData: ModelExecutionFormValues) => {
+        const { backtestRequest } = await buildBacktestRequest(formData);
+        const blob = new Blob([JSON.stringify(backtestRequest, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${formData.name || 'backtest-request'}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    };
+
     return {
         createNewBacktest,
         validateAndDryRun,
+        downloadRequest,
         isSubmitting: isPending,
         isValidationLoading,
         importSummary,
