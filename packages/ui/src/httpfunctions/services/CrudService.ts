@@ -340,6 +340,26 @@ export class CrudService {
         });
     }
     /**
+     * Get Dataset Csv
+     * @param datasetId
+     * @returns any Successful Response
+     * @throws ApiError
+     */
+    public static getDatasetCsvCrudDatasetsDatasetIdCsvGet(
+        datasetId: number,
+    ): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/crud/datasets/{datasetId}/csv',
+            path: {
+                'datasetId': datasetId,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
      * List Model Templates
      * Lists all non-archived model templates from the db.
      * @returns ModelTemplateRead Successful Response

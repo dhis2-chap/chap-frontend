@@ -72,6 +72,7 @@ const columns = [
             <PredictionActionsMenu
                 id={info.row.original.id}
                 name={info.row.original.name}
+                datasetId={info.row.original.datasetId}
             />
         ),
     }),

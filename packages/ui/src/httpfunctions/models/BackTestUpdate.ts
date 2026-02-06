@@ -3,6 +3,6 @@
 /* tslint:disable */
 /* eslint-disable */
 export type BackTestUpdate = {
-    name?: string;
+    name?: (string | null);
 };
 

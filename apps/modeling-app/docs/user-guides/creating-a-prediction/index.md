@@ -9,7 +9,7 @@ category: User Guides
 
 A prediction uses a trained model to forecast future disease cases based on your current data. Unlike an evaluation (which tests model accuracy on historical data), a prediction generates forecasts that can be imported into DHIS2 to support decision-making in the field.
 
-Before creating a prediction, it's recommended to first run an [evaluation](#/guides/creating-an-evaluation) to validate that your chosen model performs well on your data.
+Before creating a prediction, it's recommended to first run an [evaluation](/guides/creating-an-evaluation) to validate that your chosen model performs well on your data.
 
 ---
 
