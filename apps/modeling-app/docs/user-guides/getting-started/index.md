@@ -25,7 +25,7 @@ The app supports four main workflows:
 
 Start here:
 
-1. [Models](#/basics/what-is-a-model) – What these models are and how they learn from data
-2. [Evaluating a model](#/basics/what-is-an-evaluation) – How to test whether a model's predictions can be trusted
+1. [Models](/guides/what-is-a-model) – What these models are and how they learn from data
+2. [Evaluating a model](/guides/what-is-an-evaluation) – How to test whether a model's predictions can be trusted
 
 If you're already comfortable with the concepts, skip ahead to the user guides to understand how to use the app.
