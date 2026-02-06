@@ -67,8 +67,9 @@ export const SummaryModal: React.FC<SummaryModalProps> = ({
         }))
     ), [importSummary.rejected]);
 
+    const importedCount = importSummary.importedCount ?? importSummary.imported_count ?? 0;
     const hasRejectedItems = rejectedItems.length > 0;
-    const hasImportedItems = importSummary.importedCount > 0;
+    const hasImportedItems = importedCount > 0;
 
     const orgUnitNames: Map<string, string> = useMemo(() => {
         const defaultMap = new Map();
@@ -187,7 +188,7 @@ export const SummaryModal: React.FC<SummaryModalProps> = ({
 
                     <div className={styles.summaryStats}>
                         <div className={styles.statItem}>
-                            <div className={styles.statValue}>{importSummary.importedCount}</div>
+                            <div className={styles.statValue}>{importedCount}</div>
                             <div className={styles.statLabel}>{i18n.t('Valid')}</div>
                         </div>
                         <div className={styles.statItem}>
@@ -195,7 +196,7 @@ export const SummaryModal: React.FC<SummaryModalProps> = ({
                             <div className={styles.statLabel}>{i18n.t('Rejected')}</div>
                         </div>
                         <div className={styles.statItem}>
-                            <div className={styles.statValue}>{importSummary.importedCount + uniqueOrgUnits.length}</div>
+                            <div className={styles.statValue}>{importedCount + uniqueOrgUnits.length}</div>
                             <div className={styles.statLabel}>{i18n.t('Total')}</div>
                         </div>
                     </div>
