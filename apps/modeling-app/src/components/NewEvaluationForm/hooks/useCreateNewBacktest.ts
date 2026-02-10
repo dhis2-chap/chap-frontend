@@ -153,11 +153,13 @@ export const useCreateNewBacktest = ({
             }
         },
         onError: (error: ApiError) => {
-            const summary = getImportSummaryFromApiError(error, lastImportHashRef.current || undefined);
-            if (summary) {
-                setImportSummary(summary);
-                setSummaryModalOpen(true);
-                return;
+            if (error.status === 400) {
+                const summary = getImportSummaryFromApiError(error, lastImportHashRef.current || undefined);
+                if (summary) {
+                    setImportSummary(summary);
+                    setSummaryModalOpen(true);
+                    return;
+                }
             }
             onError?.(error);
         },

@@ -159,7 +159,7 @@ export const SummaryModal: React.FC<SummaryModalProps> = ({
                             valid
                         >
                             {i18n.t('All {{count}} locations can be successfully imported', {
-                                count: importSummary.importedCount,
+                                count: importedCount,
                                 defaultValue: '{{count}} location can be successfully imported',
                                 defaultValue_plural: 'All {{count}} locations can be successfully imported',
                             })}
@@ -171,7 +171,7 @@ export const SummaryModal: React.FC<SummaryModalProps> = ({
                             warning
                         >
                             {i18n.t('{{count}} locations could be successfully imported, but some were rejected', {
-                                count: importSummary.importedCount,
+                                count: importedCount,
                                 defaultValue: '{{count}} location could be successfully imported, but some were rejected',
                                 defaultValue_plural: '{{count}} locations could be successfully imported, but some were rejected',
                             })}

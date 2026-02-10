@@ -2,7 +2,7 @@ import { ApiError } from '@dhis2-chap/ui';
 import { ImportSummaryCorrected } from '../types';
 
 const isRecord = (value: unknown): value is Record<string, unknown> => (
-    typeof value === 'object' && value !== null
+    typeof value === 'object' && value !== null && !Array.isArray(value)
 );
 
 /**
