@@ -31,8 +31,14 @@ export const useEvaluationFormController = (initialValues?: Partial<ModelExecuti
         methods.handleSubmit(handleDryRunSubmit)();
     };
 
-    const handleDownloadRequest = () => {
-        methods.handleSubmit(data => downloadRequest(data))();
+    const handleDownloadRequest = async () => {
+        try {
+            await methods.handleSubmit(async (data) => {
+                await downloadRequest(data);
+            })();
+        } catch {
+            // error is surfaced via the existing error state
+        }
     };
 
     return {
