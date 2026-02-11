@@ -1,6 +1,5 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import i18n from '@dhis2/d2-i18n';
 import { ModelExecutionFormValues } from '../../ModelExecutionForm/hooks/useModelExecutionFormState';
 import {
     AnalyticsService,
@@ -11,9 +10,9 @@ import {
 } from '@dhis2-chap/ui';
 import { useDataEngine } from '@dhis2/app-runtime';
 import { useNavigate } from 'react-router-dom';
-import { validateClimateData } from '../../ModelExecutionForm/utils/validateClimateData';
 import { prepareBacktestData } from '../../ModelExecutionForm/utils/prepareBacktestData';
 import { ImportSummaryCorrected } from '../../ModelExecutionForm/types';
+import { getImportSummaryFromApiError } from '@/components/ModelExecutionForm/utils/importSummaryUtils';
 
 const N_SPLITS = 10;
 
@@ -40,48 +39,80 @@ export const useCreateNewBacktest = ({
     const queryClient = useQueryClient();
     const navigate = useNavigate();
     const [summaryModalOpen, setSummaryModalOpen] = useState<boolean>(false);
+    const [importSummary, setImportSummary] = useState<ImportSummaryCorrected | null>(null);
+    const lastImportHashRef = useRef<string | null>(null);
 
-    // TODO - remove this once the validation is done in the backend
+    const buildBacktestRequest = async (formData: ModelExecutionFormValues) => {
+        const { model, observations, orgUnitResponse, dataSources, hash } = await prepareBacktestData(
+            formData,
+            dataEngine,
+            queryClient,
+        );
+
+        const filteredGeoJson: FeatureCollectionModel = {
+            type: 'FeatureCollection',
+            features: orgUnitResponse.geojson.organisationUnits.map(ou => ({
+                id: ou.id,
+                type: 'Feature',
+                geometry: ou.geometry,
+                properties: {
+                    id: ou.id,
+                    parent: ou.parent.id,
+                    parentGraph: ou.parent.id,
+                    level: ou.level,
+                },
+            })),
+        };
+
+        const backtestRequest: MakeBacktestWithDataRequest = {
+            name: formData.name,
+            geojson: filteredGeoJson,
+            providedData: observations,
+            dataSources,
+            dataToBeFetched: [],
+            modelId: model.name,
+            nPeriods: N_PERIODS[formData.periodType.toUpperCase() as keyof typeof N_PERIODS],
+            nSplits: N_SPLITS,
+            stride: N_STRIDES[formData.periodType.toUpperCase() as keyof typeof N_STRIDES],
+        };
+
+        return { backtestRequest, hash };
+    };
+
     const {
         mutate: validateAndDryRun,
-        data: validationResult,
         isPending: isValidationLoading,
         error: validationError,
         reset: resetValidation,
     } = useMutation<ImportSummaryCorrected, ApiError, ModelExecutionFormValues>({
-        mutationFn: async (formData: ModelExecutionFormValues) => {
-            const {
-                observations,
-                periods,
-                orgUnitIds,
-                hash,
-            } = await prepareBacktestData(formData, dataEngine, queryClient);
-
-            const validation = validateClimateData(observations, formData, periods, orgUnitIds);
-
-            if (!validation.isValid) {
-                const uniqueOrgUnits = [...new Set(validation.missingData.map(item => item.orgUnit))];
-                const successCount = orgUnitIds.length - uniqueOrgUnits.length;
-                return {
-                    id: null,
-                    importedCount: successCount,
-                    hash,
-                    rejected: validation.missingData.map(item => ({
-                        featureName: item.covariate,
-                        orgUnit: item.orgUnit,
-                        reason: i18n.t('Missing data for covariate'),
-                        period: [item.period],
-                    })),
-                };
-            }
-
-            return {
-                id: null,
-                importedCount: orgUnitIds.length,
-                rejected: [],
-            };
+        onMutate: () => {
+            setImportSummary(null);
+            setSummaryModalOpen(false);
         },
-        onSuccess: () => {
+        mutationFn: async (formData: ModelExecutionFormValues) => {
+            const { backtestRequest, hash } = await buildBacktestRequest(formData);
+
+            try {
+                const result = await AnalyticsService.createBacktestWithDataAnalyticsCreateBacktestWithDataPost(
+                    backtestRequest,
+                    true,
+                );
+                return {
+                    ...result,
+                    hash,
+                } as unknown as ImportSummaryCorrected;
+            } catch (error) {
+                if (error instanceof ApiError && error.status === 400) {
+                    const summary = getImportSummaryFromApiError(error, hash);
+                    if (summary) {
+                        return summary;
+                    }
+                }
+                throw error;
+            }
+        },
+        onSuccess: (data) => {
+            setImportSummary(data);
             setSummaryModalOpen(true);
         },
         onError: (error: ApiError) => {
@@ -95,43 +126,23 @@ export const useCreateNewBacktest = ({
         error,
     } = useMutation<ImportSummaryCorrected, ApiError, ModelExecutionFormValues>({
         mutationFn: async (formData: ModelExecutionFormValues) => {
-            const { model, observations, orgUnitResponse, dataSources } = await prepareBacktestData(
-                formData,
-                dataEngine,
-                queryClient,
+            const { backtestRequest, hash } = await buildBacktestRequest(formData);
+            lastImportHashRef.current = hash;
+
+            const result = await AnalyticsService.createBacktestWithDataAnalyticsCreateBacktestWithDataPost(
+                backtestRequest,
+                false,
             );
-
-            const filteredGeoJson: FeatureCollectionModel = {
-                type: 'FeatureCollection',
-                features: orgUnitResponse.geojson.organisationUnits.map(ou => ({
-                    id: ou.id,
-                    type: 'Feature',
-                    geometry: ou.geometry,
-                    properties: {
-                        id: ou.id,
-                        parent: ou.parent.id,
-                        parentGraph: ou.parent.id,
-                        level: ou.level,
-                    },
-                })),
-            };
-
-            const backtestRequest: MakeBacktestWithDataRequest = {
-                name: formData.name,
-                geojson: filteredGeoJson,
-                providedData: observations,
-                dataSources,
-                dataToBeFetched: [],
-                modelId: model.name,
-                nPeriods: N_PERIODS[formData.periodType.toUpperCase() as keyof typeof N_PERIODS],
-                nSplits: N_SPLITS,
-                stride: N_STRIDES[formData.periodType.toUpperCase() as keyof typeof N_STRIDES],
-            };
-
-            return AnalyticsService.createBacktestWithDataAnalyticsCreateBacktestWithDataPost(backtestRequest, false) as unknown as Promise<ImportSummaryCorrected>;
+            return {
+                ...result,
+                hash,
+            } as unknown as ImportSummaryCorrected;
         },
         onMutate: () => {
             resetValidation();
+            setImportSummary(null);
+            setSummaryModalOpen(false);
+            lastImportHashRef.current = null;
         },
         onSuccess: (data: ImportSummaryCorrected) => {
             if (data.id) {
@@ -142,17 +153,38 @@ export const useCreateNewBacktest = ({
             }
         },
         onError: (error: ApiError) => {
+            if (error.status === 400) {
+                const summary = getImportSummaryFromApiError(error, lastImportHashRef.current || undefined);
+                if (summary) {
+                    setImportSummary(summary);
+                    setSummaryModalOpen(true);
+                    return;
+                }
+            }
             onError?.(error);
         },
     });
 
+    const downloadRequest = async (formData: ModelExecutionFormValues) => {
+        const { backtestRequest } = await buildBacktestRequest(formData);
+        const blob = new Blob([JSON.stringify(backtestRequest, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${formData.name || 'backtest-request'}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    };
+
     return {
         createNewBacktest,
         validateAndDryRun,
-        validationResult,
+        downloadRequest,
         isSubmitting: isPending,
         isValidationLoading,
-        importSummary: validationResult,
+        importSummary,
         error: validationError || error,
         summaryModalOpen,
         closeSummaryModal: () => setSummaryModalOpen(false),

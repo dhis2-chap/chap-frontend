@@ -7,7 +7,8 @@ export const useEvaluationFormController = (initialValues?: Partial<ModelExecuti
     const {
         createNewBacktest,
         validateAndDryRun,
-        validationResult,
+        downloadRequest,
+        importSummary,
         isSubmitting,
         isValidationLoading,
         summaryModalOpen,
@@ -30,14 +31,25 @@ export const useEvaluationFormController = (initialValues?: Partial<ModelExecuti
         methods.handleSubmit(handleDryRunSubmit)();
     };
 
+    const handleDownloadRequest = async () => {
+        try {
+            await methods.handleSubmit(async (data) => {
+                await downloadRequest(data);
+            })();
+        } catch {
+            // error is surfaced via the existing error state
+        }
+    };
+
     return {
         methods,
         handleSubmit,
         handleStartJob,
         handleDryRun,
+        handleDownloadRequest,
         isSubmitting,
         isValidationLoading,
-        importSummary: validationResult,
+        importSummary,
         summaryModalOpen,
         closeSummaryModal,
         error,

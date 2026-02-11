@@ -1,10 +1,20 @@
+import { useState } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { FormProvider } from 'react-hook-form';
 import { Card } from '@dhis2-chap/ui';
 import { useEvaluationFormController } from './hooks/useEvaluationFormController';
 import { ModelExecutionFormValues } from '../ModelExecutionForm/hooks/useModelExecutionFormState';
 import styles from './NewEvaluationForm.module.css';
-import { Button, ButtonStrip, IconArrowRightMulti16, NoticeBox } from '@dhis2/ui';
+import {
+    Button,
+    ButtonStrip,
+    SplitButton,
+    FlyoutMenu,
+    MenuItem,
+    IconArrowRightMulti16,
+    IconDownload16,
+    NoticeBox,
+} from '@dhis2/ui';
 import { ModelExecutionFormFields } from '../ModelExecutionForm/ModelExecutionFormFields';
 import { useNavigationBlocker } from '../../hooks/useNavigationBlocker';
 import { NavigationConfirmModal } from '../NavigationConfirmModal';
@@ -19,6 +29,7 @@ export const NewEvaluationFormComponent = ({ initialValues }: NewEvaluationFormP
         methods,
         handleSubmit,
         handleStartJob,
+        handleDownloadRequest,
         isSubmitting,
         error,
         importSummary,
@@ -27,6 +38,8 @@ export const NewEvaluationFormComponent = ({ initialValues }: NewEvaluationFormP
         handleDryRun,
         isValidationLoading,
     } = useEvaluationFormController(initialValues);
+
+    const [splitButtonOpen, setSplitButtonOpen] = useState(false);
 
     const {
         showConfirmModal,
@@ -55,14 +68,27 @@ export const NewEvaluationFormComponent = ({ initialValues }: NewEvaluationFormP
                                             {i18n.t('Start dry run')}
                                         </Button>
 
-                                        <Button
-                                            loading={isSubmitting}
+                                        <SplitButton
                                             onClick={handleStartJob}
                                             icon={<IconArrowRightMulti16 />}
-                                            disabled={isValidationLoading}
+                                            disabled={isSubmitting || isValidationLoading}
+                                            open={splitButtonOpen}
+                                            onToggle={() => setSplitButtonOpen(prev => !prev)}
+                                            component={(
+                                                <FlyoutMenu>
+                                                    <MenuItem
+                                                        label={i18n.t('Download request')}
+                                                        icon={<IconDownload16 />}
+                                                        onClick={() => {
+                                                            setSplitButtonOpen(false);
+                                                            handleDownloadRequest();
+                                                        }}
+                                                    />
+                                                </FlyoutMenu>
+                                            )}
                                         >
                                             {i18n.t('Start import')}
-                                        </Button>
+                                        </SplitButton>
                                     </ButtonStrip>
                                 </div>
                             )}

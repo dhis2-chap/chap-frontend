@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-02-05T09:45:43.697Z\n"
-"PO-Revision-Date: 2026-02-05T09:45:43.698Z\n"
+"POT-Creation-Date: 2026-02-06T15:01:48.416Z\n"
+"PO-Revision-Date: 2026-02-06T15:01:48.417Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -531,13 +531,6 @@ msgstr "End period must be after start period"
 msgid "Model not found"
 msgstr "Model not found"
 
-msgid ""
-"The following org units have no geometry{{escape}} "
-"{{orgUnitsWithoutGeometry}}"
-msgstr ""
-"The following org units have no geometry{{escape}} "
-"{{orgUnitsWithoutGeometry}}"
-
 msgid "Data layer not found for data item id{{escape}} {{dataItemId}}"
 msgstr "Data layer not found for data item id{{escape}} {{dataItemId}}"
 
@@ -568,9 +561,6 @@ msgstr "Error loading models"
 
 msgid "An unknown error occurred"
 msgstr "An unknown error occurred"
-
-msgid "Missing data for covariate"
-msgstr "Missing data for covariate"
 
 msgid "{{count}} org units"
 msgid_plural "{{count}} org units"
