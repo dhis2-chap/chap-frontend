@@ -1,5 +1,19 @@
 # @dhis2-chap/modeling-app
 
+## 4.0.0
+
+### Major Changes
+
+-   cb83b46: Support Chap v1.1.5
+
+### Minor Changes
+
+-   cb83b46: use api dry run for import summaries and add backtest request download
+
+### Patch Changes
+
+-   @dhis2-chap/ui@4.0.0
+
 ## 3.3.0
 
 ### Minor Changes
