@@ -18,8 +18,15 @@ export const normalizeImportSummary = (
         return null;
     }
 
+    const rejected = value.rejected;
+    if (!Array.isArray(rejected)) {
+        return null;
+    }
+
     const importedCount = value.imported_count ?? value.importedCount;
-    const rejected = value.rejected ?? [];
+    if (typeof importedCount !== 'number') {
+        return null;
+    }
 
     return {
         id: value.id ?? null,
