@@ -1,0 +1,123 @@
+.widgetContainer {
+    margin-top: var(--spacers-dp16, 16px);
+}
+
+.content {
+    padding: var(--spacers-dp8, 8px);
+}
+
+.tabBar {
+    margin-bottom: var(--spacers-dp16, 16px);
+}
+
+.tabContent {
+    min-height: 200px;
+}
+
+.loadingContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 150px;
+}
+
+.emptyState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacers-dp16, 16px);
+    padding: var(--spacers-dp24, 24px);
+    text-align: center;
+    color: var(--colors-grey700, #6e7a8a);
+}
+
+.chartContainer {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacers-dp12, 12px);
+}
+
+.chartHeader {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: var(--spacers-dp4, 4px);
+}
+
+.metadata {
+    display: flex;
+    gap: var(--spacers-dp8, 8px);
+    padding: var(--spacers-dp8, 8px) var(--spacers-dp12, 12px);
+    background: var(--colors-grey100, #f3f5f7);
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+.metadataLabel {
+    color: var(--colors-grey700, #6e7a8a);
+}
+
+.metadataValue {
+    font-weight: 500;
+    color: var(--colors-grey900, #212934);
+}
+
+.disclaimer {
+    font-size: 12px;
+    color: var(--colors-grey600, #7b8794);
+    font-style: italic;
+    margin: var(--spacers-dp8, 8px) 0 0 0;
+    padding: var(--spacers-dp8, 8px);
+    background: var(--colors-yellow050, #fff8e1);
+    border-radius: 4px;
+}
+
+.localContainer {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacers-dp16, 16px);
+}
+
+.selectors {
+    display: flex;
+    gap: var(--spacers-dp16, 16px);
+    flex-wrap: wrap;
+}
+
+.selectorGroup {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacers-dp4, 4px);
+    min-width: 150px;
+    flex: 1;
+}
+
+.selectorLabel {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--colors-grey800, #494e54);
+}
+
+.predictionComparison {
+    display: flex;
+    gap: var(--spacers-dp24, 24px);
+    padding: var(--spacers-dp12, 12px);
+    background: var(--colors-grey100, #f3f5f7);
+    border-radius: 4px;
+}
+
+.comparisonItem {
+    display: flex;
+    gap: var(--spacers-dp8, 8px);
+}
+
+.comparisonLabel {
+    font-size: 13px;
+    color: var(--colors-grey700, #6e7a8a);
+}
+
+.comparisonValue {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--colors-grey900, #212934);
+}

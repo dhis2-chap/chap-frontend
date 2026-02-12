@@ -49,6 +49,15 @@ export {
     getQueue,
 } from './httpfunctions/core/request';
 export { buildPredictionSeries } from './utils/PredictionViewModel';
+
+export { FeatureImportanceChart } from './components/explainability';
+export { XaiService } from './httpfunctions/services/XaiService';
+export type {
+    FeatureAttribution,
+    GlobalExplanationResponse,
+    LocalExplanationRequest,
+    LocalExplanationResponse,
+} from './httpfunctions/services/XaiService';
 export {
     PERIOD_TYPES,
     type PeriodType,

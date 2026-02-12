@@ -76,3 +76,5 @@ export { DebugService } from './services/DebugService';
 export { DefaultService } from './services/DefaultService';
 export { JobsService } from './services/JobsService';
 export { VisualizationService } from './services/VisualizationService';
+export { XaiService } from './services/XaiService';
+export type { FeatureAttribution, GlobalExplanationResponse, LocalExplanationRequest, LocalExplanationResponse } from './services/XaiService';
