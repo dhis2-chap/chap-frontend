@@ -30,11 +30,11 @@
 .dataItemSelects {
     display: flex;
     flex-direction: column;
-    max-width: 80%;
+    max-inline-size: 80%;
     margin: auto;
-    margin-top: var(--spacers-dp16);
+    margin-block-start: var(--spacers-dp16);
 }
 
 .buttonStrip {
-    margin-top: var(--spacers-dp8);
+    margin-block-start: var(--spacers-dp8);
 }

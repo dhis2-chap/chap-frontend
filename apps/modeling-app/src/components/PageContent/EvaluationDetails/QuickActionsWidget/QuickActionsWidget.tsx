@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Button, ButtonStrip, IconVisualizationLineMulti16, IconDuplicate16, IconExportItems24 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { useNavigate } from 'react-router-dom';

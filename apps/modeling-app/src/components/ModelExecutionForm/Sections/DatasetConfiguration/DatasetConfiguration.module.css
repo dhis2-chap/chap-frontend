@@ -5,7 +5,7 @@
 .mutedText {
   color: var(--colors-grey700);
   font-size: 0.875rem;
-  margin-bottom: 1rem;
+  margin-block-end: 1rem;
 }
 
 .errorText {

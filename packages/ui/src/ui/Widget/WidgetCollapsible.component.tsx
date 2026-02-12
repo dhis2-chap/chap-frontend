@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import cx from 'classnames';
 import { colors, IconChevronUp24 } from '@dhis2/ui';
 import { IconButton } from '../IconButton';

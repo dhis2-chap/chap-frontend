@@ -1,4 +1,3 @@
-import React from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { convertServerToClientPeriod, PERIOD_TYPES, Tag } from '@dhis2-chap/ui';
 import styles from '../../PredictionSummaryWidget.module.css';

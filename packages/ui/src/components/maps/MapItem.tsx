@@ -1,4 +1,3 @@
-import React from 'react';
 import { createContext, useState, useRef, useEffect } from 'react';
 import MapApi from '@dhis2/maps-gl';
 import styles from './MapItem.module.css';

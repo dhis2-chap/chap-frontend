@@ -10,7 +10,10 @@ import type { PeriodType } from './PeriodType';
 export type ModelTemplateDB = {
     supportedPeriodType?: PeriodType;
     userOptions?: (Record<string, any> | null);
+    hpoSearchSpace?: (Record<string, any> | null);
     requiredCovariates?: Array<string>;
+    minPredictionLength?: (number | null);
+    maxPredictionLength?: (number | null);
     target?: string;
     allowFreeAdditionalContinuousCovariates?: boolean;
     displayName?: string;
@@ -26,5 +29,6 @@ export type ModelTemplateDB = {
     id?: (number | null);
     sourceUrl?: (string | null);
     version?: (string | null);
+    archived?: boolean;
 };
 

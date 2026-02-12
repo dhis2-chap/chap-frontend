@@ -1,6 +1,6 @@
+import React, { PropsWithChildren } from 'react';
 import { IconChevronDown16 } from '@dhis2/ui-icons';
 import cx from 'classnames';
-import React, { PropsWithChildren } from 'react';
 import styles from './Sidenav.module.css';
 
 type WithClassName = {

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import { Modal, ModalTitle, ModalContent, ModalActions, Button, CircularLoader } from '@dhis2/ui';
 import { useQuery } from '@tanstack/react-query';
 import { ApiError, JobsService } from '@dhis2-chap/ui';
@@ -92,7 +92,7 @@ export const ViewJobLogsModal = ({ jobId, status, onClose }: ViewJobLogsModalPro
                             {logs || i18n.t('No logs reported for this job')}
                         </pre>
 
-                        <div style={{ marginTop: '1rem' }}>
+                        <div style={{ marginBlockStart: '1rem' }}>
                             <StatusCell status={status} />
                         </div>
                     </div>

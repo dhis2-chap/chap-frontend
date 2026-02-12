@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
     FlyoutMenu,
     MenuItem,
@@ -57,7 +57,7 @@ export const JobActionsMenu = ({
         if (type === JOB_TYPES.CREATE_BACKTEST_WITH_DATA || type === JOB_TYPES.BACKTEST) {
             navigate(`/evaluate/compare?baseEvaluation=${result}&returnTo=${encodeURIComponent('/jobs')}`);
         } else if (type === JOB_TYPES.MAKE_PREDICTION) {
-            navigate(`/predict`);
+            navigate(`/predictions/${result}`);
         }
         setFlyoutMenuIsOpen(false);
     };

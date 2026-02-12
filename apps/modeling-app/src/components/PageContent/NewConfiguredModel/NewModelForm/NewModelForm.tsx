@@ -1,4 +1,3 @@
-import React from 'react';
 import { Button, ButtonStrip, IconArrowRightMulti16 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { ModelTemplateRead } from '@dhis2-chap/ui';

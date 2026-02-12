@@ -1,12 +1,12 @@
 .container {
-    width: 100%;
+    inline-size: 100%;
 }
 
 .loadingContainer {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 60vh;
+    block-size: 60vh;
     text-align: center;
     color: var(--colors-grey700);
 }
@@ -16,15 +16,15 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 60vh;
+    block-size: 60vh;
     text-align: center;
     color: var(--colors-grey700);
     gap: 8px;
 }
 
 .visualizationContainer {
-    width: 100%;
-    height: 60vh;
+    inline-size: 100%;
+    block-size: 60vh;
 }
 
 .card {
@@ -32,8 +32,8 @@
 }
 
 .vegaEmbed {
-    width: 100%;
-    height: 100%;
+    inline-size: 100%;
+    block-size: 100%;
 }
 
 .controlsRow {
@@ -44,20 +44,20 @@
 }
 
 .singleSelectContainer {
-    min-width: 260px;
+    min-inline-size: 260px;
 }
 
 
 .errorContainer {
     padding-block-start: 16px;
-    height: 60vh
+    block-size: 60vh
 }
 
 .mutedErrorContainer {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 60vh;
+    block-size: 60vh;
     padding: 16px;
 }
 
@@ -68,7 +68,7 @@
     gap: 12px;
     text-align: center;
     align-items: center;
-    max-width: 600px;
+    max-inline-size: 600px;
     color: var(--colors-grey700);
 }
 
@@ -105,6 +105,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100%;
+    block-size: 100%;
 }
 

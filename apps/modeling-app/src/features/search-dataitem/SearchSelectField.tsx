@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { z } from 'zod';
 import i18n from '@dhis2/d2-i18n';
 import styles from './SearchSelectField.module.css';

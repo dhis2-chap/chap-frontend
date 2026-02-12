@@ -1,4 +1,3 @@
-import React from 'react';
 import styles from './GeneralSettings.module.css';
 import { RouteSettings } from '../RouteSettings';
 import { ChapSettings } from '../ChapSettings';

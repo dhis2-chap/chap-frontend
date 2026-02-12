@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
     Button,
     IconAdd16,
@@ -41,7 +41,7 @@ export const CreateRoute = () => {
                         <span className={styles.mutedText}>{i18n.t('No route found.')}</span>
                     </div>
 
-                    <div style={{ marginTop: '16px' }}>
+                    <div style={{ marginBlockStart: '16px' }}>
                         <Button
                             onClick={handleOpenDialog}
                             icon={<IconAdd16 />}

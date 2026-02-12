@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
     DataTable,
     DataTableHead,
@@ -82,6 +82,7 @@ const columns = [
         header: i18n.t('Model'),
         filterFn: (row, columnId, filterValue) => {
             const configuredModelId = row.getValue(columnId) as string;
+            if (!configuredModelId) return false;
             return configuredModelId.toString() === filterValue.toString();
         },
         cell: (info) => {
@@ -130,6 +131,7 @@ const columns = [
             <BacktestActionsMenu
                 id={info.row.original.id}
                 name={info.row.original.name}
+                datasetId={info.row.original.datasetId}
             />
         ),
     }),

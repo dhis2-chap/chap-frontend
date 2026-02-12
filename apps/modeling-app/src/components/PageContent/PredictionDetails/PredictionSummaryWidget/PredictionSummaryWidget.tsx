@@ -1,4 +1,3 @@
-import React from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { Widget } from '@dhis2-chap/ui';
 import styles from './PredictionSummaryWidget.module.css';
@@ -64,7 +63,7 @@ export const PredictionSummaryWidget = ({ predictionId }: Props) => {
                     </div>
                     <ModelView
                         models={models}
-                        configuredModelId={prediction.configuredModel.id}
+                        configuredModelId={prediction.configuredModel?.id}
                     />
                     <PeriodView
                         periodType={prediction.dataset.periodType}

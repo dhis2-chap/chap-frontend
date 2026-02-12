@@ -1,4 +1,3 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import i18n from '@dhis2/d2-i18n';
 import { PageHeader } from '../../features/common-features/PageHeader/PageHeader';

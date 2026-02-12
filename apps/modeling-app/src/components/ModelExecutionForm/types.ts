@@ -7,6 +7,6 @@ export type ImportSummaryCorrected = Omit<ImportSummaryResponse, 'rejected'> & {
         featureName: string;
         orgUnit: string;
         reason: string;
-        period: string[];
+        timePeriods?: string[];
     }[];
 };

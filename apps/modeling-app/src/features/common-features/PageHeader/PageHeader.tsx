@@ -1,4 +1,3 @@
-import React from 'react';
 import styles from './PageHeader.module.css';
 import { Button, IconAdd16 } from '@dhis2/ui';
 

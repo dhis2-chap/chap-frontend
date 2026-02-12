@@ -11,7 +11,7 @@ import {
     colors,
 } from '@dhis2/ui';
 import cx from 'classnames';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
     apiFetchOrganisationUnitGroups,
     apiFetchOrganisationUnitLevels,

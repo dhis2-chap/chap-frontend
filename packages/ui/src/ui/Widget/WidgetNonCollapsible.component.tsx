@@ -1,4 +1,3 @@
-import React from 'react';
 import { colors } from '@dhis2/ui';
 import cx from 'classnames';
 import type { WidgetNonCollapsiblePropsPlain } from './widgetNonCollapsible.types';

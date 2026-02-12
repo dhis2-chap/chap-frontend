@@ -95,17 +95,6 @@ export const prepareBacktestData = async (
         queryClient.setQueryData(['new-backtest-data', 'org-units', hash], orgUnitResponse);
     }
 
-    const orgUnitsWithoutGeometry = orgUnitResponse.geojson.organisationUnits.filter(ou => !ou.geometry);
-
-    if (orgUnitsWithoutGeometry.length > 0) {
-        throw new Error(
-            i18n.t('The following org units have no geometry{{escape}} {{orgUnitsWithoutGeometry}}', {
-                orgUnitsWithoutGeometry: orgUnitsWithoutGeometry.map(ou => ou.displayName).join(', '),
-                escape: ':',
-            }),
-        );
-    }
-
     const convertDhis2AnalyticsToChap = (data: [string, string, string, string][]): ObservationBase[] => {
         return data.map((row) => {
             const dataItemId = row[0];

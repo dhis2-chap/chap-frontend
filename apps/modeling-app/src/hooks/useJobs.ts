@@ -24,7 +24,11 @@ export const JOB_TYPES = {
 export const useJobs = () => {
     const queryClient = useQueryClient();
 
-    const { data: jobs, error, isLoading } = useQuery<JobDescription[], ApiError>({
+    const {
+        data: jobs,
+        error,
+        isLoading,
+    } = useQuery<JobDescription[], ApiError>({
         queryKey: ['jobs'],
         queryFn: () => JobsService.listJobsJobsGet(),
         staleTime: 5 * 60 * 1000,
@@ -32,17 +36,23 @@ export const useJobs = () => {
         retry: 0,
     });
 
-    const activeJobIds = useMemo(() => new Set(
-        jobs
-            ?.filter(job => job.status === JOB_STATUSES.PENDING || job.status === JOB_STATUSES.STARTED)
-            .map(job => job.id) ?? [],
-    ), [jobs]);
+    const activeJobIds = useMemo(
+        () =>
+            new Set(
+                jobs
+                    ?.filter(
+                        job =>
+                            job.status === JOB_STATUSES.PENDING
+                            || job.status === JOB_STATUSES.STARTED,
+                    )
+                    .map(job => job.id) ?? [],
+            ),
+        [jobs],
+    );
 
     const { data: activeJobsData } = useQuery<JobDescription[], ApiError>({
         queryKey: ['jobs', 'active'],
-        queryFn: () => JobsService.listJobsJobsGet(
-            Array.from(activeJobIds),
-        ),
+        queryFn: () => JobsService.listJobsJobsGet(Array.from(activeJobIds)),
         refetchInterval: () => {
             if (activeJobIds.size > 0) {
                 return 5000;
@@ -58,20 +68,25 @@ export const useJobs = () => {
         }
         let statusChanged = false;
 
-        queryClient.setQueryData(['jobs'], (oldJobs: JobDescription[] | undefined) => {
-            return oldJobs?.map((job) => {
-                if (activeJobIds.has(job.id)) {
-                    const pulledJob = activeJobsData.find(activeJob => activeJob.id === job.id);
+        queryClient.setQueryData(
+            ['jobs'],
+            (oldJobs: JobDescription[] | undefined) => {
+                return oldJobs?.map((job) => {
+                    if (activeJobIds.has(job.id)) {
+                        const pulledJob = activeJobsData.find(
+                            activeJob => activeJob.id === job.id,
+                        );
 
-                    // check if status has changed and if so, return the pulled job
-                    if (pulledJob && pulledJob.status !== job.status) {
-                        statusChanged = true;
-                        return pulledJob;
+                        // check if status has changed and if so, return the pulled job
+                        if (pulledJob && pulledJob.status !== job.status) {
+                            statusChanged = true;
+                            return pulledJob;
+                        }
                     }
-                }
-                return job;
-            });
-        });
+                    return job;
+                });
+            },
+        );
 
         if (statusChanged) {
             queryClient.invalidateQueries({ queryKey: ['backtests'] });

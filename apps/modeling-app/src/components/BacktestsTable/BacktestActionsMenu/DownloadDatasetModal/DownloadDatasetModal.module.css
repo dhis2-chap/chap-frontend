@@ -1,0 +1,10 @@
+.downloadButtons {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacers-dp8);
+    margin-block-start: var(--spacers-dp16);
+}
+
+.downloadLink {
+    text-decoration: none;
+}

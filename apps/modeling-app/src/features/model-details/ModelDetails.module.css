@@ -17,16 +17,15 @@
 .modelAuthor {
     display: flex;
     align-items: center;
-    margin-bottom: 8px;
+    margin-block-end: 8px;
     font-size: 0.9rem;
     color: #666;
 }
 
 .modelAuthorLogo {
-    height: 32px;
-    width: auto;
-    margin-left: 6px;
-    margin-right: 6px;
+    block-size: 32px;
+    inline-size: auto;
+    margin-inline: 6px;
 }
 
 .modelAuthorName {
@@ -50,8 +49,8 @@
 }
 
 .modelDescriptionText {
-    margin-left: 10px;
-    margin-top: 10px;
+    margin-inline-start: 10px;
+    margin-block-start: 10px;
 }
 
 .modelCovariates {
@@ -64,8 +63,8 @@
     color: #666;
     list-style: none;
     padding: 0;
-    margin-top: 8px;
-    margin-left: 5px;
+    margin-block-start: 8px;
+    margin-inline-start: 5px;
 }
 
 .modelCovariateItem {
@@ -78,8 +77,8 @@
 }
 
 .modelCitationText {
-    margin-top: 10px;
-    margin-left: 10px;
+    margin-block-start: 10px;
+    margin-inline-start: 10px;
     text-wrap: pretty;
 }
 

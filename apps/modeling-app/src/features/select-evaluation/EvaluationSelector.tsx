@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import {
     Help,
     SingleSelect,
@@ -47,7 +47,7 @@ export const EvaluationCompatibleSelector = ({
         cacheTime: 60 * 5 * 1000,
     });
     // allow inline onSelect function
-    const onSelectRef = React.useRef(onSelect);
+    const onSelectRef = useRef(onSelect);
     onSelectRef.current = onSelect;
 
     // clear selection if no longer compatible

@@ -1,11 +1,11 @@
 .container {
-    height: 100%;
+    block-size: 100%;
     display: flex;
     flex-direction: column;
 }
 
 .orgUnitTreeWrapper {
-    height: 382px;
+    block-size: 382px;
     flex-grow: 1;
     overflow: auto;
 }
@@ -27,18 +27,18 @@
     display: flex;
     background: #f4f6f8;
     padding: 8px 8px 8px 24px;
-    margin-bottom: 12px;
+    margin-block-end: 12px;
 }
 
 .userOrgUnitsWrapper > * {
-    margin-right: 48px;
+    margin-inline-end: 48px;
 }
 
 .selectsWrapper {
     display: flex;
     align-items: flex-start;
     gap: 8px;
-    margin-top: 12px;
+    margin-block-start: 12px;
 }
 
 .selectsWrapper.hidden {
@@ -46,13 +46,13 @@
 }
 
 .selectsWrapper > * {
-    width: 50%;
+    inline-size: 50%;
 }
 
 .summaryWrapper {
     display: inline-flex;
     align-items: center;
-    margin-top: 8px;
+    margin-block-start: 8px;
 }
 
 .warningWrapper {
@@ -61,7 +61,7 @@
 }
 
 .warningText {
-    margin-left: 8px;
+    margin-inline-start: 8px;
     font-size: 14px;
     line-height: 18px;
     color: #d32f2f;
@@ -75,5 +75,5 @@
 
 .deselectButton {
     display: inline-block;
-    margin-left: 8px;
+    margin-inline-start: 8px;
 } 

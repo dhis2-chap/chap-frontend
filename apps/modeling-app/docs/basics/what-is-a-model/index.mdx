@@ -9,11 +9,11 @@ category: Core concepts
 
 A model is a mathematical tool that learns patterns from historical data and uses those patterns to make predictions about the future.
 
-In CHAP, we work specifically with **time series prediction models**. A time series is just data collected over time - like monthly disease case counts, weekly rainfall measurements, or daily temperatures. These models look at how values change over time and use that history to forecast what comes next.
+In Chap, we work specifically with **time series prediction models**. A time series is just data collected over time - like monthly disease case counts, weekly rainfall measurements, or daily temperatures. These models look at how values change over time and use that history to forecast what comes next.
 
 For example, a model might learn that malaria cases tend to rise a few weeks after heavy rainfall, or that dengue peaks every year in the same season. It uses these patterns to predict future cases.
 
-CHAP itself is agnostic to the specific disease or domain. The same principles apply whether you're predicting malaria, dengue, cholera, or something outside health entirely. What matters is that you have time series data with patterns worth learning.
+Chap itself is agnostic to the specific disease or domain. The same principles apply whether you're predicting malaria, dengue, cholera, or something outside health entirely. What matters is that you have time series data with patterns worth learning.
 
 
 ## What makes time series special?
@@ -51,11 +51,11 @@ The narrower the range, the more confident the model. The wider the range, the m
 
 ## Different models, different approaches
 
-CHAP can work with many different models. Some are simple - they might just look at last year's pattern and assume this year will be similar. Others are more complex - they might incorporate temperature, rainfall, humidity, and even data from neighboring regions.
+Chap can work with many different models. Some are simple - they might just look at last year's pattern and assume this year will be similar. Others are more complex - they might incorporate temperature, rainfall, humidity, and even data from neighboring regions.
 
 No single model is "best" for every situation. A simple model might work well when you have limited or inconsistent data. A complex model might capture more nuance but needs more data to learn properly.
 
-When someone uploads a model to your CHAP instance, your job is to figure out: *does this model actually work for our data and context?*
+When someone uploads a model to your Chap instance, your job is to figure out: *does this model actually work for our data and context?*
 
 That's where evaluation comes in.
 

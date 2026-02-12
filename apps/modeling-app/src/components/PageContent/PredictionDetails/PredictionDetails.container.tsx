@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { CircularLoader, NoticeBox } from '@dhis2/ui';
 import { useParams } from 'react-router-dom';

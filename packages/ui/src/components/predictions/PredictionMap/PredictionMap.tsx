@@ -1,4 +1,3 @@
-import React from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { PredictionOrgUnitSeries } from '../../../interfaces/Prediction';
 import MapItem from '../../maps/MapItem';

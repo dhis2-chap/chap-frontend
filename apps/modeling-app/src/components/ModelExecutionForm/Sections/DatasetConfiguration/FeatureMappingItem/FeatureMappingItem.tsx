@@ -1,4 +1,3 @@
-import React from 'react';
 import { z } from 'zod';
 import { FeatureType } from '@dhis2-chap/ui';
 import { SearchSelectField } from '@/features/search-dataitem/SearchSelectField';

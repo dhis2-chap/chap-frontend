@@ -30,6 +30,10 @@ export default defineConfig([
         rules: {
             '@stylistic/operator-linebreak': ['error', 'before', { overrides: { '=': 'after', '&&': 'after' } }],
             '@stylistic/multiline-ternary': 'off',
+            '@stylistic/padding-line-between-statements': [
+                'error',
+                { blankLine: 'never', prev: 'import', next: 'import' },
+            ],
         },
     },
     {
@@ -40,6 +44,7 @@ export default defineConfig([
     },
     ...tseslint.configs.recommended,
     pluginReact.configs.flat.recommended,
+    pluginReact.configs.flat['jsx-runtime'],
     {
         files: ['**/*.{ts,tsx}'],
         settings: {
@@ -52,6 +57,7 @@ export default defineConfig([
         rules: {
             '@typescript-eslint/no-explicit-any': 'off',
             'indent': 'off',
+            'react/prop-types': 'off',
         },
     },
 ]);

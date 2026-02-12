@@ -1,4 +1,3 @@
-import React from 'react';
 import type { ReactNode } from 'react';
 import { MDXProvider as BaseMDXProvider } from '@mdx-js/react';
 import { DataVisualization, ModelOutputChart, PredictionAnimation } from './widgets';

@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-01-21T13:07:47.909Z\n"
-"PO-Revision-Date: 2026-01-21T13:07:47.910Z\n"
+"POT-Creation-Date: 2026-02-06T15:01:48.416Z\n"
+"PO-Revision-Date: 2026-02-06T15:01:48.417Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -16,6 +16,9 @@ msgstr "Compare"
 
 msgid "Rename"
 msgstr "Rename"
+
+msgid "Download dataset"
+msgstr "Download dataset"
 
 msgid "Delete"
 msgstr "Delete"
@@ -71,6 +74,9 @@ msgid ""
 msgstr ""
 "Are you sure you want to delete this evaluation? This action cannot be "
 "undone."
+
+msgid "Download (CSV)"
+msgstr "Download (CSV)"
 
 msgid "Name is required"
 msgstr "Name is required"
@@ -525,13 +531,6 @@ msgstr "End period must be after start period"
 msgid "Model not found"
 msgstr "Model not found"
 
-msgid ""
-"The following org units have no geometry{{escape}} "
-"{{orgUnitsWithoutGeometry}}"
-msgstr ""
-"The following org units have no geometry{{escape}} "
-"{{orgUnitsWithoutGeometry}}"
-
 msgid "Data layer not found for data item id{{escape}} {{dataItemId}}"
 msgstr "Data layer not found for data item id{{escape}} {{dataItemId}}"
 
@@ -562,9 +561,6 @@ msgstr "Error loading models"
 
 msgid "An unknown error occurred"
 msgstr "An unknown error occurred"
-
-msgid "Missing data for covariate"
-msgstr "Missing data for covariate"
 
 msgid "{{count}} org units"
 msgid_plural "{{count}} org units"
@@ -1189,8 +1185,14 @@ msgstr ""
 "elements across all organisation units and time periods. This action is "
 "irreversible."
 
-msgid "Type \"delete\" to confirm"
-msgstr "Type \"delete\" to confirm"
+msgid "Data elements to be pruned{{colon}}"
+msgstr "Data elements to be pruned{{colon}}"
+
+msgid "To confirm, type {{quote}}delete{{quote}} in the field below{{colon}}"
+msgstr "To confirm, type {{quote}}delete{{quote}} in the field below{{colon}}"
+
+msgid "Type {{quote}}delete{{quote}} to confirm"
+msgstr "Type {{quote}}delete{{quote}} to confirm"
 
 msgid "Loading..."
 msgstr "Loading..."
@@ -1258,6 +1260,43 @@ msgstr "Error"
 
 msgid "Please remember to rerun your analytics tables to update the system."
 msgstr "Please remember to rerun your analytics tables to update the system."
+
+msgid "Experimental features"
+msgstr "Experimental features"
+
+msgid "Warning"
+msgstr "Warning"
+
+msgid ""
+"These features are experimental and may be unstable or change without "
+"notice."
+msgstr ""
+"These features are experimental and may be unstable or change without "
+"notice."
+
+msgid "Enable experimental features"
+msgstr "Enable experimental features"
+
+msgid "Turn on to access experimental features in the app"
+msgstr "Turn on to access experimental features in the app"
+
+msgid "Available features"
+msgstr "Available features"
+
+msgid "Metric plots"
+msgstr "Metric plots"
+
+msgid "Show metric visualization plots in the evaluation dashboard"
+msgstr "Show metric visualization plots in the evaluation dashboard"
+
+msgid "Show evaluation visualization plots in the evaluation dashboard"
+msgstr "Show evaluation visualization plots in the evaluation dashboard"
+
+msgid "Settings saved successfully"
+msgstr "Settings saved successfully"
+
+msgid "Failed to save settings"
+msgstr "Failed to save settings"
 
 msgid "Route configuration"
 msgstr "Route configuration"

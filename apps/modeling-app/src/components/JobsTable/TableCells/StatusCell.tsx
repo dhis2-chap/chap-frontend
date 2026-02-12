@@ -1,4 +1,3 @@
-import React from 'react';
 import { StatusIndicator, PillVariant } from '@dhis2-chap/ui';
 import i18n from '@dhis2/d2-i18n';
 import { JOB_STATUSES } from '../../../hooks/useJobs';

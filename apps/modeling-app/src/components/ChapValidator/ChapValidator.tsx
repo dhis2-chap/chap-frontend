@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { Button, CircularLoader, IconError24 } from '@dhis2/ui';
 import { useNavigate } from 'react-router-dom';

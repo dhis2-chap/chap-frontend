@@ -3,7 +3,7 @@
  * This component displays a static example chart for illustrative purposes.
  * Do NOT use this component in the actual application.
  */
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Highcharts from 'highcharts';
 import highchartsMore from 'highcharts/highcharts-more';
 import HighchartsReact from 'highcharts-react-official';

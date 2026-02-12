@@ -17,7 +17,11 @@ export type DataViewRootOrgUnitsResponse = {
 };
 
 export const useDataViewRootOrgUnits = () => {
-    const { data, error, isLoading, isError } = useApiDataQuery<DataViewRootOrgUnitsResponse, Error, OrgUnit[]>({
+    const { data, error, isLoading, isError } = useApiDataQuery<
+        DataViewRootOrgUnitsResponse,
+        Error,
+        OrgUnit[]
+    >({
         queryKey: ['organisationUnits', 'dataViewRoot'],
         query: DataViewRootOrgUnitsRequest,
         select: data => data.organisationUnits,

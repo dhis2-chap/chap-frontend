@@ -7,7 +7,6 @@ import {
     getCategories as getCategoriesHelper,
     getFirstGuide as getFirstGuideHelper,
 } from '@/utils/guideHelpers';
-
 import GettingStarted, {
     frontmatter as gettingStartedFrontmatter,
 } from './user-guides/getting-started/index.md';

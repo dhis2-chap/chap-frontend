@@ -1,4 +1,3 @@
-import React from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { useInitialFormState } from '@/pages/NewEvaluationPage/hooks/useInitialFormState';
 import { CircularLoader, NoticeBox } from '@dhis2/ui';

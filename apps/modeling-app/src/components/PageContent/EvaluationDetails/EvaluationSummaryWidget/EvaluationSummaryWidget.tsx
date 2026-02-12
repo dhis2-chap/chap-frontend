@@ -1,4 +1,3 @@
-import React from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { Widget } from '@dhis2-chap/ui';
 import styles from './EvaluationSummaryWidget.module.css';
@@ -55,7 +54,7 @@ export const EvaluationSummaryWidget = ({ evaluationId }: Props) => {
         <div className={styles.container}>
             <ModelVersionWarningView
                 modelTemplateVersion={backtest.modelTemplateVersion}
-                configuredModelTemplateVersion={backtest.configuredModel.modelTemplate.version}
+                configuredModelTemplateVersion={backtest.configuredModel?.modelTemplate?.version}
             />
             <WidgetWrapper>
                 <div className={styles.content}>
@@ -69,7 +68,7 @@ export const EvaluationSummaryWidget = ({ evaluationId }: Props) => {
                     </div>
                     <ModelView
                         models={models}
-                        configuredModelId={backtest.configuredModel.id}
+                        configuredModelId={backtest.configuredModel?.id}
                     />
                     <PeriodView
                         periodType={backtest.dataset.periodType}

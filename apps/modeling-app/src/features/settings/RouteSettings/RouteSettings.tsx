@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { Card, CircularLoader } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { useRoute } from '../../../hooks/useRoute';

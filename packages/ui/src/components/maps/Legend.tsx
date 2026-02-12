@@ -1,4 +1,3 @@
-import React from 'react';
 import styles from './Legend.module.css';
 
 const Legend = ({ title, bins, colors }: any) => {

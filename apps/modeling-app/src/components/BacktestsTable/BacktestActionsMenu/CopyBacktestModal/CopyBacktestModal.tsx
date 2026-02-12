@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import {
     Modal,
     ModalTitle,
@@ -164,7 +164,7 @@ export const CopyBacktestModal = ({ id, onClose, returnTo }: CopyBacktestModalPr
                         name="model"
                         checked={selectedAttributes.model}
                         onChange={() => handleAttributeChange('model')}
-                        value={String(backtest.configuredModel.id)}
+                        value={backtest.configuredModel?.id ? String(backtest.configuredModel.id) : ''}
                     />
 
                     <div

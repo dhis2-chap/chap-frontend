@@ -1,4 +1,3 @@
-import React from 'react';
 import styles from './InfoAboutReportingBugs.module.css';
 import { Button, IconCross16, IconWarning16 } from '@dhis2/ui';
 import { useLocalStorage } from '../../../hooks/useLocalStorage';
@@ -26,7 +25,7 @@ const InfoAboutReportingBugs = () => {
             {!isWarningDismissed && (
                 <div
                     className={styles.infoAboutReportingBugsInner}
-                    style={{ maxWidth: '1400px' }}
+                    style={{ maxInlineSize: '1400px' }}
                 >
                     <div>
                         <span className={styles.icon}>

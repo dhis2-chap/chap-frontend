@@ -6,6 +6,13 @@
     max-inline-size: 800px;
 }
 
+.loadingContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 48px;
+}
+
 .accessDenied {
     padding: 48px;
 }

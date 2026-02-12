@@ -5,16 +5,19 @@ import { BACKTESTS_LIST_QUERY_KEY } from './useBacktests';
 export const useBacktestById = (backtestId?: number) => {
     const queryClient = useQueryClient();
 
-    const {
-        data,
-        error,
-        isLoading,
-        isFetching,
-    } = useQuery<BackTestRead, ApiError>({
+    const { data, error, isLoading, isFetching } = useQuery<
+        BackTestRead,
+        ApiError
+    >({
         queryKey: [BACKTESTS_LIST_QUERY_KEY, backtestId],
-        queryFn: () => CrudService.getBacktestInfoCrudBacktestsBacktestIdInfoGet(backtestId!),
+        queryFn: () =>
+            CrudService.getBacktestInfoCrudBacktestsBacktestIdInfoGet(
+                backtestId!,
+            ),
         initialData: () => {
-            const cachedList = queryClient.getQueryData<BackTestRead[]>([BACKTESTS_LIST_QUERY_KEY]);
+            const cachedList = queryClient.getQueryData<BackTestRead[]>([
+                BACKTESTS_LIST_QUERY_KEY,
+            ]);
             return cachedList?.find(backtest => backtest.id === backtestId);
         },
         enabled: !!backtestId && typeof backtestId === 'number',

@@ -16,10 +16,10 @@ Let's say that this is your disease data for the last 4 years, aggregated by mon
 <PredictionAnimation step={0} />
 
 From here, we want to know whether this is enough data to train a model that can make accurate predictions. 
-To answer this question, we can create an evaluation in the modeling app. An evaluation takes in a set of parameters defined by the model you are using, and splits the data into training and test sets automatically. 
+To answer this question, we can create an evaluation. An evaluation takes in a set of parameters defined by the model you are using, and splits the data into training and test sets automatically. 
 It then generates a range of predictions for the test set, and compares them to the actual values.
 
-> See how to do this in the [Creating an Evaluation](#/guides/creating-an-evaluation) guide.
+> See how to do this in the [Creating an Evaluation](/guides/creating-an-evaluation) guide.
 
 After running a successful evaluation, it will give you something like this:
 
@@ -38,8 +38,8 @@ This is a good sign.
 
 However, we can also see that the model has a high uncertainty in its predictions, especially for the last month. There are many factors that can contribute to this, such as:
 - The model is not trained on enough data
-- The model parameters needs to be tuned or adjusted
-- The quality of your data is not good enough
+- The model parameters need to be tuned or adjusted
+- The quality of the data is not good enough
 
 Whether this model is good enough for your use case depends on your specific requirements, and usually involves a combination of domain knowledge and data analysis.
 Evaluating a model is an iterative process. If you are not satisfied with the performance of the model, the next step would be to tune any parameters or adjust the model to reduce the uncertainty.

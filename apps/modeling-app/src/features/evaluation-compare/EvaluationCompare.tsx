@@ -3,7 +3,7 @@ import {
     EvaluationCompatibleSelector,
     EvaluationSelectorBase,
 } from '../select-evaluation';
-import React, { useMemo, useRef } from 'react';
+import { useMemo, useRef } from 'react';
 import css from './EvaluationCompare.module.css';
 import {
     Button,

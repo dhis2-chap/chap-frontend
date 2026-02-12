@@ -1,7 +1,7 @@
 .buttonContainer {
     display: flex;
     justify-content: space-between;
-    margin-bottom: var(--spacers-dp16);
+    margin-block-end: var(--spacers-dp16);
 }
 
 .leftSection {

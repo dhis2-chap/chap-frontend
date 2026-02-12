@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import css from './SplitPeriodSlider.module.css';
 import { getPeriodNameFromId } from '../utils/Time';
 import i18n from '@dhis2/d2-i18n';

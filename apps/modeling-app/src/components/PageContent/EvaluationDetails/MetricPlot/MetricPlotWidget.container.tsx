@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { CircularLoader, IconInfo16, MenuItem, NoticeBox, SingleSelect, Tooltip } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import styles from './MetricPlotWidget.module.css';

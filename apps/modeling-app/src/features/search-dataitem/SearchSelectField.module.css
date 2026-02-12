@@ -5,7 +5,7 @@
 .label {
     display: block;
     font-weight: 500;
-    margin-bottom: 0.5rem;
+    margin-block-end: 0.5rem;
     color: #374151;
 }
 
@@ -16,7 +16,7 @@
 }
 
 .triggerButton {
-    width: 100%;
+    inline-size: 100%;
     padding: 0.375rem 0.5rem;
     border: 1px solid #d1d5db;
     border-radius: 0.375rem;
@@ -27,9 +27,9 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    text-align: left;
+    text-align: start;
     gap: 0.5rem;
-    min-height: 2rem;
+    min-block-size: 2rem;
 }
 
 .triggerButton:focus {
@@ -48,7 +48,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    min-width: 0;
+    min-inline-size: 0;
     font-size: 14px;
     line-height: 1.25;
 }
@@ -62,7 +62,7 @@
     align-items: center;
     gap: 0.125rem;
     flex-shrink: 0;
-    height: 1.25rem;
+    block-size: 1.25rem;
 }
 
 .clearButton {
@@ -74,8 +74,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 1.25rem;
-    height: 1.25rem;
+    inline-size: 1.25rem;
+    block-size: 1.25rem;
     border-radius: 0.25rem;
 }
 
@@ -89,8 +89,8 @@
     align-items: center;
     justify-content: center;
     color: #6b7280;
-    width: 1.25rem;
-    height: 1.25rem;
+    inline-size: 1.25rem;
+    block-size: 1.25rem;
 }
 
 .dropDown {
@@ -98,17 +98,17 @@
     border: 1px solid #d1d5db;
     border-radius: 0.375rem;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    min-width: 120%;
-    max-width: 400px;
+    min-inline-size: 120%;
+    max-inline-size: 400px;
 }
 
 .searchContainer {
     padding: 0.75rem;
-    border-bottom: 1px solid #f3f4f6;
+    border-block-end: 1px solid #f3f4f6;
 }
 
 .searchInput {
-    width: 100%;
+    inline-size: 100%;
     padding: 0.5rem 0.75rem;
     border: 1px solid #d1d5db;
     border-radius: 0.375rem;
@@ -123,7 +123,7 @@
 }
 
 .resultsList {
-    max-height: 200px;
+    max-block-size: 200px;
     overflow-y: auto;
     margin: 0;
     padding: 0;
@@ -136,7 +136,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #f3f4f6;
+    border-block-end: 1px solid #f3f4f6;
     font-size: 0.8125rem;
     line-height: 1.25;
 }
@@ -146,7 +146,7 @@
 }
 
 .dropDownItem:last-child {
-    border-bottom: none;
+    border-block-end: none;
 }
 
 .rightDropDownItem {
@@ -156,7 +156,7 @@
     padding: 0.1875rem 0.375rem;
     border-radius: 0.25rem;
     flex-shrink: 0;
-    margin-left: 0.5rem;
+    margin-inline-start: 0.5rem;
 }
 
 .infoSearchItem {
