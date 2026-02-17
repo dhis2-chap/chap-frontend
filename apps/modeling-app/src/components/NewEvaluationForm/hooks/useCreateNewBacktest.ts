@@ -13,6 +13,7 @@ import { useNavigate } from 'react-router-dom';
 import { prepareBacktestData } from '../../ModelExecutionForm/utils/prepareBacktestData';
 import { ImportSummaryCorrected } from '../../ModelExecutionForm/types';
 import { getImportSummaryFromApiError } from '@/components/ModelExecutionForm/utils/importSummaryUtils';
+import { buildOrgUnitFeatureCollection } from '@/components/ModelExecutionForm/utils/orgUnitGeoJson';
 
 const N_SPLITS = 10;
 
@@ -49,20 +50,9 @@ export const useCreateNewBacktest = ({
             queryClient,
         );
 
-        const filteredGeoJson: FeatureCollectionModel = {
-            type: 'FeatureCollection',
-            features: orgUnitResponse.geojson.organisationUnits.map(ou => ({
-                id: ou.id,
-                type: 'Feature',
-                geometry: ou.geometry,
-                properties: {
-                    id: ou.id,
-                    parent: ou.parent.id,
-                    parentGraph: ou.parent.id,
-                    level: ou.level,
-                },
-            })),
-        };
+        const filteredGeoJson: FeatureCollectionModel = buildOrgUnitFeatureCollection(
+            orgUnitResponse.geojson.organisationUnits,
+        );
 
         const backtestRequest: MakeBacktestWithDataRequest = {
             name: formData.name,
