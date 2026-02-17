@@ -11,3 +11,6 @@
 .playwright-mcp
 .playwright-mcp/**
 .ralph
+apps/modeling-app/e2e/.auth/
+playwright-report/
+test-results/
