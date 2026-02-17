@@ -3,7 +3,7 @@
 Prerequisites:
 - DHIS2 running (default: `http://localhost:8080`)
 - CHAP backend running
-- Frontend running (default: `http://localhost:3000/#/evaluate`)
+- Frontend running (default: `http://localhost:3000`)
 
 ## Commands
 

@@ -1,6 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
 
-const APP_URL = process.env.E2E_APP_URL ?? 'http://localhost:3000/#/evaluate';
 const REQUIRED_DATA_MAPPINGS = [
     {
         fieldKey: 'disease-cases',
@@ -153,8 +152,7 @@ const prepareValidFormData = async (page: Page, name: string) => {
 };
 
 test('validates period rules with invalid values', async ({ page }) => {
-    const appOrigin = new URL(APP_URL).origin;
-    const newEvaluationUrl = `${appOrigin}/#/evaluate/new`;
+    const newEvaluationUrl = '/#/evaluate/new';
 
     await stubCreateBacktestWithData(page);
 
@@ -185,8 +183,7 @@ test('validates period rules with invalid values', async ({ page }) => {
 });
 
 test('accepts valid values without client-side validation errors', async ({ page }) => {
-    const appOrigin = new URL(APP_URL).origin;
-    const newEvaluationUrl = `${appOrigin}/#/evaluate/new`;
+    const newEvaluationUrl = '/#/evaluate/new';
 
     await stubCreateBacktestWithData(page);
     let backtestCreateRequestCount = 0;
@@ -208,9 +205,7 @@ test('accepts valid values without client-side validation errors', async ({ page
 });
 
 test('warns before leaving a form with unsaved changes', async ({ page }) => {
-    const appOrigin = new URL(APP_URL).origin;
-    const newEvaluationUrl = `${appOrigin}/#/evaluate/new`;
-    const evaluationsUrl = `${appOrigin}/#/evaluate`;
+    const newEvaluationUrl = '/#/evaluate/new';
 
     await page.goto(newEvaluationUrl);
 
@@ -220,11 +215,11 @@ test('warns before leaving a form with unsaved changes', async ({ page }) => {
     await expect(page.getByRole('heading', { name: 'Unsaved changes' })).toBeVisible();
 
     await page.getByRole('button', { name: 'Cancel' }).click();
-    await expect(page).toHaveURL(newEvaluationUrl);
+    await expect(page).toHaveURL(/\/#\/evaluate\/new$/);
 
     await page.getByRole('button', { name: 'Back to evaluations' }).click();
     await page.getByRole('button', { name: 'Leave page' }).click();
 
-    await expect(page).toHaveURL(evaluationsUrl);
+    await expect(page).toHaveURL(/\/#\/evaluate$/);
     await expect(page.getByRole('heading', { name: 'Evaluations' })).toBeVisible();
 });

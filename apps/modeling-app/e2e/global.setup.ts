@@ -1,11 +1,11 @@
 import fs from 'fs';
 import path from 'path';
 import { request } from '@playwright/test';
+import { getAppOrigin } from './config';
 
 const DEFAULT_DHIS2_BASE_URL = 'http://localhost:8080';
 const DEFAULT_DHIS2_USERNAME = 'birk';
 const DEFAULT_DHIS2_PASSWORD = 'Solololo1!';
-const DEFAULT_APP_URL = 'http://localhost:3000/#/evaluate';
 
 const normalizeBaseUrl = (url: string): string => url.replace(/\/+$/, '');
 
@@ -34,7 +34,6 @@ async function globalSetup() {
     const dhis2BaseUrl = normalizeBaseUrl(
         process.env.E2E_DHIS2_BASE_URL ?? DEFAULT_DHIS2_BASE_URL,
     );
-    const appUrl = process.env.E2E_APP_URL ?? DEFAULT_APP_URL;
     const username = process.env.E2E_DHIS2_USERNAME ?? DEFAULT_DHIS2_USERNAME;
     const password = process.env.E2E_DHIS2_PASSWORD ?? DEFAULT_DHIS2_PASSWORD;
 
@@ -85,7 +84,7 @@ async function globalSetup() {
     }
 
     const storageState = await requestContext.storageState();
-    const appOrigin = new URL(appUrl).origin;
+    const appOrigin = getAppOrigin();
     const localStorageEntry = {
         name: 'DHIS2_BASE_URL',
         value: dhis2BaseUrl,
