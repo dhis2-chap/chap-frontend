@@ -46,8 +46,15 @@ const assessmentStatusConfig = {
     },
 };
 
+const toDataTestKey = (value: string): string => value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
 export const ModelCard = ({ model, isSelected, onSelect }: Props) => {
     const assessmentStatus = model.authorAssessedStatus && assessmentStatusConfig[model.authorAssessedStatus];
+    const modelName = model.displayName || model.name || 'model';
+    const modelDataTestKey = toDataTestKey(modelName);
 
     return (
         <div className={cn(styles.modelCardContainer, {
@@ -135,6 +142,7 @@ export const ModelCard = ({ model, isSelected, onSelect }: Props) => {
                 onClick={() => onSelect(model)}
                 primary
                 small
+                dataTest={`model-select-${modelDataTestKey}`}
             >
                 {isSelected ? i18n.t('Selected') : i18n.t('Select Model')}
             </Button>

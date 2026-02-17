@@ -16,6 +16,11 @@ type Props = {
     onResetField: () => void;
 };
 
+const toDataTestKey = (value: string): string => value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
 export const FeatureMappingItem = ({ feature, onMapping, existingMapping, onResetField }: Props) => {
     const createFeature = (feature: FeatureType) => ({
         id: feature.name || feature.displayName,
@@ -23,6 +28,7 @@ export const FeatureMappingItem = ({ feature, onMapping, existingMapping, onRese
         displayName: feature.displayName,
         description: feature.description,
     });
+    const featureDataTestKey = toDataTestKey(feature.displayName || feature.name || 'feature');
 
     const shouldShowDescription = (feature: FeatureType) => {
         return feature.description &&
@@ -30,7 +36,10 @@ export const FeatureMappingItem = ({ feature, onMapping, existingMapping, onRese
     };
 
     return (
-        <div className={styles.mappingItem}>
+        <div
+            className={styles.mappingItem}
+            data-test={`feature-mapping-${featureDataTestKey}`}
+        >
             <SearchSelectField
                 feature={createFeature(feature)}
                 onChangeSearchSelectField={(_, dataItemId, dataItemDisplayName, dimensionItemType) => {
@@ -43,6 +52,7 @@ export const FeatureMappingItem = ({ feature, onMapping, existingMapping, onRese
                 }}
                 defaultValue={existingMapping}
                 onResetField={onResetField}
+                dataTestKey={`feature-mapping-${featureDataTestKey}`}
             />
             {shouldShowDescription(feature) && (
                 <p className={styles.featureDescription}>

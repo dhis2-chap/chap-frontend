@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-02-17T11:15:09.221Z\n"
-"PO-Revision-Date: 2026-02-17T11:15:09.222Z\n"
+"POT-Creation-Date: 2026-02-06T15:01:48.416Z\n"
+"PO-Revision-Date: 2026-02-06T15:01:48.417Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -439,11 +439,6 @@ msgstr "Org unit"
 msgid "Period"
 msgstr "Period"
 
-msgid "{{periods}} and {{count}} more"
-msgid_plural "{{periods}} and {{count}} more"
-msgstr[0] "{{periods}} and {{count}} more"
-msgstr[1] "{{periods}} and {{count}} more"
-
 msgid "Import Summary"
 msgstr "Import Summary"
 
@@ -554,9 +549,6 @@ msgstr "Leave page"
 
 msgid "Start dry run"
 msgstr "Start dry run"
-
-msgid "Download request"
-msgstr "Download request"
 
 msgid "Start import"
 msgstr "Start import"
