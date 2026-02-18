@@ -1,0 +1,66 @@
+services:
+  chap:
+    platform: linux/amd64
+    image: ghcr.io/dhis2-chap/chap-core:latest
+    depends_on:
+      redis:
+        condition: service_started
+      worker:
+        condition: service_started
+      postgres:
+        condition: service_healthy
+    restart: always
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      CHAP_DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      CELERY_BROKER: redis://redis:6379/0
+      CHAP_LOGS_DIR: /data/logs
+    ports:
+      - "8000:8000"
+
+  worker:
+    platform: linux/amd64
+    image: ghcr.io/dhis2-chap/chap-core-with-inla:latest
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    restart: always
+    environment:
+      CHAP_DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      CELERY_BROKER: redis://redis:6379
+      RENV_PATHS_ROOT: /data/renv
+      UV_CACHE_DIR: /data/uv
+      CHAP_LOGS_DIR: /data/logs
+      PYTENSOR_FLAGS: "base_compiledir=/data/pytensor"
+    command: /app/.venv/bin/celery -A chap_core.rest_api.celery_tasks worker --loglevel=info
+
+  redis:
+    image: valkey/valkey:8
+    restart: always
+    healthcheck:
+      test: ["CMD", "valkey-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  postgres:
+    image: postgres:17
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+      start_period: 40s
+    volumes:
+      - chap-db:/var/lib/postgresql/data
+
+volumes:
+  chap-db: {}

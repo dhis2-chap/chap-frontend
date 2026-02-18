@@ -14,3 +14,4 @@
 apps/modeling-app/e2e/.auth/
 playwright-report/
 test-results/
+.env.local
