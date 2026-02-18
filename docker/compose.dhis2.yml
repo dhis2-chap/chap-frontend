@@ -1,0 +1,91 @@
+services:
+  dhis2-db-dump:
+    image: busybox:1.37
+    command:
+      [
+        "sh",
+        "-ec",
+        "if [ -f dhis2-demo.dump.gz ]; then echo 'dhis2-demo.dump.gz exists'; exit 0; fi; if [ -f demo.sql.gz ]; then mv demo.sql.gz dhis2-demo.dump.gz; else wget --output-document dhis2-demo.dump.gz \"$$DHIS2_DB_DUMP_URL\"; fi; echo 'Prepared dhis2-demo.dump.gz'",
+      ]
+    environment:
+      DHIS2_DB_DUMP_URL: ${DHIS2_DB_DUMP_URL:-https://databases.dhis2.org/climate/laos/2.41.7/demo.sql.gz}
+    working_dir: /opt/dump
+    volumes:
+      - dhis2-db-dump:/opt/dump
+
+  dhis2-db:
+    image: ${DHIS2_DB_IMAGE:-ghcr.io/baosystems/postgis:18-3.6}
+    restart: unless-stopped
+    depends_on:
+      dhis2-db-dump:
+        condition: service_completed_successfully
+    environment:
+      POSTGRES_DB: ${DHIS2_DB_NAME:-dhis2}
+      POSTGRES_USER: ${DHIS2_DB_USER:-dhis}
+      POSTGRES_PASSWORD: ${DHIS2_DB_PASSWORD:-dhis}
+      PGPASSWORD: ${DHIS2_DB_PASSWORD:-dhis}
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "psql --no-password --quiet --username $$POSTGRES_USER postgres://127.0.0.1/$$POSTGRES_DB -p 5432 --command \"SELECT 'ok'\" > /dev/null",
+        ]
+      start_period: 120s
+      interval: 5s
+      timeout: 5s
+      retries: 30
+    volumes:
+      - dhis2-db:/var/lib/postgresql
+      - dhis2-db-dump:/opt/dhis2-dump
+      - ./scripts/init-dhis2-db.sh:/docker-entrypoint-initdb.d/01-init-dhis2-db.sh:ro
+
+  dhis2-web:
+    platform: linux/amd64
+    image: ${DHIS2_IMAGE:-dhis2/core:2.41.7}
+    restart: unless-stopped
+    depends_on:
+      dhis2-db:
+        condition: service_healthy
+    environment:
+      DB_HOSTNAME: dhis2-db
+      DB_PORT: "5432"
+      DB_NAME: ${DHIS2_DB_NAME:-dhis2}
+      DB_USERNAME: ${DHIS2_DB_USER:-dhis}
+      DB_PASSWORD: ${DHIS2_DB_PASSWORD:-dhis}
+    volumes:
+      - ./dhis.conf:/opt/dhis2/dhis.conf:ro
+    ports:
+      - "${DHIS2_PORT:-8080}:8080"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:8080/dhis-web-login >/dev/null"]
+      start_period: 240s
+      interval: 10s
+      timeout: 10s
+      retries: 60
+
+  dhis2-analytics:
+    image: alpine:3.22
+    depends_on:
+      dhis2-web:
+        condition: service_healthy
+    environment:
+      BASE_URL: http://dhis2-web:8080
+      USERNAME: ${DHIS2_ANALYTICS_USERNAME:-system}
+      PASSWORD: "${DHIS2_ANALYTICS_PASSWORD:-S&stem123!}"
+      DHIS2_ANALYTICS_LAST_YEARS: ${DHIS2_ANALYTICS_LAST_YEARS:-1}
+      DHIS2_ANALYTICS_POLL_INTERVAL_SECONDS: ${DHIS2_ANALYTICS_POLL_INTERVAL_SECONDS:-5}
+      DHIS2_ANALYTICS_MAX_POLL_TRIES: ${DHIS2_ANALYTICS_MAX_POLL_TRIES:-360}
+      DHIS2_ROUTE_NAME: ${DHIS2_ROUTE_NAME:-Chap Modeling App}
+      DHIS2_ROUTE_CODE: ${DHIS2_ROUTE_CODE:-chap}
+      DHIS2_ROUTE_URL: ${DHIS2_ROUTE_URL:-http://host.docker.internal:8000/**}
+    volumes:
+      - ./scripts/generate_analytics_tables.sh:/opt/scripts/generate_analytics_tables.sh:ro
+    working_dir: /opt/scripts
+    command: >
+      sh -c "apk update --no-cache &&
+             apk add --no-cache bash curl jq &&
+             ./generate_analytics_tables.sh"
+
+volumes:
+  dhis2-db: {}
+  dhis2-db-dump: {}

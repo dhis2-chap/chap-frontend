@@ -17,7 +17,7 @@ services:
       CELERY_BROKER: redis://redis:6379/0
       CHAP_LOGS_DIR: /data/logs
     ports:
-      - "8000:8000"
+      - "${CHAP_PORT:-8000}:8000"
 
   worker:
     platform: linux/amd64

@@ -13,6 +13,7 @@
         "tsc:check": "turbo tsc:check --parallel",
         "format": "d2-style apply",
         "start": "turbo start",
+        "docker:e2e": "./docker/scripts/e2e-stack.sh",
         "build": "turbo build",
         "test": "vitest run",
         "e2e": "playwright test --ui",
