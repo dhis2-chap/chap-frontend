@@ -5,7 +5,7 @@ export const buildOrgUnitFeatureCollection = (
     organisationUnits: OrgUnitResponse['geojson']['organisationUnits'],
 ): FeatureCollectionModel => ({
     type: 'FeatureCollection',
-    features: organisationUnits.map(orgUnit => {
+    features: organisationUnits.map((orgUnit) => {
         const parentId = orgUnit.parent?.id;
         const properties: Record<string, string | number> = {
             id: orgUnit.id,
