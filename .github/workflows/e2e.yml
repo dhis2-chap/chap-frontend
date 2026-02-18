@@ -1,0 +1,90 @@
+name: e2e
+
+on:
+    pull_request:
+    workflow_dispatch:
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    e2e:
+        runs-on: ubuntu-latest
+        timeout-minutes: 90
+        permissions:
+            contents: read
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - uses: pnpm/action-setup@v4
+              with:
+                  version: 10.14.0
+
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+                  cache: 'pnpm'
+                  cache-dependency-path: 'pnpm-lock.yaml'
+
+            - name: Install dependencies
+              run: pnpm install --frozen-lockfile
+
+            - name: Install Playwright browser
+              run: pnpm exec playwright install --with-deps chromium
+
+            - name: Start CHAP + DHIS2 stack
+              run: pnpm docker:e2e up
+
+            - name: Wait for CHAP + DHIS2 + route
+              run: |
+                  set -euo pipefail
+
+                  wait_url() {
+                    local name="$1"
+                    local url="$2"
+                    local max_seconds="${3:-900}"
+                    local waited=0
+
+                    until curl --silent --fail "$url" >/dev/null; do
+                      if [ "$waited" -ge "$max_seconds" ]; then
+                        echo "Timed out waiting for $name at $url"
+                        return 1
+                      fi
+                      sleep 5
+                      waited=$((waited + 5))
+                    done
+
+                    echo "$name is ready ($url)"
+                  }
+
+                  wait_url "CHAP health" "http://127.0.0.1:8000/health"
+                  wait_url "DHIS2 login page" "http://127.0.0.1:8080/dhis-web-login"
+
+                  route_url='http://127.0.0.1:8080/api/routes/chap'
+                  route_wait_seconds=1800
+                  waited=0
+                  while true; do
+                    status=$(curl --silent --show-error --output /dev/null --write-out "%{http_code}" --user 'system:S&stem123!' "$route_url" || true)
+                    if [ "$status" = "200" ]; then
+                      echo "DHIS2 route 'chap' is ready"
+                      break
+                    fi
+                    if [ "$waited" -ge "$route_wait_seconds" ]; then
+                      echo "Timed out waiting for DHIS2 route 'chap' (last status: $status)"
+                      exit 1
+                    fi
+                    sleep 5
+                    waited=$((waited + 5))
+                  done
+
+            - name: Run e2e tests
+              run: pnpm e2e:ci
+
+            - name: Dump logs on failure
+              if: failure()
+              run: |
+                  set +e
+                  pnpm docker:e2e ps
+                  docker compose --project-name chap-platform --env-file docker/.env.example -f docker/compose.chap.yml -f docker/compose.dhis2.yml logs --no-color

@@ -27,7 +27,8 @@ If you want to reseed from scratch, run:
 pnpm docker:e2e reset
 ```
 
-If ports are already in use locally, update `CHAP_PORT` and/or `DHIS2_PORT` in `docker/.env.local`.
+If ports are already in use locally, set `CHAP_PORT` and/or `DHIS2_PORT` in `docker/.env.local`.
+`pnpm docker:e2e ...` uses `docker/.env.local` when present, otherwise `docker/.env.example`.
 
 Useful commands:
 

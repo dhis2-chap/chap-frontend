@@ -4,8 +4,8 @@ import { request } from '@playwright/test';
 import { getAppOrigin } from './config';
 
 const DEFAULT_DHIS2_BASE_URL = 'http://localhost:8080';
-const DEFAULT_DHIS2_USERNAME = 'birk';
-const DEFAULT_DHIS2_PASSWORD = 'Solololo1!';
+const DEFAULT_DHIS2_USERNAME = 'system';
+const DEFAULT_DHIS2_PASSWORD = 'S&stem123!';
 
 const normalizeBaseUrl = (url: string): string => url.replace(/\/+$/, '');
 

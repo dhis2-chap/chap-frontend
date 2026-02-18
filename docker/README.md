@@ -64,6 +64,6 @@ To force a fresh DHIS2 DB import, run:
 pnpm docker:e2e reset
 ```
 
-All configurable values are in `docker/.env.local` (see `docker/.env.example`).
-If port `8000` is already used, change `CHAP_PORT` in `docker/.env.local`.
-If port `8080` is already used, change `DHIS2_PORT` in `docker/.env.local`.
+The stack uses `docker/.env.local` when present, otherwise falls back to `docker/.env.example`.
+If port `8000` is already used, set `CHAP_PORT` in `docker/.env.local`.
+If port `8080` is already used, set `DHIS2_PORT` in `docker/.env.local`.

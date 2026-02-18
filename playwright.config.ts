@@ -8,4 +8,10 @@ export default defineConfig({
         baseURL: getAppOrigin(),
         storageState: './apps/modeling-app/e2e/.auth/user.json',
     },
+    webServer: {
+        command: 'pnpm --filter @dhis2-chap/modeling-app start -- --port 3000 --host 0.0.0.0',
+        url: 'http://127.0.0.1:3000',
+        reuseExistingServer: !process.env.CI,
+        timeout: 180_000,
+    },
 });
