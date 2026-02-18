@@ -60,17 +60,27 @@ jobs:
                   wait_url "CHAP health" "http://127.0.0.1:8000/health"
                   wait_url "DHIS2 login page" "http://127.0.0.1:8080/dhis-web-login"
 
-                  route_url='http://127.0.0.1:8080/api/routes/chap'
+                  route_query_url='http://127.0.0.1:8080/api/routes?filter=code:eq:chap&fields=id,code&paging=false'
                   route_wait_seconds=1800
                   waited=0
                   while true; do
-                    status=$(curl --silent --show-error --output /dev/null --write-out "%{http_code}" --user 'system:S&stem123!' "$route_url" || true)
-                    if [ "$status" = "200" ]; then
+                    route_response=$(curl --silent --show-error --user 'system:S&stem123!' "$route_query_url" || true)
+                    route_count=$(echo "$route_response" | jq -r '.routes | length' 2>/dev/null || echo 0)
+
+                    if [ "$route_count" -ge 1 ]; then
                       echo "DHIS2 route 'chap' is ready"
                       break
                     fi
+
+                    analytics_state="$(docker inspect --format '{{.State.Status}} {{.State.ExitCode}}' chap-platform-dhis2-analytics-1 2>/dev/null || true)"
+                    if [[ "$analytics_state" =~ ^exited\ [1-9][0-9]*$ ]]; then
+                      echo "dhis2-analytics failed (state: $analytics_state)"
+                      docker compose --project-name chap-platform --env-file docker/.env.example -f docker/compose.chap.yml -f docker/compose.dhis2.yml logs --no-color dhis2-analytics
+                      exit 1
+                    fi
+
                     if [ "$waited" -ge "$route_wait_seconds" ]; then
-                      echo "Timed out waiting for DHIS2 route 'chap' (last status: $status)"
+                      echo "Timed out waiting for DHIS2 route 'chap' (last response: $route_response)"
                       exit 1
                     fi
                     sleep 5
