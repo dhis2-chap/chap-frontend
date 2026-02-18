@@ -37,6 +37,10 @@ async function globalSetup() {
     const username = process.env.E2E_DHIS2_USERNAME ?? DEFAULT_DHIS2_USERNAME;
     const password = process.env.E2E_DHIS2_PASSWORD ?? DEFAULT_DHIS2_PASSWORD;
 
+    // #region agent log
+    fetch('http://127.0.0.1:7500/ingest/4f894227-fdd6-48cb-9d0c-4b19a40eab48',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'f2aaee'},body:JSON.stringify({sessionId:'f2aaee',runId:'pre',hypothesisId:'B',location:'apps/modeling-app/e2e/global.setup.ts:setup-start',message:'Starting globalSetup',data:{ci:process.env.CI ?? null,dhis2BaseUrl,appOrigin:getAppOrigin(),hasE2eAppUrl:!!process.env.E2E_APP_URL,hasE2eDhis2BaseUrl:!!process.env.E2E_DHIS2_BASE_URL,username},timestamp:Date.now()})}).catch(()=>{});
+    // #endregion
+
     const authFile = path.resolve(__dirname, '.auth', 'user.json');
     fs.mkdirSync(path.dirname(authFile), { recursive: true });
 
@@ -51,6 +55,10 @@ async function globalSetup() {
             },
         },
     );
+
+    // #region agent log
+    fetch('http://127.0.0.1:7500/ingest/4f894227-fdd6-48cb-9d0c-4b19a40eab48',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'f2aaee'},body:JSON.stringify({sessionId:'f2aaee',runId:'pre',hypothesisId:'C',location:'apps/modeling-app/e2e/global.setup.ts:login-action',message:'DHIS2 login.action response',data:{status:loginActionResponse.status(),ok:loginActionResponse.ok(),dhis2BaseUrl},timestamp:Date.now()})}).catch(()=>{});
+    // #endregion
 
     if (loginActionResponse.status() >= 400) {
         throw new Error(
@@ -68,6 +76,10 @@ async function globalSetup() {
             },
         });
 
+        // #region agent log
+        fetch('http://127.0.0.1:7500/ingest/4f894227-fdd6-48cb-9d0c-4b19a40eab48',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'f2aaee'},body:JSON.stringify({sessionId:'f2aaee',runId:'pre',hypothesisId:'C',location:'apps/modeling-app/e2e/global.setup.ts:login-api-fallback',message:'DHIS2 /api/auth/login response',data:{status:loginApiResponse.status(),ok:loginApiResponse.ok(),dhis2BaseUrl},timestamp:Date.now()})}).catch(()=>{});
+        // #endregion
+
         if (loginApiResponse.status() >= 400) {
             throw new Error(
                 `DHIS2 login fallback failed (${loginApiResponse.status()}) at ${dhis2BaseUrl}.`,
@@ -76,6 +88,10 @@ async function globalSetup() {
 
         authenticated = await isAuthenticated(requestContext);
     }
+
+    // #region agent log
+    fetch('http://127.0.0.1:7500/ingest/4f894227-fdd6-48cb-9d0c-4b19a40eab48',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'f2aaee'},body:JSON.stringify({sessionId:'f2aaee',runId:'pre',hypothesisId:'C',location:'apps/modeling-app/e2e/global.setup.ts:auth-check',message:'DHIS2 authentication verification result',data:{authenticated,dhis2BaseUrl},timestamp:Date.now()})}).catch(()=>{});
+    // #endregion
 
     if (!authenticated) {
         throw new Error(
@@ -104,6 +120,10 @@ async function globalSetup() {
             localStorage: [localStorageEntry],
         });
     }
+
+    // #region agent log
+    fetch('http://127.0.0.1:7500/ingest/4f894227-fdd6-48cb-9d0c-4b19a40eab48',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'f2aaee'},body:JSON.stringify({sessionId:'f2aaee',runId:'pre',hypothesisId:'B',location:'apps/modeling-app/e2e/global.setup.ts:storage-state',message:'Wrote storageState for appOrigin',data:{appOrigin,dhis2BaseUrl,originCount:storageState.origins.length,origins:storageState.origins.map(o=>o.origin)},timestamp:Date.now()})}).catch(()=>{});
+    // #endregion
 
     fs.writeFileSync(authFile, JSON.stringify(storageState, null, 2));
     await requestContext.dispose();

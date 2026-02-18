@@ -32,8 +32,23 @@ jobs:
             - name: Install Playwright browser
               run: pnpm exec playwright install --with-deps chromium
 
+            - name: Print runtime versions
+              run: |
+                  set -euo pipefail
+                  node --version
+                  pnpm --version
+                  pnpm exec playwright --version
+                  docker --version
+                  docker compose version
+
             - name: Start CHAP + DHIS2 stack
               run: pnpm docker:e2e up
+
+            - name: Show docker service status
+              run: |
+                  set -euo pipefail
+                  docker ps --all
+                  docker compose --project-name chap-platform --env-file docker/.env.example -f docker/compose.chap.yml -f docker/compose.dhis2.yml ps
 
             - name: Wait for CHAP + DHIS2 + route
               run: |
@@ -88,11 +103,34 @@ jobs:
                   done
 
             - name: Run e2e tests
+              env:
+                  # Force IPv4 loopback + consistent origins in CI.
+                  # Some runners resolve localhost to ::1, which can break if the dev server binds to 127.0.0.1.
+                  E2E_APP_URL: http://127.0.0.1:3000
+                  E2E_DHIS2_BASE_URL: http://127.0.0.1:8080
               run: pnpm e2e:ci
 
-            - name: Dump logs on failure
+            - name: Upload Playwright report
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: playwright-report
+                  path: playwright-report/
+                  retention-days: 7
+
+            - name: Upload Playwright test results (traces/videos)
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: playwright-test-results
+                  path: test-results/
+                  retention-days: 7
+
+            - name: Dump stack logs on failure
               if: failure()
               run: |
-                  set +e
-                  pnpm docker:e2e ps
-                  docker compose --project-name chap-platform --env-file docker/.env.example -f docker/compose.chap.yml -f docker/compose.dhis2.yml logs --no-color
+                  set -euo pipefail
+                  echo "==== docker ps ===="
+                  docker ps --all || true
+                  echo "==== CHAP + DHIS2 logs (tail) ===="
+                  pnpm docker:e2e logs || true
