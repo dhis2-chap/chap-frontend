@@ -72,10 +72,10 @@ jobs:
                     echo "$name is ready ($url)"
                   }
 
-                  wait_url "CHAP health" "http://127.0.0.1:8000/health"
-                  wait_url "DHIS2 login page" "http://127.0.0.1:8080/dhis-web-login"
+                  wait_url "CHAP health" "http://localhost:8000/health"
+                  wait_url "DHIS2 login page" "http://localhost:8080/dhis-web-login"
 
-                  route_query_url='http://127.0.0.1:8080/api/routes?filter=code:eq:chap&fields=id,code&paging=false'
+                  route_query_url='http://localhost:8080/api/routes?filter=code:eq:chap&fields=id,code&paging=false'
                   route_wait_seconds=1800
                   waited=0
                   while true; do
@@ -104,10 +104,10 @@ jobs:
 
             - name: Run e2e tests
               env:
-                  # Force IPv4 loopback + consistent origins in CI.
-                  # Some runners resolve localhost to ::1, which can break if the dev server binds to 127.0.0.1.
-                  E2E_APP_URL: http://127.0.0.1:3000
-                  E2E_DHIS2_BASE_URL: http://127.0.0.1:8080
+                  # Keep hosts consistent for cookie + localStorage origins.
+                  # The Playwright `storageState` includes DHIS2 session cookies scoped to the host used during login.
+                  E2E_APP_URL: http://localhost:3000
+                  E2E_DHIS2_BASE_URL: http://localhost:8080
               run: pnpm e2e:ci
 
             - name: Upload Playwright report
