@@ -196,7 +196,7 @@ test('accepts valid values without client-side validation errors', async ({ page
     await page.goto(newEvaluationUrl);
 
     await prepareValidFormData(page, 'Valid e2e evaluation');
-    const createBacktestRequest = page.waitForRequest((request) =>
+    const createBacktestRequest = page.waitForRequest(request =>
         isBacktestCreateRequest(request.url(), request.method()),
     );
     await page.getByRole('button', { name: 'Start dry run' }).click();
