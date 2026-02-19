@@ -10,7 +10,7 @@ fetch('http://127.0.0.1:7500/ingest/4f894227-fdd6-48cb-9d0c-4b19a40eab48', { met
 // #endregion
 
 export default defineConfig({
-    testDir: './apps/modeling-app/e2e',
+    testDir: './apps/modeling-app/e2e', 
     globalSetup: './apps/modeling-app/e2e/global.setup.ts',
     // Ensure `playwright-report/` is always generated for upload in CI.
     reporter: [
