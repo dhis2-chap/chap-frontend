@@ -5,25 +5,12 @@ const __env = ((globalThis as any).process?.env ?? {}) as Record<string, string 
 const __isCI = !!__env.CI;
 const __appOrigin = getAppOrigin();
 
-// #region agent log
-fetch('http://127.0.0.1:7500/ingest/4f894227-fdd6-48cb-9d0c-4b19a40eab48', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Debug-Session-Id': 'f2aaee' }, body: JSON.stringify({ sessionId: 'f2aaee', runId: 'pre', hypothesisId: 'A', location: 'playwright.config.ts:config-load', message: 'Loaded Playwright config', data: { ci: __env.CI ?? null, e2eAppUrl: __env.E2E_APP_URL ?? null, baseURL: __appOrigin, webServerUrl: __appOrigin, webServerCommand: 'pnpm start', webServerTimeoutMs: 180_000 }, timestamp: Date.now() }) }).catch(() => {});
-// #endregion
-
 export default defineConfig({
-    testDir: './apps/modeling-app/e2e', 
+    testDir: './apps/modeling-app/e2e',
     globalSetup: './apps/modeling-app/e2e/global.setup.ts',
-    // Ensure `playwright-report/` is always generated for upload in CI.
-    reporter: [
-        ['list'],
-        ['html', { outputFolder: 'playwright-report', open: 'never' }],
-    ],
-    // Ensure `test-results/` exists when there are traces/videos.
-    outputDir: 'test-results',
     use: {
         baseURL: __appOrigin,
         storageState: './apps/modeling-app/e2e/.auth/user.json',
-        trace: 'retain-on-failure',
-        screenshot: 'only-on-failure',
         video: 'retain-on-failure',
     },
     webServer: {

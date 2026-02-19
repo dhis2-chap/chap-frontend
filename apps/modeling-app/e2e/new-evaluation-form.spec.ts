@@ -1,17 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
 
-const agentDebugLog = (payload: {
-    hypothesisId: string;
-    location: string;
-    message: string;
-    data?: Record<string, unknown>;
-    runId?: string;
-}) => {
-    // #region agent log
-    fetch('http://127.0.0.1:7500/ingest/4f894227-fdd6-48cb-9d0c-4b19a40eab48', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Debug-Session-Id': 'f2aaee' }, body: JSON.stringify({ sessionId: 'f2aaee', runId: payload.runId ?? 'pre', hypothesisId: payload.hypothesisId, location: payload.location, message: payload.message, data: payload.data ?? {}, timestamp: Date.now() }) }).catch(() => {});
-    // #endregion
-};
-
 const REQUIRED_DATA_MAPPINGS = [
     {
         fieldKey: 'disease-cases',
@@ -166,196 +154,72 @@ const prepareValidFormData = async (page: Page, name: string) => {
 test('validates period rules with invalid values', async ({ page }) => {
     const newEvaluationUrl = '/#/evaluate/new';
 
-    let lastStep = 'init';
-    try {
-        await stubCreateBacktestWithData(page);
-        lastStep = 'stubbed-backtest';
+    await stubCreateBacktestWithData(page);
 
-        let backtestCreateRequestCount = 0;
-        page.on('request', (request) => {
-            if (isBacktestCreateRequest(request.url(), request.method())) {
-                backtestCreateRequestCount += 1;
-            }
-        });
+    let backtestCreateRequestCount = 0;
+    page.on('request', (request) => {
+        if (isBacktestCreateRequest(request.url(), request.method())) {
+            backtestCreateRequestCount += 1;
+        }
+    });
 
-        page.on('requestfailed', (request) => {
-            const failure = request.failure();
-            if (!request.url().includes(':8080/') && !request.url().includes(':8000/')) {
-                return;
-            }
-            agentDebugLog({
-                hypothesisId: 'H',
-                location: 'apps/modeling-app/e2e/new-evaluation-form.spec.ts:requestfailed',
-                message: 'Request failed during new evaluation form test',
-                data: {
-                    lastStep,
-                    url: request.url(),
-                    method: request.method(),
-                    resourceType: request.resourceType(),
-                    errorText: failure?.errorText ?? null,
-                },
-            });
-        });
+    await page.goto(newEvaluationUrl);
+    const { previousMonth, currentMonth, nextMonth } = await prepareValidFormData(
+        page,
+        'Validation check',
+    );
 
-        lastStep = 'goto-new-evaluation';
-        await page.goto(newEvaluationUrl);
+    await page.locator('[data-test="evaluation-from-date-input"]').fill(currentMonth);
+    await page.locator('[data-test="evaluation-to-date-input"]').fill(previousMonth);
+    await page.getByRole('button', { name: 'Start dry run' }).click();
+    await expect(page.getByText('End period must be after start period')).toBeVisible();
+    await expect(backtestCreateRequestCount).toBe(0);
 
-        lastStep = 'prepare-valid-form-data';
-        const { previousMonth, currentMonth, nextMonth } = await prepareValidFormData(
-            page,
-            'Validation check',
-        );
-
-        lastStep = 'set-invalid-end-before-start';
-        await page.locator('[data-test="evaluation-from-date-input"]').fill(currentMonth);
-        await page.locator('[data-test="evaluation-to-date-input"]').fill(previousMonth);
-        await page.getByRole('button', { name: 'Start dry run' }).click();
-        await expect(page.getByText('End period must be after start period')).toBeVisible();
-        await expect(backtestCreateRequestCount).toBe(0);
-
-        lastStep = 'set-invalid-future-end-date';
-        await page.locator('[data-test="evaluation-from-date-input"]').fill(currentMonth);
-        await page.locator('[data-test="evaluation-to-date-input"]').fill(nextMonth);
-        await page.getByRole('button', { name: 'Start dry run' }).click();
-        await expect(page.getByText('End date cannot be in the future')).toBeVisible();
-        await expect(backtestCreateRequestCount).toBe(0);
-    } catch (err) {
-        agentDebugLog({
-            hypothesisId: 'G',
-            location: 'apps/modeling-app/e2e/new-evaluation-form.spec.ts:invalid-values-failed',
-            message: 'New evaluation validation test failed',
-            data: {
-                lastStep,
-                url: page.url(),
-                errorMessage: (err as any)?.message ?? String(err),
-            },
-        });
-        throw err;
-    }
+    await page.locator('[data-test="evaluation-from-date-input"]').fill(currentMonth);
+    await page.locator('[data-test="evaluation-to-date-input"]').fill(nextMonth);
+    await page.getByRole('button', { name: 'Start dry run' }).click();
+    await expect(page.getByText('End date cannot be in the future')).toBeVisible();
+    await expect(backtestCreateRequestCount).toBe(0);
 });
 
 test('accepts valid values without client-side validation errors', async ({ page }) => {
     const newEvaluationUrl = '/#/evaluate/new';
 
-    let lastStep = 'init';
-    try {
-        await stubCreateBacktestWithData(page);
-        lastStep = 'stubbed-backtest';
+    await stubCreateBacktestWithData(page);
+    let backtestCreateRequestCount = 0;
+    page.on('request', (request) => {
+        if (isBacktestCreateRequest(request.url(), request.method())) {
+            backtestCreateRequestCount += 1;
+        }
+    });
 
-        let backtestCreateRequestCount = 0;
-        page.on('request', (request) => {
-            if (isBacktestCreateRequest(request.url(), request.method())) {
-                backtestCreateRequestCount += 1;
-            }
-        });
+    await page.goto(newEvaluationUrl);
 
-        page.on('requestfailed', (request) => {
-            const failure = request.failure();
-            if (!request.url().includes(':8080/') && !request.url().includes(':8000/')) {
-                return;
-            }
-            agentDebugLog({
-                hypothesisId: 'H',
-                location: 'apps/modeling-app/e2e/new-evaluation-form.spec.ts:requestfailed',
-                message: 'Request failed during new evaluation form test',
-                data: {
-                    lastStep,
-                    url: request.url(),
-                    method: request.method(),
-                    resourceType: request.resourceType(),
-                    errorText: failure?.errorText ?? null,
-                },
-            });
-        });
-
-        lastStep = 'goto-new-evaluation';
-        await page.goto(newEvaluationUrl);
-
-        lastStep = 'prepare-valid-form-data';
-        await prepareValidFormData(page, 'Valid e2e evaluation');
-        const createBacktestRequest = page.waitForRequest((request) =>
-            isBacktestCreateRequest(request.url(), request.method()),
-        );
-
-        lastStep = 'click-start-dry-run';
-        await page.getByRole('button', { name: 'Start dry run' }).click();
-
-        lastStep = 'wait-for-create-backtest-request';
-        await createBacktestRequest;
-
-        lastStep = 'assert-request-count';
-        await expect(backtestCreateRequestCount).toBe(1);
-    } catch (err) {
-        agentDebugLog({
-            hypothesisId: 'G',
-            location: 'apps/modeling-app/e2e/new-evaluation-form.spec.ts:valid-values-failed',
-            message: 'New evaluation happy-path test failed',
-            data: {
-                lastStep,
-                url: page.url(),
-                errorMessage: (err as any)?.message ?? String(err),
-            },
-        });
-        throw err;
-    }
+    await prepareValidFormData(page, 'Valid e2e evaluation');
+    const createBacktestRequest = page.waitForRequest((request) =>
+        isBacktestCreateRequest(request.url(), request.method()),
+    );
+    await page.getByRole('button', { name: 'Start dry run' }).click();
+    await createBacktestRequest;
+    await expect(backtestCreateRequestCount).toBe(1);
 });
 
 test('warns before leaving a form with unsaved changes', async ({ page }) => {
     const newEvaluationUrl = '/#/evaluate/new';
 
-    let lastStep = 'init';
-    try {
-        page.on('requestfailed', (request) => {
-            const failure = request.failure();
-            if (!request.url().includes(':8080/') && !request.url().includes(':8000/')) {
-                return;
-            }
-            agentDebugLog({
-                hypothesisId: 'H',
-                location: 'apps/modeling-app/e2e/new-evaluation-form.spec.ts:requestfailed',
-                message: 'Request failed during new evaluation form test',
-                data: {
-                    lastStep,
-                    url: request.url(),
-                    method: request.method(),
-                    resourceType: request.resourceType(),
-                    errorText: failure?.errorText ?? null,
-                },
-            });
-        });
+    await page.goto(newEvaluationUrl);
 
-        lastStep = 'goto-new-evaluation';
-        await page.goto(newEvaluationUrl);
+    await page.locator('[data-test="evaluation-name-input"] input').fill('Unsaved evaluation');
+    await page.getByRole('button', { name: 'Back to evaluations' }).click();
 
-        lastStep = 'fill-name';
-        await page.locator('[data-test="evaluation-name-input"] input').fill('Unsaved evaluation');
-        await page.getByRole('button', { name: 'Back to evaluations' }).click();
+    await expect(page.getByRole('heading', { name: 'Unsaved changes' })).toBeVisible();
 
-        lastStep = 'assert-unsaved-modal';
-        await expect(page.getByRole('heading', { name: 'Unsaved changes' })).toBeVisible();
+    await page.getByRole('button', { name: 'Cancel' }).click();
+    await expect(page).toHaveURL(/\/#\/evaluate\/new$/);
 
-        lastStep = 'cancel-unsaved';
-        await page.getByRole('button', { name: 'Cancel' }).click();
-        await expect(page).toHaveURL(/\/#\/evaluate\/new$/);
+    await page.getByRole('button', { name: 'Back to evaluations' }).click();
+    await page.getByRole('button', { name: 'Leave page' }).click();
 
-        lastStep = 'confirm-leave';
-        await page.getByRole('button', { name: 'Back to evaluations' }).click();
-        await page.getByRole('button', { name: 'Leave page' }).click();
-
-        lastStep = 'assert-returned-evaluations';
-        await expect(page).toHaveURL(/\/#\/evaluate$/);
-        await expect(page.getByRole('heading', { name: 'Evaluations' })).toBeVisible();
-    } catch (err) {
-        agentDebugLog({
-            hypothesisId: 'G',
-            location: 'apps/modeling-app/e2e/new-evaluation-form.spec.ts:unsaved-changes-failed',
-            message: 'New evaluation unsaved-changes test failed',
-            data: {
-                lastStep,
-                url: page.url(),
-                errorMessage: (err as any)?.message ?? String(err),
-            },
-        });
-        throw err;
-    }
+    await expect(page).toHaveURL(/\/#\/evaluate$/);
+    await expect(page.getByRole('heading', { name: 'Evaluations' })).toBeVisible();
 });
