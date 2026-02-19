@@ -84,6 +84,8 @@ jobs:
 
                     if [ "$route_count" -ge 1 ]; then
                       echo "DHIS2 route 'chap' is ready"
+                      echo "Route details:"
+                      echo "$route_response" | jq -r '.routes[] | "id=\(.id) code=\(.code) url=\(.url)"' || true
                       break
                     fi
 
@@ -116,6 +118,7 @@ jobs:
               with:
                   name: playwright-report
                   path: playwright-report/
+                  if-no-files-found: error
                   retention-days: 7
 
             - name: Upload Playwright test results (traces/videos)
@@ -124,6 +127,7 @@ jobs:
               with:
                   name: playwright-test-results
                   path: test-results/
+                  if-no-files-found: ignore
                   retention-days: 7
 
             - name: Dump stack logs on failure

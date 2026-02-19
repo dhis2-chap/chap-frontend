@@ -77,7 +77,9 @@ services:
       DHIS2_ANALYTICS_MAX_POLL_TRIES: ${DHIS2_ANALYTICS_MAX_POLL_TRIES:-360}
       DHIS2_ROUTE_NAME: ${DHIS2_ROUTE_NAME:-Chap Modeling App}
       DHIS2_ROUTE_CODE: ${DHIS2_ROUTE_CODE:-chap}
-      DHIS2_ROUTE_URL: ${DHIS2_ROUTE_URL:-http://host.docker.internal:8000/**}
+      # Use the compose service name so DHIS2 (running in Docker) can reach CHAP
+      # reliably on Linux CI runners (where host.docker.internal may not exist).
+      DHIS2_ROUTE_URL: ${DHIS2_ROUTE_URL:-http://chap:8000/**}
     volumes:
       - ./scripts/generate_analytics_tables.sh:/opt/scripts/generate_analytics_tables.sh:ro
     working_dir: /opt/scripts

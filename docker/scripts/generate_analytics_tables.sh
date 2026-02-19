@@ -8,7 +8,7 @@ POLL_INTERVAL_SECONDS="${DHIS2_ANALYTICS_POLL_INTERVAL_SECONDS:-5}"
 MAX_TRIES="${DHIS2_ANALYTICS_MAX_POLL_TRIES:-360}"
 ROUTE_NAME="${DHIS2_ROUTE_NAME:-Chap Modeling App}"
 ROUTE_CODE="${DHIS2_ROUTE_CODE:-chap}"
-ROUTE_URL="${DHIS2_ROUTE_URL:-http://host.docker.internal:8000/**}"
+ROUTE_URL="${DHIS2_ROUTE_URL:-http://chap:8000/**}"
 ANALYTICS_TRIGGER_RESPONSE_FILE="/tmp/dhis2-analytics-trigger-response.json"
 ROUTE_CREATE_RESPONSE_FILE="/tmp/dhis2-route-create-response.json"
 
