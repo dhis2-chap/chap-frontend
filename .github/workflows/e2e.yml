@@ -87,6 +87,10 @@ jobs:
                       echo "DHIS2 route 'chap' is ready (url=$route_url)"
                       echo "Route details:"
                       echo "$route_response" | jq -r '.routes[] | "id=\(.id) code=\(.code) url=\(.url)"' || true
+                      echo "Checking route proxy health..."
+                      curl --silent --show-error --fail --user 'system:S&stem123!' \
+                        'http://localhost:8080/api/routes/chap/run/health' >/dev/null
+                      echo "Route proxy health OK"
                       break
                     fi
 
