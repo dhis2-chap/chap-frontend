@@ -36,11 +36,6 @@ jobs:
               run: pnpm docker:e2e up --wait
 
             - name: Run e2e tests
-              env:
-                  # Keep hosts consistent for cookie + localStorage origins.
-                  # The Playwright `storageState` includes DHIS2 session cookies scoped to the host used during login.
-                  E2E_APP_URL: http://localhost:3000
-                  E2E_DHIS2_BASE_URL: http://localhost:8080
               run: pnpm e2e:ci
 
             - name: Upload Playwright artifacts

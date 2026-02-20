@@ -1,59 +1,31 @@
-# E2E tests for modeling-app
+# Modeling App E2E: Need to Know
 
-Prerequisites:
-- DHIS2 running (default: `http://localhost:8080`)
-- CHAP backend running
-- Frontend running (default: `http://localhost:3000`)
+## How it works
+- Playwright runs a `setup` project first (`auth.setup.ts`) to log in and save auth state to `playwright/.auth/user.json`.
+- All `*.spec.ts` tests run in the `chromium` project and reuse that auth state.
 
-## Start the local backend stack (CHAP + DHIS2)
-
-From the repository root:
-
-```bash
-pnpm docker:e2e up
-```
-
-To block until the stack is ready (useful in CI), run:
+## Run locally
+From repo root:
 
 ```bash
 pnpm docker:e2e up --wait
+pnpm e2e
 ```
 
-This command runs both docker compose files:
-- `docker/compose.chap.yml` (CHAP stack)
-- `docker/compose.dhis2.yml` (DHIS2 stack)
-
-`dhis2-db-dump` (one-shot service) ensures the DHIS2 demo dump exists before the DB starts.
-On first run (empty DB volume), `dhis2-db` imports the dump via `docker/scripts/init-dhis2-db.sh` using `psql --set ON_ERROR_STOP=0`, then reuses the same DB volume on subsequent starts.
-`dhis2-analytics` (one-shot service) then triggers analytics table generation after DHIS2 is healthy and creates a DHIS2 API route (`code=chap`) for CHAP.
-DHIS2 uses `docker/dhis.conf` for DB connection settings in this local stack.
-If you want to reseed from scratch, run:
+Headless run:
 
 ```bash
-pnpm docker:e2e reset
+pnpm e2e:ci
 ```
 
-If ports are already in use locally, set `CHAP_PORT` and/or `DHIS2_PORT` in `docker/.env.local`.
-`pnpm docker:e2e ...` uses `docker/.env.local` when present, otherwise `docker/.env.example`.
-
-Useful commands:
-
+## Stack control
 ```bash
 pnpm docker:e2e down
 pnpm docker:e2e reset
 ```
 
-## Commands
-
-```bash
-pnpm e2e
-pnpm e2e:ci
-```
-
-## Environment variables
-
-Optional overrides:
-- `E2E_APP_URL`
-- `E2E_DHIS2_BASE_URL`
-- `E2E_DHIS2_USERNAME`
-- `E2E_DHIS2_PASSWORD`
+## Optional overrides
+- `E2E_APP_URL` (default: `http://localhost:3000`)
+- `E2E_DHIS2_BASE_URL` (default: `http://localhost:8080`)
+- `E2E_DHIS2_USERNAME` (default: `system`)
+- `E2E_DHIS2_PASSWORD` (default: `S&stem123!`)

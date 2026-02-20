@@ -9,8 +9,6 @@ ENV_FILE_LOCAL="${DOCKER_DIR}/.env.local"
 ENV_FILE_FALLBACK="${DOCKER_DIR}/.env.example"
 COMPOSE_FILES=(-f "${DOCKER_DIR}/compose.chap.yml" -f "${DOCKER_DIR}/compose.dhis2.yml")
 PROJECT_NAME="${COMPOSE_PROJECT_NAME:-chap-platform}"
-CHAP_PORT="${CHAP_PORT:-8000}"
-DHIS2_PORT="${DHIS2_PORT:-8080}"
 
 compose() {
     local -a env_args=()
@@ -100,6 +98,7 @@ get_host_port() {
     mapped="$(compose port "${service}" "${container_port}" 2>/dev/null | tail -n 1 | tr -d '\r')"
 
     if [ -z "${mapped}" ]; then
+        echo "Unable to resolve published port for ${service}:${container_port}" 1>&2
         return 1
     fi
 
@@ -110,10 +109,8 @@ wait_for_stack_ready() {
     local chap_port
     local dhis2_port
 
-    chap_port="$(get_host_port chap 8000 || true)"
-    dhis2_port="$(get_host_port dhis2-web 8080 || true)"
-    chap_port="${chap_port:-${CHAP_PORT}}"
-    dhis2_port="${dhis2_port:-${DHIS2_PORT}}"
+    chap_port="$(get_host_port chap 8000)"
+    dhis2_port="$(get_host_port dhis2-web 8080)"
 
     wait_url "CHAP health" "http://localhost:${chap_port}/health" 900
     wait_url "DHIS2 login page" "http://localhost:${dhis2_port}/dhis-web-login" 1800

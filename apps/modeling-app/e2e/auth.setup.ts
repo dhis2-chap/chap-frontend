@@ -1,17 +1,16 @@
 import fs from 'fs';
 import path from 'path';
-import { request } from '@playwright/test';
+import { request, type APIRequestContext, test as setup } from '@playwright/test';
 import { getAppOrigin } from './config';
 
 const DEFAULT_DHIS2_BASE_URL = 'http://localhost:8080';
 const DEFAULT_DHIS2_USERNAME = 'system';
 const DEFAULT_DHIS2_PASSWORD = 'S&stem123!';
+const AUTH_FILE = path.resolve(__dirname, '../../../playwright/.auth/user.json');
 
 const normalizeBaseUrl = (url: string): string => url.replace(/\/+$/, '');
 
-const isAuthenticated = async (
-    requestContext: Awaited<ReturnType<typeof request.newContext>>,
-): Promise<boolean> => {
+const isAuthenticated = async (requestContext: APIRequestContext): Promise<boolean> => {
     const meResponse = await requestContext.get('/api/me.json');
     if (!meResponse.ok()) {
         return false;
@@ -23,22 +22,17 @@ const isAuthenticated = async (
     }
 
     const me = (await meResponse.json()) as { username?: string };
-    if (!me?.username) {
-        return false;
-    }
-
-    return true;
+    return Boolean(me?.username);
 };
 
-async function globalSetup() {
+setup('authenticate', async () => {
     const dhis2BaseUrl = normalizeBaseUrl(
         process.env.E2E_DHIS2_BASE_URL ?? DEFAULT_DHIS2_BASE_URL,
     );
     const username = process.env.E2E_DHIS2_USERNAME ?? DEFAULT_DHIS2_USERNAME;
     const password = process.env.E2E_DHIS2_PASSWORD ?? DEFAULT_DHIS2_PASSWORD;
 
-    const authFile = path.resolve(__dirname, '.auth', 'user.json');
-    fs.mkdirSync(path.dirname(authFile), { recursive: true });
+    fs.mkdirSync(path.dirname(AUTH_FILE), { recursive: true });
 
     const requestContext = await request.newContext({ baseURL: dhis2BaseUrl });
 
@@ -105,8 +99,6 @@ async function globalSetup() {
         });
     }
 
-    fs.writeFileSync(authFile, JSON.stringify(storageState, null, 2));
+    fs.writeFileSync(AUTH_FILE, JSON.stringify(storageState, null, 2));
     await requestContext.dispose();
-}
-
-export default globalSetup;
+});
