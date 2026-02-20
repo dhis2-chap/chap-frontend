@@ -57,31 +57,52 @@ wait_url() {
 }
 
 wait_for_analytics_job() {
-    local max_seconds="${1:-1800}"
+    local max_seconds="${1:-300}"
     local waited=0
+    local status_log_interval_seconds=30
+    local service_log_interval_seconds=120
+    local next_status_log_at=0
+    local next_service_log_at="${service_log_interval_seconds}"
+    local last_reported_state=""
+
+    echo "Waiting for dhis2-analytics to complete (timeout: ${max_seconds}s)"
 
     while true; do
         local analytics_container_id
+        local analytics_state="not-created"
         analytics_container_id="$(compose ps -q dhis2-analytics | tr -d '\n')"
 
         if [ -n "${analytics_container_id}" ]; then
-            local analytics_state
             analytics_state="$(docker inspect --format '{{.State.Status}} {{.State.ExitCode}}' "${analytics_container_id}" 2>/dev/null || true)"
+        fi
 
-            if [[ "${analytics_state}" == "exited 0" ]]; then
-                echo "dhis2-analytics completed successfully"
-                return 0
-            fi
+        if [[ "${analytics_state}" != "${last_reported_state}" || "${waited}" -ge "${next_status_log_at}" ]]; then
+            echo "dhis2-analytics status: ${analytics_state} (waited ${waited}s/${max_seconds}s)"
+            last_reported_state="${analytics_state}"
+            next_status_log_at=$((waited + status_log_interval_seconds))
+        fi
 
-            if [[ "${analytics_state}" =~ ^exited\ [1-9][0-9]*$ ]]; then
-                echo "dhis2-analytics failed (state: ${analytics_state})"
-                compose logs --no-color dhis2-analytics || true
-                return 1
-            fi
+        if [[ "${waited}" -ge "${next_service_log_at}" ]]; then
+            echo "Recent dhis2-analytics logs:"
+            compose logs --no-color --tail=30 dhis2-analytics || true
+            next_service_log_at=$((waited + service_log_interval_seconds))
+        fi
+
+        if [[ "${analytics_state}" == "exited 0" ]]; then
+            echo "dhis2-analytics completed successfully"
+            return 0
+        fi
+
+        if [[ "${analytics_state}" =~ ^exited\ [1-9][0-9]*$ ]]; then
+            echo "dhis2-analytics failed (state: ${analytics_state})"
+            compose logs --no-color dhis2-analytics || true
+            return 1
         fi
 
         if [ "$waited" -ge "$max_seconds" ]; then
             echo "Timed out waiting for dhis2-analytics to complete"
+            echo "Current compose service status:"
+            compose ps || true
             compose logs --no-color dhis2-analytics || true
             return 1
         fi
@@ -114,7 +135,7 @@ wait_for_stack_ready() {
 
     wait_url "CHAP health" "http://localhost:${chap_port}/health" 900
     wait_url "DHIS2 login page" "http://localhost:${dhis2_port}/dhis-web-login" 1800
-    wait_for_analytics_job 1800
+    wait_for_analytics_job 300
 }
 
 command="${1:-up}"
