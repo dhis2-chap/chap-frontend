@@ -7,6 +7,9 @@ const authFile = './playwright/.auth/user.json';
 
 export default defineConfig({
     testDir: './apps/modeling-app/e2e',
+    expect: {
+        timeout: isCI ? 30_000 : 10_000,
+    },
     use: {
         baseURL: appOrigin,
         video: 'retain-on-failure',
