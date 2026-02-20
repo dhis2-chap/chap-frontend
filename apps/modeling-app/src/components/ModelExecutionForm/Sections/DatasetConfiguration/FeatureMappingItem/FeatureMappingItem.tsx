@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { FeatureType } from '@dhis2-chap/ui';
 import { SearchSelectField } from '@/features/search-dataitem/SearchSelectField';
+import { toDataTestKey } from '@/utils/dataTestKey';
 import styles from './FeatureMappingItem.module.css';
 import { dataItemSchema, dimensionItemTypeSchema } from '../../../hooks/useModelExecutionFormState';
 
@@ -16,11 +17,6 @@ type Props = {
     onResetField: () => void;
 };
 
-const toDataTestKey = (value: string): string => value
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
-
 export const FeatureMappingItem = ({ feature, onMapping, existingMapping, onResetField }: Props) => {
     const createFeature = (feature: FeatureType) => ({
         id: feature.name || feature.displayName,
@@ -28,7 +24,8 @@ export const FeatureMappingItem = ({ feature, onMapping, existingMapping, onRese
         displayName: feature.displayName,
         description: feature.description,
     });
-    const featureDataTestKey = toDataTestKey(feature.displayName || feature.name || 'feature');
+    const featureStableId = feature.name || feature.displayName || 'feature';
+    const featureDataTestKey = toDataTestKey(featureStableId);
 
     const shouldShowDescription = (feature: FeatureType) => {
         return feature.description &&

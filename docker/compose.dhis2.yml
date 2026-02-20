@@ -20,15 +20,15 @@ services:
       dhis2-db-dump:
         condition: service_completed_successfully
     environment:
-      POSTGRES_DB: ${DHIS2_DB_NAME:-dhis2}
-      POSTGRES_USER: ${DHIS2_DB_USER:-dhis}
-      POSTGRES_PASSWORD: ${DHIS2_DB_PASSWORD:-dhis}
-      PGPASSWORD: ${DHIS2_DB_PASSWORD:-dhis}
+      POSTGRES_DB: dhis2
+      POSTGRES_USER: dhis
+      POSTGRES_PASSWORD: dhis
+      PGPASSWORD: dhis
     healthcheck:
       test:
         [
           "CMD-SHELL",
-          "psql --no-password --quiet --username $$POSTGRES_USER postgres://127.0.0.1/$$POSTGRES_DB -p 5432 --command \"SELECT 'ok'\" > /dev/null",
+          "psql --no-password --quiet --username dhis postgres://127.0.0.1/dhis2 -p 5432 --command \"SELECT 'ok'\" > /dev/null",
         ]
       start_period: 120s
       interval: 5s
@@ -49,9 +49,9 @@ services:
     environment:
       DB_HOSTNAME: dhis2-db
       DB_PORT: "5432"
-      DB_NAME: ${DHIS2_DB_NAME:-dhis2}
-      DB_USERNAME: ${DHIS2_DB_USER:-dhis}
-      DB_PASSWORD: ${DHIS2_DB_PASSWORD:-dhis}
+      DB_NAME: dhis2
+      DB_USERNAME: dhis
+      DB_PASSWORD: dhis
     volumes:
       - ./dhis.conf:/opt/dhis2/dhis.conf:ro
     ports:

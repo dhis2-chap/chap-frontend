@@ -2,6 +2,7 @@ import { Button, IconInfo16, IconCalendar16, Tag, Tooltip, IconDimensionData16, 
 import i18n from '@dhis2/d2-i18n';
 import cn from 'classnames';
 import { ModelSpecRead, AuthorAssessedStatus } from '@dhis2-chap/ui';
+import { toDataTestKey } from '@/utils/dataTestKey';
 import styles from './ModelCard.module.css';
 
 type Props = {
@@ -46,15 +47,10 @@ const assessmentStatusConfig = {
     },
 };
 
-const toDataTestKey = (value: string): string => value
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
-
 export const ModelCard = ({ model, isSelected, onSelect }: Props) => {
     const assessmentStatus = model.authorAssessedStatus && assessmentStatusConfig[model.authorAssessedStatus];
-    const modelName = model.displayName || model.name || 'model';
-    const modelDataTestKey = toDataTestKey(modelName);
+    const modelStableId = model.name || String(model.id);
+    const modelDataTestKey = toDataTestKey(modelStableId);
 
     return (
         <div className={cn(styles.modelCardContainer, {

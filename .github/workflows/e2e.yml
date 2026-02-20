@@ -32,65 +32,8 @@ jobs:
             - name: Install Playwright browser
               run: pnpm exec playwright install --with-deps chromium
 
-            - name: Start CHAP + DHIS2 stack
-              run: pnpm docker:e2e up
-
-            - name: Wait for CHAP + DHIS2 + route
-              run: |
-                  set -euo pipefail
-
-                  wait_url() {
-                    local name="$1"
-                    local url="$2"
-                    local max_seconds="${3:-900}"
-                    local waited=0
-
-                    until curl --silent --fail "$url" >/dev/null; do
-                      if [ "$waited" -ge "$max_seconds" ]; then
-                        echo "Timed out waiting for $name at $url"
-                        return 1
-                      fi
-                      sleep 5
-                      waited=$((waited + 5))
-                    done
-
-                    echo "$name is ready ($url)"
-                  }
-
-                  wait_url "CHAP health" "http://localhost:8000/health"
-                  wait_url "DHIS2 login page" "http://localhost:8080/dhis-web-login"
-
-                  route_query_url='http://localhost:8080/api/routes?filter=code:eq:chap&fields=id,code,url&paging=false'
-                  route_wait_seconds=1800
-                  waited=0
-                  while true; do
-                    route_response=$(curl --silent --show-error --user 'system:S&stem123!' "$route_query_url" || true)
-                    route_count=$(echo "$route_response" | jq -r '.routes | length' 2>/dev/null || echo 0)
-                    route_url=$(echo "$route_response" | jq -r '.routes[0].url // empty' 2>/dev/null || echo '')
-
-                    if [ "$route_count" -ge 1 ] && [ -n "$route_url" ] && [ "$route_url" != "null" ]; then
-                      echo "DHIS2 route 'chap' is ready (url=$route_url)"
-                      echo "Checking route proxy health..."
-                      curl --silent --show-error --fail --user 'system:S&stem123!' \
-                        'http://localhost:8080/api/routes/chap/run/health' >/dev/null
-                      echo "Route proxy health OK"
-                      break
-                    fi
-
-                    analytics_state="$(docker inspect --format '{{.State.Status}} {{.State.ExitCode}}' chap-platform-dhis2-analytics-1 2>/dev/null || true)"
-                    if [[ "$analytics_state" =~ ^exited\ [1-9][0-9]*$ ]]; then
-                      echo "dhis2-analytics failed (state: $analytics_state)"
-                      docker compose --project-name chap-platform --env-file docker/.env.example -f docker/compose.chap.yml -f docker/compose.dhis2.yml logs --no-color dhis2-analytics
-                      exit 1
-                    fi
-
-                    if [ "$waited" -ge "$route_wait_seconds" ]; then
-                      echo "Timed out waiting for DHIS2 route 'chap' (last response: $route_response)"
-                      exit 1
-                    fi
-                    sleep 5
-                    waited=$((waited + 5))
-                  done
+            - name: Start CHAP + DHIS2 stack and wait for readiness
+              run: pnpm docker:e2e up --wait
 
             - name: Run e2e tests
               env:

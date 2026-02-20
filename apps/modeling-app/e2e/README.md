@@ -13,6 +13,12 @@ From the repository root:
 pnpm docker:e2e up
 ```
 
+To block until the stack is ready (useful in CI), run:
+
+```bash
+pnpm docker:e2e up --wait
+```
+
 This command runs both docker compose files:
 - `docker/compose.chap.yml` (CHAP stack)
 - `docker/compose.dhis2.yml` (DHIS2 stack)

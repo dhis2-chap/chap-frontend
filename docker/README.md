@@ -23,6 +23,12 @@ or:
 pnpm docker:e2e up
 ```
 
+To wait until CHAP, DHIS2, and the one-shot analytics route setup are ready:
+
+```bash
+pnpm docker:e2e up --wait
+```
+
 ## Stop/reset
 
 ```bash
@@ -44,8 +50,8 @@ This allows the seed to continue if the dump includes `DROP ...` statements for 
 `dhis2-analytics` is a one-shot service (same pattern as push-analytics) that:
 
 - triggers analytics table generation once `dhis2-web` is healthy
-- creates an API route in DHIS2 by posting to `/api/routes`
-- fails unless route creation returns HTTP `201 Created`
+- upserts the CHAP API route in DHIS2 (`code=chap`)
+- fails unless route create/update succeeds
 
 It uses:
 
@@ -56,7 +62,7 @@ It uses:
 - `DHIS2_ROUTE_CODE`
 - `DHIS2_ROUTE_URL`
 
-`dhis.conf` currently targets `dhis2-db` with database `dhis2` and user/password `dhis`.
+`dhis.conf` currently targets `dhis2-db` with fixed database credentials (`dhis2` / `dhis` / `dhis`) used by the e2e stack.
 
 To force a fresh DHIS2 DB import, run:
 
