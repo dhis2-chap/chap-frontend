@@ -82,7 +82,7 @@ const selectKnownModel = async (page: Page) => {
     }).first();
     await expect(modal).toBeVisible();
 
-    const selectModelButton = modal.locator('[data-test="model-select-naive-model-used-for-testing"]');
+    const selectModelButton = modal.locator('[data-test="model-select-naive-model"]');
     await expect(selectModelButton).toBeVisible();
     await selectModelButton.click();
 

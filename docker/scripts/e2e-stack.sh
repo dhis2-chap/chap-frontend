@@ -165,7 +165,7 @@ up)
         up_args+=("${arg}")
     done
 
-    compose up -d --remove-orphans "${up_args[@]}"
+    compose up -d --remove-orphans ${up_args[@]+"${up_args[@]}"}
     compose ps
 
     if [[ "${wait_after_up}" == "true" ]]; then
