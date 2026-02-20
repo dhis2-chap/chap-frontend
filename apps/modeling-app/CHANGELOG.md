@@ -1,5 +1,12 @@
 # @dhis2-chap/modeling-app
 
+## 4.0.1
+
+### Patch Changes
+
+-   0a998e3: fix: new evaluation form crashes when selecting root org unit
+    -   @dhis2-chap/ui@4.0.1
+
 ## 4.0.0
 
 ### Major Changes
