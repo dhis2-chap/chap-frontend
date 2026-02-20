@@ -3,18 +3,18 @@ import { expect, test, type Page } from '@playwright/test';
 const REQUIRED_DATA_MAPPINGS = [
     {
         fieldKey: 'disease-cases',
-        searchTerm: 'Dengue',
-        optionMatcher: /Dengue cases \(any\)/,
+        searchTerm: 'NCLE:',
+        optionMatcher: /NCLE:?\s*7\.\s*Dengue cases \(any\)/i,
     },
     {
         fieldKey: 'rainfall',
-        searchTerm: 'Precipitation',
-        optionMatcher: /Precipitation \(CHIRPS\)/,
+        searchTerm: 'CCH - Precipitation (CHIRPS)',
+        optionMatcher: /CCH\s*-\s*Precipitation \(CHIRPS\)/i,
     },
     {
         fieldKey: 'mean-temperature',
-        searchTerm: 'Air temperature',
-        optionMatcher: /Air temperature \(ERA5-Land\)/,
+        searchTerm: 'CCH - Air temperature',
+        optionMatcher: /CCH\s*-\s*Air temperature \(ERA-?5[-\s]Land\)/i,
     },
 ] as const;
 
@@ -29,6 +29,15 @@ const getMonthValueWithOffset = (offset: number): string => {
 
 const isBacktestCreateRequest = (url: string, method: string): boolean => {
     return method === 'POST' && url.includes('/analytics/create-backtest-with-data/');
+};
+
+const isBacktestImportRequest = (url: string, method: string): boolean => {
+    if (!isBacktestCreateRequest(url, method)) {
+        return false;
+    }
+
+    const dryRunQuery = new URL(url).searchParams.get('dryRun');
+    return dryRunQuery === 'false';
 };
 
 const stubCreateBacktestWithData = async (page: Page) => {
@@ -136,19 +145,30 @@ const mapRequiredDataSources = async (page: Page) => {
     await expect(modal).not.toBeVisible();
 };
 
-const prepareValidFormData = async (page: Page, name: string) => {
+type PrepareValidFormDataOptions = {
+    fromDate?: string;
+    toDate?: string;
+};
+
+const prepareValidFormData = async (
+    page: Page,
+    name: string,
+    options: PrepareValidFormDataOptions = {},
+) => {
     const previousMonth = getMonthValueWithOffset(-1);
     const currentMonth = getMonthValueWithOffset(0);
     const nextMonth = getMonthValueWithOffset(1);
+    const fromDate = options.fromDate ?? previousMonth;
+    const toDate = options.toDate ?? currentMonth;
 
     await page.locator('[data-test="evaluation-name-input"] input').fill(name);
-    await page.locator('[data-test="evaluation-from-date-input"]').fill(previousMonth);
-    await page.locator('[data-test="evaluation-to-date-input"]').fill(currentMonth);
+    await page.locator('[data-test="evaluation-from-date-input"]').fill(fromDate);
+    await page.locator('[data-test="evaluation-to-date-input"]').fill(toDate);
     await selectOrgUnitLevel(page);
     await selectKnownModel(page);
     await mapRequiredDataSources(page);
 
-    return { previousMonth, currentMonth, nextMonth };
+    return { previousMonth, currentMonth, nextMonth, fromDate, toDate };
 };
 
 test('validates period rules with invalid values', async ({ page }) => {
@@ -202,6 +222,41 @@ test('accepts valid values without client-side validation errors', async ({ page
     await page.getByRole('button', { name: 'Start dry run' }).click();
     await createBacktestRequest;
     await expect(backtestCreateRequestCount).toBe(1);
+});
+
+test('submits valid data, navigates to jobs, and shows the created job', async ({ page }) => {
+    const newEvaluationUrl = '/#/evaluate/new';
+    const evaluationName = `E2E import ${Date.now()}`;
+
+    await page.goto(newEvaluationUrl);
+
+    await prepareValidFormData(page, evaluationName, {
+        fromDate: '2020-01',
+        toDate: '2024-12',
+    });
+
+    const createImportRequest = page.waitForRequest(request =>
+        isBacktestImportRequest(request.url(), request.method()),
+    );
+    const createImportResponse = page.waitForResponse(response =>
+        isBacktestImportRequest(response.url(), response.request().method()),
+    );
+
+    await page.getByRole('button', { name: 'Start import' }).click();
+
+    const request = await createImportRequest;
+    await expect(
+        request.postDataJSON() as { name?: string },
+    ).toMatchObject({ name: evaluationName });
+
+    const response = await createImportResponse;
+    await expect(response.ok()).toBeTruthy();
+    const importResponseBody = (await response.json()) as { id?: string | null };
+    await expect(importResponseBody.id).toBeTruthy();
+
+    await expect(page).toHaveURL(/\/#\/jobs(?:\?.*)?$/);
+    await expect(page.getByRole('heading', { name: 'Active jobs' })).toBeVisible();
+    await expect(page.getByRole('cell', { name: evaluationName })).toBeVisible();
 });
 
 test('warns before leaving a form with unsaved changes', async ({ page }) => {
