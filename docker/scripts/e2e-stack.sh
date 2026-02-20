@@ -64,16 +64,28 @@ wait_for_analytics_job() {
     local next_status_log_at=0
     local next_service_log_at="${service_log_interval_seconds}"
     local last_reported_state=""
+    local analytics_container_name="${PROJECT_NAME}-dhis2-analytics-1"
 
     echo "Waiting for dhis2-analytics to complete (timeout: ${max_seconds}s)"
 
     while true; do
-        local analytics_container_id
         local analytics_state="not-created"
-        analytics_container_id="$(compose ps -q dhis2-analytics | tr -d '\n')"
+        analytics_state="$(docker inspect --format '{{.State.Status}} {{.State.ExitCode}}' "${analytics_container_name}" 2>/dev/null || true)"
 
-        if [ -n "${analytics_container_id}" ]; then
-            analytics_state="$(docker inspect --format '{{.State.Status}} {{.State.ExitCode}}' "${analytics_container_id}" 2>/dev/null || true)"
+        if [ -z "${analytics_state}" ]; then
+            local analytics_container_id
+            analytics_container_id="$(
+                compose ps --all -q dhis2-analytics \
+                    | tail -n 1 \
+                    | tr -d '\r\n'
+            )"
+            if [ -n "${analytics_container_id}" ]; then
+                analytics_state="$(docker inspect --format '{{.State.Status}} {{.State.ExitCode}}' "${analytics_container_id}" 2>/dev/null || true)"
+            fi
+        fi
+
+        if [ -z "${analytics_state}" ]; then
+            analytics_state="not-created"
         fi
 
         if [[ "${analytics_state}" != "${last_reported_state}" || "${waited}" -ge "${next_status_log_at}" ]]; then
@@ -84,7 +96,7 @@ wait_for_analytics_job() {
 
         if [[ "${waited}" -ge "${next_service_log_at}" ]]; then
             echo "Recent dhis2-analytics logs:"
-            compose logs --no-color --tail=30 dhis2-analytics || true
+            compose logs --no-color --since="${service_log_interval_seconds}s" dhis2-analytics || true
             next_service_log_at=$((waited + service_log_interval_seconds))
         fi
 
