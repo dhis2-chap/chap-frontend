@@ -11,6 +11,7 @@ import {
 import { ModelExecutionFormValues } from '../../ModelExecutionForm/hooks/useModelExecutionFormState';
 import { prepareBacktestData } from '../../ModelExecutionForm/utils/prepareBacktestData';
 import { PERIOD_TYPES } from '@dhis2-chap/ui';
+import { buildOrgUnitFeatureCollection } from '../../ModelExecutionForm/utils/orgUnitGeoJson';
 
 type Props = {
     onSuccess?: () => void;
@@ -39,20 +40,9 @@ export const useCreatePrediction = ({ onSuccess, onError }: Props = {}) => {
                 queryClient,
             );
 
-            const geojson: FeatureCollectionModel = {
-                type: 'FeatureCollection',
-                features: orgUnitResponse.geojson.organisationUnits.map(ou => ({
-                    id: ou.id,
-                    type: 'Feature',
-                    geometry: ou.geometry,
-                    properties: {
-                        id: ou.id,
-                        parent: ou.parent.id,
-                        parentGraph: ou.parent.id,
-                        level: ou.level,
-                    },
-                })),
-            };
+            const geojson: FeatureCollectionModel = buildOrgUnitFeatureCollection(
+                orgUnitResponse.geojson.organisationUnits,
+            );
 
             const predictionRequest: MakePredictionRequest = {
                 name: formData.name,

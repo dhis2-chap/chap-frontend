@@ -16,9 +16,9 @@ export type OrgUnitResponse = {
                 type: string;
                 coordinates: number[][];
             };
-            parent: {
+            parent?: {
                 id: string;
-            };
+            } | null;
             level: number;
         }[];
     };
