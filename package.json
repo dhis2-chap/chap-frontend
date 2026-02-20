@@ -13,8 +13,11 @@
         "tsc:check": "turbo tsc:check --parallel",
         "format": "d2-style apply",
         "start": "turbo start",
+        "docker:e2e": "./docker/scripts/e2e-stack.sh",
         "build": "turbo build",
         "test": "vitest run",
+        "e2e": "playwright test --ui",
+        "e2e:ci": "playwright test",
         "changeset": "changeset",
         "release:publish": "node scripts/publish.js",
         "release:publish:dry": "node scripts/publish.js --dry-run"
@@ -26,6 +29,7 @@
     },
     "devDependencies": {
         "@changesets/cli": "^2.29.8",
+        "@playwright/test": "^1.58.2",
         "@dhis2/cli-style": "^10.7.9",
         "@eslint/js": "^9.12.0",
         "@stylistic/eslint-plugin": "^5.3.1",

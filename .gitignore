@@ -11,3 +11,7 @@
 .playwright-mcp
 .playwright-mcp/**
 .ralph
+playwright/.auth/
+playwright-report/
+test-results/
+.env.local
