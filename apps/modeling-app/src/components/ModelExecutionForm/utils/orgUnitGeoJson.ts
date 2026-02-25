@@ -10,6 +10,8 @@ export const buildOrgUnitFeatureCollection = (
         const properties: Record<string, string | number> = {
             id: orgUnit.id,
             level: orgUnit.level,
+            displayName: orgUnit.displayName,
+            ...(orgUnit.code ? { code: orgUnit.code } : {}),
         };
 
         if (parentId) {
@@ -22,8 +24,6 @@ export const buildOrgUnitFeatureCollection = (
             type: 'Feature',
             geometry: orgUnit.geometry,
             properties,
-            displayName: orgUnit.displayName,
-            ...(orgUnit.code ? { code: orgUnit.code } : {}),
         };
     }),
 });
