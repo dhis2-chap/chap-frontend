@@ -22,6 +22,8 @@ export const buildOrgUnitFeatureCollection = (
             type: 'Feature',
             geometry: orgUnit.geometry,
             properties,
+            displayName: orgUnit.displayName,
+            ...(orgUnit.code ? { code: orgUnit.code } : {}),
         };
     }),
 });
