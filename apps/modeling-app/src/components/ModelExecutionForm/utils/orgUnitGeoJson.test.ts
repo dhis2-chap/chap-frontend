@@ -25,6 +25,8 @@ describe('buildOrgUnitFeatureCollection', () => {
         expect(featureCollection.features[0].properties).toEqual({
             id: 'root-ou',
             level: 1,
+            code: 'OU_CODE_001',
+            displayName: 'Root',
         });
     });
 
