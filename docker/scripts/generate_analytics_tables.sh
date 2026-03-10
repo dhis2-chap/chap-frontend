@@ -62,16 +62,18 @@ CREATE_ROUTE_STATUS=$(
         --user "$CREDENTIALS" \
         --header "Content-Type: application/json" \
         --request POST \
-        --data "{
-            \"name\": \"${ROUTE_NAME}\",
-            \"code\": \"${ROUTE_CODE}\",
-            \"url\": \"${ROUTE_URL}\",
-            \"authorities\": [\"F_CHAP_MODELING_APP\"],
-            \"headers\": {
-                \"Content-Type\": \"application/json\"
-            },
-            \"responseTimeoutSeconds\": 30
-        }" \
+        --data "$(jq -n \
+            --arg name "${ROUTE_NAME}" \
+            --arg code "${ROUTE_CODE}" \
+            --arg url "${ROUTE_URL}" \
+            '{
+                name: $name,
+                code: $code,
+                url: $url,
+                authorities: ["F_CHAP_MODELING_APP"],
+                headers: { "Content-Type": "application/json" },
+                responseTimeoutSeconds: 30
+            }')" \
         "$BASE_URL/api/routes"
 )
 
