@@ -3,9 +3,9 @@ import i18n from '@dhis2/d2-i18n';
 import { useAlert } from '@dhis2/app-runtime';
 import {
     ApiError,
-    CrudService,
     ModelConfigurationCreate,
     ConfiguredModelDB,
+    ModelsService,
 } from '@dhis2-chap/ui';
 
 type UseCreateModelOptions = {
@@ -27,7 +27,7 @@ export const useCreateModel = ({ onSuccess, onError }: UseCreateModelOptions = {
     );
 
     const mutation = useMutation<ConfiguredModelDB, ApiError, ModelConfigurationCreate>({
-        mutationFn: payload => CrudService.addModelCrudModelsPost(payload),
+        mutationFn: payload => ModelsService.addModelV1CrudModelsPost(payload),
         onSuccess: (model) => {
             queryClient.invalidateQueries({ queryKey: ['models'] });
             showSuccessAlert();

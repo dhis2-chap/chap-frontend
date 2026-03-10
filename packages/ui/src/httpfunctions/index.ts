@@ -77,17 +77,12 @@ export type { SystemInfoResponse } from './models/SystemInfoResponse';
 export type { ValidationError } from './models/ValidationError';
 export type { VisualizationInfo } from './models/VisualizationInfo';
 
-export { AnalyticsService } from './services/AnalyticsService';
 export { BacktestsService } from './services/BacktestsService';
-export { CrudService } from './services/CrudService';
 export { DatasetsService } from './services/DatasetsService';
-export { DefaultService } from './services/DefaultService';
 export { DebugService } from './services/DebugService';
-export { JobsService as GeneratedJobsService } from './services/JobsService';
-export { JobsService } from './services/JobsCompatService';
+export { JobsService } from './services/JobsService';
 export { ModelsService } from './services/ModelsService';
 export { PredictionsService } from './services/PredictionsService';
 export { ServicesService } from './services/ServicesService';
 export { SystemService } from './services/SystemService';
-export { VisualizationService } from './services/VisualizationService';
 export { VisualizationsService } from './services/VisualizationsService';

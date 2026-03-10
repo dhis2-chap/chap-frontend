@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { ApiError, BackTestRead, CrudService } from '@dhis2-chap/ui';
+import { ApiError, BackTestRead, BacktestsService } from '@dhis2-chap/ui';
 import { BACKTESTS_LIST_QUERY_KEY } from './useBacktests';
 
 export const useBacktestById = (backtestId?: number) => {
@@ -11,7 +11,7 @@ export const useBacktestById = (backtestId?: number) => {
     >({
         queryKey: [BACKTESTS_LIST_QUERY_KEY, backtestId],
         queryFn: () =>
-            CrudService.getBacktestInfoCrudBacktestsBacktestIdInfoGet(
+            BacktestsService.getBacktestInfoV1CrudBacktestsBacktestIdInfoGet(
                 backtestId!,
             ),
         initialData: () => {

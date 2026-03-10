@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import i18n from '@dhis2/d2-i18n';
-import { CrudService } from '@dhis2-chap/ui';
+import { PredictionsService } from '@dhis2-chap/ui';
 import { useAlert } from '@dhis2/app-runtime';
 
 type Props = {
@@ -26,7 +26,7 @@ export const useDeletePrediction = ({ onSuccess, onError }: Props = {}) => {
         isError,
         error,
     } = useMutation({
-        mutationFn: (id: number) => CrudService.deletePredictionCrudPredictionsPredictionIdDelete(id),
+        mutationFn: (id: number) => PredictionsService.deletePredictionV1CrudPredictionsPredictionIdDelete(id),
         onSuccess: (id) => {
             queryClient.invalidateQueries({ queryKey: ['predictions'] });
             showSuccessAlert();
