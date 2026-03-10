@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-03-09T12:30:52.445Z\n"
-"PO-Revision-Date: 2026-03-09T12:30:52.446Z\n"
+"POT-Creation-Date: 2026-03-10T14:11:38.674Z\n"
+"PO-Revision-Date: 2026-03-10T14:11:38.675Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -1158,9 +1158,6 @@ msgstr "CHAP Version"
 
 msgid "Python Version"
 msgstr "Python Version"
-
-msgid "Operating System"
-msgstr "Operating System"
 
 msgid "Connected"
 msgstr "Connected"

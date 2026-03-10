@@ -2,19 +2,11 @@ import { NoticeBox } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import styles from '../ChapSettings.module.css';
 import { useRoute } from '../../../../hooks/useRoute';
-import { useQuery } from '@tanstack/react-query';
+import { useChapStatus } from '../hooks/useChapStatus';
 
 export const ServerSecurityNotices = () => {
     const { route } = useRoute();
-
-    const { data: status, isLoading, error } = useQuery({
-        queryKey: ['chap-status', route?.url],
-        enabled: !!route?.url,
-        queryFn: () => fetch(`${route?.url.replace('/**', '')}/system-info`).then(res => res.json()),
-        staleTime: Infinity,
-        cacheTime: Infinity,
-        refetchOnWindowFocus: false,
-    });
+    const { status, isLoading, error } = useChapStatus({ route });
 
     if (isLoading) {
         return null;

@@ -13,7 +13,7 @@
         "linter:check": "eslint . --config ../../eslint.config.mts",
         "deploy": "d2-app-scripts deploy",
         "generate": "openapi --input ./public/openapi.json --output ./src/httpfunctions --request ./src/queuedRequest.ts",
-        "generate-localhost": "openapi --input http://localhost:8000/v1/openapi.json --output ./src/httpfunctions --request ./src/queuedRequest.ts",
+        "generate-localhost": "openapi --input http://localhost:8000/openapi.json --output ./src/httpfunctions --request ./src/queuedRequest.ts",
         "tsc:check": "tsc --noEmit"
     },
     "main": "./build/cjs/index.js",

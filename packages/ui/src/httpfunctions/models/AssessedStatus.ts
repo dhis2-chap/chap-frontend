@@ -2,7 +2,10 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export enum AuthorAssessedStatus {
+/**
+ * Model assessment status levels.
+ */
+export enum AssessedStatus {
     GRAY = 'gray',
     RED = 'red',
     ORANGE = 'orange',
