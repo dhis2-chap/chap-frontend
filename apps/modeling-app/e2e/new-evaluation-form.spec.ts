@@ -259,6 +259,47 @@ test('submits valid data, navigates to jobs, and shows the created job', async (
     await expect(page.getByRole('cell', { name: evaluationName })).toBeVisible();
 });
 
+test('submits valid data, navigates to jobs, and auto-updates the created job to success', async ({ page }) => {
+    const newEvaluationUrl = '/#/evaluate/new';
+    const evaluationName = `E2E successful evaluation ${Date.now()}`;
+
+    await page.goto(newEvaluationUrl);
+
+    await prepareValidFormData(page, evaluationName, {
+        fromDate: '2020-01',
+        toDate: '2024-12',
+    });
+
+    const createImportRequest = page.waitForRequest(request =>
+        isBacktestImportRequest(request.url(), request.method()),
+    );
+    const createImportResponse = page.waitForResponse(response =>
+        isBacktestImportRequest(response.url(), response.request().method()),
+    );
+
+    await page.getByRole('button', { name: 'Start import' }).click();
+
+    const request = await createImportRequest;
+    await expect(
+        request.postDataJSON() as { name?: string },
+    ).toMatchObject({ name: evaluationName });
+
+    const response = await createImportResponse;
+    await expect(response.ok()).toBeTruthy();
+    const importResponseBody = (await response.json()) as { id?: string | null };
+    await expect(importResponseBody.id).toBeTruthy();
+
+    await expect(page).toHaveURL(/\/#\/jobs(?:\?.*)?$/);
+    await expect(page.getByRole('heading', { name: 'Active jobs' })).toBeVisible();
+
+    const createdJobRow = page.locator('tr').filter({
+        has: page.getByRole('cell', { name: evaluationName }),
+    }).first();
+
+    await expect(createdJobRow).toBeVisible();
+    await expect(createdJobRow.getByText('Success')).toBeVisible({ timeout: 10_000 });
+});
+
 test('warns before leaving a form with unsaved changes', async ({ page }) => {
     const newEvaluationUrl = '/#/evaluate/new';
 
