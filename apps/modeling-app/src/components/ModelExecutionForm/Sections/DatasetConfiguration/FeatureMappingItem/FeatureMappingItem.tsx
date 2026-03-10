@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { FeatureType } from '@dhis2-chap/ui';
 import { SearchSelectField } from '@/features/search-dataitem/SearchSelectField';
+import { toDataTestKey } from '@/utils/dataTestKey';
 import styles from './FeatureMappingItem.module.css';
 import { dataItemSchema, dimensionItemTypeSchema } from '../../../hooks/useModelExecutionFormState';
 
@@ -23,6 +24,8 @@ export const FeatureMappingItem = ({ feature, onMapping, existingMapping, onRese
         displayName: feature.displayName,
         description: feature.description,
     });
+    const featureStableId = feature.name || feature.displayName || 'feature';
+    const featureDataTestKey = toDataTestKey(featureStableId);
 
     const shouldShowDescription = (feature: FeatureType) => {
         return feature.description &&
@@ -30,7 +33,10 @@ export const FeatureMappingItem = ({ feature, onMapping, existingMapping, onRese
     };
 
     return (
-        <div className={styles.mappingItem}>
+        <div
+            className={styles.mappingItem}
+            data-test={`feature-mapping-${featureDataTestKey}`}
+        >
             <SearchSelectField
                 feature={createFeature(feature)}
                 onChangeSearchSelectField={(_, dataItemId, dataItemDisplayName, dimensionItemType) => {
@@ -43,6 +49,7 @@ export const FeatureMappingItem = ({ feature, onMapping, existingMapping, onRese
                 }}
                 defaultValue={existingMapping}
                 onResetField={onResetField}
+                dataTestKey={`feature-mapping-${featureDataTestKey}`}
             />
             {shouldShowDescription(feature) && (
                 <p className={styles.featureDescription}>

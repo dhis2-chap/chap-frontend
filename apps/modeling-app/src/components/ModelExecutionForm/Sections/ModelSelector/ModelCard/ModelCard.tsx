@@ -2,6 +2,7 @@ import { Button, IconInfo16, IconCalendar16, Tag, Tooltip, IconDimensionData16, 
 import i18n from '@dhis2/d2-i18n';
 import cn from 'classnames';
 import { ModelSpecRead, AuthorAssessedStatus } from '@dhis2-chap/ui';
+import { toDataTestKey } from '@/utils/dataTestKey';
 import styles from './ModelCard.module.css';
 
 type Props = {
@@ -48,6 +49,8 @@ const assessmentStatusConfig = {
 
 export const ModelCard = ({ model, isSelected, onSelect }: Props) => {
     const assessmentStatus = model.authorAssessedStatus && assessmentStatusConfig[model.authorAssessedStatus];
+    const modelStableId = model.name || String(model.id);
+    const modelDataTestKey = toDataTestKey(modelStableId);
 
     return (
         <div className={cn(styles.modelCardContainer, {
@@ -135,6 +138,7 @@ export const ModelCard = ({ model, isSelected, onSelect }: Props) => {
                 onClick={() => onSelect(model)}
                 primary
                 small
+                dataTest={`model-select-${modelDataTestKey}`}
             >
                 {isSelected ? i18n.t('Selected') : i18n.t('Select Model')}
             </Button>
