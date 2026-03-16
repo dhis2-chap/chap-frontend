@@ -1,10 +1,11 @@
 import i18n from '@dhis2/d2-i18n';
 import HighchartsReact from 'highcharts-react-official';
 import Highcharts from 'highcharts';
-import React from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { HighChartsData } from '../../../interfaces/Evaluation';
 import { getPeriodNameFromId } from '../../../utils/Time';
 import enableOfflineExporting from 'highcharts/modules/offline-exporting';
+import styles from './ResultPlot.module.css';
 
 enableOfflineExporting(Highcharts);
 
@@ -86,6 +87,7 @@ type GetOptionParams = {
     data: any;
     modelName: string;
     syncZoom: ResultPlotProps['syncZoom'];
+    onAfterSetExtremes?: Highcharts.AxisSetExtremesEventCallbackFunction;
     nameLabel?: string;
     maxY?: number;
 };
@@ -94,6 +96,7 @@ const getOptions = ({
     data,
     modelName,
     syncZoom,
+    onAfterSetExtremes,
     nameLabel,
     maxY,
 }: GetOptionParams): Highcharts.Options => {
@@ -103,6 +106,36 @@ const getOptions = ({
             : modelName
                 ? `Model: ${modelName}`
                 : '';
+    const buildAfterSetExtremes = ():
+        | Highcharts.AxisSetExtremesEventCallbackFunction
+        | undefined => {
+        const syncHandler:
+            | Highcharts.AxisSetExtremesEventCallbackFunction
+            | undefined = syncZoom
+                ? typeof syncZoom === 'function'
+                    ? syncZoom
+                    : syncChartZoom
+                : undefined;
+
+        if (!syncHandler && !onAfterSetExtremes) {
+            return undefined;
+        }
+
+        return function (
+            this: Highcharts.Axis,
+            event: Highcharts.AxisSetExtremesEventObject,
+        ) {
+            if (onAfterSetExtremes) {
+                onAfterSetExtremes.call(this, event);
+            }
+            if (syncHandler) {
+                syncHandler.call(this, event);
+            }
+        };
+    };
+
+    const afterSetExtremes = buildAfterSetExtremes();
+
     return {
         title: {
             text: '',
@@ -127,13 +160,8 @@ const getOptions = ({
                     fontSize: '0.9rem',
                 },
             },
-            events: syncZoom
-                ? {
-                        afterSetExtremes:
-                          typeof syncZoom === 'function'
-                              ? syncZoom
-                              : syncChartZoom,
-                    }
+            events: afterSetExtremes
+                ? { afterSetExtremes }
                 : undefined,
             title: {
                 text: 'Period',
@@ -172,19 +200,104 @@ export const ResultPlot = React.forwardRef<
     HighchartsReact.RefObject,
     ResultPlotProps
 >(function ResultPlot({ data, modelName, syncZoom, nameLabel, maxY }, ref) {
+    const internalRef = useRef<HighchartsReact.RefObject | null>(null);
+    const [isZoomed, setIsZoomed] = useState(false);
+    const [canShiftLeft, setCanShiftLeft] = useState(false);
+    const [canShiftRight, setCanShiftRight] = useState(false);
+
+    const setRefs = useCallback(
+        (instance: HighchartsReact.RefObject | null) => {
+            internalRef.current = instance;
+            if (typeof ref === 'function') {
+                ref(instance);
+            } else if (ref) {
+                (
+                    ref as React.MutableRefObject<HighchartsReact.RefObject | null>
+                ).current = instance;
+            }
+        },
+        [ref],
+    );
+
+    const updateZoomState = useCallback(
+        function (
+            this: Highcharts.Axis,
+            event: Highcharts.AxisSetExtremesEventObject,
+        ) {
+            const zoomed =
+                event.userMin !== undefined && event.userMax !== undefined;
+            setIsZoomed(zoomed);
+            if (zoomed) {
+                setCanShiftLeft(event.min > event.dataMin);
+                setCanShiftRight(event.max < event.dataMax);
+            }
+        },
+        [],
+    );
+
+    const shiftZoom = useCallback(
+        (direction: 1 | -1) => {
+            const chart = internalRef.current?.chart;
+            if (!chart) return;
+
+            const axis = chart.xAxis[0];
+            const { min, max, dataMin, dataMax } = axis.getExtremes();
+
+            if (min === undefined || max === undefined) return;
+
+            const newMin = min + direction;
+            const newMax = max + direction;
+
+            if (newMin < dataMin || newMax > dataMax) return;
+
+            setCanShiftLeft(newMin > dataMin);
+            setCanShiftRight(newMax < dataMax);
+
+            axis.setExtremes(newMin, newMax, true, false, {
+                trigger: 'zoom',
+                userMin: newMin,
+                userMax: newMax,
+            });
+        },
+        [],
+    );
+
     return (
-        <>
+        <div className={styles.wrapper}>
             <HighchartsReact
-                ref={ref}
+                ref={setRefs}
                 highcharts={Highcharts}
                 options={getOptions({
                     data,
                     modelName,
                     syncZoom,
+                    onAfterSetExtremes: updateZoomState,
                     nameLabel,
                     maxY,
                 })}
             />
-        </>
+            {isZoomed && (
+                <div className={styles.navigationButtons}>
+                    <button
+                        className={styles.navButton}
+                        onClick={() => shiftZoom(-1)}
+                        disabled={!canShiftLeft}
+                        title={i18n.t('Shift zoom left one period')}
+                        aria-label={i18n.t('Shift zoom left one period')}
+                    >
+                        &#x2039;
+                    </button>
+                    <button
+                        className={styles.navButton}
+                        onClick={() => shiftZoom(1)}
+                        disabled={!canShiftRight}
+                        title={i18n.t('Shift zoom right one period')}
+                        aria-label={i18n.t('Shift zoom right one period')}
+                    >
+                        &#x203A;
+                    </button>
+                </div>
+            )}
+        </div>
     );
 });

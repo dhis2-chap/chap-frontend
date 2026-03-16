@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { ApiError, VisualizationService } from '@dhis2-chap/ui';
+import { ApiError, VisualizationsService } from '@dhis2-chap/ui';
 
 type UseVisualizationParams = {
     evaluationId?: number;
@@ -20,7 +20,7 @@ export const useCustomMetricVisualization = ({
             metricId,
         ],
         queryFn: () =>
-            VisualizationService.generateVisualizationVisualizationMetricPlotsVisualizationNameBacktestIdMetricIdGet(
+            VisualizationsService.generateVisualizationV1VisualizationMetricPlotsVisualizationNameBacktestIdMetricIdGet(
                 visualizationId!,
                 Number(evaluationId),
                 metricId!,

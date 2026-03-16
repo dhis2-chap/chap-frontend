@@ -30,7 +30,7 @@ export const useJobs = () => {
         isLoading,
     } = useQuery<JobDescription[], ApiError>({
         queryKey: ['jobs'],
-        queryFn: () => JobsService.listJobsJobsGet(),
+        queryFn: () => JobsService.listJobsV1JobsGet(),
         staleTime: 5 * 60 * 1000,
         cacheTime: 5 * 60 * 1000,
         retry: 0,
@@ -52,7 +52,7 @@ export const useJobs = () => {
 
     const { data: activeJobsData } = useQuery<JobDescription[], ApiError>({
         queryKey: ['jobs', 'active'],
-        queryFn: () => JobsService.listJobsJobsGet(Array.from(activeJobIds)),
+        queryFn: () => JobsService.listJobsV1JobsGet(Array.from(activeJobIds)),
         refetchInterval: () => {
             if (activeJobIds.size > 0) {
                 return 5000;

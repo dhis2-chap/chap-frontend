@@ -29,8 +29,7 @@ pnpm test                     # Run tests with Vitest
 
 # API Client Generation (in packages/ui)
 cd packages/ui
-pnpm generate                 # Generate from local OpenAPI spec
-pnpm generate-localhost       # Generate from running backend at localhost:8000
+pnpm generate                 # Generate from a running backend at localhost:8000
 ```
 
 ## Architecture

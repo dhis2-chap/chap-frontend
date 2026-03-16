@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ModelExecutionFormValues } from '../../ModelExecutionForm/hooks/useModelExecutionFormState';
 import {
-    AnalyticsService,
+    BacktestsService,
     FeatureCollectionModel,
     MakeBacktestWithDataRequest,
     ApiError,
@@ -83,7 +83,7 @@ export const useCreateNewBacktest = ({
             const { backtestRequest, hash } = await buildBacktestRequest(formData);
 
             try {
-                const result = await AnalyticsService.createBacktestWithDataAnalyticsCreateBacktestWithDataPost(
+                const result = await BacktestsService.createBacktestWithDataV1AnalyticsCreateBacktestWithDataPost(
                     backtestRequest,
                     true,
                 );
@@ -119,7 +119,7 @@ export const useCreateNewBacktest = ({
             const { backtestRequest, hash } = await buildBacktestRequest(formData);
             lastImportHashRef.current = hash;
 
-            const result = await AnalyticsService.createBacktestWithDataAnalyticsCreateBacktestWithDataPost(
+            const result = await BacktestsService.createBacktestWithDataV1AnalyticsCreateBacktestWithDataPost(
                 backtestRequest,
                 false,
             );

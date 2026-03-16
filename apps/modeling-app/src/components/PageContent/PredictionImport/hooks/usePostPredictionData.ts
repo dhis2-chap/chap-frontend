@@ -1,7 +1,7 @@
 import i18n from '@dhis2/d2-i18n';
 import { useAlert, useDataEngine } from '@dhis2/app-runtime';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { ApiError, AnalyticsService, PredictionEntry, QuantileKey } from '@dhis2-chap/ui';
+import { ApiError, PredictionEntry, PredictionsService, QuantileKey } from '@dhis2-chap/ui';
 
 const STANDARD_QUANTILES = [0.1, 0.25, 0.5, 0.75, 0.9];
 
@@ -105,7 +105,7 @@ export const usePostPredictionData = ({ onSuccess, onError }: UsePostPredictionD
             const cachedPredictionEntries = queryClient.getQueryData<PredictionEntry[]>(queryKey);
 
             const predictionEntries = cachedPredictionEntries
-                ?? await AnalyticsService.getPredictionEntriesAnalyticsPredictionEntryPredictionIdGet(
+                ?? await PredictionsService.getPredictionEntriesV1AnalyticsPredictionEntryPredictionIdGet(
                     predictionId,
                     STANDARD_QUANTILES,
                 );

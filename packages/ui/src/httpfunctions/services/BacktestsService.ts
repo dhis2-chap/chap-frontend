@@ -2,36 +2,149 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { BackTest } from '../models/BackTest';
+import type { BackTestCreate } from '../models/BackTestCreate';
 import type { BacktestDomain } from '../models/BacktestDomain';
 import type { BackTestRead } from '../models/BackTestRead';
-import type { ChapDataSource } from '../models/ChapDataSource';
+import type { BackTestUpdate } from '../models/BackTestUpdate';
 import type { DataList } from '../models/DataList';
-import type { DatasetMakeRequest } from '../models/DatasetMakeRequest';
 import type { EvaluationEntry } from '../models/EvaluationEntry';
 import type { ImportSummaryResponse } from '../models/ImportSummaryResponse';
 import type { JobResponse } from '../models/JobResponse';
 import type { MakeBacktestRequest } from '../models/MakeBacktestRequest';
 import type { MakeBacktestWithDataRequest } from '../models/MakeBacktestWithDataRequest';
-import type { MakePredictionRequest } from '../models/MakePredictionRequest';
-import type { PredictionEntry } from '../models/PredictionEntry';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
-export class AnalyticsService {
+export class BacktestsService {
     /**
-     * Make Dataset
-     * This endpoint creates a dataset from the provided data and the data to be fetched3
-     * and puts it in the database
-     * @param requestBody
-     * @returns ImportSummaryResponse Successful Response
+     * Get Backtests
+     * Returns a list of backtests/evaluations with only the id and name
+     * @returns BackTestRead Successful Response
      * @throws ApiError
      */
-    public static makeDatasetAnalyticsMakeDatasetPost(
-        requestBody: DatasetMakeRequest,
-    ): CancelablePromise<ImportSummaryResponse> {
+    public static getBacktestsV1CrudBacktestsGet(): CancelablePromise<Array<BackTestRead>> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/v1/crud/backtests',
+        });
+    }
+    /**
+     * Create Backtest
+     * @param requestBody
+     * @returns JobResponse Successful Response
+     * @throws ApiError
+     */
+    public static createBacktestV1CrudBacktestsPost(
+        requestBody: BackTestCreate,
+    ): CancelablePromise<JobResponse> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/analytics/make-dataset',
+            url: '/v1/crud/backtests',
+            body: requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
+     * Delete Backtest Batch
+     * @param ids
+     * @returns any Successful Response
+     * @throws ApiError
+     */
+    public static deleteBacktestBatchV1CrudBacktestsDelete(
+        ids: string,
+    ): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'DELETE',
+            url: '/v1/crud/backtests',
+            query: {
+                'ids': ids,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
+     * Get Backtest
+     * @param backtestId
+     * @returns BackTest Successful Response
+     * @throws ApiError
+     */
+    public static getBacktestV1CrudBacktestsBacktestIdFullGet(
+        backtestId: number,
+    ): CancelablePromise<BackTest> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/v1/crud/backtests/{backtestId}/full',
+            path: {
+                'backtestId': backtestId,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
+     * Get Backtest Info
+     * @param backtestId
+     * @returns BackTestRead Successful Response
+     * @throws ApiError
+     */
+    public static getBacktestInfoV1CrudBacktestsBacktestIdInfoGet(
+        backtestId: number,
+    ): CancelablePromise<BackTestRead> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/v1/crud/backtests/{backtestId}/info',
+            path: {
+                'backtestId': backtestId,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
+     * Delete Backtest
+     * @param backtestId
+     * @returns any Successful Response
+     * @throws ApiError
+     */
+    public static deleteBacktestV1CrudBacktestsBacktestIdDelete(
+        backtestId: number,
+    ): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'DELETE',
+            url: '/v1/crud/backtests/{backtestId}',
+            path: {
+                'backtestId': backtestId,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
+     * Update Backtest
+     * @param backtestId
+     * @param requestBody
+     * @returns BackTestRead Successful Response
+     * @throws ApiError
+     */
+    public static updateBacktestV1CrudBacktestsBacktestIdPatch(
+        backtestId: number,
+        requestBody: BackTestUpdate,
+    ): CancelablePromise<BackTestRead> {
+        return __request(OpenAPI, {
+            method: 'PATCH',
+            url: '/v1/crud/backtests/{backtestId}',
+            path: {
+                'backtestId': backtestId,
+            },
             body: requestBody,
             mediaType: 'application/json',
             errors: {
@@ -46,12 +159,12 @@ export class AnalyticsService {
      * @returns BackTestRead Successful Response
      * @throws ApiError
      */
-    public static getCompatibleBacktestsAnalyticsCompatibleBacktestsBacktestIdGet(
+    public static getCompatibleBacktestsV1AnalyticsCompatibleBacktestsBacktestIdGet(
         backtestId: number,
     ): CancelablePromise<Array<BackTestRead>> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/analytics/compatible-backtests/{backtestId}',
+            url: '/v1/analytics/compatible-backtests/{backtestId}',
             path: {
                 'backtestId': backtestId,
             },
@@ -68,40 +181,16 @@ export class AnalyticsService {
      * @returns BacktestDomain Successful Response
      * @throws ApiError
      */
-    public static getBacktestOverlapAnalyticsBacktestOverlapBacktestId1BacktestId2Get(
+    public static getBacktestOverlapV1AnalyticsBacktestOverlapBacktestId1BacktestId2Get(
         backtestId1: number,
         backtestId2: number,
     ): CancelablePromise<BacktestDomain> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/analytics/backtest-overlap/{backtestId1}/{backtestId2}',
+            url: '/v1/analytics/backtest-overlap/{backtestId1}/{backtestId2}',
             path: {
                 'backtestId1': backtestId1,
                 'backtestId2': backtestId2,
-            },
-            errors: {
-                422: `Validation Error`,
-            },
-        });
-    }
-    /**
-     * Get Prediction Entry
-     * return
-     * @param predictionId
-     * @param quantiles
-     * @returns PredictionEntry Successful Response
-     * @throws ApiError
-     */
-    public static getPredictionEntryAnalyticsPredictionEntryGet(
-        predictionId: number,
-        quantiles: Array<number>,
-    ): CancelablePromise<Array<PredictionEntry>> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/analytics/prediction-entry',
-            query: {
-                'predictionId': predictionId,
-                'quantiles': quantiles,
             },
             errors: {
                 422: `Validation Error`,
@@ -119,7 +208,7 @@ export class AnalyticsService {
      * @returns EvaluationEntry Successful Response
      * @throws ApiError
      */
-    public static getEvaluationEntriesAnalyticsEvaluationEntryGet(
+    public static getEvaluationEntriesV1AnalyticsEvaluationEntryGet(
         backtestId: number,
         quantiles: Array<number>,
         splitPeriod?: string,
@@ -127,7 +216,7 @@ export class AnalyticsService {
     ): CancelablePromise<Array<EvaluationEntry>> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/analytics/evaluation-entry',
+            url: '/v1/analytics/evaluation-entry',
             query: {
                 'backtestId': backtestId,
                 'quantiles': quantiles,
@@ -145,58 +234,14 @@ export class AnalyticsService {
      * @returns JobResponse Successful Response
      * @throws ApiError
      */
-    public static createBacktestAnalyticsCreateBacktestPost(
+    public static createBacktestV1AnalyticsCreateBacktestPost(
         requestBody: MakeBacktestRequest,
     ): CancelablePromise<JobResponse> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/analytics/create-backtest',
+            url: '/v1/analytics/create-backtest',
             body: requestBody,
             mediaType: 'application/json',
-            errors: {
-                422: `Validation Error`,
-            },
-        });
-    }
-    /**
-     * Make Prediction
-     * @param requestBody
-     * @returns JobResponse Successful Response
-     * @throws ApiError
-     */
-    public static makePredictionAnalyticsMakePredictionPost(
-        requestBody: MakePredictionRequest,
-    ): CancelablePromise<JobResponse> {
-        return __request(OpenAPI, {
-            method: 'POST',
-            url: '/analytics/make-prediction',
-            body: requestBody,
-            mediaType: 'application/json',
-            errors: {
-                422: `Validation Error`,
-            },
-        });
-    }
-    /**
-     * Get Prediction Entries
-     * @param predictionId
-     * @param quantiles
-     * @returns PredictionEntry Successful Response
-     * @throws ApiError
-     */
-    public static getPredictionEntriesAnalyticsPredictionEntryPredictionIdGet(
-        predictionId: number,
-        quantiles: Array<number>,
-    ): CancelablePromise<Array<PredictionEntry>> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/analytics/prediction-entry/{predictionId}',
-            path: {
-                'predictionId': predictionId,
-            },
-            query: {
-                'quantiles': quantiles,
-            },
             errors: {
                 422: `Validation Error`,
             },
@@ -213,14 +258,14 @@ export class AnalyticsService {
      * @returns DataList Successful Response
      * @throws ApiError
      */
-    public static getActualCasesAnalyticsActualCasesBacktestIdGet(
+    public static getActualCasesV1AnalyticsActualCasesBacktestIdGet(
         backtestId: number,
         orgUnits?: Array<string>,
         isDatasetId: boolean = false,
     ): CancelablePromise<DataList> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/analytics/actualCases/{backtestId}',
+            url: '/v1/analytics/actualCases/{backtestId}',
             path: {
                 'backtestId': backtestId,
             },
@@ -234,30 +279,19 @@ export class AnalyticsService {
         });
     }
     /**
-     * Get Data Sources
-     * @returns ChapDataSource Successful Response
-     * @throws ApiError
-     */
-    public static getDataSourcesAnalyticsDataSourcesGet(): CancelablePromise<Array<ChapDataSource>> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/analytics/data-sources',
-        });
-    }
-    /**
      * Create Backtest With Data
      * @param requestBody
      * @param dryRun If True, only run validation and do not create a backtest
      * @returns ImportSummaryResponse Successful Response
      * @throws ApiError
      */
-    public static createBacktestWithDataAnalyticsCreateBacktestWithDataPost(
+    public static createBacktestWithDataV1AnalyticsCreateBacktestWithDataPost(
         requestBody: MakeBacktestWithDataRequest,
         dryRun: boolean = false,
     ): CancelablePromise<ImportSummaryResponse> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/analytics/create-backtest-with-data/',
+            url: '/v1/analytics/create-backtest-with-data/',
             query: {
                 'dryRun': dryRun,
             },
