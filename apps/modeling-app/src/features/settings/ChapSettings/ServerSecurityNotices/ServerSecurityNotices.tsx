@@ -8,9 +8,9 @@ export const ServerSecurityNotices = () => {
     const { route } = useRoute();
 
     const { data: status, isLoading, error } = useQuery({
-        queryKey: ['chap-status', route?.url],
+        queryKey: ['chap-security-probe', route?.url],
         enabled: !!route?.url,
-        queryFn: () => fetch(`${route?.url.replace('/**', '')}/system-info`).then(res => res.json()),
+        queryFn: () => fetch(`${route?.url.replace('/**', '')}/system/info`).then(res => res.json()),
         staleTime: Infinity,
         cacheTime: Infinity,
         refetchOnWindowFocus: false,

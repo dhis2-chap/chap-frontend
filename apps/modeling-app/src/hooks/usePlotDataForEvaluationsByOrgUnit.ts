@@ -1,6 +1,6 @@
 import {
-    AnalyticsService,
     BackTestRead,
+    BacktestsService,
     createHighChartsData,
     DataElement,
     DataList,
@@ -144,7 +144,7 @@ export const usePlotDataForEvaluationsByOrgUnit = (
                     if (!orgUnitId) {
                         throw new Error('orgUnitId is required');
                     }
-                    return await AnalyticsService.getEvaluationEntriesAnalyticsEvaluationEntryGet(
+                    return await BacktestsService.getEvaluationEntriesV1AnalyticsEvaluationEntryGet(
                         backtest.id,
                         quantiles,
                         undefined,
@@ -162,7 +162,7 @@ export const usePlotDataForEvaluationsByOrgUnit = (
                     if (!orgUnitId) {
                         throw new Error('orgUnitId is required');
                     }
-                    return await AnalyticsService.getActualCasesAnalyticsActualCasesBacktestIdGet(
+                    return await BacktestsService.getActualCasesV1AnalyticsActualCasesBacktestIdGet(
                         backtest.id,
                         [orgUnitId],
                     );

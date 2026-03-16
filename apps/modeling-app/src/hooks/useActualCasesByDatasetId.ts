@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { AnalyticsService, ApiError, DataList } from '@dhis2-chap/ui';
+import { ApiError, BacktestsService, DataList } from '@dhis2-chap/ui';
 
 type Props = {
     datasetId: number | undefined;
@@ -17,7 +17,7 @@ export const useActualCasesByDatasetId = ({
         queryFn: async () => {
             if (!datasetId) throw new Error('datasetId is required');
 
-            return await AnalyticsService.getActualCasesAnalyticsActualCasesBacktestIdGet(
+            return await BacktestsService.getActualCasesV1AnalyticsActualCasesBacktestIdGet(
                 datasetId,
                 orgUnits,
                 true,

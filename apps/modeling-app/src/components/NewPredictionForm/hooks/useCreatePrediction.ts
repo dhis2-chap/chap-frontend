@@ -2,11 +2,11 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useDataEngine } from '@dhis2/app-runtime';
 import { useNavigate } from 'react-router-dom';
 import {
-    AnalyticsService,
     ApiError,
     FeatureCollectionModel,
     JobResponse,
     MakePredictionRequest,
+    PredictionsService,
 } from '@dhis2-chap/ui';
 import { ModelExecutionFormValues } from '../../ModelExecutionForm/hooks/useModelExecutionFormState';
 import { prepareBacktestData } from '../../ModelExecutionForm/utils/prepareBacktestData';
@@ -55,7 +55,7 @@ export const useCreatePrediction = ({ onSuccess, onError }: Props = {}) => {
                 type: 'forecasting' as const,
             };
 
-            return AnalyticsService.makePredictionAnalyticsMakePredictionPost(predictionRequest);
+            return PredictionsService.makePredictionV1AnalyticsMakePredictionPost(predictionRequest);
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['jobs'] });
