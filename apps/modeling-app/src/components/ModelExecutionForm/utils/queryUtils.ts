@@ -20,6 +20,7 @@ export type OrgUnitResponse = {
                 id: string;
             } | null;
             level: number;
+            code?: string;
         }[];
     };
 };
@@ -39,7 +40,7 @@ export const ORG_UNITS_QUERY = (orgUnitIds: string[]) => ({
         resource: 'organisationUnits',
         params: {
             filter: `id:in:[${orgUnitIds.join(',')}]`,
-            fields: 'id,geometry,parent[id],level,displayName',
+            fields: 'id,geometry,parent[id],level,displayName,code',
             paging: false,
         },
     },
