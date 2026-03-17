@@ -93,6 +93,7 @@ export const useCompareSelectionController = ({
     useEffect(() => {
         if (
             selectedSplitPeriod &&
+            resolvedSplitPeriods.length > 0 &&
             !resolvedSplitPeriods.includes(selectedSplitPeriod)
         ) {
             setSelectedSplitPeriod(undefined);
