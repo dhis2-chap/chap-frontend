@@ -44,14 +44,14 @@ jobs:
               run: |
                   docker build \
                     -t ghcr.io/dhis2-chap/chap-core:${{ env.CHAP_CORE_STABLE_REF }} \
-                    -f Dockerfile \
+                    -f /tmp/chap-core/Dockerfile \
                     /tmp/chap-core
 
             - name: Build stable chap-worker image
               run: |
                   docker build \
                     -t ghcr.io/dhis2-chap/chap-worker:${{ env.CHAP_CORE_STABLE_REF }} \
-                    -f Dockerfile.worker \
+                    -f /tmp/chap-core/Dockerfile.worker \
                     /tmp/chap-core
 
             - name: Start CHAP + DHIS2 stack and wait for readiness
