@@ -2,7 +2,7 @@ name: e2e-dev
 
 on:
     pull_request:
-        types: [labeled, synchronize]
+        types: [opened, labeled, synchronize]
     workflow_dispatch:
 
 concurrency:
