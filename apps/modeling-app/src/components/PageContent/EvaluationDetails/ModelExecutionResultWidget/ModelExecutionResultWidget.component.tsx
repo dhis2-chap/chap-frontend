@@ -6,6 +6,7 @@ import { SplitPeriodSlider } from '../../../../features/evaluation-compare/Split
 import styles from './ModelExecutionResultWidget.module.css';
 import { usePlotDataForEvaluationsByOrgUnit } from '@/hooks/usePlotDataForEvaluationsByOrgUnit';
 import { ALL_LOCATIONS_ORG_UNIT } from './ModelExecutionResultWidget.container';
+import { getStableMaxYByOrgUnitId } from '@/hooks/plotDataForEvaluations.utils';
 
 type Props = {
     backtest: BackTestRead;
@@ -36,6 +37,14 @@ export const ModelExecutionResultWidgetComponent = ({
         isLoading: isPlotDataLoading,
         error: plotDataError,
     } = usePlotDataForEvaluationsByOrgUnit(backtest, selectedOrgUnitId);
+
+    const maxYByOrgUnitId = useMemo(() => {
+        return getStableMaxYByOrgUnitId(viewData);
+    }, [viewData]);
+
+    const maxY = selectedOrgUnitId
+        ? maxYByOrgUnitId[selectedOrgUnitId]
+        : undefined;
 
     const { dataForSplitPeriod, periods } = useMemo(() => {
         const dataForSplitPeriod = viewData
@@ -100,6 +109,7 @@ export const ModelExecutionResultWidgetComponent = ({
                                     modelName={dataForSplitPeriod[0].models[0].modelName}
                                     syncZoom={false}
                                     nameLabel={i18n.t('Evaluation')}
+                                    maxY={maxY}
                                 />
                             )}
                             {status === STATUSES.LOADING && (

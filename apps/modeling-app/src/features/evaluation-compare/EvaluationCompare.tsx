@@ -22,6 +22,7 @@ import { useCompareSelectionController } from './useCompareSelectionController';
 import { SplitPeriodSlider } from './SplitPeriodSlider';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ID_MAIN_LAYOUT } from '../../components/layout/Layout';
+import { getStableMaxYByOrgUnitId } from '../../hooks/plotDataForEvaluations.utils';
 
 const MAX_SELECTED_ORG_UNITS = 10;
 
@@ -62,6 +63,10 @@ export const EvaluationCompare = () => {
     } = usePlotDataForEvaluations(selectedEvaluations, {
         orgUnits: selectedOrgUnits,
     });
+
+    const maxYByOrgUnitId = useMemo(() => {
+        return getStableMaxYByOrgUnitId(combined.viewData);
+    }, [combined.viewData]);
 
     const { dataForSplitPeriod, periods } = useMemo(() => {
         const dataForSplitPeriod = combined.viewData
@@ -170,6 +175,7 @@ export const EvaluationCompare = () => {
                         }}
                         useVirtuoso={true}
                         evaluationPerOrgUnits={dataForSplitPeriod}
+                        maxYByOrgUnitId={maxYByOrgUnitId}
                         nameLabel={i18n.t('Evaluation')}
                     />
                 )}

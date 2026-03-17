@@ -7,11 +7,13 @@ import Highcharts from 'highcharts';
 interface SideBySidePlotsProps {
     orgUnitsData: EvaluationPerOrgUnit;
     nameLabel?: string;
+    maxY?: number;
 }
 
 export const ComparisonPlot = React.memo(function ComparisonPlot({
     orgUnitsData,
     nameLabel,
+    maxY,
 }: SideBySidePlotsProps) {
     // read during render, so we should store in state over useRef
     const [baseRef, setBaseRef] = useState<HighchartsReact.RefObject | null>(
@@ -46,12 +48,9 @@ export const ComparisonPlot = React.memo(function ComparisonPlot({
             triggeringChart.zoomOut();
             return;
         }
-        const triggeringYAxis = this.chart.yAxis[0];
         const { min: xMin, max: xMax } = event;
-        const { min: yMin, max: yMax } = triggeringYAxis;
 
-        // sync zoom for both axes
-        chartToSync.yAxis[0].setExtremes(yMin, yMax, false);
+        // sync x-axis zoom while the shared max keeps the y-axis stable.
         chartToSync.xAxis[0].setExtremes(xMin, xMax, false);
 
         // handle reset zoom button
@@ -91,11 +90,7 @@ export const ComparisonPlot = React.memo(function ComparisonPlot({
                                         ? setBaseRef
                                         : setComparisonRef
                                 }
-                                maxY={
-                                    !isBaseEvaluation
-                                        ? baseRef?.chart?.yAxis[0].max
-                                        : undefined
-                                }
+                                maxY={maxY}
                             />
                         </div>
                     );

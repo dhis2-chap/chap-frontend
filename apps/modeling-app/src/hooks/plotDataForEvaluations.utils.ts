@@ -5,6 +5,7 @@ import {
     EvaluationEntry,
     EvaluationEntryExtend,
     EvaluationForSplitPoint,
+    EvaluationPerOrgUnit,
     HighChartsData,
     joinRealAndPredictedData,
     normalizeEvaluationModelsToSharedPeriods,
@@ -12,11 +13,81 @@ import {
     sortPeriods,
 } from '@dhis2-chap/ui';
 
+const Y_AXIS_HEADROOM_MULTIPLIER = 1.05;
+
 export type PlotDataResult = {
     evaluationEntries: EvaluationEntryExtend[];
     actualCases: DataElement[];
     splitPeriods: string[];
     evaluation: BackTestRead;
+};
+
+const getNumericMax = (values: Array<number | null | undefined>): number | undefined => {
+    const numericValues = values.filter(
+        (value): value is number =>
+            value !== null &&
+            value !== undefined &&
+            Number.isFinite(value),
+    );
+
+    if (numericValues.length === 0) {
+        return undefined;
+    }
+
+    return Math.max(...numericValues);
+};
+
+const getModelMaxY = (data: HighChartsData): number | undefined => {
+    return getNumericMax([
+        ...data.realValues ?? [],
+        ...data.averages.map(point => point?.[0]),
+        ...data.ranges.map(point => point?.[1]),
+        ...(data.midranges?.map(point => point?.[1]) ?? []),
+    ]);
+};
+
+const getOrgUnitMaxY = (
+    evaluationPerOrgUnit: EvaluationPerOrgUnit[],
+): number | undefined => {
+    const rawMax = getNumericMax(
+        evaluationPerOrgUnit.flatMap(row =>
+            row.models.map(model => getModelMaxY(model.data)),
+        ),
+    );
+
+    if (rawMax === undefined) {
+        return undefined;
+    }
+
+    return rawMax * Y_AXIS_HEADROOM_MULTIPLIER;
+};
+
+export const getStableMaxYByOrgUnitId = (
+    viewData: EvaluationForSplitPoint[],
+): Record<string, number> => {
+    const orgUnitRowsById = new Map<string, EvaluationPerOrgUnit[]>();
+
+    viewData.forEach((splitPoint) => {
+        splitPoint.evaluation.forEach((evaluationPerOrgUnit) => {
+            const existingRows =
+                orgUnitRowsById.get(evaluationPerOrgUnit.orgUnitId) ?? [];
+            existingRows.push(evaluationPerOrgUnit);
+            orgUnitRowsById.set(evaluationPerOrgUnit.orgUnitId, existingRows);
+        });
+    });
+
+    return Array.from(orgUnitRowsById.entries()).reduce<Record<string, number>>(
+        (accumulator, [orgUnitId, orgUnitRows]) => {
+            const maxY = getOrgUnitMaxY(orgUnitRows);
+
+            if (maxY !== undefined) {
+                accumulator[orgUnitId] = maxY;
+            }
+
+            return accumulator;
+        },
+        {},
+    );
 };
 
 const createQuantileFunc = (quantiles: number[]) => {

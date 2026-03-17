@@ -9,6 +9,7 @@ interface ComparisonPlotListProps {
     useVirtuosoWindowScroll?: boolean;
     virtuosoProps?: VirtuosoProps<any, any>;
     nameLabel?: string;
+    maxYByOrgUnitId?: Record<string, number>;
 }
 
 export const ComparisonPlotList: React.FC<ComparisonPlotListProps> = ({
@@ -17,6 +18,7 @@ export const ComparisonPlotList: React.FC<ComparisonPlotListProps> = ({
     useVirtuosoWindowScroll = false,
     virtuosoProps,
     nameLabel,
+    maxYByOrgUnitId,
 }) => {
     if (!useVirtuoso) {
         return (
@@ -31,6 +33,7 @@ export const ComparisonPlotList: React.FC<ComparisonPlotListProps> = ({
                             key={orgUnitsData.orgUnitId}
                             orgUnitsData={orgUnitsData}
                             nameLabel={nameLabel}
+                            maxY={maxYByOrgUnitId?.[orgUnitsData.orgUnitId]}
                         />
                     );
                 })}
@@ -48,6 +51,11 @@ export const ComparisonPlotList: React.FC<ComparisonPlotListProps> = ({
                 <ComparisonPlot
                     orgUnitsData={evaluationPerOrgUnits[index]}
                     nameLabel={nameLabel}
+                    maxY={
+                        maxYByOrgUnitId?.[
+                            evaluationPerOrgUnits[index]?.orgUnitId
+                        ]
+                    }
                 />
             )}
         />

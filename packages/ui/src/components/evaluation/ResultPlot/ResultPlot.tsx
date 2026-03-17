@@ -151,7 +151,7 @@ const getOptions = ({
             },
             min: 0,
             zoomEnabled: false,
-            max: maxY || undefined,
+            max: maxY ?? undefined,
         },
         tooltip: {
             shared: true,
