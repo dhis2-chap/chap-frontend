@@ -49,6 +49,7 @@ export const ComparisonPlot = React.memo(function ComparisonPlot({
         const triggeringYAxis = this.chart.yAxis[0];
         const { min: xMin, max: xMax } = event;
         const { min: yMin, max: yMax } = triggeringYAxis;
+
         // sync zoom for both axes
         chartToSync.yAxis[0].setExtremes(yMin, yMax, false);
         chartToSync.xAxis[0].setExtremes(xMin, xMax, false);

@@ -37,6 +37,7 @@ const getSeries = (data: any): Highcharts.SeriesOptionsType[] => {
             lineWidth: 2.5,
             type: 'line',
             color: '#f68000', // Different color for real data
+            connectNulls: false,
             marker: {
                 enabled: false,
                 lineWidth: 2,
@@ -51,6 +52,7 @@ const getSeries = (data: any): Highcharts.SeriesOptionsType[] => {
             zIndex: 3,
             opacity: 1,
             lineWidth: 2.5,
+            connectNulls: false,
             marker: {
                 enabled: false,
             },
@@ -63,18 +65,20 @@ const getSeries = (data: any): Highcharts.SeriesOptionsType[] => {
             color: '#c4dcf2',
             fillOpacity: 1,
             zIndex: 0,
+            connectNulls: false,
             marker: {
                 enabled: false,
             },
         },
         {
             name: i18n.t('50% prediction interval'),
-            data: data.midranges.slice(),
+            data: data.midranges?.slice() ?? [],
             type: 'arearange',
             lineWidth: 1,
             color: '#9bbdff',
             fillOpacity: 1,
             zIndex: 1,
+            connectNulls: false,
             marker: {
                 enabled: false,
             },

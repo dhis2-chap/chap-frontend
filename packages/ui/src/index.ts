@@ -5,6 +5,7 @@ export {
     getSplitPeriod,
     createHighChartsData,
     joinRealAndPredictedData,
+    normalizeEvaluationModelsToSharedPeriods,
 } from './utils/EvaluationResponse';
 export { ConditionalTooltip } from './utils/ConditionalTooltip';
 export type {
