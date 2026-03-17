@@ -174,6 +174,16 @@ export const usePlotDataForEvaluations = (
         ),
     });
 
+    const evaluationKey = evaluations
+        .map(evaluation => `${evaluation.id}:${evaluation.name ?? ''}`)
+        .join('|');
+    const orgUnitsKey = sortedUnits.join('|');
+    const queryDataKey = evaluationQueries
+        .map((query, index) =>
+            `${evaluations[index]?.id ?? index}:${query.dataUpdatedAt}`,
+        )
+        .join('|');
+
     const combined = useMemo(() => {
         const allData = evaluationQueries.flatMap(q => q.data || []);
         const splitPeriods = evaluationQueries.flatMap(
@@ -182,7 +192,7 @@ export const usePlotDataForEvaluations = (
         const viewData = plotResultsToViewData(allData);
 
         return { viewData, splitPeriods };
-    }, [evaluationQueries]);
+    }, [evaluationKey, orgUnitsKey, splitPeriod, queryDataKey]);
 
     const isLoading = evaluationQueries.some(q => q.isLoading && q.isFetching);
 
