@@ -5,6 +5,8 @@ import {
     DataList,
     EvaluationEntry,
     getSplitPeriod,
+    plotResultsToViewData,
+    PlotDataResult,
 } from '@dhis2-chap/ui';
 import { useCallback, useMemo } from 'react';
 import {
@@ -13,7 +15,6 @@ import {
     useQueryClient,
     UseQueryOptions,
 } from '@tanstack/react-query';
-import { plotResultsToViewData, PlotDataResult } from './plotDataForEvaluations.utils';
 
 const quantiles = [0.1, 0.25, 0.5, 0.75, 0.9];
 

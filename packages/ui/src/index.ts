@@ -57,6 +57,11 @@ export {
 } from './httpfunctions/core/request';
 export { buildPredictionSeries } from './utils/PredictionViewModel';
 export {
+    plotResultsToViewData,
+    getStableMaxYByOrgUnitId,
+    type PlotDataResult,
+} from './utils/plotDataForEvaluations';
+export {
     PERIOD_TYPES,
     type PeriodType,
     type Period,

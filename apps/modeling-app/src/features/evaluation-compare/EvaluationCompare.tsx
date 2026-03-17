@@ -1,4 +1,4 @@
-import { ComparisonPlotList } from '@dhis2-chap/ui';
+import { ComparisonPlotList, getStableMaxYByOrgUnitId } from '@dhis2-chap/ui';
 import {
     EvaluationCompatibleSelector,
     EvaluationSelectorBase,
@@ -22,7 +22,6 @@ import { useCompareSelectionController } from './useCompareSelectionController';
 import { SplitPeriodSlider } from './SplitPeriodSlider';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ID_MAIN_LAYOUT } from '../../components/layout/Layout';
-import { getStableMaxYByOrgUnitId } from '../../hooks/plotDataForEvaluations.utils';
 
 const MAX_SELECTED_ORG_UNITS = 10;
 

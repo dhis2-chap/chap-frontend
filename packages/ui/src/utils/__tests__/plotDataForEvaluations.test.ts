@@ -1,28 +1,11 @@
-import type { BackTestRead, EvaluationEntryExtend } from '@dhis2-chap/ui';
-import { describe, expect, it, vi } from 'vitest';
+import type { BackTestRead } from '../../httpfunctions';
+import type { EvaluationEntryExtend } from '../../interfaces/Evaluation';
+import { describe, expect, it } from 'vitest';
 import {
     getStableMaxYByOrgUnitId,
     PlotDataResult,
     plotResultsToViewData,
-} from './plotDataForEvaluations.utils';
-
-vi.mock('@dhis2-chap/ui', async () => {
-    const evaluationResponse = await import(
-        '../../../../packages/ui/src/utils/EvaluationResponse',
-    );
-    const timePeriodUtils = await import(
-        '../../../../packages/ui/src/utils/timePeriodUtils',
-    );
-
-    return {
-        createHighChartsData: evaluationResponse.createHighChartsData,
-        joinRealAndPredictedData: evaluationResponse.joinRealAndPredictedData,
-        normalizeEvaluationModelsToSharedPeriods:
-            evaluationResponse.normalizeEvaluationModelsToSharedPeriods,
-        PERIOD_TYPES: timePeriodUtils.PERIOD_TYPES,
-        sortPeriods: timePeriodUtils.sortPeriods,
-    };
-});
+} from '../plotDataForEvaluations';
 
 const quantiles = [0.1, 0.25, 0.5, 0.75, 0.9];
 
