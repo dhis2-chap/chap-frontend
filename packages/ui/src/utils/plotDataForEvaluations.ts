@@ -21,6 +21,34 @@ export type PlotDataResult = {
     evaluation: BackTestRead;
 };
 
+type GroupedEntriesBySplitPeriod = Map<
+    string,
+    Map<string, EvaluationEntryExtend[]>
+>;
+
+type GroupedPlotDataResult = {
+    actualCasesByOrgUnit: Map<string, DataElement[]>;
+    entriesBySplitPeriod: GroupedEntriesBySplitPeriod;
+    evaluation: BackTestRead;
+    quantileFunc: (item: EvaluationEntry) => string;
+};
+
+const getOrCreateMapValue = <TKey, TValue>(
+    map: Map<TKey, TValue>,
+    key: TKey,
+    createValue: () => TValue,
+): TValue => {
+    const existingValue = map.get(key);
+
+    if (existingValue !== undefined) {
+        return existingValue;
+    }
+
+    const newValue = createValue();
+    map.set(key, newValue);
+    return newValue;
+};
+
 const getNumericMax = (values: Array<number | null | undefined>): number | undefined => {
     const numericValues = values.filter(
         (value): value is number =>
@@ -112,49 +140,89 @@ const createQuantileFunc = (quantiles: number[]) => {
     };
 };
 
+const groupPlotDataBySplitPeriodAndOrgUnit = (
+    dataForEvaluation: PlotDataResult,
+): GroupedPlotDataResult => {
+    const entriesBySplitPeriod: GroupedEntriesBySplitPeriod = new Map();
+    const actualCasesByOrgUnit = new Map<string, DataElement[]>();
+    const quantiles = new Set<number>();
+
+    dataForEvaluation.evaluationEntries.forEach((entry) => {
+        quantiles.add(entry.quantile);
+
+        const entriesByOrgUnit = getOrCreateMapValue(
+            entriesBySplitPeriod,
+            entry.splitPeriod,
+            () => new Map(),
+        );
+        const entries = getOrCreateMapValue(
+            entriesByOrgUnit,
+            entry.orgUnit,
+            () => [],
+        );
+        entries.push(entry);
+    });
+
+    dataForEvaluation.actualCases.forEach((item) => {
+        const actualCases = getOrCreateMapValue(
+            actualCasesByOrgUnit,
+            item.ou,
+            () => [],
+        );
+        actualCases.push(item);
+    });
+
+    return {
+        actualCasesByOrgUnit,
+        entriesBySplitPeriod,
+        evaluation: dataForEvaluation.evaluation,
+        quantileFunc: createQuantileFunc(
+            Array.from(quantiles).sort((a, b) => a - b),
+        ),
+    };
+};
+
 export const plotResultsToViewData = (
     data: PlotDataResult[],
 ): EvaluationForSplitPoint[] => {
-    const evaluationData = data.flatMap(d => d.evaluationEntries);
     const periodType = data[0]?.evaluation?.dataset?.periodType;
+    const groupedData = data.map(groupPlotDataBySplitPeriodAndOrgUnit);
+    const splitPeriods = new Set<string>();
+    const orgUnits = new Set<string>();
 
-    const uniqueSplitPeriods = Array.from(
-        new Set(evaluationData.map(item => item.splitPeriod)),
-    );
+    groupedData.forEach(({ entriesBySplitPeriod }) => {
+        entriesBySplitPeriod.forEach((entriesByOrgUnit, splitPeriod) => {
+            splitPeriods.add(splitPeriod);
+            entriesByOrgUnit.forEach((_, orgUnit) => {
+                orgUnits.add(orgUnit);
+            });
+        });
+    });
 
     const allSplitPeriods = periodType
         ? sortPeriods(
-                uniqueSplitPeriods,
+                Array.from(splitPeriods),
                 periodType as keyof typeof PERIOD_TYPES,
             )
-        : uniqueSplitPeriods;
+        : Array.from(splitPeriods);
 
-    const allOrgunits = Array.from(
-        new Set(evaluationData.map(item => item.orgUnit)),
-    );
+    const allOrgunits = Array.from(orgUnits);
 
     return allSplitPeriods.map((splitPeriod: string) => {
         return {
             splitPoint: splitPeriod,
             evaluation: allOrgunits.map((orgUnit: string) => {
-                const models = data.map((dataForEvaluation) => {
+                const models = groupedData.map((dataForEvaluation) => {
                     const evaluationEntries =
-                        dataForEvaluation.evaluationEntries.filter(
-                            entry =>
-                                entry.orgUnit === orgUnit &&
-                                entry.splitPeriod === splitPeriod,
-                        );
+                        dataForEvaluation.entriesBySplitPeriod
+                            .get(splitPeriod)
+                            ?.get(orgUnit) ?? [];
                     const actualCasesForOrgunit =
-                        dataForEvaluation.actualCases.filter(
-                            item => item.ou === orgUnit,
-                        );
-                    const quantiles = evaluationEntries.map(
-                        item => item.quantile,
-                    );
-
+                        dataForEvaluation.actualCasesByOrgUnit.get(orgUnit)
+                        ?? [];
                     const highChartData = createHighChartsData(
                         evaluationEntries,
-                        createQuantileFunc(quantiles),
+                        dataForEvaluation.quantileFunc,
                     );
                     const joinedRealAndPredictedData: HighChartsData =
                         joinRealAndPredictedData(

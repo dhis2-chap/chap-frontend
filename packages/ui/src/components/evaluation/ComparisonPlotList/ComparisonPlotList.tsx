@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { EvaluationPerOrgUnit } from '../../../interfaces/Evaluation';
 import { ComparisonPlot } from '../ComparisonPlot/ComparisonPlot';
 import { Virtuoso, VirtuosoProps } from 'react-virtuoso';
@@ -12,14 +12,37 @@ interface ComparisonPlotListProps {
     maxYByOrgUnitId?: Record<string, number>;
 }
 
-export const ComparisonPlotList: React.FC<ComparisonPlotListProps> = ({
+const VIRTUOSO_STYLE = { height: '100%' } as const;
+
+export const ComparisonPlotList = React.memo(function ComparisonPlotList({
     evaluationPerOrgUnits,
     useVirtuoso = true,
     useVirtuosoWindowScroll = false,
     virtuosoProps,
     nameLabel,
     maxYByOrgUnitId,
-}) => {
+}: ComparisonPlotListProps) {
+    const renderItem = useCallback((index: number) => {
+        const orgUnitsData = evaluationPerOrgUnits[index];
+
+        if (!orgUnitsData) {
+            return null;
+        }
+
+        return (
+            <ComparisonPlot
+                orgUnitsData={orgUnitsData}
+                nameLabel={nameLabel}
+                maxY={maxYByOrgUnitId?.[orgUnitsData.orgUnitId]}
+            />
+        );
+    }, [evaluationPerOrgUnits, maxYByOrgUnitId, nameLabel]);
+
+    const computeItemKey = useCallback(
+        (index: number) => evaluationPerOrgUnits[index]?.orgUnitId ?? index,
+        [evaluationPerOrgUnits],
+    );
+
     if (!useVirtuoso) {
         return (
             <>
@@ -44,20 +67,11 @@ export const ComparisonPlotList: React.FC<ComparisonPlotListProps> = ({
     return (
         <Virtuoso
             {...virtuosoProps}
-            style={{ height: '100%' }}
+            computeItemKey={computeItemKey}
+            style={VIRTUOSO_STYLE}
             useWindowScroll={useVirtuosoWindowScroll}
             totalCount={evaluationPerOrgUnits.length}
-            itemContent={index => (
-                <ComparisonPlot
-                    orgUnitsData={evaluationPerOrgUnits[index]}
-                    nameLabel={nameLabel}
-                    maxY={
-                        maxYByOrgUnitId?.[
-                            evaluationPerOrgUnits[index]?.orgUnitId
-                        ]
-                    }
-                />
-            )}
+            itemContent={renderItem}
         />
     );
-};
+});

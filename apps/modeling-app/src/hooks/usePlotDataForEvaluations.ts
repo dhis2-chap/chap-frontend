@@ -70,7 +70,7 @@ export const usePlotDataForEvaluations = (
 ) => {
     const queryClient = useQueryClient();
     const sortedUnits = useMemo(() => {
-        return orgUnits ? orgUnits.sort() : [];
+        return orgUnits ? [...orgUnits].sort() : [];
     }, [orgUnits]);
 
     const getQueryKey = (

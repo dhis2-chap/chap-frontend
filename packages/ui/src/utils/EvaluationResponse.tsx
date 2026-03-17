@@ -38,12 +38,11 @@ export function joinRealAndPredictedData(
 
     // const nPeriods = 52 * 3
     // const predictionEnd = predictedData.periods[predictedData.periods.length - 1]
-    const realPeriodsFiltered = realData
-        .map(item => item.pe)
-        .sort(sortDhis2WeeklyAndMonthlyTime);
-    const realDataFiltered = realPeriodsFiltered.map(
-        period => realData.find(item => item.pe === period)?.value ?? null,
+    const sortedRealData = [...realData].sort((a, b) =>
+        sortDhis2WeeklyAndMonthlyTime(a.pe, b.pe),
     );
+    const realPeriodsFiltered = sortedRealData.map(item => item.pe);
+    const realDataFiltered = sortedRealData.map(item => item.value ?? null);
 
     // turn prediction arrays into period dicts
     const createLookup = <T,>(keys: string[], values: T[] | undefined) => {
@@ -58,15 +57,15 @@ export function joinRealAndPredictedData(
     };
     const averageLookup = createLookup(
         predictedData.periods,
-        predictedData.averages.slice(),
+        predictedData.averages,
     );
     const rangeLookup = createLookup(
         predictedData.periods,
-        predictedData.ranges.slice(),
+        predictedData.ranges,
     );
     const midRangeLookup = createLookup(
         predictedData.periods,
-        predictedData.midranges?.slice(),
+        predictedData.midranges,
     );
 
     // join prediction arrays into longer period arrays
@@ -259,43 +258,32 @@ export function createHighChartsData(
     quantileFunc: (item: any) => string,
 ): HighChartsData {
     // requires that all periods are included in the respone
-    const periods = Array.from(
-        new Set(plotData.map(item => item.period)),
-    ).sort(sortDhis2WeeklyAndMonthlyTime);
+    const periodsSet = new Set<string>();
+    const quantileValuesByPeriod = new Map<
+        string,
+        Partial<Record<string, number>>
+    >();
+
+    plotData.forEach((item) => {
+        periodsSet.add(item.period);
+
+        const periodValues = quantileValuesByPeriod.get(item.period) ?? {};
+        periodValues[quantileFunc(item)] = item.value;
+        quantileValuesByPeriod.set(item.period, periodValues);
+    });
+
+    const periods = Array.from(periodsSet).sort(sortDhis2WeeklyAndMonthlyTime);
 
     const ranges: HighChartsData['ranges'] = [];
     const averages: HighChartsData['averages'] = [];
     const midranges: NonNullable<HighChartsData['midranges']> = [];
     periods.forEach((period) => {
-        const quantileLow =
-            plotData.find(
-                item =>
-                    item.period === period &&
-                    quantileFunc(item) === 'quantile_low',
-            )?.value || 0;
-        const quantileHigh =
-            plotData.find(
-                item =>
-                    item.period === period &&
-                    quantileFunc(item) === 'quantile_high',
-            )?.value || 0;
-        const median =
-            plotData.find(
-                item =>
-                    item.period === period && quantileFunc(item) === 'median',
-            )?.value || 0;
-        const quantileMidHigh =
-            plotData.find(
-                item =>
-                    item.period === period &&
-                    quantileFunc(item) === 'quantile_mid_high',
-            )?.value || 0;
-        const quantileMidLow =
-            plotData.find(
-                item =>
-                    item.period === period &&
-                    quantileFunc(item) === 'quantile_mid_low',
-            )?.value || 0;
+        const periodValues = quantileValuesByPeriod.get(period);
+        const quantileLow = periodValues?.quantile_low ?? 0;
+        const quantileHigh = periodValues?.quantile_high ?? 0;
+        const median = periodValues?.median ?? 0;
+        const quantileMidHigh = periodValues?.quantile_mid_high ?? 0;
+        const quantileMidLow = periodValues?.quantile_mid_low ?? 0;
         ranges.push([quantileLow, quantileHigh]);
         averages.push([median]);
         midranges.push([quantileMidLow, quantileMidHigh]);

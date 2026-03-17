@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import css from './SplitPeriodSlider.module.css';
 import { getPeriodNameFromId } from '../utils/Time';
 import i18n from '@dhis2/d2-i18n';
@@ -12,6 +12,7 @@ type SplitPeriodSlider = {
     onChange: (selectedPoint: string) => void;
     periods?: string[];
     splitPeriodLength?: number;
+    debounceMs?: number;
 };
 
 export const SplitPeriodSlider: React.FC<SplitPeriodSlider> = ({
@@ -20,14 +21,98 @@ export const SplitPeriodSlider: React.FC<SplitPeriodSlider> = ({
     onChange,
     periods = [],
     splitPeriodLength = 3,
+    debounceMs = 200,
 }) => {
     const lastSplitPeriod = splitPeriods[splitPeriods.length - 1];
+    const maxSplitPeriodIndex = Math.max(splitPeriods.length - 1, 0);
+    const debounceTimeoutRef = useRef<number | undefined>(undefined);
+    const pendingSplitPeriodRef = useRef<string | null>(null);
 
-    const handleChange = (values: number[]) => {
-        const splitPeriodIndex = clamp(values[0], 0, splitPeriods.length - 1);
+    const selectedSplitPeriodIndex = useMemo(() => {
+        const resolvedIndex = splitPeriods.indexOf(selectedSplitPeriod);
+        return clamp(
+            resolvedIndex < 0 ? 0 : resolvedIndex,
+            0,
+            maxSplitPeriodIndex,
+        );
+    }, [maxSplitPeriodIndex, selectedSplitPeriod, splitPeriods]);
+
+    const [activeSplitPeriodIndex, setActiveSplitPeriodIndex] = useState(
+        selectedSplitPeriodIndex,
+    );
+
+    useEffect(() => {
+        setActiveSplitPeriodIndex(selectedSplitPeriodIndex);
+    }, [selectedSplitPeriodIndex]);
+
+    useEffect(() => {
+        if (pendingSplitPeriodRef.current === selectedSplitPeriod) {
+            pendingSplitPeriodRef.current = null;
+        }
+    }, [selectedSplitPeriod]);
+
+    const clearPendingCommit = useCallback(() => {
+        if (debounceTimeoutRef.current !== undefined) {
+            window.clearTimeout(debounceTimeoutRef.current);
+            debounceTimeoutRef.current = undefined;
+        }
+    }, []);
+
+    const commitSplitPeriod = useCallback((index: number) => {
+        const splitPeriodIndex = clamp(index, 0, maxSplitPeriodIndex);
         const value = splitPeriods[splitPeriodIndex] ?? lastSplitPeriod;
-        return onChange(value);
-    };
+
+        setActiveSplitPeriodIndex(splitPeriodIndex);
+
+        if (
+            value &&
+            value !== selectedSplitPeriod &&
+            value !== pendingSplitPeriodRef.current
+        ) {
+            pendingSplitPeriodRef.current = value;
+            onChange(value);
+        }
+    }, [
+        lastSplitPeriod,
+        maxSplitPeriodIndex,
+        onChange,
+        selectedSplitPeriod,
+        splitPeriods,
+    ]);
+
+    const handleChange = useCallback((values: number[]) => {
+        setActiveSplitPeriodIndex(
+            clamp(values[0], 0, maxSplitPeriodIndex),
+        );
+    }, [maxSplitPeriodIndex]);
+
+    const handleFinalChange = useCallback((values: number[]) => {
+        clearPendingCommit();
+        commitSplitPeriod(values[0]);
+    }, [clearPendingCommit, commitSplitPeriod]);
+
+    useEffect(() => {
+        if (
+            debounceMs <= 0
+            || activeSplitPeriodIndex === selectedSplitPeriodIndex
+        ) {
+            clearPendingCommit();
+            return;
+        }
+
+        debounceTimeoutRef.current = window.setTimeout(() => {
+            debounceTimeoutRef.current = undefined;
+            commitSplitPeriod(activeSplitPeriodIndex);
+        }, debounceMs);
+
+        return clearPendingCommit;
+    }, [
+        activeSplitPeriodIndex,
+        clearPendingCommit,
+        commitSplitPeriod,
+        debounceMs,
+        selectedSplitPeriodIndex,
+    ]);
 
     const lastSplitPeriodInPeriodsIndex = periods.findIndex(
         period => period === lastSplitPeriod,
@@ -40,30 +125,40 @@ export const SplitPeriodSlider: React.FC<SplitPeriodSlider> = ({
 
     // add extra periods so we can show the full period when last split period is selected
     // note that this portion cannot be selected, and will select the last valid split period
-    const withExtraPeriods = splitPeriods
-        .concat(
-            periods.slice(
-                extraPeriodsStartIndex + 1,
-                extraPeriodsStartIndex + splitPeriodLength,
-            ),
-        )
-        // hack last period so that last real period has an end
-        // we dont care about the value, since it will not be selectable
-        .concat('LAST_PERIOD');
+    const withExtraPeriods = useMemo(() => {
+        return splitPeriods
+            .concat(
+                periods.slice(
+                    extraPeriodsStartIndex + 1,
+                    extraPeriodsStartIndex + splitPeriodLength,
+                ),
+            )
+            // hack last period so that last real period has an end
+            // we dont care about the value, since it will not be selectable
+            .concat('LAST_PERIOD');
+    }, [
+        extraPeriodsStartIndex,
+        periods,
+        splitPeriodLength,
+        splitPeriods,
+    ]);
 
-    const middlePeriodIndex = Math.floor(withExtraPeriods.length / 2);
-    const splitPeriodLabels = [
-        withExtraPeriods[0],
-        withExtraPeriods[middlePeriodIndex],
-        withExtraPeriods[withExtraPeriods.length - 2],
-    ]
-        .filter((sp, i, arr) => arr.indexOf(sp) === i)
-        .map(point => getPeriodNameFromId(point));
-
-    const splitPeriodStartIndex = withExtraPeriods.indexOf(selectedSplitPeriod);
+    const splitPeriodStartIndex = activeSplitPeriodIndex;
     const splitPeriodEndIndex = splitPeriodStartIndex + splitPeriodLength - 1;
 
-    const getTrackBackground = () => {
+    const splitPeriodLabels = useMemo(() => {
+        const middlePeriodIndex = Math.floor(withExtraPeriods.length / 2);
+
+        return [
+            withExtraPeriods[0],
+            withExtraPeriods[middlePeriodIndex],
+            withExtraPeriods[withExtraPeriods.length - 2],
+        ]
+            .filter((sp, i, arr) => arr.indexOf(sp) === i)
+            .map(point => getPeriodNameFromId(point));
+    }, [withExtraPeriods]);
+
+    const trackBackground = useMemo(() => {
         const total = withExtraPeriods.length - 1;
         const splitPeriodStart = splitPeriodStartIndex * (100 / total);
         const splitPeriodEnd =
@@ -76,20 +171,20 @@ export const SplitPeriodSlider: React.FC<SplitPeriodSlider> = ({
             var(--colors-grey300) ${splitPeriodEnd}%
             
         )`;
-    };
+    }, [splitPeriodLength, splitPeriodStartIndex, withExtraPeriods.length]);
 
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
             if (event.defaultPrevented) {
                 return;
             }
-            const currentIndex = splitPeriodStartIndex;
+            const currentIndex = activeSplitPeriodIndex;
             const downKeys = new Set(['j', 'J']);
             const upKeys = new Set(['k', 'K']);
             if (downKeys.has(event.key)) {
-                handleChange([currentIndex - 1]);
+                commitSplitPeriod(currentIndex - 1);
             } else if (upKeys.has(event.key)) {
-                handleChange([currentIndex + 1]);
+                commitSplitPeriod(currentIndex + 1);
             }
         };
 
@@ -97,7 +192,7 @@ export const SplitPeriodSlider: React.FC<SplitPeriodSlider> = ({
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
         };
-    }, [splitPeriodStartIndex, splitPeriods, onChange]);
+    }, [activeSplitPeriodIndex, commitSplitPeriod]);
 
     return (
         <div className={css.wrapper}>
@@ -107,9 +202,9 @@ export const SplitPeriodSlider: React.FC<SplitPeriodSlider> = ({
                 </Label>
                 <span className={css.selectedLabel}>
                     {`${getPeriodNameFromId(
-                        selectedSplitPeriod,
+                        splitPeriods[splitPeriodStartIndex] ?? selectedSplitPeriod,
                     )} - ${getPeriodNameFromId(
-                        withExtraPeriods[splitPeriodEndIndex],
+                        withExtraPeriods[splitPeriodEndIndex] ?? lastSplitPeriod,
                     )}`}
                 </span>
             </div>
@@ -141,7 +236,7 @@ export const SplitPeriodSlider: React.FC<SplitPeriodSlider> = ({
                             {...trackProps}
                             style={{
                                 ...trackProps.style,
-                                background: getTrackBackground(),
+                                background: trackBackground,
                             }}
                             className={css.track}
                         >
@@ -149,6 +244,7 @@ export const SplitPeriodSlider: React.FC<SplitPeriodSlider> = ({
                         </div>
                     )}
                     onChange={handleChange}
+                    onFinalChange={handleFinalChange}
                     renderMark={({ props: markProps, index }) =>
                         index >= splitPeriods.length ? null : (
                             <div
