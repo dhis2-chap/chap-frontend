@@ -1,17 +1,16 @@
+import { BackTestRead, DataElement, EvaluationEntry } from '../httpfunctions';
 import {
-    BackTestRead,
-    createHighChartsData,
-    DataElement,
-    EvaluationEntry,
     EvaluationEntryExtend,
     EvaluationForSplitPoint,
     EvaluationPerOrgUnit,
     HighChartsData,
+} from '../interfaces/Evaluation';
+import {
+    createHighChartsData,
     joinRealAndPredictedData,
     normalizeEvaluationModelsToSharedPeriods,
-    PERIOD_TYPES,
-    sortPeriods,
-} from '@dhis2-chap/ui';
+} from './EvaluationResponse';
+import { PERIOD_TYPES, sortPeriods } from './timePeriodUtils';
 
 const Y_AXIS_HEADROOM_MULTIPLIER = 1.05;
 
