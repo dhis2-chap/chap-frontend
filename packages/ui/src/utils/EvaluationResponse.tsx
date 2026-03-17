@@ -6,6 +6,7 @@ import {
     HighChartsData,
     ModelData,
 } from '../interfaces/Evaluation';
+import { PeriodType, sortPeriods } from './timePeriodUtils';
 
 function sortDhis2WeeklyAndMonthlyTime(a: string, b: string): number {
     const parseDate = (dateStr: string): Date => {
@@ -45,11 +46,11 @@ export function joinRealAndPredictedData(
     );
 
     // turn prediction arrays into period dicts
-    const createLookup = (keys: string[], values: any[][] | undefined) => {
+    const createLookup = <T,>(keys: string[], values: T[] | undefined) => {
         if (!values) {
-            return new Map<string, any>();
+            return new Map<string, T>();
         }
-        const lookup = new Map<string, any>();
+        const lookup = new Map<string, T>();
         for (let i = 0; i < keys.length; i++) {
             lookup.set(keys[i], values[i]);
         }
@@ -87,10 +88,10 @@ export function joinRealAndPredictedData(
         return result
     }
     */
-    const mergePeriodValues = (
+    const mergePeriodValues = <T,>(
         periods: string[],
-        periodValues: Map<string, any>,
-    ): any[] => {
+        periodValues: Map<string, T>,
+    ): Array<T | null> => {
         return periods.map(period => periodValues.get(period) ?? null);
     };
     const joinedAverages = mergePeriodValues(realPeriodsFiltered, averageLookup);
@@ -104,10 +105,76 @@ export function joinRealAndPredictedData(
         periods: realPeriodsFiltered,
         ranges: joinedRanges,
         averages: joinedAverages,
-        realValues: realDataFiltered as any,
+        realValues: realDataFiltered,
         midranges: joinedMidRanges,
     };
 }
+
+const fillMissingPeriods = <T,>(
+    sharedPeriods: string[],
+    periods: string[],
+    values: T[] | undefined,
+): Array<T | null> => {
+    if (!values) {
+        return sharedPeriods.map(() => null);
+    }
+
+    const lookup = new Map<string, T>();
+    for (let i = 0; i < periods.length; i++) {
+        const value = values[i];
+        if (value !== undefined) {
+            lookup.set(periods[i], value);
+        }
+    }
+
+    return sharedPeriods.map(period => lookup.get(period) ?? null);
+};
+
+const normalizeHighChartsDataToPeriods = (
+    data: HighChartsData,
+    sharedPeriods: string[],
+): HighChartsData => {
+    return {
+        periods: sharedPeriods,
+        averages: fillMissingPeriods(
+            sharedPeriods,
+            data.periods,
+            data.averages,
+        ),
+        ranges: fillMissingPeriods(sharedPeriods, data.periods, data.ranges),
+        midranges: fillMissingPeriods(
+            sharedPeriods,
+            data.periods,
+            data.midranges,
+        ),
+        realValues: fillMissingPeriods(
+            sharedPeriods,
+            data.periods,
+            data.realValues,
+        ),
+    };
+};
+
+export const normalizeEvaluationModelsToSharedPeriods = (
+    models: ModelData[],
+    periodType?: PeriodType,
+): ModelData[] => {
+    if (models.length <= 1 || !periodType) {
+        return models;
+    }
+
+    const sharedPeriods = sortPeriods(
+        Array.from(
+            new Set(models.flatMap(model => model.data.periods)),
+        ),
+        periodType,
+    );
+
+    return models.map(model => ({
+        ...model,
+        data: normalizeHighChartsDataToPeriods(model.data, sharedPeriods),
+    }));
+};
 
 export const evaluationResultToViewData = (
     data: EvaluationEntryExtend[],
@@ -196,9 +263,9 @@ export function createHighChartsData(
         new Set(plotData.map(item => item.period)),
     ).sort(sortDhis2WeeklyAndMonthlyTime);
 
-    const ranges: number[][] = [];
-    const averages: number[][] = [];
-    const midranges: number[][] = [];
+    const ranges: HighChartsData['ranges'] = [];
+    const averages: HighChartsData['averages'] = [];
+    const midranges: NonNullable<HighChartsData['midranges']> = [];
     periods.forEach((period) => {
         const quantileLow =
             plotData.find(

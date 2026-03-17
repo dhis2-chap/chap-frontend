@@ -1,4 +1,4 @@
-import { ComparisonPlotList } from '@dhis2-chap/ui';
+import { ComparisonPlotList, getStableMaxYByOrgUnitId } from '@dhis2-chap/ui';
 import {
     EvaluationCompatibleSelector,
     EvaluationSelectorBase,
@@ -62,6 +62,10 @@ export const EvaluationCompare = () => {
     } = usePlotDataForEvaluations(selectedEvaluations, {
         orgUnits: selectedOrgUnits,
     });
+
+    const maxYByOrgUnitId = useMemo(() => {
+        return getStableMaxYByOrgUnitId(combined.viewData);
+    }, [combined.viewData]);
 
     const { dataForSplitPeriod, periods } = useMemo(() => {
         const dataForSplitPeriod = combined.viewData
@@ -170,6 +174,7 @@ export const EvaluationCompare = () => {
                         }}
                         useVirtuoso={true}
                         evaluationPerOrgUnits={dataForSplitPeriod}
+                        maxYByOrgUnitId={maxYByOrgUnitId}
                         nameLabel={i18n.t('Evaluation')}
                     />
                 )}

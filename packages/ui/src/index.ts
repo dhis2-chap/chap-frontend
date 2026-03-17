@@ -5,6 +5,7 @@ export {
     getSplitPeriod,
     createHighChartsData,
     joinRealAndPredictedData,
+    normalizeEvaluationModelsToSharedPeriods,
 } from './utils/EvaluationResponse';
 export { ConditionalTooltip } from './utils/ConditionalTooltip';
 export type {
@@ -55,6 +56,11 @@ export {
     getQueue,
 } from './httpfunctions/core/request';
 export { buildPredictionSeries } from './utils/PredictionViewModel';
+export {
+    plotResultsToViewData,
+    getStableMaxYByOrgUnitId,
+    type PlotDataResult,
+} from './utils/plotDataForEvaluations';
 export {
     PERIOD_TYPES,
     type PeriodType,
