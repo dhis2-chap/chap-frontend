@@ -1,7 +1,7 @@
 services:
   chap:
     platform: linux/amd64
-    image: ghcr.io/dhis2-chap/chap-core:latest
+    image: ghcr.io/dhis2-chap/chap-core:${CHAP_CORE_TAG:-latest}
     environment:
       GOOGLE_SERVICE_ACCOUNT_EMAIL: ${GOOGLE_SERVICE_ACCOUNT_EMAIL}
       GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY: ${GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY}
@@ -37,7 +37,7 @@ services:
 
   worker:
     platform: linux/amd64
-    image: ghcr.io/dhis2-chap/chap-worker:latest
+    image: ghcr.io/dhis2-chap/chap-worker:${CHAP_WORKER_TAG:-latest}
     depends_on:
       postgres:
         condition: service_healthy
