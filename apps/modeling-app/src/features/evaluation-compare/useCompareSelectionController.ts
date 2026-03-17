@@ -92,13 +92,13 @@ export const useCompareSelectionController = ({
     // reset split period if not compatible
     useEffect(() => {
         if (
-            resolvedSelectedSplitPeriod &&
+            selectedSplitPeriod &&
             resolvedSplitPeriods.length > 0 &&
-            !resolvedSplitPeriods.some(sp => sp === selectedSplitPeriod)
+            !resolvedSplitPeriods.includes(selectedSplitPeriod)
         ) {
             setSelectedSplitPeriod(undefined);
         }
-    }, [resolvedSplitPeriods, selectedSplitPeriod]);
+    }, [resolvedSplitPeriods, selectedSplitPeriod, setSelectedSplitPeriod]);
 
     return {
         selectedEvaluations,

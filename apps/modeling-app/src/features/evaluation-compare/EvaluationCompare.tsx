@@ -3,7 +3,7 @@ import {
     EvaluationCompatibleSelector,
     EvaluationSelectorBase,
 } from '../select-evaluation';
-import { useMemo, useRef } from 'react';
+import { useCallback, useDeferredValue, useMemo, useRef, useTransition } from 'react';
 import css from './EvaluationCompare.module.css';
 import {
     Button,
@@ -54,6 +54,8 @@ export const EvaluationCompare = () => {
     } = useCompareSelectionController({
         maxSelectedOrgUnits: MAX_SELECTED_ORG_UNITS,
     });
+    const deferredSelectedSplitPeriod = useDeferredValue(selectedSplitPeriod);
+    const [, startSplitPeriodTransition] = useTransition();
 
     const {
         combined,
@@ -67,21 +69,48 @@ export const EvaluationCompare = () => {
         return getStableMaxYByOrgUnitId(combined.viewData);
     }, [combined.viewData]);
 
+    const orgUnitNameById = useMemo(() => {
+        return new Map(
+            (orgUnits ?? []).map(orgUnit => [orgUnit.id, orgUnit.displayName]),
+        );
+    }, [orgUnits]);
+
+    const evaluationsBySplitPeriod = useMemo(() => {
+        return new Map(
+            combined.viewData.map(viewData => [
+                viewData.splitPoint,
+                viewData.evaluation,
+            ]),
+        );
+    }, [combined.viewData]);
+
     const { dataForSplitPeriod, periods } = useMemo(() => {
-        const dataForSplitPeriod = combined.viewData
-            .filter(v => v.splitPoint === selectedSplitPeriod)
-            .flatMap(v =>
-                v.evaluation.map(e => ({
+        const dataForSplitPeriod =
+            (evaluationsBySplitPeriod.get(deferredSelectedSplitPeriod) ?? [])
+                .map(e => ({
                     ...e,
-                    orgUnitName:
-                        orgUnits?.find(ou => ou.id === e.orgUnitId)
-                            ?.displayName ?? e.orgUnitId,
-                })),
-            )
-            .sort((a, b) => a.orgUnitName.localeCompare(b.orgUnitName));
+                    orgUnitName: orgUnitNameById.get(e.orgUnitId) ?? e.orgUnitId,
+                }))
+                .sort((a, b) => a.orgUnitName.localeCompare(b.orgUnitName));
         const periods = dataForSplitPeriod[0]?.models[0].data.periods ?? [];
         return { dataForSplitPeriod, periods };
-    }, [combined.viewData, selectedSplitPeriod, orgUnits]);
+    }, [
+        deferredSelectedSplitPeriod,
+        evaluationsBySplitPeriod,
+        orgUnitNameById,
+    ]);
+
+    const handleSplitPointChange = useCallback((splitPoint: string) => {
+        startSplitPeriodTransition(() => {
+            setSelectedSplitPoint(splitPoint);
+        });
+    }, [setSelectedSplitPoint, startSplitPeriodTransition]);
+
+    const customScrollParent = scrollerRef.current;
+    const virtuosoProps = useMemo(
+        () => ({ customScrollParent }),
+        [customScrollParent],
+    );
 
     return (
         <div className={css.wrapper}>
@@ -161,7 +190,7 @@ export const EvaluationCompare = () => {
                     <SplitPeriodSlider
                         splitPeriods={splitPeriods}
                         selectedSplitPeriod={selectedSplitPeriod}
-                        onChange={setSelectedSplitPoint}
+                        onChange={handleSplitPointChange}
                         periods={periods}
                     />
                 </div>
@@ -169,9 +198,7 @@ export const EvaluationCompare = () => {
             <div>
                 {combined.viewData.length > 0 && (
                     <ComparisonPlotList
-                        virtuosoProps={{
-                            customScrollParent: scrollerRef.current,
-                        }}
+                        virtuosoProps={virtuosoProps}
                         useVirtuoso={true}
                         evaluationPerOrgUnits={dataForSplitPeriod}
                         maxYByOrgUnitId={maxYByOrgUnitId}
