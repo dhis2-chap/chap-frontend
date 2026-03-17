@@ -6,7 +6,7 @@ import { Label } from '@dhis2/ui';
 import { Range } from 'react-range';
 import { clamp } from '../utils/clamp';
 
-type SplitPeriodSlider = {
+type SplitPeriodSliderProps = {
     splitPeriods: string[];
     selectedSplitPeriod: string;
     onChange: (selectedPoint: string) => void;
@@ -15,7 +15,7 @@ type SplitPeriodSlider = {
     debounceMs?: number;
 };
 
-export const SplitPeriodSlider: React.FC<SplitPeriodSlider> = ({
+export const SplitPeriodSlider: React.FC<SplitPeriodSliderProps> = ({
     splitPeriods,
     selectedSplitPeriod,
     onChange,
@@ -40,16 +40,13 @@ export const SplitPeriodSlider: React.FC<SplitPeriodSlider> = ({
     const [activeSplitPeriodIndex, setActiveSplitPeriodIndex] = useState(
         selectedSplitPeriodIndex,
     );
+    const [isScrubbing, setIsScrubbing] = useState(false);
 
     useEffect(() => {
-        setActiveSplitPeriodIndex(selectedSplitPeriodIndex);
-    }, [selectedSplitPeriodIndex]);
-
-    useEffect(() => {
-        if (pendingSplitPeriodRef.current === selectedSplitPeriod) {
-            pendingSplitPeriodRef.current = null;
+        if (!isScrubbing) {
+            setActiveSplitPeriodIndex(selectedSplitPeriodIndex);
         }
-    }, [selectedSplitPeriod]);
+    }, [isScrubbing, selectedSplitPeriodIndex]);
 
     const clearPendingCommit = useCallback(() => {
         if (debounceTimeoutRef.current !== undefined) {
@@ -58,11 +55,13 @@ export const SplitPeriodSlider: React.FC<SplitPeriodSlider> = ({
         }
     }, []);
 
-    const commitSplitPeriod = useCallback((index: number) => {
+    const emitSplitPeriod = useCallback((index: number) => {
         const splitPeriodIndex = clamp(index, 0, maxSplitPeriodIndex);
         const value = splitPeriods[splitPeriodIndex] ?? lastSplitPeriod;
 
-        setActiveSplitPeriodIndex(splitPeriodIndex);
+        if (pendingSplitPeriodRef.current === selectedSplitPeriod) {
+            pendingSplitPeriodRef.current = null;
+        }
 
         if (
             value &&
@@ -80,39 +79,37 @@ export const SplitPeriodSlider: React.FC<SplitPeriodSlider> = ({
         splitPeriods,
     ]);
 
-    const handleChange = useCallback((values: number[]) => {
-        setActiveSplitPeriodIndex(
-            clamp(values[0], 0, maxSplitPeriodIndex),
-        );
-    }, [maxSplitPeriodIndex]);
-
-    const handleFinalChange = useCallback((values: number[]) => {
-        clearPendingCommit();
-        commitSplitPeriod(values[0]);
-    }, [clearPendingCommit, commitSplitPeriod]);
-
-    useEffect(() => {
-        if (
-            debounceMs <= 0
-            || activeSplitPeriodIndex === selectedSplitPeriodIndex
-        ) {
-            clearPendingCommit();
+    const scheduleSplitPeriodCommit = useCallback((index: number) => {
+        if (debounceMs <= 0) {
+            emitSplitPeriod(index);
             return;
         }
 
+        clearPendingCommit();
         debounceTimeoutRef.current = window.setTimeout(() => {
             debounceTimeoutRef.current = undefined;
-            commitSplitPeriod(activeSplitPeriodIndex);
+            emitSplitPeriod(index);
         }, debounceMs);
+    }, [clearPendingCommit, debounceMs, emitSplitPeriod]);
 
+    const handleChange = useCallback((values: number[]) => {
+        const splitPeriodIndex = clamp(values[0], 0, maxSplitPeriodIndex);
+        setIsScrubbing(true);
+        setActiveSplitPeriodIndex(splitPeriodIndex);
+        scheduleSplitPeriodCommit(splitPeriodIndex);
+    }, [maxSplitPeriodIndex, scheduleSplitPeriodCommit]);
+
+    const handleFinalChange = useCallback((values: number[]) => {
+        const splitPeriodIndex = clamp(values[0], 0, maxSplitPeriodIndex);
+        setIsScrubbing(false);
+        setActiveSplitPeriodIndex(splitPeriodIndex);
+        clearPendingCommit();
+        emitSplitPeriod(splitPeriodIndex);
+    }, [clearPendingCommit, emitSplitPeriod, maxSplitPeriodIndex]);
+
+    useEffect(() => {
         return clearPendingCommit;
-    }, [
-        activeSplitPeriodIndex,
-        clearPendingCommit,
-        commitSplitPeriod,
-        debounceMs,
-        selectedSplitPeriodIndex,
-    ]);
+    }, [clearPendingCommit]);
 
     const lastSplitPeriodInPeriodsIndex = periods.findIndex(
         period => period === lastSplitPeriod,
@@ -143,7 +140,9 @@ export const SplitPeriodSlider: React.FC<SplitPeriodSlider> = ({
         splitPeriods,
     ]);
 
-    const splitPeriodStartIndex = activeSplitPeriodIndex;
+    const splitPeriodStartIndex = isScrubbing
+        ? activeSplitPeriodIndex
+        : selectedSplitPeriodIndex;
     const splitPeriodEndIndex = splitPeriodStartIndex + splitPeriodLength - 1;
 
     const splitPeriodLabels = useMemo(() => {
@@ -175,16 +174,45 @@ export const SplitPeriodSlider: React.FC<SplitPeriodSlider> = ({
 
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
-            if (event.defaultPrevented) {
+            const target = event.target as HTMLElement | null;
+            const isTypingTarget =
+                target instanceof HTMLInputElement
+                || target instanceof HTMLTextAreaElement
+                || target instanceof HTMLSelectElement
+                || !!target?.isContentEditable;
+
+            if (event.defaultPrevented || event.repeat || isTypingTarget) {
                 return;
             }
             const currentIndex = activeSplitPeriodIndex;
             const downKeys = new Set(['j', 'J']);
             const upKeys = new Set(['k', 'K']);
             if (downKeys.has(event.key)) {
-                commitSplitPeriod(currentIndex - 1);
+                const nextIndex = clamp(
+                    currentIndex - 1,
+                    0,
+                    maxSplitPeriodIndex,
+                );
+                if (nextIndex === currentIndex) {
+                    return;
+                }
+                setIsScrubbing(false);
+                setActiveSplitPeriodIndex(nextIndex);
+                clearPendingCommit();
+                emitSplitPeriod(nextIndex);
             } else if (upKeys.has(event.key)) {
-                commitSplitPeriod(currentIndex + 1);
+                const nextIndex = clamp(
+                    currentIndex + 1,
+                    0,
+                    maxSplitPeriodIndex,
+                );
+                if (nextIndex === currentIndex) {
+                    return;
+                }
+                setIsScrubbing(false);
+                setActiveSplitPeriodIndex(nextIndex);
+                clearPendingCommit();
+                emitSplitPeriod(nextIndex);
             }
         };
 
@@ -192,7 +220,12 @@ export const SplitPeriodSlider: React.FC<SplitPeriodSlider> = ({
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
         };
-    }, [activeSplitPeriodIndex, commitSplitPeriod]);
+    }, [
+        activeSplitPeriodIndex,
+        clearPendingCommit,
+        emitSplitPeriod,
+        maxSplitPeriodIndex,
+    ]);
 
     return (
         <div className={css.wrapper}>
