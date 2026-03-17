@@ -1,0 +1,77 @@
+# TODO: This workflow builds chap-core images from source as a workaround because
+# no pre-built Docker images are published for v1.2.0 on GHCR. Once the next
+# chap-core release ships with pre-built and published images, remove the
+# clone + build steps and pull the published images directly instead.
+name: e2e-stable
+
+on:
+    pull_request:
+    workflow_dispatch:
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
+env:
+    CHAP_CORE_STABLE_REF: v1.2.0
+
+jobs:
+    e2e-stable:
+        runs-on: ubuntu-latest
+        timeout-minutes: 90
+        permissions:
+            contents: read
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - uses: pnpm/action-setup@v4
+
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+                  cache: 'pnpm'
+                  cache-dependency-path: 'pnpm-lock.yaml'
+
+            - name: Install dependencies
+              run: pnpm install --frozen-lockfile
+
+            - name: Install Playwright browser
+              run: pnpm exec playwright install --with-deps chromium
+
+            - name: Clone chap-core at stable release
+              run: |
+                  git clone --depth 1 --branch "$CHAP_CORE_STABLE_REF" \
+                    https://github.com/dhis2-chap/chap-core.git /tmp/chap-core
+
+            - name: Build stable chap-core image
+              run: |
+                  docker build \
+                    -t ghcr.io/dhis2-chap/chap-core:${{ env.CHAP_CORE_STABLE_REF }} \
+                    -f /tmp/chap-core/Dockerfile \
+                    /tmp/chap-core
+
+            - name: Build stable chap-worker image
+              run: |
+                  docker build \
+                    -t ghcr.io/dhis2-chap/chap-worker:${{ env.CHAP_CORE_STABLE_REF }} \
+                    -f /tmp/chap-core/Dockerfile.worker \
+                    /tmp/chap-core
+
+            - name: Start CHAP + DHIS2 stack and wait for readiness
+              env:
+                  CHAP_CORE_TAG: ${{ env.CHAP_CORE_STABLE_REF }}
+                  CHAP_WORKER_TAG: ${{ env.CHAP_CORE_STABLE_REF }}
+              run: pnpm docker:e2e up --wait
+
+            - name: Run e2e tests
+              run: pnpm e2e:ci
+
+            - name: Upload Playwright artifacts
+              if: ${{ !cancelled() }}
+              uses: actions/upload-artifact@v4
+              with:
+                  name: playwright-report-stable
+                  path: |
+                      test-results/
+                  retention-days: 7
