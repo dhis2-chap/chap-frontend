@@ -1,3 +1,7 @@
+# TODO: This workflow builds chap-core images from source as a workaround because
+# no pre-built Docker images are published for v1.2.0 on GHCR. Once the next
+# chap-core release ships with pre-built and published images, remove the
+# clone + build steps and pull the published images directly instead.
 name: e2e-stable
 
 on:
