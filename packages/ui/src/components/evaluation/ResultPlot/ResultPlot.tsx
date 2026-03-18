@@ -1,7 +1,7 @@
 import i18n from '@dhis2/d2-i18n';
 import HighchartsReact from 'highcharts-react-official';
 import Highcharts from 'highcharts';
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef } from 'react';
 import { HighChartsData } from '../../../interfaces/Evaluation';
 import { getPeriodNameFromId } from '../../../utils/Time';
 import enableOfflineExporting from 'highcharts/modules/offline-exporting';
@@ -9,12 +9,19 @@ import styles from './ResultPlot.module.css';
 
 enableOfflineExporting(Highcharts);
 
+export interface ZoomState {
+    isZoomed: boolean;
+    canShiftLeft: boolean;
+    canShiftRight: boolean;
+}
+
 interface ResultPlotProps {
     data: HighChartsData;
     modelName: string;
     nameLabel?: string;
     syncZoom: false | Highcharts.AxisSetExtremesEventCallbackFunction;
     maxY?: number;
+    onZoomStateChange?: (state: ZoomState) => void;
 }
 
 const getSeries = (data: HighChartsData): Highcharts.SeriesOptionsType[] => {
@@ -133,7 +140,10 @@ const getOptions = ({
             align: 'left',
         },
         chart: {
-            zooming: { type: 'x' },
+            zooming: {
+                type: 'x',
+                resetButton: { theme: { style: { display: 'none' } } },
+            },
         },
         xAxis: {
             categories: data.periods, // Use periods as categories
@@ -187,11 +197,8 @@ const getOptions = ({
 const ResultPlotBase = React.forwardRef<
     HighchartsReact.RefObject,
     ResultPlotProps
->(function ResultPlot({ data, modelName, syncZoom, nameLabel, maxY }, ref) {
+>(function ResultPlot({ data, modelName, syncZoom, nameLabel, maxY, onZoomStateChange }, ref) {
     const internalRef = useRef<HighchartsReact.RefObject | null>(null);
-    const [isZoomed, setIsZoomed] = useState(false);
-    const [canShiftLeft, setCanShiftLeft] = useState(false);
-    const [canShiftRight, setCanShiftRight] = useState(false);
 
     const setRefs = useCallback(
         (instance: HighchartsReact.RefObject | null) => {
@@ -212,42 +219,16 @@ const ResultPlotBase = React.forwardRef<
             this: Highcharts.Axis,
             event: Highcharts.AxisSetExtremesEventObject,
         ) {
-            const zoomed =
+            if (!onZoomStateChange) return;
+            const isZoomed =
                 event.userMin !== undefined && event.userMax !== undefined;
-            setIsZoomed(zoomed);
-            if (zoomed) {
-                setCanShiftLeft(event.min > event.dataMin);
-                setCanShiftRight(event.max < event.dataMax);
-            }
-        },
-        [],
-    );
-
-    const shiftZoom = useCallback(
-        (direction: 1 | -1) => {
-            const chart = internalRef.current?.chart;
-            if (!chart) return;
-
-            const axis = chart.xAxis[0];
-            const { min, max, dataMin, dataMax } = axis.getExtremes();
-
-            if (min === undefined || max === undefined) return;
-
-            const newMin = min + direction;
-            const newMax = max + direction;
-
-            if (newMin < dataMin || newMax > dataMax) return;
-
-            setCanShiftLeft(newMin > dataMin);
-            setCanShiftRight(newMax < dataMax);
-
-            axis.setExtremes(newMin, newMax, true, false, {
-                trigger: 'zoom',
-                userMin: newMin,
-                userMax: newMax,
+            onZoomStateChange({
+                isZoomed,
+                canShiftLeft: isZoomed ? event.min > event.dataMin : false,
+                canShiftRight: isZoomed ? event.max < event.dataMax : false,
             });
         },
-        [],
+        [onZoomStateChange],
     );
 
     const series = useMemo(() => getSeries(data), [data]);
@@ -280,28 +261,6 @@ const ResultPlotBase = React.forwardRef<
                 highcharts={Highcharts}
                 options={options}
             />
-            {isZoomed && (
-                <div className={styles.navigationButtons}>
-                    <button
-                        className={styles.navButton}
-                        onClick={() => shiftZoom(-1)}
-                        disabled={!canShiftLeft}
-                        title={i18n.t('Shift zoom left one period')}
-                        aria-label={i18n.t('Shift zoom left one period')}
-                    >
-                        &#x2039;
-                    </button>
-                    <button
-                        className={styles.navButton}
-                        onClick={() => shiftZoom(1)}
-                        disabled={!canShiftRight}
-                        title={i18n.t('Shift zoom right one period')}
-                        aria-label={i18n.t('Shift zoom right one period')}
-                    >
-                        &#x203A;
-                    </button>
-                </div>
-            )}
         </div>
     );
 });

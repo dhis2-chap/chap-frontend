@@ -1,6 +1,8 @@
-import React, { useCallback, useRef } from 'react';
+import i18n from '@dhis2/d2-i18n';
+import { Button, IconChevronLeft16, IconChevronRight16 } from '@dhis2/ui';
+import React, { useCallback, useRef, useState } from 'react';
 import styles from './ComparisonPlot.module.css';
-import { ResultPlot } from '../ResultPlot/ResultPlot';
+import { ResultPlot, ZoomState } from '../ResultPlot/ResultPlot';
 import { EvaluationPerOrgUnit } from '../../../interfaces/Evaluation';
 import HighchartsReact from 'highcharts-react-official';
 import Highcharts from 'highcharts';
@@ -17,6 +19,11 @@ export const ComparisonPlot = React.memo(function ComparisonPlot({
 }: SideBySidePlotsProps) {
     const baseRef = useRef<HighchartsReact.RefObject | null>(null);
     const comparisonRef = useRef<HighchartsReact.RefObject | null>(null);
+    const [zoomState, setZoomState] = useState<ZoomState>({
+        isZoomed: false,
+        canShiftLeft: false,
+        canShiftRight: false,
+    });
 
     const setBaseRef = useCallback((chartRef: HighchartsReact.RefObject | null) => {
         baseRef.current = chartRef;
@@ -24,6 +31,42 @@ export const ComparisonPlot = React.memo(function ComparisonPlot({
 
     const setComparisonRef = useCallback((chartRef: HighchartsReact.RefObject | null) => {
         comparisonRef.current = chartRef;
+    }, []);
+
+    const shiftZoom = useCallback(
+        (direction: 1 | -1) => {
+            const chart = baseRef.current?.chart;
+            if (!chart) return;
+
+            const axis = chart.xAxis[0];
+            const { min, max, dataMin, dataMax } = axis.getExtremes();
+
+            if (min === undefined || max === undefined) return;
+
+            const newMin = min + direction;
+            const newMax = max + direction;
+
+            if (newMin < dataMin || newMax > dataMax) return;
+
+            setZoomState({
+                isZoomed: true,
+                canShiftLeft: newMin > dataMin,
+                canShiftRight: newMax < dataMax,
+            });
+
+            axis.setExtremes(newMin, newMax, true, false, {
+                trigger: 'zoom',
+                userMin: newMin,
+                userMax: newMax,
+            });
+        },
+        [],
+    );
+
+    const resetZoom = useCallback(() => {
+        baseRef.current?.chart?.zoomOut();
+        comparisonRef.current?.chart?.zoomOut();
+        setZoomState({ isZoomed: false, canShiftLeft: false, canShiftRight: false });
     }, []);
 
     const handleSyncChartZoom = useCallback(function handleSyncChartZoom(
@@ -57,23 +100,39 @@ export const ComparisonPlot = React.memo(function ComparisonPlot({
         // sync x-axis zoom while the shared max keeps the y-axis stable.
         chartToSync.xAxis[0].setExtremes(xMin, xMax, false);
 
-        // handle reset zoom button
-        const extremes = chartToSync.xAxis[0].getExtremes();
-        const wasZooming =
-            extremes.userMax !== undefined && extremes.userMin !== undefined;
-
-        if (!wasZooming) {
-            // only show reset zoom if we were not zooming before
-            // if this is called multiple times, the button wont disappear
-            // when zooming out
-            chartToSync.showResetZoom();
-        }
         chartToSync.redraw(true);
     }, []);
 
     return (
         <div className={styles.comparionBox}>
-            <div className={styles.title}>{orgUnitsData.orgUnitName}</div>
+            <div className={styles.header}>
+                <div className={styles.title}>{orgUnitsData.orgUnitName}</div>
+                <div className={`${styles.navigationButtons} ${!zoomState.isZoomed ? styles.hidden : ''}`}>
+                    <Button
+                        small
+                        secondary
+                        disabled={!zoomState.canShiftLeft}
+                        onClick={() => shiftZoom(-1)}
+                        aria-label={i18n.t('Shift zoom left one period')}
+                        icon={<IconChevronLeft16 />}
+                    />
+                    <Button
+                        small
+                        secondary
+                        onClick={resetZoom}
+                    >
+                        {i18n.t('Reset zoom')}
+                    </Button>
+                    <Button
+                        small
+                        secondary
+                        disabled={!zoomState.canShiftRight}
+                        onClick={() => shiftZoom(1)}
+                        aria-label={i18n.t('Shift zoom right one period')}
+                        icon={<IconChevronRight16 />}
+                    />
+                </div>
+            </div>
             <div className={styles.comparionBoxSideBySide}>
                 {orgUnitsData.models.map((modelData, index) => {
                     const isBaseEvaluation = index === 0;
@@ -97,6 +156,7 @@ export const ComparisonPlot = React.memo(function ComparisonPlot({
                                         : setComparisonRef
                                 }
                                 maxY={maxY}
+                                onZoomStateChange={isBaseEvaluation ? setZoomState : undefined}
                             />
                         </div>
                     );
