@@ -1,0 +1,10 @@
+.zoomControls {
+    display: flex;
+    justify-content: flex-end;
+    gap: 6px;
+    padding: 0.5rem 1rem;
+}
+
+.hidden {
+    visibility: hidden;
+}

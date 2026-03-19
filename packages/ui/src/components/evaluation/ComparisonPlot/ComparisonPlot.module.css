@@ -1,22 +1,7 @@
-.header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-block-end: 0.8rem;
-}
-
 .title {
     font-size: 1.2em;
     font-weight: 600;
-}
-
-.navigationButtons {
-    display: flex;
-    gap: 6px;
-}
-
-.hidden {
-    visibility: hidden;
+    margin-block-end: 0.8rem;
 }
 
 .comparionBox {

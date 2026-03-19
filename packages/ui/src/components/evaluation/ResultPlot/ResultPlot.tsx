@@ -1,7 +1,7 @@
 import i18n from '@dhis2/d2-i18n';
 import HighchartsReact from 'highcharts-react-official';
 import Highcharts from 'highcharts';
-import React, { useCallback, useMemo, useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { HighChartsData } from '../../../interfaces/Evaluation';
 import { getPeriodNameFromId } from '../../../utils/Time';
 import enableOfflineExporting from 'highcharts/modules/offline-exporting';
@@ -9,19 +9,21 @@ import styles from './ResultPlot.module.css';
 
 enableOfflineExporting(Highcharts);
 
-export interface ZoomState {
-    isZoomed: boolean;
-    canShiftLeft: boolean;
-    canShiftRight: boolean;
+export interface ZoomRange {
+    min: number;
+    max: number;
+    dataMin: number;
+    dataMax: number;
 }
 
 interface ResultPlotProps {
     data: HighChartsData;
     modelName: string;
     nameLabel?: string;
-    syncZoom: false | Highcharts.AxisSetExtremesEventCallbackFunction;
+    syncZoom?: false | Highcharts.AxisSetExtremesEventCallbackFunction;
     maxY?: number;
-    onZoomStateChange?: (state: ZoomState) => void;
+    zoomRange?: ZoomRange | null;
+    onZoomChange?: (range: ZoomRange | null) => void;
 }
 
 const getSeries = (data: HighChartsData): Highcharts.SeriesOptionsType[] => {
@@ -85,21 +87,21 @@ const getSeries = (data: HighChartsData): Highcharts.SeriesOptionsType[] => {
 type GetOptionParams = {
     data: HighChartsData;
     modelName: string;
-    syncZoom: ResultPlotProps['syncZoom'];
     onAfterSetExtremes?: Highcharts.AxisSetExtremesEventCallbackFunction;
     nameLabel?: string;
     maxY?: number;
     series: Highcharts.SeriesOptionsType[];
+    zoomRange?: ZoomRange | null;
 };
 
 const getOptions = ({
     data,
     modelName,
-    syncZoom,
     onAfterSetExtremes,
     nameLabel,
     maxY,
     series,
+    zoomRange,
 }: GetOptionParams): Highcharts.Options => {
     const subtitleText =
         nameLabel && modelName
@@ -107,29 +109,6 @@ const getOptions = ({
             : modelName
                 ? `Model: ${modelName}`
                 : '';
-    const buildAfterSetExtremes = ():
-        | Highcharts.AxisSetExtremesEventCallbackFunction
-        | undefined => {
-        const syncHandler = syncZoom || undefined;
-
-        if (!syncHandler && !onAfterSetExtremes) {
-            return undefined;
-        }
-
-        return function (
-            this: Highcharts.Axis,
-            event: Highcharts.AxisSetExtremesEventObject,
-        ) {
-            if (onAfterSetExtremes) {
-                onAfterSetExtremes.call(this, event);
-            }
-            if (syncHandler) {
-                syncHandler.call(this, event);
-            }
-        };
-    };
-
-    const afterSetExtremes = buildAfterSetExtremes();
 
     return {
         title: {
@@ -158,14 +137,16 @@ const getOptions = ({
                     fontSize: '0.9rem',
                 },
             },
-            events: afterSetExtremes
-                ? { afterSetExtremes }
+            events: onAfterSetExtremes
+                ? { afterSetExtremes: onAfterSetExtremes }
                 : undefined,
             title: {
                 text: 'Period',
             },
             crosshair: true,
             zoomEnabled: true,
+            min: zoomRange?.min,
+            max: zoomRange?.max,
         },
         yAxis: {
             title: {
@@ -197,7 +178,7 @@ const getOptions = ({
 const ResultPlotBase = React.forwardRef<
     HighchartsReact.RefObject,
     ResultPlotProps
->(function ResultPlot({ data, modelName, syncZoom, nameLabel, maxY, onZoomStateChange }, ref) {
+>(function ResultPlot({ data, modelName, syncZoom, nameLabel, maxY, zoomRange, onZoomChange }, ref) {
     const internalRef = useRef<HighchartsReact.RefObject | null>(null);
 
     const setRefs = useCallback(
@@ -214,22 +195,46 @@ const ResultPlotBase = React.forwardRef<
         [ref],
     );
 
-    const updateZoomState = useCallback(
+    const handleAfterSetExtremes = useCallback(
         function (
             this: Highcharts.Axis,
             event: Highcharts.AxisSetExtremesEventObject,
         ) {
-            if (!onZoomStateChange) return;
+            // Call legacy syncZoom handler if provided
+            if (syncZoom) {
+                syncZoom.call(this, event);
+            }
+
+            if (!onZoomChange || event.trigger !== 'zoom') return;
+
             const isZoomed =
                 event.userMin !== undefined && event.userMax !== undefined;
-            onZoomStateChange({
-                isZoomed,
-                canShiftLeft: isZoomed ? event.min > event.dataMin : false,
-                canShiftRight: isZoomed ? event.max < event.dataMax : false,
-            });
+
+            if (isZoomed) {
+                onZoomChange({
+                    min: event.min,
+                    max: event.max,
+                    dataMin: event.dataMin,
+                    dataMax: event.dataMax,
+                });
+            } else {
+                onZoomChange(null);
+            }
         },
-        [onZoomStateChange],
+        [onZoomChange, syncZoom],
     );
+
+    useEffect(() => {
+        const chart = internalRef.current?.chart;
+        if (!chart) return;
+
+        const axis = chart.xAxis[0];
+        if (zoomRange) {
+            axis.setExtremes(zoomRange.min, zoomRange.max, true, false);
+        } else {
+            axis.setExtremes(undefined, undefined, true, false);
+        }
+    }, [zoomRange]);
 
     const series = useMemo(() => getSeries(data), [data]);
     const options = useMemo(
@@ -237,11 +242,11 @@ const ResultPlotBase = React.forwardRef<
             getOptions({
                 data,
                 modelName,
-                syncZoom,
-                onAfterSetExtremes: updateZoomState,
+                onAfterSetExtremes: handleAfterSetExtremes,
                 nameLabel,
                 maxY,
                 series,
+                zoomRange,
             }),
         [
             data,
@@ -249,8 +254,8 @@ const ResultPlotBase = React.forwardRef<
             modelName,
             nameLabel,
             series,
-            syncZoom,
-            updateZoomState,
+            handleAfterSetExtremes,
+            zoomRange,
         ],
     );
 
