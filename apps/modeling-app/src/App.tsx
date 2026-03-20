@@ -33,6 +33,7 @@ import { SyncUrlWithGlobalShell } from './utils/syncUrlWithGlobalShell';
 import { NewPredictionPage } from './pages/NewPredictionPage';
 import { PredictionImportPage } from './pages/PredictionImportPage';
 import { GuidesPage } from './pages/GuidesPage';
+import { HelloPage } from './pages/HelloPage';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
@@ -200,6 +201,10 @@ const router = createHashRouter([
                     { index: true },
                     { path: ':guideSlug' },
                 ],
+            },
+            {
+                path: '/hello',
+                element: <HelloPage />,
             },
         ],
     },
