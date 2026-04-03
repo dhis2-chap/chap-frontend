@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2025-12-09T10:09:29.248Z\n"
-"PO-Revision-Date: 2025-12-09T10:09:29.249Z\n"
+"POT-Creation-Date: 2026-03-23T16:03:16.225Z\n"
+"PO-Revision-Date: 2026-03-23T16:03:16.225Z\n"
 
 msgid "Median prediction"
 msgstr "Median prediction"
@@ -16,6 +16,72 @@ msgstr "80% prediction interval"
 
 msgid "50% prediction interval"
 msgstr "50% prediction interval"
+
+msgid "Feature Importance"
+msgstr "Feature Importance"
+
+msgid "Importance Score"
+msgstr "Importance Score"
+
+msgid "Importance"
+msgstr "Importance"
+
+msgid "Effect"
+msgstr "Effect"
+
+msgid "No feature importance data available"
+msgstr "No feature importance data available"
+
+msgid "SHAP Summary — Feature Impact"
+msgstr "SHAP Summary — Feature Impact"
+
+msgid "SHAP value (impact on model output)"
+msgstr "SHAP value (impact on model output)"
+
+msgid "Feature value"
+msgstr "Feature value"
+
+msgid "All forecasts"
+msgstr "All forecasts"
+
+msgid "Selected instance"
+msgstr "Selected instance"
+
+msgid "No SHAP summary data available"
+msgstr "No SHAP summary data available"
+
+msgid "Low"
+msgstr "Low"
+
+msgid "High"
+msgstr "High"
+
+msgid "Other features"
+msgstr "Other features"
+
+msgid "SHAP Feature Contributions"
+msgstr "SHAP Feature Contributions"
+
+msgid "Model output value"
+msgstr "Model output value"
+
+msgid "Actual forecast"
+msgstr "Actual forecast"
+
+msgid "Average model prediction"
+msgstr "Average model prediction"
+
+msgid "Model output for this instance"
+msgstr "Model output for this instance"
+
+msgid "Other features (not shown)"
+msgstr "Other features (not shown)"
+
+msgid "SHAP Values"
+msgstr "SHAP Values"
+
+msgid "No SHAP explanation data available"
+msgstr "No SHAP explanation data available"
 
 msgid "Median Prediction for {{predictionTargetName}}"
 msgstr "Median Prediction for {{predictionTargetName}}"

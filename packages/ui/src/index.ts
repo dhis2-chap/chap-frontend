@@ -56,13 +56,19 @@ export {
 } from './httpfunctions/core/request';
 export { buildPredictionSeries } from './utils/PredictionViewModel';
 
-export { FeatureImportanceChart } from './components/explainability';
-export { XaiService } from './httpfunctions/services/XaiService';
+export { FeatureImportanceChart, ShapBeeswarmChart, ShapWaterfallChart } from './components/explainability';
+export { XaiService, DEFAULT_XAI_METHOD } from './httpfunctions/services/XaiService';
 export type {
+    DataSourceInfo,
     FeatureAttribution,
     GlobalExplanationResponse,
+    HorizonStepSummary,
+    HorizonSummaryResponse,
     LocalExplanationRequest,
     LocalExplanationResponse,
+    ShapBeeswarmPoint,
+    ShapBeeswarmResponse,
+    XaiMethodRead,
 } from './httpfunctions/services/XaiService';
 export {
     PERIOD_TYPES,

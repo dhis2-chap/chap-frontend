@@ -37,15 +37,16 @@ export const PredictionDetailsComponent = ({
                     prediction={prediction}
                     model={model}
                 />
-            </div>
-            <div className={styles.rightColumn}>
-                <PredictionSummaryWidget
-                    predictionId={prediction.id}
-                />
                 <ExplainabilityWidget
                     predictionId={prediction.id}
                     orgUnits={orgUnits}
                     periods={periods}
+                    periodType={prediction.dataset?.periodType}
+                />
+            </div>
+            <div className={styles.rightColumn}>
+                <PredictionSummaryWidget
+                    predictionId={prediction.id}
                 />
             </div>
         </div>

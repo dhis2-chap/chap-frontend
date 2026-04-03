@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-02-06T15:01:48.416Z\n"
-"PO-Revision-Date: 2026-02-06T15:01:48.417Z\n"
+"POT-Creation-Date: 2026-04-03T09:59:03.420Z\n"
+"PO-Revision-Date: 2026-04-03T09:59:03.420Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -260,6 +260,9 @@ msgstr "Create evaluation"
 msgid "Make prediction"
 msgstr "Make prediction"
 
+msgid "XAI surrogate training"
+msgstr "XAI surrogate training"
+
 msgid "Create dataset (deprecated)"
 msgstr "Create dataset (deprecated)"
 
@@ -271,6 +274,9 @@ msgstr "Create evaluation (Legacy)"
 
 msgid "Create dataset"
 msgstr "Create dataset"
+
+msgid "XAI explanation generation"
+msgstr "XAI explanation generation"
 
 msgid "Cancelled"
 msgstr "Cancelled"
@@ -439,6 +445,11 @@ msgstr "Org unit"
 msgid "Period"
 msgstr "Period"
 
+msgid "{{periods}} and {{count}} more"
+msgid_plural "{{periods}} and {{count}} more"
+msgstr[0] "{{periods}} and {{count}} more"
+msgstr[1] "{{periods}} and {{count}} more"
+
 msgid "Import Summary"
 msgstr "Import Summary"
 
@@ -549,6 +560,9 @@ msgstr "Leave page"
 
 msgid "Start dry run"
 msgstr "Start dry run"
+
+msgid "Download request"
+msgstr "Download request"
 
 msgid "Start import"
 msgstr "Start import"
@@ -904,6 +918,249 @@ msgstr "Model created successfully"
 msgid "Failed to create model"
 msgstr "Failed to create model"
 
+msgid "Good"
+msgstr "Good"
+
+msgid "Moderate"
+msgstr "Moderate"
+
+msgid "Poor"
+msgstr "Poor"
+
+msgid "Surrogate Model Quality"
+msgstr "Surrogate Model Quality"
+
+msgid "What do these metrics mean?"
+msgstr "What do these metrics mean?"
+
+msgid "Hide info"
+msgstr "Hide info"
+
+msgid "What is this?"
+msgstr "What is this?"
+
+msgid "CV R²"
+msgstr "CV R²"
+
+msgid "MAE"
+msgstr "MAE"
+
+msgid "Samples"
+msgstr "Samples"
+
+msgid "Unique rows"
+msgstr "Unique rows"
+
+msgid "Stability Score"
+msgstr "Stability Score"
+
+msgid "avg. error"
+msgstr "avg. error"
+
+msgid "{{pct}}% duplicated"
+msgstr "{{pct}}% duplicated"
+
+msgid "ranking consistency"
+msgstr "ranking consistency"
+
+msgid ""
+"The surrogate approximation is poor — explanations may not accurately "
+"reflect the original model. This often happens with very few data points."
+msgstr ""
+"The surrogate approximation is poor — explanations may not accurately "
+"reflect the original model. This often happens with very few data points."
+
+msgid ""
+"The surrogate captures moderate signal. Explanations are directionally "
+"useful but approximate. Feature ranking is likely correct even if "
+"magnitudes are off."
+msgstr ""
+"The surrogate captures moderate signal. Explanations are directionally "
+"useful but approximate. Feature ranking is likely correct even if "
+"magnitudes are off."
+
+msgid ""
+"The surrogate closely approximates the original model. Explanations are "
+"reliable."
+msgstr ""
+"The surrogate closely approximates the original model. Explanations are "
+"reliable."
+
+msgid "Constant features detected"
+msgstr "Constant features detected"
+
+msgid ""
+"The following features have no variation in the training data and cannot "
+"contribute to explanations{{colon}} "
+msgstr ""
+"The following features have no variation in the training data and cannot "
+"contribute to explanations{{colon}} "
+
+msgid "Explanation job failed. Check Jobs for details."
+msgstr "Explanation job failed. Check Jobs for details."
+
+msgid "Error"
+msgstr "Error"
+
+msgid "Failed to load global explanation"
+msgstr "Failed to load global explanation"
+
+msgid "No global explanation computed yet."
+msgstr "No global explanation computed yet."
+
+msgid "Compute Explanation"
+msgstr "Compute Explanation"
+
+msgid "Importance"
+msgstr "Importance"
+
+msgid "SHAP Summary"
+msgstr "SHAP Summary"
+
+msgid "Recalculate"
+msgstr "Recalculate"
+
+msgid "SHAP Summary — how feature values affect predictions"
+msgstr "SHAP Summary — how feature values affect predictions"
+
+msgid "Loading SHAP summary data..."
+msgstr "Loading SHAP summary data..."
+
+msgid "Load"
+msgstr "Load"
+
+msgid "Global Feature Importance"
+msgstr "Global Feature Importance"
+
+msgid ""
+"Feature importance shows which inputs have the most influence on "
+"predictions. This does not imply causation."
+msgstr ""
+"Feature importance shows which inputs have the most influence on "
+"predictions. This does not imply causation."
+
+msgid "About feature values"
+msgstr "About feature values"
+
+msgid ""
+"Feature values are taken from the dataset row that matches the forecast "
+"period when available."
+msgstr ""
+"Feature values are taken from the dataset row that matches the forecast "
+"period when available."
+
+msgid "Failed to load local explanation"
+msgstr "Failed to load local explanation"
+
+msgid "Waterfall"
+msgstr "Waterfall"
+
+msgid "SHAP Waterfall — {{orgUnit}}, {{period}}"
+msgstr "SHAP Waterfall — {{orgUnit}}, {{period}}"
+
+msgid "SHAP Summary — {{orgUnit}}, {{period}} highlighted"
+msgstr "SHAP Summary — {{orgUnit}}, {{period}} highlighted"
+
+msgid "LIME Feature Contributions — {{orgUnit}}, {{period}}"
+msgstr "LIME Feature Contributions — {{orgUnit}}, {{period}}"
+
+msgid "No explanation available for this selection."
+msgstr "No explanation available for this selection."
+
+msgid "Explain This Forecast"
+msgstr "Explain This Forecast"
+
+msgid "Forecast Horizon Summary — {{orgUnit}}"
+msgstr "Forecast Horizon Summary — {{orgUnit}}"
+
+msgid "Average Horizon Importance — mean |SHAP| across {{n}} steps"
+msgstr "Average Horizon Importance — mean |SHAP| across {{n}} steps"
+
+msgid "SHAP Summary — {{orgUnit}} across horizon steps"
+msgstr "SHAP Summary — {{orgUnit}} across horizon steps"
+
+msgid "No horizon summary available."
+msgstr "No horizon summary available."
+
+msgid "Compute Horizon Summary"
+msgstr "Compute Horizon Summary"
+
+msgid "Generating explanations for Global, Local, and Horizon..."
+msgstr "Generating explanations for Global, Local, and Horizon..."
+
+msgid "Generate explanations to view Global, Local, and Horizon plots."
+msgstr "Generate explanations to view Global, Local, and Horizon plots."
+
+msgid "Explainability"
+msgstr "Explainability"
+
+msgid "Explanation error"
+msgstr "Explanation error"
+
+msgid "Generating global, local, and horizon explanations ({{method}})…"
+msgstr "Generating global, local, and horizon explanations ({{method}})…"
+
+msgid ""
+"Training surrogate model ({{method}}) — this includes hyperparameter tuning "
+"and may take a moment…"
+msgstr ""
+"Training surrogate model ({{method}}) — this includes hyperparameter tuning "
+"and may take a moment…"
+
+msgid "Computing local explanation ({{method}}) with hyperparameter tuning…"
+msgstr "Computing local explanation ({{method}}) with hyperparameter tuning…"
+
+msgid "Computing horizon summary…"
+msgstr "Computing horizon summary…"
+
+msgid "Loading summary data…"
+msgstr "Loading summary data…"
+
+msgid "Global"
+msgstr "Global"
+
+msgid "Local"
+msgstr "Local"
+
+msgid "Horizon"
+msgstr "Horizon"
+
+msgid "Select XAI Method"
+msgstr "Select XAI Method"
+
+msgid "No methods available"
+msgstr "No methods available"
+
+msgid "No XAI methods are registered. Contact your administrator."
+msgstr "No XAI methods are registered. Contact your administrator."
+
+msgid "Search by name"
+msgstr "Search by name"
+
+msgid "Method type"
+msgstr "Method type"
+
+msgid "No methods found"
+msgstr "No methods found"
+
+msgid "Automatic selection"
+msgstr "Automatic selection"
+
+msgid "All methods"
+msgstr "All methods"
+
+msgid "Confirm"
+msgstr "Confirm"
+
+msgid "Plots{{colon}} "
+msgstr "Plots{{colon}} "
+
+msgid "XAI Method"
+msgstr "XAI Method"
+
+msgid "Change"
+msgstr "Change"
+
 msgid "Error loading prediction"
 msgstr "Error loading prediction"
 
@@ -1170,9 +1427,6 @@ msgstr ""
 msgid "Your server is not secure"
 msgstr "Your server is not secure"
 
-msgid "Confirm"
-msgstr "Confirm"
-
 msgid "This action cannot be undone"
 msgstr "This action cannot be undone"
 
@@ -1255,9 +1509,6 @@ msgstr[1] "All {{count}} data elements were successfully pruned."
 msgid "{{failureCount}} of {{totalCount}} data elements failed to be pruned"
 msgstr "{{failureCount}} of {{totalCount}} data elements failed to be pruned"
 
-msgid "Error"
-msgstr "Error"
-
 msgid "Please remember to rerun your analytics tables to update the system."
 msgstr "Please remember to rerun your analytics tables to update the system."
 
@@ -1291,6 +1542,16 @@ msgstr "Show metric visualization plots in the evaluation dashboard"
 
 msgid "Show evaluation visualization plots in the evaluation dashboard"
 msgstr "Show evaluation visualization plots in the evaluation dashboard"
+
+msgid "XAI auto-training"
+msgstr "XAI auto-training"
+
+msgid ""
+"Automatically train an explainability model when a prediction completes. "
+"This enables faster SHAP explanations without manual triggering."
+msgstr ""
+"Automatically train an explainability model when a prediction completes. "
+"This enables faster SHAP explanations without manual triggering."
 
 msgid "Settings saved successfully"
 msgstr "Settings saved successfully"

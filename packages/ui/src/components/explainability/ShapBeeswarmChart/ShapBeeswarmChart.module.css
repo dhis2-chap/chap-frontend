@@ -1,0 +1,48 @@
+.container {
+    width: 100%;
+    min-height: 300px;
+}
+
+.empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 150px;
+    color: var(--colors-grey700, #6e7a8a);
+    font-size: 14px;
+}
+
+.colorLegend {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    justify-content: center;
+    margin-top: 4px;
+}
+
+.colorGradient {
+    width: 120px;
+    height: 10px;
+    border-radius: 5px;
+    background: linear-gradient(to right, rgb(66, 165, 245), rgb(180, 130, 140), rgb(239, 83, 80));
+}
+
+.colorLegendLabel {
+    font-size: 10px;
+    color: var(--colors-grey600, #7b8794);
+    font-weight: 500;
+}
+
+.colorLegendCaption {
+    font-size: 10px;
+    color: var(--colors-grey500, #a0adba);
+    margin-left: 8px;
+}
+
+.annotation {
+    font-size: 11px;
+    color: var(--colors-grey600, #7b8794);
+    font-style: italic;
+    margin: 4px 0 0 0;
+    line-height: 1.4;
+}

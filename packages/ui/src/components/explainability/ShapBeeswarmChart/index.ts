@@ -1,0 +1,1 @@
+export { ShapBeeswarmChart } from './ShapBeeswarmChart';

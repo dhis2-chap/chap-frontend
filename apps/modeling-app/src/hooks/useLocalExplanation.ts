@@ -6,17 +6,34 @@ import {
     ApiError,
 } from '@dhis2-chap/ui';
 
+/** When batch runs or methods are recomputed, the DB can hold multiple rows per (org, period, method). Always use the newest. */
+function pickLatestExplanation(rows: LocalExplanationResponse[]): LocalExplanationResponse | undefined {
+    if (!rows.length) return undefined;
+    return rows.reduce((best, exp) => {
+        const eid = exp.id ?? -1;
+        const bid = best.id ?? -1;
+        if (eid !== bid) return eid > bid ? exp : best;
+        const ta = exp.computedAt ?? '';
+        const tb = best.computedAt ?? '';
+        return ta >= tb ? exp : best;
+    });
+}
+
 export const useLocalExplanation = (
     predictionId: number | undefined,
     orgUnit: string | undefined,
     period: string | undefined,
+    method: string = 'shap',
+    xaiMethod?: string,
 ) => {
     const queryClient = useQueryClient();
 
-    const { data, error, isLoading, refetch } = useQuery<LocalExplanationResponse[], ApiError>({
-        queryKey: ['localExplanations', predictionId, orgUnit, period],
-        queryFn: () => XaiService.listLocalExplanations(predictionId!, orgUnit, period),
-        enabled: !!predictionId,
+    const methodFilter = xaiMethod ?? method;
+
+    const { data, error, isLoading, isFetching, refetch } = useQuery<LocalExplanationResponse[], ApiError>({
+        queryKey: ['localExplanations', predictionId, orgUnit, period, methodFilter],
+        queryFn: () => XaiService.listLocalExplanations(predictionId!, orgUnit, period, methodFilter),
+        enabled: !!predictionId && !!orgUnit && period != null && period !== '',
         staleTime: 5 * 60 * 1000,
         retry: 1,
     });
@@ -31,15 +48,23 @@ export const useLocalExplanation = (
         },
     });
 
-    const currentExplanation = data?.find(
-        (exp) => exp.orgUnit === orgUnit && exp.period === period
-    );
+    const matches =
+        data?.filter((exp) => {
+            const ou = exp.orgUnit ?? (exp as { org_unit?: string }).org_unit;
+            const per = exp.period ?? (exp as { period?: string }).period;
+            const m = exp.method ?? (exp as { method?: string }).method;
+            if (ou !== orgUnit || String(per) !== String(period)) return false;
+            return xaiMethod ? m === xaiMethod : m === method;
+        }) ?? [];
+
+    const currentExplanation = matches.length > 0 ? pickLatestExplanation(matches) : undefined;
 
     return {
         localExplanations: data || [],
         currentExplanation,
         error,
         isLoading,
+        isFetching,
         refetch,
         computeExplanation: computeMutation.mutate,
         isComputing: computeMutation.isPending,

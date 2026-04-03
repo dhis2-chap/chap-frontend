@@ -69,6 +69,13 @@ export const ExperimentalSettings = () => {
                                     onChange={() => toggleFeature(FEATURES.EVALUATION_PLOTS)}
                                     disabled={isSaving}
                                 />
+                                <ChoiceCard
+                                    title={i18n.t('XAI auto-training')}
+                                    description={i18n.t('Automatically train an explainability model when a prediction completes. This enables faster SHAP explanations without manual triggering.')}
+                                    checked={settings.features[FEATURES.XAI_AUTO_TRAINING] ?? false}
+                                    onChange={() => toggleFeature(FEATURES.XAI_AUTO_TRAINING)}
+                                    disabled={isSaving}
+                                />
                             </div>
                         </div>
                     )}

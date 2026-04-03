@@ -11,6 +11,8 @@ import {
 import { ModelExecutionFormValues } from '../../ModelExecutionForm/hooks/useModelExecutionFormState';
 import { prepareBacktestData } from '../../ModelExecutionForm/utils/prepareBacktestData';
 import { PERIOD_TYPES } from '@dhis2-chap/ui';
+import { useExperimentalFeature } from '../../../features/settings/Experimental/hooks/useExperimentalFeature';
+import { FEATURES } from '../../../features/settings/Experimental/hooks/useExperimentalSettings';
 
 type Props = {
     onSuccess?: () => void;
@@ -26,6 +28,7 @@ export const useCreatePrediction = ({ onSuccess, onError }: Props = {}) => {
     const dataEngine = useDataEngine();
     const queryClient = useQueryClient();
     const navigate = useNavigate();
+    const { enabled: xaiAutoTraining } = useExperimentalFeature(FEATURES.XAI_AUTO_TRAINING);
 
     const {
         mutate: createPrediction,
@@ -63,6 +66,7 @@ export const useCreatePrediction = ({ onSuccess, onError }: Props = {}) => {
                 modelId: model.name,
                 nPeriods: N_PERIODS[formData.periodType.toUpperCase() as keyof typeof N_PERIODS],
                 type: 'forecasting' as const,
+                enableXai: xaiAutoTraining,
             };
 
             return AnalyticsService.makePredictionAnalyticsMakePredictionPost(predictionRequest);

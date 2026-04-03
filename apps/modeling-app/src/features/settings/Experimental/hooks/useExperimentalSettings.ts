@@ -24,6 +24,7 @@ export const DATASTORE_RESOURCE = 'dataStore/modeling/experimental';
 export const FEATURES = {
     METRIC_PLOTS: 'metricPlots',
     EVALUATION_PLOTS: 'evaluationPlots',
+    XAI_AUTO_TRAINING: 'xaiAutoTraining',
 } as const;
 
 export type FeatureKey = typeof FEATURES[keyof typeof FEATURES];
