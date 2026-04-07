@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-04-03T09:59:03.420Z\n"
-"PO-Revision-Date: 2026-04-03T09:59:03.420Z\n"
+"POT-Creation-Date: 2026-04-07T13:33:09.808Z\n"
+"PO-Revision-Date: 2026-04-07T13:33:09.808Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -945,6 +945,9 @@ msgstr "CV R²"
 msgid "MAE"
 msgstr "MAE"
 
+msgid "Residual bias"
+msgstr "Residual bias"
+
 msgid "Samples"
 msgstr "Samples"
 
@@ -954,8 +957,11 @@ msgstr "Unique rows"
 msgid "Stability Score"
 msgstr "Stability Score"
 
-msgid "avg. error"
-msgstr "avg. error"
+msgid "% MAPE"
+msgstr "% MAPE"
+
+msgid "±{{std}}"
+msgstr "±{{std}}"
 
 msgid "{{pct}}% duplicated"
 msgstr "{{pct}}% duplicated"
@@ -986,6 +992,15 @@ msgstr ""
 "The surrogate closely approximates the original model. Explanations are "
 "reliable."
 
+msgid ""
+"Target transform applied{{colon}} {{method}}. SHAP values are rescaled back "
+"to the original prediction units; attributions are first-order "
+"approximations in the transformed space."
+msgstr ""
+"Target transform applied{{colon}} {{method}}. SHAP values are rescaled back "
+"to the original prediction units; attributions are first-order "
+"approximations in the transformed space."
+
 msgid "Constant features detected"
 msgstr "Constant features detected"
 
@@ -995,6 +1010,16 @@ msgid ""
 msgstr ""
 "The following features have no variation in the training data and cannot "
 "contribute to explanations{{colon}} "
+
+msgid "Features removed by permutation selection"
+msgstr "Features removed by permutation selection"
+
+msgid ""
+"The following features were removed as noise by permutation importance "
+"selection{{colon}} "
+msgstr ""
+"The following features were removed as noise by permutation importance "
+"selection{{colon}} "
 
 msgid "Explanation job failed. Check Jobs for details."
 msgstr "Explanation job failed. Check Jobs for details."
@@ -1060,6 +1085,13 @@ msgstr "SHAP Waterfall — {{orgUnit}}, {{period}}"
 
 msgid "SHAP Summary — {{orgUnit}}, {{period}} highlighted"
 msgstr "SHAP Summary — {{orgUnit}}, {{period}} highlighted"
+
+msgid ""
+"LIME contributions are coefficients of a local linear approximation and do "
+"not decompose additively into the final prediction (unlike SHAP)."
+msgstr ""
+"LIME contributions are coefficients of a local linear approximation and do "
+"not decompose additively into the final prediction (unlike SHAP)."
 
 msgid "LIME Feature Contributions — {{orgUnit}}, {{period}}"
 msgstr "LIME Feature Contributions — {{orgUnit}}, {{period}}"

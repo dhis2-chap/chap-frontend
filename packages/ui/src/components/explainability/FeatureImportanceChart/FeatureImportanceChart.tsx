@@ -14,7 +14,7 @@ interface FeatureImportanceChartProps {
 const formatFeatureName = (name: string): string => {
     return name
         .replace(/_/g, ' ')
-        .replace(/\b\w/g, (char) => char.toUpperCase());
+        .replace(/\b\w/g, char => char.toUpperCase());
 };
 
 export const FeatureImportanceChart = ({
@@ -24,11 +24,11 @@ export const FeatureImportanceChart = ({
 }: FeatureImportanceChartProps) => {
     const options: Highcharts.Options = useMemo(() => {
         const sortedFeatures = [...features].sort(
-            (a, b) => Math.abs(b.importance) - Math.abs(a.importance)
+            (a, b) => Math.abs(b.importance) - Math.abs(a.importance),
         );
 
-        const categories = sortedFeatures.map((f) => formatFeatureName(f.feature_name));
-        const values = sortedFeatures.map((f) => f.importance);
+        const categories = sortedFeatures.map(f => formatFeatureName(f.feature_name));
+        const values = sortedFeatures.map(f => f.importance);
 
         return {
             chart: {
@@ -75,8 +75,8 @@ export const FeatureImportanceChart = ({
                         style: { fontSize: '10px' },
                     },
                     colorByPoint: true,
-                    colors: values.map((v) =>
-                        v >= 0 ? '#4caf50' : '#f44336'
+                    colors: values.map(v =>
+                        v >= 0 ? '#4caf50' : '#f44336',
                     ),
                 },
             },

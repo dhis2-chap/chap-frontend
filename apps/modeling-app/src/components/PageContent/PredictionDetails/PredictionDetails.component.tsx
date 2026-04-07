@@ -39,6 +39,7 @@ export const PredictionDetailsComponent = ({
                 />
                 <ExplainabilityWidget
                     predictionId={prediction.id}
+                    modelId={prediction.modelId}
                     orgUnits={orgUnits}
                     periods={periods}
                     periodType={prediction.dataset?.periodType}

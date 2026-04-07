@@ -15,7 +15,7 @@ interface ShapBeeswarmChartProps {
 }
 
 const formatFeatureName = (name: string): string =>
-    name.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+    name.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
 
 const interpolateColor = (t: number): string => {
     const r = Math.round(66 + t * (239 - 66));
@@ -145,10 +145,10 @@ export const ShapBeeswarmChart = ({
                     const sign = c.shapValue >= 0 ? '+' : '';
                     const orgUnitLabel = orgUnitMap?.[c.orgUnit] ?? c.orgUnit;
                     return (
-                        `<b>${formatFeatureName(c.featureName)}</b><br/>` +
-                        `${i18n.t('Feature value')}: ${c.featureValue.toLocaleString(undefined, { maximumFractionDigits: 2 })}<br/>` +
-                        `SHAP: <b>${sign}${c.shapValue.toFixed(3)}</b><br/>` +
-                        `${orgUnitLabel} — ${c.period}`
+                        `<b>${formatFeatureName(c.featureName)}</b><br/>`
+                        + `${i18n.t('Feature value')}: ${c.featureValue.toLocaleString(undefined, { maximumFractionDigits: 2 })}<br/>`
+                        + `SHAP: <b>${sign}${c.shapValue.toFixed(3)}</b><br/>`
+                        + `${orgUnitLabel} — ${c.period}`
                     );
                 },
             },
@@ -213,9 +213,9 @@ export const ShapBeeswarmChart = ({
             </div>
             <p className={styles.annotation}>
                 {i18n.t(
-                    'Each dot is one forecast. Horizontal position = SHAP impact. ' +
-                    'Color = feature value (blue = low, red = high). ' +
-                    'Features that push predictions right (positive SHAP) increase the forecast.'
+                    'Each dot is one forecast. Horizontal position = SHAP impact. '
+                    + 'Color = feature value (blue = low, red = high). '
+                    + 'Features that push predictions right (positive SHAP) increase the forecast.',
                 )}
             </p>
         </div>

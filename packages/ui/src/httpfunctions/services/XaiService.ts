@@ -156,7 +156,7 @@ export class XaiService {
             method: 'GET',
             url: '/xai/methods',
             query: {
-                'includeArchived': includeArchived,
+                includeArchived: includeArchived,
             },
             errors: {
                 422: `Validation Error`,
@@ -171,7 +171,7 @@ export class XaiService {
             method: 'GET',
             url: '/xai/methods/{name}',
             path: {
-                'name': name,
+                name: name,
             },
             errors: {
                 422: `Validation Error`,
@@ -188,10 +188,10 @@ export class XaiService {
             method: 'GET',
             url: '/xai/predictions/{predictionId}/global',
             path: {
-                'predictionId': predictionId,
+                predictionId: predictionId,
             },
             query: {
-                'xaiMethod': xaiMethod,
+                xaiMethod: xaiMethod,
             },
             errors: {
                 422: `Validation Error`,
@@ -209,12 +209,12 @@ export class XaiService {
             method: 'POST',
             url: '/xai/predictions/{predictionId}/global',
             path: {
-                'predictionId': predictionId,
+                predictionId: predictionId,
             },
             query: {
-                'topK': topK,
-                'outputStatistic': outputStatistic,
-                'xaiMethod': xaiMethod,
+                topK: topK,
+                outputStatistic: outputStatistic,
+                xaiMethod: xaiMethod,
             },
             errors: {
                 422: `Validation Error`,
@@ -232,12 +232,12 @@ export class XaiService {
             method: 'GET',
             url: '/xai/predictions/{predictionId}/local',
             path: {
-                'predictionId': predictionId,
+                predictionId: predictionId,
             },
             query: {
-                'orgUnit': orgUnit,
-                'period': period,
-                'xaiMethod': xaiMethod,
+                orgUnit: orgUnit,
+                period: period,
+                xaiMethod: xaiMethod,
             },
             errors: {
                 422: `Validation Error`,
@@ -253,7 +253,7 @@ export class XaiService {
             method: 'POST',
             url: '/xai/predictions/{predictionId}/local',
             path: {
-                'predictionId': predictionId,
+                predictionId: predictionId,
             },
             body: requestBody,
             mediaType: 'application/json',
@@ -271,8 +271,8 @@ export class XaiService {
             method: 'GET',
             url: '/xai/predictions/{predictionId}/local/{explanationId}',
             path: {
-                'predictionId': predictionId,
-                'explanationId': explanationId,
+                predictionId: predictionId,
+                explanationId: explanationId,
             },
             errors: {
                 422: `Validation Error`,
@@ -288,8 +288,8 @@ export class XaiService {
             method: 'DELETE',
             url: '/xai/predictions/{predictionId}/local/{explanationId}',
             path: {
-                'predictionId': predictionId,
-                'explanationId': explanationId,
+                predictionId: predictionId,
+                explanationId: explanationId,
             },
             errors: {
                 422: `Validation Error`,
@@ -306,11 +306,11 @@ export class XaiService {
             method: 'POST',
             url: '/xai/predictions/{predictionId}/shap-beeswarm',
             path: {
-                'predictionId': predictionId,
+                predictionId: predictionId,
             },
             query: {
-                'outputStatistic': outputStatistic,
-                'xaiMethod': xaiMethod,
+                outputStatistic: outputStatistic,
+                xaiMethod: xaiMethod,
             },
             errors: {
                 422: `Validation Error`,
@@ -329,13 +329,13 @@ export class XaiService {
             method: 'POST',
             url: '/xai/predictions/{predictionId}/local/horizon-summary',
             path: {
-                'predictionId': predictionId,
+                predictionId: predictionId,
             },
             query: {
-                'orgUnit': orgUnit,
-                'outputStatistic': outputStatistic,
-                'method': method,
-                'xaiMethod': xaiMethod,
+                orgUnit: orgUnit,
+                outputStatistic: outputStatistic,
+                method: method,
+                xaiMethod: xaiMethod,
             },
             errors: {
                 422: `Validation Error`,
@@ -353,7 +353,7 @@ export class XaiService {
             method: 'POST',
             url: '/xai/predictions/{predictionId}/explanations/run',
             path: {
-                'predictionId': predictionId,
+                predictionId: predictionId,
             },
             body: {
                 xaiMethodName,

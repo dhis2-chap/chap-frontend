@@ -26,6 +26,7 @@ import styles from './ExplainabilityWidget.module.css';
 
 type Props = {
     predictionId: number;
+    modelId?: string;
     orgUnits: string[];
     periods: string[];
     periodType?: string | null;
@@ -42,14 +43,22 @@ const SurrogateQualityPanel = ({ quality, stabilityScore }: { quality?: any; sta
     if (!quality) return null;
     const r2 = quality.rSquared ?? quality.r_squared;
     const mae = quality.mae;
+    const mape = quality.mape;
     const n = quality.nSamples ?? quality.n_samples;
     const unique = quality.nUniqueRows ?? quality.n_unique_rows;
     const constantFeatures: string[] = quality.constantFeatures ?? quality.constant_features ?? [];
+    const permRemovedFeatures: string[] = quality.permutationRemovedFeatures ?? quality.permutation_removed_features ?? [];
+    const residualMean: number | null = quality.residualMean ?? quality.residual_mean ?? null;
+    const residualStd: number | null = quality.residualStd ?? quality.residual_std ?? null;
+    const fidelityTier: string = quality.fidelityTier ?? quality.fidelity_tier ?? (r2 == null ? 'poor' : r2 >= 0.8 ? 'good' : r2 >= 0.5 ? 'moderate' : 'poor');
+    const fidelityWarning: string | null = quality.fidelityWarning ?? quality.fidelity_warning ?? null;
+    const targetTransformMethod: string | null = quality.targetTransformMethod ?? quality.target_transform_method ?? null;
+    const modelDisplayName: string = quality.selectedModelDisplayName ?? quality.selected_model_display_name ?? 'surrogate model';
     if (r2 == null) return null;
 
     const r2Pct = (r2 * 100).toFixed(1);
-    const r2Color = r2 >= 0.7 ? '#4caf50' : r2 >= 0.4 ? '#ff9800' : '#f44336';
-    const r2Label = r2 >= 0.7 ? i18n.t('Good') : r2 >= 0.4 ? i18n.t('Moderate') : i18n.t('Poor');
+    const r2Color = fidelityTier === 'good' ? '#4caf50' : fidelityTier === 'moderate' ? '#ff9800' : '#f44336';
+    const r2Label = fidelityTier === 'good' ? i18n.t('Good') : fidelityTier === 'moderate' ? i18n.t('Moderate') : i18n.t('Poor');
     const duplicateRatio = unique != null && n > 0 ? ((1 - unique / n) * 100).toFixed(0) : null;
 
     return (
@@ -71,9 +80,10 @@ const SurrogateQualityPanel = ({ quality, stabilityScore }: { quality?: any; sta
                 <div className={styles.qualityInfoBox}>
                     <p>
                         {i18n.t(
-                            'Explanations are computed using a surrogate model (Gradient Boosting Machine) ' +
+                            'Explanations are computed using a surrogate model ({{modelName}}) ' +
                             'that approximates the original prediction model. These metrics show how well ' +
-                            'the surrogate reproduces the original model\'s predictions.'
+                            'the surrogate reproduces the original model\'s predictions.',
+                            { modelName: modelDisplayName }
                         )}
                     </p>
                     <dl className={styles.qualityInfoList}>
@@ -86,6 +96,11 @@ const SurrogateQualityPanel = ({ quality, stabilityScore }: { quality?: any; sta
                         <dd>{i18n.t(
                             'Mean Absolute Error between the surrogate and original model predictions. ' +
                             'Lower is better — shows the average difference in prediction units.'
+                        )}</dd>
+                        <dt>{i18n.t('Residual bias')}</dt>
+                        <dd>{i18n.t(
+                            'Mean and standard deviation of (actual − predicted) LOO residuals. ' +
+                            'A large mean indicates systematic over- or under-prediction by the surrogate.'
                         )}</dd>
                         <dt>{i18n.t('Samples')}</dt>
                         <dd>{i18n.t(
@@ -122,8 +137,21 @@ const SurrogateQualityPanel = ({ quality, stabilityScore }: { quality?: any; sta
                         <span className={styles.qualityMetricValue}>
                             {mae < 1 ? mae.toFixed(3) : mae.toFixed(1)}
                         </span>
+                        {mape != null && (
+                            <span className={styles.qualityMetricRating} style={{ color: 'var(--colors-grey600)' }}>
+                                {(mape * 100).toFixed(1)}{i18n.t('% MAPE')}
+                            </span>
+                        )}
+                    </div>
+                )}
+                {residualMean != null && residualStd != null && (
+                    <div className={styles.qualityMetric}>
+                        <span className={styles.qualityMetricLabel}>{i18n.t('Residual bias')}</span>
+                        <span className={styles.qualityMetricValue} style={{ color: Math.abs(residualMean) > residualStd * 0.5 ? '#ff9800' : 'inherit' }}>
+                            {residualMean >= 0 ? '+' : ''}{residualMean < 1 && residualMean > -1 ? residualMean.toFixed(3) : residualMean.toFixed(1)}
+                        </span>
                         <span className={styles.qualityMetricRating} style={{ color: 'var(--colors-grey600)' }}>
-                            {i18n.t('avg. error')}
+                            {i18n.t('±{{std}}', { std: residualStd < 1 ? residualStd.toFixed(3) : residualStd.toFixed(1) })}
                         </span>
                     </div>
                 )}
@@ -159,16 +187,32 @@ const SurrogateQualityPanel = ({ quality, stabilityScore }: { quality?: any; sta
                 />
             </div>
             <p className={styles.qualityNote}>
-                {r2 < 0.4
+                {fidelityTier === 'poor'
                     ? i18n.t('The surrogate approximation is poor — explanations may not accurately reflect the original model. This often happens with very few data points.')
-                    : r2 < 0.7
+                    : fidelityTier === 'moderate'
                     ? i18n.t('The surrogate captures moderate signal. Explanations are directionally useful but approximate. Feature ranking is likely correct even if magnitudes are off.')
                     : i18n.t('The surrogate closely approximates the original model. Explanations are reliable.')}
             </p>
+            {fidelityWarning && fidelityTier !== 'good' && (
+                <NoticeBox warning>
+                    {fidelityWarning}
+                </NoticeBox>
+            )}
+            {targetTransformMethod && (
+                <NoticeBox>
+                    {i18n.t('Target transform applied{{colon}} {{method}}. SHAP values are rescaled back to the original prediction units; attributions are first-order approximations in the transformed space.', { colon: ':', method: targetTransformMethod })}
+                </NoticeBox>
+            )}
             {constantFeatures.length > 0 && (
                 <NoticeBox warning title={i18n.t('Constant features detected')}>
                     {i18n.t('The following features have no variation in the training data and cannot contribute to explanations{{colon}} ', { colon: ':' })}
                     {constantFeatures.map(formatFeatureName).join(', ')}
+                </NoticeBox>
+            )}
+            {permRemovedFeatures.length > 0 && (
+                <NoticeBox title={i18n.t('Features removed by permutation selection')}>
+                    {i18n.t('The following features were removed as noise by permutation importance selection{{colon}} ', { colon: ':' })}
+                    {permRemovedFeatures.map(formatFeatureName).join(', ')}
                 </NoticeBox>
             )}
         </div>
@@ -177,6 +221,7 @@ const SurrogateQualityPanel = ({ quality, stabilityScore }: { quality?: any; sta
 
 export const ExplainabilityWidget = ({
     predictionId,
+    modelId,
     orgUnits,
     periods,
     periodType,
@@ -189,11 +234,39 @@ export const ExplainabilityWidget = ({
     const [localOrgUnit, setLocalOrgUnit] = useState<string>(selectedOrgUnit || orgUnits[0] || '');
     const hasUserSelectedOrgUnit = useRef(false);
     const [selectedXaiMethod, setSelectedXaiMethod] = useState<string>(DEFAULT_XAI_METHOD);
+    const hasUserSelectedXaiMethod = useRef(false);
     const [explanationJobId, setExplanationJobId] = useState<string | null>(null);
     const [completedExplanationMethods, setCompletedExplanationMethods] = useState<Record<string, boolean>>({});
     const queryClient = useQueryClient();
 
     const { xaiMethods, isLoading: isXaiMethodsLoading } = useXaiMethods();
+
+    useEffect(() => {
+        if (!xaiMethods?.length || hasUserSelectedXaiMethod.current) return;
+
+        const normalizedModelId = modelId?.toLowerCase();
+        const methodScore = (method: (typeof xaiMethods)[number]) => {
+            const methodType = method.methodType?.toLowerCase() ?? '';
+            const methodName = method.name?.toLowerCase() ?? '';
+            const description = method.description?.toLowerCase() ?? '';
+            const isNative = methodType.includes('native') || methodName.includes('native');
+            const isAuto = methodType.includes('auto') || methodName.includes('auto');
+            const matchesModel =
+                !!normalizedModelId &&
+                (methodName.includes(normalizedModelId) || description.includes(normalizedModelId));
+
+            if (!isNative) return -1;
+            return (matchesModel ? 10 : 0) + (isAuto ? 3 : 0);
+        };
+
+        const preferredNativeMethod = [...xaiMethods]
+            .sort((a, b) => methodScore(b) - methodScore(a))
+            .find((method) => methodScore(method) >= 0);
+
+        if (preferredNativeMethod && preferredNativeMethod.name !== selectedXaiMethod) {
+            setSelectedXaiMethod(preferredNativeMethod.name);
+        }
+    }, [xaiMethods, selectedXaiMethod, modelId]);
 
     // Derive attribution method from the selected XAI method's methodType
     const selectedXaiMethodObj = xaiMethods?.find(m => m.name === selectedXaiMethod);
@@ -657,16 +730,21 @@ export const ExplainabilityWidget = ({
                                 </div>
                             )
                         ) : (
-                            <FeatureImportanceChart
-                                key={`local-lime-${displayExplanation.id ?? 'new'}-${localOrgUnit}-${selectedPeriod}`}
-                                features={displayExplanation.featureAttributions.map((f: any) => ({
-                                    feature_name: f.feature_name || f.featureName, importance: f.importance, direction: f.direction,
-                                }))}
-                                title={i18n.t('LIME Feature Contributions — {{orgUnit}}, {{period}}', {
-                                    orgUnit: orgUnitOptions.find(o => o.id === localOrgUnit)?.label ?? localOrgUnit,
-                                    period: getPeriodLabel(selectedPeriod),
-                                })}
-                            />
+                            <>
+                                <NoticeBox>
+                                    {i18n.t('LIME contributions are coefficients of a local linear approximation and do not decompose additively into the final prediction (unlike SHAP).')}
+                                </NoticeBox>
+                                <FeatureImportanceChart
+                                    key={`local-lime-${displayExplanation.id ?? 'new'}-${localOrgUnit}-${selectedPeriod}`}
+                                    features={displayExplanation.featureAttributions.map((f: any) => ({
+                                        feature_name: f.feature_name || f.featureName, importance: f.importance, direction: f.direction,
+                                    }))}
+                                    title={i18n.t('LIME Feature Contributions — {{orgUnit}}, {{period}}', {
+                                        orgUnit: orgUnitOptions.find(o => o.id === localOrgUnit)?.label ?? localOrgUnit,
+                                        period: getPeriodLabel(selectedPeriod),
+                                    })}
+                                />
+                            </>
                         )}
                     </div>
                 ) : (
@@ -825,6 +903,7 @@ export const ExplainabilityWidget = ({
                             xaiMethods={xaiMethods}
                             selectedMethodName={selectedXaiMethod}
                             onSelect={(method) => {
+                                hasUserSelectedXaiMethod.current = true;
                                 setSelectedXaiMethod(method.name);
                             }}
                             isLoading={isXaiMethodsLoading}

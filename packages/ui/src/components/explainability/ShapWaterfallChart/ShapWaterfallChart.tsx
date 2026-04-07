@@ -15,7 +15,7 @@ interface ShapWaterfallChartProps {
 }
 
 const formatFeatureName = (name: string): string =>
-    name.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+    name.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
 
 const formatValue = (val: number | undefined | null): string => {
     if (val === undefined || val === null) return '';
@@ -65,7 +65,7 @@ export const ShapWaterfallChart = ({
                 color: '#90A4AE',
                 dataLabels: { format: '{y:.1f}' },
             },
-            ...sorted.map((f) => ({
+            ...sorted.map(f => ({
                 y: f.importance,
                 color: f.importance >= 0 ? '#ef5350' : '#42a5f5',
                 dataLabels: {
@@ -74,12 +74,12 @@ export const ShapWaterfallChart = ({
             })),
             ...(hasOther
                 ? [
-                      {
-                          y: otherContribution,
-                          color: otherContribution >= 0 ? '#ef9a9a' : '#90caf9',
-                          dataLabels: { format: '{y:+.2f}' },
-                      } as Highcharts.PointOptionsObject,
-                  ]
+                        {
+                            y: otherContribution,
+                            color: otherContribution >= 0 ? '#ef9a9a' : '#90caf9',
+                            dataLabels: { format: '{y:+.2f}' },
+                        } as Highcharts.PointOptionsObject,
+                    ]
                 : []),
             {
                 isSum: true,
@@ -132,18 +132,18 @@ export const ShapWaterfallChart = ({
                     },
                     ...(Math.abs(actualPrediction - modelOutput) > 0.5
                         ? [
-                              {
-                                  value: actualPrediction,
-                                  color: '#FF9800',
-                                  dashStyle: 'Dot' as Highcharts.DashStyleValue,
-                                  width: 2,
-                                  zIndex: 4,
-                                  label: {
-                                      text: `${i18n.t('Actual forecast')}: ${formatValue(actualPrediction)}`,
-                                      style: { fontSize: '10px', color: '#FF9800', fontWeight: '500' },
-                                  },
-                              },
-                          ]
+                                {
+                                    value: actualPrediction,
+                                    color: '#FF9800',
+                                    dashStyle: 'Dot' as Highcharts.DashStyleValue,
+                                    width: 2,
+                                    zIndex: 4,
+                                    label: {
+                                        text: `${i18n.t('Actual forecast')}: ${formatValue(actualPrediction)}`,
+                                        style: { fontSize: '10px', color: '#FF9800', fontWeight: '500' },
+                                    },
+                                },
+                            ]
                         : []),
                 ],
             },
@@ -152,8 +152,8 @@ export const ShapWaterfallChart = ({
                     const idx = (this.point as any).index as number;
                     if (idx === 0) {
                         return (
-                            `<b>E[f(X)] — ${i18n.t('Average model prediction')}</b><br/>` +
-                            `${baselinePrediction.toFixed(2)}`
+                            `<b>E[f(X)] — ${i18n.t('Average model prediction')}</b><br/>`
+                            + `${baselinePrediction.toFixed(2)}`
                         );
                     }
                     if ((this.point as any).isSum) {
@@ -168,8 +168,8 @@ export const ShapWaterfallChart = ({
                     if (hasOther && idx === otherIdx) {
                         const sign = otherContribution >= 0 ? '+' : '';
                         return (
-                            `<b>${i18n.t('Other features (not shown)')}</b><br/>` +
-                            `${sign}${otherContribution.toFixed(2)}`
+                            `<b>${i18n.t('Other features (not shown)')}</b><br/>`
+                            + `${sign}${otherContribution.toFixed(2)}`
                         );
                     }
                     const feat = sorted[idx - 1];
@@ -242,8 +242,8 @@ export const ShapWaterfallChart = ({
             <HighchartsReact highcharts={Highcharts} options={options} />
             <p className={styles.annotation}>
                 {i18n.t(
-                    'Red bars push the prediction higher; blue bars push it lower. ' +
-                    'Bar length shows how much each feature contributed to moving away from the average.',
+                    'Red bars push the prediction higher; blue bars push it lower. '
+                    + 'Bar length shows how much each feature contributed to moving away from the average.',
                 )}
             </p>
         </div>

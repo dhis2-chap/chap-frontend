@@ -51,10 +51,10 @@ export const useLocalExplanation = (
     const matches =
         data?.filter((exp) => {
             const ou = exp.orgUnit ?? (exp as { org_unit?: string }).org_unit;
-            const per = exp.period ?? (exp as { period?: string }).period;
             const m = exp.method ?? (exp as { method?: string }).method;
-            if (ou !== orgUnit || String(per) !== String(period)) return false;
-            return xaiMethod ? m === xaiMethod : m === method;
+            const xm = exp.xaiMethodName ?? (exp as { xai_method_name?: string }).xai_method_name;
+            if (ou !== orgUnit) return false;
+            return xaiMethod ? (xm ? xm === xaiMethod : m === xaiMethod) : m === method;
         }) ?? [];
 
     const currentExplanation = matches.length > 0 ? pickLatestExplanation(matches) : undefined;
