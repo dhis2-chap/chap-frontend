@@ -1159,9 +1159,6 @@ msgstr "CHAP Version"
 msgid "Python Version"
 msgstr "Python Version"
 
-msgid "Operating System"
-msgstr "Operating System"
-
 msgid "Connected"
 msgstr "Connected"
 

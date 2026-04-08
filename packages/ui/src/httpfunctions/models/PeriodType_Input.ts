@@ -3,10 +3,9 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Health check response.
+ * Supported time period types for model predictions.
  */
-export type HealthResponse = {
-    status: string;
-    message: string;
-};
-
+export enum PeriodType_Input {
+    WEEKLY = 'weekly',
+    MONTHLY = 'monthly',
+}

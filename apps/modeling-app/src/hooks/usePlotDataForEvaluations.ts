@@ -1,7 +1,7 @@
 import {
-    AnalyticsService,
     ApiError,
     BackTestRead,
+    BacktestsService,
     DataList,
     EvaluationEntry,
     getSplitPeriod,
@@ -141,7 +141,7 @@ export const usePlotDataForEvaluations = (
                     queryKey: getQueryKey(evaluation.id),
                     queryFn: async () => {
                         const evaluationEntries =
-                            AnalyticsService.getEvaluationEntriesAnalyticsEvaluationEntryGet(
+                            BacktestsService.getEvaluationEntriesV1AnalyticsEvaluationEntryGet(
                                 evaluation.id,
                                 quantiles,
                                 splitPeriod,
@@ -149,7 +149,7 @@ export const usePlotDataForEvaluations = (
                                 orgUnits,
                             );
                         const actualCases =
-                            AnalyticsService.getActualCasesAnalyticsActualCasesBacktestIdGet(
+                            BacktestsService.getActualCasesV1AnalyticsActualCasesBacktestIdGet(
                                 evaluation.id,
                                 orgUnits,
                             );

@@ -26,7 +26,7 @@ export const useDeleteJob = ({ onSuccess, onError }: Props = {}) => {
         isError,
         error,
     } = useMutation({
-        mutationFn: (id: string) => JobsService.deleteJobJobsJobIdDelete(id),
+        mutationFn: (id: string) => JobsService.deleteJobV1JobsJobIdDelete(id),
         onSuccess: (_data, id) => {
             queryClient.invalidateQueries({ queryKey: ['jobs'] });
             showSuccessAlert();
