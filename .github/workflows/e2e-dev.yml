@@ -1,7 +1,8 @@
-name: e2e
+name: e2e-dev
 
 on:
     pull_request:
+        types: [opened, labeled, synchronize]
     workflow_dispatch:
 
 concurrency:
@@ -9,7 +10,11 @@ concurrency:
     cancel-in-progress: true
 
 jobs:
-    e2e:
+    e2e-dev:
+        if: >-
+            github.event_name == 'workflow_dispatch' ||
+            (github.event_name == 'pull_request' &&
+             contains(github.event.pull_request.labels.*.name, 'testing'))
         runs-on: ubuntu-latest
         timeout-minutes: 90
         permissions:

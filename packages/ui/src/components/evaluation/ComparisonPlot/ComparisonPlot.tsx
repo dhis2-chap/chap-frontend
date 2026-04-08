@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useRef } from 'react';
 import styles from './ComparisonPlot.module.css';
 import { ResultPlot } from '../ResultPlot/ResultPlot';
 import { EvaluationPerOrgUnit } from '../../../interfaces/Evaluation';
@@ -7,20 +7,26 @@ import Highcharts from 'highcharts';
 interface SideBySidePlotsProps {
     orgUnitsData: EvaluationPerOrgUnit;
     nameLabel?: string;
+    maxY?: number;
 }
 
 export const ComparisonPlot = React.memo(function ComparisonPlot({
     orgUnitsData,
     nameLabel,
+    maxY,
 }: SideBySidePlotsProps) {
-    // read during render, so we should store in state over useRef
-    const [baseRef, setBaseRef] = useState<HighchartsReact.RefObject | null>(
-        null,
-    );
-    const [comparisonRef, setComparisonRef] =
-        useState<HighchartsReact.RefObject | null>(null);
+    const baseRef = useRef<HighchartsReact.RefObject | null>(null);
+    const comparisonRef = useRef<HighchartsReact.RefObject | null>(null);
 
-    function handleSyncChartZoom(
+    const setBaseRef = useCallback((chartRef: HighchartsReact.RefObject | null) => {
+        baseRef.current = chartRef;
+    }, []);
+
+    const setComparisonRef = useCallback((chartRef: HighchartsReact.RefObject | null) => {
+        comparisonRef.current = chartRef;
+    }, []);
+
+    const handleSyncChartZoom = useCallback(function handleSyncChartZoom(
         this: Highcharts.Axis,
         event: Highcharts.AxisSetExtremesEventObject,
     ): void {
@@ -30,9 +36,9 @@ export const ComparisonPlot = React.memo(function ComparisonPlot({
         }
         const triggeringChart = this.chart;
         const chartToSync =
-            baseRef !== null && triggeringChart === baseRef?.chart
-                ? comparisonRef?.chart
-                : baseRef?.chart;
+            baseRef.current !== null && triggeringChart === baseRef.current?.chart
+                ? comparisonRef.current?.chart
+                : baseRef.current?.chart;
 
         if (!chartToSync) {
             return;
@@ -46,11 +52,9 @@ export const ComparisonPlot = React.memo(function ComparisonPlot({
             triggeringChart.zoomOut();
             return;
         }
-        const triggeringYAxis = this.chart.yAxis[0];
         const { min: xMin, max: xMax } = event;
-        const { min: yMin, max: yMax } = triggeringYAxis;
-        // sync zoom for both axes
-        chartToSync.yAxis[0].setExtremes(yMin, yMax, false);
+
+        // sync x-axis zoom while the shared max keeps the y-axis stable.
         chartToSync.xAxis[0].setExtremes(xMin, xMax, false);
 
         // handle reset zoom button
@@ -65,7 +69,8 @@ export const ComparisonPlot = React.memo(function ComparisonPlot({
             chartToSync.showResetZoom();
         }
         chartToSync.redraw(true);
-    }
+    }, []);
+
     return (
         <div className={styles.comparionBox}>
             <div className={styles.title}>{orgUnitsData.orgUnitName}</div>
@@ -74,13 +79,14 @@ export const ComparisonPlot = React.memo(function ComparisonPlot({
                     const isBaseEvaluation = index === 0;
                     return (
                         <div
-                            key={index}
+                            key={`${orgUnitsData.orgUnitId}-${modelData.modelName}-${index}`}
                             className={styles.comparionBoxSideBySideItem}
                         >
                             <ResultPlot
                                 syncZoom={
-                                    orgUnitsData.models.length > 0 &&
-                                    handleSyncChartZoom
+                                    orgUnitsData.models.length > 1
+                                        ? handleSyncChartZoom
+                                        : false
                                 }
                                 data={modelData.data}
                                 modelName={modelData.modelName}
@@ -90,11 +96,7 @@ export const ComparisonPlot = React.memo(function ComparisonPlot({
                                         ? setBaseRef
                                         : setComparisonRef
                                 }
-                                maxY={
-                                    !isBaseEvaluation
-                                        ? baseRef?.chart?.yAxis[0].max
-                                        : undefined
-                                }
+                                maxY={maxY}
                             />
                         </div>
                     );

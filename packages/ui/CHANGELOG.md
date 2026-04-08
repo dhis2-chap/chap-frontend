@@ -1,5 +1,11 @@
 # @dhis2-chap/ui
 
+## 4.0.1
+
+### Patch Changes
+
+-   c5bc1e3: fix: normalize and stabilize evaluation chart axes
+
 ## 4.0.0
 
 ## 3.3.0
