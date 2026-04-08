@@ -48,6 +48,11 @@
         "typescript-eslint": "^8.43.0",
         "vitest": "^4.0.16"
     },
+    "pnpm": {
+        "overrides": {
+            "axios": "^1.14.0"
+        }
+    },
     "resolutions": {
         "i18next": "20.5.0",
         "@dhis2/app-runtime": "3.14.6",

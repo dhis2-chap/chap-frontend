@@ -1,5 +1,21 @@
 # @dhis2-chap/modeling-app
 
+## 5.0.0
+
+### Major Changes
+
+-   Release v5.0.0 to support CHAP v1.3.0
+
+    BREAKING CHANGES:
+
+    -   The modeling app now requires CHAP v1.3.0 or higher to work.
+    -   Updated axios from 0.25.0 to 1.14.0 to resolve critical security vulnerability.
+
+### Patch Changes
+
+-   Updated dependencies
+    -   @dhis2-chap/ui@5.0.0
+
 ## 4.0.1
 
 ### Patch Changes
