@@ -1,12 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
-import { ApiError, AnalyticsService, PredictionEntry } from '@dhis2-chap/ui';
+import { ApiError, PredictionEntry, PredictionsService } from '@dhis2-chap/ui';
 
 const STANDARD_QUANTILES = [0.1, 0.25, 0.5, 0.75, 0.9];
 
 export const usePredictionEntries = (predictionId: number | undefined) => {
     const { data, error, isLoading, isFetching, isError } = useQuery<PredictionEntry[], ApiError>({
         queryKey: ['predictionEntries', predictionId, STANDARD_QUANTILES],
-        queryFn: () => AnalyticsService.getPredictionEntriesAnalyticsPredictionEntryPredictionIdGet(
+        queryFn: () => PredictionsService.getPredictionEntriesV1AnalyticsPredictionEntryPredictionIdGet(
             predictionId as number,
             STANDARD_QUANTILES,
         ),

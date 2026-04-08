@@ -5,6 +5,7 @@ export {
     getSplitPeriod,
     createHighChartsData,
     joinRealAndPredictedData,
+    normalizeEvaluationModelsToSharedPeriods,
 } from './utils/EvaluationResponse';
 export { ConditionalTooltip } from './utils/ConditionalTooltip';
 export type {
@@ -47,8 +48,6 @@ export type {
 export type { VisualizationInfo } from './httpfunctions/models/VisualizationInfo';
 
 // Services
-export { CrudService } from './httpfunctions/services/CrudService';
-export { AnalyticsService } from './httpfunctions/services/AnalyticsService';
 export {
     enableQueue,
     disableQueue,
@@ -70,6 +69,11 @@ export type {
     ShapBeeswarmResponse,
     XaiMethodRead,
 } from './httpfunctions/services/XaiService';
+export {
+    plotResultsToViewData,
+    getStableMaxYByOrgUnitId,
+    type PlotDataResult,
+} from './utils/plotDataForEvaluations';
 export {
     PERIOD_TYPES,
     type PeriodType,

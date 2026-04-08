@@ -1,8 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { ComparisonPlotList } from '../ComparisonPlotList/ComparisonPlotList';
 import {
     EvaluationForSplitPoint,
-    EvaluationPerOrgUnit,
 } from '../../../interfaces/Evaluation';
 import {
     Checkbox,
@@ -19,69 +18,73 @@ interface ComparionPlotWrapperProps {
     splitPeriods: string[];
 }
 
-export const ComparionPlotWrapper = ({
+export const ComparionPlotWrapper = (props: ComparionPlotWrapperProps) => {
+    const resetKey = [
+        props.evaluationName,
+        props.modelName,
+        props.splitPeriods.join('|'),
+        props.evaluations.map(evaluation => evaluation.splitPoint).join('|'),
+    ].join('::');
+
+    return (
+        <ComparionPlotWrapperContent
+            key={resetKey}
+            {...props}
+        />
+    );
+};
+
+const ComparionPlotWrapperContent = ({
     evaluationName,
     modelName,
     evaluations,
     splitPeriods,
 }: ComparionPlotWrapperProps) => {
-    const [filteredEvaluationPlots, setFilteredEvaluationPlots] = useState<
-        EvaluationPerOrgUnit[]
-    >([]);
+    const defaultSplitPoint = evaluations[0];
     const [searchQuery, setSearchQuery] = useState<string | undefined>();
-    const [selectedOrgUnits, setSelectedOrgUnits] = useState<string[]>([]);
-    const [allOrgUnits, setAllOrgUnits] = useState<
-        { name: string; id: string }[]
-    >([]);
+    const [selectedOrgUnits, setSelectedOrgUnits] = useState<string[]>(() =>
+        defaultSplitPoint?.evaluation.map(
+            evaluationPerOrgUnit => evaluationPerOrgUnit.orgUnitId,
+        ) ?? [],
+    );
     const [selectedSplitPeriod, setSelectedSplitPeriod] = useState(
-        splitPeriods[0],
+        defaultSplitPoint?.splitPoint ?? splitPeriods[0],
     );
 
-    // on intial load
-    useEffect(() => {
-        const defaultSplitPoint = evaluations[0];
+    const allOrgUnits = useMemo(() => {
+        return defaultSplitPoint?.evaluation.map((evaluationPerOrgUnit) => {
+            return {
+                name: evaluationPerOrgUnit.orgUnitName,
+                id: evaluationPerOrgUnit.orgUnitId,
+            };
+        }) ?? [];
+    }, [defaultSplitPoint]);
 
-        setSelectedOrgUnits(
-            defaultSplitPoint.evaluation.map(
-                evaluationPerOrgUnit => evaluationPerOrgUnit.orgUnitId,
-            ),
-        );
-        setAllOrgUnits(
-            defaultSplitPoint.evaluation.map((evaluationPerOrgUnit) => {
-                return {
-                    name: evaluationPerOrgUnit.orgUnitName,
-                    id: evaluationPerOrgUnit.orgUnitId,
-                };
-            }),
-        );
-
-        setSelectedSplitPeriod(defaultSplitPoint.splitPoint);
-        setFilteredEvaluationPlots(defaultSplitPoint.evaluation);
-        // setSelectedOrgUnits(evaluationPerOrgUnits.map((orgUnit) => orgUnit.orgUnitId))
-    }, [evaluations, splitPeriods]);
-
-    useEffect(() => {
-        // find selected orgUnits
-        const splitPoint = evaluations.find(
+    const selectedEvaluation = useMemo(() => {
+        return evaluations.find(
             evaluation => evaluation.splitPoint === selectedSplitPeriod,
-        ) as EvaluationForSplitPoint;
+        ) ?? defaultSplitPoint;
+    }, [defaultSplitPoint, evaluations, selectedSplitPeriod]);
 
-        // match on orgUnit
-        const _filteredEvaluationPlots = selectedOrgUnits?.map((orgUnit) => {
-            // Use find to locate the first matching evaluation for the orgUnit
-            return splitPoint.evaluation.find(
+    const normalizedSearchQuery = searchQuery?.toLocaleLowerCase() ?? '';
+
+    const filteredEvaluationPlots = useMemo(() => {
+        if (!selectedEvaluation) {
+            return [];
+        }
+
+        return selectedOrgUnits.flatMap((orgUnit) => {
+            const match = selectedEvaluation.evaluation.find(
                 evaluationPerOrgUnit =>
                     evaluationPerOrgUnit.orgUnitId === orgUnit &&
                     evaluationPerOrgUnit.orgUnitName
                         .toLocaleLowerCase()
-                        .includes(
-                            searchQuery ? searchQuery.toLocaleLowerCase() : '',
-                        ),
+                        .includes(normalizedSearchQuery),
             );
-        }) as EvaluationPerOrgUnit[];
 
-        setFilteredEvaluationPlots(_filteredEvaluationPlots);
-    }, [selectedSplitPeriod, selectedOrgUnits, searchQuery]);
+            return match ? [match] : [];
+        });
+    }, [normalizedSearchQuery, selectedEvaluation, selectedOrgUnits]);
 
     const onChangeOrgUnitSelected = (e: EventPayload) => {
         const selectedOrgUnit: string[] = e.checked

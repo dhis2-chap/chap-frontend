@@ -2,61 +2,37 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { DebugEntry } from '../models/DebugEntry';
 import type { JobResponse } from '../models/JobResponse';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 export class DebugService {
     /**
-     * Run Add Numbers
-     * Trigger a Celery task to add two numbers.
-     * @param a
-     * @param b
-     * @returns any Successful Response
-     * @throws ApiError
-     */
-    public static runAddNumbersDebugAddNumbersGet(
-        a: number,
-        b: number,
-    ): CancelablePromise<any> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/debug/add-numbers',
-            query: {
-                'a': a,
-                'b': b,
-            },
-            errors: {
-                422: `Validation Error`,
-            },
-        });
-    }
-    /**
-     * Trigger Exception
+     * Debug Entry
      * @returns JobResponse Successful Response
      * @throws ApiError
      */
-    public static triggerExceptionDebugTriggerExceptionPost(): CancelablePromise<JobResponse> {
+    public static debugEntryV1CrudDebugPost(): CancelablePromise<JobResponse> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/debug/trigger-exception',
+            url: '/v1/crud/debug',
         });
     }
     /**
-     * Get Status
-     * Get the status and result of a task.
-     * @param taskId
-     * @returns any Successful Response
+     * Get Debug Entry
+     * @param debugId
+     * @returns DebugEntry Successful Response
      * @throws ApiError
      */
-    public static getStatusDebugGetStatusGet(
-        taskId?: (string | null),
-    ): CancelablePromise<Record<string, any>> {
+    public static getDebugEntryV1CrudDebugDebugIdGet(
+        debugId: number,
+    ): CancelablePromise<DebugEntry> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/debug/get-status',
-            query: {
-                'task_id': taskId,
+            url: '/v1/crud/debug/{debugId}',
+            path: {
+                'debugId': debugId,
             },
             errors: {
                 422: `Validation Error`,

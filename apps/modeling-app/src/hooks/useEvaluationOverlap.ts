@@ -1,4 +1,4 @@
-import { AnalyticsService } from '@dhis2-chap/ui';
+import { BacktestsService } from '@dhis2-chap/ui';
 import { useQuery } from '@tanstack/react-query';
 
 type UseBackTestOverlapOptions = {
@@ -16,7 +16,7 @@ export const useEvaluationOverlap = (options: UseBackTestOverlapOptions) => {
     return useQuery({
         queryKey: ['backtest-overlap', [baseEvaluation, comparisonEvaluation]],
         queryFn: () => {
-            return AnalyticsService.getBacktestOverlapAnalyticsBacktestOverlapBacktestId1BacktestId2Get(
+            return BacktestsService.getBacktestOverlapV1AnalyticsBacktestOverlapBacktestId1BacktestId2Get(
                 baseEvaluation!,
                 comparisonEvaluation!,
             );

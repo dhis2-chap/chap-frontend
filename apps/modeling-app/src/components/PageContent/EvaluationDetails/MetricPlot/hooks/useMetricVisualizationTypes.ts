@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { ApiError, VisualizationInfo, VisualizationService } from '@dhis2-chap/ui';
+import { ApiError, VisualizationInfo, VisualizationsService } from '@dhis2-chap/ui';
 
 type Props = {
     evaluationId?: number;
@@ -9,7 +9,7 @@ type Props = {
 export const useMetricVisualizationTypes = ({ evaluationId }: Props) => {
     const { data, error, isLoading } = useQuery<VisualizationInfo[], ApiError>({
         queryKey: ['metric-visualization-types', evaluationId],
-        queryFn: () => VisualizationService.getAvilableMetricPlotsVisualizationMetricPlotsBacktestIdGet(
+        queryFn: () => VisualizationsService.getAvilableMetricPlotsV1VisualizationMetricPlotsBacktestIdGet(
             evaluationId!,
         ),
         enabled: typeof evaluationId === 'number' && evaluationId > 0,

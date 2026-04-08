@@ -77,13 +77,6 @@ export const ChapSettings = ({ route }: Props) => {
                                 <span className={styles.value}>{status.python_version}</span>
                             </>
                         )}
-                        {status.os && (
-                            <>
-                                <span className={styles.label}>{i18n.t('Operating System')}</span>
-                                <span className={styles.value}>{status.os}</span>
-                            </>
-                        )}
-
                         <span className={styles.label}>{i18n.t('Status')}</span>
                         <span className={styles.value} style={{ color: colors.green600 }}>{i18n.t('Connected')}</span>
                     </div>

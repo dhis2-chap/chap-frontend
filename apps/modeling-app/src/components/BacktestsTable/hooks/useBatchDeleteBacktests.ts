@@ -1,4 +1,4 @@
-import { ApiError, CrudService } from '@dhis2-chap/ui';
+import { ApiError, BacktestsService } from '@dhis2-chap/ui';
 import { useAlert } from '@dhis2/app-runtime';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import i18n from '@dhis2/d2-i18n';
@@ -25,7 +25,7 @@ export const useBatchDeleteBacktests = ({
     );
 
     const { mutate: deleteBacktests, isLoading: isSubmitting } = useMutation({
-        mutationFn: (backtestIds: number[]) => CrudService.deleteBacktestBatchCrudBacktestsDelete(backtestIds.join(',')),
+        mutationFn: (backtestIds: number[]) => BacktestsService.deleteBacktestBatchV1CrudBacktestsDelete(backtestIds.join(',')),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['backtests'] });
             showSuccess();

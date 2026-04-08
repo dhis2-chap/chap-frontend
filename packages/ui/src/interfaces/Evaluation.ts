@@ -15,12 +15,15 @@ export type EvaluationPerOrgUnit = {
     models: ModelData[];
 };
 
+export type HighChartsLinePoint = [number];
+export type HighChartsRangePoint = [number, number];
+
 export type HighChartsData = {
     periods: string[];
-    ranges: number[][];
-    averages: number[][];
-    realValues?: number[];
-    midranges?: number[][];
+    ranges: Array<HighChartsRangePoint | null>;
+    averages: Array<HighChartsLinePoint | null>;
+    realValues?: Array<number | null>;
+    midranges?: Array<HighChartsRangePoint | null>;
 };
 
 export type ModelData = {

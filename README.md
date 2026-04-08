@@ -47,8 +47,7 @@ The UI package includes an auto-generated TypeScript API client from OpenAPI spe
 
 ```bash
 cd packages/ui
-pnpm generate              # Generate from local spec
-pnpm generate-localhost    # Generate from running backend
+pnpm generate              # Generate from a running backend at http://localhost:8000
 ```
 
 ## Commit Standards

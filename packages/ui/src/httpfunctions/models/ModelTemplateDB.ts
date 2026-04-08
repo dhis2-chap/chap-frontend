@@ -3,12 +3,12 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { AuthorAssessedStatus } from './AuthorAssessedStatus';
-import type { PeriodType } from './PeriodType';
+import type { chap_core__model_spec__PeriodType } from './chap_core__model_spec__PeriodType';
 /**
  * Just a mixin here to get the model info flat in the database.
  */
 export type ModelTemplateDB = {
-    supportedPeriodType?: PeriodType;
+    supportedPeriodType?: chap_core__model_spec__PeriodType;
     userOptions?: (Record<string, any> | null);
     hpoSearchSpace?: (Record<string, any> | null);
     requiredCovariates?: Array<string>;

@@ -21,14 +21,14 @@ export class JobsService {
      * @returns JobDescription Successful Response
      * @throws ApiError
      */
-    public static listJobsJobsGet(
+    public static listJobsV1JobsGet(
         ids?: Array<string>,
         status?: Array<string>,
         type?: string,
     ): CancelablePromise<Array<JobDescription>> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/jobs',
+            url: '/v1/jobs',
             query: {
                 'ids': ids,
                 'status': status,
@@ -45,12 +45,12 @@ export class JobsService {
      * @returns string Successful Response
      * @throws ApiError
      */
-    public static getJobStatusJobsJobIdGet(
+    public static getJobStatusV1JobsJobIdGet(
         jobId: string,
     ): CancelablePromise<string> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/jobs/{job_id}',
+            url: '/v1/jobs/{job_id}',
             path: {
                 'job_id': jobId,
             },
@@ -65,12 +65,12 @@ export class JobsService {
      * @returns any Successful Response
      * @throws ApiError
      */
-    public static deleteJobJobsJobIdDelete(
+    public static deleteJobV1JobsJobIdDelete(
         jobId: string,
     ): CancelablePromise<Record<string, any>> {
         return __request(OpenAPI, {
             method: 'DELETE',
-            url: '/jobs/{job_id}',
+            url: '/v1/jobs/{job_id}',
             path: {
                 'job_id': jobId,
             },
@@ -86,12 +86,12 @@ export class JobsService {
      * @returns any Successful Response
      * @throws ApiError
      */
-    public static cancelJobJobsJobIdCancelPost(
+    public static cancelJobV1JobsJobIdCancelPost(
         jobId: string,
     ): CancelablePromise<Record<string, any>> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/jobs/{job_id}/cancel',
+            url: '/v1/jobs/{job_id}/cancel',
             path: {
                 'job_id': jobId,
             },
@@ -106,12 +106,12 @@ export class JobsService {
      * @returns string Successful Response
      * @throws ApiError
      */
-    public static getLogsJobsJobIdLogsGet(
+    public static getLogsV1JobsJobIdLogsGet(
         jobId: string,
     ): CancelablePromise<string> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/jobs/{job_id}/logs',
+            url: '/v1/jobs/{job_id}/logs',
             path: {
                 'job_id': jobId,
             },
@@ -126,12 +126,12 @@ export class JobsService {
      * @returns FullPredictionResponse Successful Response
      * @throws ApiError
      */
-    public static getPredictionResultJobsJobIdPredictionResultGet(
+    public static getPredictionResultV1JobsJobIdPredictionResultGet(
         jobId: string,
     ): CancelablePromise<FullPredictionResponse> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/jobs/{job_id}/prediction_result',
+            url: '/v1/jobs/{job_id}/prediction_result',
             path: {
                 'job_id': jobId,
             },
@@ -146,12 +146,12 @@ export class JobsService {
      * @returns EvaluationResponse Successful Response
      * @throws ApiError
      */
-    public static getEvaluationResultJobsJobIdEvaluationResultGet(
+    public static getEvaluationResultV1JobsJobIdEvaluationResultGet(
         jobId: string,
     ): CancelablePromise<EvaluationResponse> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/jobs/{job_id}/evaluation_result',
+            url: '/v1/jobs/{job_id}/evaluation_result',
             path: {
                 'job_id': jobId,
             },
@@ -166,12 +166,12 @@ export class JobsService {
      * @returns DataBaseResponse Successful Response
      * @throws ApiError
      */
-    public static getDatabaseResultJobsJobIdDatabaseResultGet(
+    public static getDatabaseResultV1JobsJobIdDatabaseResultGet(
         jobId: string,
     ): CancelablePromise<DataBaseResponse> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/jobs/{job_id}/database_result',
+            url: '/v1/jobs/{job_id}/database_result',
             path: {
                 'job_id': jobId,
             },

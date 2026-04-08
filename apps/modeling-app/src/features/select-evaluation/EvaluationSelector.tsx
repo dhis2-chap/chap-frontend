@@ -7,8 +7,8 @@ import {
 } from '@dhis2/ui';
 import { useQuery } from '@tanstack/react-query';
 import {
-    AnalyticsService,
     BackTestRead,
+    BacktestsService,
 } from '@dhis2-chap/ui';
 import css from './EvaluationSelector.module.css';
 import i18n from '@dhis2/d2-i18n';
@@ -38,7 +38,7 @@ export const EvaluationCompatibleSelector = ({
             if (!compatibleEvaluationId) {
                 return Promise.resolve([] as BackTestRead[]);
             }
-            return AnalyticsService.getCompatibleBacktestsAnalyticsCompatibleBacktestsBacktestIdGet(
+            return BacktestsService.getCompatibleBacktestsV1AnalyticsCompatibleBacktestsBacktestIdGet(
                 compatibleEvaluationId,
             );
         },

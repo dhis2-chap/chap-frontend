@@ -1,6 +1,6 @@
 {
     "name": "@dhis2-chap/modeling-app",
-    "version": "4.0.0",
+    "version": "4.0.1",
     "description": "",
     "license": "BSD-3-Clause",
     "private": true,
@@ -16,6 +16,7 @@
         "@mdx-js/rollup": "^3.1.1",
         "@types/highcharts": "^5.0.44",
         "@types/mdx": "^2.0.13",
+        "@types/node": "^22.18.0",
         "remark-frontmatter": "^5.0.0",
         "remark-mdx-frontmatter": "^5.2.0",
         "remark-mdx-images": "^3.0.0",

@@ -2,8 +2,9 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type ApprovedTemplate = {
-    url: string;
-    versions: Record<string, string>;
-};
-
+export enum chap_core__model_spec__PeriodType {
+    WEEK = 'week',
+    MONTH = 'month',
+    ANY = 'any',
+    YEAR = 'year',
+}

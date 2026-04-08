@@ -27,7 +27,7 @@ export const useCancelJob = ({ onSuccess, onError }: Props = {}) => {
         isLoading,
         error,
     } = useMutation({
-        mutationFn: (jobId: string) => JobsService.cancelJobJobsJobIdCancelPost(jobId),
+        mutationFn: (jobId: string) => JobsService.cancelJobV1JobsJobIdCancelPost(jobId),
         onSuccess: (_data, jobId) => {
             // update the job status in the cache without refetching entire list
             queryClient.setQueryData(['jobs'], (oldJobs: JobDescription[] | undefined) => {

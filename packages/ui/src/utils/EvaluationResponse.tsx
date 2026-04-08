@@ -6,6 +6,7 @@ import {
     HighChartsData,
     ModelData,
 } from '../interfaces/Evaluation';
+import { PeriodType, sortPeriods } from './timePeriodUtils';
 
 function sortDhis2WeeklyAndMonthlyTime(a: string, b: string): number {
     const parseDate = (dateStr: string): Date => {
@@ -37,19 +38,18 @@ export function joinRealAndPredictedData(
 
     // const nPeriods = 52 * 3
     // const predictionEnd = predictedData.periods[predictedData.periods.length - 1]
-    const realPeriodsFiltered = realData
-        .map(item => item.pe)
-        .sort(sortDhis2WeeklyAndMonthlyTime);
-    const realDataFiltered = realPeriodsFiltered.map(
-        period => realData.find(item => item.pe === period)?.value ?? null,
+    const sortedRealData = [...realData].sort((a, b) =>
+        sortDhis2WeeklyAndMonthlyTime(a.pe, b.pe),
     );
+    const realPeriodsFiltered = sortedRealData.map(item => item.pe);
+    const realDataFiltered = sortedRealData.map(item => item.value ?? null);
 
     // turn prediction arrays into period dicts
-    const createLookup = (keys: string[], values: any[][] | undefined) => {
+    const createLookup = <T,>(keys: string[], values: T[] | undefined) => {
         if (!values) {
-            return new Map<string, any>();
+            return new Map<string, T>();
         }
-        const lookup = new Map<string, any>();
+        const lookup = new Map<string, T>();
         for (let i = 0; i < keys.length; i++) {
             lookup.set(keys[i], values[i]);
         }
@@ -57,15 +57,15 @@ export function joinRealAndPredictedData(
     };
     const averageLookup = createLookup(
         predictedData.periods,
-        predictedData.averages.slice(),
+        predictedData.averages,
     );
     const rangeLookup = createLookup(
         predictedData.periods,
-        predictedData.ranges.slice(),
+        predictedData.ranges,
     );
     const midRangeLookup = createLookup(
         predictedData.periods,
-        predictedData.midranges?.slice(),
+        predictedData.midranges,
     );
 
     // join prediction arrays into longer period arrays
@@ -87,10 +87,10 @@ export function joinRealAndPredictedData(
         return result
     }
     */
-    const mergePeriodValues = (
+    const mergePeriodValues = <T,>(
         periods: string[],
-        periodValues: Map<string, any>,
-    ): any[] => {
+        periodValues: Map<string, T>,
+    ): Array<T | null> => {
         return periods.map(period => periodValues.get(period) ?? null);
     };
     const joinedAverages = mergePeriodValues(realPeriodsFiltered, averageLookup);
@@ -104,10 +104,76 @@ export function joinRealAndPredictedData(
         periods: realPeriodsFiltered,
         ranges: joinedRanges,
         averages: joinedAverages,
-        realValues: realDataFiltered as any,
+        realValues: realDataFiltered,
         midranges: joinedMidRanges,
     };
 }
+
+const fillMissingPeriods = <T,>(
+    sharedPeriods: string[],
+    periods: string[],
+    values: T[] | undefined,
+): Array<T | null> => {
+    if (!values) {
+        return sharedPeriods.map(() => null);
+    }
+
+    const lookup = new Map<string, T>();
+    for (let i = 0; i < periods.length; i++) {
+        const value = values[i];
+        if (value !== undefined) {
+            lookup.set(periods[i], value);
+        }
+    }
+
+    return sharedPeriods.map(period => lookup.get(period) ?? null);
+};
+
+const normalizeHighChartsDataToPeriods = (
+    data: HighChartsData,
+    sharedPeriods: string[],
+): HighChartsData => {
+    return {
+        periods: sharedPeriods,
+        averages: fillMissingPeriods(
+            sharedPeriods,
+            data.periods,
+            data.averages,
+        ),
+        ranges: fillMissingPeriods(sharedPeriods, data.periods, data.ranges),
+        midranges: fillMissingPeriods(
+            sharedPeriods,
+            data.periods,
+            data.midranges,
+        ),
+        realValues: fillMissingPeriods(
+            sharedPeriods,
+            data.periods,
+            data.realValues,
+        ),
+    };
+};
+
+export const normalizeEvaluationModelsToSharedPeriods = (
+    models: ModelData[],
+    periodType?: PeriodType,
+): ModelData[] => {
+    if (models.length <= 1 || !periodType) {
+        return models;
+    }
+
+    const sharedPeriods = sortPeriods(
+        Array.from(
+            new Set(models.flatMap(model => model.data.periods)),
+        ),
+        periodType,
+    );
+
+    return models.map(model => ({
+        ...model,
+        data: normalizeHighChartsDataToPeriods(model.data, sharedPeriods),
+    }));
+};
 
 export const evaluationResultToViewData = (
     data: EvaluationEntryExtend[],
@@ -192,43 +258,32 @@ export function createHighChartsData(
     quantileFunc: (item: any) => string,
 ): HighChartsData {
     // requires that all periods are included in the respone
-    const periods = Array.from(
-        new Set(plotData.map(item => item.period)),
-    ).sort(sortDhis2WeeklyAndMonthlyTime);
+    const periodsSet = new Set<string>();
+    const quantileValuesByPeriod = new Map<
+        string,
+        Partial<Record<string, number>>
+    >();
 
-    const ranges: number[][] = [];
-    const averages: number[][] = [];
-    const midranges: number[][] = [];
+    plotData.forEach((item) => {
+        periodsSet.add(item.period);
+
+        const periodValues = quantileValuesByPeriod.get(item.period) ?? {};
+        periodValues[quantileFunc(item)] = item.value;
+        quantileValuesByPeriod.set(item.period, periodValues);
+    });
+
+    const periods = Array.from(periodsSet).sort(sortDhis2WeeklyAndMonthlyTime);
+
+    const ranges: HighChartsData['ranges'] = [];
+    const averages: HighChartsData['averages'] = [];
+    const midranges: NonNullable<HighChartsData['midranges']> = [];
     periods.forEach((period) => {
-        const quantileLow =
-            plotData.find(
-                item =>
-                    item.period === period &&
-                    quantileFunc(item) === 'quantile_low',
-            )?.value || 0;
-        const quantileHigh =
-            plotData.find(
-                item =>
-                    item.period === period &&
-                    quantileFunc(item) === 'quantile_high',
-            )?.value || 0;
-        const median =
-            plotData.find(
-                item =>
-                    item.period === period && quantileFunc(item) === 'median',
-            )?.value || 0;
-        const quantileMidHigh =
-            plotData.find(
-                item =>
-                    item.period === period &&
-                    quantileFunc(item) === 'quantile_mid_high',
-            )?.value || 0;
-        const quantileMidLow =
-            plotData.find(
-                item =>
-                    item.period === period &&
-                    quantileFunc(item) === 'quantile_mid_low',
-            )?.value || 0;
+        const periodValues = quantileValuesByPeriod.get(period);
+        const quantileLow = periodValues?.quantile_low ?? 0;
+        const quantileHigh = periodValues?.quantile_high ?? 0;
+        const median = periodValues?.median ?? 0;
+        const quantileMidHigh = periodValues?.quantile_mid_high ?? 0;
+        const quantileMidLow = periodValues?.quantile_mid_low ?? 0;
         ranges.push([quantileLow, quantileHigh]);
         averages.push([median]);
         midranges.push([quantileMidLow, quantileMidHigh]);

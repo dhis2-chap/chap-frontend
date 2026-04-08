@@ -2,17 +2,18 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useDataEngine } from '@dhis2/app-runtime';
 import { useNavigate } from 'react-router-dom';
 import {
-    AnalyticsService,
     ApiError,
     FeatureCollectionModel,
     JobResponse,
     MakePredictionRequest,
+    PredictionsService,
 } from '@dhis2-chap/ui';
 import { ModelExecutionFormValues } from '../../ModelExecutionForm/hooks/useModelExecutionFormState';
 import { prepareBacktestData } from '../../ModelExecutionForm/utils/prepareBacktestData';
 import { PERIOD_TYPES } from '@dhis2-chap/ui';
 import { useExperimentalFeature } from '../../../features/settings/Experimental/hooks/useExperimentalFeature';
 import { FEATURES } from '../../../features/settings/Experimental/hooks/useExperimentalSettings';
+import { buildOrgUnitFeatureCollection } from '../../ModelExecutionForm/utils/orgUnitGeoJson';
 
 type Props = {
     onSuccess?: () => void;
@@ -42,20 +43,9 @@ export const useCreatePrediction = ({ onSuccess, onError }: Props = {}) => {
                 queryClient,
             );
 
-            const geojson: FeatureCollectionModel = {
-                type: 'FeatureCollection',
-                features: orgUnitResponse.geojson.organisationUnits.map(ou => ({
-                    id: ou.id,
-                    type: 'Feature',
-                    geometry: ou.geometry,
-                    properties: {
-                        id: ou.id,
-                        parent: ou.parent.id,
-                        parentGraph: ou.parent.id,
-                        level: ou.level,
-                    },
-                })),
-            };
+            const geojson: FeatureCollectionModel = buildOrgUnitFeatureCollection(
+                orgUnitResponse.geojson.organisationUnits,
+            );
 
             const predictionRequest: MakePredictionRequest = {
                 name: formData.name,
@@ -69,7 +59,7 @@ export const useCreatePrediction = ({ onSuccess, onError }: Props = {}) => {
                 enableXai: xaiAutoTraining,
             };
 
-            return AnalyticsService.makePredictionAnalyticsMakePredictionPost(predictionRequest);
+            return PredictionsService.makePredictionV1AnalyticsMakePredictionPost(predictionRequest);
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['jobs'] });

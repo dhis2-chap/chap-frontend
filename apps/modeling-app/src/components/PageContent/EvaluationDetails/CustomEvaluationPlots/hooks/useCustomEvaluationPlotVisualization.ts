@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { ApiError, VisualizationService } from '@dhis2-chap/ui';
+import { ApiError, VisualizationsService } from '@dhis2-chap/ui';
 
 type UseCustomEvaluationPlotVisualizationParams = {
     evaluationId?: number;
@@ -17,7 +17,7 @@ export const useCustomEvaluationPlotVisualization = ({
             visualizationId,
         ],
         queryFn: () =>
-            VisualizationService.generateBacktestPlotsVisualizationBacktestPlotsVisualizationNameBacktestIdGet(
+            VisualizationsService.generateBacktestPlotsV1VisualizationBacktestPlotsVisualizationNameBacktestIdGet(
                 visualizationId!,
                 Number(evaluationId),
             ),

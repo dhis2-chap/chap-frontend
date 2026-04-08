@@ -1,34 +1,22 @@
 import i18n from '@dhis2/d2-i18n';
 import HighchartsReact from 'highcharts-react-official';
 import Highcharts from 'highcharts';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { HighChartsData } from '../../../interfaces/Evaluation';
 import { getPeriodNameFromId } from '../../../utils/Time';
 import enableOfflineExporting from 'highcharts/modules/offline-exporting';
 
 enableOfflineExporting(Highcharts);
 
-function syncChartZoom(
-    this: Highcharts.Axis,
-    event: Highcharts.AxisSetExtremesEventObject,
-): void {
-    Highcharts.charts.forEach((chart) => {
-        if (chart) {
-            chart.xAxis[0].setExtremes(event.min, event.max);
-        }
-    });
-}
-
 interface ResultPlotProps {
     data: HighChartsData;
     modelName: string;
     nameLabel?: string;
-    syncZoom: boolean | Highcharts.AxisSetExtremesEventCallbackFunction;
-    ref?: HighchartsReact.RefObject;
+    syncZoom: false | Highcharts.AxisSetExtremesEventCallbackFunction;
     maxY?: number;
 }
 
-const getSeries = (data: any): Highcharts.SeriesOptionsType[] => {
+const getSeries = (data: HighChartsData): Highcharts.SeriesOptionsType[] => {
     return [
         {
             name: 'Real Cases',
@@ -37,6 +25,7 @@ const getSeries = (data: any): Highcharts.SeriesOptionsType[] => {
             lineWidth: 2.5,
             type: 'line',
             color: '#f68000', // Different color for real data
+            connectNulls: false,
             marker: {
                 enabled: false,
                 lineWidth: 2,
@@ -51,6 +40,7 @@ const getSeries = (data: any): Highcharts.SeriesOptionsType[] => {
             zIndex: 3,
             opacity: 1,
             lineWidth: 2.5,
+            connectNulls: false,
             marker: {
                 enabled: false,
             },
@@ -63,31 +53,34 @@ const getSeries = (data: any): Highcharts.SeriesOptionsType[] => {
             color: '#c4dcf2',
             fillOpacity: 1,
             zIndex: 0,
+            connectNulls: false,
             marker: {
                 enabled: false,
             },
         },
         {
             name: i18n.t('50% prediction interval'),
-            data: data.midranges.slice(),
+            data: data.midranges?.slice() ?? [],
             type: 'arearange',
             lineWidth: 1,
             color: '#9bbdff',
             fillOpacity: 1,
             zIndex: 1,
+            connectNulls: false,
             marker: {
                 enabled: false,
             },
         },
-    ];
+    ] as Highcharts.SeriesOptionsType[];
 };
 
 type GetOptionParams = {
-    data: any;
+    data: HighChartsData;
     modelName: string;
     syncZoom: ResultPlotProps['syncZoom'];
     nameLabel?: string;
     maxY?: number;
+    series: Highcharts.SeriesOptionsType[];
 };
 
 const getOptions = ({
@@ -96,6 +89,7 @@ const getOptions = ({
     syncZoom,
     nameLabel,
     maxY,
+    series,
 }: GetOptionParams): Highcharts.Options => {
     const subtitleText =
         nameLabel && modelName
@@ -129,10 +123,7 @@ const getOptions = ({
             },
             events: syncZoom
                 ? {
-                        afterSetExtremes:
-                          typeof syncZoom === 'function'
-                              ? syncZoom
-                              : syncChartZoom,
+                        afterSetExtremes: syncZoom,
                     }
                 : undefined,
             title: {
@@ -147,7 +138,7 @@ const getOptions = ({
             },
             min: 0,
             zoomEnabled: false,
-            max: maxY || undefined,
+            max: maxY ?? undefined,
         },
         tooltip: {
             shared: true,
@@ -161,30 +152,40 @@ const getOptions = ({
                 },
             },
         },
-        series: getSeries(data),
+        series,
         exporting: {
             fallbackToExportServer: false,
         },
     };
 };
 
-export const ResultPlot = React.forwardRef<
+const ResultPlotBase = React.forwardRef<
     HighchartsReact.RefObject,
     ResultPlotProps
 >(function ResultPlot({ data, modelName, syncZoom, nameLabel, maxY }, ref) {
+    const series = useMemo(() => getSeries(data), [data]);
+    const options = useMemo(
+        () =>
+            getOptions({
+                data,
+                modelName,
+                syncZoom,
+                nameLabel,
+                maxY,
+                series,
+            }),
+        [data, maxY, modelName, nameLabel, series, syncZoom],
+    );
+
     return (
-        <>
-            <HighchartsReact
-                ref={ref}
-                highcharts={Highcharts}
-                options={getOptions({
-                    data,
-                    modelName,
-                    syncZoom,
-                    nameLabel,
-                    maxY,
-                })}
-            />
-        </>
+        <HighchartsReact
+            ref={ref}
+            highcharts={Highcharts}
+            options={options}
+        />
     );
 });
+
+ResultPlotBase.displayName = 'ResultPlot';
+
+export const ResultPlot = React.memo(ResultPlotBase);

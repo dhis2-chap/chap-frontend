@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import i18n from '@dhis2/d2-i18n';
-import { CrudService } from '@dhis2-chap/ui';
+import { ModelsService } from '@dhis2-chap/ui';
 import { useAlert } from '@dhis2/app-runtime';
 
 type Props = {
@@ -27,7 +27,7 @@ export const useDeleteModel = ({ onSuccess, onError }: Props = {}) => {
         error,
     } = useMutation<void, Error, number>({
         mutationFn: async (id) => {
-            await CrudService.deleteConfiguredModelCrudConfiguredModelsConfiguredModelIdDelete(id);
+            await ModelsService.deleteConfiguredModelV1CrudConfiguredModelsConfiguredModelIdDelete(id);
         },
         onSuccess: (_, id) => {
             queryClient.invalidateQueries({ queryKey: ['models'] });

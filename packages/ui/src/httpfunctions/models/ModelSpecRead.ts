@@ -3,8 +3,8 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { AuthorAssessedStatus } from './AuthorAssessedStatus';
+import type { chap_core__model_spec__PeriodType } from './chap_core__model_spec__PeriodType';
 import type { FeatureType } from './FeatureType';
-import type { PeriodType } from './PeriodType';
 export type ModelSpecRead = {
     displayName?: string;
     description?: string;
@@ -17,7 +17,7 @@ export type ModelSpecRead = {
     citationInfo?: (string | null);
     name: string;
     sourceUrl?: (string | null);
-    supportedPeriodType?: PeriodType;
+    supportedPeriodType?: chap_core__model_spec__PeriodType;
     id: number;
     covariates: Array<FeatureType>;
     target: FeatureType;

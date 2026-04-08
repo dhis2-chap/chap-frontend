@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { CircularLoader, Menu, MenuItem } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
-import { Widget, ResultPlot, BackTestRead } from '@dhis2-chap/ui';
+import { Widget, ResultPlot, BackTestRead, getStableMaxYByOrgUnitId } from '@dhis2-chap/ui';
 import { SplitPeriodSlider } from '../../../../features/evaluation-compare/SplitPeriodSlider';
 import styles from './ModelExecutionResultWidget.module.css';
 import { usePlotDataForEvaluationsByOrgUnit } from '@/hooks/usePlotDataForEvaluationsByOrgUnit';
@@ -36,6 +36,14 @@ export const ModelExecutionResultWidgetComponent = ({
         isLoading: isPlotDataLoading,
         error: plotDataError,
     } = usePlotDataForEvaluationsByOrgUnit(backtest, selectedOrgUnitId);
+
+    const maxYByOrgUnitId = useMemo(() => {
+        return getStableMaxYByOrgUnitId(viewData);
+    }, [viewData]);
+
+    const maxY = selectedOrgUnitId
+        ? maxYByOrgUnitId[selectedOrgUnitId]
+        : undefined;
 
     const { dataForSplitPeriod, periods } = useMemo(() => {
         const dataForSplitPeriod = viewData
@@ -100,6 +108,7 @@ export const ModelExecutionResultWidgetComponent = ({
                                     modelName={dataForSplitPeriod[0].models[0].modelName}
                                     syncZoom={false}
                                     nameLabel={i18n.t('Evaluation')}
+                                    maxY={maxY}
                                 />
                             )}
                             {status === STATUSES.LOADING && (

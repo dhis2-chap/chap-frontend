@@ -38,6 +38,7 @@ interface SearchSelectFieldProps {
         dimensionItemType: string | null | undefined;
     };
     onResetField: () => void;
+    dataTestKey?: string;
 }
 
 const DIMENSION_ITEM_TYPE_LABELS = {
@@ -52,6 +53,7 @@ export const SearchSelectField = ({
     onChangeSearchSelectField,
     defaultValue,
     onResetField,
+    dataTestKey,
 }: SearchSelectFieldProps) => {
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [selectedOption, setSelectedOption] = useState<Option | null>(() => {
@@ -152,6 +154,8 @@ export const SearchSelectField = ({
                         key={option.id}
                         onClick={() => handleOptionClick(option)}
                         className={styles.dropDownItem}
+                        role="option"
+                        data-test={dataTestKey ? `${dataTestKey}-option-${option.id}` : undefined}
                     >
                         <div>{option.displayName}</div>
                         <div className={styles.rightDropDownItem}>
@@ -174,6 +178,7 @@ export const SearchSelectField = ({
                     type="button"
                     onClick={handleTriggerClick}
                     className={`${styles.triggerButton} ${selectedOption ? styles.hasSelection : ''}`}
+                    data-test={dataTestKey ? `${dataTestKey}-trigger` : undefined}
                 >
                     <span className={styles.triggerText}>
                         {selectedOption ? selectedOption.displayName : 'Select a data item...'}
@@ -210,9 +215,14 @@ export const SearchSelectField = ({
                                     onChange={handleSearchInputChange}
                                     placeholder={i18n.t('Search for indicators, data elements, or program indicators')}
                                     className={styles.searchInput}
+                                    data-test={dataTestKey ? `${dataTestKey}-search` : undefined}
                                 />
                             </div>
-                            <ul className={styles.resultsList}>
+                            <ul
+                                className={styles.resultsList}
+                                role="listbox"
+                                data-test={dataTestKey ? `${dataTestKey}-options` : undefined}
+                            >
                                 {renderList()}
                             </ul>
                         </div>

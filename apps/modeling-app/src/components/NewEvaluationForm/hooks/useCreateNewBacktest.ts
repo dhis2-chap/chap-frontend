@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ModelExecutionFormValues } from '../../ModelExecutionForm/hooks/useModelExecutionFormState';
 import {
-    AnalyticsService,
+    BacktestsService,
     FeatureCollectionModel,
     MakeBacktestWithDataRequest,
     ApiError,
@@ -13,6 +13,7 @@ import { useNavigate } from 'react-router-dom';
 import { prepareBacktestData } from '../../ModelExecutionForm/utils/prepareBacktestData';
 import { ImportSummaryCorrected } from '../../ModelExecutionForm/types';
 import { getImportSummaryFromApiError } from '@/components/ModelExecutionForm/utils/importSummaryUtils';
+import { buildOrgUnitFeatureCollection } from '@/components/ModelExecutionForm/utils/orgUnitGeoJson';
 
 const N_SPLITS = 10;
 
@@ -49,20 +50,9 @@ export const useCreateNewBacktest = ({
             queryClient,
         );
 
-        const filteredGeoJson: FeatureCollectionModel = {
-            type: 'FeatureCollection',
-            features: orgUnitResponse.geojson.organisationUnits.map(ou => ({
-                id: ou.id,
-                type: 'Feature',
-                geometry: ou.geometry,
-                properties: {
-                    id: ou.id,
-                    parent: ou.parent.id,
-                    parentGraph: ou.parent.id,
-                    level: ou.level,
-                },
-            })),
-        };
+        const filteredGeoJson: FeatureCollectionModel = buildOrgUnitFeatureCollection(
+            orgUnitResponse.geojson.organisationUnits,
+        );
 
         const backtestRequest: MakeBacktestWithDataRequest = {
             name: formData.name,
@@ -93,7 +83,7 @@ export const useCreateNewBacktest = ({
             const { backtestRequest, hash } = await buildBacktestRequest(formData);
 
             try {
-                const result = await AnalyticsService.createBacktestWithDataAnalyticsCreateBacktestWithDataPost(
+                const result = await BacktestsService.createBacktestWithDataV1AnalyticsCreateBacktestWithDataPost(
                     backtestRequest,
                     true,
                 );
@@ -129,7 +119,7 @@ export const useCreateNewBacktest = ({
             const { backtestRequest, hash } = await buildBacktestRequest(formData);
             lastImportHashRef.current = hash;
 
-            const result = await AnalyticsService.createBacktestWithDataAnalyticsCreateBacktestWithDataPost(
+            const result = await BacktestsService.createBacktestWithDataV1AnalyticsCreateBacktestWithDataPost(
                 backtestRequest,
                 false,
             );

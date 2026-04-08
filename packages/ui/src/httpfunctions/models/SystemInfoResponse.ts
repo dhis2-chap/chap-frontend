@@ -2,9 +2,11 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+/**
+ * System information response.
+ */
 export type SystemInfoResponse = {
     chap_core_version: string;
     python_version: string;
-    os: string;
 };
 
