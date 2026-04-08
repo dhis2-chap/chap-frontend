@@ -39,7 +39,7 @@
         "styled-jsx": "^4.0.1"
     },
     "devDependencies": {
-        "@dhis2/cli-app-scripts": "12.8.0-alpha.3",
+        "@dhis2/cli-app-scripts": "12.11.0",
         "@types/css-modules": "^1.0.5",
         "@types/highcharts": "^5.0.44",
         "@types/node": "^22.10.1",
