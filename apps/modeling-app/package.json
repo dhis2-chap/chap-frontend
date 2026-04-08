@@ -1,6 +1,6 @@
 {
     "name": "@dhis2-chap/modeling-app",
-    "version": "5.0.0",
+    "version": "4.0.1",
     "description": "",
     "license": "BSD-3-Clause",
     "private": true,
@@ -12,7 +12,7 @@
         "linter:check": "eslint . --config ../../eslint.config.mts"
     },
     "devDependencies": {
-        "@dhis2/cli-app-scripts": "12.8.0-alpha.3",
+        "@dhis2/cli-app-scripts": "12.11.0",
         "@mdx-js/rollup": "^3.1.1",
         "@types/highcharts": "^5.0.44",
         "@types/mdx": "^2.0.13",
