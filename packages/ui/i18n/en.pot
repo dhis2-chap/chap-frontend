@@ -5,8 +5,17 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-03-17T21:43:20.526Z\n"
-"PO-Revision-Date: 2026-03-17T21:43:20.527Z\n"
+"POT-Creation-Date: 2026-04-11T09:58:51.402Z\n"
+"PO-Revision-Date: 2026-04-11T09:58:51.403Z\n"
+
+msgid "Shift zoom left one period"
+msgstr "Shift zoom left one period"
+
+msgid "Reset zoom"
+msgstr "Reset zoom"
+
+msgid "Shift zoom right one period"
+msgstr "Shift zoom right one period"
 
 msgid "Median prediction"
 msgstr "Median prediction"
@@ -16,12 +25,6 @@ msgstr "80% prediction interval"
 
 msgid "50% prediction interval"
 msgstr "50% prediction interval"
-
-msgid "Shift zoom left one period"
-msgstr "Shift zoom left one period"
-
-msgid "Shift zoom right one period"
-msgstr "Shift zoom right one period"
 
 msgid "Median Prediction for {{predictionTargetName}}"
 msgstr "Median Prediction for {{predictionTargetName}}"

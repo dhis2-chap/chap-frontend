@@ -36,6 +36,9 @@ export const SplitPeriodSlider: React.FC<SplitPeriodSliderProps> = ({
             maxSplitPeriodIndex,
         );
     }, [maxSplitPeriodIndex, selectedSplitPeriod, splitPeriods]);
+    const previousSelectedSplitPeriodIndexRef = useRef(
+        selectedSplitPeriodIndex,
+    );
 
     const [activeSplitPeriodIndex, setActiveSplitPeriodIndex] = useState(
         selectedSplitPeriodIndex,
@@ -43,6 +46,15 @@ export const SplitPeriodSlider: React.FC<SplitPeriodSliderProps> = ({
     const [isScrubbing, setIsScrubbing] = useState(false);
 
     useEffect(() => {
+        if (
+            selectedSplitPeriodIndex
+            === previousSelectedSplitPeriodIndexRef.current
+        ) {
+            return;
+        }
+
+        previousSelectedSplitPeriodIndexRef.current = selectedSplitPeriodIndex;
+
         if (!isScrubbing) {
             setActiveSplitPeriodIndex(selectedSplitPeriodIndex);
         }
@@ -140,9 +152,7 @@ export const SplitPeriodSlider: React.FC<SplitPeriodSliderProps> = ({
         splitPeriods,
     ]);
 
-    const splitPeriodStartIndex = isScrubbing
-        ? activeSplitPeriodIndex
-        : selectedSplitPeriodIndex;
+    const splitPeriodStartIndex = activeSplitPeriodIndex;
     const splitPeriodEndIndex = splitPeriodStartIndex + splitPeriodLength - 1;
 
     const splitPeriodLabels = useMemo(() => {
@@ -180,8 +190,15 @@ export const SplitPeriodSlider: React.FC<SplitPeriodSliderProps> = ({
                 || target instanceof HTMLTextAreaElement
                 || target instanceof HTMLSelectElement
                 || !!target?.isContentEditable;
+            const isSliderTarget = target instanceof Element &&
+                target.closest('[role="slider"]') !== null;
 
-            if (event.defaultPrevented || event.repeat || isTypingTarget) {
+            if (
+                event.defaultPrevented
+                || event.repeat
+                || isTypingTarget
+                || isSliderTarget
+            ) {
                 return;
             }
             const currentIndex = activeSplitPeriodIndex;
