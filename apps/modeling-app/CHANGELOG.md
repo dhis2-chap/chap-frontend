@@ -1,5 +1,33 @@
 # @dhis2-chap/modeling-app
 
+## 5.0.0
+
+### Major Changes
+
+-   9d9e103: Release v5.0.0 to support CHAP v1.3.0
+
+    BREAKING CHANGES:
+
+    -   The modeling app now requires CHAP v1.3.0 or higher to work.
+    -   Upgraded @dhis2/cli-app-scripts from 12.8.0-alpha.3 to 12.11.0 (latest stable).
+
+### Patch Changes
+
+-   Updated dependencies [9d9e103]
+    -   @dhis2-chap/ui@5.0.0
+
+## 4.0.1
+
+### Patch Changes
+
+-   48f8a5b: added the code and displayName properties on exported geojson data
+-   5541260: ci: update automatic tests to also run against the latest chap-core release
+-   c5bc1e3: fix: normalize and stabilize evaluation chart axes
+-   cbfe3f7: added e2e test framework and initial test
+-   0a998e3: fix: new evaluation form crashes when selecting root org unit
+-   Updated dependencies [c5bc1e3]
+    -   @dhis2-chap/ui@4.0.1
+
 ## 4.0.0
 
 ### Major Changes

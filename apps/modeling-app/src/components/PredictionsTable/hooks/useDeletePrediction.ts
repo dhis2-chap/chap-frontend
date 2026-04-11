@@ -27,7 +27,7 @@ export const useDeletePrediction = ({ onSuccess, onError }: Props = {}) => {
         error,
     } = useMutation({
         mutationFn: (id: number) => PredictionsService.deletePredictionV1CrudPredictionsPredictionIdDelete(id),
-        onSuccess: (id) => {
+        onSuccess: (_data, id) => {
             queryClient.invalidateQueries({ queryKey: ['predictions'] });
             showSuccessAlert();
             onSuccess?.({ id });

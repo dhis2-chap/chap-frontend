@@ -27,7 +27,7 @@ export const useDeleteBacktest = ({ onSuccess, onError }: Props = {}) => {
         error,
     } = useMutation({
         mutationFn: (id: number) => BacktestsService.deleteBacktestV1CrudBacktestsBacktestIdDelete(id),
-        onSuccess: (id) => {
+        onSuccess: (_data, id) => {
             queryClient.invalidateQueries({ queryKey: ['backtests'] });
             showSuccessAlert();
             onSuccess?.({ id });

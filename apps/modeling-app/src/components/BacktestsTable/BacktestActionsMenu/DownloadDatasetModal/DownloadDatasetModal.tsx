@@ -20,7 +20,7 @@ export const DownloadDatasetModal = ({
     onClose,
 }: DownloadDatasetModalProps) => {
     // Base URL is set in SetChapUrl.tsx and uses the correct route API
-    const csvDownloadUrl = `${OpenAPI.BASE}/crud/datasets/${datasetId}/csv`;
+    const csvDownloadUrl = `${OpenAPI.BASE}/v1/crud/datasets/${datasetId}/csv`;
 
     return (
         <Modal
