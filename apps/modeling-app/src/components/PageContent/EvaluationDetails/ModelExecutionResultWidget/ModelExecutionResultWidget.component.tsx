@@ -71,7 +71,7 @@ export const ModelExecutionResultWidgetComponent = ({
             return STATUSES.EMPTY;
         }
         return STATUSES.SUCCESS;
-    }, [isPlotDataLoading, plotDataError]);
+    }, [isPlotDataLoading, plotDataError, dataForSplitPeriod.length]);
 
     return (
         <div className={styles.container}>
