@@ -1,7 +1,7 @@
 ---
 title: Creating a prediction
 description: Step-by-step guide on how to create a model prediction
-order: 3
+order: 2
 category: User Guides
 ---
 

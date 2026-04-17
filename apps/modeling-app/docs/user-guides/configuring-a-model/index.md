@@ -1,7 +1,7 @@
 ---
 title: Configuring a model
 description: Step-by-step guide on how to configure a new model from a model template
-order: 1
+order: 3
 category: User Guides
 ---
 
