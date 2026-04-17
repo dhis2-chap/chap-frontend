@@ -5,17 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-04-11T09:58:51.402Z\n"
-"PO-Revision-Date: 2026-04-11T09:58:51.403Z\n"
-
-msgid "Shift zoom left one period"
-msgstr "Shift zoom left one period"
-
-msgid "Reset zoom"
-msgstr "Reset zoom"
-
-msgid "Shift zoom right one period"
-msgstr "Shift zoom right one period"
+"POT-Creation-Date: 2026-04-17T08:51:37.760Z\n"
+"PO-Revision-Date: 2026-04-17T08:51:37.761Z\n"
 
 msgid "Median prediction"
 msgstr "Median prediction"

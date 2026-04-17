@@ -17,6 +17,7 @@ import {
     IconVisualizationLine24,
     IconVisualizationLineMulti24,
     NoticeBox,
+    Tooltip,
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { usePlotDataForEvaluations } from '../../hooks/usePlotDataForEvaluations';
@@ -96,6 +97,45 @@ export const EvaluationCompare = () => {
     const isZoomed = zoomRange !== null;
     const canShiftLeft = isZoomed && zoomRange.min > zoomRange.dataMin;
     const canShiftRight = isZoomed && zoomRange.max < zoomRange.dataMax;
+
+    useEffect(() => {
+        const handleKeyDown = (event: KeyboardEvent) => {
+            const target = event.target as HTMLElement | null;
+            const isTypingTarget =
+                target instanceof HTMLInputElement
+                || target instanceof HTMLTextAreaElement
+                || target instanceof HTMLSelectElement
+                || !!target?.isContentEditable;
+            const isSliderTarget = target instanceof Element &&
+                target.closest('[role="slider"]') !== null;
+
+            if (
+                event.defaultPrevented
+                || event.repeat
+                || event.ctrlKey
+                || event.metaKey
+                || event.altKey
+                || event.shiftKey
+                || isTypingTarget
+                || isSliderTarget
+            ) {
+                return;
+            }
+
+            const leftKeys = new Set(['h', 'H']);
+            const rightKeys = new Set(['l', 'L']);
+            if (leftKeys.has(event.key) && canShiftLeft) {
+                shiftZoom(-1);
+            } else if (rightKeys.has(event.key) && canShiftRight) {
+                shiftZoom(1);
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [shiftZoom, canShiftLeft, canShiftRight]);
 
     const {
         combined,
@@ -200,6 +240,7 @@ export const EvaluationCompare = () => {
                         compatibleEvaluationId={baseEvaluation?.id}
                     />
                     <OrganisationUnitMultiSelect
+                        dense
                         prefix={i18n.t('Location(s)')}
                         selected={selectedOrgUnits}
                         disabled={!orgUnits}
@@ -208,17 +249,20 @@ export const EvaluationCompare = () => {
                         available={orgUnits ?? []}
                         inputMaxHeight="52px"
                         maxSelections={MAX_SELECTED_ORG_UNITS}
+                        collapseSelectionAfter={0}
                     />
                 </div>
                 <div className={css.zoomButtons}>
-                    <Button
-                        small
-                        secondary
-                        disabled={!canShiftLeft}
-                        onClick={() => shiftZoom(-1)}
-                        aria-label={i18n.t('Shift zoom left one period')}
-                        icon={<IconChevronLeft16 />}
-                    />
+                    <Tooltip content={i18n.t('Shift zoom left (H)')}>
+                        <Button
+                            small
+                            secondary
+                            disabled={!canShiftLeft}
+                            onClick={() => shiftZoom(-1)}
+                            aria-label={i18n.t('Shift zoom left one period')}
+                            icon={<IconChevronLeft16 />}
+                        />
+                    </Tooltip>
                     <Button
                         small
                         secondary
@@ -227,14 +271,16 @@ export const EvaluationCompare = () => {
                     >
                         {i18n.t('Reset zoom')}
                     </Button>
-                    <Button
-                        small
-                        secondary
-                        disabled={!canShiftRight}
-                        onClick={() => shiftZoom(1)}
-                        aria-label={i18n.t('Shift zoom right one period')}
-                        icon={<IconChevronRight16 />}
-                    />
+                    <Tooltip content={i18n.t('Shift zoom right (L)')}>
+                        <Button
+                            small
+                            secondary
+                            disabled={!canShiftRight}
+                            onClick={() => shiftZoom(1)}
+                            aria-label={i18n.t('Shift zoom right one period')}
+                            icon={<IconChevronRight16 />}
+                        />
+                    </Tooltip>
                 </div>
             </div>
             {hasNoMatchingSplitPeriods && (

@@ -196,6 +196,10 @@ export const SplitPeriodSlider: React.FC<SplitPeriodSliderProps> = ({
             if (
                 event.defaultPrevented
                 || event.repeat
+                || event.ctrlKey
+                || event.metaKey
+                || event.altKey
+                || event.shiftKey
                 || isTypingTarget
                 || isSliderTarget
             ) {
