@@ -1,5 +1,16 @@
 # @dhis2-chap/modeling-app
 
+## 5.1.0
+
+### Minor Changes
+
+-   2a85290: increase performance and functionality on the compare page
+
+### Patch Changes
+
+-   5dfb831: Add user guide on configuring a model from a model template
+    -   @dhis2-chap/ui@5.1.0
+
 ## 5.0.0
 
 ### Major Changes
