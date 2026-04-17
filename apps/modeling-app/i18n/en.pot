@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-04-17T08:51:37.815Z\n"
-"PO-Revision-Date: 2026-04-17T08:51:37.816Z\n"
+"POT-Creation-Date: 2026-04-17T09:43:26.414Z\n"
+"PO-Revision-Date: 2026-04-17T09:43:26.415Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -1089,11 +1089,17 @@ msgstr "Select base evaluation"
 msgid "Location(s)"
 msgstr "Location(s)"
 
+msgid "Shift zoom left (H)"
+msgstr "Shift zoom left (H)"
+
 msgid "Shift zoom left one period"
 msgstr "Shift zoom left one period"
 
 msgid "Reset zoom"
 msgstr "Reset zoom"
+
+msgid "Shift zoom right (L)"
+msgstr "Shift zoom right (L)"
 
 msgid "Shift zoom right one period"
 msgstr "Shift zoom right one period"
@@ -1541,3 +1547,11 @@ msgstr ""
 msgctxt ") instead."
 msgid "Spaces are not allowed. Use dashes (-) or underscores ("
 msgstr "Spaces are not allowed. Use dashes (-) or underscores (_) instead."
+
+msgctxt "Application title"
+msgid "__MANIFEST_APP_TITLE"
+msgstr "Modeling"
+
+msgctxt "Application description"
+msgid "__MANIFEST_APP_DESCRIPTION"
+msgstr ""

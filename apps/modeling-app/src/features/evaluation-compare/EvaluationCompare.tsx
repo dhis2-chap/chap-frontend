@@ -204,6 +204,7 @@ export const EvaluationCompare = () => {
                     <EvaluationSelectorBase
                         dense
                         onSelect={(evaluation1) => {
+                            setZoomRange(null);
                             setBaseEvaluation(evaluation1?.id.toString());
                         }}
                         selected={baseEvaluation}
@@ -214,6 +215,7 @@ export const EvaluationCompare = () => {
                     <EvaluationCompatibleSelector
                         dense
                         onSelect={(evaluation2) => {
+                            setZoomRange(null);
                             setComparisonEvaluation(evaluation2?.id.toString());
                         }}
                         selected={comparisonEvaluation}
