@@ -168,6 +168,9 @@ const getOptions = ({
                 },
             },
         },
+        legend: {
+            enabled: false,
+        },
         series,
         exporting: {
             fallbackToExportServer: false,

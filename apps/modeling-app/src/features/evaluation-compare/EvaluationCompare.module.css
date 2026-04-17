@@ -6,11 +6,6 @@
     margin-block-end: 72px;
 }
 
-.wrapper .compareSelectors {
-    display: flex;
-    gap: var(--spacers-dp8);
-    
-}
 
 .loaderWrapper {
     z-index: 1;
@@ -25,14 +20,41 @@
     position: absolute;
 }
 
+.stickyBar {
+    display: flex;
+    align-items: center;
+    gap: var(--spacers-dp24);
+    padding: var(--spacers-dp8);
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: transparent;
+    transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stuck {
+    background: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
 .selectorRow {
     display: flex;
     gap: var(--spacers-dp8);
-    inline-size: 100%;
+    flex: 2;
+    min-inline-size: 0;
 }
 
-.selectorRow > div {
-    inline-size: 100%;
+.selectorRow > * {
+    flex: 1;
+    min-inline-size: 0;
+}
+
+.zoomButtons {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 6px;
+    flex: 1;
 }
 
 .selectionToolbar {
