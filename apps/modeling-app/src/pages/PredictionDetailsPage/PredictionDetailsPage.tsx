@@ -18,7 +18,7 @@ export const PredictionDetailsPage: React.FC = () => {
                 <Button
                     small
                     icon={<IconArrowLeft16 />}
-                    onClick={() => navigate('/predictions')}
+                    onClick={() => navigate('/predictions/runs')}
                 >
                     {i18n.t('Back to predictions')}
                 </Button>

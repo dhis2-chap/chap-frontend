@@ -26,6 +26,7 @@ import { JobsPage } from './pages/JobsPage';
 import { EvaluationComparePage } from './pages/EvaluationCompare';
 import { GetStartedPage } from './pages/GetStartedPage';
 import { PredictionsPage } from './pages/PredictionsPage';
+import { ReadyToPredictPage } from './pages/ReadyToPredictPage';
 import { PredictionDetailsPage } from './pages/PredictionDetailsPage';
 import { ModelsPage } from './pages/ModelsPage';
 import { NewConfiguredModelPage } from './pages/NewConfiguredModelPage';
@@ -118,6 +119,10 @@ const router = createHashRouter([
                         children: [
                             {
                                 index: true,
+                                element: <ReadyToPredictPage />,
+                            },
+                            {
+                                path: 'runs',
                                 element: <PredictionsPage />,
                             },
                             {
