@@ -89,6 +89,7 @@ type GetOptionParams = {
     nameLabel?: string;
     maxY?: number;
     series: Highcharts.SeriesOptionsType[];
+    hideResetButton?: boolean;
 };
 
 const getOptions = ({
@@ -98,6 +99,7 @@ const getOptions = ({
     nameLabel,
     maxY,
     series,
+    hideResetButton,
 }: GetOptionParams): Highcharts.Options => {
     const subtitleText =
         nameLabel && modelName
@@ -117,7 +119,9 @@ const getOptions = ({
         chart: {
             zooming: {
                 type: 'x',
-                resetButton: { theme: { style: { display: 'none' } } },
+                ...(hideResetButton && {
+                    resetButton: { theme: { style: { display: 'none' } } },
+                }),
             },
         },
         xAxis: {
@@ -218,6 +222,7 @@ function ResultPlotBase({
         }
     }, [zoomRange]);
 
+    const hasExternalZoomControls = onZoomChange !== undefined;
     const series = useMemo(() => getSeries(data), [data]);
     const options = useMemo(
         () =>
@@ -228,8 +233,9 @@ function ResultPlotBase({
                 nameLabel,
                 maxY,
                 series,
+                hideResetButton: hasExternalZoomControls,
             }),
-        [data, maxY, modelName, nameLabel, series, handleAfterSetExtremes],
+        [data, maxY, modelName, nameLabel, series, handleAfterSetExtremes, hasExternalZoomControls],
     );
 
     return (
