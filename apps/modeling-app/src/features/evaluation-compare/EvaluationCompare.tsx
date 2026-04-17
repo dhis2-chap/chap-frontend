@@ -27,6 +27,7 @@ import { useCompareSelectionController } from './useCompareSelectionController';
 import { SplitPeriodSlider } from './SplitPeriodSlider';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ID_MAIN_LAYOUT } from '../../components/layout/Layout';
+import { shouldIgnoreHotkey } from './shouldIgnoreHotkey';
 
 const MAX_SELECTED_ORG_UNITS = 10;
 
@@ -71,7 +72,7 @@ export const EvaluationCompare = () => {
         if (!el) return;
         const observer = new IntersectionObserver(
             ([entry]) => setIsStuck(!entry.isIntersecting),
-            { threshold: 0 },
+            { threshold: 0, root: document.getElementById(ID_MAIN_LAYOUT) },
         );
         observer.observe(el);
         return () => observer.disconnect();
@@ -100,33 +101,12 @@ export const EvaluationCompare = () => {
 
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
-            const target = event.target as HTMLElement | null;
-            const isTypingTarget =
-                target instanceof HTMLInputElement
-                || target instanceof HTMLTextAreaElement
-                || target instanceof HTMLSelectElement
-                || !!target?.isContentEditable;
-            const isSliderTarget = target instanceof Element &&
-                target.closest('[role="slider"]') !== null;
+            if (shouldIgnoreHotkey(event)) return;
 
-            if (
-                event.defaultPrevented
-                || event.repeat
-                || event.ctrlKey
-                || event.metaKey
-                || event.altKey
-                || event.shiftKey
-                || isTypingTarget
-                || isSliderTarget
-            ) {
-                return;
-            }
-
-            const leftKeys = new Set(['h', 'H']);
-            const rightKeys = new Set(['l', 'L']);
-            if (leftKeys.has(event.key) && canShiftLeft) {
+            const key = event.key.toLowerCase();
+            if (key === 'h' && canShiftLeft) {
                 shiftZoom(-1);
-            } else if (rightKeys.has(event.key) && canShiftRight) {
+            } else if (key === 'l' && canShiftRight) {
                 shiftZoom(1);
             }
         };

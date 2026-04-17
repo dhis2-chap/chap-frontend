@@ -5,7 +5,6 @@ import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { HighChartsData } from '../../../interfaces/Evaluation';
 import { getPeriodNameFromId } from '../../../utils/Time';
 import enableOfflineExporting from 'highcharts/modules/offline-exporting';
-import styles from './ResultPlot.module.css';
 
 enableOfflineExporting(Highcharts);
 
@@ -20,7 +19,6 @@ interface ResultPlotProps {
     data: HighChartsData;
     modelName: string;
     nameLabel?: string;
-    syncZoom?: false | Highcharts.AxisSetExtremesEventCallbackFunction;
     maxY?: number;
     zoomRange?: ZoomRange | null;
     onZoomChange?: (range: ZoomRange | null) => void;
@@ -91,7 +89,6 @@ type GetOptionParams = {
     nameLabel?: string;
     maxY?: number;
     series: Highcharts.SeriesOptionsType[];
-    zoomRange?: ZoomRange | null;
 };
 
 const getOptions = ({
@@ -101,7 +98,6 @@ const getOptions = ({
     nameLabel,
     maxY,
     series,
-    zoomRange,
 }: GetOptionParams): Highcharts.Options => {
     const subtitleText =
         nameLabel && modelName
@@ -145,8 +141,6 @@ const getOptions = ({
             },
             crosshair: true,
             zoomEnabled: true,
-            min: zoomRange?.min,
-            max: zoomRange?.max,
         },
         yAxis: {
             title: {
@@ -178,36 +172,21 @@ const getOptions = ({
     };
 };
 
-const ResultPlotBase = React.forwardRef<
-    HighchartsReact.RefObject,
-    ResultPlotProps
->(function ResultPlot({ data, modelName, syncZoom, nameLabel, maxY, zoomRange, onZoomChange }, ref) {
-    const internalRef = useRef<HighchartsReact.RefObject | null>(null);
-
-    const setRefs = useCallback(
-        (instance: HighchartsReact.RefObject | null) => {
-            internalRef.current = instance;
-            if (typeof ref === 'function') {
-                ref(instance);
-            } else if (ref) {
-                (
-                    ref as React.MutableRefObject<HighchartsReact.RefObject | null>
-                ).current = instance;
-            }
-        },
-        [ref],
-    );
+function ResultPlotBase({
+    data,
+    modelName,
+    nameLabel,
+    maxY,
+    zoomRange,
+    onZoomChange,
+}: ResultPlotProps) {
+    const chartRef = useRef<HighchartsReact.RefObject | null>(null);
 
     const handleAfterSetExtremes = useCallback(
         function (
             this: Highcharts.Axis,
             event: Highcharts.AxisSetExtremesEventObject,
         ) {
-            // Call legacy syncZoom handler if provided
-            if (syncZoom) {
-                syncZoom.call(this, event);
-            }
-
             if (!onZoomChange || event.trigger !== 'zoom') return;
 
             const isZoomed =
@@ -224,11 +203,11 @@ const ResultPlotBase = React.forwardRef<
                 onZoomChange(null);
             }
         },
-        [onZoomChange, syncZoom],
+        [onZoomChange],
     );
 
     useEffect(() => {
-        const chart = internalRef.current?.chart;
+        const chart = chartRef.current?.chart;
         if (!chart) return;
 
         const axis = chart.xAxis[0];
@@ -249,30 +228,17 @@ const ResultPlotBase = React.forwardRef<
                 nameLabel,
                 maxY,
                 series,
-                zoomRange,
             }),
-        [
-            data,
-            maxY,
-            modelName,
-            nameLabel,
-            series,
-            handleAfterSetExtremes,
-            zoomRange,
-        ],
+        [data, maxY, modelName, nameLabel, series, handleAfterSetExtremes],
     );
 
     return (
-        <div className={styles.wrapper}>
-            <HighchartsReact
-                ref={setRefs}
-                highcharts={Highcharts}
-                options={options}
-            />
-        </div>
+        <HighchartsReact
+            ref={chartRef}
+            highcharts={Highcharts}
+            options={options}
+        />
     );
-});
-
-ResultPlotBase.displayName = 'ResultPlot';
+}
 
 export const ResultPlot = React.memo(ResultPlotBase);

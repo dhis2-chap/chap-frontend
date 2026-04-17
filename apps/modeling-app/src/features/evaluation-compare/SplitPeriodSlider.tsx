@@ -5,6 +5,7 @@ import i18n from '@dhis2/d2-i18n';
 import { Label } from '@dhis2/ui';
 import { Range } from 'react-range';
 import { clamp } from '../utils/clamp';
+import { shouldIgnoreHotkey } from './shouldIgnoreHotkey';
 
 type SplitPeriodSliderProps = {
     splitPeriods: string[];
@@ -184,31 +185,11 @@ export const SplitPeriodSlider: React.FC<SplitPeriodSliderProps> = ({
 
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
-            const target = event.target as HTMLElement | null;
-            const isTypingTarget =
-                target instanceof HTMLInputElement
-                || target instanceof HTMLTextAreaElement
-                || target instanceof HTMLSelectElement
-                || !!target?.isContentEditable;
-            const isSliderTarget = target instanceof Element &&
-                target.closest('[role="slider"]') !== null;
+            if (shouldIgnoreHotkey(event)) return;
 
-            if (
-                event.defaultPrevented
-                || event.repeat
-                || event.ctrlKey
-                || event.metaKey
-                || event.altKey
-                || event.shiftKey
-                || isTypingTarget
-                || isSliderTarget
-            ) {
-                return;
-            }
+            const key = event.key.toLowerCase();
             const currentIndex = activeSplitPeriodIndex;
-            const downKeys = new Set(['j', 'J']);
-            const upKeys = new Set(['k', 'K']);
-            if (downKeys.has(event.key)) {
+            if (key === 'j') {
                 const nextIndex = clamp(
                     currentIndex - 1,
                     0,
@@ -221,7 +202,7 @@ export const SplitPeriodSlider: React.FC<SplitPeriodSliderProps> = ({
                 setActiveSplitPeriodIndex(nextIndex);
                 clearPendingCommit();
                 emitSplitPeriod(nextIndex);
-            } else if (upKeys.has(event.key)) {
+            } else if (key === 'k') {
                 const nextIndex = clamp(
                     currentIndex + 1,
                     0,

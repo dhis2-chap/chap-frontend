@@ -52,7 +52,7 @@ export const ComparisonPlotList = React.memo(function ComparisonPlotList({
 
     if (!useVirtuoso) {
         return (
-            <div>
+            <>
                 {evaluationPerOrgUnits.map((orgUnitsData) => {
                     if (!orgUnitsData) {
                         return null;
@@ -69,7 +69,7 @@ export const ComparisonPlotList = React.memo(function ComparisonPlotList({
                         />
                     );
                 })}
-            </div>
+            </>
         );
     }
 
