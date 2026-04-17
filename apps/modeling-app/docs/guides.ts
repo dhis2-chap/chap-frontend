@@ -10,6 +10,9 @@ import {
 import GettingStarted, {
     frontmatter as gettingStartedFrontmatter,
 } from './user-guides/getting-started/index.md';
+import ConfiguringAModel, {
+    frontmatter as configuringAModelFrontmatter,
+} from './user-guides/configuring-a-model/index.md';
 import CreatingAnEvaluation, {
     frontmatter as creatingAnEvaluationFrontmatter,
 } from './user-guides/creating-an-evaluation/index.md';
@@ -49,6 +52,7 @@ export const guides: Guide[] = [
     createGuide('getting-started', gettingStartedFrontmatter, GettingStarted),
     createGuide('what-is-a-model', whatIsAModelFrontmatter, WhatIsAModel),
     createGuide('what-is-an-evaluation', whatIsAnEvaluationFrontmatter, WhatIsAnEvaluation),
+    createGuide('configuring-a-model', configuringAModelFrontmatter, ConfiguringAModel),
     createGuide('creating-an-evaluation', creatingAnEvaluationFrontmatter, CreatingAnEvaluation),
     createGuide('creating-a-prediction', creatingAPredictionFrontmatter, CreatingAPrediction),
 ];
