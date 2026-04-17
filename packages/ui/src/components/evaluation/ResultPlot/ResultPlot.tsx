@@ -1,19 +1,27 @@
 import i18n from '@dhis2/d2-i18n';
 import HighchartsReact from 'highcharts-react-official';
 import Highcharts from 'highcharts';
-import React, { useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { HighChartsData } from '../../../interfaces/Evaluation';
 import { getPeriodNameFromId } from '../../../utils/Time';
 import enableOfflineExporting from 'highcharts/modules/offline-exporting';
 
 enableOfflineExporting(Highcharts);
 
+export interface ZoomRange {
+    min: number;
+    max: number;
+    dataMin: number;
+    dataMax: number;
+}
+
 interface ResultPlotProps {
     data: HighChartsData;
     modelName: string;
     nameLabel?: string;
-    syncZoom: false | Highcharts.AxisSetExtremesEventCallbackFunction;
     maxY?: number;
+    zoomRange?: ZoomRange | null;
+    onZoomChange?: (range: ZoomRange | null) => void;
 }
 
 const getSeries = (data: HighChartsData): Highcharts.SeriesOptionsType[] => {
@@ -77,19 +85,21 @@ const getSeries = (data: HighChartsData): Highcharts.SeriesOptionsType[] => {
 type GetOptionParams = {
     data: HighChartsData;
     modelName: string;
-    syncZoom: ResultPlotProps['syncZoom'];
+    onAfterSetExtremes?: Highcharts.AxisSetExtremesEventCallbackFunction;
     nameLabel?: string;
     maxY?: number;
     series: Highcharts.SeriesOptionsType[];
+    hideResetButton?: boolean;
 };
 
 const getOptions = ({
     data,
     modelName,
-    syncZoom,
+    onAfterSetExtremes,
     nameLabel,
     maxY,
     series,
+    hideResetButton,
 }: GetOptionParams): Highcharts.Options => {
     const subtitleText =
         nameLabel && modelName
@@ -97,6 +107,7 @@ const getOptions = ({
             : modelName
                 ? `Model: ${modelName}`
                 : '';
+
     return {
         title: {
             text: '',
@@ -106,7 +117,12 @@ const getOptions = ({
             align: 'left',
         },
         chart: {
-            zooming: { type: 'x' },
+            zooming: {
+                type: 'x',
+                ...(hideResetButton && {
+                    resetButton: { theme: { style: { display: 'none' } } },
+                }),
+            },
         },
         xAxis: {
             categories: data.periods, // Use periods as categories
@@ -121,10 +137,8 @@ const getOptions = ({
                     fontSize: '0.9rem',
                 },
             },
-            events: syncZoom
-                ? {
-                        afterSetExtremes: syncZoom,
-                    }
+            events: onAfterSetExtremes
+                ? { afterSetExtremes: onAfterSetExtremes }
                 : undefined,
             title: {
                 text: 'Period',
@@ -152,6 +166,9 @@ const getOptions = ({
                 },
             },
         },
+        legend: {
+            enabled: false,
+        },
         series,
         exporting: {
             fallbackToExportServer: false,
@@ -159,33 +176,75 @@ const getOptions = ({
     };
 };
 
-const ResultPlotBase = React.forwardRef<
-    HighchartsReact.RefObject,
-    ResultPlotProps
->(function ResultPlot({ data, modelName, syncZoom, nameLabel, maxY }, ref) {
+function ResultPlotBase({
+    data,
+    modelName,
+    nameLabel,
+    maxY,
+    zoomRange,
+    onZoomChange,
+}: ResultPlotProps) {
+    const chartRef = useRef<HighchartsReact.RefObject | null>(null);
+
+    const handleAfterSetExtremes = useCallback(
+        function (
+            this: Highcharts.Axis,
+            event: Highcharts.AxisSetExtremesEventObject,
+        ) {
+            if (!onZoomChange || event.trigger !== 'zoom') return;
+
+            const isZoomed =
+                event.userMin !== undefined && event.userMax !== undefined;
+
+            if (isZoomed) {
+                onZoomChange({
+                    min: event.min,
+                    max: event.max,
+                    dataMin: event.dataMin,
+                    dataMax: event.dataMax,
+                });
+            } else {
+                onZoomChange(null);
+            }
+        },
+        [onZoomChange],
+    );
+
+    useEffect(() => {
+        const chart = chartRef.current?.chart;
+        if (!chart) return;
+
+        const axis = chart.xAxis[0];
+        if (zoomRange) {
+            axis.setExtremes(zoomRange.min, zoomRange.max, true, false);
+        } else {
+            axis.setExtremes(undefined, undefined, true, false);
+        }
+    }, [zoomRange]);
+
+    const hasExternalZoomControls = onZoomChange !== undefined;
     const series = useMemo(() => getSeries(data), [data]);
     const options = useMemo(
         () =>
             getOptions({
                 data,
                 modelName,
-                syncZoom,
+                onAfterSetExtremes: handleAfterSetExtremes,
                 nameLabel,
                 maxY,
                 series,
+                hideResetButton: hasExternalZoomControls,
             }),
-        [data, maxY, modelName, nameLabel, series, syncZoom],
+        [data, maxY, modelName, nameLabel, series, handleAfterSetExtremes, hasExternalZoomControls],
     );
 
     return (
         <HighchartsReact
-            ref={ref}
+            ref={chartRef}
             highcharts={Highcharts}
             options={options}
         />
     );
-});
-
-ResultPlotBase.displayName = 'ResultPlot';
+}
 
 export const ResultPlot = React.memo(ResultPlotBase);

@@ -5,6 +5,7 @@ import i18n from '@dhis2/d2-i18n';
 import { Label } from '@dhis2/ui';
 import { Range } from 'react-range';
 import { clamp } from '../utils/clamp';
+import { shouldIgnoreHotkey } from './shouldIgnoreHotkey';
 
 type SplitPeriodSliderProps = {
     splitPeriods: string[];
@@ -36,6 +37,9 @@ export const SplitPeriodSlider: React.FC<SplitPeriodSliderProps> = ({
             maxSplitPeriodIndex,
         );
     }, [maxSplitPeriodIndex, selectedSplitPeriod, splitPeriods]);
+    const previousSelectedSplitPeriodIndexRef = useRef(
+        selectedSplitPeriodIndex,
+    );
 
     const [activeSplitPeriodIndex, setActiveSplitPeriodIndex] = useState(
         selectedSplitPeriodIndex,
@@ -43,6 +47,15 @@ export const SplitPeriodSlider: React.FC<SplitPeriodSliderProps> = ({
     const [isScrubbing, setIsScrubbing] = useState(false);
 
     useEffect(() => {
+        if (
+            selectedSplitPeriodIndex
+            === previousSelectedSplitPeriodIndexRef.current
+        ) {
+            return;
+        }
+
+        previousSelectedSplitPeriodIndexRef.current = selectedSplitPeriodIndex;
+
         if (!isScrubbing) {
             setActiveSplitPeriodIndex(selectedSplitPeriodIndex);
         }
@@ -140,9 +153,7 @@ export const SplitPeriodSlider: React.FC<SplitPeriodSliderProps> = ({
         splitPeriods,
     ]);
 
-    const splitPeriodStartIndex = isScrubbing
-        ? activeSplitPeriodIndex
-        : selectedSplitPeriodIndex;
+    const splitPeriodStartIndex = activeSplitPeriodIndex;
     const splitPeriodEndIndex = splitPeriodStartIndex + splitPeriodLength - 1;
 
     const splitPeriodLabels = useMemo(() => {
@@ -174,20 +185,11 @@ export const SplitPeriodSlider: React.FC<SplitPeriodSliderProps> = ({
 
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
-            const target = event.target as HTMLElement | null;
-            const isTypingTarget =
-                target instanceof HTMLInputElement
-                || target instanceof HTMLTextAreaElement
-                || target instanceof HTMLSelectElement
-                || !!target?.isContentEditable;
+            if (shouldIgnoreHotkey(event)) return;
 
-            if (event.defaultPrevented || event.repeat || isTypingTarget) {
-                return;
-            }
+            const key = event.key.toLowerCase();
             const currentIndex = activeSplitPeriodIndex;
-            const downKeys = new Set(['j', 'J']);
-            const upKeys = new Set(['k', 'K']);
-            if (downKeys.has(event.key)) {
+            if (key === 'j') {
                 const nextIndex = clamp(
                     currentIndex - 1,
                     0,
@@ -200,7 +202,7 @@ export const SplitPeriodSlider: React.FC<SplitPeriodSliderProps> = ({
                 setActiveSplitPeriodIndex(nextIndex);
                 clearPendingCommit();
                 emitSplitPeriod(nextIndex);
-            } else if (upKeys.has(event.key)) {
+            } else if (key === 'k') {
                 const nextIndex = clamp(
                     currentIndex + 1,
                     0,
