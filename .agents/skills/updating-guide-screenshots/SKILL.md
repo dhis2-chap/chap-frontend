@@ -1,3 +1,8 @@
+---
+name: updating-guide-screenshots
+description: (Re)capture screenshots for user guides under apps/modeling-app/docs/user-guides/. Use when adding a new guide, refreshing outdated images, or when a guide build fails because a referenced PNG is missing.
+---
+
 # Updating Guide Screenshots
 
 How to (re)capture screenshots for any user guide under `apps/modeling-app/docs/user-guides/<guide-name>/images/`.
