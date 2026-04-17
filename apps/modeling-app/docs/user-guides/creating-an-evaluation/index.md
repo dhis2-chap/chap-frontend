@@ -1,7 +1,7 @@
 ---
 title: Creating an evaluation
 description: Step-by-step guide on how to create a model evaluation
-order: 1
+order: 2
 category: User Guides
 ---
 
