@@ -3,6 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { ConfiguredModelDB } from '../models/ConfiguredModelDB';
+import type { ConfiguredModelWithDataSourceRead } from '../models/ConfiguredModelWithDataSourceRead';
 import type { ModelConfigurationCreate } from '../models/ModelConfigurationCreate';
 import type { ModelSpecRead } from '../models/ModelSpecRead';
 import type { ModelTemplateRead } from '../models/ModelTemplateRead';
@@ -13,6 +14,8 @@ export class ModelsService {
     /**
      * List Model Templates
      * Lists all model templates from the db, including archived.
+     * Also syncs live chapkit services from the v2 service registry
+     * into the database (upsert by name).
      * @returns ModelTemplateRead Successful Response
      * @throws ApiError
      */
@@ -69,6 +72,37 @@ export class ModelsService {
             url: '/v1/crud/configured-models/{configuredModelId}',
             path: {
                 'configuredModelId': configuredModelId,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
+     * List Configured Models With Data Source
+     * @returns ConfiguredModelWithDataSourceRead Successful Response
+     * @throws ApiError
+     */
+    public static listConfiguredModelsWithDataSourceV1CrudConfiguredModelsWithDataSourceGet(): CancelablePromise<Array<ConfiguredModelWithDataSourceRead>> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/v1/crud/configured-models-with-data-source',
+        });
+    }
+    /**
+     * Create Configured Model With Data Source From Backtest
+     * @param backtestId
+     * @returns ConfiguredModelWithDataSourceRead Successful Response
+     * @throws ApiError
+     */
+    public static createConfiguredModelWithDataSourceFromBacktestV1CrudConfiguredModelsWithDataSourceFromBacktestBacktestIdPost(
+        backtestId: number,
+    ): CancelablePromise<ConfiguredModelWithDataSourceRead> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/v1/crud/configured-models-with-data-source/from-backtest/{backtestId}',
+            path: {
+                'backtestId': backtestId,
             },
             errors: {
                 422: `Validation Error`,
