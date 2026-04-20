@@ -5,6 +5,7 @@ import {
     ModalActions,
     ButtonStrip,
     Button,
+    IconDownload16,
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { OpenAPI } from '@dhis2-chap/ui';
@@ -43,53 +44,40 @@ export const DownloadModal = ({
                 {i18n.t('Download')}
             </ModalTitle>
             <ModalContent>
-                <div className={styles.sections}>
-                    {isDatasetDownloadAvailable && (
-                        <div className={styles.section}>
-                            <h4 className={styles.sectionTitle}>
-                                {i18n.t('Dataset')}
-                            </h4>
-                            <p className={styles.description}>
-                                {i18n.t(
-                                    'The dataset used to train and evaluate this model, as a CSV.',
-                                )}
-                            </p>
-                            <a
-                                href={datasetDownloadUrl}
-                                download={`dataset-${datasetId}.csv`}
-                                className={styles.downloadLink}
-                            >
-                                <Button
-                                    secondary
-                                    dataTest="download-dataset-button"
-                                >
-                                    {i18n.t('Download dataset (CSV)')}
-                                </Button>
-                            </a>
-                        </div>
+                <p className={styles.description}>
+                    {i18n.t(
+                        'Click the buttons below to download the different records linked to this evaluation.',
                     )}
-                    <div className={styles.section}>
-                        <h4 className={styles.sectionTitle}>
-                            {i18n.t('Evaluation metrics')}
-                        </h4>
-                        <p className={styles.description}>
-                            {i18n.t(
-                                'Every applicable metric for this evaluation as a long-format CSV with one row per metric, location, time period and horizon.',
-                            )}
-                        </p>
+                </p>
+                <div className={styles.buttons}>
+                    {isDatasetDownloadAvailable && (
                         <a
-                            href={metricsDownloadUrl}
-                            download={`${safeName}-metrics.csv`}
+                            href={datasetDownloadUrl}
+                            download={`dataset-${datasetId}.csv`}
                             className={styles.downloadLink}
                         >
                             <Button
                                 secondary
-                                dataTest="download-metrics-button"
+                                icon={<IconDownload16 />}
+                                dataTest="download-dataset-button"
                             >
-                                {i18n.t('Download metrics (CSV)')}
+                                {i18n.t('Dataset (CSV)')}
                             </Button>
                         </a>
-                    </div>
+                    )}
+                    <a
+                        href={metricsDownloadUrl}
+                        download={`${safeName}-metrics.csv`}
+                        className={styles.downloadLink}
+                    >
+                        <Button
+                            secondary
+                            icon={<IconDownload16 />}
+                            dataTest="download-metrics-button"
+                        >
+                            {i18n.t('Metrics (CSV)')}
+                        </Button>
+                    </a>
                 </div>
             </ModalContent>
             <ModalActions>
