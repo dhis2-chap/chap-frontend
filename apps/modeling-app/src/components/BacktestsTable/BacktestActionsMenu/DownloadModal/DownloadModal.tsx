@@ -46,7 +46,7 @@ export const DownloadModal = ({
             <ModalContent>
                 <p className={styles.description}>
                     {i18n.t(
-                        'Click the buttons below to download the different records linked to this evaluation.',
+                        'Export dataset and metrics associated with this evaluation.',
                     )}
                 </p>
                 <div className={styles.buttons}>
