@@ -8,5 +8,8 @@
 export type SystemInfoResponse = {
     chap_core_version: string;
     python_version: string;
+    server_date: string;
+    server_time_zone_id: string;
+    revision: string;
 };
 

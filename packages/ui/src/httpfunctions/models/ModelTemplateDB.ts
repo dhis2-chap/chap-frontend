@@ -16,6 +16,7 @@ export type ModelTemplateDB = {
     maxPredictionLength?: (number | null);
     target?: string;
     allowFreeAdditionalContinuousCovariates?: boolean;
+    requiresGeo?: boolean;
     displayName?: string;
     description?: string;
     authorNote?: string;
@@ -25,10 +26,12 @@ export type ModelTemplateDB = {
     organizationLogoUrl?: (string | null);
     contactEmail?: (string | null);
     citationInfo?: (string | null);
+    documentationUrl?: (string | null);
     name: string;
     id?: (number | null);
     sourceUrl?: (string | null);
     version?: (string | null);
     archived?: boolean;
+    usesChapkit?: boolean;
 };
 
