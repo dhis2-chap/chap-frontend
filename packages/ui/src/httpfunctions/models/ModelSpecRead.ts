@@ -15,6 +15,7 @@ export type ModelSpecRead = {
     organizationLogoUrl?: (string | null);
     contactEmail?: (string | null);
     citationInfo?: (string | null);
+    documentationUrl?: (string | null);
     name: string;
     sourceUrl?: (string | null);
     supportedPeriodType?: chap_core__model_spec__PeriodType;

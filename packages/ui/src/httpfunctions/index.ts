@@ -1,7 +1,7 @@
 /* generated using openapi-typescript-codegen -- do not edit */
 /* istanbul ignore file */
 /* tslint:disable */
-
+/* eslint-disable */
 export { ApiError } from './core/ApiError';
 export { CancelablePromise, CancelError } from './core/CancelablePromise';
 export { OpenAPI } from './core/OpenAPI';
@@ -20,8 +20,8 @@ export { chap_core__model_spec__PeriodType } from './models/chap_core__model_spe
 export { chap_core__rest_api__services__schemas__PeriodType } from './models/chap_core__rest_api__services__schemas__PeriodType';
 export type { ChapDataSource } from './models/ChapDataSource';
 export type { ConfiguredModelDB } from './models/ConfiguredModelDB';
+export type { ConfiguredModelInfoRead } from './models/ConfiguredModelInfoRead';
 export type { ConfiguredModelRead } from './models/ConfiguredModelRead';
-export type { Coordinates } from './models/Coordinates';
 export type { DataBaseResponse } from './models/DataBaseResponse';
 export type { DataElement } from './models/DataElement';
 export type { DataList } from './models/DataList';
@@ -45,7 +45,7 @@ export type { HTTPValidationError } from './models/HTTPValidationError';
 export type { ImportSummaryResponse } from './models/ImportSummaryResponse';
 export type { JobDescription } from './models/JobDescription';
 export type { JobResponse } from './models/JobResponse';
-export type { LineStringModel } from './models/LineStringModel';
+export type { LineString } from './models/LineString';
 export type { MakeBacktestRequest } from './models/MakeBacktestRequest';
 export type { MakeBacktestWithDataRequest } from './models/MakeBacktestWithDataRequest';
 export type { MakePredictionRequest } from './models/MakePredictionRequest';
@@ -57,14 +57,16 @@ export type { ModelMetadata } from './models/ModelMetadata';
 export type { ModelSpecRead } from './models/ModelSpecRead';
 export type { ModelTemplateDB } from './models/ModelTemplateDB';
 export type { ModelTemplateRead } from './models/ModelTemplateRead';
-export type { MultiLineStringModel } from './models/MultiLineStringModel';
-export type { MultiPointModel } from './models/MultiPointModel';
-export type { MultiPolygonModel } from './models/MultiPolygonModel';
+export type { MultiLineString } from './models/MultiLineString';
+export type { MultiPoint } from './models/MultiPoint';
+export type { MultiPolygon } from './models/MultiPolygon';
 export type { ObservationBase } from './models/ObservationBase';
 export { PeriodType_Input } from './models/PeriodType_Input';
 export type { PingResponse } from './models/PingResponse';
-export type { PointModel } from './models/PointModel';
-export type { PolygonModel } from './models/PolygonModel';
+export type { Point } from './models/Point';
+export type { Polygon } from './models/Polygon';
+export type { Position2D } from './models/Position2D';
+export type { Position3D } from './models/Position3D';
 export type { PredictionCreate } from './models/PredictionCreate';
 export type { PredictionEntry } from './models/PredictionEntry';
 export type { PredictionInfo } from './models/PredictionInfo';
