@@ -33,6 +33,7 @@ export const BacktestActionsMenu = ({
 }: Props) => {
     const navigate = useNavigate();
     const { isAvailable: isDatasetDownloadAvailable } = useIsFeatureAvailable(Features.DATASET_DOWNLOAD);
+    const { isAvailable: isMetricsDownloadAvailable } = useIsFeatureAvailable(Features.METRICS_DOWNLOAD);
     const [flyoutMenuIsOpen, setFlyoutMenuIsOpen] = useState(false);
     const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
     const [editModalIsOpen, setEditModalIsOpen] = useState(false);
@@ -132,6 +133,7 @@ export const BacktestActionsMenu = ({
                     backtestName={name}
                     datasetId={datasetId}
                     isDatasetDownloadAvailable={isDatasetDownloadAvailable}
+                    isMetricsDownloadAvailable={isMetricsDownloadAvailable}
                     onClose={() => setDownloadModalIsOpen(false)}
                 />
             )}

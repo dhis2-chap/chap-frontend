@@ -16,6 +16,7 @@ interface DownloadModalProps {
     backtestName?: string | null;
     datasetId: number;
     isDatasetDownloadAvailable: boolean;
+    isMetricsDownloadAvailable: boolean;
     onClose: () => void;
 }
 
@@ -24,6 +25,7 @@ export const DownloadModal = ({
     backtestName,
     datasetId,
     isDatasetDownloadAvailable,
+    isMetricsDownloadAvailable,
     onClose,
 }: DownloadModalProps) => {
     // Base URL is set in SetChapUrl.tsx and uses the correct route API
@@ -65,19 +67,21 @@ export const DownloadModal = ({
                             </Button>
                         </a>
                     )}
-                    <a
-                        href={metricsDownloadUrl}
-                        download={`${safeName}-metrics.csv`}
-                        className={styles.downloadLink}
-                    >
-                        <Button
-                            secondary
-                            icon={<IconDownload16 />}
-                            dataTest="download-metrics-button"
+                    {isMetricsDownloadAvailable && (
+                        <a
+                            href={metricsDownloadUrl}
+                            download={`${safeName}-metrics.csv`}
+                            className={styles.downloadLink}
                         >
-                            {i18n.t('Metrics (CSV)')}
-                        </Button>
-                    </a>
+                            <Button
+                                secondary
+                                icon={<IconDownload16 />}
+                                dataTest="download-metrics-button"
+                            >
+                                {i18n.t('Metrics (CSV)')}
+                            </Button>
+                        </a>
+                    )}
                 </div>
             </ModalContent>
             <ModalActions>
