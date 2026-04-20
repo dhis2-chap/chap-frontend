@@ -7,32 +7,69 @@ description: (Re)capture screenshots for user guides under apps/modeling-app/doc
 
 How to (re)capture screenshots for any user guide under `apps/modeling-app/docs/user-guides/<guide-name>/images/`.
 
+We capture from a **production build deployed into the local DHIS2 instance** (not the Vite dev server). This avoids dev-only UI noise (ReactQueryDevtools, HMR overlays) without having to patch `App.tsx`, and mirrors what users actually see.
+
 ## Prerequisites
 
-- A running local stack with:
+- Docker stack with:
     - DHIS2 at `http://localhost:8080`
     - CHAP backend at `http://localhost:8000`
-    - CHAP Modeling app dev server at `http://localhost:3000` (start with `pnpm start` from the repo root).
+
+  Bring it up from the repo root:
+  ```bash
+  pnpm docker:e2e up --wait
+  pnpm docker:e2e ready   # waits for the analytics job to finish
+  ```
+
 - A CHAP instance with the relevant data for the guide (e.g. at least one configured model, a dataset, etc. — depends on the guide). The default docker stack seeded by the chap-frontend repo usually already has the relevant data.
-- Local dev DHIS2 credentials. Throwaway instance is fine to use directly; these work against the default docker stack:
+
+- Local DHIS2 credentials. Throwaway instance is fine to use directly; these work against the default docker stack:
     - Server: `http://localhost:8080`
     - Username: `birk`
     - Password: `Solololo1!`
 
   If these don't work (e.g. credentials rotated), ask the user for fresh ones.
 
-## Setup
+## Build and deploy the modeling app
 
-1. Confirm the viewport matches the existing images in the target guide. Check with:
+1. From the repo root, build all packages:
+   ```bash
+   pnpm build
+   ```
+   This produces `apps/modeling-app/build/bundle/dhis2-chap-modeling-app-<version>.zip`.
+
+2. From `apps/modeling-app/`, deploy the built bundle into the running DHIS2 instance:
+   ```bash
+   cd apps/modeling-app
+   pnpm exec d2-app-scripts deploy http://localhost:8080 -u birk --password 'Solololo1!'
+   ```
+   On success you'll see:
+   ```
+   Successfully deployed @dhis2-chap/modeling-app to http://localhost:8080
+   App is available at http://localhost:8080/api/apps/dhis2-chapmodeling-app/
+   ```
+   `--password` is undocumented by `d2-app-scripts deploy --help` but accepted by the handler. Alternatively omit it and let the CLI prompt (won't work in non-interactive shells).
+
+3. If you change app code during capture (e.g. to tweak the UI for a shot), re-run `pnpm build` + the `deploy` command to refresh the deployed bundle.
+
+## Setup before capturing
+
+1. Confirm the viewport matches the existing images in the target guide:
    ```bash
    identify apps/modeling-app/docs/user-guides/<guide>/images/*.png
    ```
    Common resolutions used so far: `1600x1122` (e.g. `configuring-a-model`). Devin's `browser` tool renders at the resolution set by the `--ozone-override-screen-size` flag on the Chrome session; do not rely on CSS/window resize to match a different target size.
-2. Temporarily comment out `<ReactQueryDevtools />` in `apps/modeling-app/src/App.tsx` so the devtools flower icon doesn't appear in captures. Revert before committing.
-3. Log in to the modeling app (DHIS2 app-shell sign-in proxy) using the credentials above. The first navigation to `http://localhost:3000` will redirect to the sign-in form that asks for Server / Username / Password.
+
+2. Log in to DHIS2 at `http://localhost:8080/dhis-web-login/` using the credentials above. Unlike the dev-server flow, there is **no** app-shell Server/Username/Password proxy form — you log in to DHIS2 directly.
+
+3. Open the modeling app at `http://localhost:8080/api/apps/dhis2-chapmodeling-app/index.html` (or via the DHIS2 apps menu — look for "Modeling"). The app key is `dhis2-chapmodeling-app` (no hyphen between "chap" and "modeling"); this matches what `d2-app-scripts deploy` prints as the "App is available at …" URL.
+
 4. Close any transient UI that isn't part of the documented flow:
     - The yellow "alpha version" banner at the top of the page (close button on the right).
-    - Any Vite HMR / console overlays.
+
+   Notes specific to the production build (vs. the old dev-server flow):
+    - `ReactQueryDevtools` is tree-shaken out in production, so there is no devtools flower icon to hide — no need to edit `App.tsx`.
+    - No Vite HMR / console overlays appear.
 
 ## Capturing
 
@@ -47,15 +84,14 @@ How to (re)capture screenshots for any user guide under `apps/modeling-app/docs/
 
 ## Finishing
 
-1. Uncomment `<ReactQueryDevtools />` in `App.tsx`.
-2. Verify image sizes and that each referenced PNG exists:
+1. Verify image sizes and that each referenced PNG exists:
    ```bash
    identify apps/modeling-app/docs/user-guides/<guide>/images/*.png
    pnpm build  # optional sanity check; fails loudly if a referenced PNG is missing
    ```
-3. Commit only the PNG changes (and any revert of `App.tsx`):
+2. Commit only the PNG changes:
    ```bash
-   git add apps/modeling-app/docs/user-guides/<guide>/images/*.png apps/modeling-app/src/App.tsx
+   git add apps/modeling-app/docs/user-guides/<guide>/images/*.png
    git commit -m "docs: refresh screenshots for <guide>"
    ```
 
