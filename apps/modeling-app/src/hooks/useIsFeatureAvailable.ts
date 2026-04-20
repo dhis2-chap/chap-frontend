@@ -8,7 +8,7 @@ import { useRoute } from './useRoute';
  */
 export const FEATURE_MIN_VERSIONS = {
     datasetDownload: '1.1.5',
-    metricsDownload: '1.5.0',
+    metricsDownload: '1.4.1',
 } as const;
 
 /**
