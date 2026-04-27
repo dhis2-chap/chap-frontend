@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, ButtonStrip, IconVisualizationLineMulti16, IconDuplicate16, IconExportItems24 } from '@dhis2/ui';
+import { Button, IconVisualizationLineMulti16, IconDuplicate16, IconExportItems24 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { useNavigate } from 'react-router-dom';
 import { Widget } from '@dhis2-chap/ui';
@@ -35,11 +35,12 @@ export const QuickActionsWidget = ({ evaluationId }: Props) => {
                 noncollapsible
             >
                 <div className={styles.content}>
-                    <ButtonStrip>
+                    <div className={styles.actionList}>
                         <Button
                             onClick={handleCompareWith}
                             dataTest="quick-action-compare"
                             icon={<IconVisualizationLineMulti16 />}
+                            className={styles.actionButton}
                         >
                             {i18n.t('Compare with...')}
                         </Button>
@@ -47,6 +48,7 @@ export const QuickActionsWidget = ({ evaluationId }: Props) => {
                             onClick={handleCreateNew}
                             dataTest="quick-action-create-new"
                             icon={<IconDuplicate16 />}
+                            className={styles.actionButton}
                         >
                             {i18n.t('Create new based on...')}
                         </Button>
@@ -54,10 +56,11 @@ export const QuickActionsWidget = ({ evaluationId }: Props) => {
                             onClick={handlePredict}
                             dataTest="quick-action-predict"
                             icon={<IconExportItems24 />}
+                            className={styles.actionButton}
                         >
                             {i18n.t('Predict...')}
                         </Button>
-                    </ButtonStrip>
+                    </div>
                 </div>
             </Widget>
 
