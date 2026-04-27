@@ -4,7 +4,8 @@
 /* eslint-disable */
 import type { ConfiguredModelRead } from './ConfiguredModelRead';
 import type { DataSource } from './DataSource';
-export type ConfiguredModelWithDataSourceRead = {
+import type { PredictionInfo } from './PredictionInfo';
+export type ConfiguredModelWithDataSourceReadWithPredictions = {
     id: number;
     name: string;
     created: (string | null);
@@ -13,5 +14,6 @@ export type ConfiguredModelWithDataSourceRead = {
     orgUnits: Array<string>;
     dataSources: Array<DataSource>;
     periodType: (string | null);
+    predictions?: Array<PredictionInfo>;
 };
 

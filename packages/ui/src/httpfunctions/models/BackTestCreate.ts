@@ -4,7 +4,7 @@
 /* eslint-disable */
 export type BackTestCreate = {
     datasetId: number;
-    modelId: string;
+    modelId: (number | string);
     name?: (string | null);
     created?: (string | null);
     modelTemplateVersion?: (string | null);

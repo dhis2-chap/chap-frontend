@@ -2,16 +2,17 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { LineStringModel } from './LineStringModel';
-import type { MultiLineStringModel } from './MultiLineStringModel';
-import type { MultiPointModel } from './MultiPointModel';
-import type { MultiPolygonModel } from './MultiPolygonModel';
-import type { PointModel } from './PointModel';
-import type { PolygonModel } from './PolygonModel';
+import type { LineString } from './LineString';
+import type { MultiLineString } from './MultiLineString';
+import type { MultiPoint } from './MultiPoint';
+import type { MultiPolygon } from './MultiPolygon';
+import type { Point } from './Point';
+import type { Polygon } from './Polygon';
 export type FeatureModel = {
-    type?: string;
+    bbox?: (any[] | null);
+    type: string;
+    geometry?: (Point | MultiPoint | LineString | MultiLineString | Polygon | MultiPolygon | null);
     properties?: (Record<string, any> | null);
-    geometry?: (PointModel | MultiPointModel | LineStringModel | MultiLineStringModel | PolygonModel | MultiPolygonModel | null);
     id?: (string | null);
 };
 

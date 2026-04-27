@@ -18,6 +18,7 @@ import { Layout } from './components/layout/Layout';
 import { RouteValidator } from './components/RouteValidator';
 import InfoAboutReportingBugs from './features/common-features/InfoAboutReportingBugs/InfoAboutReportingBugs';
 import WarnAboutIncompatibleVersion from './features/common-features/WarnAboutIncompatibleVersion/WarnAboutIncompatibleVersion';
+import { DashboardPage } from './pages/DashboardPage';
 import { EvaluationPage } from './pages/EvaluationPage';
 import { EvaluationDetailsPage } from './pages/EvaluationDetailsPage';
 import { ChapValidator } from './components/ChapValidator';
@@ -64,7 +65,7 @@ const router = createHashRouter([
         children: [
             {
                 path: '/',
-                element: <Navigate to="/evaluate" replace />,
+                element: <Navigate to="/dashboard" replace />,
             },
             {
                 element: (
@@ -80,6 +81,10 @@ const router = createHashRouter([
                 ),
                 errorElement: <ErrorPage />,
                 children: [
+                    {
+                        path: '/dashboard',
+                        element: <DashboardPage />,
+                    },
                     {
                         path: '/evaluate',
                         children: [
