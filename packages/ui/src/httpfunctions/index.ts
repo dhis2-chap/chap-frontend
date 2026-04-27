@@ -21,6 +21,7 @@ export { chap_core__rest_api__services__schemas__PeriodType } from './models/cha
 export type { ChapDataSource } from './models/ChapDataSource';
 export type { ConfiguredModelDB } from './models/ConfiguredModelDB';
 export type { ConfiguredModelRead } from './models/ConfiguredModelRead';
+export type { ConfiguredModelWithDataSourceFromBacktestCreate } from './models/ConfiguredModelWithDataSourceFromBacktestCreate';
 export type { ConfiguredModelWithDataSourceRead } from './models/ConfiguredModelWithDataSourceRead';
 export type { ConfiguredModelWithDataSourceReadWithPredictions } from './models/ConfiguredModelWithDataSourceReadWithPredictions';
 export type { DataBaseResponse } from './models/DataBaseResponse';

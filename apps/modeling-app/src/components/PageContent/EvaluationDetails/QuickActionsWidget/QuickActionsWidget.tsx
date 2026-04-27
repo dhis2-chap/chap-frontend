@@ -1,20 +1,32 @@
 import { useState } from 'react';
-import { Button, IconVisualizationLineMulti16, IconDuplicate16, IconExportItems24 } from '@dhis2/ui';
+import { Button, IconCheckmarkCircle16, IconVisualizationLineMulti16, IconDuplicate16, IconExportItems24 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { useNavigate } from 'react-router-dom';
 import { Widget } from '@dhis2-chap/ui';
 import { CopyBacktestModal } from '../../../BacktestsTable/BacktestActionsMenu/CopyBacktestModal';
-import { PredictFromEvaluationModal } from './PredictFromEvaluationModal';
+import { MarkReadyForForecastingModal } from './MarkReadyForForecastingModal';
+import type { MarkReadyForForecastingFormValues } from './MarkReadyForForecastingModal';
+import { useCreateConfiguredModelWithDataSourceFromBacktest } from './hooks/useCreateConfiguredModelWithDataSourceFromBacktest';
 import styles from './QuickActionsWidget.module.css';
 
 type Props = {
     evaluationId: number;
+    readyForFollowUp: boolean;
+    configurationId: number;
 };
 
-export const QuickActionsWidget = ({ evaluationId }: Props) => {
+export const QuickActionsWidget = ({
+    evaluationId,
+    readyForFollowUp,
+    configurationId,
+}: Props) => {
     const navigate = useNavigate();
+    const [markReadyModalIsOpen, setMarkReadyModalIsOpen] = useState(false);
     const [copyModalIsOpen, setCopyModalIsOpen] = useState(false);
-    const [predictModalIsOpen, setPredictModalIsOpen] = useState(false);
+    const {
+        createConfiguredModelWithDataSourceFromBacktest,
+        isCreating,
+    } = useCreateConfiguredModelWithDataSourceFromBacktest();
 
     const handleCompareWith = () => {
         navigate(`/evaluate/compare?baseEvaluation=${evaluationId}&returnTo=${encodeURIComponent(`/evaluate/${evaluationId}`)}`);
@@ -25,7 +37,19 @@ export const QuickActionsWidget = ({ evaluationId }: Props) => {
     };
 
     const handlePredict = () => {
-        setPredictModalIsOpen(true);
+        navigate(`/predictions/${configurationId}`);
+    };
+
+    const handleMarkReady = () => {
+        setMarkReadyModalIsOpen(true);
+    };
+
+    const handleMarkReadySubmit = async ({ name }: MarkReadyForForecastingFormValues) => {
+        await createConfiguredModelWithDataSourceFromBacktest({
+            backtestId: evaluationId,
+            data: { name },
+        });
+        setMarkReadyModalIsOpen(false);
     };
 
     return (
@@ -36,6 +60,27 @@ export const QuickActionsWidget = ({ evaluationId }: Props) => {
             >
                 <div className={styles.content}>
                     <div className={styles.actionList}>
+                        {readyForFollowUp ? (
+                            <Button
+                                onClick={handlePredict}
+                                dataTest="quick-action-predict"
+                                icon={<IconExportItems24 />}
+                                className={styles.actionButton}
+                                primary
+                            >
+                                {i18n.t('Predict')}
+                            </Button>
+                        ) : (
+                            <Button
+                                onClick={handleMarkReady}
+                                dataTest="quick-action-mark-ready-for-forecasting"
+                                icon={<IconCheckmarkCircle16 />}
+                                className={styles.actionButton}
+                                primary
+                            >
+                                {i18n.t('Mark as ready for forecasting')}
+                            </Button>
+                        )}
                         <Button
                             onClick={handleCompareWith}
                             dataTest="quick-action-compare"
@@ -52,30 +97,22 @@ export const QuickActionsWidget = ({ evaluationId }: Props) => {
                         >
                             {i18n.t('Create new based on...')}
                         </Button>
-                        <Button
-                            onClick={handlePredict}
-                            dataTest="quick-action-predict"
-                            icon={<IconExportItems24 />}
-                            className={styles.actionButton}
-                        >
-                            {i18n.t('Predict...')}
-                        </Button>
                     </div>
                 </div>
             </Widget>
+
+            {markReadyModalIsOpen && (
+                <MarkReadyForForecastingModal
+                    onClose={() => setMarkReadyModalIsOpen(false)}
+                    onSubmit={handleMarkReadySubmit}
+                    isSubmitting={isCreating}
+                />
+            )}
 
             {copyModalIsOpen && (
                 <CopyBacktestModal
                     id={evaluationId}
                     onClose={() => setCopyModalIsOpen(false)}
-                    returnTo={`/evaluate/${evaluationId}`}
-                />
-            )}
-
-            {predictModalIsOpen && (
-                <PredictFromEvaluationModal
-                    id={evaluationId}
-                    onClose={() => setPredictModalIsOpen(false)}
                     returnTo={`/evaluate/${evaluationId}`}
                 />
             )}

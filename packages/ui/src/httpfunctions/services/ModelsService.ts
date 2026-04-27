@@ -3,6 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { ConfiguredModelDB } from '../models/ConfiguredModelDB';
+import type { ConfiguredModelWithDataSourceFromBacktestCreate } from '../models/ConfiguredModelWithDataSourceFromBacktestCreate';
 import type { ConfiguredModelWithDataSourceRead } from '../models/ConfiguredModelWithDataSourceRead';
 import type { ConfiguredModelWithDataSourceReadWithPredictions } from '../models/ConfiguredModelWithDataSourceReadWithPredictions';
 import type { ModelConfigurationCreate } from '../models/ModelConfigurationCreate';
@@ -116,11 +117,13 @@ export class ModelsService {
      * Create Configured Model With Data Source From Backtest
      * ⚠️ **Experimental:** behavior and response shape may change without notice.
      * @param backtestId
+     * @param requestBody
      * @returns ConfiguredModelWithDataSourceRead Successful Response
      * @throws ApiError
      */
     public static createConfiguredModelWithDataSourceFromBacktestV1CrudConfiguredModelsWithDataSourceFromBacktestBacktestIdPost(
         backtestId: number,
+        requestBody: ConfiguredModelWithDataSourceFromBacktestCreate,
     ): CancelablePromise<ConfiguredModelWithDataSourceRead> {
         return __request(OpenAPI, {
             method: 'POST',
@@ -128,6 +131,8 @@ export class ModelsService {
             path: {
                 'backtestId': backtestId,
             },
+            body: requestBody,
+            mediaType: 'application/json',
             errors: {
                 422: `Validation Error`,
             },

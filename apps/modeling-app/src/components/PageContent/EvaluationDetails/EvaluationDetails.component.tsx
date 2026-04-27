@@ -71,6 +71,8 @@ export const EvaluationDetailsComponent = ({ evaluationId }: Props) => {
             <div className={styles.rightColumn}>
                 <QuickActionsWidget
                     evaluationId={evaluationId}
+                    readyForFollowUp={!!backtest.readyForFollowUp}
+                    configurationId={backtest.configuredModel?.id ?? evaluationId}
                 />
                 <EvaluationSummaryWidget
                     evaluationId={evaluationId}
