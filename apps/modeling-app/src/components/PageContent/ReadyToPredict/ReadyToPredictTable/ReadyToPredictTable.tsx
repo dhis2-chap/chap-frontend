@@ -42,11 +42,6 @@ const columns = [
             </Link>
         ),
     }),
-    columnHelper.display({
-        id: 'labels',
-        header: () => i18n.t('Labels'),
-        cell: () => <span className={styles.muted}>{EMPTY_VALUE}</span>,
-    }),
     columnHelper.accessor('created', {
         header: () => i18n.t('Date created'),
         cell: (info) => {
@@ -58,11 +53,6 @@ const columns = [
         id: 'model',
         header: () => i18n.t('Model'),
         cell: info => info.getValue() || EMPTY_VALUE,
-    }),
-    columnHelper.display({
-        id: 'createdBy',
-        header: () => i18n.t('Created by'),
-        cell: () => <span className={styles.muted}>{EMPTY_VALUE}</span>,
     }),
 ];
 

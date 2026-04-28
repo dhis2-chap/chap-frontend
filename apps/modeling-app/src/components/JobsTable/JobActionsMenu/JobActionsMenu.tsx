@@ -56,11 +56,13 @@ export const JobActionsMenu = ({
     const handleNavigateToResult = () => {
         if (type === JOB_TYPES.CREATE_BACKTEST_WITH_DATA || type === JOB_TYPES.BACKTEST) {
             navigate(`/evaluate/compare?baseEvaluation=${result}&returnTo=${encodeURIComponent('/jobs')}`);
-        } else if (type === JOB_TYPES.MAKE_PREDICTION) {
-            navigate(`/predictions/runs/${result}`);
         }
         setFlyoutMenuIsOpen(false);
     };
+
+    const canNavigateToResult = status === JOB_STATUSES.SUCCESS &&
+        !!result &&
+        (type === JOB_TYPES.CREATE_BACKTEST_WITH_DATA || type === JOB_TYPES.BACKTEST);
 
     return (
         <>
@@ -73,11 +75,10 @@ export const JobActionsMenu = ({
                 }}
                 component={(
                     <FlyoutMenu dense>
-                        {status === JOB_STATUSES.SUCCESS && (
+                        {canNavigateToResult && (
                             <MenuItem
                                 label={i18n.t('Go to result')}
                                 dataTest="job-overflow-go-to-result"
-                                disabled={!result}
                                 icon={<IconArrowRight16 />}
                                 onClick={handleNavigateToResult}
                             />

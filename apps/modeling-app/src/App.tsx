@@ -28,7 +28,6 @@ import { EvaluationComparePage } from './pages/EvaluationCompare';
 import { GetStartedPage } from './pages/GetStartedPage';
 import { ReadyToPredictPage } from './pages/ReadyToPredictPage';
 import { ConfiguredModelDashboardPage } from './pages/ConfiguredModelDashboardPage';
-import { PredictionDetailsPage } from './pages/PredictionDetailsPage';
 import { ModelsPage } from './pages/ModelsPage';
 import { NewConfiguredModelPage } from './pages/NewConfiguredModelPage';
 import { SyncUrlWithGlobalShell } from './utils/syncUrlWithGlobalShell';
@@ -135,13 +134,6 @@ const router = createHashRouter([
                                             collapseSidebar: true,
                                         } satisfies RouteHandle,
                                         element: <PredictionImportPage />,
-                                    },
-                                    {
-                                        path: ':predictionId',
-                                        handle: {
-                                            collapseSidebar: true,
-                                        } satisfies RouteHandle,
-                                        element: <PredictionDetailsPage />,
                                     },
                                 ],
                             },

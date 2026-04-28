@@ -16,6 +16,9 @@ export const PredictionImportPage: React.FC = () => {
     const { predictionId } = useParams();
     const navigate = useNavigate();
     const { prediction, error, isLoading, isError } = usePredictionById(predictionId);
+    const returnTo = prediction?.configuredModelWithDataSource?.id
+        ? `/predictions/${prediction.configuredModelWithDataSource.id}`
+        : '/predictions';
 
     if (isLoading) {
         return (
@@ -55,9 +58,9 @@ export const PredictionImportPage: React.FC = () => {
                 <Button
                     small
                     icon={<IconArrowLeft16 />}
-                    onClick={() => navigate(`/predictions/runs/${predictionId}`)}
+                    onClick={() => navigate(returnTo)}
                 >
-                    {i18n.t('Back to prediction details')}
+                    {i18n.t('Back to predictions')}
                 </Button>
             </div>
             <Card className={styles.container}>

@@ -97,7 +97,7 @@ export const PredictionHistoryWidget = ({
                         ))}
                     </div>
                 )}
-                <Link className={styles.footerLink} to="/predictions/runs">
+                <Link className={styles.footerLink} to="/predictions">
                     {i18n.t('See all prediction runs')}
                 </Link>
             </div>

@@ -41,11 +41,7 @@ const columns = [
     columnHelper.accessor('name', {
         header: () => i18n.t('Name'),
         filterFn: 'includesString',
-        cell: info => (
-            <Link to={`/predictions/runs/${info.row.original.id}`}>
-                {info.getValue()}
-            </Link>
-        ),
+        cell: info => info.getValue(),
     }),
     columnHelper.accessor('created', {
         header: () => i18n.t('Created'),
