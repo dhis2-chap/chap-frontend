@@ -1501,8 +1501,8 @@ msgstr "Requires superuser authority"
 msgid "Prediction dashboard"
 msgstr "Prediction dashboard"
 
-msgid "Manage the configuration object that defines this model run."
-msgstr "Manage the configuration object that defines this model run."
+msgid "Manage and run predictions for a certain model and configuration."
+msgstr "Manage and run predictions for a certain model and configuration."
 
 msgid "Latest Evaluation Runs"
 msgstr "Latest Evaluation Runs"

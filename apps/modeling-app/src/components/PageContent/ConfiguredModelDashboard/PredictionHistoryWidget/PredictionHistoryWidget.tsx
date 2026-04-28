@@ -3,20 +3,13 @@ import { CircularLoader } from '@dhis2/ui';
 import type { PredictionInfo } from '@dhis2-chap/ui';
 import { Widget } from '@dhis2-chap/ui';
 import { Link } from 'react-router-dom';
+import { format } from 'date-fns';
 import styles from './PredictionHistoryWidget.module.css';
 
 const EMPTY_VALUE = '—';
 
-const dateFormatter = new Intl.DateTimeFormat('en-GB', {
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-});
-
 const formatDate = (created?: string | null) => (
-    created ? dateFormatter.format(new Date(created)) : EMPTY_VALUE
+    created ? format(new Date(created), 'dd.MM.yyyy, HH:mm') : EMPTY_VALUE
 );
 
 type Props = {
