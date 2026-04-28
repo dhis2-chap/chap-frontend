@@ -142,8 +142,6 @@ const getChartOptions = (
                 if (outbreakInfo) {
                     lines.push(
                         `${i18n.t('Outbreak')}: <b>${outbreakInfo.outbreak ? i18n.t('Yes') : i18n.t('No')}</b>`,
-                        `${i18n.t('Supported probability')}: <b>${formatProbabilityBucket(outbreakInfo.supportedProbability)}</b>`,
-                        `${i18n.t('Imported value')}: <b>${outbreakInfo.value}</b>`,
                     );
                 }
 
@@ -209,10 +207,6 @@ export interface OutbreakPeriodChartInfo {
     supportedProbability: SupportedOutbreakProbabilityBucket;
     value: '1' | '0';
 }
-
-const formatProbabilityBucket = (
-    bucket: SupportedOutbreakProbabilityBucket,
-) => (bucket === '<10' ? bucket : `>=${bucket}%`);
 
 export const UncertaintyAreaChart = ({
     series,

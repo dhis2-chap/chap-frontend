@@ -5,6 +5,12 @@
     gap: 16px;
 }
 
+.dialogContainer {
+    flex-direction: column;
+    margin-block-start: 0;
+    font-size: 14px;
+}
+
 .leftColumn {
     flex: 1 1 auto;
     min-inline-size: 0;
@@ -28,6 +34,10 @@
     gap: 16px;
     padding-inline: 16px;
     min-block-size: 440px;
+}
+
+.dialogPreviewLayout {
+    min-block-size: 470px;
 }
 
 .orgUnitList {
@@ -103,6 +113,70 @@
     gap: 20px;
     padding-inline: 16px;
     padding-block-end: 24px;
+}
+
+.alertDialog {
+    width: min(1180px, calc(100vw - 48px)) !important;
+}
+
+.dialogContent {
+    max-block-size: calc(100vh - 190px);
+    overflow-y: auto;
+}
+
+.dialogProbabilityControl {
+    display: flex;
+    justify-content: flex-start;
+    margin-block-end: -4px;
+}
+
+.dialogProbabilityControl .panelSection {
+    inline-size: min(360px, 100%);
+    gap: 8px;
+}
+
+.dialogProbabilityControl .panelSection h3 {
+    font-size: 12px;
+    line-height: 16px;
+}
+
+.dialogProbabilityControl .segmentedControl {
+    border-color: var(--colors-grey300);
+    border-radius: 5px;
+    background: var(--colors-white);
+}
+
+.dialogProbabilityControl .segmentButton {
+    min-block-size: 28px;
+    background: var(--colors-white);
+    color: var(--colors-grey600);
+    font-size: 13px;
+    font-weight: 600;
+    position: relative;
+}
+
+.dialogProbabilityControl .segmentButton:hover {
+    background: var(--colors-grey050);
+    color: var(--colors-grey800);
+}
+
+.dialogProbabilityControl .selectedSegmentButton {
+    background: var(--colors-white);
+    color: var(--colors-grey900);
+}
+
+.dialogProbabilityControl .selectedSegmentButton::after {
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline: 0;
+    block-size: 2px;
+    background: var(--colors-grey900);
+    content: '';
+}
+
+.dialogProbabilityControl .selectedSegmentButton:hover {
+    background: var(--colors-grey050);
+    color: var(--colors-grey900);
 }
 
 .actionBar {

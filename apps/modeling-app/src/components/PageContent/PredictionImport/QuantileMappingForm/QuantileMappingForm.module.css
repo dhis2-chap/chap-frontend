@@ -70,6 +70,31 @@
     font-weight: 600;
 }
 
+.tertiaryActionButton {
+    align-self: center;
+    border: 0;
+    border-radius: 3px;
+    background: transparent;
+    color: var(--colors-grey900);
+    cursor: pointer;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.4;
+    padding: 4px 6px;
+}
+
+.tertiaryActionButton:hover,
+.tertiaryActionButton:focus {
+    background-color: var(--colors-grey100);
+    color: var(--colors-grey900);
+}
+
+.tertiaryActionButton:focus {
+    outline: 2px solid var(--colors-grey500);
+    outline-offset: 1px;
+}
+
 .alertOutput {
     display: flex;
     flex-direction: column;

@@ -1,20 +1,20 @@
+import { useState } from 'react';
 import type { KeyboardEvent, MouseEvent } from 'react';
 import * as z from 'zod';
 import i18n from '@dhis2/d2-i18n';
 import {
     buildOutbreakIndicators,
     calculateMockEndemicThreshold,
-    MINIMUM_THRESHOLD_OBSERVATIONS,
+    DEFAULT_OUTBREAK_PROBABILITY,
     ModelSpecRead,
+    OUTBREAK_PROBABILITY_OPTIONS,
     OutbreakProbability,
-    parseOutbreakProbability,
     PredictionInfo,
 } from '@dhis2-chap/ui';
 import {
     Button,
     ButtonStrip,
     CircularLoader,
-    IconArrowRight16,
     IconImportItems24,
     NoticeBox,
     Switch,
@@ -26,13 +26,26 @@ import { DataItemSelect } from './DataItemSelect';
 import { usePostPredictionData } from '../hooks/usePostPredictionData';
 import { useNavigationBlocker } from '@/hooks/useNavigationBlocker';
 import { NavigationConfirmModal } from '@/components/NavigationConfirmModal';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { usePredictionSeries } from '../../PredictionDetails/hooks/usePredictionSeries';
+import { PredictionAlertsDialog } from '../../PredictionAlerts';
 
 type Props = {
     prediction: PredictionInfo;
     model: ModelSpecRead;
 };
+
+const outbreakProbabilitySchema = z.custom<OutbreakProbability>(
+    value => OUTBREAK_PROBABILITY_OPTIONS.includes(value as OutbreakProbability),
+    { message: 'Alert probability is required' },
+);
+
+const importLocationStateSchema = z
+    .object({
+        alertProbability: outbreakProbabilitySchema.optional(),
+    })
+    .passthrough()
+    .optional();
 
 export const quantileMappingSchema = z.object({
     quantile_low: z.string().min(1, { message: 'Quantile low is required' }),
@@ -41,6 +54,7 @@ export const quantileMappingSchema = z.object({
     quantile_mid_low: z.string().min(1, { message: 'Quantile mid low is required' }),
     quantile_mid_high: z.string().min(1, { message: 'Quantile mid high is required' }),
     use_alert_outputs: z.boolean(),
+    alert_probability: outbreakProbabilitySchema,
     outbreak_indicator: z.string(),
 }).superRefine((values, context) => {
     if (values.use_alert_outputs && !values.outbreak_indicator) {
@@ -57,17 +71,14 @@ type MappingField = keyof QuantileMappingFormValues;
 
 export const QuantileMappingForm = ({ prediction, model }: Props) => {
     const navigate = useNavigate();
-    const [searchParams] = useSearchParams();
-    const selectedProbability = parseOutbreakProbability(searchParams.get('alertProbability'));
+    const location = useLocation();
+    const { data: locationState } = importLocationStateSchema.safeParse(location.state);
+    const [isAlertsDialogOpen, setIsAlertsDialogOpen] = useState(false);
     const {
         series,
         isLoading: isSeriesLoading,
         error: seriesError,
     } = usePredictionSeries({ prediction, model });
-    const outbreakIndicators = buildOutbreakIndicators(
-        series,
-        selectedProbability as OutbreakProbability,
-    );
     const unavailableThresholdCount = series.filter(orgUnitSeries => (
         !calculateMockEndemicThreshold(orgUnitSeries.actualCases).available
     )).length;
@@ -86,6 +97,7 @@ export const QuantileMappingForm = ({ prediction, model }: Props) => {
             quantile_mid_low: '',
             quantile_mid_high: '',
             use_alert_outputs: true,
+            alert_probability: locationState?.alertProbability ?? DEFAULT_OUTBREAK_PROBABILITY,
             outbreak_indicator: '',
         },
     });
@@ -109,9 +121,14 @@ export const QuantileMappingForm = ({ prediction, model }: Props) => {
                 quantileMidHighId: data.quantile_mid_high,
                 outbreakIndicatorId: data.use_alert_outputs ? data.outbreak_indicator : '',
             },
-            outbreakIndicators: data.use_alert_outputs ? outbreakIndicators : [],
+            outbreakIndicators: data.use_alert_outputs
+                ? buildOutbreakIndicators(series, data.alert_probability)
+                : [],
         });
     };
+    const returnTo = prediction.configuredModelWithDataSource?.id
+        ? `/predictions/${prediction.configuredModelWithDataSource.id}`
+        : '/predictions';
 
     const {
         showConfirmModal,
@@ -120,7 +137,17 @@ export const QuantileMappingForm = ({ prediction, model }: Props) => {
     } = useNavigationBlocker({
         shouldBlock: !isPending && isDirty,
     });
-    const { quantile_low, quantile_high, median, quantile_mid_low, quantile_mid_high, use_alert_outputs, outbreak_indicator } = useWatch({ control });
+    const {
+        quantile_low,
+        quantile_high,
+        median,
+        quantile_mid_low,
+        quantile_mid_high,
+        use_alert_outputs,
+        alert_probability,
+        outbreak_indicator,
+    } = useWatch({ control });
+    const selectedProbability = alert_probability ?? DEFAULT_OUTBREAK_PROBABILITY;
 
     const updateQuantile = (quantile: MappingField, id: string | null) => {
         if (id) {
@@ -143,6 +170,10 @@ export const QuantileMappingForm = ({ prediction, model }: Props) => {
 
     const handleSwitchClick = (event: MouseEvent) => {
         event.stopPropagation();
+    };
+
+    const handleApplyAlertProbability = (probability: OutbreakProbability) => {
+        setValue('alert_probability', probability, { shouldDirty: true });
     };
 
     if (isSeriesLoading) {
@@ -176,15 +207,6 @@ export const QuantileMappingForm = ({ prediction, model }: Props) => {
                     {i18n.t('Importing forecasted values into DHIS2 requires you to set up five data elements for the quantiles outputted by the model.')}
                 </span>
             </div>
-
-            {unavailableThresholdCount > 0 && (
-                <NoticeBox warning title={i18n.t('Some outbreak indicators will be skipped')}>
-                    {i18n.t('Outbreak indicators will be skipped for {{count}} regions without at least {{minimum}} historical observations.', {
-                        count: unavailableThresholdCount,
-                        minimum: MINIMUM_THRESHOLD_OBSERVATIONS,
-                    })}
-                </NoticeBox>
-            )}
 
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className={styles.dataItemSelects}>
@@ -245,6 +267,14 @@ export const QuantileMappingForm = ({ prediction, model }: Props) => {
                         </div>
                         {use_alert_outputs && (
                             <>
+                                {unavailableThresholdCount > 0 && (
+                                    <NoticeBox warning title={i18n.t('Some outbreak indicators will be skipped')}>
+                                        {i18n.t('Outbreak indicators will be skipped for one region due to insufficient disease data.', {
+                                            count: unavailableThresholdCount,
+                                            defaultValue_plural: 'Outbreak indicators will be skipped for {{count}} regions due to insufficient disease data.',
+                                        })}
+                                    </NoticeBox>
+                                )}
                                 <div className={styles.alertSummary}>
                                     <div>
                                         <span className={styles.summaryLabel}>
@@ -254,13 +284,13 @@ export const QuantileMappingForm = ({ prediction, model }: Props) => {
                                             {`${selectedProbability}%`}
                                         </span>
                                     </div>
-                                    <Button
-                                        small
-                                        icon={<IconArrowRight16 />}
-                                        onClick={() => navigate(`/predictions/runs/${prediction.id}/alerts?alertProbability=${selectedProbability}`)}
+                                    <button
+                                        type="button"
+                                        className={styles.tertiaryActionButton}
+                                        onClick={() => setIsAlertsDialogOpen(true)}
                                     >
-                                        {i18n.t('Adjust alerts')}
-                                    </Button>
+                                        {i18n.t('Adjust')}
+                                    </button>
                                 </div>
                                 <div className={styles.outbreakIndicatorField}>
                                     <DataItemSelect
@@ -275,6 +305,12 @@ export const QuantileMappingForm = ({ prediction, model }: Props) => {
                     </div>
 
                     <ButtonStrip end className={styles.buttonStrip}>
+                        <Button
+                            type="button"
+                            onClick={() => navigate(returnTo)}
+                        >
+                            {i18n.t('Cancel')}
+                        </Button>
                         <Button
                             type="submit"
                             loading={isPending}
@@ -291,6 +327,16 @@ export const QuantileMappingForm = ({ prediction, model }: Props) => {
                 <NavigationConfirmModal
                     onConfirm={handleConfirmNavigation}
                     onCancel={handleCancelNavigation}
+                />
+            )}
+
+            {isAlertsDialogOpen && (
+                <PredictionAlertsDialog
+                    prediction={prediction}
+                    model={model}
+                    selectedProbability={selectedProbability}
+                    onApply={handleApplyAlertProbability}
+                    onClose={() => setIsAlertsDialogOpen(false)}
                 />
             )}
         </>

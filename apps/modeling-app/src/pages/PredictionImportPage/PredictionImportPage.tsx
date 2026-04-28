@@ -1,9 +1,7 @@
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import {
     CircularLoader,
     NoticeBox,
-    Button,
-    IconArrowLeft16,
 } from '@dhis2/ui';
 import { Card } from '@dhis2-chap/ui';
 import i18n from '@dhis2/d2-i18n';
@@ -15,16 +13,12 @@ import { useModels } from '../../hooks/useModels';
 
 export const PredictionImportPage: React.FC = () => {
     const { predictionId } = useParams();
-    const navigate = useNavigate();
     const { prediction, error, isLoading, isError } = usePredictionById(predictionId);
     const {
         models,
         error: modelsError,
         isLoading: isModelsLoading,
     } = useModels({ includeArchived: true });
-    const returnTo = prediction?.configuredModelWithDataSource?.id
-        ? `/predictions/${prediction.configuredModelWithDataSource.id}`
-        : '/predictions';
     const model = models?.find(modelSpec => modelSpec.name === prediction?.modelId);
 
     if (isLoading || (prediction && isModelsLoading)) {
@@ -71,15 +65,6 @@ export const PredictionImportPage: React.FC = () => {
                 pageTitle={i18n.t('Import prediction')}
                 pageDescription={i18n.t('Import the forecasted values of this prediction into DHIS2.')}
             />
-            <div className={styles.backButton}>
-                <Button
-                    small
-                    icon={<IconArrowLeft16 />}
-                    onClick={() => navigate(returnTo)}
-                >
-                    {i18n.t('Back to predictions')}
-                </Button>
-            </div>
             <Card className={styles.container}>
                 <PredictionImport
                     prediction={prediction}
