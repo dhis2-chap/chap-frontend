@@ -561,6 +561,9 @@ msgstr "Download request"
 msgid "Start import"
 msgstr "Start import"
 
+msgid "Run prediction"
+msgstr "Run prediction"
+
 msgid "There was an error"
 msgstr "There was an error"
 

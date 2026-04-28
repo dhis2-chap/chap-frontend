@@ -2,7 +2,6 @@ import {
     Button,
     IconExportItems24,
     IconImportItems24,
-    IconSettings16,
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { PERIOD_TYPES, Widget } from '@dhis2-chap/ui';
@@ -131,13 +130,6 @@ export const QuickActionsWidget = ({
                         className={styles.actionButton}
                     >
                         {i18n.t('Import')}
-                    </Button>
-                    <Button
-                        dataTest="quick-action-thresholds"
-                        icon={<IconSettings16 />}
-                        className={styles.actionButton}
-                    >
-                        {i18n.t('Thresholds')}
                     </Button>
                 </div>
             </div>

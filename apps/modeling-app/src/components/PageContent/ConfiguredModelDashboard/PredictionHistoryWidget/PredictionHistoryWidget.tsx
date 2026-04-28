@@ -37,6 +37,7 @@ export const PredictionHistoryWidget = ({
     onSelectPrediction,
 }: Props) => {
     const hasError = !!error;
+    const hasRuns = predictions.length > 0;
 
     return (
         <Widget
@@ -64,7 +65,7 @@ export const PredictionHistoryWidget = ({
                         {i18n.t('No predictions have been run for this configuration yet')}
                     </div>
                 )}
-                {!isLoading && !hasError && predictions.length > 0 && (
+                {!isLoading && !hasError && hasRuns && (
                     <div
                         className={styles.list}
                         role="radiogroup"
@@ -97,9 +98,18 @@ export const PredictionHistoryWidget = ({
                         ))}
                     </div>
                 )}
-                <Link className={styles.footerLink} to="/predictions">
-                    {i18n.t('See all prediction runs')}
-                </Link>
+                {hasRuns ? (
+                    <Link className={styles.footerLink} to="/predictions">
+                        {i18n.t('See all prediction runs')}
+                    </Link>
+                ) : (
+                    <span
+                        aria-disabled="true"
+                        className={`${styles.footerLink} ${styles.disabledFooterLink}`}
+                    >
+                        {i18n.t('See all prediction runs')}
+                    </span>
+                )}
             </div>
         </Widget>
     );

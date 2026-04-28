@@ -54,7 +54,7 @@ export const NewPredictionForm = ({
                                             icon={<IconArrowRightMulti16 />}
                                             dataTest="prediction-start-button"
                                         >
-                                            {i18n.t('Start import')}
+                                            {i18n.t('Run prediction')}
                                         </Button>
                                     </ButtonStrip>
                                 </div>

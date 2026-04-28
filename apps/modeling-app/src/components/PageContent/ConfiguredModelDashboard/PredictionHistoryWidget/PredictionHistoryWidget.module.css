@@ -108,6 +108,16 @@
     text-decoration: underline;
 }
 
+.disabledFooterLink {
+    color: var(--colors-grey500);
+    cursor: not-allowed;
+}
+
+.disabledFooterLink:hover {
+    background: var(--colors-grey100);
+    text-decoration: none;
+}
+
 @media (max-width: 768px) {
     .listItem {
         padding: 9px 10px 9px 12px;

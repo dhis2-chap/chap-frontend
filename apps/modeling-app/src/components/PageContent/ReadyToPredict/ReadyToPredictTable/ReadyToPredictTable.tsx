@@ -1,5 +1,4 @@
 import {
-    Button,
     DataTable,
     DataTableHead,
     DataTableRow,
@@ -8,7 +7,6 @@ import {
     DataTableColumnHeader,
     DataTableFoot,
     Pagination,
-    IconAdd16,
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import {
@@ -96,18 +94,6 @@ export const ReadyToPredictTable = ({ configuredModels }: Props) => {
             <div className={styles.buttonContainer}>
                 <div className={styles.leftSection}>
                     <ReadyToPredictTableFilters />
-                </div>
-                <div className={styles.rightSection}>
-                    <Link to="/predictions/new">
-                        <Button
-                            primary
-                            icon={<IconAdd16 />}
-                            small
-                            onClick={() => { }}
-                        >
-                            {i18n.t('New empty prediction')}
-                        </Button>
-                    </Link>
                 </div>
             </div>
 
