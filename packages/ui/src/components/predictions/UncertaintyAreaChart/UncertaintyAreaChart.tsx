@@ -6,6 +6,7 @@ import highchartsMore from 'highcharts/highcharts-more';
 import exporting from 'highcharts/modules/exporting';
 import HighchartsReact from 'highcharts-react-official';
 import { PredictionOrgUnitSeries } from '../../../interfaces/Prediction';
+import type { SupportedOutbreakProbabilityBucket } from '../../../utils/outbreakAlerts';
 
 accessibility(Highcharts);
 exporting(Highcharts);
@@ -14,13 +15,24 @@ highchartsMore(Highcharts);
 const getChartOptions = (
     series: PredictionOrgUnitSeries,
     predictionTargetName: string,
+    endemicThreshold?: number | null,
+    outbreakPeriods: OutbreakPeriodChartInfo[] = [],
 ): Highcharts.Options => {
+    const periods = [
+        ...(series.actualCases?.map(actualCase => actualCase.period) ?? []),
+        ...series.points.map(point => point.period),
+    ].filter((period, index, allPeriods) => allPeriods.indexOf(period) === index);
+    const periodIndexById = new Map(periods.map((period, index) => [period, index]));
+    const outbreakInfoByPeriod = new Map(
+        outbreakPeriods.map(outbreakPeriod => [outbreakPeriod.period, outbreakPeriod]),
+    );
     const median: Highcharts.PointOptionsObject[] = series.points
-        .map(p => ({ name: p.period, y: p.quantiles.median }));
+        .map(p => ({ name: p.period, x: periodIndexById.get(p.period), y: p.quantiles.median }));
 
     const outerRange: Highcharts.PointOptionsObject[] = series.points
         .map(p => ({
             name: p.period,
+            x: periodIndexById.get(p.period),
             low: p.quantiles.quantile_low,
             high: p.quantiles.quantile_high,
         }));
@@ -28,12 +40,13 @@ const getChartOptions = (
     const midRange: Highcharts.PointOptionsObject[] = series.points
         .map(p => ({
             name: p.period,
+            x: periodIndexById.get(p.period),
             low: p.quantiles.quantile_mid_low,
             high: p.quantiles.quantile_mid_high,
         }));
 
     const actualCases: Highcharts.PointOptionsObject[] | undefined = series.actualCases
-        ?.map(ac => ({ name: ac.period, y: ac.value }));
+        ?.map(ac => ({ name: ac.period, x: periodIndexById.get(ac.period), y: ac.value }));
 
     const chartSeries: Highcharts.SeriesOptionsType[] = [
         // median
@@ -82,6 +95,26 @@ const getChartOptions = (
         });
     }
 
+    if (endemicThreshold !== undefined && endemicThreshold !== null) {
+        chartSeries.push({
+            type: 'line',
+            data: periods.map(period => ({
+                name: period,
+                x: periodIndexById.get(period),
+                y: endemicThreshold,
+            })),
+            name: i18n.t('Endemic threshold'),
+            color: '#212934',
+            dashStyle: 'Dash',
+            zIndex: 5,
+            marker: {
+                enabled: false,
+            },
+            lineWidth: 2,
+            connectNulls: false,
+        });
+    }
+
     return {
         title: {
             style: {
@@ -98,9 +131,28 @@ const getChartOptions = (
         tooltip: {
             shared: true,
             valueDecimals: 2,
+            formatter: function () {
+                const points = this.points ?? [];
+                const lines = points.map(point => (
+                    `<span style="color:${point.color}">\u25CF</span> ${point.series.name}: <b>${point.y?.toFixed(2)}</b>`
+                ));
+                const period = String(points[0]?.point.name ?? this.x);
+                const outbreakInfo = outbreakInfoByPeriod.get(period);
+
+                if (outbreakInfo) {
+                    lines.push(
+                        `${i18n.t('Outbreak')}: <b>${outbreakInfo.outbreak ? i18n.t('Yes') : i18n.t('No')}</b>`,
+                        `${i18n.t('Supported probability')}: <b>${formatProbabilityBucket(outbreakInfo.supportedProbability)}</b>`,
+                        `${i18n.t('Imported value')}: <b>${outbreakInfo.value}</b>`,
+                    );
+                }
+
+                return `<b>${period}</b><br/>${lines.join('<br/>')}`;
+            },
         },
         xAxis: {
             type: 'category',
+            categories: periods,
             labels: {
                 enabled: true,
                 formatter: function () {
@@ -110,6 +162,17 @@ const getChartOptions = (
                     fontSize: '0.8rem',
                 },
             },
+            plotBands: outbreakPeriods
+                .filter(outbreakPeriod => outbreakPeriod.outbreak)
+                .map((outbreakPeriod) => {
+                    const index = periodIndexById.get(outbreakPeriod.period);
+
+                    return {
+                        from: (index ?? 0) - 0.5,
+                        to: (index ?? 0) + 0.5,
+                        color: 'rgba(212, 64, 64, 0.16)',
+                    };
+                }),
         },
         yAxis: {
             title: {
@@ -136,16 +199,36 @@ const getChartOptions = (
 interface PredicationChartProps {
     series: PredictionOrgUnitSeries;
     predictionTargetName: string;
+    endemicThreshold?: number | null;
+    outbreakPeriods?: OutbreakPeriodChartInfo[];
 }
+
+export interface OutbreakPeriodChartInfo {
+    period: string;
+    outbreak: boolean;
+    supportedProbability: SupportedOutbreakProbabilityBucket;
+    value: '1' | '0';
+}
+
+const formatProbabilityBucket = (
+    bucket: SupportedOutbreakProbabilityBucket,
+) => (bucket === '<10' ? bucket : `>=${bucket}%`);
 
 export const UncertaintyAreaChart = ({
     series,
     predictionTargetName,
+    endemicThreshold,
+    outbreakPeriods = [],
 }: PredicationChartProps) => {
     const options: Highcharts.Options | undefined = useMemo(() => {
         if (!series || series.points.length === 0) return undefined;
-        return getChartOptions(series, predictionTargetName);
-    }, [series, predictionTargetName]);
+        return getChartOptions(
+            series,
+            predictionTargetName,
+            endemicThreshold,
+            outbreakPeriods,
+        );
+    }, [series, predictionTargetName, endemicThreshold, outbreakPeriods]);
 
     return (
         <HighchartsReact

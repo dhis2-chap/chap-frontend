@@ -56,6 +56,23 @@ export {
 } from './httpfunctions/core/request';
 export { buildPredictionSeries } from './utils/PredictionViewModel';
 export {
+    OUTBREAK_PROBABILITY_OPTIONS,
+    DEFAULT_OUTBREAK_PROBABILITY,
+    MINIMUM_THRESHOLD_OBSERVATIONS,
+    buildOutbreakIndicators,
+    buildOutbreakIndicatorsForSeries,
+    calculateMockEndemicThreshold,
+    getHighestSupportedOutbreakProbability,
+    getQuantileKeyForOutbreakProbability,
+    getSupportedOutbreakProbabilityBucket,
+    isOutbreakAtProbability,
+    parseOutbreakProbability,
+    type MockEndemicThresholdResult,
+    type OutbreakIndicator,
+    type OutbreakProbability,
+    type SupportedOutbreakProbabilityBucket,
+} from './utils/outbreakAlerts';
+export {
     plotResultsToViewData,
     getStableMaxYByOrgUnitId,
     type PlotDataResult,

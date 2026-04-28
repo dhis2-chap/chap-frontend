@@ -33,6 +33,7 @@ import { NewConfiguredModelPage } from './pages/NewConfiguredModelPage';
 import { SyncUrlWithGlobalShell } from './utils/syncUrlWithGlobalShell';
 import { NewPredictionPage } from './pages/NewPredictionPage';
 import { PredictionImportPage } from './pages/PredictionImportPage';
+import { PredictionAlertsPage } from './pages/PredictionAlertsPage';
 import { GuidesPage } from './pages/GuidesPage';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
@@ -128,6 +129,13 @@ const router = createHashRouter([
                             {
                                 path: 'runs',
                                 children: [
+                                    {
+                                        path: ':predictionId/alerts',
+                                        handle: {
+                                            collapseSidebar: true,
+                                        } satisfies RouteHandle,
+                                        element: <PredictionAlertsPage />,
+                                    },
                                     {
                                         path: ':predictionId/import',
                                         handle: {

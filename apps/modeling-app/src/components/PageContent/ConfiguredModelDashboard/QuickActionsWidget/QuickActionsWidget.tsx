@@ -101,7 +101,7 @@ export const QuickActionsWidget = ({
             return;
         }
 
-        navigate(`/predictions/runs/${selectedPredictionId}/import`);
+        navigate(`/predictions/runs/${selectedPredictionId}/alerts?alertProbability=75`);
     };
 
     return (
