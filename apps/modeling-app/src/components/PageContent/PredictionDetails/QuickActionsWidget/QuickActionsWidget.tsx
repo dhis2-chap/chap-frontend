@@ -16,7 +16,7 @@ export const QuickActionsWidget = ({ predictionId }: Props) => {
         >
             <div className={styles.content}>
                 <ButtonStrip>
-                    <Link to={`/predictions/${predictionId}/import`}>
+                    <Link to={`/predictions/runs/${predictionId}/import`}>
                         <Button
                             dataTest="quick-action-import"
                             icon={<IconImportItems24 />}

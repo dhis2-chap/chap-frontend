@@ -42,7 +42,7 @@ const columns = [
         header: () => i18n.t('Name'),
         filterFn: 'includesString',
         cell: info => (
-            <Link to={`/predictions/${info.row.original.id}`}>
+            <Link to={`/predictions/runs/${info.row.original.id}`}>
                 {info.getValue()}
             </Link>
         ),

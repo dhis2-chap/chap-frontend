@@ -6,6 +6,7 @@ import {
     FeatureCollectionModel,
     JobResponse,
     MakePredictionRequest,
+    MakePredictionWithDataSourceRequest,
     PredictionsService,
 } from '@dhis2-chap/ui';
 import { ModelExecutionFormValues } from '../../ModelExecutionForm/hooks/useModelExecutionFormState';
@@ -14,6 +15,7 @@ import { PERIOD_TYPES } from '@dhis2-chap/ui';
 import { buildOrgUnitFeatureCollection } from '../../ModelExecutionForm/utils/orgUnitGeoJson';
 
 type Props = {
+    configuredModelWithDataSourceId?: number;
     onSuccess?: () => void;
     onError?: (error: ApiError) => void;
 };
@@ -23,7 +25,11 @@ export const N_PERIODS = {
     [PERIOD_TYPES.WEEK]: 12,
 };
 
-export const useCreatePrediction = ({ onSuccess, onError }: Props = {}) => {
+export const useCreatePrediction = ({
+    configuredModelWithDataSourceId,
+    onSuccess,
+    onError,
+}: Props = {}) => {
     const dataEngine = useDataEngine();
     const queryClient = useQueryClient();
     const navigate = useNavigate();
@@ -44,15 +50,30 @@ export const useCreatePrediction = ({ onSuccess, onError }: Props = {}) => {
                 orgUnitResponse.geojson.organisationUnits,
             );
 
-            const predictionRequest: MakePredictionRequest = {
+            const basePredictionRequest = {
                 name: formData.name,
                 geojson,
                 providedData: observations,
                 dataSources,
                 dataToBeFetched: [],
-                modelId: model.name,
                 nPeriods: N_PERIODS[formData.periodType.toUpperCase() as keyof typeof N_PERIODS],
                 type: 'forecasting' as const,
+            };
+
+            if (configuredModelWithDataSourceId) {
+                const predictionRequest: MakePredictionWithDataSourceRequest = {
+                    ...basePredictionRequest,
+                    configuredModelWithDataSourceId,
+                };
+
+                return PredictionsService.makePredictionWithDataSourceV1AnalyticsMakePredictionWithDataSourcePost(
+                    predictionRequest,
+                );
+            }
+
+            const predictionRequest: MakePredictionRequest = {
+                ...basePredictionRequest,
+                modelId: model.name,
             };
 
             return PredictionsService.makePredictionV1AnalyticsMakePredictionPost(predictionRequest);

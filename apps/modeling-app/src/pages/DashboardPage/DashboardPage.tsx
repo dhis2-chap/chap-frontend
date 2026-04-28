@@ -180,7 +180,7 @@ const ConfiguredModelsWidget = ({
                         <Link
                             className={styles.listItem}
                             key={configuration.id}
-                            to={`/predictions/new?configuredModelWithDataSourceId=${configuration.id}`}
+                            to={`/predictions/${configuration.id}`}
                         >
                             <span className={`${styles.icon} ${styles.successIcon}`}>
                                 <IconCheckmarkCircle16 />

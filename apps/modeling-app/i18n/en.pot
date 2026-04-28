@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-04-27T19:21:58.694Z\n"
-"PO-Revision-Date: 2026-04-27T19:21:58.694Z\n"
+"POT-Creation-Date: 2026-04-27T21:59:46.193Z\n"
+"PO-Revision-Date: 2026-04-27T21:59:46.194Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -624,6 +624,40 @@ msgstr "No organisation units match your search"
 msgid "You cannot select more than {{max}} organisation units at a time"
 msgstr "You cannot select more than {{max}} organisation units at a time"
 
+msgid "{{count}} locations"
+msgid_plural "{{count}} locations"
+msgstr[0] "{{count}} location"
+msgstr[1] "{{count}} locations"
+
+msgid "{{count}} periods"
+msgid_plural "{{count}} periods"
+msgstr[0] "{{count}} period"
+msgstr[1] "{{count}} periods"
+
+msgid "Previous runs"
+msgstr "Previous runs"
+
+msgid "Error loading prediction history"
+msgstr "Error loading prediction history"
+
+msgid "Invalid prediction configuration"
+msgstr "Invalid prediction configuration"
+
+msgid "No predictions have been run for this configuration yet"
+msgstr "No predictions have been run for this configuration yet"
+
+msgid "Unnamed prediction"
+msgstr "Unnamed prediction"
+
+msgid "{{name}} prediction"
+msgstr "{{name}} prediction"
+
+msgid "Quick actions"
+msgstr "Quick actions"
+
+msgid "Predict"
+msgstr "Predict"
+
 msgid "Please select a visualization."
 msgstr "Please select a visualization."
 
@@ -722,11 +756,6 @@ msgstr ""
 msgid "Training period"
 msgstr "Training period"
 
-msgid "{{count}} locations"
-msgid_plural "{{count}} locations"
-msgstr[0] "{{count}} location"
-msgstr[1] "{{count}} locations"
-
 msgid "Please select a visualization and metric."
 msgstr "Please select a visualization and metric."
 
@@ -774,6 +803,12 @@ msgstr "Start period"
 msgid "End period"
 msgstr "End period"
 
+msgid "Mark as ready for forecasting"
+msgstr "Mark as ready for forecasting"
+
+msgid "Configuration name"
+msgstr "Configuration name"
+
 msgid "Create prediction"
 msgstr "Create prediction"
 
@@ -787,14 +822,14 @@ msgstr ""
 msgid "Continue"
 msgstr "Continue"
 
-msgid "Quick actions"
-msgstr "Quick actions"
-
 msgid "Compare with..."
 msgstr "Compare with..."
 
-msgid "Predict..."
-msgstr "Predict..."
+msgid "Configuration marked as ready for forecasting"
+msgstr "Configuration marked as ready for forecasting"
+
+msgid "Failed to mark configuration as ready for forecasting"
+msgstr "Failed to mark configuration as ready for forecasting"
 
 msgid "Error loading jobs"
 msgstr "Error loading jobs"
@@ -1068,9 +1103,6 @@ msgstr "Evaluate"
 
 msgid "Overview"
 msgstr "Overview"
-
-msgid "Predict"
-msgstr "Predict"
 
 msgid "Models"
 msgstr "Models"
@@ -1459,6 +1491,12 @@ msgstr "Data Pruning"
 
 msgid "Requires superuser authority"
 msgstr "Requires superuser authority"
+
+msgid "Prediction dashboard"
+msgstr "Prediction dashboard"
+
+msgid "Manage the configuration object that defines this model run."
+msgstr "Manage the configuration object that defines this model run."
 
 msgid "Latest Evaluation Runs"
 msgstr "Latest Evaluation Runs"

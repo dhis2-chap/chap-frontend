@@ -55,7 +55,7 @@ export const PredictionImportPage: React.FC = () => {
                 <Button
                     small
                     icon={<IconArrowLeft16 />}
-                    onClick={() => navigate(`/predictions/${predictionId}`)}
+                    onClick={() => navigate(`/predictions/runs/${predictionId}`)}
                 >
                     {i18n.t('Back to prediction details')}
                 </Button>

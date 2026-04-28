@@ -1,0 +1,1 @@
+export { QuickActionsWidget } from './QuickActionsWidget';

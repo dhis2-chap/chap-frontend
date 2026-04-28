@@ -10,17 +10,24 @@ import { useNavigationBlocker } from '../../hooks/useNavigationBlocker';
 import { NavigationConfirmModal } from '../NavigationConfirmModal';
 
 type NewPredictionFormProps = {
+    configuredModelWithDataSourceId?: number;
     initialValues?: Partial<ModelExecutionFormValues>;
 };
 
-export const NewPredictionForm = ({ initialValues }: NewPredictionFormProps = {}) => {
+export const NewPredictionForm = ({
+    configuredModelWithDataSourceId,
+    initialValues,
+}: NewPredictionFormProps = {}) => {
     const {
         methods,
         handleSubmit,
         handleStartPrediction,
         isSubmitting,
         error,
-    } = usePredictionFormController(initialValues);
+    } = usePredictionFormController({
+        configuredModelWithDataSourceId,
+        initialValues,
+    });
 
     const {
         showConfirmModal,

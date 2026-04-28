@@ -1,0 +1,115 @@
+.content {
+    overflow: hidden;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+}
+
+.listItem {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 16px;
+    gap: 8px;
+    align-items: start;
+    padding: 9px 10px 9px 12px;
+    border-block-end: 1px solid var(--colors-grey300);
+    cursor: pointer;
+}
+
+.listItem:hover {
+    background: var(--colors-grey100);
+}
+
+.selectedListItem {
+    background: var(--colors-grey100);
+}
+
+.selectedListItem:hover {
+    background: var(--colors-grey100);
+}
+
+.radio {
+    grid-column: 2;
+    grid-row: 1;
+    appearance: none;
+    inline-size: 14px;
+    block-size: 14px;
+    margin: 2px 0 0;
+    border: 1.5px solid var(--colors-grey400);
+    border-radius: 3px;
+    accent-color: var(--colors-blue600);
+    background: var(--colors-white);
+}
+
+.radio:checked {
+    border-color: var(--colors-blue600);
+    background:
+        linear-gradient(var(--colors-blue600), var(--colors-blue600)) center / 6px 6px no-repeat,
+        var(--colors-white);
+}
+
+.itemContent {
+    grid-column: 1;
+    grid-row: 1;
+    min-inline-size: 0;
+}
+
+.itemTitle {
+    display: block;
+    overflow-wrap: anywhere;
+    color: var(--colors-grey900);
+    font-size: inherit;
+    line-height: 18px;
+    font-weight: 600;
+}
+
+.itemMeta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 24px;
+    margin-block-start: 2px;
+    color: var(--colors-grey700);
+    font-size: 13px;
+    line-height: 18px;
+}
+
+.emptyState,
+.loadingState,
+.errorState {
+    padding: 18px;
+    color: var(--colors-grey700);
+    font-size: inherit;
+    line-height: 20px;
+}
+
+.loadingState {
+    display: flex;
+    min-block-size: 112px;
+    align-items: center;
+    justify-content: center;
+}
+
+.errorState {
+    color: var(--colors-red700);
+}
+
+.footerLink {
+    display: block;
+    padding: 12px 12px;
+    background: var(--colors-grey100);
+    color: var(--colors-grey700);
+    font-size: inherit;
+    line-height: 20px;
+}
+
+.footerLink:hover {
+    background: var(--colors-grey200);
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .listItem {
+        padding: 9px 10px 9px 12px;
+    }
+}

@@ -43,7 +43,7 @@ export const QuantileMappingForm = ({ prediction }: Props) => {
     });
     const { mutateAsync, isPending } = usePostPredictionData({
         onSuccess: () => {
-            navigate(`/predictions/${prediction.id}`);
+            navigate(`/predictions/runs/${prediction.id}`);
         },
     });
 

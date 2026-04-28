@@ -26,8 +26,8 @@ import { NewEvaluationPage } from './pages/NewEvaluationPage';
 import { JobsPage } from './pages/JobsPage';
 import { EvaluationComparePage } from './pages/EvaluationCompare';
 import { GetStartedPage } from './pages/GetStartedPage';
-import { PredictionsPage } from './pages/PredictionsPage';
 import { ReadyToPredictPage } from './pages/ReadyToPredictPage';
+import { ConfiguredModelDashboardPage } from './pages/ConfiguredModelDashboardPage';
 import { PredictionDetailsPage } from './pages/PredictionDetailsPage';
 import { ModelsPage } from './pages/ModelsPage';
 import { NewConfiguredModelPage } from './pages/NewConfiguredModelPage';
@@ -128,21 +128,22 @@ const router = createHashRouter([
                             },
                             {
                                 path: 'runs',
-                                element: <PredictionsPage />,
-                            },
-                            {
-                                path: ':predictionId/import',
-                                handle: {
-                                    collapseSidebar: true,
-                                } satisfies RouteHandle,
-                                element: <PredictionImportPage />,
-                            },
-                            {
-                                path: ':predictionId',
-                                handle: {
-                                    collapseSidebar: true,
-                                } satisfies RouteHandle,
-                                element: <PredictionDetailsPage />,
+                                children: [
+                                    {
+                                        path: ':predictionId/import',
+                                        handle: {
+                                            collapseSidebar: true,
+                                        } satisfies RouteHandle,
+                                        element: <PredictionImportPage />,
+                                    },
+                                    {
+                                        path: ':predictionId',
+                                        handle: {
+                                            collapseSidebar: true,
+                                        } satisfies RouteHandle,
+                                        element: <PredictionDetailsPage />,
+                                    },
+                                ],
                             },
                             {
                                 path: 'new',
@@ -150,6 +151,13 @@ const router = createHashRouter([
                                     collapseSidebar: true,
                                 } satisfies RouteHandle,
                                 element: <NewPredictionPage />,
+                            },
+                            {
+                                path: ':configuredId',
+                                handle: {
+                                    collapseSidebar: true,
+                                } satisfies RouteHandle,
+                                element: <ConfiguredModelDashboardPage />,
                             },
                         ],
                     },

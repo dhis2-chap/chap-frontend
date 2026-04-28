@@ -1,7 +1,15 @@
 import { useModelExecutionFormState, ModelExecutionFormValues } from '../../ModelExecutionForm/hooks/useModelExecutionFormState';
 import { useCreatePrediction } from './useCreatePrediction';
 
-export const usePredictionFormController = (initialValues?: Partial<ModelExecutionFormValues>) => {
+type UsePredictionFormControllerOptions = {
+    configuredModelWithDataSourceId?: number;
+    initialValues?: Partial<ModelExecutionFormValues>;
+};
+
+export const usePredictionFormController = ({
+    configuredModelWithDataSourceId,
+    initialValues,
+}: UsePredictionFormControllerOptions = {}) => {
     const { methods } = useModelExecutionFormState({ initialValues });
 
     const {
@@ -9,6 +17,7 @@ export const usePredictionFormController = (initialValues?: Partial<ModelExecuti
         isSubmitting,
         error,
     } = useCreatePrediction({
+        configuredModelWithDataSourceId,
         onSuccess: () => {
             methods.reset();
         },

@@ -36,7 +36,7 @@ export const PredictionActionsMenu = ({ id, datasetId }: Props) => {
                             icon={<IconView16 />}
                             dataTest="prediction-overflow-view"
                             onClick={() => {
-                                navigate(`/predictions/${id}`);
+                                navigate(`/predictions/runs/${id}`);
                                 setFlyoutMenuIsOpen(false);
                             }}
                         />

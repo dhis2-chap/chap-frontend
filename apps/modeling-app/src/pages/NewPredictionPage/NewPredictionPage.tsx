@@ -1,12 +1,14 @@
 import i18n from '@dhis2/d2-i18n';
 import { Button, IconArrowLeft16 } from '@dhis2/ui';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { PageHeader } from '../../features/common-features/PageHeader/PageHeader';
 import { NewPredictionContent } from '../../components/PageContent/NewPrediction';
 import styles from './NewPredictionPage.module.css';
 
 export const NewPredictionPage = () => {
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const returnTo = searchParams.get('returnTo') || '/predictions/runs';
 
     return (
         <div>
@@ -19,7 +21,7 @@ export const NewPredictionPage = () => {
                 className={styles.backButton}
                 small
                 icon={<IconArrowLeft16 />}
-                onClick={() => navigate('/predictions/runs')}
+                onClick={() => navigate(returnTo)}
             >
                 {i18n.t('Back to predictions')}
             </Button>
