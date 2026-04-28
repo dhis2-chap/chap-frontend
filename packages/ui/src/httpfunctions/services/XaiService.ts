@@ -154,7 +154,7 @@ export class XaiService {
     ): CancelablePromise<XaiMethodRead[]> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/xai/methods',
+            url: '/v1/xai/methods',
             query: {
                 includeArchived: includeArchived,
             },
@@ -169,7 +169,7 @@ export class XaiService {
     ): CancelablePromise<XaiMethodRead> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/xai/methods/{name}',
+            url: '/v1/xai/methods/{name}',
             path: {
                 name: name,
             },
@@ -186,7 +186,7 @@ export class XaiService {
     ): CancelablePromise<GlobalExplanationResponse> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/xai/predictions/{predictionId}/global',
+            url: '/v1/xai/predictions/{predictionId}/global',
             path: {
                 predictionId: predictionId,
             },
@@ -207,7 +207,7 @@ export class XaiService {
     ): CancelablePromise<GlobalExplanationResponse> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/xai/predictions/{predictionId}/global',
+            url: '/v1/xai/predictions/{predictionId}/global',
             path: {
                 predictionId: predictionId,
             },
@@ -230,7 +230,7 @@ export class XaiService {
     ): CancelablePromise<LocalExplanationResponse[]> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/xai/predictions/{predictionId}/local',
+            url: '/v1/xai/predictions/{predictionId}/local',
             path: {
                 predictionId: predictionId,
             },
@@ -251,7 +251,7 @@ export class XaiService {
     ): CancelablePromise<LocalExplanationResponse> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/xai/predictions/{predictionId}/local',
+            url: '/v1/xai/predictions/{predictionId}/local',
             path: {
                 predictionId: predictionId,
             },
@@ -269,7 +269,7 @@ export class XaiService {
     ): CancelablePromise<LocalExplanationResponse> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/xai/predictions/{predictionId}/local/{explanationId}',
+            url: '/v1/xai/predictions/{predictionId}/local/{explanationId}',
             path: {
                 predictionId: predictionId,
                 explanationId: explanationId,
@@ -286,7 +286,7 @@ export class XaiService {
     ): CancelablePromise<any> {
         return __request(OpenAPI, {
             method: 'DELETE',
-            url: '/xai/predictions/{predictionId}/local/{explanationId}',
+            url: '/v1/xai/predictions/{predictionId}/local/{explanationId}',
             path: {
                 predictionId: predictionId,
                 explanationId: explanationId,
@@ -304,7 +304,7 @@ export class XaiService {
     ): CancelablePromise<ShapBeeswarmResponse> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/xai/predictions/{predictionId}/shap-beeswarm',
+            url: '/v1/xai/predictions/{predictionId}/shap-beeswarm',
             path: {
                 predictionId: predictionId,
             },
@@ -327,7 +327,7 @@ export class XaiService {
     ): CancelablePromise<HorizonSummaryResponse> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/xai/predictions/{predictionId}/local/horizon-summary',
+            url: '/v1/xai/predictions/{predictionId}/local/horizon-summary',
             path: {
                 predictionId: predictionId,
             },
@@ -351,7 +351,7 @@ export class XaiService {
     ): CancelablePromise<JobResponse> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/xai/predictions/{predictionId}/explanations/run',
+            url: '/v1/xai/predictions/{predictionId}/explanations/run',
             path: {
                 predictionId: predictionId,
             },
