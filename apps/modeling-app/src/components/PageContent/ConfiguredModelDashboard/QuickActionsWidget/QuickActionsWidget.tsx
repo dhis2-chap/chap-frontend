@@ -1,4 +1,9 @@
-import { Button, IconExportItems24, IconSettings16 } from '@dhis2/ui';
+import {
+    Button,
+    IconExportItems24,
+    IconImportItems24,
+    IconSettings16,
+} from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { PERIOD_TYPES, Widget } from '@dhis2-chap/ui';
 import type { ConfiguredModelWithDataSourceReadWithPredictions } from '@dhis2-chap/ui';
@@ -22,6 +27,7 @@ type Props = {
     configuredId?: string;
     configuredModelWithDataSource?: ConfiguredModelWithDataSourceReadWithPredictions;
     isLoading: boolean;
+    selectedPredictionId?: number;
 };
 
 const getPeriodType = (
@@ -74,6 +80,7 @@ export const QuickActionsWidget = ({
     configuredId,
     configuredModelWithDataSource,
     isLoading,
+    selectedPredictionId,
 }: Props) => {
     const navigate = useNavigate();
     const canPredict = !!configuredModelWithDataSource?.configuredModel?.id;
@@ -88,6 +95,14 @@ export const QuickActionsWidget = ({
             `/predictions/new?returnTo=${encodeURIComponent(returnTo)}`,
             { state: buildPredictionFormState(configuredModelWithDataSource) },
         );
+    };
+
+    const handleImport = () => {
+        if (!selectedPredictionId) {
+            return;
+        }
+
+        navigate(`/predictions/runs/${selectedPredictionId}/import`);
     };
 
     return (
@@ -106,7 +121,16 @@ export const QuickActionsWidget = ({
                         className={styles.actionButton}
                         primary
                     >
-                        {i18n.t('Predict')}
+                        {i18n.t('Manual prediction')}
+                    </Button>
+                    <Button
+                        dataTest="quick-action-import"
+                        icon={<IconImportItems24 />}
+                        onClick={handleImport}
+                        disabled={!selectedPredictionId}
+                        className={styles.actionButton}
+                    >
+                        {i18n.t('Import')}
                     </Button>
                     <Button
                         dataTest="quick-action-thresholds"

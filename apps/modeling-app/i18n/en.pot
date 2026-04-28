@@ -655,6 +655,9 @@ msgstr "{{name}} prediction"
 msgid "Quick actions"
 msgstr "Quick actions"
 
+msgid "Manual prediction"
+msgstr "Manual prediction"
+
 msgid "Predict"
 msgstr "Predict"
 

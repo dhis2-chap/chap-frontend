@@ -151,6 +151,7 @@ export const ConfiguredModelDashboard: React.FC = () => {
                     configuredId={configuredId}
                     configuredModelWithDataSource={configuredModelWithDataSource}
                     isLoading={isLoading}
+                    selectedPredictionId={selectedPrediction?.id}
                 />
                 <PredictionHistoryWidget
                     error={error}
