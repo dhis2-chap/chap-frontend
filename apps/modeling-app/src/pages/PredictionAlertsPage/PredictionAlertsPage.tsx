@@ -1,6 +1,8 @@
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
+    Button,
     CircularLoader,
+    IconArrowLeft16,
     NoticeBox,
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
@@ -11,6 +13,7 @@ import { useModels } from '../../hooks/useModels';
 import styles from './PredictionAlertsPage.module.css';
 
 export const PredictionAlertsPage: React.FC = () => {
+    const navigate = useNavigate();
     const { predictionId } = useParams();
     const { prediction, error, isLoading, isError } = usePredictionById(predictionId);
     const {
@@ -58,12 +61,24 @@ export const PredictionAlertsPage: React.FC = () => {
         );
     }
 
+    const returnTo = prediction.configuredModelWithDataSource?.id
+        ? `/predictions/${prediction.configuredModelWithDataSource.id}`
+        : '/predictions';
+
     return (
         <>
             <PageHeader
-                pageTitle={i18n.t('Configure outbreak alerts')}
-                pageDescription={i18n.t('Choose the minimum outbreak probability and review forecast periods that will be imported as outbreak alerts.')}
+                pageTitle={i18n.t('Outbreak thresholds')}
+                pageDescription={i18n.t('Preview how outbreak probability thresholds affect all regions in this prediction.')}
             />
+            <Button
+                className={styles.backButton}
+                small
+                icon={<IconArrowLeft16 />}
+                onClick={() => navigate(returnTo)}
+            >
+                {i18n.t('Back to prediction dashboard')}
+            </Button>
             <PredictionAlerts
                 prediction={prediction}
                 model={model}

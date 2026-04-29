@@ -133,6 +133,7 @@ const router = createHashRouter([
                                         path: ':predictionId/alerts',
                                         handle: {
                                             collapseSidebar: true,
+                                            fullWidth: true,
                                         } satisfies RouteHandle,
                                         element: <PredictionAlertsPage />,
                                     },

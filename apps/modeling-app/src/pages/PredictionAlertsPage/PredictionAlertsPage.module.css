@@ -8,3 +8,7 @@
 .errorContainer {
     padding: 16px;
 }
+
+.backButton {
+    margin-block-start: 12px;
+}

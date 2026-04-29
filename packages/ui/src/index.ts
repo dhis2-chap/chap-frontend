@@ -31,6 +31,7 @@ export {
     Tag,
     Widget,
 } from './ui';
+export { VirtuosoGrid } from 'react-virtuoso';
 
 export type { PillVariant } from './ui/Pill';
 export type { TagVariant } from './ui/Tag';
@@ -72,6 +73,12 @@ export {
     type OutbreakProbability,
     type SupportedOutbreakProbabilityBucket,
 } from './utils/outbreakAlerts';
+export {
+    getThresholdTileViewModels,
+    type ThresholdSummary,
+    type ThresholdTileStatus,
+    type ThresholdTileViewModel,
+} from './utils/outbreakThresholdTiles';
 export {
     plotResultsToViewData,
     getStableMaxYByOrgUnitId,

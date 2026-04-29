@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import Highcharts from 'highcharts';
 import accessibility from 'highcharts/modules/accessibility';
@@ -7,17 +7,45 @@ import exporting from 'highcharts/modules/exporting';
 import HighchartsReact from 'highcharts-react-official';
 import { PredictionOrgUnitSeries } from '../../../interfaces/Prediction';
 import type { SupportedOutbreakProbabilityBucket } from '../../../utils/outbreakAlerts';
+import type { ZoomRange } from '../../evaluation/ResultPlot/ResultPlot';
 
 accessibility(Highcharts);
 exporting(Highcharts);
 highchartsMore(Highcharts);
+
+type DisabledAnimationOptions = {
+    chart: {
+        animation: false;
+    };
+    plotOptions: {
+        series: {
+            animation: false;
+        };
+    };
+};
+
+const getDisabledAnimationOptions = (): DisabledAnimationOptions => ({
+    chart: {
+        animation: false,
+    },
+    plotOptions: {
+        series: {
+            animation: false,
+        },
+    },
+});
 
 const getChartOptions = (
     series: PredictionOrgUnitSeries,
     predictionTargetName: string,
     endemicThreshold?: number | null,
     outbreakPeriods: OutbreakPeriodChartInfo[] = [],
+    variant: UncertaintyAreaChartVariant = 'default',
+    onAfterSetExtremes?: Highcharts.AxisSetExtremesEventCallbackFunction,
+    hideResetButton = false,
 ): Highcharts.Options => {
+    const isTile = variant === 'tile';
+    const disabledAnimationOptions = getDisabledAnimationOptions();
     const periods = [
         ...(series.actualCases?.map(actualCase => actualCase.period) ?? []),
         ...series.points.map(point => point.period),
@@ -120,7 +148,7 @@ const getChartOptions = (
             style: {
                 fontSize: '0.8rem',
             },
-            text: i18n.t(
+            text: isTile ? undefined : i18n.t(
                 'Prediction for {{predictionTargetName}} for {{orgUnitName}}',
                 {
                     predictionTargetName,
@@ -151,6 +179,9 @@ const getChartOptions = (
         xAxis: {
             type: 'category',
             categories: periods,
+            events: onAfterSetExtremes
+                ? { afterSetExtremes: onAfterSetExtremes }
+                : undefined,
             labels: {
                 enabled: true,
                 formatter: function () {
@@ -174,19 +205,34 @@ const getChartOptions = (
         },
         yAxis: {
             title: {
-                text: i18n.t('Number of cases'),
+                text: isTile ? undefined : i18n.t('Number of cases'),
             },
         },
         credits: {
+            enabled: !isTile,
             text: 'CHAP',
         },
+        exporting: {
+            enabled: !isTile,
+        },
+        legend: {
+            enabled: !isTile,
+        },
         chart: {
-            height: (9 / 16 * 100) + '%',
-            marginBottom: 125,
-            zooming: { type: 'x' },
+            ...disabledAnimationOptions.chart,
+            height: isTile ? 240 : (9 / 16 * 100) + '%',
+            marginBottom: isTile ? 48 : 125,
+            zooming: {
+                type: 'x',
+                ...(hideResetButton && {
+                    resetButton: { theme: { style: { display: 'none' } } },
+                }),
+            },
         },
         plotOptions: {
+            ...disabledAnimationOptions.plotOptions,
             series: {
+                ...disabledAnimationOptions.plotOptions.series,
                 lineWidth: 5,
             },
         },
@@ -199,6 +245,9 @@ interface PredicationChartProps {
     predictionTargetName: string;
     endemicThreshold?: number | null;
     outbreakPeriods?: OutbreakPeriodChartInfo[];
+    variant?: UncertaintyAreaChartVariant;
+    zoomRange?: ZoomRange | null;
+    onZoomChange?: (range: ZoomRange | null) => void;
 }
 
 export interface OutbreakPeriodChartInfo {
@@ -208,12 +257,56 @@ export interface OutbreakPeriodChartInfo {
     value: '1' | '0';
 }
 
+export type UncertaintyAreaChartVariant = 'default' | 'tile';
+
 export const UncertaintyAreaChart = ({
     series,
     predictionTargetName,
     endemicThreshold,
     outbreakPeriods = [],
+    variant = 'default',
+    zoomRange,
+    onZoomChange,
 }: PredicationChartProps) => {
+    const chartRef = useRef<HighchartsReact.RefObject | null>(null);
+
+    const handleAfterSetExtremes = useCallback(
+        function (
+            this: Highcharts.Axis,
+            event: Highcharts.AxisSetExtremesEventObject,
+        ) {
+            if (!onZoomChange || event.trigger !== 'zoom') return;
+
+            const isZoomed =
+                event.userMin !== undefined && event.userMax !== undefined;
+
+            if (isZoomed) {
+                onZoomChange({
+                    min: event.min,
+                    max: event.max,
+                    dataMin: event.dataMin,
+                    dataMax: event.dataMax,
+                });
+            } else {
+                onZoomChange(null);
+            }
+        },
+        [onZoomChange],
+    );
+
+    useEffect(() => {
+        const chart = chartRef.current?.chart;
+        if (!chart) return;
+
+        const axis = chart.xAxis[0];
+        if (zoomRange) {
+            axis.setExtremes(zoomRange.min, zoomRange.max, true, false);
+        } else {
+            axis.setExtremes(undefined, undefined, true, false);
+        }
+    }, [zoomRange]);
+
+    const hasExternalZoomControls = onZoomChange !== undefined;
     const options: Highcharts.Options | undefined = useMemo(() => {
         if (!series || series.points.length === 0) return undefined;
         return getChartOptions(
@@ -221,11 +314,23 @@ export const UncertaintyAreaChart = ({
             predictionTargetName,
             endemicThreshold,
             outbreakPeriods,
+            variant,
+            handleAfterSetExtremes,
+            hasExternalZoomControls,
         );
-    }, [series, predictionTargetName, endemicThreshold, outbreakPeriods]);
+    }, [
+        series,
+        predictionTargetName,
+        endemicThreshold,
+        outbreakPeriods,
+        variant,
+        handleAfterSetExtremes,
+        hasExternalZoomControls,
+    ]);
 
     return (
         <HighchartsReact
+            ref={chartRef}
             highcharts={Highcharts}
             constructorType="chart"
             options={options}

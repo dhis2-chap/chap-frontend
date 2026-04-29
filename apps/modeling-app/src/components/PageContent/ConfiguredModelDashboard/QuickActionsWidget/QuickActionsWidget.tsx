@@ -2,6 +2,7 @@ import {
     Button,
     IconExportItems24,
     IconImportItems24,
+    IconVisualizationLine24,
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { PERIOD_TYPES, Widget } from '@dhis2-chap/ui';
@@ -104,6 +105,14 @@ export const QuickActionsWidget = ({
         navigate(`/predictions/runs/${selectedPredictionId}/import`);
     };
 
+    const handleOutbreakThresholds = () => {
+        if (!selectedPredictionId) {
+            return;
+        }
+
+        navigate(`/predictions/runs/${selectedPredictionId}/alerts`);
+    };
+
     return (
         <Widget
             header={i18n.t('Quick actions')}
@@ -130,6 +139,15 @@ export const QuickActionsWidget = ({
                         className={styles.actionButton}
                     >
                         {i18n.t('Import')}
+                    </Button>
+                    <Button
+                        dataTest="quick-action-outbreak-thresholds"
+                        icon={<IconVisualizationLine24 />}
+                        onClick={handleOutbreakThresholds}
+                        disabled={!selectedPredictionId}
+                        className={styles.actionButton}
+                    >
+                        {i18n.t('Outbreak thresholds')}
                     </Button>
                 </div>
             </div>
