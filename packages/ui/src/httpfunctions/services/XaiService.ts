@@ -345,7 +345,7 @@ export class XaiService {
 
     public static runExplanations(
         predictionId: number,
-        xaiMethodName: string = DEFAULT_XAI_METHOD,
+        xaiMethod: string = DEFAULT_XAI_METHOD,
         outputStatistic: string = 'median',
         topK: number = 10,
     ): CancelablePromise<JobResponse> {
@@ -356,7 +356,7 @@ export class XaiService {
                 predictionId: predictionId,
             },
             body: {
-                xaiMethodName,
+                xaiMethod,
                 outputStatistic,
                 topK,
             },
