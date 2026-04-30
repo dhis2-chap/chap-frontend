@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-04-29T18:19:21.750Z\n"
-"PO-Revision-Date: 2026-04-29T18:19:21.750Z\n"
+"POT-Creation-Date: 2026-04-30T15:54:15.978Z\n"
+"PO-Revision-Date: 2026-04-30T15:54:15.978Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -262,6 +262,9 @@ msgstr "Make prediction"
 
 msgid "XAI surrogate training"
 msgstr "XAI surrogate training"
+
+msgid "Run explanations"
+msgstr "Run explanations"
 
 msgid "Create dataset (deprecated)"
 msgstr "Create dataset (deprecated)"
@@ -918,111 +921,44 @@ msgstr "Model created successfully"
 msgid "Failed to create model"
 msgstr "Failed to create model"
 
-msgid "Good"
-msgstr "Good"
-
-msgid "Moderate"
-msgstr "Moderate"
-
-msgid "Poor"
-msgstr "Poor"
-
-msgid "Surrogate Model Quality"
-msgstr "Surrogate Model Quality"
-
-msgid "What do these metrics mean?"
-msgstr "What do these metrics mean?"
-
-msgid "Hide info"
-msgstr "Hide info"
-
-msgid "What is this?"
-msgstr "What is this?"
-
-msgid "CV R²"
-msgstr "CV R²"
-
-msgid "MAE"
-msgstr "MAE"
-
-msgid "Residual bias"
-msgstr "Residual bias"
-
-msgid "Samples"
-msgstr "Samples"
-
-msgid "Unique rows"
-msgstr "Unique rows"
-
-msgid "Stability Score"
-msgstr "Stability Score"
-
-msgid "% MAPE"
-msgstr "% MAPE"
-
-msgid "±{{std}}"
-msgstr "±{{std}}"
-
-msgid "{{pct}}% duplicated"
-msgstr "{{pct}}% duplicated"
-
-msgid "ranking consistency"
-msgstr "ranking consistency"
-
-msgid ""
-"The surrogate approximation is poor — explanations may not accurately "
-"reflect the original model. This often happens with very few data points."
-msgstr ""
-"The surrogate approximation is poor — explanations may not accurately "
-"reflect the original model. This often happens with very few data points."
-
-msgid ""
-"The surrogate captures moderate signal. Explanations are directionally "
-"useful but approximate. Feature ranking is likely correct even if "
-"magnitudes are off."
-msgstr ""
-"The surrogate captures moderate signal. Explanations are directionally "
-"useful but approximate. Feature ranking is likely correct even if "
-"magnitudes are off."
-
-msgid ""
-"The surrogate closely approximates the original model. Explanations are "
-"reliable."
-msgstr ""
-"The surrogate closely approximates the original model. Explanations are "
-"reliable."
-
-msgid ""
-"Target transform applied{{colon}} {{method}}. SHAP values are rescaled back "
-"to the original prediction units; attributions are first-order "
-"approximations in the transformed space."
-msgstr ""
-"Target transform applied{{colon}} {{method}}. SHAP values are rescaled back "
-"to the original prediction units; attributions are first-order "
-"approximations in the transformed space."
-
-msgid "Constant features detected"
-msgstr "Constant features detected"
-
-msgid ""
-"The following features have no variation in the training data and cannot "
-"contribute to explanations{{colon}} "
-msgstr ""
-"The following features have no variation in the training data and cannot "
-"contribute to explanations{{colon}} "
-
-msgid "Features removed by permutation selection"
-msgstr "Features removed by permutation selection"
-
-msgid ""
-"The following features were removed as noise by permutation importance "
-"selection{{colon}} "
-msgstr ""
-"The following features were removed as noise by permutation importance "
-"selection{{colon}} "
-
 msgid "Explanation job failed. Check Jobs for details."
 msgstr "Explanation job failed. Check Jobs for details."
+
+msgid "Explanation job was revoked. Check Jobs for details."
+msgstr "Explanation job was revoked. Check Jobs for details."
+
+msgid "Generate explanations to view Global, Local, and Horizon plots."
+msgstr "Generate explanations to view Global, Local, and Horizon plots."
+
+msgid "Compute Explanation"
+msgstr "Compute Explanation"
+
+msgid "Explainability"
+msgstr "Explainability"
+
+msgid "Explanation error"
+msgstr "Explanation error"
+
+msgid "Generating explanations ({{method}})…"
+msgstr "Generating explanations ({{method}})…"
+
+msgid "Computing local explanation…"
+msgstr "Computing local explanation…"
+
+msgid "Computing horizon summary…"
+msgstr "Computing horizon summary…"
+
+msgid "Loading summary data…"
+msgstr "Loading summary data…"
+
+msgid "Global"
+msgstr "Global"
+
+msgid "Local"
+msgstr "Local"
+
+msgid "Horizon"
+msgstr "Horizon"
 
 msgid "Error"
 msgstr "Error"
@@ -1032,9 +968,6 @@ msgstr "Failed to load global explanation"
 
 msgid "No global explanation computed yet."
 msgstr "No global explanation computed yet."
-
-msgid "Compute Explanation"
-msgstr "Compute Explanation"
 
 msgid "Importance"
 msgstr "Importance"
@@ -1048,8 +981,8 @@ msgstr "Recalculate"
 msgid "SHAP Summary — how feature values affect predictions"
 msgstr "SHAP Summary — how feature values affect predictions"
 
-msgid "Loading SHAP summary data..."
-msgstr "Loading SHAP summary data..."
+msgid "SHAP summary data not yet loaded."
+msgstr "SHAP summary data not yet loaded."
 
 msgid "Load"
 msgstr "Load"
@@ -1057,12 +990,23 @@ msgstr "Load"
 msgid "Global Feature Importance"
 msgstr "Global Feature Importance"
 
-msgid ""
-"Feature importance shows which inputs have the most influence on "
-"predictions. This does not imply causation."
-msgstr ""
-"Feature importance shows which inputs have the most influence on "
-"predictions. This does not imply causation."
+msgid "Forecast Horizon Summary — {{orgUnit}}"
+msgstr "Forecast Horizon Summary — {{orgUnit}}"
+
+msgid "Average Horizon Importance — mean |SHAP| across {{n}} steps"
+msgstr "Average Horizon Importance — mean |SHAP| across {{n}} steps"
+
+msgid "SHAP Summary — {{orgUnit}} across horizon steps"
+msgstr "SHAP Summary — {{orgUnit}} across horizon steps"
+
+msgid "No horizon summary available."
+msgstr "No horizon summary available."
+
+msgid "Compute Horizon Summary"
+msgstr "Compute Horizon Summary"
+
+msgid "No forecast periods are available for this prediction."
+msgstr "No forecast periods are available for this prediction."
 
 msgid "About feature values"
 msgstr "About feature values"
@@ -1102,60 +1046,86 @@ msgstr "No explanation available for this selection."
 msgid "Explain This Forecast"
 msgstr "Explain This Forecast"
 
-msgid "Forecast Horizon Summary — {{orgUnit}}"
-msgstr "Forecast Horizon Summary — {{orgUnit}}"
+msgid "Good"
+msgstr "Good"
 
-msgid "Average Horizon Importance — mean |SHAP| across {{n}} steps"
-msgstr "Average Horizon Importance — mean |SHAP| across {{n}} steps"
+msgid "Moderate"
+msgstr "Moderate"
 
-msgid "SHAP Summary — {{orgUnit}} across horizon steps"
-msgstr "SHAP Summary — {{orgUnit}} across horizon steps"
+msgid "Poor"
+msgstr "Poor"
 
-msgid "No horizon summary available."
-msgstr "No horizon summary available."
+msgid "explanations closely match the original model"
+msgstr "explanations closely match the original model"
 
-msgid "Compute Horizon Summary"
-msgstr "Compute Horizon Summary"
+msgid "directionally useful, magnitudes are approximate"
+msgstr "directionally useful, magnitudes are approximate"
 
-msgid "Generating explanations for Global, Local, and Horizon..."
-msgstr "Generating explanations for Global, Local, and Horizon..."
+msgid "explanations may not reflect the original model"
+msgstr "explanations may not reflect the original model"
 
-msgid "Generate explanations to view Global, Local, and Horizon plots."
-msgstr "Generate explanations to view Global, Local, and Horizon plots."
+msgid "Surrogate Model Quality"
+msgstr "Surrogate Model Quality"
 
-msgid "Explainability"
-msgstr "Explainability"
+msgid "Hide metrics"
+msgstr "Hide metrics"
 
-msgid "Explanation error"
-msgstr "Explanation error"
+msgid "Show metrics"
+msgstr "Show metrics"
 
-msgid "Generating global, local, and horizon explanations ({{method}})…"
-msgstr "Generating global, local, and horizon explanations ({{method}})…"
+msgid " — {{summary}}"
+msgstr " — {{summary}}"
 
 msgid ""
-"Training surrogate model ({{method}}) — this includes hyperparameter tuning "
-"and may take a moment…"
+"{{n}} feature(s) had no variation and were excluded from "
+"explanations{{colon}} {{list}}"
 msgstr ""
-"Training surrogate model ({{method}}) — this includes hyperparameter tuning "
-"and may take a moment…"
+"{{n}} feature(s) had no variation and were excluded from "
+"explanations{{colon}} {{list}}"
 
-msgid "Computing local explanation ({{method}}) with hyperparameter tuning…"
-msgstr "Computing local explanation ({{method}}) with hyperparameter tuning…"
+msgid ""
+"{{n}} low-signal feature(s) removed by permutation selection{{colon}} "
+"{{list}}"
+msgstr ""
+"{{n}} low-signal feature(s) removed by permutation selection{{colon}} "
+"{{list}}"
 
-msgid "Computing horizon summary…"
-msgstr "Computing horizon summary…"
+msgid "CV R²"
+msgstr "CV R²"
 
-msgid "Loading summary data…"
-msgstr "Loading summary data…"
+msgid "MAE"
+msgstr "MAE"
 
-msgid "Global"
-msgstr "Global"
+msgid "% MAPE"
+msgstr "% MAPE"
 
-msgid "Local"
-msgstr "Local"
+msgid "Residual bias"
+msgstr "Residual bias"
 
-msgid "Horizon"
-msgstr "Horizon"
+msgid "±{{std}}"
+msgstr "±{{std}}"
+
+msgid "Samples"
+msgstr "Samples"
+
+msgid "Unique rows"
+msgstr "Unique rows"
+
+msgid "{{pct}}% duplicated"
+msgstr "{{pct}}% duplicated"
+
+msgid "Stability"
+msgstr "Stability"
+
+msgid "ranking consistency"
+msgstr "ranking consistency"
+
+msgid ""
+"Predictions were rescaled from a transformed target space ({{method}}) — "
+"attributions are first-order approximations."
+msgstr ""
+"Predictions were rescaled from a transformed target space ({{method}}) — "
+"attributions are first-order approximations."
 
 msgid "Select XAI Method"
 msgstr "Select XAI Method"
@@ -1187,11 +1157,8 @@ msgstr "Confirm"
 msgid "Plots{{colon}} "
 msgstr "Plots{{colon}} "
 
-msgid "XAI Method"
-msgstr "XAI Method"
-
-msgid "Change"
-msgstr "Change"
+msgid "Change XAI method"
+msgstr "Change XAI method"
 
 msgid "Error loading prediction"
 msgstr "Error loading prediction"

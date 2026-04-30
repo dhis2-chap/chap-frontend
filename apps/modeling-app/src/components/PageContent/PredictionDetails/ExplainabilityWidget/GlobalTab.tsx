@@ -1,10 +1,10 @@
-import React from 'react';
 import i18n from '@dhis2/d2-i18n';
-import { Button, CircularLoader, NoticeBox, Tag } from '@dhis2/ui';
+import { Button, CircularLoader, NoticeBox } from '@dhis2/ui';
 import {
     FeatureImportanceChart,
     ShapBeeswarmChart,
     type FeatureAttribution,
+    type GlobalExplanationResponse,
     type ShapBeeswarmResponse,
 } from '@dhis2-chap/ui';
 import { SurrogateQualityPanel } from './SurrogateQualityPanel';
@@ -15,12 +15,10 @@ type Props = {
     isGlobalFetching: boolean;
     isExplanationJobRunning: boolean;
     globalError: unknown;
-    globalExplanation: any;
+    globalExplanation: GlobalExplanationResponse | undefined;
     supports: (viz: string) => boolean;
     globalView: 'importance' | 'beeswarm';
     onGlobalViewChange: (v: 'importance' | 'beeswarm') => void;
-    selectedXaiMethodObj: any;
-    selectedXaiMethod: string;
     isBeeswarmLoading: boolean;
     beeswarmData: ShapBeeswarmResponse | null;
     beeswarmError?: string | null;
@@ -38,8 +36,6 @@ export const GlobalTab = ({
     supports,
     globalView,
     onGlobalViewChange,
-    selectedXaiMethodObj,
-    selectedXaiMethod,
     isBeeswarmLoading,
     beeswarmData,
     beeswarmError,
@@ -64,7 +60,7 @@ export const GlobalTab = ({
         );
     }
 
-    const features: FeatureAttribution[] = globalExplanation.topFeatures.map((f: any) => ({
+    const features: FeatureAttribution[] = globalExplanation.topFeatures.map((f) => ({
         feature_name: f.feature_name,
         importance: f.importance,
         direction: f.direction,
@@ -73,7 +69,7 @@ export const GlobalTab = ({
     return (
         <div className={styles.chartContainer}>
             <div className={styles.chartHeader}>
-                {supports('beeswarm') ? (
+                {supports('beeswarm') && (
                     <div className={styles.viewToggle}>
                         <button
                             className={`${styles.toggleBtn} ${globalView === 'importance' ? styles.toggleBtnActive : ''}`}
@@ -88,8 +84,6 @@ export const GlobalTab = ({
                             {i18n.t('SHAP Summary')}
                         </button>
                     </div>
-                ) : (
-                    <Tag>{selectedXaiMethodObj?.displayName ?? selectedXaiMethod}</Tag>
                 )}
                 <Button small secondary onClick={onRunExplanations} loading={isExplanationJobRunning} disabled={isExplanationJobRunning}>
                     {i18n.t('Recalculate')}
@@ -120,9 +114,6 @@ export const GlobalTab = ({
                 quality={globalExplanation.surrogateQuality || beeswarmData?.surrogateQuality}
                 stabilityScore={globalExplanation.stabilityScore}
             />
-            <p className={styles.disclaimer}>
-                {i18n.t('Feature importance shows which inputs have the most influence on predictions. This does not imply causation.')}
-            </p>
         </div>
     );
 };

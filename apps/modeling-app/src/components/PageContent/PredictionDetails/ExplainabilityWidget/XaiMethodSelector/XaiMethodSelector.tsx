@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Button, IconSettings16 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { type XaiMethodRead } from '@dhis2-chap/ui';
 import { XaiMethodSelectionModal } from './XaiMethodSelectionModal';
@@ -21,23 +20,19 @@ export const XaiMethodSelector = ({
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const selectedMethod = xaiMethods?.find(m => m.name === selectedMethodName);
+    const label = selectedMethod?.displayName ?? selectedMethodName;
 
     return (
         <>
-            <div className={styles.selector}>
-                <span className={styles.label}>{i18n.t('XAI Method')}</span>
-                <span className={styles.value}>
-                    {selectedMethod?.displayName ?? selectedMethodName}
-                </span>
-                <Button
-                    small
-                    icon={<IconSettings16 />}
-                    onClick={() => setIsModalOpen(true)}
-                    loading={isLoading}
-                >
-                    {i18n.t('Change')}
-                </Button>
-            </div>
+            <button
+                className={styles.pill}
+                onClick={() => setIsModalOpen(true)}
+                disabled={isLoading}
+                title={i18n.t('Change XAI method')}
+            >
+                {label}
+                <span className={styles.pillCaret}>▾</span>
+            </button>
 
             {isModalOpen && (
                 <XaiMethodSelectionModal

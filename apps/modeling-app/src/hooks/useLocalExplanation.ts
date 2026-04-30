@@ -50,11 +50,8 @@ export const useLocalExplanation = (
 
     const matches =
         data?.filter((exp) => {
-            const ou = exp.orgUnit ?? (exp as { org_unit?: string }).org_unit;
-            const m = exp.method ?? (exp as { method?: string }).method;
-            const xm = exp.xaiMethodName ?? (exp as { xai_method_name?: string }).xai_method_name;
-            if (ou !== orgUnit) return false;
-            return xaiMethod ? (xm ? xm === xaiMethod : m === xaiMethod) : m === method;
+            if (exp.orgUnit !== orgUnit) return false;
+            return xaiMethod ? (exp.xaiMethodName ? exp.xaiMethodName === xaiMethod : exp.method === xaiMethod) : exp.method === method;
         }) ?? [];
 
     const currentExplanation = matches.length > 0 ? pickLatestExplanation(matches) : undefined;

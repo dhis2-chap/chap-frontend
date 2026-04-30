@@ -55,7 +55,7 @@ export {
 } from './httpfunctions/core/request';
 export { buildPredictionSeries } from './utils/PredictionViewModel';
 
-export { FeatureImportanceChart, ShapBeeswarmChart, ShapWaterfallChart } from './components/explainability';
+export { FeatureImportanceChart, ShapBeeswarmChart, ShapWaterfallChart, formatFeatureName } from './components/explainability';
 export { XaiService, DEFAULT_XAI_METHOD } from './httpfunctions/services/XaiService';
 export type {
     DataSourceInfo,

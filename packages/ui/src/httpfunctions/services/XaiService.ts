@@ -174,7 +174,19 @@ function normalizeGlobalExplanation(r: any): GlobalExplanationResponse {
 
 function normalizeLocalExplanation(r: any): LocalExplanationResponse {
     return {
-        ...r,
+        id: r.id,
+        predictionId: r.predictionId ?? r.prediction_id,
+        orgUnit: r.orgUnit ?? r.org_unit,
+        period: r.period,
+        method: r.method,
+        xaiMethodName: r.xaiMethodName ?? r.xai_method_name,
+        outputStatistic: r.outputStatistic ?? r.output_statistic,
+        featureAttributions: r.featureAttributions ?? r.feature_attributions ?? [],
+        baselinePrediction: r.baselinePrediction ?? r.baseline_prediction,
+        actualPrediction: r.actualPrediction ?? r.actual_prediction,
+        computedAt: r.computedAt ?? r.computed_at,
+        status: r.status,
+        dataSource: r.dataSource ?? r.data_source,
         covariateProvenance: r.covariateProvenance ?? r.covariate_provenance,
         surrogateQuality: (r.surrogateQuality || r.surrogate_quality)
             ? normalizeSurrogateQuality(r.surrogateQuality ?? r.surrogate_quality)
@@ -216,12 +228,14 @@ function normalizeHorizonSummary(r: any): HorizonSummaryResponse {
 export class XaiService {
     public static listXaiMethods(
         includeArchived: boolean = false,
+        predictionId?: number,
     ): CancelablePromise<XaiMethodRead[]> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/v1/xai/methods',
             query: {
                 includeArchived: includeArchived,
+                predictionId: predictionId,
             },
             errors: {
                 422: `Validation Error`,

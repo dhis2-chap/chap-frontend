@@ -1,9 +1,10 @@
 import i18n from '@dhis2/d2-i18n';
-import { Button, CircularLoader, NoticeBox, SingleSelect, SingleSelectOption, Menu, MenuItem, Tag } from '@dhis2/ui';
+import { Button, CircularLoader, NoticeBox, SingleSelect, SingleSelectOption, Menu, MenuItem } from '@dhis2/ui';
 import {
     FeatureImportanceChart,
     ShapBeeswarmChart,
     ShapWaterfallChart,
+    type LocalExplanationResponse,
     type ShapBeeswarmResponse,
 } from '@dhis2-chap/ui';
 import styles from './ExplainabilityWidget.module.css';
@@ -18,7 +19,7 @@ type Props = {
     selectedPeriod: string;
     onPeriodChange: (period: string) => void;
     getPeriodLabel: (period: string) => string;
-    displayExplanation: any;
+    displayExplanation: LocalExplanationResponse | null;
     isLocalLoading: boolean;
     isLocalFetching: boolean;
     localError: unknown;
@@ -28,8 +29,6 @@ type Props = {
     supports: (viz: string) => boolean;
     localView: 'waterfall' | 'summary';
     onLocalViewChange: (v: 'waterfall' | 'summary') => void;
-    selectedXaiMethodObj: any;
-    selectedXaiMethod: string;
     beeswarmData: ShapBeeswarmResponse | null;
     isBeeswarmLoading: boolean;
     beeswarmError?: string | null;
@@ -57,8 +56,6 @@ export const LocalTab = ({
     supports,
     localView,
     onLocalViewChange,
-    selectedXaiMethodObj,
-    selectedXaiMethod,
     beeswarmData,
     isBeeswarmLoading,
     beeswarmError,
@@ -119,7 +116,7 @@ export const LocalTab = ({
                                     <div className={styles.loadingOverlay}><CircularLoader small /></div>
                                 )}
                                 <div className={styles.chartHeader}>
-                                    {(supports('waterfall') || supports('beeswarm')) ? (
+                                    {(supports('waterfall') || supports('beeswarm')) && (
                                         <div className={styles.viewToggle}>
                                             {supports('waterfall') && (
                                                 <button
@@ -138,8 +135,6 @@ export const LocalTab = ({
                                                 </button>
                                             )}
                                         </div>
-                                    ) : (
-                                        <Tag>{selectedXaiMethodObj?.displayName ?? selectedXaiMethod}</Tag>
                                     )}
                                     <Button small secondary onClick={onRunExplanations} loading={isExplanationJobRunning} disabled={isExplanationJobRunning}>
                                         {i18n.t('Recalculate')}
@@ -148,7 +143,7 @@ export const LocalTab = ({
                                 {supports('waterfall') && localView === 'waterfall' ? (
                                     <ShapWaterfallChart
                                         key={`local-waterfall-${displayExplanation.id ?? 'new'}-${localOrgUnit}-${selectedPeriod}`}
-                                        features={displayExplanation.featureAttributions.map((f: any) => ({
+                                        features={displayExplanation.featureAttributions.map((f) => ({
                                             feature_name: f.feature_name, importance: f.importance,
                                             direction: f.direction, actual_value: f.actual_value,
                                         }))}
@@ -187,7 +182,7 @@ export const LocalTab = ({
                                         </NoticeBox>
                                         <FeatureImportanceChart
                                             key={`local-lime-${displayExplanation.id ?? 'new'}-${localOrgUnit}-${selectedPeriod}`}
-                                            features={displayExplanation.featureAttributions.map((f: any) => ({
+                                            features={displayExplanation.featureAttributions.map((f) => ({
                                                 feature_name: f.feature_name, importance: f.importance, direction: f.direction,
                                             }))}
                                             title={i18n.t('LIME Feature Contributions — {{orgUnit}}, {{period}}', {

@@ -1,26 +1,19 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import type { FeatureAttribution } from '../../../httpfunctions/services/XaiService';
+import { formatFeatureName, CHART_COLORS } from '../utils';
 import styles from './FeatureImportanceChart.module.css';
 
 interface FeatureImportanceChartProps {
     features: FeatureAttribution[];
     title?: string;
-    showDirection?: boolean;
 }
-
-const formatFeatureName = (name: string): string => {
-    return name
-        .replace(/_/g, ' ')
-        .replace(/\b\w/g, char => char.toUpperCase());
-};
 
 export const FeatureImportanceChart = ({
     features,
     title,
-    showDirection = true,
 }: FeatureImportanceChartProps) => {
     const options: Highcharts.Options = useMemo(() => {
         const sortedFeatures = [...features].sort(
@@ -28,7 +21,7 @@ export const FeatureImportanceChart = ({
         );
 
         const categories = sortedFeatures.map(f => formatFeatureName(f.feature_name));
-        const values = sortedFeatures.map(f => f.importance);
+        const values = sortedFeatures.map(f => Math.abs(f.importance));
 
         return {
             chart: {
@@ -42,42 +35,29 @@ export const FeatureImportanceChart = ({
             xAxis: {
                 categories,
                 title: { text: null },
-                labels: {
-                    style: { fontSize: '12px' },
-                },
+                labels: { style: { fontSize: '12px' } },
             },
             yAxis: {
                 title: {
-                    text: i18n.t('Importance Score'),
-                    style: { fontSize: '12px' },
+                    text: i18n.t('Mean absolute SHAP value'),
+                    style: { fontSize: '11px', color: '#6e7a8a' },
                 },
-                labels: {
-                    style: { fontSize: '11px' },
-                },
+                labels: { style: { fontSize: '11px' } },
+                min: 0,
             },
             tooltip: {
                 formatter: function (this: Highcharts.TooltipFormatterContextObject) {
-                    const point = this.point;
-                    const feature = sortedFeatures[point.index];
-                    let tooltip = `<b>${formatFeatureName(feature.feature_name)}</b><br/>`;
-                    tooltip += `${i18n.t('Importance')}: ${feature.importance.toFixed(4)}<br/>`;
-                    if (showDirection && feature.direction) {
-                        tooltip += `${i18n.t('Effect')}: ${feature.direction}`;
-                    }
-                    return tooltip;
+                    const feature = sortedFeatures[this.point.index];
+                    return `<b>${formatFeatureName(feature.feature_name)}</b><br/>${i18n.t('Importance')}: ${Math.abs(feature.importance).toFixed(4)}`;
                 },
             },
             plotOptions: {
                 bar: {
-                    dataLabels: {
-                        enabled: true,
-                        format: '{y:.3f}',
-                        style: { fontSize: '10px' },
-                    },
-                    colorByPoint: true,
-                    colors: values.map(v =>
-                        v >= 0 ? '#4caf50' : '#f44336',
-                    ),
+                    dataLabels: { enabled: false },
+                    color: CHART_COLORS.neutral,
+                    borderRadius: 2,
+                    groupPadding: 0.1,
+                    pointPadding: 0.05,
                 },
             },
             legend: { enabled: false },
@@ -90,7 +70,7 @@ export const FeatureImportanceChart = ({
                 },
             ],
         };
-    }, [features, title, showDirection]);
+    }, [features, title]);
 
     if (!features || features.length === 0) {
         return (

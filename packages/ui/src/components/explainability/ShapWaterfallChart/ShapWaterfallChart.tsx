@@ -1,8 +1,9 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import type { FeatureAttribution, DataSourceInfo } from '../../../httpfunctions/services/XaiService';
+import { formatFeatureName, CHART_COLORS } from '../utils';
 import styles from './ShapWaterfallChart.module.css';
 
 interface ShapWaterfallChartProps {
@@ -14,9 +15,6 @@ interface ShapWaterfallChartProps {
     dataSource?: DataSourceInfo;
 }
 
-const formatFeatureName = (name: string): string =>
-    name.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-
 const formatValue = (val: number | undefined | null): string => {
     if (val === undefined || val === null) return '';
     if (Number.isInteger(val)) return val.toLocaleString();
@@ -24,9 +22,9 @@ const formatValue = (val: number | undefined | null): string => {
 };
 
 const getDataSourceLabels = (): Record<string, { label: string; color: string }> => ({
-    observed: { label: i18n.t('Current State Driver'), color: '#4caf50' },
-    seasonal_proxy: { label: i18n.t('Seasonal Expectation (Proxy)'), color: '#ff9800' },
-    last_available: { label: i18n.t('Last Available Data'), color: '#ff9800' },
+    observed: { label: i18n.t('Current State Driver'), color: '#2e7d32' },
+    seasonal_proxy: { label: i18n.t('Seasonal Expectation (Proxy)'), color: '#e65100' },
+    last_available: { label: i18n.t('Last Available Data'), color: '#e65100' },
 });
 
 export const ShapWaterfallChart = ({
@@ -62,12 +60,12 @@ export const ShapWaterfallChart = ({
         const data: Highcharts.PointOptionsObject[] = [
             {
                 y: baselinePrediction,
-                color: '#90A4AE',
+                color: CHART_COLORS.baseline,
                 dataLabels: { format: '{y:.1f}' },
             },
             ...sorted.map(f => ({
                 y: f.importance,
-                color: f.importance >= 0 ? '#ef5350' : '#42a5f5',
+                color: f.importance >= 0 ? CHART_COLORS.positive : CHART_COLORS.negative,
                 dataLabels: {
                     format: `{y:+.2f}`,
                 },
@@ -76,14 +74,14 @@ export const ShapWaterfallChart = ({
                 ? [
                         {
                             y: otherContribution,
-                            color: otherContribution >= 0 ? '#ef9a9a' : '#90caf9',
+                            color: otherContribution >= 0 ? CHART_COLORS.positiveLight : CHART_COLORS.negativeLight,
                             dataLabels: { format: '{y:+.2f}' },
                         } as Highcharts.PointOptionsObject,
                     ]
                 : []),
             {
                 isSum: true,
-                color: '#546E7A',
+                color: CHART_COLORS.sum,
                 dataLabels: { format: '{y:.1f}' },
             },
         ];
@@ -134,13 +132,13 @@ export const ShapWaterfallChart = ({
                         ? [
                                 {
                                     value: actualPrediction,
-                                    color: '#FF9800',
+                                    color: '#e65100',
                                     dashStyle: 'Dot' as Highcharts.DashStyleValue,
                                     width: 2,
                                     zIndex: 4,
                                     label: {
                                         text: `${i18n.t('Actual forecast')}: ${formatValue(actualPrediction)}`,
-                                        style: { fontSize: '10px', color: '#FF9800', fontWeight: '500' },
+                                        style: { fontSize: '10px', color: '#e65100', fontWeight: '500' },
                                     },
                                 },
                             ]
@@ -208,8 +206,8 @@ export const ShapWaterfallChart = ({
                     type: 'waterfall',
                     name: i18n.t('SHAP Values'),
                     data,
-                    upColor: '#ef5350',
-                    color: '#42a5f5',
+                    upColor: CHART_COLORS.positive,
+                    color: CHART_COLORS.negative,
                 } as Highcharts.SeriesWaterfallOptions,
             ],
         };

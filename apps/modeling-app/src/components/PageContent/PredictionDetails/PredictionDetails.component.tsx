@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import styles from './PredictionDetails.module.css';
 import { PredictionInfo, ModelSpecRead } from '@dhis2-chap/ui';
 import { PredictionResultWidget } from './PredictionResultWidget/PredictionResultWidget.container';
@@ -24,7 +24,7 @@ export const PredictionDetailsComponent = ({
         for (let i = 0; i < nPeriods; i++) {
             periodsArr.push(`${lastPeriod}_${i + 1}`);
         }
-        return periodsArr.length > 0 ? periodsArr : [lastPeriod];
+        return periodsArr;
     }, [prediction]);
 
     return (

@@ -1,8 +1,9 @@
-import React, { useMemo, useRef } from 'react';
+import { useMemo } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import type { ShapBeeswarmPoint } from '../../../httpfunctions/services/XaiService';
+import { formatFeatureName } from '../utils';
 import styles from './ShapBeeswarmChart.module.css';
 
 interface ShapBeeswarmChartProps {
@@ -13,9 +14,6 @@ interface ShapBeeswarmChartProps {
     highlightPeriod?: string;
     orgUnitMap?: Record<string, string>;
 }
-
-const formatFeatureName = (name: string): string =>
-    name.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
 
 const interpolateColor = (t: number): string => {
     const r = Math.round(66 + t * (239 - 66));
@@ -42,17 +40,13 @@ export const ShapBeeswarmChart = ({
 }: ShapBeeswarmChartProps) => {
     const hasHighlight = !!(highlightOrgUnit && highlightPeriod);
 
-    const jitterCacheRef = useRef<Map<string, number>>(new Map());
-    const prevPointsRef = useRef<ShapBeeswarmPoint[]>([]);
-    if (prevPointsRef.current !== points) {
-        prevPointsRef.current = points;
-        jitterCacheRef.current = new Map(
-            points.map((p) => {
-                const key = `${p.orgUnit}|${p.period}|${p.featureName}`;
-                return [key, jitterForKey(key)];
-            })
-        );
-    }
+    const jitterCache = useMemo(
+        () => new Map(points.map((p) => {
+            const key = `${p.orgUnit}|${p.period}|${p.featureName}`;
+            return [key, jitterForKey(key)];
+        })),
+        [points],
+    );
 
     const options: Highcharts.Options = useMemo(() => {
         const featureRanges: Record<string, { min: number; max: number }> = {};
@@ -80,7 +74,9 @@ export const ShapBeeswarmChart = ({
             .sort((a, b) => (meanAbsShap[a] / counts[a]) - (meanAbsShap[b] / counts[b]));
 
         const featureIndexMap: Record<string, number> = {};
-        sortedFeatures.forEach((f, i) => { featureIndexMap[f] = i; });
+        sortedFeatures.forEach((f, i) => {
+            featureIndexMap[f] = i;
+        });
 
         const bgData: Highcharts.PointOptionsObject[] = [];
         const hlData: Highcharts.PointOptionsObject[] = [];
@@ -96,7 +92,7 @@ export const ShapBeeswarmChart = ({
             const t = spread > 0 ? (fv - range.min) / spread : 0.5;
 
             const yIdx = featureIndexMap[name] ?? 0;
-            const jitter = jitterCacheRef.current.get(`${ou}|${per}|${name}`) ?? 0;
+            const jitter = jitterCache.get(`${ou}|${per}|${name}`) ?? 0;
 
             const isHighlighted = hasHighlight && ou === highlightOrgUnit && per === highlightPeriod;
 
@@ -212,7 +208,7 @@ export const ShapBeeswarmChart = ({
                 }] : []),
             ],
         };
-    }, [points, featureNames, title, hasHighlight, highlightOrgUnit, highlightPeriod, orgUnitMap]);
+    }, [points, featureNames, title, hasHighlight, highlightOrgUnit, highlightPeriod, orgUnitMap, jitterCache]);
 
     if (!points || points.length === 0) {
         return (

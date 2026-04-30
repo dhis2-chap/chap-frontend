@@ -20,8 +20,11 @@ import { useCopyToClipboard } from '../../../hooks/useCopyToClipboard';
 import { useAlert } from '@dhis2/app-runtime';
 import { useNavigate } from 'react-router-dom';
 
+const XAI_METHOD_PATTERN = /((?:shap|lime)_[a-z_]+|native_shap)/;
+
 type Props = {
     jobId: string;
+    name: string;
     status: string;
     result: string | undefined | null;
     type: string;
@@ -29,6 +32,7 @@ type Props = {
 
 export const JobActionsMenu = ({
     jobId,
+    name,
     status,
     result,
     type,
@@ -53,11 +57,17 @@ export const JobActionsMenu = ({
         setViewLogsModalIsOpen(true);
     };
 
+    const isXaiJob = type === JOB_TYPES.XAI_SURROGATE || type === JOB_TYPES.XAI_EXPLANATIONS;
+    const xaiMethod = isXaiJob ? XAI_METHOD_PATTERN.exec(name)?.[1] : null;
+
     const handleNavigateToResult = () => {
         if (type === JOB_TYPES.CREATE_BACKTEST_WITH_DATA || type === JOB_TYPES.BACKTEST) {
             navigate(`/evaluate/compare?baseEvaluation=${result}&returnTo=${encodeURIComponent('/jobs')}`);
         } else if (type === JOB_TYPES.MAKE_PREDICTION) {
             navigate(`/predictions/${result}`);
+        } else if (isXaiJob && result) {
+            const params = xaiMethod ? `?xaiMethod=${xaiMethod}` : '';
+            navigate(`/predictions/${result}${params}`);
         }
         setFlyoutMenuIsOpen(false);
     };
