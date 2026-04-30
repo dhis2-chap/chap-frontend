@@ -74,6 +74,10 @@ export const JobsTableFilters = () => {
                         label={i18n.t('XAI surrogate training')}
                         value={JOB_TYPES.XAI_SURROGATE}
                     />
+                    <MenuItem
+                        label={i18n.t('Run explanations')}
+                        value={JOB_TYPES.XAI_EXPLANATIONS}
+                    />
                     {/* <MenuItem
                         label={i18n.t('Create dataset (deprecated)')}
                         value={JOB_TYPES.CREATE_DATASET}

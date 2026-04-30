@@ -23,6 +23,7 @@ type Props = {
     selectedXaiMethod: string;
     isBeeswarmLoading: boolean;
     beeswarmData: ShapBeeswarmResponse | null;
+    beeswarmError?: string | null;
     orgUnitMap: Record<string, string>;
     onRunExplanations: () => void;
     onLoadBeeswarm: () => void;
@@ -41,6 +42,7 @@ export const GlobalTab = ({
     selectedXaiMethod,
     isBeeswarmLoading,
     beeswarmData,
+    beeswarmError,
     orgUnitMap,
     onRunExplanations,
     onLoadBeeswarm,
@@ -106,7 +108,7 @@ export const GlobalTab = ({
                     />
                 ) : (
                     <div className={styles.emptyState}>
-                        <p>{i18n.t('Loading SHAP summary data...')}</p>
+                        <p>{beeswarmError ?? i18n.t('SHAP summary data not yet loaded.')}</p>
                         <Button small primary onClick={onLoadBeeswarm}>{i18n.t('Load')}</Button>
                     </div>
                 )

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import i18n from '@dhis2/d2-i18n';
 import { Button, CircularLoader, NoticeBox, TabBar, Tab } from '@dhis2/ui';
@@ -12,8 +12,8 @@ import {
 } from '@dhis2-chap/ui';
 import { useGlobalExplanation } from '@/hooks/useGlobalExplanation';
 import { useLocalExplanation } from '@/hooks/useLocalExplanation';
-import { useOrgUnitsById } from '../../../../hooks/useOrgUnitsById';
-import { useXaiMethods } from '../../../../hooks/useXaiMethods';
+import { useOrgUnitsById } from '@/hooks/useOrgUnitsById';
+import { useXaiMethods } from '@/hooks/useXaiMethods';
 import { XaiMethodSelector } from './XaiMethodSelector';
 import { getPeriodLabel } from './getPeriodLabel';
 import { GlobalTab } from './GlobalTab';
@@ -73,7 +73,7 @@ export const ExplainabilityWidget = ({
 
         const preferredNativeMethod = [...xaiMethods]
             .sort((a, b) => methodScore(b) - methodScore(a))
-            .find((method) => methodScore(method) >= 0);
+            .find(method => methodScore(method) >= 0);
 
         if (preferredNativeMethod && preferredNativeMethod.name !== selectedXaiMethod) {
             setSelectedXaiMethod(preferredNativeMethod.name);
@@ -85,14 +85,14 @@ export const ExplainabilityWidget = ({
 
     // Falls back to method-type inference when supportedVisualizations is not yet populated
     // (e.g. after upgrading a server that hasn't reseeded the DB yet).
-    const supports = (viz: string): boolean => {
+    const supports = useCallback((viz: string): boolean => {
         const declared = selectedXaiMethodObj?.supportedVisualizations;
         if (declared && declared.length > 0) {
             return declared.includes(viz);
         }
         if (viz === 'importance') return true;
         return selectedMethod === 'shap';
-    };
+    }, [selectedXaiMethodObj, selectedMethod]);
 
     const [horizonData, setHorizonData] = useState<HorizonSummaryResponse | null>(null);
     const [horizonOrgUnit, setHorizonOrgUnit] = useState<string>('');
@@ -102,6 +102,7 @@ export const ExplainabilityWidget = ({
 
     const [beeswarmData, setBeeswarmData] = useState<ShapBeeswarmResponse | null>(null);
     const [isBeeswarmLoading, setIsBeeswarmLoading] = useState(false);
+    const [beeswarmError, setBeeswarmError] = useState<string | null>(null);
     const [globalView, setGlobalView] = useState<'importance' | 'beeswarm'>('importance');
     const [localView, setLocalView] = useState<'waterfall' | 'summary'>('waterfall');
     const [horizonView, setHorizonView] = useState<'importance' | 'beeswarm'>('importance');
@@ -111,7 +112,6 @@ export const ExplainabilityWidget = ({
         isLoading: isGlobalLoading,
         isFetching: isGlobalFetching,
         error: globalError,
-        isComputing: isComputingGlobal,
     } = useGlobalExplanation(predictionId, selectedXaiMethod);
 
     const {
@@ -128,9 +128,9 @@ export const ExplainabilityWidget = ({
         prevExplanationRef.current = localExplanation;
     }
     const displayExplanation =
-        localExplanation ??
-        (prevExplanationRef.current?.period === selectedPeriod &&
-        prevExplanationRef.current?.orgUnit === localOrgUnit
+        localExplanation
+        ?? (prevExplanationRef.current?.period === selectedPeriod &&
+            prevExplanationRef.current?.orgUnit === localOrgUnit
             ? prevExplanationRef.current
             : null);
     const isTransitioning =
@@ -143,7 +143,7 @@ export const ExplainabilityWidget = ({
 
     const orgUnitOptions = useMemo(
         () =>
-            orgUnits.map(id => {
+            orgUnits.map((id) => {
                 const found = orgUnitsData?.organisationUnits.find(ou => ou.id === id);
                 return { id, label: found?.displayName ?? id };
             }).sort((a, b) => a.label.localeCompare(b.label)),
@@ -172,17 +172,17 @@ export const ExplainabilityWidget = ({
         data: explanationJobStatus,
     } = useQuery({
         queryKey: ['jobStatus', explanationJobId],
-        queryFn: () => JobsService.getJobStatusJobsJobIdGet(explanationJobId!),
+        queryFn: () => JobsService.getJobStatusV1JobsJobIdGet(explanationJobId!),
         enabled: !!explanationJobId,
-        refetchInterval: (data) =>
+        refetchInterval: data =>
             data === 'SUCCESS' || data === 'FAILURE' || data === 'REVOKED' ? false : 2000,
     });
 
     const isExplanationJobRunning =
-        !!explanationJobId
-        && explanationJobStatus !== 'SUCCESS'
-        && explanationJobStatus !== 'FAILURE'
-        && explanationJobStatus !== 'REVOKED';
+        !!explanationJobId &&
+        explanationJobStatus !== 'SUCCESS' &&
+        explanationJobStatus !== 'FAILURE' &&
+        explanationJobStatus !== 'REVOKED';
     const hasCompletedExplanationsForMethod = !!completedExplanationMethods[selectedXaiMethod];
 
     const handleRunExplanations = async () => {
@@ -191,8 +191,8 @@ export const ExplainabilityWidget = ({
         try {
             const job = await XaiService.runExplanations(predictionId, selectedXaiMethod, 'median', 10);
             setExplanationJobId(job.id);
-        } catch (e: any) {
-            setExplanationRunError(e?.message || 'Failed to start explanation run');
+        } catch (e) {
+            setExplanationRunError((e instanceof Error ? e.message : String(e)) || 'Failed to start explanation run');
         }
     };
 
@@ -202,6 +202,7 @@ export const ExplainabilityWidget = ({
             prevXaiMethodRef.current = selectedXaiMethod;
             setExplanationJobId(null);
             setBeeswarmData(null);
+            setBeeswarmError(null);
             setHorizonData(null);
             setHorizonOrgUnit('');
             if (!supports('beeswarm')) {
@@ -210,8 +211,7 @@ export const ExplainabilityWidget = ({
                 setHorizonView('importance');
             }
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectedXaiMethod]);
+    }, [selectedXaiMethod, supports]);
 
     const handleComputeLocal = (force: boolean = false) => {
         computeLocal({
@@ -233,8 +233,8 @@ export const ExplainabilityWidget = ({
             const result = await XaiService.computeHorizonSummary(predictionId, ou, 'median', selectedMethod, selectedXaiMethod);
             setHorizonData(result);
             setHorizonOrgUnit(ou);
-        } catch (e: any) {
-            setHorizonError(e?.message || 'Failed to compute horizon summary');
+        } catch (e) {
+            setHorizonError((e instanceof Error ? e.message : String(e)) || 'Failed to compute horizon summary');
         } finally {
             setIsHorizonLoading(false);
         }
@@ -243,38 +243,27 @@ export const ExplainabilityWidget = ({
     const handleLoadBeeswarm = async () => {
         if (!predictionId || beeswarmData || isBeeswarmLoading) return;
         setIsBeeswarmLoading(true);
+        setBeeswarmError(null);
         try {
             const result = await XaiService.computeShapBeeswarm(predictionId, 'median', selectedXaiMethod);
             setBeeswarmData(result);
-        } catch { /* silently fail — chart just won't show */ }
-        finally { setIsBeeswarmLoading(false); }
-    };
-
-    useEffect(() => {
-        if (
-            hasCompletedExplanationsForMethod &&
-            activeTab === 'local'
-            && !isExplanationJobRunning
-            && !isLocalLoading
-            && !isLocalFetching
-            && !localExplanation
-            && !isComputingLocal
-            && localOrgUnit
-            && selectedPeriod
-        ) {
-            handleComputeLocal(false);
+        } catch (e) {
+            setBeeswarmError((e instanceof Error ? e.message : String(e)) || 'Failed to load summary data');
+        } finally {
+            setIsBeeswarmLoading(false);
         }
-    }, [activeTab, localOrgUnit, selectedPeriod, selectedXaiMethod, isLocalLoading, isLocalFetching, localExplanation, isComputingLocal, isExplanationJobRunning, hasCompletedExplanationsForMethod]);
+    };
 
     useEffect(() => {
         if (!explanationJobId) return;
         if (explanationJobStatus === 'SUCCESS') {
-            setCompletedExplanationMethods((prev) => ({ ...prev, [selectedXaiMethod]: true }));
+            setCompletedExplanationMethods(prev => ({ ...prev, [selectedXaiMethod]: true }));
             queryClient.invalidateQueries({ queryKey: ['globalExplanation', predictionId, selectedXaiMethod] });
             queryClient.invalidateQueries({ queryKey: ['localExplanations', predictionId] });
             setHorizonOrgUnit('');
             setHorizonData(null);
             setBeeswarmData(null);
+            setBeeswarmError(null);
             handleComputeHorizon(localOrgUnit);
             setExplanationJobId(null);
         }
@@ -286,7 +275,7 @@ export const ExplainabilityWidget = ({
 
     useEffect(() => {
         if (globalExplanation?.available) {
-            setCompletedExplanationMethods((prev) => ({ ...prev, [selectedXaiMethod]: true }));
+            setCompletedExplanationMethods(prev => ({ ...prev, [selectedXaiMethod]: true }));
         }
     }, [globalExplanation?.available, selectedXaiMethod]);
 
@@ -298,14 +287,13 @@ export const ExplainabilityWidget = ({
 
     useEffect(() => {
         const needsBeeswarm =
-            (activeTab === 'global' && globalView === 'beeswarm') ||
-            (activeTab === 'local' && localView === 'summary' && supports('beeswarm')) ||
-            (activeTab === 'horizon' && horizonView === 'beeswarm');
+            (activeTab === 'global' && globalView === 'beeswarm')
+            || (activeTab === 'local' && localView === 'summary' && supports('beeswarm'))
+            || (activeTab === 'horizon' && horizonView === 'beeswarm');
         if (needsBeeswarm && !beeswarmData && !isBeeswarmLoading) {
             handleLoadBeeswarm();
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [activeTab, globalView, localView, selectedXaiMethod, beeswarmData, isBeeswarmLoading, horizonView]);
+    }, [activeTab, globalView, localView, selectedXaiMethod, beeswarmData, isBeeswarmLoading, horizonView, supports]);
 
     const handleOrgUnitChange = (value: string) => {
         hasUserSelectedOrgUnit.current = true;
@@ -335,6 +323,7 @@ export const ExplainabilityWidget = ({
             onOrgUnitChange: handleOrgUnitChange,
             beeswarmData,
             isBeeswarmLoading,
+            beeswarmError,
             orgUnitMap,
             isExplanationJobRunning,
             supports,
@@ -375,6 +364,7 @@ export const ExplainabilityWidget = ({
                         onLocalViewChange={setLocalView}
                         selectedXaiMethodObj={selectedXaiMethodObj}
                         selectedXaiMethod={selectedXaiMethod}
+                        onComputeLocal={() => handleComputeLocal(false)}
                     />
                 );
             case 'horizon':
@@ -410,25 +400,21 @@ export const ExplainabilityWidget = ({
                                 {explanationRunError}
                             </NoticeBox>
                         )}
-                        {(isExplanationJobRunning || isComputingGlobal || isComputingLocal || isHorizonLoading || isBeeswarmLoading) && (
+                        {(isExplanationJobRunning || isComputingLocal || isHorizonLoading || isBeeswarmLoading) && (
                             <div className={styles.computingBanner}>
                                 <CircularLoader extrasmall />
                                 <span>
                                     {isExplanationJobRunning
                                         ? i18n.t('Generating global, local, and horizon explanations ({{method}})…', {
-                                            method: selectedXaiMethodObj?.displayName ?? selectedXaiMethod,
-                                        })
-                                        : isComputingGlobal
-                                        ? i18n.t('Training surrogate model ({{method}}) — this includes hyperparameter tuning and may take a moment…', {
-                                            method: selectedXaiMethodObj?.displayName ?? selectedXaiMethod,
-                                        })
+                                                method: selectedXaiMethodObj?.displayName ?? selectedXaiMethod,
+                                            })
                                         : isComputingLocal
-                                        ? i18n.t('Computing local explanation ({{method}}) with hyperparameter tuning…', {
-                                            method: selectedXaiMethodObj?.displayName ?? selectedXaiMethod,
-                                        })
-                                        : isHorizonLoading
-                                        ? i18n.t('Computing horizon summary…')
-                                        : i18n.t('Loading summary data…')}
+                                            ? i18n.t('Computing local explanation ({{method}}) with hyperparameter tuning…', {
+                                                    method: selectedXaiMethodObj?.displayName ?? selectedXaiMethod,
+                                                })
+                                            : isHorizonLoading
+                                                ? i18n.t('Computing horizon summary…')
+                                                : i18n.t('Loading summary data…')}
                                 </span>
                             </div>
                         )}
@@ -436,7 +422,7 @@ export const ExplainabilityWidget = ({
                     <TabBar className={styles.tabBar}>
                         <Tab selected={activeTab === 'global'} onClick={() => setActiveTab('global')}>
                             {i18n.t('Global')}
-                            {(isComputingGlobal || isExplanationJobRunning || isGlobalFetching) && <CircularLoader extrasmall className={styles.tabSpinner} />}
+                            {(isExplanationJobRunning || isGlobalFetching) && <CircularLoader extrasmall className={styles.tabSpinner} />}
                         </Tab>
                         <Tab selected={activeTab === 'local'} onClick={() => setActiveTab('local')}>
                             {i18n.t('Local')}

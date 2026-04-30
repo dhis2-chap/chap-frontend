@@ -24,6 +24,7 @@ type Props = {
     onHorizonViewChange: (v: 'importance' | 'beeswarm') => void;
     beeswarmData: ShapBeeswarmResponse | null;
     isBeeswarmLoading: boolean;
+    beeswarmError?: string | null;
     orgUnitMap: Record<string, string>;
     onRunExplanations: () => void;
     onLoadBeeswarm: () => void;
@@ -42,6 +43,7 @@ export const HorizonTab = ({
     onHorizonViewChange,
     beeswarmData,
     isBeeswarmLoading,
+    beeswarmError,
     orgUnitMap,
     onRunExplanations,
     onLoadBeeswarm,
@@ -134,7 +136,7 @@ export const HorizonTab = ({
                             />
                         ) : (
                             <div className={styles.emptyState}>
-                                <p>{i18n.t('Loading SHAP summary data...')}</p>
+                                <p>{beeswarmError ?? i18n.t('SHAP summary data not yet loaded.')}</p>
                                 <Button small primary onClick={onLoadBeeswarm}>{i18n.t('Load')}</Button>
                             </div>
                         )}

@@ -5,7 +5,7 @@ export const useXaiMethods = () => {
     const { data, error, isLoading } = useQuery<XaiMethodRead[], ApiError>({
         queryKey: ['xaiMethods'],
         queryFn: () => XaiService.listXaiMethods(),
-        staleTime: Infinity,
+        staleTime: 30 * 60 * 1000,
         retry: 0,
         select: methods => methods.filter(m => !m.archived),
     });
