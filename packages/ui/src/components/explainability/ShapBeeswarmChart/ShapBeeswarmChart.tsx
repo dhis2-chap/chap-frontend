@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
@@ -24,6 +24,14 @@ const interpolateColor = (t: number): string => {
     return `rgb(${r},${g},${b})`;
 };
 
+const jitterForKey = (key: string): number => {
+    let h = 0;
+    for (let i = 0; i < key.length; i++) {
+        h = Math.imul(31, h) + key.charCodeAt(i) | 0;
+    }
+    return ((h >>> 0) / 0xffffffff - 0.5) * 0.3;
+};
+
 export const ShapBeeswarmChart = ({
     points,
     featureNames,
@@ -33,6 +41,18 @@ export const ShapBeeswarmChart = ({
     orgUnitMap,
 }: ShapBeeswarmChartProps) => {
     const hasHighlight = !!(highlightOrgUnit && highlightPeriod);
+
+    const jitterCacheRef = useRef<Map<string, number>>(new Map());
+    const prevPointsRef = useRef<ShapBeeswarmPoint[]>([]);
+    if (prevPointsRef.current !== points) {
+        prevPointsRef.current = points;
+        jitterCacheRef.current = new Map(
+            points.map((p) => {
+                const key = `${p.orgUnit}|${p.period}|${p.featureName}`;
+                return [key, jitterForKey(key)];
+            })
+        );
+    }
 
     const options: Highcharts.Options = useMemo(() => {
         const featureRanges: Record<string, { min: number; max: number }> = {};
@@ -76,7 +96,7 @@ export const ShapBeeswarmChart = ({
             const t = spread > 0 ? (fv - range.min) / spread : 0.5;
 
             const yIdx = featureIndexMap[name] ?? 0;
-            const jitter = (Math.random() - 0.5) * 0.3;
+            const jitter = jitterCacheRef.current.get(`${ou}|${per}|${name}`) ?? 0;
 
             const isHighlighted = hasHighlight && ou === highlightOrgUnit && per === highlightPeriod;
 

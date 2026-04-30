@@ -67,6 +67,7 @@ export type {
     LocalExplanationResponse,
     ShapBeeswarmPoint,
     ShapBeeswarmResponse,
+    SurrogateQuality,
     XaiMethodRead,
 } from './httpfunctions/services/XaiService';
 export {

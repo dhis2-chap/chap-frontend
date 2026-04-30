@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { NoticeBox } from '@dhis2/ui';
+import type { SurrogateQuality } from '@dhis2-chap/ui';
 import styles from './ExplainabilityWidget.module.css';
 
 const formatFeatureName = (name: string): string =>
     name.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
 
 type Props = {
-    quality?: any;
+    quality?: SurrogateQuality;
     stabilityScore?: number;
 };
 
@@ -33,7 +34,7 @@ export const SurrogateQualityPanel = ({ quality, stabilityScore }: Props) => {
     const r2Pct = (r2 * 100).toFixed(1);
     const r2Color = fidelityTier === 'good' ? '#4caf50' : fidelityTier === 'moderate' ? '#ff9800' : '#f44336';
     const r2Label = fidelityTier === 'good' ? i18n.t('Good') : fidelityTier === 'moderate' ? i18n.t('Moderate') : i18n.t('Poor');
-    const duplicateRatio = unique != null && n > 0 ? ((1 - unique / n) * 100).toFixed(0) : null;
+    const duplicateRatio = unique != null && n != null && n > 0 ? ((1 - unique / n) * 100).toFixed(0) : null;
 
     return (
         <div className={styles.qualityPanel}>

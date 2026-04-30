@@ -33,6 +33,33 @@ export interface DataSourceInfo {
     description: string;
 }
 
+export interface SurrogateQuality {
+    rSquared?: number;
+    r_squared?: number;
+    mae?: number;
+    mape?: number;
+    nSamples?: number;
+    n_samples?: number;
+    nUniqueRows?: number;
+    n_unique_rows?: number;
+    constantFeatures?: string[];
+    constant_features?: string[];
+    permutationRemovedFeatures?: string[];
+    permutation_removed_features?: string[];
+    residualMean?: number | null;
+    residual_mean?: number | null;
+    residualStd?: number | null;
+    residual_std?: number | null;
+    fidelityTier?: string;
+    fidelity_tier?: string;
+    fidelityWarning?: string | null;
+    fidelity_warning?: string | null;
+    targetTransformMethod?: string | null;
+    target_transform_method?: string | null;
+    selectedModelDisplayName?: string;
+    selected_model_display_name?: string;
+}
+
 export interface GlobalExplanationResponse {
     method: string;
     topFeatures: FeatureAttribution[];
@@ -40,12 +67,7 @@ export interface GlobalExplanationResponse {
     nSamples: number;
     stabilityScore?: number;
     available: boolean;
-    surrogateQuality?: {
-        rSquared: number;
-        nSamples: number;
-        nUniqueRows: number;
-        constantFeatures: string[];
-    };
+    surrogateQuality?: SurrogateQuality;
 }
 
 export interface CovariateProvenance {
@@ -84,12 +106,7 @@ export interface LocalExplanationResponse {
     actualPrediction: number;
     computedAt?: string;
     status: string;
-    surrogateQuality?: {
-        rSquared: number;
-        nSamples: number;
-        nUniqueRows: number;
-        constantFeatures: string[];
-    };
+    surrogateQuality?: SurrogateQuality;
     covariateProvenance?: CovariateProvenance;
     dataSource?: DataSourceInfo;
 }
@@ -119,12 +136,7 @@ export interface HorizonSummaryResponse {
         meanSignedImportance: number;
         direction: string;
     }[];
-    surrogateQuality?: {
-        rSquared: number;
-        nSamples: number;
-        nUniqueRows: number;
-        constantFeatures: string[];
-    };
+    surrogateQuality?: SurrogateQuality;
 }
 
 export interface ShapBeeswarmPoint {
@@ -140,12 +152,7 @@ export interface ShapBeeswarmResponse {
     outputStatistic: string;
     featureNames: string[];
     points: ShapBeeswarmPoint[];
-    surrogateQuality?: {
-        rSquared: number;
-        nSamples: number;
-        nUniqueRows: number;
-        constantFeatures: string[];
-    };
+    surrogateQuality?: SurrogateQuality;
 }
 
 export class XaiService {
