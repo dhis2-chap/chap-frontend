@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import type { PredictionOrgUnitSeries, PredictionPointVM } from '../../interfaces/Prediction';
-import { getThresholdTileViewModels } from '../outbreakThresholdTiles';
+import {
+    getStableMaxYForThresholdChart,
+    getThresholdTileViewModels,
+} from '../outbreakThresholdTiles';
 
 const point = (
     period: string,
@@ -107,5 +110,16 @@ describe('getThresholdTileViewModels', () => {
             totalRegions: 4,
             unavailableThresholds: 1,
         });
+    });
+
+    it('sets a stable y-axis max from the full series and endemic threshold', () => {
+        const candidate = series({
+            id: 'region-a',
+            name: 'Region A',
+            actualValues: [100, 100, 100, 100],
+            highQuantile: 50,
+        });
+
+        expect(getStableMaxYForThresholdChart(candidate, 120)).toBe(126);
     });
 });

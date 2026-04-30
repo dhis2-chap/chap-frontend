@@ -74,6 +74,7 @@ export {
     type SupportedOutbreakProbabilityBucket,
 } from './utils/outbreakAlerts';
 export {
+    getStableMaxYForThresholdChart,
     getThresholdTileViewModels,
     type ThresholdSummary,
     type ThresholdTileStatus,

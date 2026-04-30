@@ -1,4 +1,4 @@
-import { forwardRef, useCallback, useEffect, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { HTMLAttributes } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import {
@@ -16,6 +16,7 @@ import {
 import {
     buildOutbreakIndicatorsForSeries,
     calculateMockEndemicThreshold,
+    getStableMaxYForThresholdChart,
     getThresholdTileViewModels,
     MINIMUM_THRESHOLD_OBSERVATIONS,
     OUTBREAK_PROBABILITY_OPTIONS,
@@ -144,40 +145,47 @@ const ThresholdTile = ({
     tile: ThresholdTileViewModel;
     zoomRange?: ZoomRange | null;
     onZoomChange?: (range: ZoomRange | null) => void;
-}) => (
-    <article className={styles.thresholdTile}>
-        <div className={styles.thresholdTileHeader}>
-            <h3 title={tile.orgUnitName}>{tile.orgUnitName}</h3>
-            <span className={[
-                styles.thresholdStatusBadge,
-                tile.status === 'outbreak'
-                    ? styles.thresholdStatusOutbreak
-                    : tile.status === 'unavailable'
-                        ? styles.thresholdStatusUnavailable
-                        : styles.thresholdStatusNoOutbreak,
-            ].join(' ')}
-            >
-                {statusLabels[tile.status]}
-            </span>
-        </div>
-        <div className={styles.thresholdChart}>
-            <UncertaintyAreaChart
-                predictionTargetName={predictionTargetName}
-                series={tile.series}
-                endemicThreshold={tile.endemicThreshold}
-                outbreakPeriods={tile.indicators.map(indicator => ({
-                    period: indicator.period,
-                    outbreak: indicator.outbreak,
-                    supportedProbability: indicator.supportedProbability,
-                    value: indicator.value,
-                }))}
-                variant="tile"
-                zoomRange={zoomRange}
-                onZoomChange={onZoomChange}
-            />
-        </div>
-    </article>
-);
+}) => {
+    const maxY = useMemo(() => (
+        getStableMaxYForThresholdChart(tile.series, tile.endemicThreshold)
+    ), [tile.endemicThreshold, tile.series]);
+
+    return (
+        <article className={styles.thresholdTile}>
+            <div className={styles.thresholdTileHeader}>
+                <h3 title={tile.orgUnitName}>{tile.orgUnitName}</h3>
+                <span className={[
+                    styles.thresholdStatusBadge,
+                    tile.status === 'outbreak'
+                        ? styles.thresholdStatusOutbreak
+                        : tile.status === 'unavailable'
+                            ? styles.thresholdStatusUnavailable
+                            : styles.thresholdStatusNoOutbreak,
+                ].join(' ')}
+                >
+                    {statusLabels[tile.status]}
+                </span>
+            </div>
+            <div className={styles.thresholdChart}>
+                <UncertaintyAreaChart
+                    predictionTargetName={predictionTargetName}
+                    series={tile.series}
+                    endemicThreshold={tile.endemicThreshold}
+                    outbreakPeriods={tile.indicators.map(indicator => ({
+                        period: indicator.period,
+                        outbreak: indicator.outbreak,
+                        supportedProbability: indicator.supportedProbability,
+                        value: indicator.value,
+                    }))}
+                    variant="tile"
+                    zoomRange={zoomRange}
+                    onZoomChange={onZoomChange}
+                    maxY={maxY}
+                />
+            </div>
+        </article>
+    );
+};
 
 export const PredictionAlertsConfigurator = ({
     prediction,
@@ -193,6 +201,8 @@ export const PredictionAlertsConfigurator = ({
     const [regionSearch, setRegionSearch] = useState('');
     const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
     const [zoomRange, setZoomRange] = useState<ZoomRange | null>(null);
+    const toolbarRef = useRef<HTMLDivElement>(null);
+    const isToolbarStuckRef = useRef(false);
     const {
         series,
         predictionTargetName,
@@ -205,6 +215,11 @@ export const PredictionAlertsConfigurator = ({
     const selectedThreshold = useMemo(() => (
         calculateMockEndemicThreshold(selectedSeries?.actualCases)
     ), [selectedSeries]);
+    const selectedMaxY = useMemo(() => (
+        selectedSeries
+            ? getStableMaxYForThresholdChart(selectedSeries, selectedThreshold.threshold)
+            : undefined
+    ), [selectedSeries, selectedThreshold.threshold]);
     const selectedIndicators = useMemo(() => (
         selectedSeries
             ? buildOutbreakIndicatorsForSeries(selectedSeries, selectedProbability)
@@ -221,6 +236,48 @@ export const PredictionAlertsConfigurator = ({
     } = useMemo(() => (
         getThresholdTileViewModels(series, selectedProbability)
     ), [series, selectedProbability]);
+
+    useEffect(() => {
+        const toolbar = toolbarRef.current;
+        if (!toolbar || !scrollParent) return;
+
+        let animationFrame: number | null = null;
+
+        const updateToolbarStuckState = () => {
+            animationFrame = null;
+
+            const nextIsStuck = (
+                toolbar.getBoundingClientRect().top
+                <= scrollParent.getBoundingClientRect().top + 0.5
+            );
+
+            toolbar.classList.toggle(styles.thresholdToolbarStuck, nextIsStuck);
+
+            if (isToolbarStuckRef.current === nextIsStuck) return;
+
+            isToolbarStuckRef.current = nextIsStuck;
+        };
+
+        const requestUpdate = () => {
+            if (animationFrame !== null) return;
+
+            animationFrame = window.requestAnimationFrame(updateToolbarStuckState);
+        };
+
+        updateToolbarStuckState();
+        scrollParent.addEventListener('scroll', requestUpdate, { passive: true });
+        window.addEventListener('resize', requestUpdate);
+
+        return () => {
+            scrollParent.removeEventListener('scroll', requestUpdate);
+            window.removeEventListener('resize', requestUpdate);
+
+            if (animationFrame !== null) {
+                window.cancelAnimationFrame(animationFrame);
+            }
+        };
+    }, [isLoading, scrollParent]);
+
     const normalizedRegionSearch = regionSearch.trim().toLocaleLowerCase();
     const filteredTiles = useMemo(() => (
         tiles.filter(tile => (
@@ -401,11 +458,17 @@ export const PredictionAlertsConfigurator = ({
     if (density === 'page') {
         return (
             <div className={styles.thresholdContainer}>
+                <div
+                    ref={toolbarRef}
+                    className={[
+                        styles.thresholdToolbar,
+                        isToolbarStuckRef.current ? styles.thresholdToolbarStuck : '',
+                    ].join(' ')}
+                >
+                    {filterToolbar}
+                    {zoomControls}
+                </div>
                 <div className={styles.thresholdGridColumn}>
-                    <div className={styles.thresholdToolbar}>
-                        {filterToolbar}
-                        {zoomControls}
-                    </div>
                     {filteredTiles.length > 0
                         ? (
                                 <VirtuosoGrid
@@ -556,6 +619,7 @@ export const PredictionAlertsConfigurator = ({
                                     supportedProbability: indicator.supportedProbability,
                                     value: indicator.value,
                                 }))}
+                                maxY={selectedMaxY}
                             />
                         </div>
                     </div>
