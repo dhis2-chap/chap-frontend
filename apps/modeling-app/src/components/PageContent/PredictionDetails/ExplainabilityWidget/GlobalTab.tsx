@@ -63,7 +63,7 @@ export const GlobalTab = ({
     }
 
     const features: FeatureAttribution[] = globalExplanation.topFeatures.map((f: any) => ({
-        feature_name: f.feature_name || f.featureName,
+        feature_name: f.feature_name,
         importance: f.importance,
         direction: f.direction,
     }));
@@ -100,7 +100,7 @@ export const GlobalTab = ({
                 ) : beeswarmData ? (
                     <ShapBeeswarmChart
                         points={beeswarmData.points}
-                        featureNames={beeswarmData.featureNames || (beeswarmData as any).feature_names || []}
+                        featureNames={beeswarmData.featureNames}
                         orgUnitMap={orgUnitMap}
                         title={i18n.t('SHAP Summary — how feature values affect predictions')}
                     />

@@ -16,19 +16,19 @@ export const SurrogateQualityPanel = ({ quality, stabilityScore }: Props) => {
     const [showInfo, setShowInfo] = useState(false);
 
     if (!quality) return null;
-    const r2 = quality.rSquared ?? quality.r_squared;
+    const r2 = quality.rSquared;
     const mae = quality.mae;
     const mape = quality.mape;
-    const n = quality.nSamples ?? quality.n_samples;
-    const unique = quality.nUniqueRows ?? quality.n_unique_rows;
-    const constantFeatures: string[] = quality.constantFeatures ?? quality.constant_features ?? [];
-    const permRemovedFeatures: string[] = quality.permutationRemovedFeatures ?? quality.permutation_removed_features ?? [];
-    const residualMean: number | null = quality.residualMean ?? quality.residual_mean ?? null;
-    const residualStd: number | null = quality.residualStd ?? quality.residual_std ?? null;
-    const fidelityTier: string = quality.fidelityTier ?? quality.fidelity_tier ?? (r2 == null ? 'poor' : r2 >= 0.8 ? 'good' : r2 >= 0.5 ? 'moderate' : 'poor');
-    const fidelityWarning: string | null = quality.fidelityWarning ?? quality.fidelity_warning ?? null;
-    const targetTransformMethod: string | null = quality.targetTransformMethod ?? quality.target_transform_method ?? null;
-    const modelDisplayName: string = quality.selectedModelDisplayName ?? quality.selected_model_display_name ?? 'surrogate model';
+    const n = quality.nSamples;
+    const unique = quality.nUniqueRows;
+    const constantFeatures: string[] = quality.constantFeatures ?? [];
+    const permRemovedFeatures: string[] = quality.permutationRemovedFeatures ?? [];
+    const residualMean: number | null = quality.residualMean ?? null;
+    const residualStd: number | null = quality.residualStd ?? null;
+    const fidelityTier: string = quality.fidelityTier ?? (r2 == null ? 'poor' : r2 >= 0.8 ? 'good' : r2 >= 0.5 ? 'moderate' : 'poor');
+    const fidelityWarning: string | null = quality.fidelityWarning ?? null;
+    const targetTransformMethod: string | null = quality.targetTransformMethod ?? null;
+    const modelDisplayName: string = quality.selectedModelDisplayName ?? 'surrogate model';
     if (r2 == null) return null;
 
     const r2Pct = (r2 * 100).toFixed(1);

@@ -57,8 +57,8 @@ export const ShapBeeswarmChart = ({
     const options: Highcharts.Options = useMemo(() => {
         const featureRanges: Record<string, { min: number; max: number }> = {};
         for (const p of points) {
-            const name = p.featureName || (p as any).feature_name;
-            const val = p.featureValue ?? (p as any).feature_value;
+            const name = p.featureName;
+            const val = p.featureValue;
             if (!featureRanges[name]) {
                 featureRanges[name] = { min: val, max: val };
             } else {
@@ -70,8 +70,8 @@ export const ShapBeeswarmChart = ({
         const meanAbsShap: Record<string, number> = {};
         const counts: Record<string, number> = {};
         for (const p of points) {
-            const name = p.featureName || (p as any).feature_name;
-            const sv = p.shapValue ?? (p as any).shap_value;
+            const name = p.featureName;
+            const sv = p.shapValue;
             meanAbsShap[name] = (meanAbsShap[name] || 0) + Math.abs(sv);
             counts[name] = (counts[name] || 0) + 1;
         }
@@ -86,10 +86,10 @@ export const ShapBeeswarmChart = ({
         const hlData: Highcharts.PointOptionsObject[] = [];
 
         points.forEach((p) => {
-            const name = p.featureName || (p as any).feature_name;
-            const sv = p.shapValue ?? (p as any).shap_value;
-            const fv = p.featureValue ?? (p as any).feature_value;
-            const ou = p.orgUnit || (p as any).org_unit;
+            const name = p.featureName;
+            const sv = p.shapValue;
+            const fv = p.featureValue;
+            const ou = p.orgUnit;
             const per = p.period;
             const range = featureRanges[name];
             const spread = range.max - range.min;
@@ -111,7 +111,7 @@ export const ShapBeeswarmChart = ({
                     orgUnit: ou,
                     period: per,
                 },
-            } as any;
+            };
 
             if (isHighlighted) {
                 hlData.push(pt);
@@ -167,7 +167,7 @@ export const ShapBeeswarmChart = ({
                     return (
                         `<b>${formatFeatureName(c.featureName)}</b><br/>`
                         + `${i18n.t('Feature value')}: ${c.featureValue.toLocaleString(undefined, { maximumFractionDigits: 2 })}<br/>`
-                        + `SHAP: <b>${sign}${c.shapValue.toFixed(3)}</b><br/>`
+                        + `${i18n.t('SHAP{{colon}}', { colon: ':' })} <b>${sign}${c.shapValue.toFixed(3)}</b><br/>`
                         + `${orgUnitLabel} — ${c.period}`
                     );
                 },

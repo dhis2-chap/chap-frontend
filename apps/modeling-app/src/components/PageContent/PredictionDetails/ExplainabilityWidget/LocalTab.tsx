@@ -64,7 +64,7 @@ export const LocalTab = ({
     onRunExplanations,
     onLoadBeeswarm,
 }: Props) => {
-    const cp = displayExplanation?.covariateProvenance ?? (displayExplanation as { covariate_provenance?: { source?: string; detail?: string } })?.covariate_provenance;
+    const cp = displayExplanation?.covariateProvenance;
 
     return (
         <div className={styles.mainLayout}>
@@ -140,8 +140,8 @@ export const LocalTab = ({
                             <ShapWaterfallChart
                                 key={`local-waterfall-${displayExplanation.id ?? 'new'}-${localOrgUnit}-${selectedPeriod}`}
                                 features={displayExplanation.featureAttributions.map((f: any) => ({
-                                    feature_name: f.feature_name || f.featureName, importance: f.importance,
-                                    direction: f.direction, actual_value: f.actual_value ?? f.actualValue,
+                                    feature_name: f.feature_name, importance: f.importance,
+                                    direction: f.direction, actual_value: f.actual_value,
                                 }))}
                                 baselinePrediction={displayExplanation.baselinePrediction}
                                 actualPrediction={displayExplanation.actualPrediction}
@@ -155,8 +155,8 @@ export const LocalTab = ({
                                 <div className={styles.loadingContainer}><CircularLoader small /></div>
                             ) : beeswarmData ? (
                                 <ShapBeeswarmChart
-                                    points={beeswarmData.points.filter(p => (p.orgUnit || (p as any).org_unit) === localOrgUnit)}
-                                    featureNames={beeswarmData.featureNames || (beeswarmData as any).feature_names || []}
+                                    points={beeswarmData.points.filter(p => p.orgUnit === localOrgUnit)}
+                                    featureNames={beeswarmData.featureNames}
                                     highlightOrgUnit={localOrgUnit}
                                     highlightPeriod={selectedPeriod}
                                     orgUnitMap={orgUnitMap}
@@ -179,7 +179,7 @@ export const LocalTab = ({
                                 <FeatureImportanceChart
                                     key={`local-lime-${displayExplanation.id ?? 'new'}-${localOrgUnit}-${selectedPeriod}`}
                                     features={displayExplanation.featureAttributions.map((f: any) => ({
-                                        feature_name: f.feature_name || f.featureName, importance: f.importance, direction: f.direction,
+                                        feature_name: f.feature_name, importance: f.importance, direction: f.direction,
                                     }))}
                                     title={i18n.t('LIME Feature Contributions — {{orgUnit}}, {{period}}', {
                                         orgUnit: orgUnitOptions.find(o => o.id === localOrgUnit)?.label ?? localOrgUnit,

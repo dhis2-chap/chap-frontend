@@ -110,9 +110,9 @@ export const HorizonTab = ({
 
                                 {horizonData.averageImportance.length > 0 && (
                                     <FeatureImportanceChart
-                                        features={horizonData.averageImportance.map((f: any) => ({
-                                            feature_name: f.featureName || f.feature_name,
-                                            importance: f.meanAbsImportance || f.mean_abs_importance,
+                                        features={horizonData.averageImportance.map((f) => ({
+                                            feature_name: f.featureName,
+                                            importance: f.meanAbsImportance,
                                             direction: f.direction,
                                         }))}
                                         title={i18n.t('Average Horizon Importance — mean |SHAP| across {{n}} steps', {
@@ -125,8 +125,8 @@ export const HorizonTab = ({
                             <div className={styles.loadingContainer}><CircularLoader small /></div>
                         ) : beeswarmData ? (
                             <ShapBeeswarmChart
-                                points={beeswarmData.points.filter(p => (p.orgUnit || (p as any).org_unit) === localOrgUnit)}
-                                featureNames={beeswarmData.featureNames || (beeswarmData as any).feature_names || []}
+                                points={beeswarmData.points.filter(p => p.orgUnit === localOrgUnit)}
+                                featureNames={beeswarmData.featureNames}
                                 orgUnitMap={orgUnitMap}
                                 title={i18n.t('SHAP Summary — {{orgUnit}} across horizon steps', {
                                     orgUnit: orgLabel,

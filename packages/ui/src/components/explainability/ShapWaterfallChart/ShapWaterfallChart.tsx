@@ -23,11 +23,11 @@ const formatValue = (val: number | undefined | null): string => {
     return val.toLocaleString(undefined, { maximumFractionDigits: 2 });
 };
 
-const DATA_SOURCE_LABELS: Record<string, { label: string; color: string }> = {
-    observed: { label: 'Current State Driver', color: '#4caf50' },
-    seasonal_proxy: { label: 'Seasonal Expectation (Proxy)', color: '#ff9800' },
-    last_available: { label: 'Last Available Data', color: '#ff9800' },
-};
+const getDataSourceLabels = (): Record<string, { label: string; color: string }> => ({
+    observed: { label: i18n.t('Current State Driver'), color: '#4caf50' },
+    seasonal_proxy: { label: i18n.t('Seasonal Expectation (Proxy)'), color: '#ff9800' },
+    last_available: { label: i18n.t('Last Available Data'), color: '#ff9800' },
+});
 
 export const ShapWaterfallChart = ({
     features,
@@ -176,7 +176,7 @@ export const ShapWaterfallChart = ({
                     if (!feat) return '';
                     const sign = feat.importance >= 0 ? '+' : '';
                     let tip = `<b>${formatFeatureName(feat.feature_name)}</b><br/>`;
-                    tip += `SHAP value: <b>${sign}${feat.importance.toFixed(3)}</b>`;
+                    tip += `${i18n.t('SHAP value{{colon}}', { colon: ':' })} <b>${sign}${feat.importance.toFixed(3)}</b>`;
                     if (feat.actual_value != null) {
                         tip += `<br/>${i18n.t('Feature value')}: ${formatValue(feat.actual_value)}`;
                     }
@@ -223,8 +223,9 @@ export const ShapWaterfallChart = ({
         );
     }
 
+    const dataSourceLabels = getDataSourceLabels();
     const dsLabel = dataSource
-        ? DATA_SOURCE_LABELS[dataSource.dataSourceType] ?? DATA_SOURCE_LABELS.last_available
+        ? dataSourceLabels[dataSource.dataSourceType] ?? dataSourceLabels.last_available
         : null;
 
     return (
