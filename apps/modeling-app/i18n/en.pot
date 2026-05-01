@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-04-30T15:54:15.978Z\n"
-"PO-Revision-Date: 2026-04-30T15:54:15.978Z\n"
+"POT-Creation-Date: 2026-05-01T15:20:35.530Z\n"
+"PO-Revision-Date: 2026-05-01T15:20:35.530Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -278,8 +278,8 @@ msgstr "Create evaluation (Legacy)"
 msgid "Create dataset"
 msgstr "Create dataset"
 
-msgid "XAI explanation generation"
-msgstr "XAI explanation generation"
+msgid "Explanation generation"
+msgstr "Explanation generation"
 
 msgid "Cancelled"
 msgstr "Cancelled"
@@ -927,6 +927,12 @@ msgstr "Explanation job failed. Check Jobs for details."
 msgid "Explanation job was revoked. Check Jobs for details."
 msgstr "Explanation job was revoked. Check Jobs for details."
 
+msgid "Surrogate model training failed. Check Jobs for details."
+msgstr "Surrogate model training failed. Check Jobs for details."
+
+msgid "Surrogate model training was revoked. Check Jobs for details."
+msgstr "Surrogate model training was revoked. Check Jobs for details."
+
 msgid "Generate explanations to view Global, Local, and Horizon plots."
 msgstr "Generate explanations to view Global, Local, and Horizon plots."
 
@@ -938,6 +944,9 @@ msgstr "Explainability"
 
 msgid "Explanation error"
 msgstr "Explanation error"
+
+msgid "Training surrogate model ({{method}})…"
+msgstr "Training surrogate model ({{method}})…"
 
 msgid "Generating explanations ({{method}})…"
 msgstr "Generating explanations ({{method}})…"

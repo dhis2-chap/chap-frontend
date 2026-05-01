@@ -13,6 +13,7 @@ import styles from './ExplainabilityWidget.module.css';
 type Props = {
     isGlobalLoading: boolean;
     isGlobalFetching: boolean;
+    isGlobalTransitioning: boolean;
     isExplanationJobRunning: boolean;
     globalError: unknown;
     globalExplanation: GlobalExplanationResponse | undefined;
@@ -30,6 +31,7 @@ type Props = {
 export const GlobalTab = ({
     isGlobalLoading,
     isGlobalFetching,
+    isGlobalTransitioning,
     isExplanationJobRunning,
     globalError,
     globalExplanation,
@@ -43,7 +45,7 @@ export const GlobalTab = ({
     onRunExplanations,
     onLoadBeeswarm,
 }: Props) => {
-    if (isGlobalLoading || (isGlobalFetching && !globalExplanation?.available) || (isExplanationJobRunning && !globalExplanation?.available)) {
+    if (isGlobalLoading || (isGlobalFetching && !globalExplanation?.available && !isGlobalTransitioning) || (isExplanationJobRunning && !globalExplanation?.available)) {
         return <div className={styles.loadingContainer}><CircularLoader small /></div>;
     }
     if (globalError) {
@@ -67,7 +69,10 @@ export const GlobalTab = ({
     }));
 
     return (
-        <div className={styles.chartContainer}>
+        <div className={styles.chartContainer} style={{ position: 'relative' }}>
+            {isGlobalTransitioning && (
+                <div className={styles.loadingOverlay}><CircularLoader small /></div>
+            )}
             <div className={styles.chartHeader}>
                 {supports('beeswarm') && (
                     <div className={styles.viewToggle}>

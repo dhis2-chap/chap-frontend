@@ -52,29 +52,54 @@ export const ExplainabilityWidget = ({
     const hasUserSelectedOrgUnit = useRef(false);
     const [selectedXaiMethod, setSelectedXaiMethod] = useState<string>(initialXaiMethod ?? DEFAULT_XAI_METHOD);
     const hasUserSelectedXaiMethod = useRef(!!initialXaiMethod);
-    const [explanationJobId, setExplanationJobId] = useState<string | null>(null);
+    const [explanationJobId, setExplanationJobId] = useState<string | null>(() =>
+        sessionStorage.getItem(`chap_xai_job_${predictionId}_${initialXaiMethod ?? DEFAULT_XAI_METHOD}`),
+    );
+    const [surrogateJobId, setSurrogateJobId] = useState<string | null>(null);
     const [completedExplanationMethods, setCompletedExplanationMethods] = useState<Record<string, boolean>>({});
     const queryClient = useQueryClient();
 
     const { data: activeXaiJobs } = useQuery({
-        queryKey: ['activeXaiJobs', predictionId],
+        queryKey: ['activeXaiJobs', predictionId, selectedXaiMethod],
         queryFn: () => JobsService.listJobsV1JobsGet(
             undefined,
             ['PENDING', 'STARTED'],
             JOB_TYPES.XAI_EXPLANATIONS,
         ),
         enabled: !explanationJobId && !completedExplanationMethods[selectedXaiMethod],
-        staleTime: Infinity,
-        refetchOnWindowFocus: false,
+        cacheTime: 0,
+    });
+
+    const { data: activeSurrogateJobs } = useQuery({
+        queryKey: ['activeSurrogateJobs', predictionId, selectedXaiMethod],
+        queryFn: () => JobsService.listJobsV1JobsGet(
+            undefined,
+            ['PENDING', 'STARTED'],
+            JOB_TYPES.XAI_SURROGATE,
+        ),
+        enabled: !surrogateJobId && !explanationJobId && !completedExplanationMethods[selectedXaiMethod],
+        cacheTime: 0,
     });
 
     useEffect(() => {
         if (!activeXaiJobs?.length || explanationJobId || completedExplanationMethods[selectedXaiMethod]) return;
-        const match = activeXaiJobs.find(job => job.name.includes(String(predictionId)));
+        const match = activeXaiJobs.find(job =>
+            job.name.includes(String(predictionId)) && job.name.includes(selectedXaiMethod),
+        );
         if (match) {
             setExplanationJobId(match.id);
         }
     }, [activeXaiJobs, explanationJobId, predictionId, completedExplanationMethods, selectedXaiMethod]);
+
+    useEffect(() => {
+        if (!activeSurrogateJobs?.length || surrogateJobId || explanationJobId || completedExplanationMethods[selectedXaiMethod]) return;
+        const match = activeSurrogateJobs.find(job =>
+            job.name.includes(String(predictionId)) && job.name.includes(selectedXaiMethod),
+        );
+        if (match) {
+            setSurrogateJobId(match.id);
+        }
+    }, [activeSurrogateJobs, surrogateJobId, explanationJobId, predictionId, completedExplanationMethods, selectedXaiMethod]);
 
     const { xaiMethods, isLoading: isXaiMethodsLoading } = useXaiMethods(predictionId);
 
@@ -140,6 +165,18 @@ export const ExplainabilityWidget = ({
         error: globalError,
     } = useGlobalExplanation(predictionId, selectedXaiMethod);
 
+    const prevGlobalRef = useRef(globalExplanation);
+    if (globalExplanation?.available && globalExplanation?.topFeatures?.length) {
+        prevGlobalRef.current = globalExplanation;
+    }
+    const displayGlobalExplanation =
+        globalExplanation
+        ?? ((isGlobalFetching || isGlobalLoading) ? prevGlobalRef.current : undefined);
+    const isGlobalTransitioning =
+        !!displayGlobalExplanation &&
+        displayGlobalExplanation !== globalExplanation &&
+        (isGlobalFetching || isGlobalLoading);
+
     const {
         currentExplanation: localExplanation,
         isLoading: isLocalLoading,
@@ -155,15 +192,11 @@ export const ExplainabilityWidget = ({
     }
     const displayExplanation =
         localExplanation
-        ?? (prevExplanationRef.current?.period === selectedPeriod &&
-            prevExplanationRef.current?.orgUnit === localOrgUnit
-            ? prevExplanationRef.current
-            : null);
+        ?? ((isLocalFetching || isLocalLoading) ? (prevExplanationRef.current ?? null) : null);
     const isTransitioning =
         !!displayExplanation &&
         !localExplanation &&
-        prevExplanationRef.current?.period === selectedPeriod &&
-        prevExplanationRef.current?.orgUnit === localOrgUnit;
+        (isLocalFetching || isLocalLoading);
 
     const { data: orgUnitsData } = useOrgUnitsById(orgUnits);
 
@@ -204,18 +237,43 @@ export const ExplainabilityWidget = ({
             data === 'SUCCESS' || data === 'FAILURE' || data === 'REVOKED' ? false : 2000,
     });
 
+    const {
+        data: surrogateJobStatus,
+    } = useQuery({
+        queryKey: ['jobStatus', surrogateJobId],
+        queryFn: () => JobsService.getJobStatusV1JobsJobIdGet(surrogateJobId!),
+        enabled: !!surrogateJobId,
+        refetchInterval: data =>
+            data === 'SUCCESS' || data === 'FAILURE' || data === 'REVOKED' ? false : 2000,
+    });
+
     const isExplanationJobRunning =
         !!explanationJobId &&
         explanationJobStatus !== 'SUCCESS' &&
         explanationJobStatus !== 'FAILURE' &&
         explanationJobStatus !== 'REVOKED';
+
+    const isSurrogateJobRunning =
+        !!surrogateJobId &&
+        surrogateJobStatus !== 'SUCCESS' &&
+        surrogateJobStatus !== 'FAILURE' &&
+        surrogateJobStatus !== 'REVOKED';
+
     const hasCompletedExplanationsForMethod = !!completedExplanationMethods[selectedXaiMethod];
+    const isAnyXaiJobRunning = isExplanationJobRunning || isSurrogateJobRunning;
+
+    const isCheckingForActiveJobs =
+        !hasCompletedExplanationsForMethod &&
+        !explanationJobId &&
+        !surrogateJobId &&
+        activeXaiJobs === undefined;
 
     const handleRunExplanations = async () => {
-        if (!predictionId || isExplanationJobRunning) return;
+        if (!predictionId || isAnyXaiJobRunning) return;
         setExplanationRunError(null);
         try {
             const job = await XaiService.runExplanations(predictionId, selectedXaiMethod, 'median', 10);
+            sessionStorage.setItem(`chap_xai_job_${predictionId}_${selectedXaiMethod}`, job.id);
             setExplanationJobId(job.id);
         } catch (e) {
             setExplanationRunError((e instanceof Error ? e.message : String(e)) || 'Failed to start explanation run');
@@ -226,7 +284,8 @@ export const ExplainabilityWidget = ({
     useEffect(() => {
         if (prevXaiMethodRef.current !== selectedXaiMethod) {
             prevXaiMethodRef.current = selectedXaiMethod;
-            setExplanationJobId(null);
+            setExplanationJobId(sessionStorage.getItem(`chap_xai_job_${predictionId}_${selectedXaiMethod}`));
+            setSurrogateJobId(null);
             setBeeswarmData(null);
             setBeeswarmError(null);
             setHorizonData(null);
@@ -283,6 +342,7 @@ export const ExplainabilityWidget = ({
     useEffect(() => {
         if (!explanationJobId) return;
         if (explanationJobStatus === 'SUCCESS') {
+            sessionStorage.removeItem(`chap_xai_job_${predictionId}_${selectedXaiMethod}`);
             setCompletedExplanationMethods(prev => ({ ...prev, [selectedXaiMethod]: true }));
             queryClient.invalidateQueries({ queryKey: ['globalExplanation', predictionId, selectedXaiMethod] });
             queryClient.invalidateQueries({ queryKey: ['localExplanations', predictionId] });
@@ -294,14 +354,31 @@ export const ExplainabilityWidget = ({
             setExplanationJobId(null);
         }
         if (explanationJobStatus === 'FAILURE') {
+            sessionStorage.removeItem(`chap_xai_job_${predictionId}_${selectedXaiMethod}`);
             setExplanationRunError(i18n.t('Explanation job failed. Check Jobs for details.'));
             setExplanationJobId(null);
         }
         if (explanationJobStatus === 'REVOKED') {
+            sessionStorage.removeItem(`chap_xai_job_${predictionId}_${selectedXaiMethod}`);
             setExplanationRunError(i18n.t('Explanation job was revoked. Check Jobs for details.'));
             setExplanationJobId(null);
         }
     }, [explanationJobId, explanationJobStatus, predictionId, selectedXaiMethod, queryClient, localOrgUnit, handleComputeHorizon]);
+
+    useEffect(() => {
+        if (!surrogateJobId) return;
+        if (surrogateJobStatus === 'SUCCESS') {
+            setSurrogateJobId(null);
+        }
+        if (surrogateJobStatus === 'FAILURE') {
+            setExplanationRunError(i18n.t('Surrogate model training failed. Check Jobs for details.'));
+            setSurrogateJobId(null);
+        }
+        if (surrogateJobStatus === 'REVOKED') {
+            setExplanationRunError(i18n.t('Surrogate model training was revoked. Check Jobs for details.'));
+            setSurrogateJobId(null);
+        }
+    }, [surrogateJobId, surrogateJobStatus]);
 
     useEffect(() => {
         if (globalExplanation?.available) {
@@ -334,13 +411,16 @@ export const ExplainabilityWidget = ({
     const isExplanationBundleReady = hasCompletedExplanationsForMethod;
 
     const renderActiveTab = () => {
-        if (!isExplanationBundleReady && !isExplanationJobRunning) {
+        if (!isExplanationBundleReady && !isAnyXaiJobRunning) {
+            if (isCheckingForActiveJobs) {
+                return <div className={styles.loadingContainer}><CircularLoader small /></div>;
+            }
             return (
                 <div className={styles.emptyState}>
                     <p>
                         {i18n.t('Generate explanations to view Global, Local, and Horizon plots.')}
                     </p>
-                    <Button primary onClick={handleRunExplanations} loading={isExplanationJobRunning} disabled={isExplanationJobRunning}>
+                    <Button primary onClick={handleRunExplanations} loading={isAnyXaiJobRunning} disabled={isAnyXaiJobRunning}>
                         {i18n.t('Compute Explanation')}
                     </Button>
                 </div>
@@ -355,7 +435,7 @@ export const ExplainabilityWidget = ({
             isBeeswarmLoading,
             beeswarmError,
             orgUnitMap,
-            isExplanationJobRunning,
+            isExplanationJobRunning: isAnyXaiJobRunning,
             supports,
             onRunExplanations: handleRunExplanations,
             onLoadBeeswarm: handleLoadBeeswarm,
@@ -368,8 +448,9 @@ export const ExplainabilityWidget = ({
                         {...sharedProps}
                         isGlobalLoading={isGlobalLoading}
                         isGlobalFetching={isGlobalFetching}
+                        isGlobalTransitioning={isGlobalTransitioning}
                         globalError={globalError}
-                        globalExplanation={globalExplanation}
+                        globalExplanation={displayGlobalExplanation}
                         globalView={globalView}
                         onGlobalViewChange={setGlobalView}
                     />
@@ -416,19 +497,23 @@ export const ExplainabilityWidget = ({
                             {explanationRunError}
                         </NoticeBox>
                     )}
-                    {(isExplanationJobRunning || isComputingLocal || isHorizonLoading || isBeeswarmLoading) && (
+                    {(isSurrogateJobRunning || isExplanationJobRunning || isComputingLocal || (isHorizonLoading && !horizonData) || isBeeswarmLoading) && (
                         <div className={styles.computingBanner}>
                             <CircularLoader extrasmall />
                             <span>
-                                {isExplanationJobRunning
-                                    ? i18n.t('Generating explanations ({{method}})…', {
+                                {isSurrogateJobRunning
+                                    ? i18n.t('Training surrogate model ({{method}})…', {
                                             method: selectedXaiMethodObj?.displayName ?? selectedXaiMethod,
                                         })
-                                    : isComputingLocal
-                                        ? i18n.t('Computing local explanation…')
-                                        : isHorizonLoading
-                                            ? i18n.t('Computing horizon summary…')
-                                            : i18n.t('Loading summary data…')}
+                                    : isExplanationJobRunning
+                                        ? i18n.t('Generating explanations ({{method}})…', {
+                                                method: selectedXaiMethodObj?.displayName ?? selectedXaiMethod,
+                                            })
+                                        : isComputingLocal
+                                            ? i18n.t('Computing local explanation…')
+                                            : isHorizonLoading
+                                                ? i18n.t('Computing horizon summary…')
+                                                : i18n.t('Loading summary data…')}
                             </span>
                         </div>
                     )}
@@ -436,15 +521,15 @@ export const ExplainabilityWidget = ({
                         <TabBar>
                             <Tab selected={activeTab === 'global'} onClick={() => setActiveTab('global')}>
                                 {i18n.t('Global')}
-                                {(isExplanationJobRunning || isGlobalFetching) && <CircularLoader extrasmall className={styles.tabSpinner} />}
+                                {(isAnyXaiJobRunning || isGlobalFetching) && <CircularLoader extrasmall className={styles.tabSpinner} />}
                             </Tab>
                             <Tab selected={activeTab === 'local'} onClick={() => setActiveTab('local')}>
                                 {i18n.t('Local')}
-                                {(isComputingLocal || isExplanationJobRunning) && <CircularLoader extrasmall className={styles.tabSpinner} />}
+                                {(isComputingLocal || isAnyXaiJobRunning) && <CircularLoader extrasmall className={styles.tabSpinner} />}
                             </Tab>
                             <Tab selected={activeTab === 'horizon'} onClick={() => setActiveTab('horizon')}>
                                 {i18n.t('Horizon')}
-                                {(isHorizonLoading || isExplanationJobRunning) && <CircularLoader extrasmall className={styles.tabSpinner} />}
+                                {(isHorizonLoading || isAnyXaiJobRunning) && <CircularLoader extrasmall className={styles.tabSpinner} />}
                             </Tab>
                         </TabBar>
                         <div className={styles.methodPillSlot}>
