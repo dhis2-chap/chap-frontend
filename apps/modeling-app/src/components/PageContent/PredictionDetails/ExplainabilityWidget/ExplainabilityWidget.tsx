@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import i18n from '@dhis2/d2-i18n';
 import { Button, CircularLoader, NoticeBox, TabBar, Tab } from '@dhis2/ui';
@@ -29,8 +28,6 @@ type Props = {
     orgUnits: string[];
     periods: string[];
     periodType?: string | null;
-    selectedOrgUnit?: string;
-    onOrgUnitChange?: (orgUnit: string) => void;
 };
 
 export const ExplainabilityWidget = ({
@@ -39,21 +36,16 @@ export const ExplainabilityWidget = ({
     orgUnits,
     periods,
     periodType,
-    selectedOrgUnit,
-    onOrgUnitChange,
 }: Props) => {
-    const [searchParams] = useSearchParams();
-    const initialXaiMethod = searchParams.get('xaiMethod');
-
     const [open, setOpen] = useState(true);
     const [activeTab, setActiveTab] = useState<'global' | 'local' | 'horizon'>('global');
     const [selectedPeriod, setSelectedPeriod] = useState<string>(periods[0] || '');
-    const [localOrgUnit, setLocalOrgUnit] = useState<string>(selectedOrgUnit || orgUnits[0] || '');
+    const [localOrgUnit, setLocalOrgUnit] = useState<string>(orgUnits[0] || '');
     const hasUserSelectedOrgUnit = useRef(false);
-    const [selectedXaiMethod, setSelectedXaiMethod] = useState<string>(initialXaiMethod ?? DEFAULT_XAI_METHOD);
-    const hasUserSelectedXaiMethod = useRef(!!initialXaiMethod);
+    const [selectedXaiMethod, setSelectedXaiMethod] = useState<string>(DEFAULT_XAI_METHOD);
+    const hasUserSelectedXaiMethod = useRef(false);
     const [explanationJobId, setExplanationJobId] = useState<string | null>(() =>
-        sessionStorage.getItem(`chap_xai_job_${predictionId}_${initialXaiMethod ?? DEFAULT_XAI_METHOD}`),
+        sessionStorage.getItem(`chap_xai_job_${predictionId}_${DEFAULT_XAI_METHOD}`),
     );
     const [surrogateJobId, setSurrogateJobId] = useState<string | null>(null);
     const [completedExplanationMethods, setCompletedExplanationMethods] = useState<Record<string, boolean>>({});
@@ -220,7 +212,6 @@ export const ExplainabilityWidget = ({
             if (firstSorted !== localOrgUnit) {
                 setLocalOrgUnit(firstSorted);
                 setHorizonOrgUnit('');
-                onOrgUnitChange?.(firstSorted);
             }
         }
     }, [orgUnitOptions, orgUnitsData]);
@@ -272,7 +263,7 @@ export const ExplainabilityWidget = ({
         if (!predictionId || isAnyXaiJobRunning) return;
         setExplanationRunError(null);
         try {
-            const job = await XaiService.runExplanations(predictionId, selectedXaiMethod, 'median', 10);
+            const job = await XaiService.runExplanations(predictionId, selectedXaiMethod);
             sessionStorage.setItem(`chap_xai_job_${predictionId}_${selectedXaiMethod}`, job.id);
             setExplanationJobId(job.id);
         } catch (e) {
@@ -405,7 +396,6 @@ export const ExplainabilityWidget = ({
     const handleOrgUnitChange = (value: string) => {
         hasUserSelectedOrgUnit.current = true;
         setLocalOrgUnit(value);
-        onOrgUnitChange?.(value);
     };
 
     const isExplanationBundleReady = hasCompletedExplanationsForMethod;

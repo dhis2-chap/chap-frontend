@@ -27,13 +27,6 @@ export interface FeatureAttribution {
     actualValue?: number;
 }
 
-export interface DataSourceInfo {
-    dataSourceType: 'observed' | 'seasonal_proxy' | 'last_available';
-    targetPeriod: string;
-    matchedPeriod: string;
-    description: string;
-}
-
 export interface SurrogateQuality {
     rSquared?: number;
     mae?: number;
@@ -60,15 +53,10 @@ export interface GlobalExplanationResponse {
     surrogateQuality?: SurrogateQuality;
 }
 
+export const COVARIATE_SOURCE_DATASET_MATCH = 'dataset_match';
+
 export interface CovariateProvenance {
     source?: string;
-    matchedPeriod?: string;
-    aggregate?: string;
-    targetYear?: number;
-    calendarMonth?: number;
-    isoWeek?: number;
-    nRowsAveraged?: number;
-    yearsUsed?: number[];
     detail?: string;
 }
 
@@ -98,14 +86,12 @@ export interface LocalExplanationResponse {
     status: string;
     surrogateQuality?: SurrogateQuality;
     covariateProvenance?: CovariateProvenance;
-    dataSource?: DataSourceInfo;
 }
 
 export interface HorizonStepSummary {
     period: string;
     targetPeriod: string;
     forecastStep: number;
-    dataSource?: DataSourceInfo;
     featureImportances: {
         featureName: string;
         importance: number;
@@ -186,7 +172,6 @@ function normalizeLocalExplanation(r: any): LocalExplanationResponse {
         actualPrediction: r.actualPrediction ?? r.actual_prediction,
         computedAt: r.computedAt ?? r.computed_at,
         status: r.status,
-        dataSource: r.dataSource ?? r.data_source,
         covariateProvenance: r.covariateProvenance ?? r.covariate_provenance,
         surrogateQuality: (r.surrogateQuality || r.surrogate_quality)
             ? normalizeSurrogateQuality(r.surrogateQuality ?? r.surrogate_quality)

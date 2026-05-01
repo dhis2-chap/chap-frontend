@@ -56,9 +56,8 @@ export {
 export { buildPredictionSeries } from './utils/PredictionViewModel';
 
 export { FeatureImportanceChart, ShapBeeswarmChart, ShapWaterfallChart, formatFeatureName } from './components/explainability';
-export { XaiService, DEFAULT_XAI_METHOD } from './httpfunctions/services/XaiService';
+export { XaiService, DEFAULT_XAI_METHOD, COVARIATE_SOURCE_DATASET_MATCH } from './httpfunctions/services/XaiService';
 export type {
-    DataSourceInfo,
     FeatureAttribution,
     GlobalExplanationResponse,
     HorizonStepSummary,

@@ -20,26 +20,3 @@
     line-height: 1.4;
 }
 
-.dataSourceBadge {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    padding: 8px 12px;
-    background: var(--colors-grey050, #fbfcfd);
-    border-left: 3px solid;
-    border-radius: 0 4px 4px 0;
-    margin-bottom: 8px;
-}
-
-.dataSourceLabel {
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.3px;
-}
-
-.dataSourceDesc {
-    font-size: 11px;
-    color: var(--colors-grey600, #7b8794);
-    line-height: 1.4;
-}

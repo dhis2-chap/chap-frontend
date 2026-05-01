@@ -4,6 +4,7 @@ import {
     FeatureImportanceChart,
     ShapBeeswarmChart,
     ShapWaterfallChart,
+    COVARIATE_SOURCE_DATASET_MATCH,
     type LocalExplanationResponse,
     type ShapBeeswarmResponse,
 } from '@dhis2-chap/ui';
@@ -96,7 +97,7 @@ export const LocalTab = ({
                             </div>
                         </div>
 
-                        {cp?.detail && cp.source && cp.source !== 'dataset_match' ? (
+                        {cp?.detail && cp.source && cp.source !== COVARIATE_SOURCE_DATASET_MATCH ? (
                             <NoticeBox title={i18n.t('About feature values')}>
                                 {cp.detail}
                             </NoticeBox>

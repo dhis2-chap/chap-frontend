@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
-import type { FeatureAttribution, DataSourceInfo } from '../../../httpfunctions/services/XaiService';
+import type { FeatureAttribution } from '../../../httpfunctions/services/XaiService';
 import { formatFeatureName, CHART_COLORS } from '../utils';
 import styles from './ShapWaterfallChart.module.css';
 
@@ -12,7 +12,6 @@ interface ShapWaterfallChartProps {
     actualPrediction: number;
     title?: string;
     topK?: number;
-    dataSource?: DataSourceInfo;
 }
 
 const formatValue = (val: number | undefined | null): string => {
@@ -21,19 +20,12 @@ const formatValue = (val: number | undefined | null): string => {
     return val.toLocaleString(undefined, { maximumFractionDigits: 2 });
 };
 
-const getDataSourceLabels = (): Record<string, { label: string; color: string }> => ({
-    observed: { label: i18n.t('Current State Driver'), color: '#2e7d32' },
-    seasonal_proxy: { label: i18n.t('Seasonal Expectation (Proxy)'), color: '#e65100' },
-    last_available: { label: i18n.t('Last Available Data'), color: '#e65100' },
-});
-
 export const ShapWaterfallChart = ({
     features,
     baselinePrediction,
     actualPrediction,
     title,
     topK = 8,
-    dataSource,
 }: ShapWaterfallChartProps) => {
     const options: Highcharts.Options = useMemo(() => {
         const sorted = [...features]
@@ -221,23 +213,8 @@ export const ShapWaterfallChart = ({
         );
     }
 
-    const dataSourceLabels = getDataSourceLabels();
-    const dsLabel = dataSource
-        ? dataSourceLabels[dataSource.dataSourceType] ?? dataSourceLabels.last_available
-        : null;
-
     return (
         <div className={styles.container}>
-            {dsLabel && (
-                <div className={styles.dataSourceBadge} style={{ borderLeftColor: dsLabel.color }}>
-                    <span className={styles.dataSourceLabel} style={{ color: dsLabel.color }}>
-                        {dsLabel.label}
-                    </span>
-                    <span className={styles.dataSourceDesc}>
-                        {dataSource!.description}
-                    </span>
-                </div>
-            )}
             <HighchartsReact highcharts={Highcharts} options={options} />
             <p className={styles.annotation}>
                 {i18n.t(
