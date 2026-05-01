@@ -39,7 +39,7 @@ export const useLocalExplanation = (
     });
 
     const computeMutation = useMutation<LocalExplanationResponse, ApiError, LocalExplanationRequest>({
-        mutationFn: (request) =>
+        mutationFn: request =>
             XaiService.computeLocalExplanation(predictionId!, request),
         onSuccess: () => {
             queryClient.invalidateQueries({

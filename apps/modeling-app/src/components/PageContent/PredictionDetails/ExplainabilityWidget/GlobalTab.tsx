@@ -62,8 +62,8 @@ export const GlobalTab = ({
         );
     }
 
-    const features: FeatureAttribution[] = globalExplanation.topFeatures.map((f) => ({
-        feature_name: f.feature_name,
+    const features: FeatureAttribution[] = globalExplanation.topFeatures.map(f => ({
+        featureName: f.featureName,
         importance: f.importance,
         direction: f.direction,
     }));

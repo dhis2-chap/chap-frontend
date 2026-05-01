@@ -20,7 +20,7 @@ export const FeatureImportanceChart = ({
             (a, b) => Math.abs(b.importance) - Math.abs(a.importance),
         );
 
-        const categories = sortedFeatures.map(f => formatFeatureName(f.feature_name));
+        const categories = sortedFeatures.map(f => formatFeatureName(f.featureName));
         const values = sortedFeatures.map(f => Math.abs(f.importance));
 
         return {
@@ -48,7 +48,7 @@ export const FeatureImportanceChart = ({
             tooltip: {
                 formatter: function (this: Highcharts.TooltipFormatterContextObject) {
                     const feature = sortedFeatures[this.point.index];
-                    return `<b>${formatFeatureName(feature.feature_name)}</b><br/>${i18n.t('Importance')}: ${Math.abs(feature.importance).toFixed(4)}`;
+                    return `<b>${formatFeatureName(feature.featureName)}</b><br/>${i18n.t('Importance')}: ${Math.abs(feature.importance).toFixed(4)}`;
                 },
             },
             plotOptions: {

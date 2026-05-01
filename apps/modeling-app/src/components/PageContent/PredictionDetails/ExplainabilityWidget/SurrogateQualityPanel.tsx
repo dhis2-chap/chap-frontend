@@ -36,8 +36,8 @@ export const SurrogateQualityPanel = ({ quality, stabilityScore }: Props) => {
     const summaryLine = fidelityTier === 'good'
         ? i18n.t('explanations closely match the original model')
         : fidelityTier === 'moderate'
-        ? i18n.t('directionally useful, magnitudes are approximate')
-        : i18n.t('explanations may not reflect the original model');
+            ? i18n.t('directionally useful, magnitudes are approximate')
+            : i18n.t('explanations may not reflect the original model');
 
     return (
         <div className={styles.qualityPanel}>
@@ -87,9 +87,9 @@ export const SurrogateQualityPanel = ({ quality, stabilityScore }: Props) => {
                 <div className={styles.metricsArea}>
                     <p className={styles.metricsDescription}>
                         {i18n.t(
-                            'A {{modelName}} approximates the original prediction model. ' +
-                            'These metrics show how faithfully it reproduces the original model\'s predictions.',
-                            { modelName: modelDisplayName }
+                            'A {{modelName}} approximates the original prediction model. '
+                            + 'These metrics show how faithfully it reproduces the original model\'s predictions.',
+                            { modelName: modelDisplayName },
                         )}
                     </p>
 
@@ -104,7 +104,8 @@ export const SurrogateQualityPanel = ({ quality, stabilityScore }: Props) => {
                         <div className={styles.qualityMetric}>
                             <span className={styles.qualityMetricLabel}>{i18n.t('CV R²')}</span>
                             <span className={styles.qualityMetricValue} style={{ color: r2Color }}>
-                                {r2Pct}%
+                                {r2Pct}
+                                %
                             </span>
                             <span className={styles.qualityMetricRating} style={{ color: r2Color }}>
                                 {r2Label}
@@ -118,7 +119,8 @@ export const SurrogateQualityPanel = ({ quality, stabilityScore }: Props) => {
                                 </span>
                                 {mape != null && (
                                     <span className={styles.qualityMetricRating} style={{ color: 'var(--colors-grey600)' }}>
-                                        {(mape * 100).toFixed(1)}{i18n.t('% MAPE')}
+                                        {(mape * 100).toFixed(1)}
+                                        {i18n.t('% MAPE')}
                                     </span>
                                 )}
                             </div>
@@ -130,7 +132,8 @@ export const SurrogateQualityPanel = ({ quality, stabilityScore }: Props) => {
                                     className={styles.qualityMetricValue}
                                     style={{ color: Math.abs(residualMean) > residualStd * 0.5 ? '#ff9800' : 'inherit' }}
                                 >
-                                    {residualMean >= 0 ? '+' : ''}{residualMean < 1 && residualMean > -1 ? residualMean.toFixed(3) : residualMean.toFixed(1)}
+                                    {residualMean >= 0 ? '+' : ''}
+                                    {residualMean < 1 && residualMean > -1 ? residualMean.toFixed(3) : residualMean.toFixed(1)}
                                 </span>
                                 <span className={styles.qualityMetricRating} style={{ color: 'var(--colors-grey600)' }}>
                                     {i18n.t('±{{std}}', { std: residualStd < 1 ? residualStd.toFixed(3) : residualStd.toFixed(1) })}
@@ -155,7 +158,10 @@ export const SurrogateQualityPanel = ({ quality, stabilityScore }: Props) => {
                         {stabilityScore != null && (
                             <div className={styles.qualityMetric}>
                                 <span className={styles.qualityMetricLabel}>{i18n.t('Stability')}</span>
-                                <span className={styles.qualityMetricValue}>{(stabilityScore * 100).toFixed(1)}%</span>
+                                <span className={styles.qualityMetricValue}>
+                                    {(stabilityScore * 100).toFixed(1)}
+                                    %
+                                </span>
                                 <span className={styles.qualityMetricRating} style={{ color: 'var(--colors-grey600)' }}>
                                     {i18n.t('ranking consistency')}
                                 </span>

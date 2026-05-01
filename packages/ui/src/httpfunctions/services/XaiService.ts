@@ -20,11 +20,11 @@ export interface XaiMethodRead {
 }
 
 export interface FeatureAttribution {
-    feature_name: string;
+    featureName: string;
     importance: number;
     direction?: string;
-    baseline_value?: number;
-    actual_value?: number;
+    baselineValue?: number;
+    actualValue?: number;
 }
 
 export interface DataSourceInfo {
@@ -321,7 +321,7 @@ export class XaiService {
             errors: {
                 422: `Validation Error`,
             },
-        }).then((items) => (items as any[]).map(normalizeLocalExplanation));
+        }).then(items => (items as any[]).map(normalizeLocalExplanation));
     }
 
     public static computeLocalExplanation(

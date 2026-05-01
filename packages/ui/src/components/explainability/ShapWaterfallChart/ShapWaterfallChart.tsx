@@ -50,8 +50,8 @@ export const ShapWaterfallChart = ({
         const categories: string[] = [
             `E[f(X)] = ${formatValue(baselinePrediction)}`,
             ...sorted.map((f) => {
-                const valStr = f.actual_value != null ? ` = ${formatValue(f.actual_value)}` : '';
-                return `${formatFeatureName(f.feature_name)}${valStr}`;
+                const valStr = f.actualValue != null ? ` = ${formatValue(f.actualValue)}` : '';
+                return `${formatFeatureName(f.featureName)}${valStr}`;
             }),
             ...(hasOther ? [i18n.t('Other features')] : []),
             `f(x) = ${formatValue(modelOutput)}`,
@@ -173,10 +173,10 @@ export const ShapWaterfallChart = ({
                     const feat = sorted[idx - 1];
                     if (!feat) return '';
                     const sign = feat.importance >= 0 ? '+' : '';
-                    let tip = `<b>${formatFeatureName(feat.feature_name)}</b><br/>`;
+                    let tip = `<b>${formatFeatureName(feat.featureName)}</b><br/>`;
                     tip += `${i18n.t('SHAP value{{colon}}', { colon: ':' })} <b>${sign}${feat.importance.toFixed(3)}</b>`;
-                    if (feat.actual_value != null) {
-                        tip += `<br/>${i18n.t('Feature value')}: ${formatValue(feat.actual_value)}`;
+                    if (feat.actualValue != null) {
+                        tip += `<br/>${i18n.t('Feature value')}: ${formatValue(feat.actualValue)}`;
                     }
                     return tip;
                 },

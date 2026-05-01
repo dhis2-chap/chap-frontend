@@ -103,16 +103,16 @@ export const HorizonTab = ({
                             <>
                                 <p className={styles.horizonDesc}>
                                     {i18n.t(
-                                        'Average feature importance across all forecast steps in the horizon window. ' +
-                                        'This shows which features are the dominant drivers for the upcoming period overall. ' +
-                                        'Use the Local tab to inspect individual steps in detail.'
+                                        'Average feature importance across all forecast steps in the horizon window. '
+                                        + 'This shows which features are the dominant drivers for the upcoming period overall. '
+                                        + 'Use the Local tab to inspect individual steps in detail.',
                                     )}
                                 </p>
 
                                 {horizonData.averageImportance.length > 0 && (
                                     <FeatureImportanceChart
-                                        features={horizonData.averageImportance.map((f) => ({
-                                            feature_name: f.featureName,
+                                        features={horizonData.averageImportance.map(f => ({
+                                            featureName: f.featureName,
                                             importance: f.meanAbsImportance,
                                             direction: f.direction,
                                         }))}

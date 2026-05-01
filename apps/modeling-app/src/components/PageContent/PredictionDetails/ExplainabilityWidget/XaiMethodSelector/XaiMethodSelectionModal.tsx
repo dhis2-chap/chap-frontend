@@ -24,8 +24,8 @@ type Props = {
 };
 
 const isAutoMethod = (method: XaiMethodRead) =>
-    method.methodType?.toLowerCase().includes('auto') ||
-    method.name?.toLowerCase().includes('auto');
+    method.methodType?.toLowerCase().includes('auto')
+    || method.name?.toLowerCase().includes('auto');
 
 export const XaiMethodSelectionModal = ({
     xaiMethods,
@@ -47,10 +47,10 @@ export const XaiMethodSelectionModal = ({
     const filteredMethods = useMemo(() => {
         if (!xaiMethods) return [];
         return xaiMethods
-            .filter(m => {
-                const matchesSearch = !searchValue ||
-                    m.displayName?.toLowerCase().includes(searchValue.toLowerCase()) ||
-                    m.description?.toLowerCase().includes(searchValue.toLowerCase());
+            .filter((m) => {
+                const matchesSearch = !searchValue
+                    || m.displayName?.toLowerCase().includes(searchValue.toLowerCase())
+                    || m.description?.toLowerCase().includes(searchValue.toLowerCase());
                 const matchesType = !methodTypeFilter || m.methodType === methodTypeFilter;
                 return matchesSearch && matchesType;
             })
@@ -72,8 +72,8 @@ export const XaiMethodSelectionModal = ({
             <ModalContent>
                 <p className={styles.description}>
                     {i18n.t(
-                        'Choose which explainability method to use when computing feature attributions. ' +
-                        'The selected method applies to all explanation types (global, local, and horizon).',
+                        'Choose which explainability method to use when computing feature attributions. '
+                        + 'The selected method applies to all explanation types (global, local, and horizon).',
                     )}
                 </p>
 

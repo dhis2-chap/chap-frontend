@@ -1,5 +1,5 @@
 export const formatFeatureName = (name: string): string =>
-    name.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+    name.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
 
 export const CHART_COLORS = {
     positive: '#c62828',

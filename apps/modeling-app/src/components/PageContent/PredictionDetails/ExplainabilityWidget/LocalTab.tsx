@@ -143,9 +143,9 @@ export const LocalTab = ({
                                 {supports('waterfall') && localView === 'waterfall' ? (
                                     <ShapWaterfallChart
                                         key={`local-waterfall-${displayExplanation.id ?? 'new'}-${localOrgUnit}-${selectedPeriod}`}
-                                        features={displayExplanation.featureAttributions.map((f) => ({
-                                            feature_name: f.feature_name, importance: f.importance,
-                                            direction: f.direction, actual_value: f.actual_value,
+                                        features={displayExplanation.featureAttributions.map(f => ({
+                                            featureName: f.featureName, importance: f.importance,
+                                            direction: f.direction, actualValue: f.actualValue,
                                         }))}
                                         baselinePrediction={displayExplanation.baselinePrediction}
                                         actualPrediction={displayExplanation.actualPrediction}
@@ -182,8 +182,8 @@ export const LocalTab = ({
                                         </NoticeBox>
                                         <FeatureImportanceChart
                                             key={`local-lime-${displayExplanation.id ?? 'new'}-${localOrgUnit}-${selectedPeriod}`}
-                                            features={displayExplanation.featureAttributions.map((f) => ({
-                                                feature_name: f.feature_name, importance: f.importance, direction: f.direction,
+                                            features={displayExplanation.featureAttributions.map(f => ({
+                                                featureName: f.featureName, importance: f.importance, direction: f.direction,
                                             }))}
                                             title={i18n.t('LIME Feature Contributions — {{orgUnit}}, {{period}}', {
                                                 orgUnit: orgUnitOptions.find(o => o.id === localOrgUnit)?.label ?? localOrgUnit,
