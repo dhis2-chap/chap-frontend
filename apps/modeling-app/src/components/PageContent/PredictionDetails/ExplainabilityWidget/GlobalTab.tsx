@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { Button, ButtonStrip, CircularLoader, NoticeBox } from '@dhis2/ui';
 import {
@@ -10,6 +11,7 @@ import {
 import { SurrogateQualityPanel } from './SurrogateQualityPanel';
 import styles from './ExplainabilityWidget.module.css';
 import { toSurrogateQuality } from './xaiTypes';
+import { getChartHeight } from './getChartHeight';
 
 type Props = {
     isGlobalLoading: boolean;
@@ -19,8 +21,6 @@ type Props = {
     globalError: unknown;
     globalExplanation: GlobalExplanationResponse | undefined;
     supports: (viz: string) => boolean;
-    globalView: 'importance' | 'beeswarm';
-    onGlobalViewChange: (v: 'importance' | 'beeswarm') => void;
     isBeeswarmLoading: boolean;
     beeswarmData: ShapBeeswarmResponse | undefined;
     beeswarmError?: string | null;
@@ -37,8 +37,6 @@ export const GlobalTab = ({
     globalError,
     globalExplanation,
     supports,
-    globalView,
-    onGlobalViewChange,
     isBeeswarmLoading,
     beeswarmData,
     beeswarmError,
@@ -46,6 +44,7 @@ export const GlobalTab = ({
     onRunExplanations,
     onLoadBeeswarm,
 }: Props) => {
+    const [globalView, setGlobalView] = useState<'importance' | 'beeswarm'>('importance');
     if (!globalExplanation?.available && (isGlobalLoading || (isGlobalFetching && !isGlobalTransitioning) || isExplanationJobRunning)) {
         return <div className={styles.loadingContainer}><CircularLoader small /></div>;
     }
@@ -69,11 +68,8 @@ export const GlobalTab = ({
         direction: f.direction,
     }));
 
-    const featureCount = beeswarmData ? beeswarmData.featureNames.length : features.length;
-    const chartHeight = Math.max(
-        Math.max(200, features.length * 35 + 80),
-        supports('beeswarm') ? Math.max(300, featureCount * 50 + 120) : 0,
-    );
+    const beeswarmFeatureCount = beeswarmData ? beeswarmData.featureNames.length : features.length;
+    const chartHeight = getChartHeight(features.length, beeswarmFeatureCount, supports('beeswarm'));
 
     return (
         <div className={styles.chartContainer}>
@@ -86,14 +82,14 @@ export const GlobalTab = ({
                         <Button
                             small
                             primary={globalView === 'importance'}
-                            onClick={() => onGlobalViewChange('importance')}
+                            onClick={() => setGlobalView('importance')}
                         >
                             {i18n.t('Importance')}
                         </Button>
                         <Button
                             small
                             primary={globalView === 'beeswarm'}
-                            onClick={() => onGlobalViewChange('beeswarm')}
+                            onClick={() => setGlobalView('beeswarm')}
                         >
                             {i18n.t('SHAP Summary')}
                         </Button>

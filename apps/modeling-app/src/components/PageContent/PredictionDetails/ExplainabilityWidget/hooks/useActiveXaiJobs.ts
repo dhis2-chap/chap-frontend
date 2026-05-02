@@ -18,6 +18,9 @@ export const useActiveXaiJobs = ({
     xaiMethod,
     enabled,
 }: Args) => {
+    // TODO: backend currently only filters by a single job type, so we issue
+    // two parallel requests. If the API gains support for a list of types,
+    // collapse these into one call.
     const explanationJobsQuery = useQuery({
         queryKey: ['activeXaiJobs', predictionId, xaiMethod],
         queryFn: () =>
@@ -27,7 +30,6 @@ export const useActiveXaiJobs = ({
                 JOB_TYPES.XAI_EXPLANATIONS,
             ),
         enabled,
-        cacheTime: 0,
     });
 
     const surrogateJobsQuery = useQuery({
@@ -39,7 +41,6 @@ export const useActiveXaiJobs = ({
                 JOB_TYPES.XAI_SURROGATE,
             ),
         enabled,
-        cacheTime: 0,
     });
 
     const matchFn = matches(predictionId, xaiMethod);

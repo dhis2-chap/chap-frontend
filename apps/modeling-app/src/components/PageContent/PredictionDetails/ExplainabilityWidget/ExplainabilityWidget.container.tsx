@@ -35,6 +35,27 @@ type Props = {
     periodType?: string | null;
 };
 
+const getComputingMessage = ({
+    isSurrogateRunning,
+    isExplanationRunning,
+    isComputingLocal,
+    methodLabel,
+}: {
+    isSurrogateRunning: boolean;
+    isExplanationRunning: boolean;
+    isComputingLocal: boolean;
+    methodLabel: string;
+}): string | null => {
+    if (isSurrogateRunning) {
+        return i18n.t('Training surrogate model ({{method}})…', { method: methodLabel });
+    }
+    if (isExplanationRunning) {
+        return i18n.t('Generating explanations ({{method}})…', { method: methodLabel });
+    }
+    if (isComputingLocal) return i18n.t('Computing local explanation…');
+    return null;
+};
+
 export const ExplainabilityWidget = ({
     predictionId,
     orgUnits,
@@ -44,15 +65,6 @@ export const ExplainabilityWidget = ({
     // UI state
     const [open, setOpen] = useState(true);
     const [activeTab, setActiveTab] = useState<TabKey>('global');
-    const [globalView, setGlobalView] = useState<'importance' | 'beeswarm'>(
-        'importance',
-    );
-    const [localView, setLocalView] = useState<'waterfall' | 'summary'>(
-        'waterfall',
-    );
-    const [horizonView, setHorizonView] = useState<'importance' | 'beeswarm'>(
-        'importance',
-    );
 
     // Selections
     const [searchParams] = useSearchParams();
@@ -72,11 +84,10 @@ export const ExplainabilityWidget = ({
         isRunning: isAnyXaiJobRunning,
         isExplanationRunning,
         isSurrogateRunning,
-        isComplete: hasCompletedExplanationsForMethod,
+        hasJobSucceeded,
         isCheckingForActiveJobs,
         error: explanationRunError,
         run: handleRunExplanations,
-        markComplete: markMethodComplete,
     } = useXaiExplanationJob({
         predictionId,
         xaiMethod: selectedXaiMethod,
@@ -114,18 +125,6 @@ export const ExplainabilityWidget = ({
         setSelectedXaiMethod(method.name);
     };
 
-    // Reset visualization views when switching to a method without beeswarm support.
-    const prevXaiMethodRef = useRef(selectedXaiMethod);
-    useEffect(() => {
-        if (prevXaiMethodRef.current === selectedXaiMethod) return;
-        prevXaiMethodRef.current = selectedXaiMethod;
-        if (!supports('beeswarm')) {
-            setGlobalView('importance');
-            setLocalView('waterfall');
-            setHorizonView('importance');
-        }
-    }, [selectedXaiMethod, supports]);
-
     // Global / local explanation data — keepPreviousData on the queries means
     // the hook's `data` already holds the prior response while a new fetch is in
     // flight, and `isPreviousData` flags the transition.
@@ -138,6 +137,8 @@ export const ExplainabilityWidget = ({
     } = useGlobalExplanation(predictionId, selectedXaiMethod);
 
     const isGlobalTransitioning = isGlobalFetching && isGlobalPreviousData;
+    const hasCompletedExplanationsForMethod =
+        !!globalExplanation?.available || hasJobSucceeded;
 
     const {
         currentExplanation: localExplanation,
@@ -156,14 +157,10 @@ export const ExplainabilityWidget = ({
 
     const isTransitioning = isLocalFetching && isLocalPreviousData;
 
-    // Beeswarm — fetched lazily based on which view is showing
+    // Beeswarm — fetched once explanations exist and the active method supports it.
+    // Pre-fetched on tab arrival so switching to the SHAP Summary view is instant.
     const beeswarmEnabled =
-        hasCompletedExplanationsForMethod &&
-        ((activeTab === 'global' && globalView === 'beeswarm')
-            || (activeTab === 'local' &&
-                localView === 'summary' &&
-                supports('beeswarm'))
-            || (activeTab === 'horizon' && horizonView === 'beeswarm'));
+        hasCompletedExplanationsForMethod && supports('beeswarm');
     const {
         beeswarmData,
         isBeeswarmLoading,
@@ -216,13 +213,6 @@ export const ExplainabilityWidget = ({
         setLocalOrgUnit(value);
     };
 
-    // Mark a method as completed once its global explanation is available
-    // (covers the case where the user opens a prediction whose explanations
-    // were already computed before this session — no job to listen to).
-    useEffect(() => {
-        if (globalExplanation?.available) markMethodComplete();
-    }, [globalExplanation?.available, markMethodComplete]);
-
     const handleComputeLocal = () => {
         computeLocal({
             orgUnit: localOrgUnit,
@@ -235,21 +225,12 @@ export const ExplainabilityWidget = ({
 
     const getLabel = (period: string) => getPeriodLabel(period, periodType);
 
-    // Banner message
-    const computingMessage = (() => {
-        if (isSurrogateRunning) {
-            return i18n.t('Training surrogate model ({{method}})…', {
-                method: selectedXaiMethodObj?.displayName ?? selectedXaiMethod,
-            });
-        }
-        if (isExplanationRunning) {
-            return i18n.t('Generating explanations ({{method}})…', {
-                method: selectedXaiMethodObj?.displayName ?? selectedXaiMethod,
-            });
-        }
-        if (isComputingLocal) return i18n.t('Computing local explanation…');
-        return null;
-    })();
+    const computingMessage = getComputingMessage({
+        isSurrogateRunning,
+        isExplanationRunning,
+        isComputingLocal,
+        methodLabel: selectedXaiMethodObj?.displayName ?? selectedXaiMethod,
+    });
 
     // Body
     const isExplanationBundleReady = hasCompletedExplanationsForMethod;
@@ -301,8 +282,6 @@ export const ExplainabilityWidget = ({
                         isGlobalTransitioning={isGlobalTransitioning}
                         globalError={globalError}
                         globalExplanation={globalExplanation}
-                        globalView={globalView}
-                        onGlobalViewChange={setGlobalView}
                     />
                 );
                 break;
@@ -320,8 +299,6 @@ export const ExplainabilityWidget = ({
                         localError={localError}
                         isComputingLocal={isComputingLocal}
                         isTransitioning={isTransitioning}
-                        localView={localView}
-                        onLocalViewChange={setLocalView}
                         onComputeLocal={handleComputeLocal}
                     />
                 );
@@ -333,8 +310,6 @@ export const ExplainabilityWidget = ({
                         horizonData={horizonData}
                         isHorizonLoading={isHorizonLoading}
                         horizonError={horizonError}
-                        horizonView={horizonView}
-                        onHorizonViewChange={setHorizonView}
                     />
                 );
                 break;

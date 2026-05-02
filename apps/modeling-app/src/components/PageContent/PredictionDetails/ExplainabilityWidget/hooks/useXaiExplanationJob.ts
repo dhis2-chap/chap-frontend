@@ -26,12 +26,8 @@ export const useXaiExplanationJob = ({
         () => xaiJobStorage.get(predictionId, xaiMethod),
     );
     const [surrogateJobId, setSurrogateJobId] = useState<string | null>(null);
-    const [completedMethods, setCompletedMethods] = useState<
-        Record<string, boolean>
-    >({});
+    const [hasJobSucceeded, setHasJobSucceeded] = useState(false);
     const [error, setError] = useState<string | null>(null);
-
-    const isComplete = !!completedMethods[xaiMethod];
 
     // Reset transient job state when the user switches XAI method.
     const prevXaiMethod = useRef(xaiMethod);
@@ -40,6 +36,7 @@ export const useXaiExplanationJob = ({
         prevXaiMethod.current = xaiMethod;
         setExplanationJobId(xaiJobStorage.get(predictionId, xaiMethod));
         setSurrogateJobId(null);
+        setHasJobSucceeded(false);
     }, [xaiMethod, predictionId]);
 
     // Discover any in-flight jobs (only when nothing's already running or done).
@@ -47,7 +44,7 @@ export const useXaiExplanationJob = ({
         useActiveXaiJobs({
             predictionId,
             xaiMethod,
-            enabled: !explanationJobId && !surrogateJobId && !isComplete,
+            enabled: !explanationJobId && !surrogateJobId && !hasJobSucceeded,
         });
     useEffect(() => {
         if (explanationJobMatch && !explanationJobId) {
@@ -68,32 +65,23 @@ export const useXaiExplanationJob = ({
     useEffect(() => {
         if (!explanationJobId) return;
         const status = explanationJob.status;
+        if (status !== 'SUCCESS' && status !== 'FAILURE' && status !== 'REVOKED') return;
+
+        xaiJobStorage.clear(predictionId, xaiMethod);
+        setExplanationJobId(null);
+
         if (status === 'SUCCESS') {
-            xaiJobStorage.clear(predictionId, xaiMethod);
-            setCompletedMethods(prev => ({ ...prev, [xaiMethod]: true }));
-            queryClient.invalidateQueries({
-                queryKey: ['globalExplanation', predictionId, xaiMethod],
-            });
-            queryClient.invalidateQueries({
-                queryKey: ['localExplanations', predictionId],
-            });
-            queryClient.invalidateQueries({
-                queryKey: ['shapBeeswarm', predictionId],
-            });
-            queryClient.invalidateQueries({
-                queryKey: ['horizonSummary', predictionId],
-            });
-            setExplanationJobId(null);
-        } else if (status === 'FAILURE') {
-            xaiJobStorage.clear(predictionId, xaiMethod);
-            setError(i18n.t('Explanation job failed. Check Jobs for details.'));
-            setExplanationJobId(null);
-        } else if (status === 'REVOKED') {
-            xaiJobStorage.clear(predictionId, xaiMethod);
+            setHasJobSucceeded(true);
+            queryClient.invalidateQueries({ queryKey: ['globalExplanation', predictionId, xaiMethod] });
+            queryClient.invalidateQueries({ queryKey: ['localExplanations', predictionId] });
+            queryClient.invalidateQueries({ queryKey: ['shapBeeswarm', predictionId] });
+            queryClient.invalidateQueries({ queryKey: ['horizonSummary', predictionId] });
+        } else {
             setError(
-                i18n.t('Explanation job was revoked. Check Jobs for details.'),
+                status === 'FAILURE'
+                    ? i18n.t('Explanation job failed. Check Jobs for details.')
+                    : i18n.t('Explanation job was revoked. Check Jobs for details.'),
             );
-            setExplanationJobId(null);
         }
     }, [
         explanationJobId,
@@ -107,34 +95,25 @@ export const useXaiExplanationJob = ({
     useEffect(() => {
         if (!surrogateJobId) return;
         const status = surrogateJob.status;
-        if (status === 'SUCCESS') {
-            setSurrogateJobId(null);
-        } else if (status === 'FAILURE') {
+        if (status !== 'SUCCESS' && status !== 'FAILURE' && status !== 'REVOKED') return;
+
+        setSurrogateJobId(null);
+        if (status !== 'SUCCESS') {
             setError(
-                i18n.t(
-                    'Surrogate model training failed. Check Jobs for details.',
-                ),
+                status === 'FAILURE'
+                    ? i18n.t('Surrogate model training failed. Check Jobs for details.')
+                    : i18n.t('Surrogate model training was revoked. Check Jobs for details.'),
             );
-            setSurrogateJobId(null);
-        } else if (status === 'REVOKED') {
-            setError(
-                i18n.t(
-                    'Surrogate model training was revoked. Check Jobs for details.',
-                ),
-            );
-            setSurrogateJobId(null);
         }
     }, [surrogateJobId, surrogateJob.status]);
-
-    const markComplete = useCallback(() => {
-        setCompletedMethods(prev =>
-            prev[xaiMethod] ? prev : { ...prev, [xaiMethod]: true },
-        );
-    }, [xaiMethod]);
 
     const run = useCallback(async () => {
         if (!predictionId || isRunning) return;
         setError(null);
+        // Re-running for a method that previously succeeded: clear the cached
+        // success flag so the UI reflects the fresh run instead of relying on
+        // the prior run's state.
+        setHasJobSucceeded(false);
         try {
             const job = await XaiService.runExplanationsV1XaiPredictionsPredictionIdExplanationsRunPost(
                 predictionId,
@@ -152,11 +131,10 @@ export const useXaiExplanationJob = ({
 
     return {
         isRunning,
-        isComplete,
+        hasJobSucceeded,
         isCheckingForActiveJobs,
         error,
         run,
-        markComplete,
         isExplanationRunning: explanationJob.isRunning,
         isSurrogateRunning: surrogateJob.isRunning,
     };

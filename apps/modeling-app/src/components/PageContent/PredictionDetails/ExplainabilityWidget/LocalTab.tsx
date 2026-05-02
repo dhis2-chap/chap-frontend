@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { Button, ButtonStrip, CircularLoader, NoticeBox, SingleSelect, SingleSelectOption, Menu, MenuItem } from '@dhis2/ui';
 import {
@@ -28,8 +29,6 @@ type Props = {
     isTransitioning: boolean;
     isExplanationJobRunning: boolean;
     supports: (viz: string) => boolean;
-    localView: 'waterfall' | 'summary';
-    onLocalViewChange: (v: 'waterfall' | 'summary') => void;
     beeswarmData: ShapBeeswarmResponse | undefined;
     isBeeswarmLoading: boolean;
     beeswarmError?: string | null;
@@ -55,8 +54,6 @@ export const LocalTab = ({
     isTransitioning,
     isExplanationJobRunning,
     supports,
-    localView,
-    onLocalViewChange,
     beeswarmData,
     isBeeswarmLoading,
     beeswarmError,
@@ -65,6 +62,7 @@ export const LocalTab = ({
     onLoadBeeswarm,
     onComputeLocal,
 }: Props) => {
+    const [localView, setLocalView] = useState<'waterfall' | 'summary'>('waterfall');
     const cp = toCovariateProvenance(displayExplanation?.covariateProvenance);
 
     return (
@@ -123,7 +121,7 @@ export const LocalTab = ({
                                                 <Button
                                                     small
                                                     primary={localView === 'waterfall'}
-                                                    onClick={() => onLocalViewChange('waterfall')}
+                                                    onClick={() => setLocalView('waterfall')}
                                                 >
                                                     {i18n.t('Waterfall')}
                                                 </Button>
@@ -132,7 +130,7 @@ export const LocalTab = ({
                                                 <Button
                                                     small
                                                     primary={localView === 'summary'}
-                                                    onClick={() => onLocalViewChange('summary')}
+                                                    onClick={() => setLocalView('summary')}
                                                 >
                                                     {i18n.t('SHAP Summary')}
                                                 </Button>
@@ -145,7 +143,6 @@ export const LocalTab = ({
                                 </div>
                                 {supports('waterfall') && localView === 'waterfall' ? (
                                     <ShapWaterfallChart
-                                        key={`local-waterfall-${displayExplanation.id ?? 'new'}-${localOrgUnit}-${selectedPeriod}`}
                                         features={displayExplanation.featureAttributions.map(f => ({
                                             featureName: f.featureName, importance: f.importance,
                                             direction: f.direction, actualValue: f.actualValue,
@@ -184,7 +181,6 @@ export const LocalTab = ({
                                             {i18n.t('LIME contributions are coefficients of a local linear approximation and do not decompose additively into the final prediction (unlike SHAP).')}
                                         </NoticeBox>
                                         <FeatureImportanceChart
-                                            key={`local-lime-${displayExplanation.id ?? 'new'}-${localOrgUnit}-${selectedPeriod}`}
                                             features={displayExplanation.featureAttributions.map(f => ({
                                                 featureName: f.featureName, importance: f.importance, direction: f.direction,
                                             }))}

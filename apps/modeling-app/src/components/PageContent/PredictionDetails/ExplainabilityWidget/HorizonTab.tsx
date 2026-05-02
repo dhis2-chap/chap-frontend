@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { Button, ButtonStrip, CircularLoader, NoticeBox, Menu, MenuItem } from '@dhis2/ui';
 import {
@@ -7,6 +8,7 @@ import {
     type ShapBeeswarmResponse,
 } from '@dhis2-chap/ui';
 import styles from './ExplainabilityWidget.module.css';
+import { getChartHeight } from './getChartHeight';
 
 type OrgUnitOption = { id: string; label: string };
 
@@ -19,8 +21,6 @@ type Props = {
     horizonError: string | null;
     isExplanationJobRunning: boolean;
     supports: (viz: string) => boolean;
-    horizonView: 'importance' | 'beeswarm';
-    onHorizonViewChange: (v: 'importance' | 'beeswarm') => void;
     beeswarmData: ShapBeeswarmResponse | undefined;
     isBeeswarmLoading: boolean;
     beeswarmError?: string | null;
@@ -38,8 +38,6 @@ export const HorizonTab = ({
     horizonError,
     isExplanationJobRunning,
     supports,
-    horizonView,
-    onHorizonViewChange,
     beeswarmData,
     isBeeswarmLoading,
     beeswarmError,
@@ -47,14 +45,13 @@ export const HorizonTab = ({
     onRunExplanations,
     onLoadBeeswarm,
 }: Props) => {
+    const [horizonView, setHorizonView] = useState<'importance' | 'beeswarm'>('importance');
+    const showBeeswarm = supports('beeswarm') && horizonView === 'beeswarm';
     const orgLabel = orgUnitOptions.find(o => o.id === localOrgUnit)?.label ?? localOrgUnit;
 
     const importanceFeatureCount = horizonData?.averageImportance.length ?? 0;
     const beeswarmFeatureCount = beeswarmData ? beeswarmData.featureNames.length : importanceFeatureCount;
-    const chartHeight = Math.max(
-        Math.max(200, importanceFeatureCount * 35 + 80),
-        supports('beeswarm') ? Math.max(300, beeswarmFeatureCount * 50 + 120) : 0,
-    );
+    const chartHeight = getChartHeight(importanceFeatureCount, beeswarmFeatureCount, supports('beeswarm'));
 
     return (
         <div className={styles.mainLayout}>
@@ -94,21 +91,21 @@ export const HorizonTab = ({
                                 <Button
                                     small
                                     primary={horizonView === 'importance'}
-                                    onClick={() => onHorizonViewChange('importance')}
+                                    onClick={() => setHorizonView('importance')}
                                 >
                                     {i18n.t('Importance')}
                                 </Button>
                                 <Button
                                     small
                                     primary={horizonView === 'beeswarm'}
-                                    onClick={() => onHorizonViewChange('beeswarm')}
+                                    onClick={() => setHorizonView('beeswarm')}
                                 >
                                     {i18n.t('SHAP Summary')}
                                 </Button>
                             </ButtonStrip>
                         )}
 
-                        {horizonView === 'importance' ? (
+                        {!showBeeswarm ? (
                             <>
                                 <p className={styles.horizonDesc}>
                                     {i18n.t(
