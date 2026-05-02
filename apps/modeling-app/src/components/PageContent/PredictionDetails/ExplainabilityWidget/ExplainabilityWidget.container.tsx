@@ -109,10 +109,15 @@ export const ExplainabilityWidget = ({
         [selectedXaiMethodObj],
     );
 
-    // If the default method isn't in the (prediction-filtered) list, fall back
-    // to the first auto method, then the first method overall.
+    // Prefer a native SHAP method when the model supports it; otherwise fall
+    // back to the default, then the first auto method, then the first method.
     useEffect(() => {
         if (hasUserSelectedXaiMethod.current || !xaiMethods?.length) return;
+        const native = xaiMethods.find(m => m.methodType === 'native_shap');
+        if (native) {
+            if (selectedXaiMethod !== native.name) setSelectedXaiMethod(native.name);
+            return;
+        }
         if (xaiMethods.some(m => m.name === selectedXaiMethod)) return;
         const fallback = xaiMethods.find(m => m.isAuto) ?? xaiMethods[0];
         setSelectedXaiMethod(fallback.name);
