@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { Tag, formatFeatureName, CHART_COLORS } from '@dhis2-chap/ui';
 import styles from './ExplainabilityWidget.module.css';
@@ -9,29 +9,31 @@ type Props = {
     stabilityScore?: number;
 };
 
-const TIER_META: Record<FidelityTier, { color: string; label: string; summary: string }> = {
-    good: {
-        color: CHART_COLORS.qualityGood,
-        label: i18n.t('Good'),
-        summary: i18n.t('explanations closely match the original model'),
-    },
-    moderate: {
-        color: CHART_COLORS.qualityModerate,
-        label: i18n.t('Moderate'),
-        summary: i18n.t('directionally useful, magnitudes are approximate'),
-    },
-    poor: {
-        color: CHART_COLORS.qualityPoor,
-        label: i18n.t('Poor'),
-        summary: i18n.t('explanations may not reflect the original model'),
-    },
-};
-
 const formatMetric = (v: number) => (Math.abs(v) < 1 ? v.toFixed(3) : v.toFixed(1));
 const formatPct = (v: number, digits = 1) => (v * 100).toFixed(digits);
 
 export const SurrogateQualityPanel = ({ quality, stabilityScore }: Props) => {
     const [showMetrics, setShowMetrics] = useState(false);
+
+    // Built inside the component so i18n strings reflect the current locale
+    // rather than the locale at module load time.
+    const tierMeta = useMemo<Record<FidelityTier, { color: string; label: string; summary: string }>>(() => ({
+        good: {
+            color: CHART_COLORS.qualityGood,
+            label: i18n.t('Good'),
+            summary: i18n.t('explanations closely match the original model'),
+        },
+        moderate: {
+            color: CHART_COLORS.qualityModerate,
+            label: i18n.t('Moderate'),
+            summary: i18n.t('directionally useful, magnitudes are approximate'),
+        },
+        poor: {
+            color: CHART_COLORS.qualityPoor,
+            label: i18n.t('Poor'),
+            summary: i18n.t('explanations may not reflect the original model'),
+        },
+    }), []);
 
     if (!quality) return null;
     const r2 = quality.rSquared;
@@ -44,7 +46,7 @@ export const SurrogateQualityPanel = ({ quality, stabilityScore }: Props) => {
     const permRemovedFeatures = quality.permutationRemovedFeatures ?? [];
     const modelDisplayName = quality.selectedModelDisplayName ?? i18n.t('surrogate model');
 
-    const { color, label, summary } = TIER_META[fidelityTier];
+    const { color, label, summary } = tierMeta[fidelityTier];
     const duplicateRatio = unique != null && n != null && n > 0 ? ((1 - unique / n) * 100).toFixed(0) : null;
 
     return (

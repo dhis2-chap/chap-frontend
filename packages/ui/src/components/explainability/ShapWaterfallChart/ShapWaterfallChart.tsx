@@ -150,7 +150,7 @@ export const ShapWaterfallChart = ({
                         let tip = `<b>f(x) — ${i18n.t('Model output for this instance')}</b><br/>`;
                         tip += `${modelOutput.toFixed(2)}`;
                         if (Math.abs(actualPrediction - modelOutput) > 0.5) {
-                            tip += `<br/><br/>${i18n.t('Actual forecast')}: <b>${actualPrediction.toFixed(2)}</b>`;
+                            tip += `<br/><br/>${i18n.t('Actual forecast{{colon}}', { colon: ':' })} <b>${actualPrediction.toFixed(2)}</b>`;
                         }
                         return tip;
                     }
@@ -168,7 +168,7 @@ export const ShapWaterfallChart = ({
                     let tip = `<b>${formatFeatureName(feat.featureName)}</b><br/>`;
                     tip += `${i18n.t('SHAP value{{colon}}', { colon: ':' })} <b>${sign}${feat.importance.toFixed(3)}</b>`;
                     if (feat.actualValue != null) {
-                        tip += `<br/>${i18n.t('Feature value')}: ${formatValue(feat.actualValue)}`;
+                        tip += `<br/>${i18n.t('Feature value{{colon}}', { colon: ':' })} ${formatValue(feat.actualValue)}`;
                     }
                     return tip;
                 },

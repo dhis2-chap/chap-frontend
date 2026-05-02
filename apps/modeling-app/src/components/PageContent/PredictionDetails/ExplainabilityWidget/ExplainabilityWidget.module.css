@@ -51,9 +51,14 @@
 }
 
 .chartContainer {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: var(--spacers-dp12, 12px);
+}
+
+.chartLoadingWrapper {
+    position: relative;
 }
 
 .chartHeader {
@@ -67,20 +72,20 @@
 .mainLayout {
     display: flex;
     gap: var(--spacers-dp16, 16px);
-    min-block-size: 400px;
+    min-height: 400px;
 }
 
 .sidebar {
     flex-shrink: 0;
-    inline-size: 200px;
-    border-inline-end: 1px solid var(--colors-grey300);
+    width: 200px;
+    border-right: 1px solid var(--colors-grey300);
     overflow-y: auto;
-    max-block-size: 400px;
+    max-height: 400px;
 }
 
 .plotArea {
     flex: 1;
-    min-inline-size: 0;
+    min-width: 0;
     display: flex;
     flex-direction: column;
     gap: var(--spacers-dp16, 16px);
@@ -121,34 +126,6 @@
     padding: 8px 12px;
     background: var(--colors-blue050, #e3f2fd);
     border-radius: 4px;
-}
-
-.viewToggle {
-    display: flex;
-    border: 1px solid var(--colors-grey300, #d5dde5);
-    border-radius: 4px;
-    overflow: hidden;
-}
-
-.toggleBtn {
-    padding: 4px 12px;
-    font-size: 11px;
-    font-weight: 500;
-    border: none;
-    background: var(--colors-white, #fff);
-    color: var(--colors-grey700, #6e7a8a);
-    cursor: pointer;
-    transition: background 0.15s, color 0.15s;
-}
-
-.toggleBtn:not(:last-child) {
-    border-right: 1px solid var(--colors-grey300, #d5dde5);
-}
-
-.toggleBtnActive {
-    background: var(--colors-grey200, #eef0f3);
-    color: var(--colors-grey900, #212934);
-    font-weight: 600;
 }
 
 .qualityPanel {
@@ -304,7 +281,7 @@
 
 .tabSpinner {
     display: inline-block;
-    margin-inline-start: 6px;
+    margin-left: 6px;
     vertical-align: middle;
 }
 

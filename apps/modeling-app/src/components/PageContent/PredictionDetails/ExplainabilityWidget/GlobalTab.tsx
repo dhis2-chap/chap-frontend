@@ -1,5 +1,5 @@
 import i18n from '@dhis2/d2-i18n';
-import { Button, CircularLoader, NoticeBox } from '@dhis2/ui';
+import { Button, ButtonStrip, CircularLoader, NoticeBox } from '@dhis2/ui';
 import {
     FeatureImportanceChart,
     ShapBeeswarmChart,
@@ -9,7 +9,7 @@ import {
 } from '@dhis2-chap/ui';
 import { SurrogateQualityPanel } from './SurrogateQualityPanel';
 import styles from './ExplainabilityWidget.module.css';
-import type { SurrogateQuality } from './xaiTypes';
+import { toSurrogateQuality } from './xaiTypes';
 
 type Props = {
     isGlobalLoading: boolean;
@@ -76,28 +76,28 @@ export const GlobalTab = ({
     );
 
     return (
-        <div className={styles.chartContainer} style={{ position: 'relative' }}>
+        <div className={styles.chartContainer}>
             {isGlobalTransitioning && (
                 <div className={styles.loadingOverlay}><CircularLoader small /></div>
             )}
             <div className={styles.chartHeader}>
                 {supports('beeswarm') && (
-                    <div className={styles.viewToggle}>
-                        <button
-                            type="button"
-                            className={`${styles.toggleBtn} ${globalView === 'importance' ? styles.toggleBtnActive : ''}`}
+                    <ButtonStrip>
+                        <Button
+                            small
+                            primary={globalView === 'importance'}
                             onClick={() => onGlobalViewChange('importance')}
                         >
                             {i18n.t('Importance')}
-                        </button>
-                        <button
-                            type="button"
-                            className={`${styles.toggleBtn} ${globalView === 'beeswarm' ? styles.toggleBtnActive : ''}`}
+                        </Button>
+                        <Button
+                            small
+                            primary={globalView === 'beeswarm'}
                             onClick={() => onGlobalViewChange('beeswarm')}
                         >
                             {i18n.t('SHAP Summary')}
-                        </button>
-                    </div>
+                        </Button>
+                    </ButtonStrip>
                 )}
                 <Button small secondary onClick={onRunExplanations} loading={isExplanationJobRunning} disabled={isExplanationJobRunning}>
                     {i18n.t('Recalculate')}
@@ -106,7 +106,7 @@ export const GlobalTab = ({
 
             {supports('beeswarm') && globalView === 'beeswarm' ? (
                 isBeeswarmLoading ? (
-                    <div style={{ position: 'relative' }}>
+                    <div className={styles.chartLoadingWrapper}>
                         <div className={styles.loadingOverlay}><CircularLoader small /></div>
                         <FeatureImportanceChart features={features} title={i18n.t('Global Feature Importance')} height={chartHeight} />
                     </div>
@@ -129,7 +129,7 @@ export const GlobalTab = ({
             )}
 
             <SurrogateQualityPanel
-                quality={(globalExplanation.surrogateQuality || beeswarmData?.surrogateQuality) as SurrogateQuality | undefined}
+                quality={toSurrogateQuality(globalExplanation.surrogateQuality ?? beeswarmData?.surrogateQuality)}
                 stabilityScore={globalExplanation.stabilityScore ?? undefined}
             />
         </div>

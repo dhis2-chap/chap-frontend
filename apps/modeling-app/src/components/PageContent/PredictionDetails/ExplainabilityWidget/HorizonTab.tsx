@@ -1,5 +1,5 @@
 import i18n from '@dhis2/d2-i18n';
-import { Button, CircularLoader, NoticeBox, Menu, MenuItem } from '@dhis2/ui';
+import { Button, ButtonStrip, CircularLoader, NoticeBox, Menu, MenuItem } from '@dhis2/ui';
 import {
     FeatureImportanceChart,
     ShapBeeswarmChart,
@@ -76,7 +76,7 @@ export const HorizonTab = ({
                 ) : horizonError && !horizonData ? (
                     <NoticeBox error title={i18n.t('Error')}>{horizonError}</NoticeBox>
                 ) : horizonData ? (
-                    <div className={styles.chartContainer} style={{ position: 'relative' }}>
+                    <div className={styles.chartContainer}>
                         {isHorizonLoading && (
                             <div className={styles.loadingOverlay}><CircularLoader small /></div>
                         )}
@@ -90,22 +90,22 @@ export const HorizonTab = ({
                         </div>
 
                         {supports('beeswarm') && (
-                            <div className={styles.viewToggle} style={{ alignSelf: 'flex-start' }}>
-                                <button
-                                    type="button"
-                                    className={`${styles.toggleBtn} ${horizonView === 'importance' ? styles.toggleBtnActive : ''}`}
+                            <ButtonStrip>
+                                <Button
+                                    small
+                                    primary={horizonView === 'importance'}
                                     onClick={() => onHorizonViewChange('importance')}
                                 >
                                     {i18n.t('Importance')}
-                                </button>
-                                <button
-                                    type="button"
-                                    className={`${styles.toggleBtn} ${horizonView === 'beeswarm' ? styles.toggleBtnActive : ''}`}
+                                </Button>
+                                <Button
+                                    small
+                                    primary={horizonView === 'beeswarm'}
                                     onClick={() => onHorizonViewChange('beeswarm')}
                                 >
                                     {i18n.t('SHAP Summary')}
-                                </button>
-                            </div>
+                                </Button>
+                            </ButtonStrip>
                         )}
 
                         {horizonView === 'importance' ? (
@@ -133,7 +133,7 @@ export const HorizonTab = ({
                                 )}
                             </>
                         ) : isBeeswarmLoading ? (
-                            <div style={{ position: 'relative' }}>
+                            <div className={styles.chartLoadingWrapper}>
                                 <div className={styles.loadingOverlay}><CircularLoader small /></div>
                                 <FeatureImportanceChart
                                     features={horizonData.averageImportance.map(f => ({

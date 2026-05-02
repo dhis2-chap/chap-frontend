@@ -4,7 +4,7 @@ export const COVARIATE_SOURCE_DATASET_MATCH = 'dataset_match';
 
 export type FidelityTier = 'good' | 'moderate' | 'poor';
 
-export interface SurrogateQuality {
+export type SurrogateQuality = {
     rSquared?: number;
     mae?: number;
     mape?: number;
@@ -17,9 +17,18 @@ export interface SurrogateQuality {
     fidelityTier?: FidelityTier;
     targetTransformMethod?: string | null;
     selectedModelDisplayName?: string;
-}
+};
 
-export interface CovariateProvenance {
+export type CovariateProvenance = {
     source?: string;
     detail?: string;
-}
+};
+
+// The OpenAPI generator types these fields as `Record<string, any>` (or null).
+// Until the backend exposes proper schemas for SurrogateQuality and
+// CovariateProvenance, centralize the cast here so call sites stay clean.
+export const toSurrogateQuality = (raw: unknown): SurrogateQuality | undefined =>
+    (raw ?? undefined) as SurrogateQuality | undefined;
+
+export const toCovariateProvenance = (raw: unknown): CovariateProvenance | undefined =>
+    (raw ?? undefined) as CovariateProvenance | undefined;

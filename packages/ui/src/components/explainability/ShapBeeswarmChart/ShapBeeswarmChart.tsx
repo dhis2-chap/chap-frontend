@@ -177,7 +177,7 @@ export const ShapBeeswarmChart = ({
                     const orgUnitLabel = orgUnitMap?.[c.orgUnit] ?? c.orgUnit;
                     return (
                         `<b>${formatFeatureName(c.featureName)}</b><br/>`
-                        + `${i18n.t('Feature value')}: ${c.featureValue.toLocaleString(undefined, { maximumFractionDigits: 2 })}<br/>`
+                        + `${i18n.t('Feature value{{colon}}', { colon: ':' })} ${c.featureValue.toLocaleString(undefined, { maximumFractionDigits: 2 })}<br/>`
                         + `${i18n.t('SHAP{{colon}}', { colon: ':' })} <b>${sign}${c.shapValue.toFixed(3)}</b><br/>`
                         + `${orgUnitLabel} — ${c.period}`
                     );

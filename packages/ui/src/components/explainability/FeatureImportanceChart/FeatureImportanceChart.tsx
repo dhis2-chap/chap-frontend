@@ -50,7 +50,7 @@ export const FeatureImportanceChart = ({
             tooltip: {
                 formatter: function (this: Highcharts.TooltipFormatterContextObject) {
                     const feature = sortedFeatures[this.point.index];
-                    return `<b>${formatFeatureName(feature.featureName)}</b><br/>${i18n.t('Importance')}: ${Math.abs(feature.importance).toFixed(4)}`;
+                    return `<b>${formatFeatureName(feature.featureName)}</b><br/>${i18n.t('Importance{{colon}}', { colon: ':' })} ${Math.abs(feature.importance).toFixed(4)}`;
                 },
             },
             plotOptions: {

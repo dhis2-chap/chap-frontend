@@ -1,5 +1,5 @@
 import i18n from '@dhis2/d2-i18n';
-import { Button, CircularLoader, NoticeBox, SingleSelect, SingleSelectOption, Menu, MenuItem } from '@dhis2/ui';
+import { Button, ButtonStrip, CircularLoader, NoticeBox, SingleSelect, SingleSelectOption, Menu, MenuItem } from '@dhis2/ui';
 import {
     FeatureImportanceChart,
     ShapBeeswarmChart,
@@ -8,7 +8,7 @@ import {
     type ShapBeeswarmResponse,
 } from '@dhis2-chap/ui';
 import styles from './ExplainabilityWidget.module.css';
-import { COVARIATE_SOURCE_DATASET_MATCH, type CovariateProvenance } from './xaiTypes';
+import { COVARIATE_SOURCE_DATASET_MATCH, toCovariateProvenance } from './xaiTypes';
 
 type OrgUnitOption = { id: string; label: string };
 
@@ -65,7 +65,7 @@ export const LocalTab = ({
     onLoadBeeswarm,
     onComputeLocal,
 }: Props) => {
-    const cp = displayExplanation?.covariateProvenance as CovariateProvenance | null | undefined;
+    const cp = toCovariateProvenance(displayExplanation?.covariateProvenance);
 
     return (
         <div className={styles.mainLayout}>
@@ -112,32 +112,32 @@ export const LocalTab = ({
                         ) : localError && !displayExplanation ? (
                             <NoticeBox error title={i18n.t('Error')}>{i18n.t('Failed to load local explanation')}</NoticeBox>
                         ) : displayExplanation ? (
-                            <div className={styles.chartContainer} style={{ position: 'relative' }}>
+                            <div className={styles.chartContainer}>
                                 {(isLocalFetching || isComputingLocal || isTransitioning) && (
                                     <div className={styles.loadingOverlay}><CircularLoader small /></div>
                                 )}
                                 <div className={styles.chartHeader}>
                                     {(supports('waterfall') || supports('beeswarm')) && (
-                                        <div className={styles.viewToggle}>
+                                        <ButtonStrip>
                                             {supports('waterfall') && (
-                                                <button
-                                                    type="button"
-                                                    className={`${styles.toggleBtn} ${localView === 'waterfall' ? styles.toggleBtnActive : ''}`}
+                                                <Button
+                                                    small
+                                                    primary={localView === 'waterfall'}
                                                     onClick={() => onLocalViewChange('waterfall')}
                                                 >
                                                     {i18n.t('Waterfall')}
-                                                </button>
+                                                </Button>
                                             )}
                                             {supports('beeswarm') && (
-                                                <button
-                                                    type="button"
-                                                    className={`${styles.toggleBtn} ${localView === 'summary' ? styles.toggleBtnActive : ''}`}
+                                                <Button
+                                                    small
+                                                    primary={localView === 'summary'}
                                                     onClick={() => onLocalViewChange('summary')}
                                                 >
                                                     {i18n.t('SHAP Summary')}
-                                                </button>
+                                                </Button>
                                             )}
-                                        </div>
+                                        </ButtonStrip>
                                     )}
                                     <Button small secondary onClick={onRunExplanations} loading={isExplanationJobRunning} disabled={isExplanationJobRunning}>
                                         {i18n.t('Recalculate')}
