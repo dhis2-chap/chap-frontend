@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-05-02T14:23:17.559Z\n"
-"PO-Revision-Date: 2026-05-02T14:23:17.559Z\n"
+"POT-Creation-Date: 2026-05-02T15:03:52.178Z\n"
+"PO-Revision-Date: 2026-05-02T15:03:52.178Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -1031,20 +1031,23 @@ msgstr "Explain This Forecast"
 msgid "Good"
 msgstr "Good"
 
-msgid "Moderate"
-msgstr "Moderate"
-
-msgid "Poor"
-msgstr "Poor"
-
 msgid "explanations closely match the original model"
 msgstr "explanations closely match the original model"
+
+msgid "Moderate"
+msgstr "Moderate"
 
 msgid "directionally useful, magnitudes are approximate"
 msgstr "directionally useful, magnitudes are approximate"
 
+msgid "Poor"
+msgstr "Poor"
+
 msgid "explanations may not reflect the original model"
 msgstr "explanations may not reflect the original model"
+
+msgid "surrogate model"
+msgstr "surrogate model"
 
 msgid "Surrogate Model Quality"
 msgstr "Surrogate Model Quality"

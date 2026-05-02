@@ -1,19 +1,9 @@
 import { describe, it, expect } from 'vitest';
-import type { LocalExplanationResponse } from '@dhis2-chap/ui';
-import { pickLatestExplanation } from './useLocalExplanation';
+import { pickLatestExplanation } from './pickLatestExplanation';
 
-const mk = (overrides: Partial<LocalExplanationResponse>): LocalExplanationResponse => ({
-    predictionId: 1,
-    orgUnit: 'orgA',
-    period: '202401',
-    method: 'shap',
-    outputStatistic: 'mean',
-    featureAttributions: [],
-    baselinePrediction: 0,
-    actualPrediction: 0,
-    status: 'success',
-    ...overrides,
-});
+type Row = { id?: number; computedAt?: string };
+
+const mk = (overrides: Row): Row => ({ ...overrides });
 
 describe('pickLatestExplanation', () => {
     it('returns undefined for an empty array', () => {
