@@ -5,7 +5,7 @@ import {
     ApiError,
     FeatureCollectionModel,
     JobResponse,
-    MakePredictionRequest,
+    MakePredictionRequestWithXai,
     PredictionsService,
 } from '@dhis2-chap/ui';
 import { ModelExecutionFormValues } from '../../ModelExecutionForm/hooks/useModelExecutionFormState';
@@ -47,7 +47,7 @@ export const useCreatePrediction = ({ onSuccess, onError }: Props = {}) => {
                 orgUnitResponse.geojson.organisationUnits,
             );
 
-            const predictionRequest: MakePredictionRequest = {
+            const predictionRequest: MakePredictionRequestWithXai = {
                 name: formData.name,
                 geojson,
                 providedData: observations,

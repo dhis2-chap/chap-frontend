@@ -25,14 +25,5 @@ export type MakePredictionRequest = {
     providedData: Array<ObservationBase>;
     dataToBeFetched: Array<FetchRequest>;
     metaData?: Record<string, any>;
-    /**
-     * When true, automatically train an XAI surrogate model after the prediction completes.
-     */
-    enableXai?: boolean;
-    /**
-     * Name of the XAI method to use for surrogate training (e.g. "shap_auto").
-     * Defaults to "shap_auto" on the server when omitted.
-     */
-    xaiMethodName?: string;
 };
 

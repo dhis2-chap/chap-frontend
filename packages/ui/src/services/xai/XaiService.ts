@@ -1,8 +1,29 @@
-/* hand-written — XAI endpoints are not yet included in the generated OpenAPI client */
-import type { CancelablePromise } from '../core/CancelablePromise';
-import type { JobResponse } from '../models/JobResponse';
-import { OpenAPI } from '../core/OpenAPI';
-import { request as __request } from '../core/request';
+/**
+ * Hand-written XAI client.
+ *
+ * TEMPORARY: these endpoints are not yet exposed by the backend OpenAPI spec, so
+ * they cannot be produced by `pnpm generate`. Once the backend includes the
+ * /v1/xai/** routes in its OpenAPI document, delete this file and re-run the
+ * generator — the generated XaiService will replace it. Until then, keep this
+ * file in sync with the backend manually (see apps/modeling-app/docs/xai_api.md).
+ */
+import type { CancelablePromise } from '../../httpfunctions/core/CancelablePromise';
+import type { JobResponse } from '../../httpfunctions/models/JobResponse';
+import type { MakePredictionRequest } from '../../httpfunctions/models/MakePredictionRequest';
+import { OpenAPI } from '../../httpfunctions/core/OpenAPI';
+import { request as __request } from '../../httpfunctions/core/request';
+
+/**
+ * MakePredictionRequest extended with XAI-only fields. The backend accepts these
+ * but they are not yet in the OpenAPI spec; remove this type once the generated
+ * MakePredictionRequest includes them.
+ */
+export type MakePredictionRequestWithXai = MakePredictionRequest & {
+    /** When true, automatically train an XAI surrogate model after the prediction completes. */
+    enableXai?: boolean;
+    /** Name of the XAI method to use for surrogate training (e.g. "shap_auto"). */
+    xaiMethodName?: string;
+};
 
 export const DEFAULT_XAI_METHOD = 'shap_auto';
 
@@ -27,6 +48,8 @@ export interface FeatureAttribution {
     actualValue?: number;
 }
 
+export type FidelityTier = 'high' | 'medium' | 'low';
+
 export interface SurrogateQuality {
     rSquared?: number;
     mae?: number;
@@ -37,8 +60,7 @@ export interface SurrogateQuality {
     permutationRemovedFeatures?: string[];
     residualMean?: number | null;
     residualStd?: number | null;
-    fidelityTier?: string;
-    fidelityWarning?: string | null;
+    fidelityTier?: FidelityTier;
     targetTransformMethod?: string | null;
     selectedModelDisplayName?: string;
 }
@@ -143,7 +165,6 @@ function normalizeSurrogateQuality(q: any): SurrogateQuality {
         residualMean: q.residualMean ?? q.residual_mean,
         residualStd: q.residualStd ?? q.residual_std,
         fidelityTier: q.fidelityTier ?? q.fidelity_tier,
-        fidelityWarning: q.fidelityWarning ?? q.fidelity_warning,
         targetTransformMethod: q.targetTransformMethod ?? q.target_transform_method,
         selectedModelDisplayName: q.selectedModelDisplayName ?? q.selected_model_display_name,
     };

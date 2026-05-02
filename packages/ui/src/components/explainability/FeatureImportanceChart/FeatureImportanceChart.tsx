@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
-import type { FeatureAttribution } from '../../../httpfunctions/services/XaiService';
+import type { FeatureAttribution } from '../../../services/xai/XaiService';
 import { formatFeatureName, CHART_COLORS } from '../utils';
 import styles from './FeatureImportanceChart.module.css';
 

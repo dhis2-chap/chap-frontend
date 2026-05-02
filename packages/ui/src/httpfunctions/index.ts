@@ -86,5 +86,3 @@ export { PredictionsService } from './services/PredictionsService';
 export { ServicesService } from './services/ServicesService';
 export { SystemService } from './services/SystemService';
 export { VisualizationsService } from './services/VisualizationsService';
-export { XaiService } from './services/XaiService';
-export type { CovariateProvenance, FeatureAttribution, GlobalExplanationResponse, LocalExplanationRequest, LocalExplanationResponse, HorizonStepSummary, HorizonSummaryResponse, ShapBeeswarmPoint, ShapBeeswarmResponse } from './services/XaiService';

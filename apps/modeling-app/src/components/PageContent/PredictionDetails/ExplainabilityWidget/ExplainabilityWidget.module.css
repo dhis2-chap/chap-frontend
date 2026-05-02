@@ -397,12 +397,6 @@
     line-height: 1.4;
 }
 
-.qualityInlineWarning {
-    font-size: 11px;
-    color: var(--colors-grey700, #6e7a8a);
-    font-style: italic;
-}
-
 .qualityInlineNote {
     font-size: 11px;
     color: var(--colors-grey600, #7b8794);

@@ -14,7 +14,7 @@ export default defineConfig([
             'dist/**',
             '.turbo/**',
             '.eslintcache/**',
-            '**/ui/src/httpfunctions/**',
+            '**/src/httpfunctions/**',
             '**/*.{js,jsx,mjs}',
         ],
     },

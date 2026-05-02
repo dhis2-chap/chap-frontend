@@ -23,19 +23,18 @@ export const SurrogateQualityPanel = ({ quality, stabilityScore }: Props) => {
     const permRemovedFeatures: string[] = quality.permutationRemovedFeatures ?? [];
     const residualMean: number | null = quality.residualMean ?? null;
     const residualStd: number | null = quality.residualStd ?? null;
-    const fidelityTier: string = quality.fidelityTier ?? (r2 >= 0.8 ? 'good' : r2 >= 0.5 ? 'moderate' : 'poor');
-    const fidelityWarning: string | null = quality.fidelityWarning ?? null;
+    const fidelityTier = quality.fidelityTier ?? (r2 >= 0.8 ? 'high' : r2 >= 0.5 ? 'medium' : 'low');
     const targetTransformMethod: string | null = quality.targetTransformMethod ?? null;
     const modelDisplayName: string = quality.selectedModelDisplayName ?? 'surrogate model';
 
     const r2Pct = (r2 * 100).toFixed(1);
-    const r2Color = fidelityTier === 'good' ? '#4caf50' : fidelityTier === 'moderate' ? '#ff9800' : '#f44336';
-    const r2Label = fidelityTier === 'good' ? i18n.t('Good') : fidelityTier === 'moderate' ? i18n.t('Moderate') : i18n.t('Poor');
+    const r2Color = fidelityTier === 'high' ? '#4caf50' : fidelityTier === 'medium' ? '#ff9800' : '#f44336';
+    const r2Label = fidelityTier === 'high' ? i18n.t('Good') : fidelityTier === 'medium' ? i18n.t('Moderate') : i18n.t('Poor');
     const duplicateRatio = unique != null && n != null && n > 0 ? ((1 - unique / n) * 100).toFixed(0) : null;
 
-    const summaryLine = fidelityTier === 'good'
+    const summaryLine = fidelityTier === 'high'
         ? i18n.t('explanations closely match the original model')
-        : fidelityTier === 'moderate'
+        : fidelityTier === 'medium'
             ? i18n.t('directionally useful, magnitudes are approximate')
             : i18n.t('explanations may not reflect the original model');
 
@@ -59,9 +58,6 @@ export const SurrogateQualityPanel = ({ quality, stabilityScore }: Props) => {
                     <strong style={{ color: r2Color }}>{r2Label}</strong>
                     {i18n.t(' — {{summary}}', { summary: summaryLine })}
                 </span>
-                {fidelityWarning && fidelityTier !== 'good' && (
-                    <span className={styles.qualityInlineWarning}>{fidelityWarning}</span>
-                )}
             </div>
 
             {constantFeatures.length > 0 && (
