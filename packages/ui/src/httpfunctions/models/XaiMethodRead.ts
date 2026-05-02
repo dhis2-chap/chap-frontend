@@ -11,6 +11,7 @@ export type XaiMethodRead = {
     sourceUrl?: (string | null);
     author: string;
     archived: boolean;
+    isAuto?: boolean;
     supportedVisualizations: Array<string>;
 };
 

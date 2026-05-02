@@ -21,11 +21,6 @@ type Props = {
     onConfirm: (method: XaiMethodRead) => void;
 };
 
-const AUTO_METHOD_TYPES = new Set(['surrogate_shap_auto', 'surrogate_lime_auto']);
-
-const isAutoMethod = (method: XaiMethodRead) =>
-    AUTO_METHOD_TYPES.has(method.methodType);
-
 export const XaiMethodSelectionModal = ({
     xaiMethods,
     selectedMethodName,
@@ -47,16 +42,14 @@ export const XaiMethodSelectionModal = ({
                     || m.description?.toLowerCase().includes(q);
             })
             .sort((a, b) => {
-                const aIsAuto = isAutoMethod(a);
-                const bIsAuto = isAutoMethod(b);
-                if (aIsAuto && !bIsAuto) return -1;
-                if (!aIsAuto && bIsAuto) return 1;
+                if (a.isAuto && !b.isAuto) return -1;
+                if (!a.isAuto && b.isAuto) return 1;
                 return (a.displayName ?? a.name).localeCompare(b.displayName ?? b.name);
             });
     }, [xaiMethods, searchValue]);
 
-    const autoMethods = filteredMethods.filter(isAutoMethod);
-    const otherMethods = filteredMethods.filter(m => !isAutoMethod(m));
+    const autoMethods = filteredMethods.filter(m => m.isAuto);
+    const otherMethods = filteredMethods.filter(m => !m.isAuto);
 
     return (
         <Modal fluid onClose={onClose}>

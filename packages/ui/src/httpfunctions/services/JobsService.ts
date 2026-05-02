@@ -13,7 +13,8 @@ export class JobsService {
     /**
      * List Jobs
      * List all jobs currently in the queue.
-     * Optionally filters by a list of job IDs, a list of statuses, and/or a job type.
+     * Optionally filters by a list of job IDs, a list of statuses, and/or one or more job types.
+     * Multiple types can be passed via repeated query params (``?type=a&type=b``).
      * Filtering order: IDs, then type, then status.
      * @param ids
      * @param status
@@ -24,7 +25,7 @@ export class JobsService {
     public static listJobsV1JobsGet(
         ids?: Array<string>,
         status?: Array<string>,
-        type?: string,
+        type?: Array<string>,
     ): CancelablePromise<Array<JobDescription>> {
         return __request(OpenAPI, {
             method: 'GET',

@@ -4,6 +4,7 @@
 /* eslint-disable */
 import type { AverageImportance } from './AverageImportance';
 import type { HorizonStepSummary } from './HorizonStepSummary';
+import type { SurrogateQualityRead } from './SurrogateQualityRead';
 export type HorizonSummaryResponse = {
     predictionId: number;
     orgUnit: string;
@@ -11,6 +12,6 @@ export type HorizonSummaryResponse = {
     outputStatistic: string;
     steps: Array<HorizonStepSummary>;
     averageImportance: Array<AverageImportance>;
-    surrogateQuality?: (Record<string, any> | null);
+    surrogateQuality?: (SurrogateQualityRead | null);
 };
 

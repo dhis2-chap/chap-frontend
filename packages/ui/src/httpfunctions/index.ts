@@ -1,7 +1,7 @@
 /* generated using openapi-typescript-codegen -- do not edit */
 /* istanbul ignore file */
 /* tslint:disable */
-
+/* eslint-disable */
 export { ApiError } from './core/ApiError';
 export { CancelablePromise, CancelError } from './core/CancelablePromise';
 export { OpenAPI } from './core/OpenAPI';
@@ -25,6 +25,7 @@ export type { ConfiguredModelInfoRead } from './models/ConfiguredModelInfoRead';
 export type { ConfiguredModelRead } from './models/ConfiguredModelRead';
 export type { ConfiguredModelWithDataSourceRead } from './models/ConfiguredModelWithDataSourceRead';
 export type { ConfiguredModelWithDataSourceReadWithPredictions } from './models/ConfiguredModelWithDataSourceReadWithPredictions';
+export { CovariateProvenanceRead } from './models/CovariateProvenanceRead';
 export type { DataBaseResponse } from './models/DataBaseResponse';
 export type { DataElement } from './models/DataElement';
 export type { DataList } from './models/DataList';
@@ -89,6 +90,7 @@ export type { ServiceDetail } from './models/ServiceDetail';
 export type { ServiceListResponse } from './models/ServiceListResponse';
 export type { ShapBeeswarmPoint } from './models/ShapBeeswarmPoint';
 export type { ShapBeeswarmResponse } from './models/ShapBeeswarmResponse';
+export type { SurrogateQualityRead } from './models/SurrogateQualityRead';
 export type { SystemInfoResponse } from './models/SystemInfoResponse';
 export type { ValidationError } from './models/ValidationError';
 export type { VisualizationInfo } from './models/VisualizationInfo';

@@ -10,7 +10,6 @@ import {
 } from '@dhis2-chap/ui';
 import { SurrogateQualityPanel } from './SurrogateQualityPanel';
 import styles from './ExplainabilityWidget.module.css';
-import { toSurrogateQuality } from './xaiTypes';
 import { getChartHeight } from './getChartHeight';
 
 type Props = {
@@ -125,7 +124,7 @@ export const GlobalTab = ({
             )}
 
             <SurrogateQualityPanel
-                quality={toSurrogateQuality(globalExplanation.surrogateQuality ?? beeswarmData?.surrogateQuality)}
+                quality={globalExplanation.surrogateQuality ?? beeswarmData?.surrogateQuality}
                 stabilityScore={globalExplanation.stabilityScore ?? undefined}
             />
         </div>

@@ -3,6 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { FeatureAttribution } from './FeatureAttribution';
+import type { SurrogateQualityRead } from './SurrogateQualityRead';
 export type GlobalExplanationResponse = {
     method: string;
     topFeatures: Array<FeatureAttribution>;
@@ -10,6 +11,6 @@ export type GlobalExplanationResponse = {
     nSamples?: number;
     stabilityScore?: (number | null);
     available?: boolean;
-    surrogateQuality?: (Record<string, any> | null);
+    surrogateQuality?: (SurrogateQualityRead | null);
 };
 

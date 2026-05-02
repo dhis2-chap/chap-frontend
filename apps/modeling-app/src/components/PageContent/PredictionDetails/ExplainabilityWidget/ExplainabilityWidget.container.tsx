@@ -24,8 +24,11 @@ import { HorizonTab } from './HorizonTab';
 import { useShapBeeswarm } from './hooks/useShapBeeswarm';
 import { useHorizonSummary } from './hooks/useHorizonSummary';
 import { useXaiExplanationJob } from './hooks/useXaiExplanationJob';
-import { DEFAULT_XAI_METHOD } from './xaiTypes';
 import styles from './ExplainabilityWidget.module.css';
+
+// Matches the backend default; the methods endpoint already filters to those
+// compatible with the prediction, so this is just a sensible initial guess.
+const DEFAULT_XAI_METHOD = 'shap_auto';
 
 type Props = {
     predictionId: number;
@@ -106,18 +109,13 @@ export const ExplainabilityWidget = ({
         [selectedXaiMethodObj],
     );
 
+    // If the default method isn't in the (prediction-filtered) list, fall back
+    // to the first auto method, then the first method overall.
     useEffect(() => {
-        if (!xaiMethods?.length || hasUserSelectedXaiMethod.current) return;
-        const nativeMethods = xaiMethods.filter(
-            m => m.methodType === 'native_shap',
-        );
-        if (!nativeMethods.length) return;
-        const preferred =
-            nativeMethods.find(m => m.name === 'native_shap')
-            ?? nativeMethods[0];
-        if (preferred.name !== selectedXaiMethod) {
-            setSelectedXaiMethod(preferred.name);
-        }
+        if (hasUserSelectedXaiMethod.current || !xaiMethods?.length) return;
+        if (xaiMethods.some(m => m.name === selectedXaiMethod)) return;
+        const fallback = xaiMethods.find(m => m.isAuto) ?? xaiMethods[0];
+        setSelectedXaiMethod(fallback.name);
     }, [xaiMethods, selectedXaiMethod]);
 
     const handleSelectXaiMethod = (method: XaiMethodRead) => {

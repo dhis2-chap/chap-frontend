@@ -2,6 +2,7 @@ import { useState } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { Button, ButtonStrip, CircularLoader, NoticeBox, SingleSelect, SingleSelectOption, Menu, MenuItem } from '@dhis2/ui';
 import {
+    CovariateProvenanceRead,
     FeatureImportanceChart,
     ShapBeeswarmChart,
     ShapWaterfallChart,
@@ -9,7 +10,6 @@ import {
     type ShapBeeswarmResponse,
 } from '@dhis2-chap/ui';
 import styles from './ExplainabilityWidget.module.css';
-import { COVARIATE_SOURCE_DATASET_MATCH, toCovariateProvenance } from './xaiTypes';
 
 type OrgUnitOption = { id: string; label: string };
 
@@ -63,7 +63,7 @@ export const LocalTab = ({
     onComputeLocal,
 }: Props) => {
     const [localView, setLocalView] = useState<'waterfall' | 'summary'>('waterfall');
-    const cp = toCovariateProvenance(displayExplanation?.covariateProvenance);
+    const cp = displayExplanation?.covariateProvenance;
 
     return (
         <div className={styles.mainLayout}>
@@ -95,7 +95,7 @@ export const LocalTab = ({
                             </div>
                         </div>
 
-                        {cp?.detail && cp.source && cp.source !== COVARIATE_SOURCE_DATASET_MATCH ? (
+                        {cp && cp.source !== CovariateProvenanceRead.source.DATASET_MATCH ? (
                             <NoticeBox title={i18n.t('About feature values')}>
                                 {cp.detail}
                             </NoticeBox>
