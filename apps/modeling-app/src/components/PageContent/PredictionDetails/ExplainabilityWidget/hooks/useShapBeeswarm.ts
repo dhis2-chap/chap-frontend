@@ -1,11 +1,11 @@
-import { useQuery } from '@tanstack/react-query'
-import { XaiService } from '@dhis2-chap/ui'
+import { useQuery } from '@tanstack/react-query';
+import { XaiService } from '@dhis2-chap/ui';
 
 type Args = {
-    predictionId: number
-    xaiMethod: string
-    enabled: boolean
-}
+    predictionId: number;
+    xaiMethod: string;
+    enabled: boolean;
+};
 
 export const useShapBeeswarm = ({ predictionId, xaiMethod, enabled }: Args) => {
     const { data, isFetching, error, refetch } = useQuery({
@@ -14,7 +14,7 @@ export const useShapBeeswarm = ({ predictionId, xaiMethod, enabled }: Args) => {
             XaiService.computeShapBeeswarm(predictionId, 'median', xaiMethod),
         enabled,
         staleTime: Infinity,
-    })
+    });
 
     return {
         beeswarmData: data ?? null,
@@ -25,5 +25,5 @@ export const useShapBeeswarm = ({ predictionId, xaiMethod, enabled }: Args) => {
                 : String(error)
             : null,
         refetchBeeswarm: () => refetch(),
-    }
-}
+    };
+};

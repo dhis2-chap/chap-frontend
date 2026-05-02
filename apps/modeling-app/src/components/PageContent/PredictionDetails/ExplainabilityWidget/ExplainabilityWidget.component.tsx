@@ -1,34 +1,34 @@
-import { ReactNode } from 'react'
-import i18n from '@dhis2/d2-i18n'
-import { CircularLoader, NoticeBox, TabBar, Tab } from '@dhis2/ui'
-import { Widget } from '@dhis2-chap/ui'
-import type { XaiMethodRead } from '@dhis2-chap/ui'
-import { XaiMethodSelector } from './XaiMethodSelector'
-import styles from './ExplainabilityWidget.module.css'
+import { ReactNode } from 'react';
+import i18n from '@dhis2/d2-i18n';
+import { CircularLoader, NoticeBox, TabBar, Tab } from '@dhis2/ui';
+import { Widget } from '@dhis2-chap/ui';
+import type { XaiMethodRead } from '@dhis2-chap/ui';
+import { XaiMethodSelector } from './XaiMethodSelector';
+import styles from './ExplainabilityWidget.module.css';
 
-export type TabKey = 'global' | 'local' | 'horizon'
+export type TabKey = 'global' | 'local' | 'horizon';
 
 type Props = {
-    open: boolean
-    onOpenChange: (open: boolean) => void
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
 
-    activeTab: TabKey
-    onActiveTabChange: (tab: TabKey) => void
+    activeTab: TabKey;
+    onActiveTabChange: (tab: TabKey) => void;
 
-    explanationRunError: string | null
-    computingMessage: string | null
+    explanationRunError: string | null;
+    computingMessage: string | null;
 
-    showGlobalTabSpinner: boolean
-    showLocalTabSpinner: boolean
-    showHorizonTabSpinner: boolean
+    showGlobalTabSpinner: boolean;
+    showLocalTabSpinner: boolean;
+    showHorizonTabSpinner: boolean;
 
-    xaiMethods: XaiMethodRead[] | undefined
-    selectedXaiMethod: string
-    isXaiMethodsLoading: boolean
-    onSelectXaiMethod: (method: XaiMethodRead) => void
+    xaiMethods: XaiMethodRead[] | undefined;
+    selectedXaiMethod: string;
+    isXaiMethodsLoading: boolean;
+    onSelectXaiMethod: (method: XaiMethodRead) => void;
 
-    body: ReactNode
-}
+    body: ReactNode;
+};
 
 export const ExplainabilityWidgetComponent = ({
     open,
@@ -118,5 +118,5 @@ export const ExplainabilityWidgetComponent = ({
                 </div>
             </Widget>
         </div>
-    )
-}
+    );
+};
