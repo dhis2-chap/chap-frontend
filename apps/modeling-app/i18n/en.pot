@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-05-02T14:01:41.936Z\n"
-"PO-Revision-Date: 2026-05-02T14:01:41.936Z\n"
+"POT-Creation-Date: 2026-05-02T14:23:17.559Z\n"
+"PO-Revision-Date: 2026-05-02T14:23:17.559Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -1553,16 +1553,6 @@ msgstr "Show metric visualization plots in the evaluation dashboard"
 
 msgid "Show evaluation visualization plots in the evaluation dashboard"
 msgstr "Show evaluation visualization plots in the evaluation dashboard"
-
-msgid "XAI auto-training"
-msgstr "XAI auto-training"
-
-msgid ""
-"Automatically train an explainability model when a prediction completes. "
-"This enables faster SHAP explanations without manual triggering."
-msgstr ""
-"Automatically train an explainability model when a prediction completes. "
-"This enables faster SHAP explanations without manual triggering."
 
 msgid "Settings saved successfully"
 msgstr "Settings saved successfully"

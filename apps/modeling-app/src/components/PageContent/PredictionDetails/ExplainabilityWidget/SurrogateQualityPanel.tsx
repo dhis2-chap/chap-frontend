@@ -2,7 +2,7 @@ import { useState } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { Tag, formatFeatureName, CHART_COLORS } from '@dhis2-chap/ui';
 import styles from './ExplainabilityWidget.module.css';
-import type { SurrogateQuality } from './xaiTypes';
+import { normalizeFidelityTier, type SurrogateQuality } from './xaiTypes';
 
 type Props = {
     quality?: SurrogateQuality;
@@ -24,18 +24,19 @@ export const SurrogateQualityPanel = ({ quality, stabilityScore }: Props) => {
     const permRemovedFeatures: string[] = quality.permutationRemovedFeatures ?? [];
     const residualMean: number | null = quality.residualMean ?? null;
     const residualStd: number | null = quality.residualStd ?? null;
-    const fidelityTier = quality.fidelityTier ?? (r2 >= 0.8 ? 'high' : r2 >= 0.5 ? 'medium' : 'low');
+    const fidelityTier = normalizeFidelityTier(quality.fidelityTier);
+    if (!fidelityTier) return null;
     const targetTransformMethod: string | null = quality.targetTransformMethod ?? null;
     const modelDisplayName: string = quality.selectedModelDisplayName ?? 'surrogate model';
 
     const r2Pct = (r2 * 100).toFixed(1);
-    const r2Color = fidelityTier === 'high' ? CHART_COLORS.qualityHigh : fidelityTier === 'medium' ? CHART_COLORS.qualityMedium : CHART_COLORS.qualityLow;
-    const r2Label = fidelityTier === 'high' ? i18n.t('Good') : fidelityTier === 'medium' ? i18n.t('Moderate') : i18n.t('Poor');
+    const r2Color = fidelityTier === 'good' ? CHART_COLORS.qualityGood : fidelityTier === 'moderate' ? CHART_COLORS.qualityModerate : CHART_COLORS.qualityPoor;
+    const r2Label = fidelityTier === 'good' ? i18n.t('Good') : fidelityTier === 'moderate' ? i18n.t('Moderate') : i18n.t('Poor');
     const duplicateRatio = unique != null && n != null && n > 0 ? ((1 - unique / n) * 100).toFixed(0) : null;
 
-    const summaryLine = fidelityTier === 'high'
+    const summaryLine = fidelityTier === 'good'
         ? i18n.t('explanations closely match the original model')
-        : fidelityTier === 'medium'
+        : fidelityTier === 'moderate'
             ? i18n.t('directionally useful, magnitudes are approximate')
             : i18n.t('explanations may not reflect the original model');
 
@@ -128,7 +129,7 @@ export const SurrogateQualityPanel = ({ quality, stabilityScore }: Props) => {
                                 <span className={styles.qualityMetricLabel}>{i18n.t('Residual bias')}</span>
                                 <span
                                     className={styles.qualityMetricValue}
-                                    style={{ color: Math.abs(residualMean) > residualStd * 0.5 ? CHART_COLORS.qualityMedium : 'inherit' }}
+                                    style={{ color: Math.abs(residualMean) > residualStd * 0.5 ? CHART_COLORS.qualityModerate : 'inherit' }}
                                 >
                                     {residualMean >= 0 ? '+' : ''}
                                     {residualMean < 1 && residualMean > -1 ? residualMean.toFixed(3) : residualMean.toFixed(1)}

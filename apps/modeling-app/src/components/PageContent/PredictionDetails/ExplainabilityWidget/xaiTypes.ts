@@ -2,7 +2,12 @@ export const DEFAULT_XAI_METHOD = 'shap_auto';
 
 export const COVARIATE_SOURCE_DATASET_MATCH = 'dataset_match';
 
-export type FidelityTier = 'high' | 'medium' | 'low';
+export type FidelityTier = 'good' | 'moderate' | 'poor';
+
+export function normalizeFidelityTier(raw: unknown): FidelityTier | undefined {
+    if (raw === 'good' || raw === 'moderate' || raw === 'poor') return raw;
+    return undefined;
+}
 
 export interface SurrogateQuality {
     rSquared?: number;
@@ -14,7 +19,7 @@ export interface SurrogateQuality {
     permutationRemovedFeatures?: string[];
     residualMean?: number | null;
     residualStd?: number | null;
-    fidelityTier?: FidelityTier;
+    fidelityTier?: FidelityTier | string;
     targetTransformMethod?: string | null;
     selectedModelDisplayName?: string;
 }

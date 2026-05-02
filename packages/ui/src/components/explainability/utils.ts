@@ -16,7 +16,7 @@ export const CHART_COLORS = {
     dataLabel: '#444',
     waterfallBorder: '#e0e0e0',
     waterfallGrid: '#f0f0f0',
-    qualityHigh: '#4caf50',
-    qualityMedium: '#ff9800',
-    qualityLow: '#f44336',
+    qualityGood: '#4caf50',
+    qualityModerate: '#ff9800',
+    qualityPoor: '#f44336',
 } as const;
