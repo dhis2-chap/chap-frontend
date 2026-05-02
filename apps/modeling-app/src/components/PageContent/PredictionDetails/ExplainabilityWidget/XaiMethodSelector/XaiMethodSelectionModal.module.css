@@ -27,10 +27,6 @@
     max-inline-size: 320px;
 }
 
-.selectContainer {
-    min-inline-size: 160px;
-}
-
 /* Content area */
 .content {
     inline-size: 70vw;

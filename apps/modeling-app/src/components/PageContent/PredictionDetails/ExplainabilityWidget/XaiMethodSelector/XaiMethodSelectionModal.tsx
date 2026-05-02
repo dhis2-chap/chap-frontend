@@ -4,13 +4,11 @@ import {
     ButtonStrip,
     CircularLoader,
     Input,
-    MenuItem,
     Modal,
     ModalActions,
     ModalContent,
     ModalTitle,
     NoticeBox,
-    SingleSelect,
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { type XaiMethodRead } from '@dhis2-chap/ui';
@@ -38,22 +36,15 @@ export const XaiMethodSelectionModal = ({
         xaiMethods?.find(m => m.name === selectedMethodName),
     );
     const [searchValue, setSearchValue] = useState('');
-    const [methodTypeFilter, setMethodTypeFilter] = useState<string | undefined>(undefined);
-
-    const methodTypes = useMemo(() => {
-        if (!xaiMethods) return [];
-        return [...new Set(xaiMethods.map(m => m.methodType).filter(Boolean))];
-    }, [xaiMethods]);
 
     const filteredMethods = useMemo(() => {
         if (!xaiMethods) return [];
         return xaiMethods
             .filter((m) => {
-                const matchesSearch = !searchValue
-                    || m.displayName?.toLowerCase().includes(searchValue.toLowerCase())
-                    || m.description?.toLowerCase().includes(searchValue.toLowerCase());
-                const matchesType = !methodTypeFilter || m.methodType === methodTypeFilter;
-                return matchesSearch && matchesType;
+                if (!searchValue) return true;
+                const q = searchValue.toLowerCase();
+                return m.displayName?.toLowerCase().includes(q)
+                    || m.description?.toLowerCase().includes(q);
             })
             .sort((a, b) => {
                 const aIsAuto = isAutoMethod(a);
@@ -62,7 +53,7 @@ export const XaiMethodSelectionModal = ({
                 if (!aIsAuto && bIsAuto) return 1;
                 return (a.displayName ?? a.name).localeCompare(b.displayName ?? b.name);
             });
-    }, [xaiMethods, searchValue, methodTypeFilter]);
+    }, [xaiMethods, searchValue]);
 
     const autoMethods = filteredMethods.filter(isAutoMethod);
     const otherMethods = filteredMethods.filter(m => !isAutoMethod(m));
@@ -97,26 +88,6 @@ export const XaiMethodSelectionModal = ({
                                     onChange={e => setSearchValue(e.value ?? '')}
                                 />
                             </div>
-                            {methodTypes.length > 1 && (
-                                <div className={styles.selectContainer}>
-                                    <SingleSelect
-                                        dense
-                                        clearable
-                                        clearText={i18n.t('Clear')}
-                                        placeholder={i18n.t('Method type')}
-                                        selected={methodTypeFilter}
-                                        onChange={e => setMethodTypeFilter(e.selected)}
-                                    >
-                                        {methodTypes.map(type => (
-                                            <MenuItem
-                                                key={type}
-                                                label={type}
-                                                value={type}
-                                            />
-                                        ))}
-                                    </SingleSelect>
-                                </div>
-                            )}
                         </div>
 
                         <div className={styles.content}>
