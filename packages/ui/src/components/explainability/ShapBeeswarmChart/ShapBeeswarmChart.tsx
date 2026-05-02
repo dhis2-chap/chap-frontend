@@ -225,7 +225,7 @@ export const ShapBeeswarmChart = ({
         };
     }, [points, featureNames, title, height, hasHighlight, highlightOrgUnit, highlightPeriod, orgUnitMap, jitterCache]);
 
-    if (!points || points.length === 0) {
+    if (points.length === 0) {
         return (
             <div className={styles.empty}>
                 {i18n.t('No SHAP summary data available')}

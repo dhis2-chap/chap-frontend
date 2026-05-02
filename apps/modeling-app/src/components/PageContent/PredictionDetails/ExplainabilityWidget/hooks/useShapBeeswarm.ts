@@ -18,6 +18,7 @@ export const useShapBeeswarm = ({ predictionId, xaiMethod, enabled }: Args) => {
             ),
         enabled,
         staleTime: Infinity,
+        retry: 0,
     });
 
     return {

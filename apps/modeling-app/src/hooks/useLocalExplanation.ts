@@ -5,7 +5,7 @@ import {
     type LocalExplanationRequest,
     ApiError,
 } from '@dhis2-chap/ui';
-import { pickLatestExplanation } from './pickLatestExplanation';
+import { pickLatestExplanation } from '../utils/pickLatestExplanation';
 
 export const useLocalExplanation = (
     predictionId: number | undefined,
@@ -19,8 +19,8 @@ export const useLocalExplanation = (
         queryKey: ['localExplanations', predictionId, orgUnit, period, xaiMethod],
         queryFn: () => XaiService.listLocalExplanationsV1XaiPredictionsPredictionIdLocalGet(predictionId!, orgUnit, period, xaiMethod),
         enabled: !!predictionId && !!orgUnit && period != null && period !== '',
-        staleTime: 5 * 60 * 1000,
-        retry: 1,
+        staleTime: Infinity,
+        retry: 0,
         keepPreviousData: true,
     });
 

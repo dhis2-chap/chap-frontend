@@ -68,7 +68,8 @@ export const SurrogateQualityPanel = ({ quality, stabilityScore }: Props) => {
                 <span className={styles.qualityDot} style={{ background: color }} />
                 <span className={styles.qualityBadgeText}>
                     <strong style={{ color }}>{label}</strong>
-                    {i18n.t(' — {{summary}}', { summary })}
+                    {' — '}
+                    {summary}
                 </span>
             </div>
 

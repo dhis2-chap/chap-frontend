@@ -71,6 +71,7 @@ export {
     sortPeriods,
     comparePeriods,
     getLastNPeriods,
+    getPeriodLabel,
 } from './utils/timePeriodUtils';
 
 // Map utilities

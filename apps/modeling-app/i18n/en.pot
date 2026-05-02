@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-05-02T18:20:53.507Z\n"
-"PO-Revision-Date: 2026-05-02T18:20:53.507Z\n"
+"POT-Creation-Date: 2026-05-02T18:41:07.142Z\n"
+"PO-Revision-Date: 2026-05-02T18:41:07.143Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -1058,9 +1058,6 @@ msgstr "Hide metrics"
 msgid "Show metrics"
 msgstr "Show metrics"
 
-msgid " — {{summary}}"
-msgstr " — {{summary}}"
-
 msgid ""
 "{{n}} feature(s) had no variation and were excluded from "
 "explanations{{colon}} {{list}}"
@@ -1123,9 +1120,6 @@ msgstr "No XAI methods are registered. Contact your administrator."
 
 msgid "Search by name"
 msgstr "Search by name"
-
-msgid "Method type"
-msgstr "Method type"
 
 msgid "No methods found"
 msgstr "No methods found"

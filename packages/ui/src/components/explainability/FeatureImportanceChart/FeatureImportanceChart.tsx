@@ -74,7 +74,7 @@ export const FeatureImportanceChart = ({
         };
     }, [features, title, height]);
 
-    if (!features || features.length === 0) {
+    if (features.length === 0) {
         return (
             <div className={styles.empty}>
                 {i18n.t('No feature importance data available')}

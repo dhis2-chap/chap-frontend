@@ -9,7 +9,7 @@ import {
 import { useSearchParams } from 'react-router-dom';
 import i18n from '@dhis2/d2-i18n';
 import { Button, CircularLoader } from '@dhis2/ui';
-import { type XaiMethodRead } from '@dhis2-chap/ui';
+import { type XaiMethodRead, getPeriodLabel } from '@dhis2-chap/ui';
 import { useGlobalExplanation } from '@/hooks/useGlobalExplanation';
 import { useLocalExplanation } from '@/hooks/useLocalExplanation';
 import { useOrgUnitsById } from '@/hooks/useOrgUnitsById';
@@ -21,7 +21,6 @@ import {
 import { GlobalTab } from './GlobalTab';
 import { LocalTab } from './LocalTab';
 import { HorizonTab } from './HorizonTab';
-import { getPeriodLabel } from './getPeriodLabel';
 import { useShapBeeswarm } from './hooks/useShapBeeswarm';
 import { useHorizonSummary } from './hooks/useHorizonSummary';
 import { useXaiExplanationJob } from './hooks/useXaiExplanationJob';
@@ -72,6 +71,7 @@ export const ExplainabilityWidget = ({
     const [selectedPeriod, setSelectedPeriod] = useState<string>(
         periods[0] || '',
     );
+    const hasUserSelectedPeriod = useRef(false);
     const [localOrgUnit, setLocalOrgUnit] = useState<string>(orgUnits[0] || '');
     const hasUserSelectedOrgUnit = useRef(false);
     const [selectedXaiMethod, setSelectedXaiMethod] = useState<string>(
@@ -208,9 +208,19 @@ export const ExplainabilityWidget = ({
         const firstSorted = orgUnitOptions[0].id;
         setLocalOrgUnit(prev => (prev === firstSorted ? prev : firstSorted));
     }, [orgUnitOptions, orgUnitsData]);
+    useEffect(() => {
+        if (hasUserSelectedPeriod.current) return;
+        if (periods.length === 0) return;
+        const first = periods[0];
+        setSelectedPeriod(prev => (prev === first ? prev : first));
+    }, [periods]);
     const handleOrgUnitChange = (value: string) => {
         hasUserSelectedOrgUnit.current = true;
         setLocalOrgUnit(value);
+    };
+    const handlePeriodChange = (value: string) => {
+        hasUserSelectedPeriod.current = true;
+        setSelectedPeriod(value);
     };
 
     const handleComputeLocal = () => {
@@ -291,7 +301,7 @@ export const ExplainabilityWidget = ({
                         {...sharedTabProps}
                         periods={periods}
                         selectedPeriod={selectedPeriod}
-                        onPeriodChange={setSelectedPeriod}
+                        onPeriodChange={handlePeriodChange}
                         getPeriodLabel={getLabel}
                         displayExplanation={localExplanation ?? null}
                         isLocalLoading={isLocalLoading}

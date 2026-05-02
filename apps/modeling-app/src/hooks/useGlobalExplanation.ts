@@ -6,8 +6,8 @@ export const useGlobalExplanation = (predictionId: number | undefined, xaiMethod
         queryKey: ['globalExplanation', predictionId, xaiMethod],
         queryFn: () => XaiService.getGlobalExplanationV1XaiPredictionsPredictionIdGlobalGet(predictionId!, xaiMethod),
         enabled: !!predictionId,
-        staleTime: 5 * 60 * 1000,
-        retry: 1,
+        staleTime: Infinity,
+        retry: 0,
         keepPreviousData: true,
     });
 

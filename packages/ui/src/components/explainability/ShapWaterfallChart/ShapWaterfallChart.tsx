@@ -205,7 +205,7 @@ export const ShapWaterfallChart = ({
         };
     }, [features, baselinePrediction, actualPrediction, title, topK]);
 
-    if (!features || features.length === 0) {
+    if (features.length === 0) {
         return (
             <div className={styles.empty}>
                 {i18n.t('No SHAP explanation data available')}
