@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-05-01T15:20:35.530Z\n"
-"PO-Revision-Date: 2026-05-01T15:20:35.530Z\n"
+"POT-Creation-Date: 2026-05-01T20:24:49.931Z\n"
+"PO-Revision-Date: 2026-05-01T20:24:49.931Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -921,6 +921,21 @@ msgstr "Model created successfully"
 msgid "Failed to create model"
 msgstr "Failed to create model"
 
+msgid "Explainability"
+msgstr "Explainability"
+
+msgid "Explanation error"
+msgstr "Explanation error"
+
+msgid "Global"
+msgstr "Global"
+
+msgid "Local"
+msgstr "Local"
+
+msgid "Horizon"
+msgstr "Horizon"
+
 msgid "Explanation job failed. Check Jobs for details."
 msgstr "Explanation job failed. Check Jobs for details."
 
@@ -932,18 +947,6 @@ msgstr "Surrogate model training failed. Check Jobs for details."
 
 msgid "Surrogate model training was revoked. Check Jobs for details."
 msgstr "Surrogate model training was revoked. Check Jobs for details."
-
-msgid "Generate explanations to view Global, Local, and Horizon plots."
-msgstr "Generate explanations to view Global, Local, and Horizon plots."
-
-msgid "Compute Explanation"
-msgstr "Compute Explanation"
-
-msgid "Explainability"
-msgstr "Explainability"
-
-msgid "Explanation error"
-msgstr "Explanation error"
 
 msgid "Training surrogate model ({{method}})…"
 msgstr "Training surrogate model ({{method}})…"
@@ -960,14 +963,11 @@ msgstr "Computing horizon summary…"
 msgid "Loading summary data…"
 msgstr "Loading summary data…"
 
-msgid "Global"
-msgstr "Global"
+msgid "Generate explanations to view Global, Local, and Horizon plots."
+msgstr "Generate explanations to view Global, Local, and Horizon plots."
 
-msgid "Local"
-msgstr "Local"
-
-msgid "Horizon"
-msgstr "Horizon"
+msgid "Compute Explanation"
+msgstr "Compute Explanation"
 
 msgid "Error"
 msgstr "Error"

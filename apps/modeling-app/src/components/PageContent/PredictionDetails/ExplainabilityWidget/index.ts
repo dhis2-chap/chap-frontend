@@ -1,1 +1,1 @@
-export { ExplainabilityWidget } from './ExplainabilityWidget';
+export { ExplainabilityWidget } from './ExplainabilityWidget.container';

@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-04-30T15:51:41.332Z\n"
-"PO-Revision-Date: 2026-04-30T15:51:41.332Z\n"
+"POT-Creation-Date: 2026-05-01T20:23:57.786Z\n"
+"PO-Revision-Date: 2026-05-01T20:23:57.786Z\n"
 
 msgid "Median prediction"
 msgstr "Median prediction"
@@ -55,15 +55,6 @@ msgstr "Low"
 
 msgid "High"
 msgstr "High"
-
-msgid "Current State Driver"
-msgstr "Current State Driver"
-
-msgid "Seasonal Expectation (Proxy)"
-msgstr "Seasonal Expectation (Proxy)"
-
-msgid "Last Available Data"
-msgstr "Last Available Data"
 
 msgid "Other features"
 msgstr "Other features"

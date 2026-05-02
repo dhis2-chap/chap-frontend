@@ -1,0 +1,166 @@
+.qualityPanel {
+    padding: 10px 14px;
+    background: var(--colors-grey050, #fbfcfd);
+    border: 1px solid var(--colors-grey200, #eef0f3);
+    border-radius: 6px;
+}
+
+.tierGood {
+    --tier-color: var(--colors-green700, #4caf50);
+}
+.tierModerate {
+    --tier-color: var(--colors-yellow800, #ff9800);
+}
+.tierPoor {
+    --tier-color: var(--colors-red700, #f44336);
+}
+
+.qualityHeaderRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-block-end: 6px;
+}
+
+.qualityHeaderLeft {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.qualityHeader {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--colors-grey800, #494e54);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.qualityBadge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--colors-grey800, #494e54);
+    flex: 1;
+    min-inline-size: 0;
+    flex-wrap: wrap;
+}
+
+.qualityDot {
+    flex-shrink: 0;
+    inline-size: 8px;
+    block-size: 8px;
+    border-radius: 50%;
+    background: var(--tier-color);
+}
+
+.qualityBadgeText {
+    line-height: 1.4;
+}
+
+.qualityBadgeText strong {
+    color: var(--tier-color);
+}
+
+.qualityInlineWarning {
+    font-size: 11px;
+    color: var(--colors-grey700, #6e7a8a);
+    font-style: italic;
+}
+
+.qualityInlineNote {
+    font-size: 11px;
+    color: var(--colors-grey600, #7b8794);
+    margin: 6px 0 0 0;
+    line-height: 1.4;
+}
+
+.metricsToggle {
+    flex-shrink: 0;
+    border: none;
+    background: none;
+    font-size: 11px;
+    color: var(--colors-blue600, #1976d2);
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 3px;
+    white-space: nowrap;
+}
+
+.metricsToggle:hover {
+    background: var(--colors-blue050, #e3f2fd);
+}
+
+.metricsArea {
+    margin-block-start: 10px;
+    padding-block-start: 10px;
+    border-block-start: 1px solid var(--colors-grey200, #eef0f3);
+}
+
+.metricsDescription {
+    font-size: 12px;
+    color: var(--colors-grey700, #6e7a8a);
+    margin: 0 0 10px 0;
+    line-height: 1.5;
+}
+
+.qualityMetrics {
+    display: flex;
+    gap: 24px;
+    margin-block-end: 8px;
+    flex-wrap: wrap;
+}
+
+.qualityMetric {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.qualityMetricLabel {
+    font-size: 10px;
+    color: var(--colors-grey600, #7b8794);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.qualityMetricValue {
+    font-size: 18px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+
+.qualityMetricValueTier {
+    color: var(--tier-color);
+}
+
+.qualityMetricValueWarning {
+    color: var(--colors-yellow800, #ff9800);
+}
+
+.qualityMetricRating {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--colors-grey600, #7b8794);
+}
+
+.qualityMetricRatingTier {
+    color: var(--tier-color);
+}
+
+.qualityBar {
+    block-size: 4px;
+    background: var(--colors-grey200, #eef0f3);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-block-end: 10px;
+}
+
+.qualityBarFill {
+    block-size: 100%;
+    border-radius: 2px;
+    background: var(--tier-color);
+    transition: width 0.3s ease;
+}
