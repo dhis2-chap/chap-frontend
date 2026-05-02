@@ -1,5 +1,5 @@
 /** When batch runs or methods are recomputed, the DB can hold multiple rows per (org, period, method). Always use the newest. */
-export function pickLatestExplanation<T extends { id?: number; computedAt?: string }>(rows: T[]): T | undefined {
+export function pickLatestExplanation<T extends { id?: number | null; computedAt?: string | null }>(rows: T[]): T | undefined {
     if (!rows.length) return undefined;
     return rows.reduce((best, exp) => {
         const eid = exp.id ?? -1;
