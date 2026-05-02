@@ -153,7 +153,7 @@ export const LocalTab = ({
                                         baselinePrediction={displayExplanation.baselinePrediction}
                                         actualPrediction={displayExplanation.actualPrediction}
                                         title={i18n.t('SHAP Waterfall — {{orgUnit}}, {{period}}', {
-                                            orgUnit: orgUnitOptions.find(o => o.id === localOrgUnit)?.label ?? localOrgUnit,
+                                            orgUnit: orgUnitMap[localOrgUnit] ?? localOrgUnit,
                                             period: getPeriodLabel(selectedPeriod),
                                         })}
                                     />
@@ -168,7 +168,7 @@ export const LocalTab = ({
                                             highlightPeriod={selectedPeriod}
                                             orgUnitMap={orgUnitMap}
                                             title={i18n.t('SHAP Summary — {{orgUnit}}, {{period}} highlighted', {
-                                                orgUnit: orgUnitOptions.find(o => o.id === localOrgUnit)?.label ?? localOrgUnit,
+                                                orgUnit: orgUnitMap[localOrgUnit] ?? localOrgUnit,
                                                 period: getPeriodLabel(selectedPeriod),
                                             })}
                                         />
@@ -189,7 +189,7 @@ export const LocalTab = ({
                                                 featureName: f.featureName, importance: f.importance, direction: f.direction,
                                             }))}
                                             title={i18n.t('LIME Feature Contributions — {{orgUnit}}, {{period}}', {
-                                                orgUnit: orgUnitOptions.find(o => o.id === localOrgUnit)?.label ?? localOrgUnit,
+                                                orgUnit: orgUnitMap[localOrgUnit] ?? localOrgUnit,
                                                 period: getPeriodLabel(selectedPeriod),
                                             })}
                                         />
