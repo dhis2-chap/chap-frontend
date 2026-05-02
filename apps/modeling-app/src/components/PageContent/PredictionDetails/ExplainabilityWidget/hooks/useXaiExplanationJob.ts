@@ -145,7 +145,7 @@ export const useXaiExplanationJob = ({
         } catch (e) {
             setError(
                 (e instanceof Error ? e.message : String(e))
-                || 'Failed to start explanation run',
+                || i18n.t('Failed to start explanation run'),
             );
         }
     }, [predictionId, xaiMethod, isRunning]);

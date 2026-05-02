@@ -92,12 +92,14 @@ export const HorizonTab = ({
                         {supports('beeswarm') && (
                             <div className={styles.viewToggle} style={{ alignSelf: 'flex-start' }}>
                                 <button
+                                    type="button"
                                     className={`${styles.toggleBtn} ${horizonView === 'importance' ? styles.toggleBtnActive : ''}`}
                                     onClick={() => onHorizonViewChange('importance')}
                                 >
                                     {i18n.t('Importance')}
                                 </button>
                                 <button
+                                    type="button"
                                     className={`${styles.toggleBtn} ${horizonView === 'beeswarm' ? styles.toggleBtnActive : ''}`}
                                     onClick={() => onHorizonViewChange('beeswarm')}
                                 >

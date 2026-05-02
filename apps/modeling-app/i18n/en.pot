@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-05-02T10:45:37.639Z\n"
-"PO-Revision-Date: 2026-05-02T10:45:37.639Z\n"
+"POT-Creation-Date: 2026-05-02T12:00:38.241Z\n"
+"PO-Revision-Date: 2026-05-02T12:00:38.241Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -936,18 +936,6 @@ msgstr "Local"
 msgid "Horizon"
 msgstr "Horizon"
 
-msgid "Explanation job failed. Check Jobs for details."
-msgstr "Explanation job failed. Check Jobs for details."
-
-msgid "Explanation job was revoked. Check Jobs for details."
-msgstr "Explanation job was revoked. Check Jobs for details."
-
-msgid "Surrogate model training failed. Check Jobs for details."
-msgstr "Surrogate model training failed. Check Jobs for details."
-
-msgid "Surrogate model training was revoked. Check Jobs for details."
-msgstr "Surrogate model training was revoked. Check Jobs for details."
-
 msgid "Training surrogate model ({{method}})…"
 msgstr "Training surrogate model ({{method}})…"
 
@@ -956,12 +944,6 @@ msgstr "Generating explanations ({{method}})…"
 
 msgid "Computing local explanation…"
 msgstr "Computing local explanation…"
-
-msgid "Computing horizon summary…"
-msgstr "Computing horizon summary…"
-
-msgid "Loading summary data…"
-msgstr "Loading summary data…"
 
 msgid "Generate explanations to view Global, Local, and Horizon plots."
 msgstr "Generate explanations to view Global, Local, and Horizon plots."
@@ -1168,6 +1150,18 @@ msgstr "Plots{{colon}} "
 
 msgid "Change XAI method"
 msgstr "Change XAI method"
+
+msgid "Explanation job failed. Check Jobs for details."
+msgstr "Explanation job failed. Check Jobs for details."
+
+msgid "Explanation job was revoked. Check Jobs for details."
+msgstr "Explanation job was revoked. Check Jobs for details."
+
+msgid "Surrogate model training failed. Check Jobs for details."
+msgstr "Surrogate model training failed. Check Jobs for details."
+
+msgid "Surrogate model training was revoked. Check Jobs for details."
+msgstr "Surrogate model training was revoked. Check Jobs for details."
 
 msgid "Error loading prediction"
 msgstr "Error loading prediction"

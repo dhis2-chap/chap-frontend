@@ -1,1 +1,1 @@
-export { ShapBeeswarmChart } from './ShapBeeswarmChart';
+export { ShapBeeswarmChart, interpolateColor, jitterForKey } from './ShapBeeswarmChart';

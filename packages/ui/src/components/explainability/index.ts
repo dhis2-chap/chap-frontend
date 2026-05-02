@@ -1,4 +1,4 @@
 export { FeatureImportanceChart } from './FeatureImportanceChart';
-export { ShapBeeswarmChart } from './ShapBeeswarmChart';
+export { ShapBeeswarmChart, interpolateColor, jitterForKey } from './ShapBeeswarmChart';
 export { ShapWaterfallChart } from './ShapWaterfallChart';
-export { formatFeatureName } from './utils';
+export { formatFeatureName, CHART_COLORS } from './utils';

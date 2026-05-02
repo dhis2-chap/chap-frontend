@@ -121,6 +121,7 @@ export const LocalTab = ({
                                         <div className={styles.viewToggle}>
                                             {supports('waterfall') && (
                                                 <button
+                                                    type="button"
                                                     className={`${styles.toggleBtn} ${localView === 'waterfall' ? styles.toggleBtnActive : ''}`}
                                                     onClick={() => onLocalViewChange('waterfall')}
                                                 >
@@ -129,6 +130,7 @@ export const LocalTab = ({
                                             )}
                                             {supports('beeswarm') && (
                                                 <button
+                                                    type="button"
                                                     className={`${styles.toggleBtn} ${localView === 'summary' ? styles.toggleBtnActive : ''}`}
                                                     onClick={() => onLocalViewChange('summary')}
                                                 >

@@ -3,7 +3,7 @@ import i18n from '@dhis2/d2-i18n';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import type { ShapBeeswarmPoint } from '../../../services/xai/XaiService';
-import { formatFeatureName } from '../utils';
+import { formatFeatureName, CHART_COLORS } from '../utils';
 import styles from './ShapBeeswarmChart.module.css';
 
 interface ShapBeeswarmChartProps {
@@ -16,14 +16,14 @@ interface ShapBeeswarmChartProps {
     orgUnitMap?: Record<string, string>;
 }
 
-const interpolateColor = (t: number): string => {
+export const interpolateColor = (t: number): string => {
     const r = Math.round(66 + t * (239 - 66));
     const g = Math.round(165 + t * (83 - 165));
     const b = Math.round(245 + t * (80 - 245));
     return `rgb(${r},${g},${b})`;
 };
 
-const jitterForKey = (key: string): number => {
+export const jitterForKey = (key: string): number => {
     let h = 0;
     for (let i = 0; i < key.length; i++) {
         h = Math.imul(31, h) + key.charCodeAt(i) | 0;
@@ -101,7 +101,7 @@ export const ShapBeeswarmChart = ({
             const pt = {
                 x: sv,
                 y: yIdx + jitter,
-                color: isHighlighted ? '#000' : interpolateColor(t),
+                color: isHighlighted ? CHART_COLORS.highlight : interpolateColor(t),
                 custom: {
                     featureName: name,
                     featureValue: fv,
@@ -139,7 +139,7 @@ export const ShapBeeswarmChart = ({
                 },
                 plotLines: [{
                     value: 0,
-                    color: '#bbb',
+                    color: CHART_COLORS.gridLine,
                     width: 1,
                     dashStyle: 'Dash' as Highcharts.DashStyleValue,
                     zIndex: 2,
@@ -204,7 +204,7 @@ export const ShapBeeswarmChart = ({
                         radius: 7,
                         symbol: 'diamond' as const,
                         lineWidth: 2,
-                        lineColor: '#000',
+                        lineColor: CHART_COLORS.highlight,
                     },
                     zIndex: 5,
                 }] : []),

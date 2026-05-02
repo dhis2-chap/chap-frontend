@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import i18n from '@dhis2/d2-i18n';
-import { Tag, formatFeatureName, type SurrogateQuality } from '@dhis2-chap/ui';
+import { Tag, formatFeatureName, CHART_COLORS, type SurrogateQuality } from '@dhis2-chap/ui';
 import styles from './ExplainabilityWidget.module.css';
 
 type Props = {
@@ -28,7 +28,7 @@ export const SurrogateQualityPanel = ({ quality, stabilityScore }: Props) => {
     const modelDisplayName: string = quality.selectedModelDisplayName ?? 'surrogate model';
 
     const r2Pct = (r2 * 100).toFixed(1);
-    const r2Color = fidelityTier === 'high' ? '#4caf50' : fidelityTier === 'medium' ? '#ff9800' : '#f44336';
+    const r2Color = fidelityTier === 'high' ? CHART_COLORS.qualityHigh : fidelityTier === 'medium' ? CHART_COLORS.qualityMedium : CHART_COLORS.qualityLow;
     const r2Label = fidelityTier === 'high' ? i18n.t('Good') : fidelityTier === 'medium' ? i18n.t('Moderate') : i18n.t('Poor');
     const duplicateRatio = unique != null && n != null && n > 0 ? ((1 - unique / n) * 100).toFixed(0) : null;
 
@@ -46,6 +46,7 @@ export const SurrogateQualityPanel = ({ quality, stabilityScore }: Props) => {
                     <Tag variant="info">{modelDisplayName}</Tag>
                 </div>
                 <button
+                    type="button"
                     className={styles.metricsToggle}
                     onClick={() => setShowMetrics(v => !v)}
                 >
@@ -126,7 +127,7 @@ export const SurrogateQualityPanel = ({ quality, stabilityScore }: Props) => {
                                 <span className={styles.qualityMetricLabel}>{i18n.t('Residual bias')}</span>
                                 <span
                                     className={styles.qualityMetricValue}
-                                    style={{ color: Math.abs(residualMean) > residualStd * 0.5 ? '#ff9800' : 'inherit' }}
+                                    style={{ color: Math.abs(residualMean) > residualStd * 0.5 ? CHART_COLORS.qualityMedium : 'inherit' }}
                                 >
                                     {residualMean >= 0 ? '+' : ''}
                                     {residualMean < 1 && residualMean > -1 ? residualMean.toFixed(3) : residualMean.toFixed(1)}

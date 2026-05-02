@@ -25,6 +25,7 @@ export const XaiMethodSelector = ({
     return (
         <>
             <button
+                type="button"
                 className={styles.pill}
                 onClick={() => setIsModalOpen(true)}
                 disabled={isLoading}

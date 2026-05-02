@@ -83,12 +83,14 @@ export const GlobalTab = ({
                 {supports('beeswarm') && (
                     <div className={styles.viewToggle}>
                         <button
+                            type="button"
                             className={`${styles.toggleBtn} ${globalView === 'importance' ? styles.toggleBtnActive : ''}`}
                             onClick={() => onGlobalViewChange('importance')}
                         >
                             {i18n.t('Importance')}
                         </button>
                         <button
+                            type="button"
                             className={`${styles.toggleBtn} ${globalView === 'beeswarm' ? styles.toggleBtnActive : ''}`}
                             onClick={() => onGlobalViewChange('beeswarm')}
                         >

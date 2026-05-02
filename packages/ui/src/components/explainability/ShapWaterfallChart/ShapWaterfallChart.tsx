@@ -107,30 +107,30 @@ export const ShapWaterfallChart = ({
                     style: { fontSize: '11px' },
                 },
                 labels: { style: { fontSize: '11px' } },
-                gridLineColor: '#f0f0f0',
+                gridLineColor: CHART_COLORS.waterfallGrid,
                 plotLines: [
                     {
                         value: baselinePrediction,
-                        color: '#90A4AE',
+                        color: CHART_COLORS.baselineLine,
                         dashStyle: 'Dash' as Highcharts.DashStyleValue,
                         width: 1,
                         zIndex: 3,
                         label: {
                             text: `E[f(X)]`,
-                            style: { fontSize: '10px', color: '#90A4AE' },
+                            style: { fontSize: '10px', color: CHART_COLORS.baselineLine },
                         },
                     },
                     ...(Math.abs(actualPrediction - modelOutput) > 0.5
                         ? [
                                 {
                                     value: actualPrediction,
-                                    color: '#e65100',
+                                    color: CHART_COLORS.forecastLine,
                                     dashStyle: 'Dot' as Highcharts.DashStyleValue,
                                     width: 2,
                                     zIndex: 4,
                                     label: {
                                         text: `${i18n.t('Actual forecast')}: ${formatValue(actualPrediction)}`,
-                                        style: { fontSize: '10px', color: '#e65100', fontWeight: '500' },
+                                        style: { fontSize: '10px', color: CHART_COLORS.forecastLine, fontWeight: '500' },
                                     },
                                 },
                             ]
@@ -181,11 +181,11 @@ export const ShapWaterfallChart = ({
                             fontSize: '10px',
                             fontWeight: 'normal',
                             textOutline: 'none',
-                            color: '#444',
+                            color: CHART_COLORS.dataLabel,
                         },
                         inside: false,
                     },
-                    lineColor: '#e0e0e0',
+                    lineColor: CHART_COLORS.waterfallBorder,
                     lineWidth: 1,
                     borderWidth: 0,
                     pointPadding: 0.1,

@@ -7,7 +7,7 @@ import {
 } from '@dhis2-chap/ui';
 
 /** When batch runs or methods are recomputed, the DB can hold multiple rows per (org, period, method). Always use the newest. */
-function pickLatestExplanation(rows: LocalExplanationResponse[]): LocalExplanationResponse | undefined {
+export function pickLatestExplanation(rows: LocalExplanationResponse[]): LocalExplanationResponse | undefined {
     if (!rows.length) return undefined;
     return rows.reduce((best, exp) => {
         const eid = exp.id ?? -1;
