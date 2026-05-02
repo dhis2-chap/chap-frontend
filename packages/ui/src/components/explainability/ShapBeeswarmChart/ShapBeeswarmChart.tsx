@@ -23,6 +23,11 @@ export const interpolateColor = (t: number): string => {
     return `rgb(${r},${g},${b})`;
 };
 
+/**
+ * Deterministic per-point jitter so the same forecast lands at the same y on every
+ * render — Highcharts' built-in `jitter` re-randomizes on each render, which makes
+ * the highlighted point appear to move when other state changes.
+ */
 export const jitterForKey = (key: string): number => {
     let h = 0;
     for (let i = 0; i < key.length; i++) {

@@ -26,6 +26,6 @@
 }
 
 .pillCaret {
-    font-size: 10px;
+    display: inline-flex;
     color: var(--colors-grey600, #7b8794);
 }

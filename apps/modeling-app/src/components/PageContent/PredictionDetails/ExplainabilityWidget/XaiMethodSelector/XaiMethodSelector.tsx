@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import i18n from '@dhis2/d2-i18n';
+import { IconChevronDown16 } from '@dhis2/ui';
 import { type XaiMethodRead } from '@dhis2-chap/ui';
 import { XaiMethodSelectionModal } from './XaiMethodSelectionModal';
 import styles from './XaiMethodSelector.module.css';
@@ -32,7 +33,9 @@ export const XaiMethodSelector = ({
                 title={i18n.t('Change XAI method')}
             >
                 {label}
-                <span className={styles.pillCaret}>▾</span>
+                <span className={styles.pillCaret}>
+                    <IconChevronDown16 />
+                </span>
             </button>
 
             {isModalOpen && (

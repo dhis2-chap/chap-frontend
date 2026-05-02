@@ -107,9 +107,7 @@ export const ExplainabilityWidget = ({
     useEffect(() => {
         if (!xaiMethods?.length || hasUserSelectedXaiMethod.current) return;
         const lowerModelId = modelId?.toLowerCase();
-        const isNative = (m: XaiMethodRead) =>
-            (m.methodType?.toLowerCase() ?? '').includes('native')
-            || (m.name?.toLowerCase() ?? '').includes('native');
+        const isNative = (m: XaiMethodRead) => m.methodType === 'native_shap';
         const matchesModel = (m: XaiMethodRead) =>
             !!lowerModelId &&
             ((m.name?.toLowerCase() ?? '').includes(lowerModelId)

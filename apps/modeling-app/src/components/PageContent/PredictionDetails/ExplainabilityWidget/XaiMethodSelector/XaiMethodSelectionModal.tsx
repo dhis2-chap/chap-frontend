@@ -23,9 +23,10 @@ type Props = {
     onConfirm: (method: XaiMethodRead) => void;
 };
 
+const AUTO_METHOD_TYPES = new Set(['surrogate_shap_auto', 'surrogate_lime_auto']);
+
 const isAutoMethod = (method: XaiMethodRead) =>
-    method.methodType?.toLowerCase().includes('auto')
-    || method.name?.toLowerCase().includes('auto');
+    AUTO_METHOD_TYPES.has(method.methodType);
 
 export const XaiMethodSelectionModal = ({
     xaiMethods,

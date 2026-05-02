@@ -351,8 +351,6 @@ export class XaiService {
     public static runExplanations(
         predictionId: number,
         xaiMethod: string = DEFAULT_XAI_METHOD,
-        outputStatistic: string = 'median',
-        topK: number = 10,
     ): CancelablePromise<JobResponse> {
         return __request(OpenAPI, {
             method: 'POST',
@@ -362,8 +360,6 @@ export class XaiService {
             },
             body: {
                 xaiMethod,
-                outputStatistic,
-                topK,
             },
             mediaType: 'application/json',
             errors: {
