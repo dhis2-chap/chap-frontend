@@ -30,7 +30,6 @@ import styles from './ExplainabilityWidget.module.css';
 
 type Props = {
     predictionId: number;
-    modelId?: string;
     orgUnits: string[];
     periods: string[];
     periodType?: string | null;
@@ -38,7 +37,6 @@ type Props = {
 
 export const ExplainabilityWidget = ({
     predictionId,
-    modelId,
     orgUnits,
     periods,
     periodType,
@@ -90,39 +88,26 @@ export const ExplainabilityWidget = ({
     const selectedXaiMethodObj = xaiMethods?.find(
         m => m.name === selectedXaiMethod,
     );
-    const selectedMethod =
-        selectedXaiMethodObj?.methodType === 'surrogate_lime' ? 'lime' : 'shap';
 
-    // Falls back to method-type inference when supportedVisualizations is not yet
-    // populated (e.g. after upgrading a server that hasn't reseeded the DB).
     const supports = useCallback(
-        (viz: string): boolean => {
-            const declared = selectedXaiMethodObj?.supportedVisualizations;
-            if (declared && declared.length > 0) return declared.includes(viz);
-            if (viz === 'importance') return true;
-            return selectedMethod === 'shap';
-        },
-        [selectedXaiMethodObj, selectedMethod],
+        (viz: string): boolean =>
+            selectedXaiMethodObj?.supportedVisualizations.includes(viz) ?? false,
+        [selectedXaiMethodObj],
     );
 
     useEffect(() => {
         if (!xaiMethods?.length || hasUserSelectedXaiMethod.current) return;
-        const lowerModelId = modelId?.toLowerCase();
-        const isNative = (m: XaiMethodRead) => m.methodType === 'native_shap';
-        const matchesModel = (m: XaiMethodRead) =>
-            !!lowerModelId &&
-            ((m.name?.toLowerCase() ?? '').includes(lowerModelId)
-                || (m.description?.toLowerCase() ?? '').includes(lowerModelId));
-        const nativeMethods = xaiMethods.filter(isNative);
+        const nativeMethods = xaiMethods.filter(
+            m => m.methodType === 'native_shap',
+        );
         if (!nativeMethods.length) return;
         const preferred =
-            nativeMethods.find(matchesModel)
-            ?? nativeMethods.find(m => m.name === 'native_shap')
+            nativeMethods.find(m => m.name === 'native_shap')
             ?? nativeMethods[0];
         if (preferred.name !== selectedXaiMethod) {
             setSelectedXaiMethod(preferred.name);
         }
-    }, [xaiMethods, selectedXaiMethod, modelId]);
+    }, [xaiMethods, selectedXaiMethod]);
 
     const handleSelectXaiMethod = (method: XaiMethodRead) => {
         hasUserSelectedXaiMethod.current = true;
@@ -179,12 +164,16 @@ export const ExplainabilityWidget = ({
                 localView === 'summary' &&
                 supports('beeswarm'))
             || (activeTab === 'horizon' && horizonView === 'beeswarm'));
-    const { beeswarmData, isBeeswarmLoading, beeswarmError, refetchBeeswarm } =
-        useShapBeeswarm({
-            predictionId,
-            xaiMethod: selectedXaiMethod,
-            enabled: beeswarmEnabled,
-        });
+    const {
+        beeswarmData,
+        isBeeswarmLoading,
+        beeswarmError,
+        refetch: refetchBeeswarm,
+    } = useShapBeeswarm({
+        predictionId,
+        xaiMethod: selectedXaiMethod,
+        enabled: beeswarmEnabled,
+    });
 
     // Horizon — fetched once explanations exist and the horizon tab is active
     const horizonEnabled =

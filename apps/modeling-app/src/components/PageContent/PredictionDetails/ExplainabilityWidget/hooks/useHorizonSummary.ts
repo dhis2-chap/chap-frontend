@@ -14,7 +14,7 @@ export const useHorizonSummary = ({
     xaiMethod,
     enabled,
 }: Args) => {
-    const { data, isFetching, isPreviousData, error } = useQuery({
+    const { data, isFetching, error } = useQuery({
         queryKey: ['horizonSummary', predictionId, orgUnit, xaiMethod],
         queryFn: () =>
             XaiService.computeHorizonSummaryV1XaiPredictionsPredictionIdLocalHorizonSummaryPost(
@@ -31,7 +31,6 @@ export const useHorizonSummary = ({
     return {
         horizonData: data ?? null,
         isHorizonLoading: isFetching,
-        isHorizonPreviousData: isPreviousData,
         horizonError: error
             ? error instanceof Error
                 ? error.message

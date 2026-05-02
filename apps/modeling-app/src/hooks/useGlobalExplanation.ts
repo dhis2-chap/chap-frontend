@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { XaiService, type GlobalExplanationResponse, ApiError } from '@dhis2-chap/ui';
 
 export const useGlobalExplanation = (predictionId: number | undefined, xaiMethod?: string) => {
-    const { data, error, isLoading, isFetching, isPreviousData, refetch } = useQuery<GlobalExplanationResponse, ApiError>({
+    const { data, error, isLoading, isFetching, isPreviousData } = useQuery<GlobalExplanationResponse, ApiError>({
         queryKey: ['globalExplanation', predictionId, xaiMethod],
         queryFn: () => XaiService.getGlobalExplanationV1XaiPredictionsPredictionIdGlobalGet(predictionId!, xaiMethod),
         enabled: !!predictionId,
@@ -17,6 +17,5 @@ export const useGlobalExplanation = (predictionId: number | undefined, xaiMethod
         isLoading,
         isFetching,
         isPreviousData,
-        refetch,
     };
 };

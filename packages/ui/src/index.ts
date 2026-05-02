@@ -56,7 +56,7 @@ export {
 } from './httpfunctions/core/request';
 export { buildPredictionSeries } from './utils/PredictionViewModel';
 
-export { FeatureImportanceChart, ShapBeeswarmChart, ShapWaterfallChart, formatFeatureName, CHART_COLORS, interpolateColor, jitterForKey } from './components/explainability';
+export { FeatureImportanceChart, ShapBeeswarmChart, ShapWaterfallChart, formatFeatureName, CHART_COLORS } from './components/explainability';
 export {
     plotResultsToViewData,
     getStableMaxYByOrgUnitId,

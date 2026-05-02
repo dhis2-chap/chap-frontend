@@ -34,6 +34,8 @@ export const useLocalExplanation = (
         },
     });
 
+    // keepPreviousData surfaces the prior orgUnit's response during a transition;
+    // filter so the UI never shows another orgUnit's explanation while refetching.
     const matches = data?.filter(exp => exp.orgUnit === orgUnit) ?? [];
 
     const currentExplanation = matches.length > 0 ? pickLatestExplanation(matches) : undefined;

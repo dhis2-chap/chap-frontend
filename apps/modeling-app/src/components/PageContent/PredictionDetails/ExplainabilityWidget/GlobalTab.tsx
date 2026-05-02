@@ -22,7 +22,7 @@ type Props = {
     globalView: 'importance' | 'beeswarm';
     onGlobalViewChange: (v: 'importance' | 'beeswarm') => void;
     isBeeswarmLoading: boolean;
-    beeswarmData: ShapBeeswarmResponse | null;
+    beeswarmData: ShapBeeswarmResponse | undefined;
     beeswarmError?: string | null;
     orgUnitMap: Record<string, string>;
     onRunExplanations: () => void;

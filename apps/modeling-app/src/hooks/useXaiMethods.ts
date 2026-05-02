@@ -7,7 +7,6 @@ export const useXaiMethods = (predictionId?: number) => {
         queryFn: () => XaiService.listXaiMethodsV1XaiMethodsGet(false, predictionId),
         staleTime: 30 * 60 * 1000,
         retry: 0,
-        select: methods => methods.filter(m => !m.archived),
     });
 
     return {

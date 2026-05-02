@@ -21,13 +21,13 @@ export const useShapBeeswarm = ({ predictionId, xaiMethod, enabled }: Args) => {
     });
 
     return {
-        beeswarmData: data ?? null,
+        beeswarmData: data,
         isBeeswarmLoading: isFetching,
         beeswarmError: error
             ? error instanceof Error
                 ? error.message
                 : String(error)
             : null,
-        refetchBeeswarm: () => refetch(),
+        refetch,
     };
 };

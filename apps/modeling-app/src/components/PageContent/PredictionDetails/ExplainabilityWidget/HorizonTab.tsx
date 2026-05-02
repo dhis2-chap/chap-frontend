@@ -21,7 +21,7 @@ type Props = {
     supports: (viz: string) => boolean;
     horizonView: 'importance' | 'beeswarm';
     onHorizonViewChange: (v: 'importance' | 'beeswarm') => void;
-    beeswarmData: ShapBeeswarmResponse | null;
+    beeswarmData: ShapBeeswarmResponse | undefined;
     isBeeswarmLoading: boolean;
     beeswarmError?: string | null;
     orgUnitMap: Record<string, string>;

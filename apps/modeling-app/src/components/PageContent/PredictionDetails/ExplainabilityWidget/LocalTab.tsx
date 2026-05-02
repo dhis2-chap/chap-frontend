@@ -30,7 +30,7 @@ type Props = {
     supports: (viz: string) => boolean;
     localView: 'waterfall' | 'summary';
     onLocalViewChange: (v: 'waterfall' | 'summary') => void;
-    beeswarmData: ShapBeeswarmResponse | null;
+    beeswarmData: ShapBeeswarmResponse | undefined;
     isBeeswarmLoading: boolean;
     beeswarmError?: string | null;
     orgUnitMap: Record<string, string>;
