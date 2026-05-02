@@ -9,11 +9,13 @@ import styles from './FeatureImportanceChart.module.css';
 interface FeatureImportanceChartProps {
     features: FeatureAttribution[];
     title?: string;
+    height?: number;
 }
 
 export const FeatureImportanceChart = ({
     features,
     title,
+    height,
 }: FeatureImportanceChartProps) => {
     const options: Highcharts.Options = useMemo(() => {
         const sortedFeatures = [...features].sort(
@@ -26,7 +28,7 @@ export const FeatureImportanceChart = ({
         return {
             chart: {
                 type: 'bar',
-                height: Math.max(200, features.length * 35 + 80),
+                height: height ?? Math.max(200, features.length * 35 + 80),
             },
             title: {
                 text: title || i18n.t('Feature Importance'),
@@ -70,7 +72,7 @@ export const FeatureImportanceChart = ({
                 },
             ],
         };
-    }, [features, title]);
+    }, [features, title, height]);
 
     if (!features || features.length === 0) {
         return (

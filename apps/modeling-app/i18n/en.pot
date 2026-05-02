@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-05-01T20:24:49.931Z\n"
-"PO-Revision-Date: 2026-05-01T20:24:49.931Z\n"
+"POT-Creation-Date: 2026-05-02T10:45:37.639Z\n"
+"PO-Revision-Date: 2026-05-02T10:45:37.639Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -987,6 +987,9 @@ msgstr "SHAP Summary"
 msgid "Recalculate"
 msgstr "Recalculate"
 
+msgid "Global Feature Importance"
+msgstr "Global Feature Importance"
+
 msgid "SHAP Summary — how feature values affect predictions"
 msgstr "SHAP Summary — how feature values affect predictions"
 
@@ -995,9 +998,6 @@ msgstr "SHAP summary data not yet loaded."
 
 msgid "Load"
 msgstr "Load"
-
-msgid "Global Feature Importance"
-msgstr "Global Feature Importance"
 
 msgid "Forecast Horizon Summary — {{orgUnit}}"
 msgstr "Forecast Horizon Summary — {{orgUnit}}"

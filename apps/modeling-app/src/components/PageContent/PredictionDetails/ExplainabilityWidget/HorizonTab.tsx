@@ -49,6 +49,13 @@ export const HorizonTab = ({
 }: Props) => {
     const orgLabel = orgUnitOptions.find(o => o.id === localOrgUnit)?.label ?? localOrgUnit;
 
+    const importanceFeatureCount = horizonData?.averageImportance.length ?? 0;
+    const beeswarmFeatureCount = beeswarmData ? beeswarmData.featureNames.length : importanceFeatureCount;
+    const chartHeight = Math.max(
+        Math.max(200, importanceFeatureCount * 35 + 80),
+        supports('beeswarm') ? Math.max(300, beeswarmFeatureCount * 50 + 120) : 0,
+    );
+
     return (
         <div className={styles.mainLayout}>
             <div className={styles.sidebar}>
@@ -119,11 +126,25 @@ export const HorizonTab = ({
                                         title={i18n.t('Average Horizon Importance — mean |SHAP| across {{n}} steps', {
                                             n: horizonData.steps.length,
                                         })}
+                                        height={chartHeight}
                                     />
                                 )}
                             </>
                         ) : isBeeswarmLoading ? (
-                            <div className={styles.loadingContainer}><CircularLoader small /></div>
+                            <div style={{ position: 'relative' }}>
+                                <div className={styles.loadingOverlay}><CircularLoader small /></div>
+                                <FeatureImportanceChart
+                                    features={horizonData.averageImportance.map(f => ({
+                                        featureName: f.featureName,
+                                        importance: f.meanAbsImportance,
+                                        direction: f.direction,
+                                    }))}
+                                    title={i18n.t('Average Horizon Importance — mean |SHAP| across {{n}} steps', {
+                                        n: horizonData.steps.length,
+                                    })}
+                                    height={chartHeight}
+                                />
+                            </div>
                         ) : beeswarmData ? (
                             <ShapBeeswarmChart
                                 points={beeswarmData.points.filter(p => p.orgUnit === localOrgUnit)}
@@ -132,6 +153,7 @@ export const HorizonTab = ({
                                 title={i18n.t('SHAP Summary — {{orgUnit}} across horizon steps', {
                                     orgUnit: orgLabel,
                                 })}
+                                height={chartHeight}
                             />
                         ) : (
                             <div className={styles.emptyState}>

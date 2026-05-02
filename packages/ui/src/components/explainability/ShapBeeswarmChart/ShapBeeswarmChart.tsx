@@ -10,6 +10,7 @@ interface ShapBeeswarmChartProps {
     points: ShapBeeswarmPoint[];
     featureNames: string[];
     title?: string;
+    height?: number;
     highlightOrgUnit?: string;
     highlightPeriod?: string;
     orgUnitMap?: Record<string, string>;
@@ -34,6 +35,7 @@ export const ShapBeeswarmChart = ({
     points,
     featureNames,
     title,
+    height,
     highlightOrgUnit,
     highlightPeriod,
     orgUnitMap,
@@ -116,7 +118,7 @@ export const ShapBeeswarmChart = ({
             }
         });
 
-        const chartHeight = Math.max(300, sortedFeatures.length * 50 + 120);
+        const chartHeight = height ?? Math.max(300, sortedFeatures.length * 50 + 120);
 
         return {
             chart: {
@@ -208,7 +210,7 @@ export const ShapBeeswarmChart = ({
                 }] : []),
             ],
         };
-    }, [points, featureNames, title, hasHighlight, highlightOrgUnit, highlightPeriod, orgUnitMap, jitterCache]);
+    }, [points, featureNames, title, height, hasHighlight, highlightOrgUnit, highlightPeriod, orgUnitMap, jitterCache]);
 
     if (!points || points.length === 0) {
         return (

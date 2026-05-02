@@ -45,7 +45,7 @@ export const GlobalTab = ({
     onRunExplanations,
     onLoadBeeswarm,
 }: Props) => {
-    if (isGlobalLoading || (isGlobalFetching && !globalExplanation?.available && !isGlobalTransitioning) || (isExplanationJobRunning && !globalExplanation?.available)) {
+    if (!globalExplanation?.available && (isGlobalLoading || (isGlobalFetching && !isGlobalTransitioning) || isExplanationJobRunning)) {
         return <div className={styles.loadingContainer}><CircularLoader small /></div>;
     }
     if (globalError) {
@@ -67,6 +67,12 @@ export const GlobalTab = ({
         importance: f.importance,
         direction: f.direction,
     }));
+
+    const featureCount = beeswarmData ? beeswarmData.featureNames.length : features.length;
+    const chartHeight = Math.max(
+        Math.max(200, features.length * 35 + 80),
+        supports('beeswarm') ? Math.max(300, featureCount * 50 + 120) : 0,
+    );
 
     return (
         <div className={styles.chartContainer} style={{ position: 'relative' }}>
@@ -97,13 +103,17 @@ export const GlobalTab = ({
 
             {supports('beeswarm') && globalView === 'beeswarm' ? (
                 isBeeswarmLoading ? (
-                    <div className={styles.loadingContainer}><CircularLoader small /></div>
+                    <div style={{ position: 'relative' }}>
+                        <div className={styles.loadingOverlay}><CircularLoader small /></div>
+                        <FeatureImportanceChart features={features} title={i18n.t('Global Feature Importance')} height={chartHeight} />
+                    </div>
                 ) : beeswarmData ? (
                     <ShapBeeswarmChart
                         points={beeswarmData.points}
                         featureNames={beeswarmData.featureNames}
                         orgUnitMap={orgUnitMap}
                         title={i18n.t('SHAP Summary — how feature values affect predictions')}
+                        height={chartHeight}
                     />
                 ) : (
                     <div className={styles.emptyState}>
@@ -112,7 +122,7 @@ export const GlobalTab = ({
                     </div>
                 )
             ) : (
-                <FeatureImportanceChart features={features} title={i18n.t('Global Feature Importance')} />
+                <FeatureImportanceChart features={features} title={i18n.t('Global Feature Importance')} height={chartHeight} />
             )}
 
             <SurrogateQualityPanel

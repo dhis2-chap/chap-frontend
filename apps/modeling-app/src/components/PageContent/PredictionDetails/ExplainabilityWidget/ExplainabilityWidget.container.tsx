@@ -266,6 +266,10 @@ export const ExplainabilityWidget = ({
         enabled: horizonEnabled,
     })
 
+    const prevHorizonRef = useRef(horizonData)
+    if (horizonData) prevHorizonRef.current = horizonData
+    const displayHorizonData = horizonData ?? (isHorizonLoading ? prevHorizonRef.current : null)
+
     // Org units
     const { data: orgUnitsData } = useOrgUnitsById(orgUnits)
     const orgUnitOptions = useMemo(
@@ -427,9 +431,6 @@ export const ExplainabilityWidget = ({
             })
         }
         if (isComputingLocal) return i18n.t('Computing local explanation…')
-        if (isHorizonLoading && !horizonData)
-            return i18n.t('Computing horizon summary…')
-        if (isBeeswarmLoading) return i18n.t('Loading summary data…')
         return null
     })()
 
@@ -512,7 +513,7 @@ export const ExplainabilityWidget = ({
                 body = (
                     <HorizonTab
                         {...sharedTabProps}
-                        horizonData={horizonData}
+                        horizonData={displayHorizonData}
                         isHorizonLoading={isHorizonLoading}
                         horizonError={horizonError}
                         horizonView={horizonView}
