@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import { EvaluationPerOrgUnit } from '../../../interfaces/Evaluation';
 import { ComparisonPlot } from '../ComparisonPlot/ComparisonPlot';
+import { ZoomRange } from '../ResultPlot/ResultPlot';
 import { Virtuoso, VirtuosoProps } from 'react-virtuoso';
 
 interface ComparisonPlotListProps {
@@ -10,6 +11,8 @@ interface ComparisonPlotListProps {
     virtuosoProps?: VirtuosoProps<any, any>;
     nameLabel?: string;
     maxYByOrgUnitId?: Record<string, number>;
+    zoomRange?: ZoomRange | null;
+    onZoomChange?: (range: ZoomRange | null) => void;
 }
 
 const VIRTUOSO_STYLE = { height: '100%' } as const;
@@ -21,6 +24,8 @@ export const ComparisonPlotList = React.memo(function ComparisonPlotList({
     virtuosoProps,
     nameLabel,
     maxYByOrgUnitId,
+    zoomRange,
+    onZoomChange,
 }: ComparisonPlotListProps) {
     const renderItem = useCallback((index: number) => {
         const orgUnitsData = evaluationPerOrgUnits[index];
@@ -34,9 +39,11 @@ export const ComparisonPlotList = React.memo(function ComparisonPlotList({
                 orgUnitsData={orgUnitsData}
                 nameLabel={nameLabel}
                 maxY={maxYByOrgUnitId?.[orgUnitsData.orgUnitId]}
+                zoomRange={zoomRange}
+                onZoomChange={onZoomChange}
             />
         );
-    }, [evaluationPerOrgUnits, maxYByOrgUnitId, nameLabel]);
+    }, [evaluationPerOrgUnits, maxYByOrgUnitId, nameLabel, zoomRange, onZoomChange]);
 
     const computeItemKey = useCallback(
         (index: number) => evaluationPerOrgUnits[index]?.orgUnitId ?? index,
@@ -57,6 +64,8 @@ export const ComparisonPlotList = React.memo(function ComparisonPlotList({
                             orgUnitsData={orgUnitsData}
                             nameLabel={nameLabel}
                             maxY={maxYByOrgUnitId?.[orgUnitsData.orgUnitId]}
+                            zoomRange={zoomRange}
+                            onZoomChange={onZoomChange}
                         />
                     );
                 })}

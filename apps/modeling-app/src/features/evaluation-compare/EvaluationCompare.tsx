@@ -1,18 +1,23 @@
 import { ComparisonPlotList, getStableMaxYByOrgUnitId } from '@dhis2-chap/ui';
+import type { ZoomRange } from '@dhis2-chap/ui';
 import {
     EvaluationCompatibleSelector,
     EvaluationSelectorBase,
 } from '../select-evaluation';
-import { useCallback, useDeferredValue, useMemo, useRef, useTransition } from 'react';
+import { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState, useTransition } from 'react';
+import cx from 'classnames';
 import css from './EvaluationCompare.module.css';
 import {
     Button,
     CircularLoader,
     IconArrowLeft16,
     IconArrowRight16,
+    IconChevronLeft16,
+    IconChevronRight16,
     IconVisualizationLine24,
     IconVisualizationLineMulti24,
     NoticeBox,
+    Tooltip,
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { usePlotDataForEvaluations } from '../../hooks/usePlotDataForEvaluations';
@@ -22,6 +27,7 @@ import { useCompareSelectionController } from './useCompareSelectionController';
 import { SplitPeriodSlider } from './SplitPeriodSlider';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ID_MAIN_LAYOUT } from '../../components/layout/Layout';
+import { shouldIgnoreHotkey } from './shouldIgnoreHotkey';
 
 const MAX_SELECTED_ORG_UNITS = 10;
 
@@ -56,6 +62,60 @@ export const EvaluationCompare = () => {
     });
     const deferredSelectedSplitPeriod = useDeferredValue(selectedSplitPeriod);
     const [, startSplitPeriodTransition] = useTransition();
+
+    const [zoomRange, setZoomRange] = useState<ZoomRange | null>(null);
+    const [isStuck, setIsStuck] = useState(false);
+    const sentinelRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const el = sentinelRef.current;
+        if (!el) return;
+        const observer = new IntersectionObserver(
+            ([entry]) => setIsStuck(!entry.isIntersecting),
+            { threshold: 0, root: document.getElementById(ID_MAIN_LAYOUT) },
+        );
+        observer.observe(el);
+        return () => observer.disconnect();
+    }, []);
+
+    const shiftZoom = useCallback(
+        (direction: 1 | -1) => {
+            setZoomRange((prev) => {
+                if (!prev) return null;
+                const newMin = prev.min + direction;
+                const newMax = prev.max + direction;
+                if (newMin < prev.dataMin || newMax > prev.dataMax) return prev;
+                return { ...prev, min: newMin, max: newMax };
+            });
+        },
+        [],
+    );
+
+    const resetZoom = useCallback(() => {
+        setZoomRange(null);
+    }, []);
+
+    const isZoomed = zoomRange !== null;
+    const canShiftLeft = isZoomed && zoomRange.min > zoomRange.dataMin;
+    const canShiftRight = isZoomed && zoomRange.max < zoomRange.dataMax;
+
+    useEffect(() => {
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (shouldIgnoreHotkey(event)) return;
+
+            const key = event.key.toLowerCase();
+            if (key === 'h' && canShiftLeft) {
+                shiftZoom(-1);
+            } else if (key === 'l' && canShiftRight) {
+                shiftZoom(1);
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [shiftZoom, canShiftLeft, canShiftRight]);
 
     const {
         combined,
@@ -132,9 +192,19 @@ export const EvaluationCompare = () => {
                         {i18n.t(isFromDetails ? 'Back to evaluation details' : 'Back to evaluation')}
                     </Button>
                 </div>
-                <div className={css.compareSelectors}>
+                {plotDataLoading && (
+                    <div className={css.loaderWrapper}>
+                        <CircularLoader small className={css.loader} />
+                    </div>
+                )}
+            </div>
+            <div ref={sentinelRef} />
+            <div className={cx(css.stickyBar, { [css.stuck]: isStuck })}>
+                <div className={css.selectorRow}>
                     <EvaluationSelectorBase
+                        dense
                         onSelect={(evaluation1) => {
+                            setZoomRange(null);
                             setBaseEvaluation(evaluation1?.id.toString());
                         }}
                         selected={baseEvaluation}
@@ -143,16 +213,17 @@ export const EvaluationCompare = () => {
                         placeholder={i18n.t('Select base evaluation')}
                     />
                     <EvaluationCompatibleSelector
+                        dense
                         onSelect={(evaluation2) => {
+                            setZoomRange(null);
                             setComparisonEvaluation(evaluation2?.id.toString());
                         }}
                         selected={comparisonEvaluation}
                         compatibleEvaluationId={baseEvaluation?.id}
                     />
-                </div>
-                <div className={css.selectorRow}>
                     <OrganisationUnitMultiSelect
-                        prefix={i18n.t('Organisation Units')}
+                        dense
+                        prefix={i18n.t('Location(s)')}
                         selected={selectedOrgUnits}
                         disabled={!orgUnits}
                         onSelect={({ selected }) =>
@@ -160,13 +231,39 @@ export const EvaluationCompare = () => {
                         available={orgUnits ?? []}
                         inputMaxHeight="52px"
                         maxSelections={MAX_SELECTED_ORG_UNITS}
+                        collapseSelectionAfter={0}
                     />
                 </div>
-                {plotDataLoading && (
-                    <div className={css.loaderWrapper}>
-                        <CircularLoader small className={css.loader} />
-                    </div>
-                )}
+                <div className={css.zoomButtons}>
+                    <Tooltip content={i18n.t('Shift zoom left (H)')}>
+                        <Button
+                            small
+                            secondary
+                            disabled={!canShiftLeft}
+                            onClick={() => shiftZoom(-1)}
+                            aria-label={i18n.t('Shift zoom left one period')}
+                            icon={<IconChevronLeft16 />}
+                        />
+                    </Tooltip>
+                    <Button
+                        small
+                        secondary
+                        disabled={!isZoomed}
+                        onClick={resetZoom}
+                    >
+                        {i18n.t('Reset zoom')}
+                    </Button>
+                    <Tooltip content={i18n.t('Shift zoom right (L)')}>
+                        <Button
+                            small
+                            secondary
+                            disabled={!canShiftRight}
+                            onClick={() => shiftZoom(1)}
+                            aria-label={i18n.t('Shift zoom right one period')}
+                            icon={<IconChevronRight16 />}
+                        />
+                    </Tooltip>
+                </div>
             </div>
             {hasNoMatchingSplitPeriods && (
                 <NoticeBox warning>
@@ -203,6 +300,8 @@ export const EvaluationCompare = () => {
                         evaluationPerOrgUnits={dataForSplitPeriod}
                         maxYByOrgUnitId={maxYByOrgUnitId}
                         nameLabel={i18n.t('Evaluation')}
+                        zoomRange={zoomRange}
+                        onZoomChange={setZoomRange}
                     />
                 )}
             </div>

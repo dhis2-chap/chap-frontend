@@ -7,9 +7,9 @@
 .comparionBox {
     background-color: #ffffff;
     padding: 1rem;
-    margin: 1rem;
+    margin: 1rem 0;
     border-radius: 0.4rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    border: 0.5px solid rgba(0, 0, 0, 0.12);
 }
 
 .comparionBoxSideBySide {

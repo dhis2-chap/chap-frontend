@@ -1,6 +1,6 @@
 {
     "name": "@dhis2-chap/modeling-app",
-    "version": "4.0.1",
+    "version": "5.0.0",
     "description": "",
     "license": "BSD-3-Clause",
     "private": true,
@@ -12,7 +12,7 @@
         "linter:check": "eslint . --config ../../eslint.config.mts"
     },
     "devDependencies": {
-        "@dhis2/cli-app-scripts": "12.8.0-alpha.3",
+        "@dhis2/cli-app-scripts": "12.11.0",
         "@mdx-js/rollup": "^3.1.1",
         "@types/highcharts": "^5.0.44",
         "@types/mdx": "^2.0.13",
@@ -31,7 +31,7 @@
         "@dhis2/app-runtime": "3.14.6",
         "@dhis2/d2-i18n": "1.2.0",
         "@dhis2/multi-calendar-dates": "^2.1.2",
-        "@dhis2/ui": "^10.10.0",
+        "@dhis2/ui": "^10.13.0",
         "@hookform/resolvers": "^5.0.1",
         "@mdx-js/react": "^3.1.1",
         "@tanstack/react-query": "4",

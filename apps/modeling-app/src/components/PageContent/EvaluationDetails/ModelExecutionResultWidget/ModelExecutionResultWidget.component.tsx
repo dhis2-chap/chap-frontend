@@ -71,7 +71,7 @@ export const ModelExecutionResultWidgetComponent = ({
             return STATUSES.EMPTY;
         }
         return STATUSES.SUCCESS;
-    }, [isPlotDataLoading, plotDataError]);
+    }, [isPlotDataLoading, plotDataError, dataForSplitPeriod.length]);
 
     return (
         <div className={styles.container}>
@@ -106,7 +106,6 @@ export const ModelExecutionResultWidgetComponent = ({
                                 <ResultPlot
                                     data={dataForSplitPeriod[0].models[0].data}
                                     modelName={dataForSplitPeriod[0].models[0].modelName}
-                                    syncZoom={false}
                                     nameLabel={i18n.t('Evaluation')}
                                     maxY={maxY}
                                 />

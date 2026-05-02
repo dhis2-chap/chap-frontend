@@ -24,7 +24,7 @@
     },
     "dependencies": {
         "@dhis2/app-runtime": "3.14.6",
-        "@dhis2/cli-app-scripts": "12.8.0-alpha.3",
+        "@dhis2/cli-app-scripts": "12.11.0",
         "clsx": "^2.1.1"
     },
     "devDependencies": {
@@ -51,6 +51,6 @@
     "resolutions": {
         "i18next": "20.5.0",
         "@dhis2/app-runtime": "3.14.6",
-        "@dhis2/cli-app-scripts": "12.8.0-alpha.3"
+        "@dhis2/cli-app-scripts": "12.11.0"
     }
 }

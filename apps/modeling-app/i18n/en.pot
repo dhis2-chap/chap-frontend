@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-05-02T12:00:38.241Z\n"
-"PO-Revision-Date: 2026-05-02T12:00:38.241Z\n"
+"POT-Creation-Date: 2026-05-02T13:10:17.020Z\n"
+"PO-Revision-Date: 2026-05-02T13:10:17.020Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -254,35 +254,26 @@ msgstr "Failed"
 msgid "Revoked"
 msgstr "Revoked"
 
+msgid "Cancelled"
+msgstr "Cancelled"
+
+msgid "Create evaluation (Legacy)"
+msgstr "Create evaluation (Legacy)"
+
 msgid "Create evaluation"
 msgstr "Create evaluation"
 
 msgid "Make prediction"
 msgstr "Make prediction"
 
-msgid "XAI surrogate training"
-msgstr "XAI surrogate training"
-
-msgid "Run explanations"
-msgstr "Run explanations"
-
-msgid "Create dataset (deprecated)"
-msgstr "Create dataset (deprecated)"
-
-msgid "Create evaluation (deprecated)"
-msgstr "Create evaluation (deprecated)"
-
-msgid "Create evaluation (Legacy)"
-msgstr "Create evaluation (Legacy)"
-
 msgid "Create dataset"
 msgstr "Create dataset"
 
+msgid "XAI surrogate training"
+msgstr "XAI surrogate training"
+
 msgid "Explanation generation"
 msgstr "Explanation generation"
-
-msgid "Cancelled"
-msgstr "Cancelled"
 
 msgid "Map Data Items"
 msgstr "Map Data Items"
@@ -1163,6 +1154,9 @@ msgstr "Surrogate model training failed. Check Jobs for details."
 msgid "Surrogate model training was revoked. Check Jobs for details."
 msgstr "Surrogate model training was revoked. Check Jobs for details."
 
+msgid "Failed to start explanation run"
+msgstr "Failed to start explanation run"
+
 msgid "Error loading prediction"
 msgstr "Error loading prediction"
 
@@ -1336,6 +1330,24 @@ msgstr "Compare evaluations to assess model, co-variates and data performance."
 
 msgid "Select base evaluation"
 msgstr "Select base evaluation"
+
+msgid "Location(s)"
+msgstr "Location(s)"
+
+msgid "Shift zoom left (H)"
+msgstr "Shift zoom left (H)"
+
+msgid "Shift zoom left one period"
+msgstr "Shift zoom left one period"
+
+msgid "Reset zoom"
+msgstr "Reset zoom"
+
+msgid "Shift zoom right (L)"
+msgstr "Shift zoom right (L)"
+
+msgid "Shift zoom right one period"
+msgstr "Shift zoom right one period"
 
 msgid ""
 "Selected evaluations do not have any split periods in common. Please select "
