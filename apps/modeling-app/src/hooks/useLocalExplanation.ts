@@ -23,16 +23,13 @@ export const useLocalExplanation = (
     predictionId: number | undefined,
     orgUnit: string | undefined,
     period: string | undefined,
-    method: string = 'shap',
     xaiMethod?: string,
 ) => {
     const queryClient = useQueryClient();
 
-    const methodFilter = xaiMethod ?? method;
-
     const { data, error, isLoading, isFetching, isPreviousData } = useQuery<LocalExplanationResponse[], ApiError>({
-        queryKey: ['localExplanations', predictionId, orgUnit, period, methodFilter],
-        queryFn: () => XaiService.listLocalExplanations(predictionId!, orgUnit, period, methodFilter),
+        queryKey: ['localExplanations', predictionId, orgUnit, period, xaiMethod],
+        queryFn: () => XaiService.listLocalExplanationsV1XaiPredictionsPredictionIdLocalGet(predictionId!, orgUnit, period, xaiMethod),
         enabled: !!predictionId && !!orgUnit && period != null && period !== '',
         staleTime: 5 * 60 * 1000,
         retry: 1,
@@ -41,7 +38,7 @@ export const useLocalExplanation = (
 
     const computeMutation = useMutation<LocalExplanationResponse, ApiError, LocalExplanationRequest>({
         mutationFn: request =>
-            XaiService.computeLocalExplanation(predictionId!, request),
+            XaiService.computeLocalExplanationV1XaiPredictionsPredictionIdLocalPost(predictionId!, request),
         onSuccess: () => {
             queryClient.invalidateQueries({
                 queryKey: ['localExplanations', predictionId],
@@ -49,8 +46,7 @@ export const useLocalExplanation = (
         },
     });
 
-    const matches =
-        data?.filter(exp => exp.orgUnit === orgUnit && exp.method === methodFilter) ?? [];
+    const matches = data?.filter(exp => exp.orgUnit === orgUnit) ?? [];
 
     const currentExplanation = matches.length > 0 ? pickLatestExplanation(matches) : undefined;
 

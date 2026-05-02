@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
-import type { ShapBeeswarmPoint } from '../../../services/xai/XaiService';
+import type { ShapBeeswarmPoint } from '../../../httpfunctions/models/ShapBeeswarmPoint';
 import { formatFeatureName, CHART_COLORS } from '../utils';
 import styles from './ShapBeeswarmChart.module.css';
 

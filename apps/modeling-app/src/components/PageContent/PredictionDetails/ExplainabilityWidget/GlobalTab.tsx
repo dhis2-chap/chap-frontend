@@ -9,6 +9,7 @@ import {
 } from '@dhis2-chap/ui';
 import { SurrogateQualityPanel } from './SurrogateQualityPanel';
 import styles from './ExplainabilityWidget.module.css';
+import type { SurrogateQuality } from './xaiTypes';
 
 type Props = {
     isGlobalLoading: boolean;
@@ -128,8 +129,8 @@ export const GlobalTab = ({
             )}
 
             <SurrogateQualityPanel
-                quality={globalExplanation.surrogateQuality || beeswarmData?.surrogateQuality}
-                stabilityScore={globalExplanation.stabilityScore}
+                quality={(globalExplanation.surrogateQuality || beeswarmData?.surrogateQuality) as SurrogateQuality | undefined}
+                stabilityScore={globalExplanation.stabilityScore ?? undefined}
             />
         </div>
     );

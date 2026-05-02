@@ -4,11 +4,11 @@ import {
     FeatureImportanceChart,
     ShapBeeswarmChart,
     ShapWaterfallChart,
-    COVARIATE_SOURCE_DATASET_MATCH,
     type LocalExplanationResponse,
     type ShapBeeswarmResponse,
 } from '@dhis2-chap/ui';
 import styles from './ExplainabilityWidget.module.css';
+import { COVARIATE_SOURCE_DATASET_MATCH, type CovariateProvenance } from './xaiTypes';
 
 type OrgUnitOption = { id: string; label: string };
 
@@ -65,7 +65,7 @@ export const LocalTab = ({
     onLoadBeeswarm,
     onComputeLocal,
 }: Props) => {
-    const cp = displayExplanation?.covariateProvenance;
+    const cp = displayExplanation?.covariateProvenance as CovariateProvenance | null | undefined;
 
     return (
         <div className={styles.mainLayout}>

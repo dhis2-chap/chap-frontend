@@ -4,7 +4,6 @@ import { XaiService } from '@dhis2-chap/ui';
 type Args = {
     predictionId: number;
     orgUnit: string;
-    method: string;
     xaiMethod: string;
     enabled: boolean;
 };
@@ -12,18 +11,16 @@ type Args = {
 export const useHorizonSummary = ({
     predictionId,
     orgUnit,
-    method,
     xaiMethod,
     enabled,
 }: Args) => {
     const { data, isFetching, isPreviousData, error } = useQuery({
-        queryKey: ['horizonSummary', predictionId, orgUnit, method, xaiMethod],
+        queryKey: ['horizonSummary', predictionId, orgUnit, xaiMethod],
         queryFn: () =>
-            XaiService.computeHorizonSummary(
+            XaiService.computeHorizonSummaryV1XaiPredictionsPredictionIdLocalHorizonSummaryPost(
                 predictionId,
                 orgUnit,
                 'median',
-                method,
                 xaiMethod,
             ),
         enabled: enabled && !!orgUnit,

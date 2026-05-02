@@ -136,9 +136,9 @@ export const useXaiExplanationJob = ({
         if (!predictionId || isRunning) return;
         setError(null);
         try {
-            const job = await XaiService.runExplanations(
+            const job = await XaiService.runExplanationsV1XaiPredictionsPredictionIdExplanationsRunPost(
                 predictionId,
-                xaiMethod,
+                { xaiMethod },
             );
             xaiJobStorage.set(predictionId, xaiMethod, job.id);
             setExplanationJobId(job.id);

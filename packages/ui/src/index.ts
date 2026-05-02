@@ -57,21 +57,6 @@ export {
 export { buildPredictionSeries } from './utils/PredictionViewModel';
 
 export { FeatureImportanceChart, ShapBeeswarmChart, ShapWaterfallChart, formatFeatureName, CHART_COLORS, interpolateColor, jitterForKey } from './components/explainability';
-export { XaiService, DEFAULT_XAI_METHOD, COVARIATE_SOURCE_DATASET_MATCH } from './services/xai/XaiService';
-export type {
-    CovariateProvenance,
-    FeatureAttribution,
-    GlobalExplanationResponse,
-    HorizonStepSummary,
-    HorizonSummaryResponse,
-    LocalExplanationRequest,
-    LocalExplanationResponse,
-    MakePredictionRequestWithXai,
-    ShapBeeswarmPoint,
-    ShapBeeswarmResponse,
-    SurrogateQuality,
-    XaiMethodRead,
-} from './services/xai/XaiService';
 export {
     plotResultsToViewData,
     getStableMaxYByOrgUnitId,

@@ -11,7 +11,11 @@ export const useShapBeeswarm = ({ predictionId, xaiMethod, enabled }: Args) => {
     const { data, isFetching, error, refetch } = useQuery({
         queryKey: ['shapBeeswarm', predictionId, xaiMethod],
         queryFn: () =>
-            XaiService.computeShapBeeswarm(predictionId, 'median', xaiMethod),
+            XaiService.computeShapBeeswarmV1XaiPredictionsPredictionIdShapBeeswarmPost(
+                predictionId,
+                'median',
+                xaiMethod,
+            ),
         enabled,
         staleTime: Infinity,
     });

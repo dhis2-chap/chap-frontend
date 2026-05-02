@@ -9,7 +9,7 @@ import {
 import { useSearchParams } from 'react-router-dom';
 import i18n from '@dhis2/d2-i18n';
 import { Button, CircularLoader } from '@dhis2/ui';
-import { DEFAULT_XAI_METHOD, type XaiMethodRead } from '@dhis2-chap/ui';
+import { type XaiMethodRead } from '@dhis2-chap/ui';
 import { useGlobalExplanation } from '@/hooks/useGlobalExplanation';
 import { useLocalExplanation } from '@/hooks/useLocalExplanation';
 import { useOrgUnitsById } from '@/hooks/useOrgUnitsById';
@@ -25,6 +25,7 @@ import { getPeriodLabel } from './getPeriodLabel';
 import { useShapBeeswarm } from './hooks/useShapBeeswarm';
 import { useHorizonSummary } from './hooks/useHorizonSummary';
 import { useXaiExplanationJob } from './hooks/useXaiExplanationJob';
+import { DEFAULT_XAI_METHOD } from './xaiTypes';
 import styles from './ExplainabilityWidget.module.css';
 
 type Props = {
@@ -165,7 +166,6 @@ export const ExplainabilityWidget = ({
         predictionId,
         localOrgUnit,
         selectedPeriod,
-        selectedMethod,
         selectedXaiMethod,
     );
 
@@ -194,7 +194,6 @@ export const ExplainabilityWidget = ({
     const { horizonData, isHorizonLoading, horizonError } = useHorizonSummary({
         predictionId,
         orgUnit: localOrgUnit,
-        method: selectedMethod,
         xaiMethod: selectedXaiMethod,
         enabled: horizonEnabled,
     });
@@ -239,7 +238,6 @@ export const ExplainabilityWidget = ({
         computeLocal({
             orgUnit: localOrgUnit,
             period: selectedPeriod,
-            method: selectedMethod,
             xaiMethod: selectedXaiMethod,
             topK: 10,
             force: false,
