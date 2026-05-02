@@ -139,14 +139,14 @@ export const ShapWaterfallChart = ({
             },
             tooltip: {
                 formatter: function (this: Highcharts.TooltipFormatterContextObject) {
-                    const idx = (this.point as any).index as number;
+                    const idx = this.point.index;
                     if (idx === 0) {
                         return (
                             `<b>E[f(X)] — ${i18n.t('Average model prediction')}</b><br/>`
                             + `${baselinePrediction.toFixed(2)}`
                         );
                     }
-                    if ((this.point as any).isSum) {
+                    if (this.point.options.isSum) {
                         let tip = `<b>f(x) — ${i18n.t('Model output for this instance')}</b><br/>`;
                         tip += `${modelOutput.toFixed(2)}`;
                         if (Math.abs(actualPrediction - modelOutput) > 0.5) {

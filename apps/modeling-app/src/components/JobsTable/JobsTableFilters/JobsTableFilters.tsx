@@ -79,14 +79,6 @@ export const JobsTableFilters = () => {
                         label={jobTypeLabels[JOB_TYPES.XAI_EXPLANATIONS]}
                         value={JOB_TYPES.XAI_EXPLANATIONS}
                     />
-                    {/* <MenuItem
-                        label={i18n.t('Create dataset (deprecated)')}
-                        value={JOB_TYPES.CREATE_DATASET}
-                    />
-                    <MenuItem
-                        label={i18n.t('Create evaluation (deprecated)')}
-                        value={JOB_TYPES.BACKTEST}
-                    />  */}
                 </SingleSelect>
             </div>
         </>

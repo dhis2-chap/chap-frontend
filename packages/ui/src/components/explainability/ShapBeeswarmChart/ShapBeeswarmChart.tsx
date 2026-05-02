@@ -6,6 +6,14 @@ import type { ShapBeeswarmPoint } from '../../../services/xai/XaiService';
 import { formatFeatureName, CHART_COLORS } from '../utils';
 import styles from './ShapBeeswarmChart.module.css';
 
+type BeeswarmPointCustom = {
+    featureName: string;
+    featureValue: number;
+    shapValue: number;
+    orgUnit: string;
+    period: string;
+};
+
 interface ShapBeeswarmChartProps {
     points: ShapBeeswarmPoint[];
     featureNames: string[];
@@ -163,7 +171,7 @@ export const ShapBeeswarmChart = ({
             },
             tooltip: {
                 formatter: function (this: Highcharts.TooltipFormatterContextObject) {
-                    const c = (this.point as any).custom;
+                    const c = this.point.options.custom as BeeswarmPointCustom | undefined;
                     if (!c) return '';
                     const sign = c.shapValue >= 0 ? '+' : '';
                     const orgUnitLabel = orgUnitMap?.[c.orgUnit] ?? c.orgUnit;

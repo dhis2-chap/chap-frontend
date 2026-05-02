@@ -4,8 +4,9 @@
  * TEMPORARY: these endpoints are not yet exposed by the backend OpenAPI spec, so
  * they cannot be produced by `pnpm generate`. Once the backend includes the
  * /v1/xai/** routes in its OpenAPI document, delete this file and re-run the
- * generator — the generated XaiService will replace it. Until then, keep this
- * file in sync with the backend manually (see apps/modeling-app/docs/xai_api.md).
+ * generator — the generated XaiService will replace it. Until then, mirror any
+ * backend changes here; the canonical schema is the running backend's `/docs`
+ * (chap-core repo: https://github.com/dhis2-chap/chap-core).
  */
 import type { CancelablePromise } from '../../httpfunctions/core/CancelablePromise';
 import type { JobResponse } from '../../httpfunctions/models/JobResponse';

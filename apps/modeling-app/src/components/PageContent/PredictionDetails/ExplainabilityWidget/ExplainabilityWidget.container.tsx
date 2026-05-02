@@ -218,16 +218,10 @@ export const ExplainabilityWidget = ({
         [orgUnitOptions],
     );
     useEffect(() => {
-        if (
-            !hasUserSelectedOrgUnit.current &&
-            orgUnitOptions.length > 0 &&
-            orgUnitsData
-        ) {
-            const firstSorted = orgUnitOptions[0].id;
-            if (firstSorted !== localOrgUnit) {
-                setLocalOrgUnit(firstSorted);
-            }
-        }
+        if (hasUserSelectedOrgUnit.current) return;
+        if (!orgUnitsData || orgUnitOptions.length === 0) return;
+        const firstSorted = orgUnitOptions[0].id;
+        setLocalOrgUnit(prev => (prev === firstSorted ? prev : firstSorted));
     }, [orgUnitOptions, orgUnitsData]);
     const handleOrgUnitChange = (value: string) => {
         hasUserSelectedOrgUnit.current = true;
