@@ -30,12 +30,13 @@ export const useLocalExplanation = (
 
     const methodFilter = xaiMethod ?? method;
 
-    const { data, error, isLoading, isFetching, refetch } = useQuery<LocalExplanationResponse[], ApiError>({
+    const { data, error, isLoading, isFetching, isPreviousData, refetch } = useQuery<LocalExplanationResponse[], ApiError>({
         queryKey: ['localExplanations', predictionId, orgUnit, period, methodFilter],
         queryFn: () => XaiService.listLocalExplanations(predictionId!, orgUnit, period, methodFilter),
         enabled: !!predictionId && !!orgUnit && period != null && period !== '',
         staleTime: 5 * 60 * 1000,
         retry: 1,
+        keepPreviousData: true,
     });
 
     const computeMutation = useMutation<LocalExplanationResponse, ApiError, LocalExplanationRequest>({
@@ -49,10 +50,7 @@ export const useLocalExplanation = (
     });
 
     const matches =
-        data?.filter((exp) => {
-            if (exp.orgUnit !== orgUnit) return false;
-            return xaiMethod ? (exp.xaiMethodName ? exp.xaiMethodName === xaiMethod : exp.method === xaiMethod) : exp.method === method;
-        }) ?? [];
+        data?.filter(exp => exp.orgUnit === orgUnit && exp.method === methodFilter) ?? [];
 
     const currentExplanation = matches.length > 0 ? pickLatestExplanation(matches) : undefined;
 
@@ -62,6 +60,7 @@ export const useLocalExplanation = (
         error,
         isLoading,
         isFetching,
+        isPreviousData,
         refetch,
         computeExplanation: computeMutation.mutate,
         isComputing: computeMutation.isPending,

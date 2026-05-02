@@ -7,14 +7,9 @@ import {
     useState,
 } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { useQueryClient } from '@tanstack/react-query';
 import i18n from '@dhis2/d2-i18n';
 import { Button, CircularLoader } from '@dhis2/ui';
-import {
-    XaiService,
-    DEFAULT_XAI_METHOD,
-    type XaiMethodRead,
-} from '@dhis2-chap/ui';
+import { DEFAULT_XAI_METHOD, type XaiMethodRead } from '@dhis2-chap/ui';
 import { useGlobalExplanation } from '@/hooks/useGlobalExplanation';
 import { useLocalExplanation } from '@/hooks/useLocalExplanation';
 import { useOrgUnitsById } from '@/hooks/useOrgUnitsById';
@@ -27,16 +22,13 @@ import { GlobalTab } from './GlobalTab';
 import { LocalTab } from './LocalTab';
 import { HorizonTab } from './HorizonTab';
 import { getPeriodLabel } from './getPeriodLabel';
-import { useActiveXaiJobs } from './hooks/useActiveXaiJobs';
-import { useXaiJobStatus } from './hooks/useXaiJobStatus';
 import { useShapBeeswarm } from './hooks/useShapBeeswarm';
 import { useHorizonSummary } from './hooks/useHorizonSummary';
-import { xaiJobStorage } from './hooks/xaiJobStorage';
+import { useXaiExplanationJob } from './hooks/useXaiExplanationJob';
 import styles from './ExplainabilityWidget.module.css';
 
 type Props = {
     predictionId: number;
-    predictionName: string;
     modelId?: string;
     orgUnits: string[];
     periods: string[];
@@ -45,7 +37,6 @@ type Props = {
 
 export const ExplainabilityWidget = ({
     predictionId,
-    predictionName,
     modelId,
     orgUnits,
     periods,
@@ -77,24 +68,20 @@ export const ExplainabilityWidget = ({
     );
     const hasUserSelectedXaiMethod = useRef(!!initialXaiMethod);
 
-    // Job state
-    const [explanationJobId, setExplanationJobId] = useState<string | null>(
-        () =>
-            xaiJobStorage.get(
-                predictionId,
-                initialXaiMethod ?? DEFAULT_XAI_METHOD,
-            ),
-    );
-    const [surrogateJobId, setSurrogateJobId] = useState<string | null>(null);
-    const [completedExplanationMethods, setCompletedExplanationMethods] =
-        useState<Record<string, boolean>>({});
-    const [explanationRunError, setExplanationRunError] = useState<
-        string | null
-    >(null);
-    const queryClient = useQueryClient();
-
-    const hasCompletedExplanationsForMethod =
-        !!completedExplanationMethods[selectedXaiMethod];
+    // XAI explanation job lifecycle (id persistence, polling, terminal handling).
+    const {
+        isRunning: isAnyXaiJobRunning,
+        isExplanationRunning,
+        isSurrogateRunning,
+        isComplete: hasCompletedExplanationsForMethod,
+        isCheckingForActiveJobs,
+        error: explanationRunError,
+        run: handleRunExplanations,
+        markComplete: markMethodComplete,
+    } = useXaiExplanationJob({
+        predictionId,
+        xaiMethod: selectedXaiMethod,
+    });
 
     // XAI methods
     const { xaiMethods, isLoading: isXaiMethodsLoading } =
@@ -143,78 +130,36 @@ export const ExplainabilityWidget = ({
         setSelectedXaiMethod(method.name);
     };
 
-    // Reset transient job state when the user switches XAI method.
-    // Beeswarm/horizon caches reset automatically via the queryKey changing.
+    // Reset visualization views when switching to a method without beeswarm support.
     const prevXaiMethodRef = useRef(selectedXaiMethod);
     useEffect(() => {
         if (prevXaiMethodRef.current === selectedXaiMethod) return;
         prevXaiMethodRef.current = selectedXaiMethod;
-        setExplanationJobId(xaiJobStorage.get(predictionId, selectedXaiMethod));
-        setSurrogateJobId(null);
         if (!supports('beeswarm')) {
             setGlobalView('importance');
             setLocalView('waterfall');
             setHorizonView('importance');
         }
-    }, [selectedXaiMethod, predictionId, supports]);
+    }, [selectedXaiMethod, supports]);
 
-    // Active job discovery — only when nothing's already running or done.
-    const { explanationJobMatch, surrogateJobMatch, isCheckingForActiveJobs } =
-        useActiveXaiJobs({
-            predictionId,
-            predictionName,
-            xaiMethod: selectedXaiMethod,
-            enabled:
-                !explanationJobId &&
-                !surrogateJobId &&
-                !hasCompletedExplanationsForMethod,
-        });
-    useEffect(() => {
-        if (explanationJobMatch && !explanationJobId) {
-            setExplanationJobId(explanationJobMatch.id);
-        }
-    }, [explanationJobMatch, explanationJobId]);
-    useEffect(() => {
-        if (surrogateJobMatch && !surrogateJobId && !explanationJobId) {
-            setSurrogateJobId(surrogateJobMatch.id);
-        }
-    }, [surrogateJobMatch, surrogateJobId, explanationJobId]);
-
-    // Job status polling
-    const explanationJob = useXaiJobStatus(explanationJobId);
-    const surrogateJob = useXaiJobStatus(surrogateJobId);
-    const isAnyXaiJobRunning =
-        explanationJob.isRunning || surrogateJob.isRunning;
-
-    // Global / local explanation data
+    // Global / local explanation data — keepPreviousData on the queries means
+    // the hook's `data` already holds the prior response while a new fetch is in
+    // flight, and `isPreviousData` flags the transition.
     const {
         globalExplanation,
         isLoading: isGlobalLoading,
         isFetching: isGlobalFetching,
+        isPreviousData: isGlobalPreviousData,
         error: globalError,
     } = useGlobalExplanation(predictionId, selectedXaiMethod);
 
-    const prevGlobalRef = useRef(globalExplanation);
-    if (
-        globalExplanation?.available &&
-        globalExplanation?.topFeatures?.length
-    ) {
-        prevGlobalRef.current = globalExplanation;
-    }
-    const displayGlobalExplanation =
-        globalExplanation
-        ?? (isGlobalFetching || isGlobalLoading
-            ? prevGlobalRef.current
-            : undefined);
-    const isGlobalTransitioning =
-        !!displayGlobalExplanation &&
-        displayGlobalExplanation !== globalExplanation &&
-        (isGlobalFetching || isGlobalLoading);
+    const isGlobalTransitioning = isGlobalFetching && isGlobalPreviousData;
 
     const {
         currentExplanation: localExplanation,
         isLoading: isLocalLoading,
         isFetching: isLocalFetching,
+        isPreviousData: isLocalPreviousData,
         error: localError,
         computeExplanation: computeLocal,
         isComputing: isComputingLocal,
@@ -226,17 +171,7 @@ export const ExplainabilityWidget = ({
         selectedXaiMethod,
     );
 
-    const prevExplanationRef = useRef(localExplanation);
-    if (localExplanation) prevExplanationRef.current = localExplanation;
-    const displayExplanation =
-        localExplanation
-        ?? (isLocalFetching || isLocalLoading
-            ? prevExplanationRef.current ?? null
-            : null);
-    const isTransitioning =
-        !!displayExplanation &&
-        !localExplanation &&
-        (isLocalFetching || isLocalLoading);
+    const isTransitioning = isLocalFetching && isLocalPreviousData;
 
     // Beeswarm — fetched lazily based on which view is showing
     const beeswarmEnabled =
@@ -257,7 +192,7 @@ export const ExplainabilityWidget = ({
     const horizonEnabled =
         hasCompletedExplanationsForMethod &&
         activeTab === 'horizon' &&
-        !explanationJob.isRunning;
+        !isExplanationRunning;
     const { horizonData, isHorizonLoading, horizonError } = useHorizonSummary({
         predictionId,
         orgUnit: localOrgUnit,
@@ -265,10 +200,6 @@ export const ExplainabilityWidget = ({
         xaiMethod: selectedXaiMethod,
         enabled: horizonEnabled,
     });
-
-    const prevHorizonRef = useRef(horizonData);
-    if (horizonData) prevHorizonRef.current = horizonData;
-    const displayHorizonData = horizonData ?? (isHorizonLoading ? prevHorizonRef.current : null);
 
     // Org units
     const { data: orgUnitsData } = useOrgUnitsById(orgUnits);
@@ -305,105 +236,12 @@ export const ExplainabilityWidget = ({
         setLocalOrgUnit(value);
     };
 
-    // Mark a method as completed once its global explanation is available.
+    // Mark a method as completed once its global explanation is available
+    // (covers the case where the user opens a prediction whose explanations
+    // were already computed before this session — no job to listen to).
     useEffect(() => {
-        if (globalExplanation?.available) {
-            setCompletedExplanationMethods(prev => ({
-                ...prev,
-                [selectedXaiMethod]: true,
-            }));
-        }
-    }, [globalExplanation?.available, selectedXaiMethod]);
-
-    // Explanation job terminal handling
-    useEffect(() => {
-        if (!explanationJobId) return;
-        const status = explanationJob.status;
-        if (status === 'SUCCESS') {
-            xaiJobStorage.clear(predictionId, selectedXaiMethod);
-            setCompletedExplanationMethods(prev => ({
-                ...prev,
-                [selectedXaiMethod]: true,
-            }));
-            queryClient.invalidateQueries({
-                queryKey: [
-                    'globalExplanation',
-                    predictionId,
-                    selectedXaiMethod,
-                ],
-            });
-            queryClient.invalidateQueries({
-                queryKey: ['localExplanations', predictionId],
-            });
-            queryClient.invalidateQueries({
-                queryKey: ['shapBeeswarm', predictionId],
-            });
-            queryClient.invalidateQueries({
-                queryKey: ['horizonSummary', predictionId],
-            });
-            setExplanationJobId(null);
-        } else if (status === 'FAILURE') {
-            xaiJobStorage.clear(predictionId, selectedXaiMethod);
-            setExplanationRunError(
-                i18n.t('Explanation job failed. Check Jobs for details.'),
-            );
-            setExplanationJobId(null);
-        } else if (status === 'REVOKED') {
-            xaiJobStorage.clear(predictionId, selectedXaiMethod);
-            setExplanationRunError(
-                i18n.t('Explanation job was revoked. Check Jobs for details.'),
-            );
-            setExplanationJobId(null);
-        }
-    }, [
-        explanationJobId,
-        explanationJob.status,
-        predictionId,
-        selectedXaiMethod,
-        queryClient,
-    ]);
-
-    // Surrogate job terminal handling
-    useEffect(() => {
-        if (!surrogateJobId) return;
-        const status = surrogateJob.status;
-        if (status === 'SUCCESS') {
-            setSurrogateJobId(null);
-        } else if (status === 'FAILURE') {
-            setExplanationRunError(
-                i18n.t(
-                    'Surrogate model training failed. Check Jobs for details.',
-                ),
-            );
-            setSurrogateJobId(null);
-        } else if (status === 'REVOKED') {
-            setExplanationRunError(
-                i18n.t(
-                    'Surrogate model training was revoked. Check Jobs for details.',
-                ),
-            );
-            setSurrogateJobId(null);
-        }
-    }, [surrogateJobId, surrogateJob.status]);
-
-    // Handlers
-    const handleRunExplanations = async () => {
-        if (!predictionId || isAnyXaiJobRunning) return;
-        setExplanationRunError(null);
-        try {
-            const job = await XaiService.runExplanations(
-                predictionId,
-                selectedXaiMethod,
-            );
-            xaiJobStorage.set(predictionId, selectedXaiMethod, job.id);
-            setExplanationJobId(job.id);
-        } catch (e) {
-            setExplanationRunError(
-                (e instanceof Error ? e.message : String(e))
-                || 'Failed to start explanation run',
-            );
-        }
-    };
+        if (globalExplanation?.available) markMethodComplete();
+    }, [globalExplanation?.available, markMethodComplete]);
 
     const handleComputeLocal = () => {
         computeLocal({
@@ -420,12 +258,12 @@ export const ExplainabilityWidget = ({
 
     // Banner message
     const computingMessage = (() => {
-        if (surrogateJob.isRunning) {
+        if (isSurrogateRunning) {
             return i18n.t('Training surrogate model ({{method}})…', {
                 method: selectedXaiMethodObj?.displayName ?? selectedXaiMethod,
             });
         }
-        if (explanationJob.isRunning) {
+        if (isExplanationRunning) {
             return i18n.t('Generating explanations ({{method}})…', {
                 method: selectedXaiMethodObj?.displayName ?? selectedXaiMethod,
             });
@@ -483,7 +321,7 @@ export const ExplainabilityWidget = ({
                         isGlobalFetching={isGlobalFetching}
                         isGlobalTransitioning={isGlobalTransitioning}
                         globalError={globalError}
-                        globalExplanation={displayGlobalExplanation}
+                        globalExplanation={globalExplanation}
                         globalView={globalView}
                         onGlobalViewChange={setGlobalView}
                     />
@@ -497,7 +335,7 @@ export const ExplainabilityWidget = ({
                         selectedPeriod={selectedPeriod}
                         onPeriodChange={setSelectedPeriod}
                         getPeriodLabel={getLabel}
-                        displayExplanation={displayExplanation}
+                        displayExplanation={localExplanation ?? null}
                         isLocalLoading={isLocalLoading}
                         isLocalFetching={isLocalFetching}
                         localError={localError}
@@ -513,7 +351,7 @@ export const ExplainabilityWidget = ({
                 body = (
                     <HorizonTab
                         {...sharedTabProps}
-                        horizonData={displayHorizonData}
+                        horizonData={horizonData}
                         isHorizonLoading={isHorizonLoading}
                         horizonError={horizonError}
                         horizonView={horizonView}

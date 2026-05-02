@@ -20,22 +20,20 @@ import { useCopyToClipboard } from '../../../hooks/useCopyToClipboard';
 import { useAlert } from '@dhis2/app-runtime';
 import { useNavigate } from 'react-router-dom';
 
-const XAI_METHOD_PATTERN = /((?:shap|lime)_[a-z_]+|native_shap)/;
-
 type Props = {
     jobId: string;
-    name: string;
     status: string;
     result: string | undefined | null;
     type: string;
+    xaiMethod?: string | null;
 };
 
 export const JobActionsMenu = ({
     jobId,
-    name,
     status,
     result,
     type,
+    xaiMethod,
 }: Props) => {
     const navigate = useNavigate();
     const [flyoutMenuIsOpen, setFlyoutMenuIsOpen] = useState(false);
@@ -58,7 +56,6 @@ export const JobActionsMenu = ({
     };
 
     const isXaiJob = type === JOB_TYPES.XAI_SURROGATE || type === JOB_TYPES.XAI_EXPLANATIONS;
-    const xaiMethod = isXaiJob ? XAI_METHOD_PATTERN.exec(name)?.[1] : null;
 
     const handleNavigateToResult = () => {
         if (type === JOB_TYPES.CREATE_BACKTEST_WITH_DATA || type === JOB_TYPES.BACKTEST) {

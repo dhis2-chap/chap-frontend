@@ -90,7 +90,6 @@ export interface LocalExplanationRequest {
     xaiMethod?: string;
     topK?: number;
     force?: boolean;
-    includeInteractions?: boolean;
 }
 
 export interface LocalExplanationResponse {
@@ -99,7 +98,6 @@ export interface LocalExplanationResponse {
     orgUnit: string;
     period: string;
     method: string;
-    xaiMethodName?: string;
     outputStatistic: string;
     featureAttributions: FeatureAttribution[];
     baselinePrediction: number;
@@ -153,84 +151,6 @@ export interface ShapBeeswarmResponse {
     surrogateQuality?: SurrogateQuality;
 }
 
-function normalizeSurrogateQuality(q: any): SurrogateQuality {
-    return {
-        rSquared: q.rSquared ?? q.r_squared,
-        mae: q.mae,
-        mape: q.mape,
-        nSamples: q.nSamples ?? q.n_samples,
-        nUniqueRows: q.nUniqueRows ?? q.n_unique_rows,
-        constantFeatures: q.constantFeatures ?? q.constant_features,
-        permutationRemovedFeatures: q.permutationRemovedFeatures ?? q.permutation_removed_features,
-        residualMean: q.residualMean ?? q.residual_mean,
-        residualStd: q.residualStd ?? q.residual_std,
-        fidelityTier: q.fidelityTier ?? q.fidelity_tier,
-        targetTransformMethod: q.targetTransformMethod ?? q.target_transform_method,
-        selectedModelDisplayName: q.selectedModelDisplayName ?? q.selected_model_display_name,
-    };
-}
-
-function normalizeGlobalExplanation(r: any): GlobalExplanationResponse {
-    return {
-        ...r,
-        surrogateQuality: (r.surrogateQuality || r.surrogate_quality)
-            ? normalizeSurrogateQuality(r.surrogateQuality ?? r.surrogate_quality)
-            : undefined,
-    };
-}
-
-function normalizeLocalExplanation(r: any): LocalExplanationResponse {
-    return {
-        id: r.id,
-        predictionId: r.predictionId ?? r.prediction_id,
-        orgUnit: r.orgUnit ?? r.org_unit,
-        period: r.period,
-        method: r.method,
-        xaiMethodName: r.xaiMethodName ?? r.xai_method_name,
-        outputStatistic: r.outputStatistic ?? r.output_statistic,
-        featureAttributions: r.featureAttributions ?? r.feature_attributions ?? [],
-        baselinePrediction: r.baselinePrediction ?? r.baseline_prediction,
-        actualPrediction: r.actualPrediction ?? r.actual_prediction,
-        computedAt: r.computedAt ?? r.computed_at,
-        status: r.status,
-        covariateProvenance: r.covariateProvenance ?? r.covariate_provenance,
-        surrogateQuality: (r.surrogateQuality || r.surrogate_quality)
-            ? normalizeSurrogateQuality(r.surrogateQuality ?? r.surrogate_quality)
-            : undefined,
-    };
-}
-
-function normalizeShapBeeswarmPoint(p: any): ShapBeeswarmPoint {
-    return {
-        featureName: p.featureName ?? p.feature_name,
-        shapValue: p.shapValue ?? p.shap_value,
-        featureValue: p.featureValue ?? p.feature_value,
-        orgUnit: p.orgUnit ?? p.org_unit,
-        period: p.period,
-    };
-}
-
-function normalizeShapBeeswarmResponse(r: any): ShapBeeswarmResponse {
-    return {
-        predictionId: r.predictionId ?? r.prediction_id,
-        outputStatistic: r.outputStatistic ?? r.output_statistic,
-        featureNames: r.featureNames ?? r.feature_names ?? [],
-        points: (r.points ?? []).map(normalizeShapBeeswarmPoint),
-        surrogateQuality: (r.surrogateQuality || r.surrogate_quality)
-            ? normalizeSurrogateQuality(r.surrogateQuality ?? r.surrogate_quality)
-            : undefined,
-    };
-}
-
-function normalizeHorizonSummary(r: any): HorizonSummaryResponse {
-    return {
-        ...r,
-        surrogateQuality: (r.surrogateQuality || r.surrogate_quality)
-            ? normalizeSurrogateQuality(r.surrogateQuality ?? r.surrogate_quality)
-            : undefined,
-    };
-}
-
 export class XaiService {
     public static listXaiMethods(
         includeArchived: boolean = false,
@@ -268,7 +188,7 @@ export class XaiService {
     public static getGlobalExplanation(
         predictionId: number,
         xaiMethod?: string,
-    ): Promise<GlobalExplanationResponse> {
+    ): CancelablePromise<GlobalExplanationResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/v1/xai/predictions/{predictionId}/global',
@@ -281,7 +201,7 @@ export class XaiService {
             errors: {
                 422: `Validation Error`,
             },
-        }).then(normalizeGlobalExplanation);
+        });
     }
 
     public static computeGlobalExplanation(
@@ -289,7 +209,7 @@ export class XaiService {
         topK: number = 10,
         outputStatistic?: string,
         xaiMethod?: string,
-    ): Promise<GlobalExplanationResponse> {
+    ): CancelablePromise<GlobalExplanationResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/v1/xai/predictions/{predictionId}/global',
@@ -304,7 +224,7 @@ export class XaiService {
             errors: {
                 422: `Validation Error`,
             },
-        }).then(normalizeGlobalExplanation);
+        });
     }
 
     public static listLocalExplanations(
@@ -312,7 +232,7 @@ export class XaiService {
         orgUnit?: string,
         period?: string,
         xaiMethod?: string,
-    ): Promise<LocalExplanationResponse[]> {
+    ): CancelablePromise<LocalExplanationResponse[]> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/v1/xai/predictions/{predictionId}/local',
@@ -327,13 +247,13 @@ export class XaiService {
             errors: {
                 422: `Validation Error`,
             },
-        }).then(items => (items as any[]).map(normalizeLocalExplanation));
+        });
     }
 
     public static computeLocalExplanation(
         predictionId: number,
         requestBody: LocalExplanationRequest,
-    ): Promise<LocalExplanationResponse> {
+    ): CancelablePromise<LocalExplanationResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/v1/xai/predictions/{predictionId}/local',
@@ -345,13 +265,13 @@ export class XaiService {
             errors: {
                 422: `Validation Error`,
             },
-        }).then(normalizeLocalExplanation);
+        });
     }
 
     public static getLocalExplanation(
         predictionId: number,
         explanationId: number,
-    ): Promise<LocalExplanationResponse> {
+    ): CancelablePromise<LocalExplanationResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/v1/xai/predictions/{predictionId}/local/{explanationId}',
@@ -362,7 +282,7 @@ export class XaiService {
             errors: {
                 422: `Validation Error`,
             },
-        }).then(normalizeLocalExplanation);
+        });
     }
 
     public static deleteLocalExplanation(
@@ -386,7 +306,7 @@ export class XaiService {
         predictionId: number,
         outputStatistic: string = 'median',
         xaiMethod: string = DEFAULT_XAI_METHOD,
-    ): Promise<ShapBeeswarmResponse> {
+    ): CancelablePromise<ShapBeeswarmResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/v1/xai/predictions/{predictionId}/shap-beeswarm',
@@ -400,7 +320,7 @@ export class XaiService {
             errors: {
                 422: `Validation Error`,
             },
-        }).then(normalizeShapBeeswarmResponse);
+        });
     }
 
     public static computeHorizonSummary(
@@ -409,7 +329,7 @@ export class XaiService {
         outputStatistic: string = 'median',
         method: string = 'shap',
         xaiMethod: string = DEFAULT_XAI_METHOD,
-    ): Promise<HorizonSummaryResponse> {
+    ): CancelablePromise<HorizonSummaryResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/v1/xai/predictions/{predictionId}/local/horizon-summary',
@@ -425,7 +345,7 @@ export class XaiService {
             errors: {
                 422: `Validation Error`,
             },
-        }).then(normalizeHorizonSummary);
+        });
     }
 
     public static runExplanations(

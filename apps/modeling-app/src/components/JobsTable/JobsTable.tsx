@@ -105,10 +105,10 @@ const columns = [
             return (
                 <JobActionsMenu
                     jobId={info.row.original.id}
-                    name={info.row.original.name}
                     result={info.row.original.result}
                     status={status}
                     type={info.row.original.type}
+                    xaiMethod={info.row.original.xaiMethod}
                 />
             );
         },

@@ -4,22 +4,17 @@ import { JOB_TYPES } from '@/hooks/useJobs';
 
 type Args = {
     predictionId: number;
-    predictionName: string;
     xaiMethod: string;
     enabled: boolean;
 };
 
-// Backend names XAI jobs as `${predictionName} ${xaiMethod}`, so we match by
-// prediction name rather than id (the id never appears in the job name).
 const matches =
-    (predictionName: string, xaiMethod: string) => (job: { name: string }) =>
-        !!predictionName &&
-        job.name.includes(predictionName) &&
-        job.name.includes(xaiMethod);
+    (predictionId: number, xaiMethod: string) =>
+        (job: { predictionId?: number | null; xaiMethod?: string | null }) =>
+            job.predictionId === predictionId && job.xaiMethod === xaiMethod;
 
 export const useActiveXaiJobs = ({
     predictionId,
-    predictionName,
     xaiMethod,
     enabled,
 }: Args) => {
@@ -47,13 +42,13 @@ export const useActiveXaiJobs = ({
         cacheTime: 0,
     });
 
-    const matchFn = matches(predictionName, xaiMethod);
+    const matchFn = matches(predictionId, xaiMethod);
 
     return {
         explanationJobMatch: explanationJobsQuery.data?.find(matchFn) ?? null,
         surrogateJobMatch: surrogateJobsQuery.data?.find(matchFn) ?? null,
-        // Equivalent to the old `activeXaiJobs === undefined` check — true while the
-        // initial fetch is in flight, false once we know whether anything is running.
+        // True while the initial fetch is in flight, false once we know whether
+        // anything is running.
         isCheckingForActiveJobs:
             enabled && explanationJobsQuery.data === undefined,
     };

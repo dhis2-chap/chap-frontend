@@ -3,6 +3,9 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { ConfiguredModelDB } from '../models/ConfiguredModelDB';
+import type { ConfiguredModelInfoRead } from '../models/ConfiguredModelInfoRead';
+import type { ConfiguredModelWithDataSourceRead } from '../models/ConfiguredModelWithDataSourceRead';
+import type { ConfiguredModelWithDataSourceReadWithPredictions } from '../models/ConfiguredModelWithDataSourceReadWithPredictions';
 import type { ModelConfigurationCreate } from '../models/ModelConfigurationCreate';
 import type { ModelSpecRead } from '../models/ModelSpecRead';
 import type { ModelTemplateRead } from '../models/ModelTemplateRead';
@@ -13,6 +16,8 @@ export class ModelsService {
     /**
      * List Model Templates
      * Lists all model templates from the db, including archived.
+     * Also syncs live chapkit services from the v2 service registry
+     * into the database (upsert by name).
      * @returns ModelTemplateRead Successful Response
      * @throws ApiError
      */
@@ -55,6 +60,29 @@ export class ModelsService {
         });
     }
     /**
+     * Get Configured Model Info
+     * ⚠️ **Experimental:** behavior and response shape may change without notice.
+     *
+     * Return the detail view for a single configured model, including its template.
+     * @param configuredModelId
+     * @returns ConfiguredModelInfoRead Successful Response
+     * @throws ApiError
+     */
+    public static getConfiguredModelInfoV1CrudConfiguredModelsConfiguredModelIdGet(
+        configuredModelId: number,
+    ): CancelablePromise<ConfiguredModelInfoRead> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/v1/crud/configured-models/{configuredModelId}',
+            path: {
+                'configuredModelId': configuredModelId,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
      * Delete Configured Model
      * Soft delete a configured model by setting archived to True
      * @param configuredModelId
@@ -69,6 +97,60 @@ export class ModelsService {
             url: '/v1/crud/configured-models/{configuredModelId}',
             path: {
                 'configuredModelId': configuredModelId,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
+     * List Configured Models With Data Source
+     * ⚠️ **Experimental:** behavior and response shape may change without notice.
+     * @returns ConfiguredModelWithDataSourceRead Successful Response
+     * @throws ApiError
+     */
+    public static listConfiguredModelsWithDataSourceV1CrudConfiguredModelsWithDataSourceGet(): CancelablePromise<Array<ConfiguredModelWithDataSourceRead>> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/v1/crud/configured-models-with-data-source',
+        });
+    }
+    /**
+     * Get Configured Model With Data Source
+     * ⚠️ **Experimental:** behavior and response shape may change without notice.
+     * @param configuredModelWithDataSourceId
+     * @returns ConfiguredModelWithDataSourceReadWithPredictions Successful Response
+     * @throws ApiError
+     */
+    public static getConfiguredModelWithDataSourceV1CrudConfiguredModelsWithDataSourceConfiguredModelWithDataSourceIdGet(
+        configuredModelWithDataSourceId: number,
+    ): CancelablePromise<ConfiguredModelWithDataSourceReadWithPredictions> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/v1/crud/configured-models-with-data-source/{configuredModelWithDataSourceId}',
+            path: {
+                'configuredModelWithDataSourceId': configuredModelWithDataSourceId,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
+     * Create Configured Model With Data Source From Backtest
+     * ⚠️ **Experimental:** behavior and response shape may change without notice.
+     * @param backtestId
+     * @returns ConfiguredModelWithDataSourceRead Successful Response
+     * @throws ApiError
+     */
+    public static createConfiguredModelWithDataSourceFromBacktestV1CrudConfiguredModelsWithDataSourceFromBacktestBacktestIdPost(
+        backtestId: number,
+    ): CancelablePromise<ConfiguredModelWithDataSourceRead> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/v1/crud/configured-models-with-data-source/from-backtest/{backtestId}',
+            path: {
+                'backtestId': backtestId,
             },
             errors: {
                 422: `Validation Error`,
