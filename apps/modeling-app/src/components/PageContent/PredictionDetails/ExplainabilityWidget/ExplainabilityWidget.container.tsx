@@ -10,10 +10,7 @@ import { useSearchParams } from 'react-router-dom';
 import i18n from '@dhis2/d2-i18n';
 import { Button, CircularLoader } from '@dhis2/ui';
 import { type XaiMethodRead, getPeriodLabel } from '@dhis2-chap/ui';
-import { useGlobalExplanation } from '@/hooks/useGlobalExplanation';
-import { useLocalExplanation } from '@/hooks/useLocalExplanation';
 import { useOrgUnitsById } from '@/hooks/useOrgUnitsById';
-import { useXaiMethods } from '@/hooks/useXaiMethods';
 import {
     ExplainabilityWidgetComponent,
     type TabKey,
@@ -21,6 +18,9 @@ import {
 import { GlobalTab } from './GlobalTab';
 import { LocalTab } from './LocalTab';
 import { HorizonTab } from './HorizonTab';
+import { useGlobalExplanation } from './hooks/useGlobalExplanation';
+import { useLocalExplanation } from './hooks/useLocalExplanation';
+import { useXaiMethods } from './hooks/useXaiMethods';
 import { useShapBeeswarm } from './hooks/useShapBeeswarm';
 import { useHorizonSummary } from './hooks/useHorizonSummary';
 import { useXaiExplanationJob } from './hooks/useXaiExplanationJob';

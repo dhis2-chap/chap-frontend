@@ -5,7 +5,7 @@ import {
     type LocalExplanationRequest,
     ApiError,
 } from '@dhis2-chap/ui';
-import { pickLatestExplanation } from '../utils/pickLatestExplanation';
+import { pickLatestExplanation } from './pickLatestExplanation';
 
 export const useLocalExplanation = (
     predictionId: number | undefined,
