@@ -90,7 +90,7 @@ export class XaiService {
      */
     public static getGlobalExplanationV1XaiPredictionsPredictionIdGlobalGet(
         predictionId: number,
-        xaiMethod?: (string | null),
+        xaiMethod: string,
     ): CancelablePromise<GlobalExplanationResponse> {
         return __request(OpenAPI, {
             method: 'GET',

@@ -56,7 +56,16 @@ export {
 } from './httpfunctions/core/request';
 export { buildPredictionSeries } from './utils/PredictionViewModel';
 
-export { FeatureImportanceChart, ShapBeeswarmChart, ShapWaterfallChart, formatFeatureName, CHART_COLORS } from './components/explainability';
+export {
+    FeatureImportanceChart,
+    ShapBeeswarmChart,
+    ShapWaterfallChart,
+    explainabilityAlignedTabChartHeight,
+    explainabilityBeeswarmChartHeight,
+    explainabilityImportanceChartHeight,
+    formatFeatureName,
+    CHART_COLORS,
+} from './components/explainability';
 export {
     plotResultsToViewData,
     getStableMaxYByOrgUnitId,

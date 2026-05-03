@@ -1,5 +1,4 @@
 import {
-    useCallback,
     useEffect,
     useMemo,
     useState,
@@ -14,7 +13,7 @@ import {
     type TabKey,
 } from './ExplainabilityWidget.component';
 import { GlobalTab } from './GlobalTab';
-import { LocalTab } from './LocalTab';
+import { LocalTab, type LocalView } from './LocalTab';
 import { HorizonTab } from './HorizonTab';
 import { useGlobalExplanation } from './hooks/useGlobalExplanation';
 import { useLocalExplanation } from './hooks/useLocalExplanation';
@@ -74,15 +73,16 @@ export const ExplainabilityWidget = ({
     const { xaiMethods, isLoading: isXaiMethodsLoading } = useXaiMethods(predictionId);
 
     // Honour an explicit user selection when it is present in the method list;
-    // otherwise prefer native SHAP → isAuto → first available.
+    // otherwise prefer native → isAuto → first available.
     const effectiveXaiMethod = useMemo((): string => {
         if (!xaiMethods?.length) return selectedXaiMethod ?? '';
         if (selectedXaiMethod && xaiMethods.some(m => m.name === selectedXaiMethod)) {
             return selectedXaiMethod;
         }
-        const native = xaiMethods.find(m => m.methodType === 'native_shap');
-        if (native) return native.name;
-        return (xaiMethods.find(m => m.isAuto) ?? xaiMethods[0]).name;
+        const pick = xaiMethods.find(m => m.isNative)
+            ?? xaiMethods.find(m => m.isAuto)
+            ?? xaiMethods[0];
+        return pick.name;
     }, [xaiMethods, selectedXaiMethod]);
 
     const effectivePeriod = selectedPeriod ?? periods[0] ?? '';
@@ -127,16 +127,9 @@ export const ExplainabilityWidget = ({
         xaiMethod: effectiveXaiMethod,
     });
 
-    const selectedXaiMethodObj = useMemo(
-        () => xaiMethods?.find(m => m.name === effectiveXaiMethod),
-        [xaiMethods, effectiveXaiMethod],
-    );
-
-    const supports = useCallback(
-        (viz: string): boolean =>
-            selectedXaiMethodObj?.supportedVisualizations.includes(viz) ?? false,
-        [selectedXaiMethodObj],
-    );
+    const selectedXaiMethodObj = xaiMethods?.find(m => m.name === effectiveXaiMethod);
+    const supports = (viz: string): boolean =>
+        selectedXaiMethodObj?.supportedVisualizations.includes(viz) ?? false;
 
     const {
         globalExplanation,
@@ -148,7 +141,7 @@ export const ExplainabilityWidget = ({
 
     const isGlobalTransitioning = isGlobalFetching && isGlobalPreviousData;
     const hasCompletedExplanationsForMethod =
-        !!globalExplanation?.available || hasJobSucceeded;
+        !!globalExplanation || hasJobSucceeded;
 
     const {
         currentExplanation: localExplanation,
@@ -188,6 +181,7 @@ export const ExplainabilityWidget = ({
         isHorizonLoading,
         horizonError,
         computeHorizon,
+        isComputingHorizon,
     } = useHorizonSummary({
         predictionId,
         orgUnit: effectiveOrgUnit,
@@ -282,6 +276,7 @@ export const ExplainabilityWidget = ({
                 />
             ) : activeTab === 'local' ? (
                 <LocalTab
+                    key={`${effectiveXaiMethod}-${selectedXaiMethodObj?.defaultVisualization ?? 'waterfall'}`}
                     {...sharedTabProps}
                     periods={periods}
                     selectedPeriod={effectivePeriod}
@@ -294,7 +289,7 @@ export const ExplainabilityWidget = ({
                     isComputingLocal={isComputingLocal}
                     isTransitioning={isTransitioning}
                     methodDisplayName={selectedXaiMethodObj?.displayName ?? effectiveXaiMethod}
-                    defaultVisualization={selectedXaiMethodObj?.defaultVisualization ?? 'waterfall'}
+                    defaultVisualization={(selectedXaiMethodObj?.defaultVisualization ?? 'waterfall') as LocalView}
                     onComputeLocal={handleComputeLocal}
                 />
             ) : (
@@ -304,7 +299,7 @@ export const ExplainabilityWidget = ({
                     isHorizonLoading={isHorizonLoading}
                     horizonError={horizonError}
                     onComputeHorizon={computeHorizon}
-                    isComputingHorizon={isHorizonLoading}
+                    isComputingHorizon={isComputingHorizon}
                 />
             )}
         </ExplainabilityWidgetComponent>

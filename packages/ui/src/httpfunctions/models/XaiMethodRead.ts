@@ -13,6 +13,7 @@ export type XaiMethodRead = {
     author: string;
     archived: boolean;
     isAuto?: boolean;
+    isNative?: boolean;
     supportedVisualizations: Array<string>;
     supportedVisualizationLabels: Array<string>;
     defaultVisualization: string;

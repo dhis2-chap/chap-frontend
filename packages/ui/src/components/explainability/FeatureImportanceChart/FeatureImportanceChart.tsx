@@ -3,7 +3,7 @@ import i18n from '@dhis2/d2-i18n';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import type { FeatureAttribution } from '../../../httpfunctions/models/FeatureAttribution';
-import { formatFeatureName, CHART_COLORS } from '../utils';
+import { explainabilityImportanceChartHeight, formatFeatureName, CHART_COLORS } from '../utils';
 import styles from './FeatureImportanceChart.module.css';
 
 interface FeatureImportanceChartProps {
@@ -28,7 +28,7 @@ export const FeatureImportanceChart = ({
         return {
             chart: {
                 type: 'bar',
-                height: height ?? Math.max(200, features.length * 35 + 80),
+                height: height ?? explainabilityImportanceChartHeight(features.length),
             },
             title: {
                 text: title || i18n.t('Feature Importance'),

@@ -27,28 +27,23 @@ export const XaiMethodSelectionModal = ({
     onClose,
     onConfirm,
 }: Props) => {
-    const [selectedName, setSelectedName] = useState<string>(selectedMethodName);
+    const [selectedName, setSelectedName] = useState(selectedMethodName);
     const [searchValue, setSearchValue] = useState('');
     const selected = xaiMethods?.find(m => m.name === selectedName);
 
-    const filteredMethods = useMemo(() => {
-        if (!xaiMethods) return [];
-        return xaiMethods
-            .filter((m) => {
-                if (!searchValue) return true;
-                const q = searchValue.toLowerCase();
-                return m.displayName?.toLowerCase().includes(q)
-                    || m.description?.toLowerCase().includes(q);
-            })
-            .sort((a, b) => {
-                if (a.isAuto && !b.isAuto) return -1;
-                if (!a.isAuto && b.isAuto) return 1;
-                return (a.displayName ?? a.name).localeCompare(b.displayName ?? b.name);
-            });
+    const [autoMethods, otherMethods] = useMemo(() => {
+        const auto: XaiMethodRead[] = [];
+        const other: XaiMethodRead[] = [];
+        if (!xaiMethods) return [auto, other];
+        const q = searchValue.toLowerCase();
+        for (const m of xaiMethods) {
+            if (searchValue && !m.displayName?.toLowerCase().includes(q) && !m.description?.toLowerCase().includes(q)) continue;
+            (m.isAuto ? auto : other).push(m);
+        }
+        const cmp = (a: XaiMethodRead, b: XaiMethodRead) =>
+            (a.displayName ?? a.name).localeCompare(b.displayName ?? b.name);
+        return [auto.sort(cmp), other.sort(cmp)];
     }, [xaiMethods, searchValue]);
-
-    const autoMethods = filteredMethods.filter(m => m.isAuto);
-    const otherMethods = filteredMethods.filter(m => !m.isAuto);
 
     return (
         <Modal fluid onClose={onClose}>
@@ -83,7 +78,7 @@ export const XaiMethodSelectionModal = ({
                         </div>
 
                         <div className={styles.content}>
-                            {filteredMethods.length === 0 ? (
+                            {autoMethods.length === 0 && otherMethods.length === 0 ? (
                                 <div className={styles.noResults}>
                                     {i18n.t('No methods found')}
                                 </div>

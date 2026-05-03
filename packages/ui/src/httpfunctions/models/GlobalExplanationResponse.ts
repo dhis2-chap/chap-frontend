@@ -10,7 +10,6 @@ export type GlobalExplanationResponse = {
     computedAt?: (string | null);
     nSamples?: number;
     stabilityScore?: (number | null);
-    available?: boolean;
     surrogateQuality?: (SurrogateQualityRead | null);
 };
 

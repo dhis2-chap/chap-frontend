@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { Tag, formatFeatureName, CHART_COLORS, type SurrogateQualityRead } from '@dhis2-chap/ui';
 import styles from './SurrogateQualityPanel.module.css';
@@ -16,9 +16,7 @@ const formatPct = (v: number) => (v * 100).toFixed(1);
 export const SurrogateQualityPanel = ({ quality, stabilityScore }: Props) => {
     const [showMetrics, setShowMetrics] = useState(false);
 
-    // Built inside the component so i18n strings reflect the current locale
-    // rather than the locale at module load time.
-    const tierMeta = useMemo<Record<FidelityTier, { color: string; label: string; summary: string }>>(() => ({
+    const tierMeta: Record<FidelityTier, { color: string; label: string; summary: string }> = {
         good: {
             color: CHART_COLORS.qualityGood,
             label: i18n.t('Good'),
@@ -34,7 +32,7 @@ export const SurrogateQualityPanel = ({ quality, stabilityScore }: Props) => {
             label: i18n.t('Poor'),
             summary: i18n.t('explanations may not reflect the original model'),
         },
-    }), []);
+    };
 
     if (!quality) return null;
     const r2 = quality.rSquared;
@@ -106,7 +104,7 @@ export const SurrogateQualityPanel = ({ quality, stabilityScore }: Props) => {
                     <div className={styles.qualityBar}>
                         <div
                             className={styles.qualityBarFill}
-                            style={{ width: `${Math.min(100, r2 * 100)}%`, background: color }}
+                            style={{ width: `${Math.max(0, Math.min(100, r2 * 100))}%`, background: color }}
                         />
                     </div>
 

@@ -3,7 +3,7 @@ import i18n from '@dhis2/d2-i18n';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import type { ShapBeeswarmPoint } from '../../../httpfunctions/models/ShapBeeswarmPoint';
-import { formatFeatureName, CHART_COLORS } from '../utils';
+import { explainabilityBeeswarmChartHeight, formatFeatureName, CHART_COLORS } from '../utils';
 import styles from './ShapBeeswarmChart.module.css';
 
 type BeeswarmPointCustom = {
@@ -131,7 +131,7 @@ export const ShapBeeswarmChart = ({
             }
         });
 
-        const chartHeight = height ?? Math.max(300, sortedFeatures.length * 50 + 120);
+        const chartHeight = height ?? explainabilityBeeswarmChartHeight(sortedFeatures.length);
 
         return {
             chart: {

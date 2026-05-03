@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { Button, ButtonStrip, CircularLoader, NoticeBox, SingleSelectField, SingleSelectOption, Menu, MenuItem } from '@dhis2/ui';
 import {
@@ -13,6 +13,7 @@ import widgetStyles from './ExplainabilityWidget.module.css';
 import styles from './LocalTab.module.css';
 
 type OrgUnitOption = { id: string; label: string };
+export type LocalView = 'waterfall' | 'beeswarm' | 'importance';
 
 type Props = {
     orgUnitOptions: OrgUnitOption[];
@@ -35,7 +36,7 @@ type Props = {
     beeswarmError?: string | null;
     orgUnitMap: Record<string, string>;
     methodDisplayName: string;
-    defaultVisualization: string;
+    defaultVisualization: LocalView;
     onRunExplanations: () => void;
     onComputeBeeswarm: () => void;
     onComputeLocal: () => void;
@@ -67,12 +68,8 @@ export const LocalTab = ({
     onComputeBeeswarm,
     onComputeLocal,
 }: Props) => {
-    const [localView, setLocalView] = useState<string>(defaultVisualization);
-    useEffect(() => {
-        setLocalView(defaultVisualization);
-    }, [defaultVisualization]);
+    const [localView, setLocalView] = useState<LocalView>(defaultVisualization);
     const covariateProvenance = displayExplanation?.covariateProvenance;
-    const isBeeswarmAvailable = !!beeswarmData && beeswarmData.available !== false;
 
     return (
         <div className={widgetStyles.mainLayout}>
@@ -170,7 +167,7 @@ export const LocalTab = ({
                                 ) : supports('beeswarm') && localView === 'beeswarm' ? (
                                     isBeeswarmLoading ? (
                                         <div className={widgetStyles.loadingContainer}><CircularLoader small /></div>
-                                    ) : isBeeswarmAvailable && beeswarmData ? (
+                                    ) : beeswarmData ? (
                                         <ShapBeeswarmChart
                                             points={beeswarmData.points.filter(p => p.orgUnit === localOrgUnit)}
                                             featureNames={beeswarmData.featureNames}

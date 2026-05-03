@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { XaiService, type HorizonSummaryResponse, ApiError } from '@dhis2-chap/ui';
+import { formatQueryError } from './formatQueryError';
 
 type Args = {
     predictionId: number;
@@ -7,9 +8,6 @@ type Args = {
     xaiMethod: string;
     enabled: boolean;
 };
-
-const formatError = (e: unknown): string | null =>
-    e ? (e instanceof Error ? e.message : String(e)) : null;
 
 export const useHorizonSummary = ({
     predictionId,
@@ -20,7 +18,7 @@ export const useHorizonSummary = ({
     const queryClient = useQueryClient();
     const queryKey = ['horizonSummary', predictionId, orgUnit, xaiMethod];
 
-    const { data, isFetching, error } = useQuery<HorizonSummaryResponse, ApiError>({
+    const { data, isFetching, error } = useQuery<HorizonSummaryResponse | undefined, ApiError>({
         queryKey,
         queryFn: () =>
             XaiService.getHorizonSummaryV1XaiPredictionsPredictionIdLocalHorizonSummaryGet(
@@ -51,7 +49,7 @@ export const useHorizonSummary = ({
     return {
         horizonData: data ?? null,
         isHorizonLoading: isFetching || computeMutation.isPending,
-        horizonError: formatError(error) ?? formatError(computeMutation.error),
+        horizonError: formatQueryError(error) ?? formatQueryError(computeMutation.error),
         computeHorizon: () => computeMutation.mutate(),
         isComputingHorizon: computeMutation.isPending,
     };

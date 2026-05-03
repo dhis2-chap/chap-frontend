@@ -4,13 +4,13 @@ import { Button, ButtonStrip, CircularLoader, NoticeBox } from '@dhis2/ui';
 import {
     FeatureImportanceChart,
     ShapBeeswarmChart,
+    explainabilityAlignedTabChartHeight,
     type FeatureAttribution,
     type GlobalExplanationResponse,
     type ShapBeeswarmResponse,
 } from '@dhis2-chap/ui';
 import { SurrogateQualityPanel } from './SurrogateQualityPanel';
 import styles from './ExplainabilityWidget.module.css';
-import { getChartHeight } from './getChartHeight';
 
 type Props = {
     isGlobalLoading: boolean;
@@ -44,13 +44,13 @@ export const GlobalTab = ({
     onComputeBeeswarm,
 }: Props) => {
     const [globalView, setGlobalView] = useState<'importance' | 'beeswarm'>('importance');
-    if (!globalExplanation?.available && (isGlobalLoading || (isGlobalFetching && !isGlobalTransitioning) || isExplanationJobRunning)) {
+    if (!globalExplanation && (isGlobalLoading || (isGlobalFetching && !isGlobalTransitioning) || isExplanationJobRunning)) {
         return <div className={styles.loadingContainer}><CircularLoader small /></div>;
     }
     if (globalError) {
         return <NoticeBox error title={i18n.t('Error')}>{i18n.t('Failed to load global explanation')}</NoticeBox>;
     }
-    if (!globalExplanation?.available || !globalExplanation?.topFeatures?.length) {
+    if (!globalExplanation?.topFeatures.length) {
         return (
             <div className={styles.emptyState}>
                 <p>{i18n.t('No global explanation computed yet.')}</p>
@@ -68,7 +68,11 @@ export const GlobalTab = ({
     }));
 
     const beeswarmFeatureCount = beeswarmData ? beeswarmData.featureNames.length : features.length;
-    const chartHeight = getChartHeight(features.length, beeswarmFeatureCount, supports('beeswarm'));
+    const chartHeight = explainabilityAlignedTabChartHeight(
+        features.length,
+        beeswarmFeatureCount,
+        supports('beeswarm'),
+    );
 
     return (
         <div className={styles.chartContainer}>
@@ -105,7 +109,7 @@ export const GlobalTab = ({
                         <div className={styles.loadingOverlay}><CircularLoader small /></div>
                         <FeatureImportanceChart features={features} title={i18n.t('Global Feature Importance')} height={chartHeight} />
                     </div>
-                ) : beeswarmData && beeswarmData.available !== false ? (
+                ) : beeswarmData ? (
                     <ShapBeeswarmChart
                         points={beeswarmData.points}
                         featureNames={beeswarmData.featureNames}

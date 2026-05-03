@@ -4,12 +4,12 @@ import { Button, ButtonStrip, CircularLoader, NoticeBox, Menu, MenuItem } from '
 import {
     FeatureImportanceChart,
     ShapBeeswarmChart,
+    explainabilityAlignedTabChartHeight,
     type HorizonSummaryResponse,
     type ShapBeeswarmResponse,
 } from '@dhis2-chap/ui';
 import widgetStyles from './ExplainabilityWidget.module.css';
 import styles from './HorizonTab.module.css';
-import { getChartHeight } from './getChartHeight';
 
 type OrgUnitOption = { id: string; label: string };
 
@@ -54,12 +54,13 @@ export const HorizonTab = ({
     const showBeeswarm = supports('beeswarm') && horizonView === 'beeswarm';
     const orgLabel = orgUnitOptions.find(o => o.id === localOrgUnit)?.label ?? localOrgUnit;
 
-    const isHorizonAvailable = !!horizonData && horizonData.available !== false;
-    const isBeeswarmAvailable = !!beeswarmData && beeswarmData.available !== false;
-
     const importanceFeatureCount = horizonData?.averageImportance.length ?? 0;
     const beeswarmFeatureCount = beeswarmData ? beeswarmData.featureNames.length : importanceFeatureCount;
-    const chartHeight = getChartHeight(importanceFeatureCount, beeswarmFeatureCount, supports('beeswarm'));
+    const chartHeight = explainabilityAlignedTabChartHeight(
+        importanceFeatureCount,
+        beeswarmFeatureCount,
+        supports('beeswarm'),
+    );
 
     return (
         <div className={widgetStyles.mainLayout}>
@@ -76,11 +77,11 @@ export const HorizonTab = ({
                 </Menu>
             </div>
             <div className={widgetStyles.plotArea}>
-                {(isHorizonLoading || (isExplanationJobRunning && !horizonData)) && !horizonData ? (
+                {(isHorizonLoading || isExplanationJobRunning) && !horizonData ? (
                     <div className={widgetStyles.loadingContainer}><CircularLoader small /></div>
                 ) : horizonError && !horizonData ? (
                     <NoticeBox error title={i18n.t('Error')}>{horizonError}</NoticeBox>
-                ) : horizonData && !isHorizonAvailable ? (
+                ) : !horizonData ? (
                     <div className={widgetStyles.emptyState}>
                         <p>{i18n.t('Horizon summary has not been computed yet.')}</p>
                         <Button
@@ -92,7 +93,7 @@ export const HorizonTab = ({
                             {i18n.t('Compute Horizon Summary')}
                         </Button>
                     </div>
-                ) : horizonData ? (
+                ) : (
                     <div className={widgetStyles.chartContainer}>
                         {isHorizonLoading && (
                             <div className={widgetStyles.loadingOverlay}><CircularLoader small /></div>
@@ -164,7 +165,7 @@ export const HorizonTab = ({
                                     height={chartHeight}
                                 />
                             </div>
-                        ) : isBeeswarmAvailable && beeswarmData ? (
+                        ) : beeswarmData ? (
                             <ShapBeeswarmChart
                                 points={beeswarmData.points.filter(p => p.orgUnit === localOrgUnit)}
                                 featureNames={beeswarmData.featureNames}
@@ -181,7 +182,7 @@ export const HorizonTab = ({
                             </div>
                         )}
                     </div>
-                ) : null}
+                )}
             </div>
         </div>
     );

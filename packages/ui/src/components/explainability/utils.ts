@@ -1,6 +1,22 @@
 export const formatFeatureName = (name: string): string =>
     name.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
 
+export const explainabilityImportanceChartHeight = (featureCount: number): number =>
+    Math.max(200, featureCount * 35 + 80);
+
+export const explainabilityBeeswarmChartHeight = (featureCount: number): number =>
+    Math.max(300, featureCount * 50 + 120);
+
+export const explainabilityAlignedTabChartHeight = (
+    importanceFeatureCount: number,
+    beeswarmFeatureCount: number,
+    supportsBeeswarm: boolean,
+): number =>
+    Math.max(
+        explainabilityImportanceChartHeight(importanceFeatureCount),
+        supportsBeeswarm ? explainabilityBeeswarmChartHeight(beeswarmFeatureCount) : 0,
+    );
+
 export const CHART_COLORS = {
     positive: '#c62828',
     positiveLight: '#ef9a9a',

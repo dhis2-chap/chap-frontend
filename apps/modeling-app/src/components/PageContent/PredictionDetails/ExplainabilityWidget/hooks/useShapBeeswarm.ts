@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { XaiService, type ShapBeeswarmResponse, ApiError } from '@dhis2-chap/ui';
+import { formatQueryError } from './formatQueryError';
 
 type Args = {
     predictionId: number;
@@ -7,14 +8,11 @@ type Args = {
     enabled: boolean;
 };
 
-const formatError = (e: unknown): string | null =>
-    e ? (e instanceof Error ? e.message : String(e)) : null;
-
 export const useShapBeeswarm = ({ predictionId, xaiMethod, enabled }: Args) => {
     const queryClient = useQueryClient();
     const queryKey = ['shapBeeswarm', predictionId, xaiMethod];
 
-    const { data, isFetching, error } = useQuery<ShapBeeswarmResponse, ApiError>({
+    const { data, isFetching, error } = useQuery<ShapBeeswarmResponse | undefined, ApiError>({
         queryKey,
         queryFn: () =>
             XaiService.getShapBeeswarmV1XaiPredictionsPredictionIdShapBeeswarmGet(
@@ -42,7 +40,7 @@ export const useShapBeeswarm = ({ predictionId, xaiMethod, enabled }: Args) => {
     return {
         beeswarmData: data,
         isBeeswarmLoading: isFetching || computeMutation.isPending,
-        beeswarmError: formatError(error) ?? formatError(computeMutation.error),
+        beeswarmError: formatQueryError(error) ?? formatQueryError(computeMutation.error),
         computeBeeswarm: () => computeMutation.mutate(),
         isComputingBeeswarm: computeMutation.isPending,
     };
