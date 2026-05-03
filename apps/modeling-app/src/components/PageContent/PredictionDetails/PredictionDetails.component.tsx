@@ -5,6 +5,7 @@ import { PredictionResultWidget } from './PredictionResultWidget/PredictionResul
 import { PredictionSummaryWidget } from './PredictionSummaryWidget';
 import { QuickActionsWidget } from './QuickActionsWidget';
 import { ExplainabilityWidget } from './ExplainabilityWidget';
+import { useExperimentalFeature, FEATURES } from '@/features/settings/Experimental';
 
 type Props = {
     prediction: PredictionInfo;
@@ -15,6 +16,7 @@ export const PredictionDetailsComponent = ({
     prediction,
     model,
 }: Props) => {
+    const { enabled: isExplainabilityEnabled } = useExperimentalFeature(FEATURES.EXPLAINABILITY_WIDGET);
     const orgUnits = useMemo(() => prediction.orgUnits || [], [prediction]);
     const periods = useMemo(() => {
         const lastPeriod = prediction.dataset?.lastPeriod;
@@ -37,12 +39,14 @@ export const PredictionDetailsComponent = ({
                     prediction={prediction}
                     model={model}
                 />
-                <ExplainabilityWidget
-                    predictionId={prediction.id}
-                    orgUnits={orgUnits}
-                    periods={periods}
-                    periodType={prediction.dataset?.periodType}
-                />
+                {isExplainabilityEnabled && (
+                    <ExplainabilityWidget
+                        predictionId={prediction.id}
+                        orgUnits={orgUnits}
+                        periods={periods}
+                        periodType={prediction.dataset?.periodType}
+                    />
+                )}
             </div>
             <div className={styles.rightColumn}>
                 <PredictionSummaryWidget

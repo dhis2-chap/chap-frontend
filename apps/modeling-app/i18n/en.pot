@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-05-03T13:06:07.074Z\n"
-"PO-Revision-Date: 2026-05-03T13:06:07.074Z\n"
+"POT-Creation-Date: 2026-05-03T15:00:57.779Z\n"
+"PO-Revision-Date: 2026-05-03T15:00:57.780Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -1012,13 +1012,6 @@ msgstr "SHAP Waterfall — {{orgUnit}}, {{period}}"
 msgid "SHAP Summary — {{orgUnit}}, {{period}} highlighted"
 msgstr "SHAP Summary — {{orgUnit}}, {{period}} highlighted"
 
-msgid ""
-"{{method}} attributions are shown as feature contributions and may not "
-"decompose additively into the final prediction (unlike SHAP)."
-msgstr ""
-"{{method}} attributions are shown as feature contributions and may not "
-"decompose additively into the final prediction (unlike SHAP)."
-
 msgid "{{method}} Feature Contributions — {{orgUnit}}, {{period}}"
 msgstr "{{method}} Feature Contributions — {{orgUnit}}, {{period}}"
 
@@ -1550,6 +1543,16 @@ msgstr "Show metric visualization plots in the evaluation dashboard"
 
 msgid "Show evaluation visualization plots in the evaluation dashboard"
 msgstr "Show evaluation visualization plots in the evaluation dashboard"
+
+msgid "Explainability widget"
+msgstr "Explainability widget"
+
+msgid ""
+"Show the explainability widget in prediction details (requires backend XAI "
+"support)"
+msgstr ""
+"Show the explainability widget in prediction details (requires backend XAI "
+"support)"
 
 msgid "Settings saved successfully"
 msgstr "Settings saved successfully"
