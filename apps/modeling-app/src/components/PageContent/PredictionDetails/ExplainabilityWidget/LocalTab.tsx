@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import i18n from '@dhis2/d2-i18n';
-import { Button, ButtonStrip, CircularLoader, NoticeBox, SingleSelect, SingleSelectOption, Menu, MenuItem } from '@dhis2/ui';
+import { Button, ButtonStrip, CircularLoader, NoticeBox, SingleSelectField, SingleSelectOption, Menu, MenuItem } from '@dhis2/ui';
 import {
     CovariateProvenanceRead,
     FeatureImportanceChart,
@@ -33,6 +33,7 @@ type Props = {
     isBeeswarmLoading: boolean;
     beeswarmError?: string | null;
     orgUnitMap: Record<string, string>;
+    methodDisplayName: string;
     onRunExplanations: () => void;
     onLoadBeeswarm: () => void;
     onComputeLocal: () => void;
@@ -58,12 +59,17 @@ export const LocalTab = ({
     isBeeswarmLoading,
     beeswarmError,
     orgUnitMap,
+    methodDisplayName,
     onRunExplanations,
     onLoadBeeswarm,
     onComputeLocal,
 }: Props) => {
-    const [localView, setLocalView] = useState<'waterfall' | 'summary'>('waterfall');
-    const cp = displayExplanation?.covariateProvenance;
+    const defaultLocalView: 'waterfall' | 'summary' = supports('waterfall') ? 'waterfall' : 'summary';
+    const [localView, setLocalView] = useState<'waterfall' | 'summary'>(defaultLocalView);
+    useEffect(() => {
+        setLocalView(defaultLocalView);
+    }, [defaultLocalView]);
+    const covariateProvenance = displayExplanation?.covariateProvenance;
 
     return (
         <div className={styles.mainLayout}>
@@ -88,16 +94,20 @@ export const LocalTab = ({
                     <>
                         <div className={styles.selectors}>
                             <div className={styles.selectorGroup}>
-                                <label className={styles.selectorLabel}>{i18n.t('Period')}</label>
-                                <SingleSelect selected={selectedPeriod} onChange={({ selected }) => onPeriodChange(selected as string)} dense>
+                                <SingleSelectField
+                                    label={i18n.t('Period')}
+                                    selected={selectedPeriod}
+                                    onChange={({ selected }) => onPeriodChange(selected)}
+                                    dense
+                                >
                                     {periods.map(p => <SingleSelectOption key={p} label={getPeriodLabel(p)} value={p} />)}
-                                </SingleSelect>
+                                </SingleSelectField>
                             </div>
                         </div>
 
-                        {cp && cp.source !== CovariateProvenanceRead.source.DATASET_MATCH ? (
+                        {covariateProvenance && covariateProvenance.source !== CovariateProvenanceRead.source.DATASET_MATCH ? (
                             <NoticeBox title={i18n.t('About feature values')}>
-                                {cp.detail}
+                                {covariateProvenance.detail}
                             </NoticeBox>
                         ) : (
                             <p className={styles.dataSourceNote}>
@@ -178,13 +188,14 @@ export const LocalTab = ({
                                 ) : (
                                     <>
                                         <NoticeBox>
-                                            {i18n.t('LIME contributions are coefficients of a local linear approximation and do not decompose additively into the final prediction (unlike SHAP).')}
+                                            {i18n.t('{{method}} attributions are shown as feature contributions and may not decompose additively into the final prediction (unlike SHAP).', { method: methodDisplayName })}
                                         </NoticeBox>
                                         <FeatureImportanceChart
                                             features={displayExplanation.featureAttributions.map(f => ({
                                                 featureName: f.featureName, importance: f.importance, direction: f.direction,
                                             }))}
-                                            title={i18n.t('LIME Feature Contributions — {{orgUnit}}, {{period}}', {
+                                            title={i18n.t('{{method}} Feature Contributions — {{orgUnit}}, {{period}}', {
+                                                method: methodDisplayName,
                                                 orgUnit: orgUnitMap[localOrgUnit] ?? localOrgUnit,
                                                 period: getPeriodLabel(selectedPeriod),
                                             })}

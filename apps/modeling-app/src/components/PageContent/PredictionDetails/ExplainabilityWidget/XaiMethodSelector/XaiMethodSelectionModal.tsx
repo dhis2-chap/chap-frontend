@@ -27,10 +27,9 @@ export const XaiMethodSelectionModal = ({
     onClose,
     onConfirm,
 }: Props) => {
-    const [selected, setSelected] = useState<XaiMethodRead | undefined>(
-        xaiMethods?.find(m => m.name === selectedMethodName),
-    );
+    const [selectedName, setSelectedName] = useState<string>(selectedMethodName);
     const [searchValue, setSearchValue] = useState('');
+    const selected = xaiMethods?.find(m => m.name === selectedName);
 
     const filteredMethods = useMemo(() => {
         if (!xaiMethods) return [];
@@ -100,8 +99,8 @@ export const XaiMethodSelectionModal = ({
                                                     <MethodCard
                                                         key={method.name}
                                                         method={method}
-                                                        isSelected={selected?.name === method.name}
-                                                        onSelect={setSelected}
+                                                        isSelected={selectedName === method.name}
+                                                        onSelect={setSelectedName}
                                                     />
                                                 ))}
                                             </div>
@@ -119,8 +118,8 @@ export const XaiMethodSelectionModal = ({
                                                     <MethodCard
                                                         key={method.name}
                                                         method={method}
-                                                        isSelected={selected?.name === method.name}
-                                                        onSelect={setSelected}
+                                                        isSelected={selectedName === method.name}
+                                                        onSelect={setSelectedName}
                                                     />
                                                 ))}
                                             </div>
@@ -151,14 +150,14 @@ export const XaiMethodSelectionModal = ({
 type MethodCardProps = {
     method: XaiMethodRead;
     isSelected: boolean;
-    onSelect: (method: XaiMethodRead) => void;
+    onSelect: (name: string) => void;
 };
 
 const MethodCard = ({ method, isSelected, onSelect }: MethodCardProps) => (
     <button
         type="button"
         className={`${styles.methodCard} ${isSelected ? styles.methodCardSelected : ''}`}
-        onClick={() => onSelect(method)}
+        onClick={() => onSelect(method.name)}
     >
         <div className={styles.methodName}>{method.displayName}</div>
         <div className={styles.methodDescription}>{method.description}</div>

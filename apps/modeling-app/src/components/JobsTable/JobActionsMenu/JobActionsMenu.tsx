@@ -63,8 +63,8 @@ export const JobActionsMenu = ({
         } else if (type === JOB_TYPES.MAKE_PREDICTION) {
             navigate(`/predictions/${result}`);
         } else if (isXaiJob && result) {
-            const params = xaiMethod ? `?xaiMethod=${xaiMethod}` : '';
-            navigate(`/predictions/${result}${params}`);
+            const search = xaiMethod ? `?${new URLSearchParams({ xaiMethod }).toString()}` : '';
+            navigate(`/predictions/${result}${search}`);
         }
         setFlyoutMenuIsOpen(false);
     };

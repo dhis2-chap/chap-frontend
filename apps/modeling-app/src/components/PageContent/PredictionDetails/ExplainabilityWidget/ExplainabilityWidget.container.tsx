@@ -65,7 +65,7 @@ export const ExplainabilityWidget = ({
     const [open, setOpen] = useState(true);
     const [activeTab, setActiveTab] = useState<TabKey>('global');
 
-    const [searchParams] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams();
     const initialXaiMethod = searchParams.get('xaiMethod');
     const [selectedPeriod, setSelectedPeriod] = useState<string>(
         periods[0] || '',
@@ -121,6 +121,11 @@ export const ExplainabilityWidget = ({
     const handleSelectXaiMethod = (method: XaiMethodRead) => {
         hasUserSelectedXaiMethod.current = true;
         setSelectedXaiMethod(method.name);
+        setSearchParams((prev) => {
+            const next = new URLSearchParams(prev);
+            next.set('xaiMethod', method.name);
+            return next;
+        }, { replace: true });
     };
 
     const {
@@ -295,6 +300,7 @@ export const ExplainabilityWidget = ({
                         localError={localError}
                         isComputingLocal={isComputingLocal}
                         isTransitioning={isTransitioning}
+                        methodDisplayName={selectedXaiMethodObj?.displayName ?? selectedXaiMethod}
                         onComputeLocal={handleComputeLocal}
                     />
                 );
