@@ -26,8 +26,6 @@ import { useHorizonSummary } from './hooks/useHorizonSummary';
 import { useXaiExplanationJob } from './hooks/useXaiExplanationJob';
 import styles from './ExplainabilityWidget.module.css';
 
-// Matches the backend default; the methods endpoint already filters to those
-// compatible with the prediction, so this is just a sensible initial guess.
 const DEFAULT_XAI_METHOD = 'shap_auto';
 
 type Props = {
@@ -64,11 +62,9 @@ export const ExplainabilityWidget = ({
     periods,
     periodType,
 }: Props) => {
-    // UI state
     const [open, setOpen] = useState(true);
     const [activeTab, setActiveTab] = useState<TabKey>('global');
 
-    // Selections
     const [searchParams] = useSearchParams();
     const initialXaiMethod = searchParams.get('xaiMethod');
     const [selectedPeriod, setSelectedPeriod] = useState<string>(
@@ -82,7 +78,6 @@ export const ExplainabilityWidget = ({
     );
     const hasUserSelectedXaiMethod = useRef(!!initialXaiMethod);
 
-    // XAI explanation job lifecycle (id persistence, polling, terminal handling).
     const {
         isRunning: isAnyXaiJobRunning,
         isExplanationRunning,
@@ -96,11 +91,11 @@ export const ExplainabilityWidget = ({
         xaiMethod: selectedXaiMethod,
     });
 
-    // XAI methods
     const { xaiMethods, isLoading: isXaiMethodsLoading } =
         useXaiMethods(predictionId);
-    const selectedXaiMethodObj = xaiMethods?.find(
-        m => m.name === selectedXaiMethod,
+    const selectedXaiMethodObj = useMemo(
+        () => xaiMethods?.find(m => m.name === selectedXaiMethod),
+        [xaiMethods, selectedXaiMethod],
     );
 
     const supports = useCallback(
@@ -109,8 +104,8 @@ export const ExplainabilityWidget = ({
         [selectedXaiMethodObj],
     );
 
-    // Prefer a native SHAP method when the model supports it; otherwise fall
-    // back to the default, then the first auto method, then the first method.
+    // Prefer a native SHAP method when available — otherwise fall back to
+    // an auto method, then the first listed method.
     useEffect(() => {
         if (hasUserSelectedXaiMethod.current || !xaiMethods?.length) return;
         const native = xaiMethods.find(m => m.methodType === 'native_shap');
@@ -128,9 +123,6 @@ export const ExplainabilityWidget = ({
         setSelectedXaiMethod(method.name);
     };
 
-    // Global / local explanation data — keepPreviousData on the queries means
-    // the hook's `data` already holds the prior response while a new fetch is in
-    // flight, and `isPreviousData` flags the transition.
     const {
         globalExplanation,
         isLoading: isGlobalLoading,
@@ -160,8 +152,6 @@ export const ExplainabilityWidget = ({
 
     const isTransitioning = isLocalFetching && isLocalPreviousData;
 
-    // Beeswarm — fetched once explanations exist and the active method supports it.
-    // Pre-fetched on tab arrival so switching to the SHAP Summary view is instant.
     const beeswarmEnabled =
         hasCompletedExplanationsForMethod && supports('beeswarm');
     const {
@@ -175,7 +165,6 @@ export const ExplainabilityWidget = ({
         enabled: beeswarmEnabled,
     });
 
-    // Horizon — fetched once explanations exist and the horizon tab is active
     const horizonEnabled =
         hasCompletedExplanationsForMethod &&
         activeTab === 'horizon' &&
@@ -187,7 +176,6 @@ export const ExplainabilityWidget = ({
         enabled: horizonEnabled,
     });
 
-    // Org units
     const { data: orgUnitsData } = useOrgUnitsById(orgUnits);
     const orgUnitOptions = useMemo(
         () =>
@@ -236,8 +224,6 @@ export const ExplainabilityWidget = ({
         });
     };
 
-    const getLabel = (period: string) => getPeriodLabel(period, periodType);
-
     const computingMessage = getComputingMessage({
         isSurrogateRunning,
         isExplanationRunning,
@@ -245,11 +231,8 @@ export const ExplainabilityWidget = ({
         methodLabel: selectedXaiMethodObj?.displayName ?? selectedXaiMethod,
     });
 
-    // Body
-    const isExplanationBundleReady = hasCompletedExplanationsForMethod;
-
     let body: ReactNode;
-    if (!isExplanationBundleReady && !isAnyXaiJobRunning) {
+    if (!hasCompletedExplanationsForMethod && !isAnyXaiJobRunning) {
         body = isCheckingForActiveJobs ? (
             <div className={styles.loadingContainer}>
                 <CircularLoader small />
@@ -305,7 +288,7 @@ export const ExplainabilityWidget = ({
                         periods={periods}
                         selectedPeriod={selectedPeriod}
                         onPeriodChange={handlePeriodChange}
-                        getPeriodLabel={getLabel}
+                        getPeriodLabel={period => getPeriodLabel(period, periodType)}
                         displayExplanation={localExplanation ?? null}
                         isLocalLoading={isLocalLoading}
                         isLocalFetching={isLocalFetching}
