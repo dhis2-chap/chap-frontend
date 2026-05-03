@@ -27,7 +27,7 @@ type Props = {
     isXaiMethodsLoading: boolean;
     onSelectXaiMethod: (method: XaiMethodRead) => void;
 
-    body: ReactNode;
+    children: ReactNode;
 };
 
 export const ExplainabilityWidgetComponent = ({
@@ -44,7 +44,7 @@ export const ExplainabilityWidgetComponent = ({
     selectedXaiMethod,
     isXaiMethodsLoading,
     onSelectXaiMethod,
-    body,
+    children,
 }: Props) => {
     return (
         <div className={styles.widgetContainer}>
@@ -114,7 +114,7 @@ export const ExplainabilityWidgetComponent = ({
                             />
                         </div>
                     </div>
-                    <div className={styles.tabContent}>{body}</div>
+                    <div className={styles.tabContent}>{children}</div>
                 </div>
             </Widget>
         </div>

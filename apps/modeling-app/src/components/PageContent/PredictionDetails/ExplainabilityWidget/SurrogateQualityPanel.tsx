@@ -14,7 +14,7 @@ type Props = {
 };
 
 const formatMetric = (v: number) => (Math.abs(v) < 1 ? v.toFixed(3) : v.toFixed(1));
-const formatPct = (v: number, digits = 1) => (v * 100).toFixed(digits);
+const formatPct = (v: number) => (v * 100).toFixed(1);
 
 export const SurrogateQualityPanel = ({ quality, stabilityScore }: Props) => {
     const [showMetrics, setShowMetrics] = useState(false);
