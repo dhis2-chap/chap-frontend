@@ -163,13 +163,13 @@ const MethodCard = ({ method, isSelected, onSelect }: MethodCardProps) => (
         <div className={styles.methodDescription}>{method.description}</div>
         <div className={styles.methodMeta}>
             <span className={styles.methodAuthor}>{method.author}</span>
-            {method.methodType && (
-                <span className={styles.methodType}>{method.methodType}</span>
+            {method.methodTypeLabel && (
+                <span className={styles.methodType}>{method.methodTypeLabel}</span>
             )}
-            {method.supportedVisualizations && method.supportedVisualizations.length > 0 && (
+            {method.supportedVisualizationLabels && method.supportedVisualizationLabels.length > 0 && (
                 <span className={styles.methodVisualizations}>
                     {i18n.t('Plots{{colon}} ', { colon: ':' })}
-                    {method.supportedVisualizations.join(', ')}
+                    {method.supportedVisualizationLabels.join(', ')}
                 </span>
             )}
         </div>

@@ -1,5 +1,5 @@
-import { useQuery } from '@tanstack/react-query';
-import { XaiService } from '@dhis2-chap/ui';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { XaiService, type ShapBeeswarmResponse, ApiError } from '@dhis2-chap/ui';
 
 type Args = {
     predictionId: number;
@@ -7,11 +7,17 @@ type Args = {
     enabled: boolean;
 };
 
+const formatError = (e: unknown): string | null =>
+    e ? (e instanceof Error ? e.message : String(e)) : null;
+
 export const useShapBeeswarm = ({ predictionId, xaiMethod, enabled }: Args) => {
-    const { data, isFetching, error, refetch } = useQuery({
-        queryKey: ['shapBeeswarm', predictionId, xaiMethod],
+    const queryClient = useQueryClient();
+    const queryKey = ['shapBeeswarm', predictionId, xaiMethod];
+
+    const { data, isFetching, error } = useQuery<ShapBeeswarmResponse, ApiError>({
+        queryKey,
         queryFn: () =>
-            XaiService.computeShapBeeswarmV1XaiPredictionsPredictionIdShapBeeswarmPost(
+            XaiService.getShapBeeswarmV1XaiPredictionsPredictionIdShapBeeswarmGet(
                 predictionId,
                 'median',
                 xaiMethod,
@@ -21,14 +27,23 @@ export const useShapBeeswarm = ({ predictionId, xaiMethod, enabled }: Args) => {
         retry: 0,
     });
 
+    const computeMutation = useMutation<ShapBeeswarmResponse, ApiError>({
+        mutationFn: () =>
+            XaiService.computeShapBeeswarmV1XaiPredictionsPredictionIdShapBeeswarmPost(
+                predictionId,
+                'median',
+                xaiMethod,
+            ),
+        onSuccess: (result) => {
+            queryClient.setQueryData(queryKey, result);
+        },
+    });
+
     return {
         beeswarmData: data,
-        isBeeswarmLoading: isFetching,
-        beeswarmError: error
-            ? error instanceof Error
-                ? error.message
-                : String(error)
-            : null,
-        refetch,
+        isBeeswarmLoading: isFetching || computeMutation.isPending,
+        beeswarmError: formatError(error) ?? formatError(computeMutation.error),
+        computeBeeswarm: () => computeMutation.mutate(),
+        isComputingBeeswarm: computeMutation.isPending,
     };
 };

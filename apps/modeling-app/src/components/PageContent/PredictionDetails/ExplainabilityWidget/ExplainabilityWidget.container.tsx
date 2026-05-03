@@ -172,7 +172,7 @@ export const ExplainabilityWidget = ({
         beeswarmData,
         isBeeswarmLoading,
         beeswarmError,
-        refetch: refetchBeeswarm,
+        computeBeeswarm,
     } = useShapBeeswarm({
         predictionId,
         xaiMethod: effectiveXaiMethod,
@@ -183,7 +183,12 @@ export const ExplainabilityWidget = ({
         hasCompletedExplanationsForMethod &&
         activeTab === 'horizon' &&
         !isExplanationRunning;
-    const { horizonData, isHorizonLoading, horizonError } = useHorizonSummary({
+    const {
+        horizonData,
+        isHorizonLoading,
+        horizonError,
+        computeHorizon,
+    } = useHorizonSummary({
         predictionId,
         orgUnit: effectiveOrgUnit,
         xaiMethod: effectiveXaiMethod,
@@ -218,7 +223,7 @@ export const ExplainabilityWidget = ({
         isExplanationJobRunning: isAnyXaiJobRunning,
         supports,
         onRunExplanations: handleRunExplanations,
-        onLoadBeeswarm: refetchBeeswarm,
+        onComputeBeeswarm: computeBeeswarm,
     };
 
     return (
@@ -289,6 +294,7 @@ export const ExplainabilityWidget = ({
                     isComputingLocal={isComputingLocal}
                     isTransitioning={isTransitioning}
                     methodDisplayName={selectedXaiMethodObj?.displayName ?? effectiveXaiMethod}
+                    defaultVisualization={selectedXaiMethodObj?.defaultVisualization ?? 'waterfall'}
                     onComputeLocal={handleComputeLocal}
                 />
             ) : (
@@ -297,6 +303,8 @@ export const ExplainabilityWidget = ({
                     horizonData={horizonData}
                     isHorizonLoading={isHorizonLoading}
                     horizonError={horizonError}
+                    onComputeHorizon={computeHorizon}
+                    isComputingHorizon={isHorizonLoading}
                 />
             )}
         </ExplainabilityWidgetComponent>

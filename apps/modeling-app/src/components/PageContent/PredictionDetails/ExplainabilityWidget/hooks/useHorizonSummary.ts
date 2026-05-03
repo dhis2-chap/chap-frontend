@@ -1,5 +1,5 @@
-import { useQuery } from '@tanstack/react-query';
-import { XaiService } from '@dhis2-chap/ui';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { XaiService, type HorizonSummaryResponse, ApiError } from '@dhis2-chap/ui';
 
 type Args = {
     predictionId: number;
@@ -8,16 +8,22 @@ type Args = {
     enabled: boolean;
 };
 
+const formatError = (e: unknown): string | null =>
+    e ? (e instanceof Error ? e.message : String(e)) : null;
+
 export const useHorizonSummary = ({
     predictionId,
     orgUnit,
     xaiMethod,
     enabled,
 }: Args) => {
-    const { data, isFetching, error } = useQuery({
-        queryKey: ['horizonSummary', predictionId, orgUnit, xaiMethod],
+    const queryClient = useQueryClient();
+    const queryKey = ['horizonSummary', predictionId, orgUnit, xaiMethod];
+
+    const { data, isFetching, error } = useQuery<HorizonSummaryResponse, ApiError>({
+        queryKey,
         queryFn: () =>
-            XaiService.computeHorizonSummaryV1XaiPredictionsPredictionIdLocalHorizonSummaryPost(
+            XaiService.getHorizonSummaryV1XaiPredictionsPredictionIdLocalHorizonSummaryGet(
                 predictionId,
                 orgUnit,
                 'median',
@@ -25,16 +31,28 @@ export const useHorizonSummary = ({
             ),
         enabled: enabled && !!orgUnit,
         staleTime: Infinity,
+        retry: 0,
         keepPreviousData: true,
+    });
+
+    const computeMutation = useMutation<HorizonSummaryResponse, ApiError>({
+        mutationFn: () =>
+            XaiService.computeHorizonSummaryV1XaiPredictionsPredictionIdLocalHorizonSummaryPost(
+                predictionId,
+                orgUnit,
+                'median',
+                xaiMethod,
+            ),
+        onSuccess: (result) => {
+            queryClient.setQueryData(queryKey, result);
+        },
     });
 
     return {
         horizonData: data ?? null,
-        isHorizonLoading: isFetching,
-        horizonError: error
-            ? error instanceof Error
-                ? error.message
-                : String(error)
-            : null,
+        isHorizonLoading: isFetching || computeMutation.isPending,
+        horizonError: formatError(error) ?? formatError(computeMutation.error),
+        computeHorizon: () => computeMutation.mutate(),
+        isComputingHorizon: computeMutation.isPending,
     };
 };

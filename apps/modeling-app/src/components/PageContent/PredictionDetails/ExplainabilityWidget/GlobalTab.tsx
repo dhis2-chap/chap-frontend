@@ -25,7 +25,7 @@ type Props = {
     beeswarmError?: string | null;
     orgUnitMap: Record<string, string>;
     onRunExplanations: () => void;
-    onLoadBeeswarm: () => void;
+    onComputeBeeswarm: () => void;
 };
 
 export const GlobalTab = ({
@@ -41,7 +41,7 @@ export const GlobalTab = ({
     beeswarmError,
     orgUnitMap,
     onRunExplanations,
-    onLoadBeeswarm,
+    onComputeBeeswarm,
 }: Props) => {
     const [globalView, setGlobalView] = useState<'importance' | 'beeswarm'>('importance');
     if (!globalExplanation?.available && (isGlobalLoading || (isGlobalFetching && !isGlobalTransitioning) || isExplanationJobRunning)) {
@@ -105,7 +105,7 @@ export const GlobalTab = ({
                         <div className={styles.loadingOverlay}><CircularLoader small /></div>
                         <FeatureImportanceChart features={features} title={i18n.t('Global Feature Importance')} height={chartHeight} />
                     </div>
-                ) : beeswarmData ? (
+                ) : beeswarmData && beeswarmData.available !== false ? (
                     <ShapBeeswarmChart
                         points={beeswarmData.points}
                         featureNames={beeswarmData.featureNames}
@@ -115,8 +115,8 @@ export const GlobalTab = ({
                     />
                 ) : (
                     <div className={styles.emptyState}>
-                        <p>{beeswarmError ?? i18n.t('SHAP summary data not yet loaded.')}</p>
-                        <Button small primary onClick={onLoadBeeswarm}>{i18n.t('Load')}</Button>
+                        <p>{beeswarmError ?? i18n.t('SHAP summary data not yet computed.')}</p>
+                        <Button small primary onClick={onComputeBeeswarm}>{i18n.t('Compute')}</Button>
                     </div>
                 )
             ) : (

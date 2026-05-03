@@ -10,5 +10,6 @@ export type ShapBeeswarmResponse = {
     featureNames: Array<string>;
     points: Array<ShapBeeswarmPoint>;
     surrogateQuality?: (SurrogateQualityRead | null);
+    available?: boolean;
 };
 

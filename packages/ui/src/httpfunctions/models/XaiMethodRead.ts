@@ -8,10 +8,13 @@ export type XaiMethodRead = {
     displayName: string;
     description: string;
     methodType: string;
+    methodTypeLabel: string;
     sourceUrl?: (string | null);
     author: string;
     archived: boolean;
     isAuto?: boolean;
     supportedVisualizations: Array<string>;
+    supportedVisualizationLabels: Array<string>;
+    defaultVisualization: string;
 };
 

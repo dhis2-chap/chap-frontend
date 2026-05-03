@@ -5,7 +5,7 @@ export const useGlobalExplanation = (predictionId: number | undefined, xaiMethod
     const { data, error, isLoading, isFetching, isPreviousData } = useQuery<GlobalExplanationResponse, ApiError>({
         queryKey: ['globalExplanation', predictionId, xaiMethod],
         queryFn: () => XaiService.getGlobalExplanationV1XaiPredictionsPredictionIdGlobalGet(predictionId!, xaiMethod),
-        enabled: !!predictionId,
+        enabled: !!predictionId && !!xaiMethod,
         staleTime: Infinity,
         retry: 0,
         keepPreviousData: true,

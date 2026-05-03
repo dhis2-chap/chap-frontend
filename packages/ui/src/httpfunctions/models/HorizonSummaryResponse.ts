@@ -13,5 +13,6 @@ export type HorizonSummaryResponse = {
     steps: Array<HorizonStepSummary>;
     averageImportance: Array<AverageImportance>;
     surrogateQuality?: (SurrogateQualityRead | null);
+    available?: boolean;
 };
 

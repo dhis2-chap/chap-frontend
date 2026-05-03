@@ -196,6 +196,34 @@ export class XaiService {
         });
     }
     /**
+     * Get Shap Beeswarm
+     * @param predictionId
+     * @param outputStatistic
+     * @param xaiMethod
+     * @returns ShapBeeswarmResponse Successful Response
+     * @throws ApiError
+     */
+    public static getShapBeeswarmV1XaiPredictionsPredictionIdShapBeeswarmGet(
+        predictionId: number,
+        outputStatistic: string = 'median',
+        xaiMethod: string = 'shap_auto',
+    ): CancelablePromise<ShapBeeswarmResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/v1/xai/predictions/{predictionId}/shap-beeswarm',
+            path: {
+                'predictionId': predictionId,
+            },
+            query: {
+                'outputStatistic': outputStatistic,
+                'xaiMethod': xaiMethod,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
      * Compute Shap Beeswarm
      * @param predictionId
      * @param outputStatistic
@@ -215,6 +243,37 @@ export class XaiService {
                 'predictionId': predictionId,
             },
             query: {
+                'outputStatistic': outputStatistic,
+                'xaiMethod': xaiMethod,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
+     * Get Horizon Summary
+     * @param predictionId
+     * @param orgUnit
+     * @param outputStatistic
+     * @param xaiMethod
+     * @returns HorizonSummaryResponse Successful Response
+     * @throws ApiError
+     */
+    public static getHorizonSummaryV1XaiPredictionsPredictionIdLocalHorizonSummaryGet(
+        predictionId: number,
+        orgUnit: string,
+        outputStatistic: string = 'median',
+        xaiMethod: string = 'shap_auto',
+    ): CancelablePromise<HorizonSummaryResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/v1/xai/predictions/{predictionId}/local/horizon-summary',
+            path: {
+                'predictionId': predictionId,
+            },
+            query: {
+                'orgUnit': orgUnit,
                 'outputStatistic': outputStatistic,
                 'xaiMethod': xaiMethod,
             },

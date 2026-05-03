@@ -27,7 +27,9 @@ type Props = {
     beeswarmError?: string | null;
     orgUnitMap: Record<string, string>;
     onRunExplanations: () => void;
-    onLoadBeeswarm: () => void;
+    onComputeBeeswarm: () => void;
+    onComputeHorizon: () => void;
+    isComputingHorizon: boolean;
 };
 
 export const HorizonTab = ({
@@ -44,11 +46,16 @@ export const HorizonTab = ({
     beeswarmError,
     orgUnitMap,
     onRunExplanations,
-    onLoadBeeswarm,
+    onComputeBeeswarm,
+    onComputeHorizon,
+    isComputingHorizon,
 }: Props) => {
     const [horizonView, setHorizonView] = useState<'importance' | 'beeswarm'>('importance');
     const showBeeswarm = supports('beeswarm') && horizonView === 'beeswarm';
     const orgLabel = orgUnitOptions.find(o => o.id === localOrgUnit)?.label ?? localOrgUnit;
+
+    const isHorizonAvailable = !!horizonData && horizonData.available !== false;
+    const isBeeswarmAvailable = !!beeswarmData && beeswarmData.available !== false;
 
     const importanceFeatureCount = horizonData?.averageImportance.length ?? 0;
     const beeswarmFeatureCount = beeswarmData ? beeswarmData.featureNames.length : importanceFeatureCount;
@@ -73,6 +80,18 @@ export const HorizonTab = ({
                     <div className={widgetStyles.loadingContainer}><CircularLoader small /></div>
                 ) : horizonError && !horizonData ? (
                     <NoticeBox error title={i18n.t('Error')}>{horizonError}</NoticeBox>
+                ) : horizonData && !isHorizonAvailable ? (
+                    <div className={widgetStyles.emptyState}>
+                        <p>{i18n.t('Horizon summary has not been computed yet.')}</p>
+                        <Button
+                            primary
+                            onClick={onComputeHorizon}
+                            loading={isComputingHorizon || isExplanationJobRunning}
+                            disabled={!localOrgUnit || isComputingHorizon || isExplanationJobRunning}
+                        >
+                            {i18n.t('Compute Horizon Summary')}
+                        </Button>
+                    </div>
                 ) : horizonData ? (
                     <div className={widgetStyles.chartContainer}>
                         {isHorizonLoading && (
@@ -145,7 +164,7 @@ export const HorizonTab = ({
                                     height={chartHeight}
                                 />
                             </div>
-                        ) : beeswarmData ? (
+                        ) : isBeeswarmAvailable && beeswarmData ? (
                             <ShapBeeswarmChart
                                 points={beeswarmData.points.filter(p => p.orgUnit === localOrgUnit)}
                                 featureNames={beeswarmData.featureNames}
@@ -157,19 +176,12 @@ export const HorizonTab = ({
                             />
                         ) : (
                             <div className={widgetStyles.emptyState}>
-                                <p>{beeswarmError ?? i18n.t('SHAP summary data not yet loaded.')}</p>
-                                <Button small primary onClick={onLoadBeeswarm}>{i18n.t('Load')}</Button>
+                                <p>{beeswarmError ?? i18n.t('SHAP summary data not yet computed.')}</p>
+                                <Button small primary onClick={onComputeBeeswarm}>{i18n.t('Compute')}</Button>
                             </div>
                         )}
                     </div>
-                ) : (
-                    <div className={widgetStyles.emptyState}>
-                        <p>{i18n.t('No horizon summary available.')}</p>
-                        <Button primary onClick={onRunExplanations} loading={isExplanationJobRunning} disabled={!localOrgUnit || isExplanationJobRunning}>
-                            {i18n.t('Compute Horizon Summary')}
-                        </Button>
-                    </div>
-                )}
+                ) : null}
             </div>
         </div>
     );

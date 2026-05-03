@@ -18,7 +18,7 @@ export const useLocalExplanation = (
     const { data, error, isLoading, isFetching, isPreviousData } = useQuery<LocalExplanationResponse[], ApiError>({
         queryKey: ['localExplanations', predictionId, orgUnit, period, xaiMethod],
         queryFn: () => XaiService.listLocalExplanationsV1XaiPredictionsPredictionIdLocalGet(predictionId!, orgUnit, period, xaiMethod),
-        enabled: !!predictionId && !!orgUnit && period != null && period !== '',
+        enabled: !!predictionId && !!orgUnit && period != null && period !== '' && !!xaiMethod,
         staleTime: Infinity,
         retry: 0,
         keepPreviousData: true,

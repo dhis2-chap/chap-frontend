@@ -35,8 +35,9 @@ type Props = {
     beeswarmError?: string | null;
     orgUnitMap: Record<string, string>;
     methodDisplayName: string;
+    defaultVisualization: string;
     onRunExplanations: () => void;
-    onLoadBeeswarm: () => void;
+    onComputeBeeswarm: () => void;
     onComputeLocal: () => void;
 };
 
@@ -61,16 +62,17 @@ export const LocalTab = ({
     beeswarmError,
     orgUnitMap,
     methodDisplayName,
+    defaultVisualization,
     onRunExplanations,
-    onLoadBeeswarm,
+    onComputeBeeswarm,
     onComputeLocal,
 }: Props) => {
-    const defaultLocalView: 'waterfall' | 'summary' = supports('waterfall') ? 'waterfall' : 'summary';
-    const [localView, setLocalView] = useState<'waterfall' | 'summary'>(defaultLocalView);
+    const [localView, setLocalView] = useState<string>(defaultVisualization);
     useEffect(() => {
-        setLocalView(defaultLocalView);
-    }, [defaultLocalView]);
+        setLocalView(defaultVisualization);
+    }, [defaultVisualization]);
     const covariateProvenance = displayExplanation?.covariateProvenance;
+    const isBeeswarmAvailable = !!beeswarmData && beeswarmData.available !== false;
 
     return (
         <div className={widgetStyles.mainLayout}>
@@ -140,8 +142,8 @@ export const LocalTab = ({
                                             {supports('beeswarm') && (
                                                 <Button
                                                     small
-                                                    primary={localView === 'summary'}
-                                                    onClick={() => setLocalView('summary')}
+                                                    primary={localView === 'beeswarm'}
+                                                    onClick={() => setLocalView('beeswarm')}
                                                 >
                                                     {i18n.t('SHAP Summary')}
                                                 </Button>
@@ -165,10 +167,10 @@ export const LocalTab = ({
                                             period: getPeriodLabel(selectedPeriod),
                                         })}
                                     />
-                                ) : supports('beeswarm') && localView === 'summary' ? (
+                                ) : supports('beeswarm') && localView === 'beeswarm' ? (
                                     isBeeswarmLoading ? (
                                         <div className={widgetStyles.loadingContainer}><CircularLoader small /></div>
-                                    ) : beeswarmData ? (
+                                    ) : isBeeswarmAvailable && beeswarmData ? (
                                         <ShapBeeswarmChart
                                             points={beeswarmData.points.filter(p => p.orgUnit === localOrgUnit)}
                                             featureNames={beeswarmData.featureNames}
@@ -182,8 +184,8 @@ export const LocalTab = ({
                                         />
                                     ) : (
                                         <div className={widgetStyles.emptyState}>
-                                            <p>{beeswarmError ?? i18n.t('SHAP summary data not yet loaded.')}</p>
-                                            <Button small primary onClick={onLoadBeeswarm}>{i18n.t('Load')}</Button>
+                                            <p>{beeswarmError ?? i18n.t('SHAP summary data not yet computed.')}</p>
+                                            <Button small primary onClick={onComputeBeeswarm}>{i18n.t('Compute')}</Button>
                                         </div>
                                     )
                                 ) : (

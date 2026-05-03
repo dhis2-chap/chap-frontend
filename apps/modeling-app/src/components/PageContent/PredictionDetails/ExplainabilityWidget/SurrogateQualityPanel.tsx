@@ -3,10 +3,7 @@ import i18n from '@dhis2/d2-i18n';
 import { Tag, formatFeatureName, CHART_COLORS, type SurrogateQualityRead } from '@dhis2-chap/ui';
 import styles from './SurrogateQualityPanel.module.css';
 
-type FidelityTier = 'good' | 'moderate' | 'poor';
-const FIDELITY_TIERS = new Set<FidelityTier>(['good', 'moderate', 'poor']);
-const isFidelityTier = (v: string | null | undefined): v is FidelityTier =>
-    !!v && FIDELITY_TIERS.has(v as FidelityTier);
+type FidelityTier = NonNullable<SurrogateQualityRead['fidelityTier']>;
 
 type Props = {
     quality?: SurrogateQualityRead | null;
@@ -43,7 +40,7 @@ export const SurrogateQualityPanel = ({ quality, stabilityScore }: Props) => {
     const r2 = quality.rSquared;
     if (r2 == null) return null;
     const fidelityTier = quality.fidelityTier;
-    if (!isFidelityTier(fidelityTier)) return null;
+    if (fidelityTier == null) return null;
 
     const { mae, mape, nSamples: n, nUniqueRows: unique, residualMean, residualStd, targetTransformMethod } = quality;
     const constantFeatures = quality.constantFeatures ?? [];

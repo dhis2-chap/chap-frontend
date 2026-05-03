@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-05-02T19:29:08.329Z\n"
-"PO-Revision-Date: 2026-05-02T19:29:08.330Z\n"
+"POT-Creation-Date: 2026-05-03T12:04:44.833Z\n"
+"PO-Revision-Date: 2026-05-03T12:04:44.833Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -966,11 +966,17 @@ msgstr "Global Feature Importance"
 msgid "SHAP Summary — how feature values affect predictions"
 msgstr "SHAP Summary — how feature values affect predictions"
 
-msgid "SHAP summary data not yet loaded."
-msgstr "SHAP summary data not yet loaded."
+msgid "SHAP summary data not yet computed."
+msgstr "SHAP summary data not yet computed."
 
-msgid "Load"
-msgstr "Load"
+msgid "Compute"
+msgstr "Compute"
+
+msgid "Horizon summary has not been computed yet."
+msgstr "Horizon summary has not been computed yet."
+
+msgid "Compute Horizon Summary"
+msgstr "Compute Horizon Summary"
 
 msgid "Forecast Horizon Summary — {{orgUnit}}"
 msgstr "Forecast Horizon Summary — {{orgUnit}}"
@@ -980,12 +986,6 @@ msgstr "Average Horizon Importance — mean |SHAP| across {{n}} steps"
 
 msgid "SHAP Summary — {{orgUnit}} across horizon steps"
 msgstr "SHAP Summary — {{orgUnit}} across horizon steps"
-
-msgid "No horizon summary available."
-msgstr "No horizon summary available."
-
-msgid "Compute Horizon Summary"
-msgstr "Compute Horizon Summary"
 
 msgid "No forecast periods are available for this prediction."
 msgstr "No forecast periods are available for this prediction."
@@ -1013,14 +1013,14 @@ msgid "SHAP Summary — {{orgUnit}}, {{period}} highlighted"
 msgstr "SHAP Summary — {{orgUnit}}, {{period}} highlighted"
 
 msgid ""
-"LIME contributions are coefficients of a local linear approximation and do "
-"not decompose additively into the final prediction (unlike SHAP)."
+"{{method}} attributions are shown as feature contributions and may not "
+"decompose additively into the final prediction (unlike SHAP)."
 msgstr ""
-"LIME contributions are coefficients of a local linear approximation and do "
-"not decompose additively into the final prediction (unlike SHAP)."
+"{{method}} attributions are shown as feature contributions and may not "
+"decompose additively into the final prediction (unlike SHAP)."
 
-msgid "LIME Feature Contributions — {{orgUnit}}, {{period}}"
-msgstr "LIME Feature Contributions — {{orgUnit}}, {{period}}"
+msgid "{{method}} Feature Contributions — {{orgUnit}}, {{period}}"
+msgstr "{{method}} Feature Contributions — {{orgUnit}}, {{period}}"
 
 msgid "No explanation available for this selection."
 msgstr "No explanation available for this selection."

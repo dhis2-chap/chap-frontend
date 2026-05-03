@@ -14,7 +14,7 @@ export type SurrogateQualityRead = {
     selectedModelType?: (string | null);
     selectedModelDisplayName?: (string | null);
     nGroups?: (number | null);
-    fidelityTier?: (string | null);
+    fidelityTier?: ('good' | 'moderate' | 'poor' | null);
     residualMean?: (number | null);
     residualStd?: (number | null);
     targetTransformed?: boolean;
