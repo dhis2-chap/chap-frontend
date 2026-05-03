@@ -7,7 +7,8 @@ import {
     type HorizonSummaryResponse,
     type ShapBeeswarmResponse,
 } from '@dhis2-chap/ui';
-import styles from './ExplainabilityWidget.module.css';
+import widgetStyles from './ExplainabilityWidget.module.css';
+import styles from './HorizonTab.module.css';
 import { getChartHeight } from './getChartHeight';
 
 type OrgUnitOption = { id: string; label: string };
@@ -54,8 +55,8 @@ export const HorizonTab = ({
     const chartHeight = getChartHeight(importanceFeatureCount, beeswarmFeatureCount, supports('beeswarm'));
 
     return (
-        <div className={styles.mainLayout}>
-            <div className={styles.sidebar}>
+        <div className={widgetStyles.mainLayout}>
+            <div className={widgetStyles.sidebar}>
                 <Menu dense>
                     {orgUnitOptions.map(o => (
                         <MenuItem
@@ -67,17 +68,17 @@ export const HorizonTab = ({
                     ))}
                 </Menu>
             </div>
-            <div className={styles.plotArea}>
+            <div className={widgetStyles.plotArea}>
                 {(isHorizonLoading || (isExplanationJobRunning && !horizonData)) && !horizonData ? (
-                    <div className={styles.loadingContainer}><CircularLoader small /></div>
+                    <div className={widgetStyles.loadingContainer}><CircularLoader small /></div>
                 ) : horizonError && !horizonData ? (
                     <NoticeBox error title={i18n.t('Error')}>{horizonError}</NoticeBox>
                 ) : horizonData ? (
-                    <div className={styles.chartContainer}>
+                    <div className={widgetStyles.chartContainer}>
                         {isHorizonLoading && (
-                            <div className={styles.loadingOverlay}><CircularLoader small /></div>
+                            <div className={widgetStyles.loadingOverlay}><CircularLoader small /></div>
                         )}
-                        <div className={styles.chartHeader}>
+                        <div className={widgetStyles.chartHeader}>
                             <h4 className={styles.horizonTitle}>
                                 {i18n.t('Forecast Horizon Summary — {{orgUnit}}', { orgUnit: orgLabel })}
                             </h4>
@@ -130,8 +131,8 @@ export const HorizonTab = ({
                                 )}
                             </>
                         ) : isBeeswarmLoading ? (
-                            <div className={styles.chartLoadingWrapper}>
-                                <div className={styles.loadingOverlay}><CircularLoader small /></div>
+                            <div className={widgetStyles.chartLoadingWrapper}>
+                                <div className={widgetStyles.loadingOverlay}><CircularLoader small /></div>
                                 <FeatureImportanceChart
                                     features={horizonData.averageImportance.map(f => ({
                                         featureName: f.featureName,
@@ -155,14 +156,14 @@ export const HorizonTab = ({
                                 height={chartHeight}
                             />
                         ) : (
-                            <div className={styles.emptyState}>
+                            <div className={widgetStyles.emptyState}>
                                 <p>{beeswarmError ?? i18n.t('SHAP summary data not yet loaded.')}</p>
                                 <Button small primary onClick={onLoadBeeswarm}>{i18n.t('Load')}</Button>
                             </div>
                         )}
                     </div>
                 ) : (
-                    <div className={styles.emptyState}>
+                    <div className={widgetStyles.emptyState}>
                         <p>{i18n.t('No horizon summary available.')}</p>
                         <Button primary onClick={onRunExplanations} loading={isExplanationJobRunning} disabled={!localOrgUnit || isExplanationJobRunning}>
                             {i18n.t('Compute Horizon Summary')}

@@ -9,7 +9,8 @@ import {
     type LocalExplanationResponse,
     type ShapBeeswarmResponse,
 } from '@dhis2-chap/ui';
-import styles from './ExplainabilityWidget.module.css';
+import widgetStyles from './ExplainabilityWidget.module.css';
+import styles from './LocalTab.module.css';
 
 type OrgUnitOption = { id: string; label: string };
 
@@ -72,8 +73,8 @@ export const LocalTab = ({
     const covariateProvenance = displayExplanation?.covariateProvenance;
 
     return (
-        <div className={styles.mainLayout}>
-            <div className={styles.sidebar}>
+        <div className={widgetStyles.mainLayout}>
+            <div className={widgetStyles.sidebar}>
                 <Menu dense>
                     {orgUnitOptions.map(o => (
                         <MenuItem
@@ -85,9 +86,9 @@ export const LocalTab = ({
                     ))}
                 </Menu>
             </div>
-            <div className={styles.plotArea}>
+            <div className={widgetStyles.plotArea}>
                 {periods.length === 0 ? (
-                    <div className={styles.emptyState}>
+                    <div className={widgetStyles.emptyState}>
                         <p>{i18n.t('No forecast periods are available for this prediction.')}</p>
                     </div>
                 ) : (
@@ -116,15 +117,15 @@ export const LocalTab = ({
                         )}
 
                         {(isLocalLoading || isLocalFetching || isComputingLocal || (isExplanationJobRunning && !displayExplanation)) && !displayExplanation ? (
-                            <div className={styles.loadingContainer}><CircularLoader small /></div>
+                            <div className={widgetStyles.loadingContainer}><CircularLoader small /></div>
                         ) : localError && !displayExplanation ? (
                             <NoticeBox error title={i18n.t('Error')}>{i18n.t('Failed to load local explanation')}</NoticeBox>
                         ) : displayExplanation ? (
-                            <div className={styles.chartContainer}>
+                            <div className={widgetStyles.chartContainer}>
                                 {(isLocalFetching || isComputingLocal || isTransitioning) && (
-                                    <div className={styles.loadingOverlay}><CircularLoader small /></div>
+                                    <div className={widgetStyles.loadingOverlay}><CircularLoader small /></div>
                                 )}
-                                <div className={styles.chartHeader}>
+                                <div className={widgetStyles.chartHeader}>
                                     {(supports('waterfall') || supports('beeswarm')) && (
                                         <ButtonStrip>
                                             {supports('waterfall') && (
@@ -166,7 +167,7 @@ export const LocalTab = ({
                                     />
                                 ) : supports('beeswarm') && localView === 'summary' ? (
                                     isBeeswarmLoading ? (
-                                        <div className={styles.loadingContainer}><CircularLoader small /></div>
+                                        <div className={widgetStyles.loadingContainer}><CircularLoader small /></div>
                                     ) : beeswarmData ? (
                                         <ShapBeeswarmChart
                                             points={beeswarmData.points.filter(p => p.orgUnit === localOrgUnit)}
@@ -180,7 +181,7 @@ export const LocalTab = ({
                                             })}
                                         />
                                     ) : (
-                                        <div className={styles.emptyState}>
+                                        <div className={widgetStyles.emptyState}>
                                             <p>{beeswarmError ?? i18n.t('SHAP summary data not yet loaded.')}</p>
                                             <Button small primary onClick={onLoadBeeswarm}>{i18n.t('Load')}</Button>
                                         </div>
@@ -204,7 +205,7 @@ export const LocalTab = ({
                                 )}
                             </div>
                         ) : (
-                            <div className={styles.emptyState}>
+                            <div className={widgetStyles.emptyState}>
                                 <p>{i18n.t('No explanation available for this selection.')}</p>
                                 <Button primary onClick={onComputeLocal} loading={isComputingLocal} disabled={isComputingLocal || !localOrgUnit || !selectedPeriod}>
                                     {i18n.t('Explain This Forecast')}

@@ -1,0 +1,20 @@
+.selectors {
+    display: flex;
+    gap: var(--spacers-dp16, 16px);
+    flex-wrap: wrap;
+}
+
+.selectorGroup {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacers-dp4, 4px);
+    min-width: 150px;
+    flex: 1;
+}
+
+.dataSourceNote {
+    font-size: 12px;
+    color: var(--colors-grey600, #7b8794);
+    margin: 0;
+    font-style: italic;
+}

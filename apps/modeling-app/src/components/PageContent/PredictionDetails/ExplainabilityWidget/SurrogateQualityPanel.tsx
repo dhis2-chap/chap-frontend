@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { Tag, formatFeatureName, CHART_COLORS, type SurrogateQualityRead } from '@dhis2-chap/ui';
-import styles from './ExplainabilityWidget.module.css';
+import styles from './SurrogateQualityPanel.module.css';
 
 type FidelityTier = 'good' | 'moderate' | 'poor';
 const FIDELITY_TIERS = new Set<FidelityTier>(['good', 'moderate', 'poor']);
