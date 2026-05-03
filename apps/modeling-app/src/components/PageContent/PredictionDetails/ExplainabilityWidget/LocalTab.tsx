@@ -187,9 +187,6 @@ export const LocalTab = ({
                                     )
                                 ) : (
                                     <>
-                                        <NoticeBox>
-                                            {i18n.t('{{method}} attributions are shown as feature contributions and may not decompose additively into the final prediction (unlike SHAP).', { method: methodDisplayName })}
-                                        </NoticeBox>
                                         <FeatureImportanceChart
                                             features={displayExplanation.featureAttributions.map(f => ({
                                                 featureName: f.featureName, importance: f.importance, direction: f.direction,
