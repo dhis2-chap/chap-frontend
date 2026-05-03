@@ -12,9 +12,9 @@ import {
     ExplainabilityWidgetComponent,
     type TabKey,
 } from './ExplainabilityWidget.component';
-import { GlobalTab } from './GlobalTab';
-import { LocalTab, type LocalView } from './LocalTab';
-import { HorizonTab } from './HorizonTab';
+import { GlobalTab } from './Tabs/GlobalTab';
+import { LocalTab, type LocalView } from './Tabs/LocalTab';
+import { HorizonTab } from './Tabs/HorizonTab';
 import { useGlobalExplanation } from './hooks/useGlobalExplanation';
 import { useLocalExplanation } from './hooks/useLocalExplanation';
 import { useXaiMethods } from './hooks/useXaiMethods';

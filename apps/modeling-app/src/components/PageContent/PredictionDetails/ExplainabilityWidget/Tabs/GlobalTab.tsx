@@ -10,7 +10,7 @@ import {
     type ShapBeeswarmResponse,
 } from '@dhis2-chap/ui';
 import { SurrogateQualityPanel } from './SurrogateQualityPanel';
-import styles from './ExplainabilityWidget.module.css';
+import styles from '../ExplainabilityWidget.module.css';
 
 type Props = {
     isGlobalLoading: boolean;

@@ -9,7 +9,7 @@ import {
     type LocalExplanationResponse,
     type ShapBeeswarmResponse,
 } from '@dhis2-chap/ui';
-import widgetStyles from './ExplainabilityWidget.module.css';
+import widgetStyles from '../ExplainabilityWidget.module.css';
 import styles from './LocalTab.module.css';
 
 type OrgUnitOption = { id: string; label: string };

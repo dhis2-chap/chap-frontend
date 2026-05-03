@@ -8,7 +8,7 @@ import {
     type HorizonSummaryResponse,
     type ShapBeeswarmResponse,
 } from '@dhis2-chap/ui';
-import widgetStyles from './ExplainabilityWidget.module.css';
+import widgetStyles from '../ExplainabilityWidget.module.css';
 import styles from './HorizonTab.module.css';
 
 type OrgUnitOption = { id: string; label: string };
