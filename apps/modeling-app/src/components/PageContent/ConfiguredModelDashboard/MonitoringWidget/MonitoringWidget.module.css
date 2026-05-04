@@ -1,0 +1,7 @@
+.placeholder {
+    min-block-size: 112px;
+    padding: 18px;
+    color: var(--colors-grey700);
+    font-size: inherit;
+    line-height: 20px;
+}

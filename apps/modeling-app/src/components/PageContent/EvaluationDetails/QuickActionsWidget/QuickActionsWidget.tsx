@@ -12,13 +12,15 @@ import styles from './QuickActionsWidget.module.css';
 type Props = {
     evaluationId: number;
     readyForFollowUp: boolean;
-    configurationId: number;
+    predictionSetupId?: number;
+    predictionSetupIsLoading?: boolean;
 };
 
 export const QuickActionsWidget = ({
     evaluationId,
     readyForFollowUp,
-    configurationId,
+    predictionSetupId,
+    predictionSetupIsLoading = false,
 }: Props) => {
     const navigate = useNavigate();
     const [markReadyModalIsOpen, setMarkReadyModalIsOpen] = useState(false);
@@ -37,7 +39,11 @@ export const QuickActionsWidget = ({
     };
 
     const handlePredict = () => {
-        navigate(`/predictions/${configurationId}`);
+        if (!predictionSetupId) {
+            return;
+        }
+
+        navigate(`/predictions/${predictionSetupId}`);
     };
 
     const handleMarkReady = () => {
@@ -66,6 +72,8 @@ export const QuickActionsWidget = ({
                                 dataTest="quick-action-predict"
                                 icon={<IconExportItems24 />}
                                 className={styles.actionButton}
+                                loading={predictionSetupIsLoading}
+                                disabled={!predictionSetupId || predictionSetupIsLoading}
                                 primary
                             >
                                 {i18n.t('Predict')}
@@ -78,7 +86,7 @@ export const QuickActionsWidget = ({
                                 className={styles.actionButton}
                                 primary
                             >
-                                {i18n.t('Mark as ready for forecasting')}
+                                {i18n.t('Create prediction setup')}
                             </Button>
                         )}
                         <Button

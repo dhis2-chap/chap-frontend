@@ -27,12 +27,12 @@ export const useCreateConfiguredModelWithDataSourceFromBacktest = ({
     const queryClient = useQueryClient();
 
     const { show: showSuccessAlert } = useAlert(
-        i18n.t('Configuration marked as ready for forecasting'),
+        i18n.t('Prediction setup created'),
         { success: true },
     );
 
     const { show: showErrorAlert } = useAlert(
-        i18n.t('Failed to mark configuration as ready for forecasting'),
+        i18n.t('Failed to create prediction setup'),
         { critical: true },
     );
 

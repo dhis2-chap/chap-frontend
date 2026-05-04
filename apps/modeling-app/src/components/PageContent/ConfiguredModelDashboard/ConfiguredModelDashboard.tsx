@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import type { PredictionInfo } from '@dhis2-chap/ui';
 import { useParams } from 'react-router-dom';
 import { useConfiguredModelWithDataSource } from '../../../hooks/useConfiguredModelWithDataSource';
+import { MonitoringWidget } from './MonitoringWidget';
 import { OverviewWidget } from './OverviewWidget';
 import { PredictionRunsWidget } from './PredictionRunsWidget';
 import { QuickActionsWidget } from './QuickActionsWidget';
@@ -47,6 +48,7 @@ export const ConfiguredModelDashboard: React.FC = () => {
                     isLoading={isLoading}
                     predictions={predictions}
                 />
+                <MonitoringWidget />
             </div>
             <div className={styles.rightColumn}>
                 <QuickActionsWidget

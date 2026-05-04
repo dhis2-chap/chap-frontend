@@ -1,18 +1,21 @@
 .content {
     display: flex;
     flex-direction: column;
-    gap: var(--spacers-dp24);
+    padding-block-start: var(--spacers-dp8);
+    padding-block-end: var(--spacers-dp24);
 }
 
 .section {
     display: flex;
     flex-direction: column;
     gap: var(--spacers-dp12);
-    padding-block-start: var(--spacers-dp16);
+    margin-block-start: var(--spacers-dp20, 20px);
+    padding-block-start: var(--spacers-dp20, 20px);
     border-block-start: 1px solid var(--colors-grey300);
 }
 
-.mappingToggle {
+.mappingToggle,
+.mappingToggleDisabled {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -26,6 +29,11 @@
     background-color: var(--colors-grey050);
     cursor: pointer;
     user-select: none;
+}
+
+.mappingToggleDisabled {
+    cursor: not-allowed;
+    opacity: 0.72;
 }
 
 .mappingToggle:hover {
@@ -61,5 +69,6 @@
     box-sizing: border-box;
     inline-size: calc(90% - 22px);
     margin-inline: auto;
+    overflow: hidden;
     row-gap: var(--spacers-dp4);
 }

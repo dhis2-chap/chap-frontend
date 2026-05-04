@@ -86,6 +86,7 @@ export const PredictionRunsWidget = ({
 }: Props) => {
     const hasError = !!error;
     const hasRuns = predictions.length > 0;
+    const [open, setOpen] = useState(true);
     const [sorting, setSorting] = useState<SortingState>([{ id: 'created', desc: true }]);
     const columns = useMemo(() => [
         columnHelper.accessor('name', {
@@ -140,7 +141,9 @@ export const PredictionRunsWidget = ({
     return (
         <Widget
             header={i18n.t('Prediction runs')}
-            noncollapsible
+            open={open}
+            onClose={() => setOpen(false)}
+            onOpen={() => setOpen(true)}
         >
             <div className={styles.content}>
                 {isLoading && (

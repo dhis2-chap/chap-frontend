@@ -21,7 +21,9 @@ import {
 } from '@tanstack/react-table';
 import { ConfiguredModelWithDataSourceRead } from '@dhis2-chap/ui';
 import { Link } from 'react-router-dom';
+import { format } from 'date-fns';
 import styles from './ReadyToPredictTable.module.css';
+import { PredictionSetupActionsMenu } from './PredictionSetupActionsMenu';
 import { ReadyToPredictTableFilters } from './ReadyToPredictTableFilters';
 import { useReadyToPredictTableFilters } from './hooks/useReadyToPredictTableFilters';
 import { useTablePaginationParams } from '../../../../hooks/useTablePaginationParams';
@@ -30,7 +32,15 @@ const columnHelper = createColumnHelper<ConfiguredModelWithDataSourceRead>();
 
 const EMPTY_VALUE = '—';
 
+const formatDateTime = (created?: string | null) => (
+    created ? format(new Date(created), 'dd.MM.yyyy, HH:mm') : EMPTY_VALUE
+);
+
 const columns = [
+    columnHelper.accessor('id', {
+        header: () => i18n.t('ID'),
+        filterFn: 'equals',
+    }),
     columnHelper.accessor('name', {
         header: () => i18n.t('Name'),
         filterFn: 'includesString',
@@ -42,15 +52,20 @@ const columns = [
     }),
     columnHelper.accessor('created', {
         header: () => i18n.t('Date created'),
-        cell: (info) => {
-            const value = info.getValue();
-            return value ? new Date(value).toLocaleDateString() : EMPTY_VALUE;
-        },
+        cell: info => formatDateTime(info.getValue()),
     }),
     columnHelper.accessor(row => row.configuredModel?.modelTemplate?.displayName || row.configuredModel?.name || '', {
         id: 'model',
         header: () => i18n.t('Model'),
         cell: info => info.getValue() || EMPTY_VALUE,
+    }),
+    columnHelper.display({
+        id: 'actions',
+        header: () => i18n.t('Actions'),
+        enableSorting: false,
+        cell: info => (
+            <PredictionSetupActionsMenu predictionSetupId={info.row.original.id} />
+        ),
     }),
 ];
 

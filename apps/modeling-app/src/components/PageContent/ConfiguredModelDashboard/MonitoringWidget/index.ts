@@ -1,0 +1,1 @@
+export { MonitoringWidget } from './MonitoringWidget';

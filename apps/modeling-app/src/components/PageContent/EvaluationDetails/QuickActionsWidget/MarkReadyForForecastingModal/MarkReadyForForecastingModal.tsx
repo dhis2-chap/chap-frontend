@@ -11,6 +11,7 @@ import {
 import i18n from '@dhis2/d2-i18n';
 import { useState } from 'react';
 import type { KeyboardEvent, MouseEvent } from 'react';
+import { AnimatePresence, motion } from 'motion/react';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -80,7 +81,6 @@ export const MarkReadyForForecastingModal = ({
     onSubmit,
     isSubmitting = false,
 }: MarkReadyForForecastingModalProps) => {
-    const [scheduleIsEnabled, setScheduleIsEnabled] = useState(false);
     const [importMappingIsEnabled, setImportMappingIsEnabled] = useState(false);
     const {
         control,
@@ -112,17 +112,6 @@ export const MarkReadyForForecastingModal = ({
         }
     };
 
-    const toggleSchedule = () => {
-        setScheduleIsEnabled(!scheduleIsEnabled);
-    };
-
-    const handleScheduleKeyDown = (event: KeyboardEvent) => {
-        if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            toggleSchedule();
-        }
-    };
-
     const handleImportMappingKeyDown = (event: KeyboardEvent) => {
         if (event.key === 'Enter' || event.key === ' ') {
             event.preventDefault();
@@ -137,7 +126,7 @@ export const MarkReadyForForecastingModal = ({
     return (
         <Modal onClose={onClose} dataTest="mark-ready-for-forecasting-modal" large>
             <form onSubmit={handleSubmit(onSubmit)}>
-                <ModalTitle>{i18n.t('Mark as ready for forecasting')}</ModalTitle>
+                <ModalTitle>{i18n.t('Create prediction setup')}</ModalTitle>
                 <ModalContent>
                     <div className={styles.content}>
                         <Controller
@@ -146,7 +135,7 @@ export const MarkReadyForForecastingModal = ({
                             render={({ field }) => (
                                 <InputField
                                     {...field}
-                                    label={i18n.t('Configuration name')}
+                                    label={i18n.t('Setup name')}
                                     autoComplete="off"
                                     error={!!errors.name}
                                     validationText={errors.name?.message}
@@ -159,11 +148,8 @@ export const MarkReadyForForecastingModal = ({
 
                         <section className={styles.section}>
                             <div
-                                className={styles.mappingToggle}
-                                onClick={toggleSchedule}
-                                onKeyDown={handleScheduleKeyDown}
-                                role="button"
-                                tabIndex={0}
+                                className={styles.mappingToggleDisabled}
+                                aria-disabled="true"
                             >
                                 <div className={styles.mappingToggleText}>
                                     <span className={styles.mappingToggleTitle}>
@@ -175,8 +161,8 @@ export const MarkReadyForForecastingModal = ({
                                 </div>
                                 <span onClick={handleSwitchClick}>
                                     <Switch
-                                        checked={scheduleIsEnabled}
-                                        onChange={toggleSchedule}
+                                        checked={false}
+                                        disabled
                                     />
                                 </span>
                             </div>
@@ -195,7 +181,7 @@ export const MarkReadyForForecastingModal = ({
                                         {i18n.t('Set default import mapping')}
                                     </span>
                                     <span className={styles.mappingToggleDescription}>
-                                        {i18n.t('Choose the DHIS2 data elements to use by default when prediction outputs are imported. You can change these mappings before each import.')}
+                                        {i18n.t('Choose the DHIS2 data elements to use by default when prediction outputs are imported. You can change this before each import.')}
                                     </span>
                                 </div>
                                 <span onClick={handleSwitchClick}>
@@ -205,26 +191,34 @@ export const MarkReadyForForecastingModal = ({
                                     />
                                 </span>
                             </div>
-                            {importMappingIsEnabled && (
-                                <div className={styles.quantileGrid}>
-                                    {quantileFields.map(({ name, label }) => (
-                                        <Controller
-                                            key={name}
-                                            name={name}
-                                            control={control}
-                                            render={({ field }) => (
-                                                <DataItemSelect
-                                                    label={label}
-                                                    value={field.value}
-                                                    onChange={field.onChange}
-                                                    error={errors[name]?.message}
-                                                    dataElementsOnly
-                                                />
-                                            )}
-                                        />
-                                    ))}
-                                </div>
-                            )}
+                            <AnimatePresence initial={false}>
+                                {importMappingIsEnabled && (
+                                    <motion.div
+                                        className={styles.quantileGrid}
+                                        initial={{ height: 0, opacity: 0, y: -4 }}
+                                        animate={{ height: 'auto', opacity: 1, y: 0 }}
+                                        exit={{ height: 0, opacity: 0, y: -4 }}
+                                        transition={{ duration: 0.18, ease: 'easeOut' }}
+                                    >
+                                        {quantileFields.map(({ name, label }) => (
+                                            <Controller
+                                                key={name}
+                                                name={name}
+                                                control={control}
+                                                render={({ field }) => (
+                                                    <DataItemSelect
+                                                        label={label}
+                                                        value={field.value}
+                                                        onChange={field.onChange}
+                                                        error={errors[name]?.message}
+                                                        dataElementsOnly
+                                                    />
+                                                )}
+                                            />
+                                        ))}
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
                         </section>
                     </div>
                 </ModalContent>

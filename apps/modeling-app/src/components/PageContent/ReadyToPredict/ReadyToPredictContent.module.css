@@ -1,14 +1,15 @@
 .container {
-  margin: 16px 0;
+    margin: 16px 0;
+    padding: var(--spacers-dp16);
 }
 
 .loadingContainer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  block-size: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    block-size: 200px;
 }
 
 .errorContainer {
-  margin: 16px 0;
+    margin: 16px 0;
 }

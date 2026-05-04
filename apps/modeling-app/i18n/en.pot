@@ -825,11 +825,11 @@ msgstr "Start period"
 msgid "End period"
 msgstr "End period"
 
-msgid "Mark as ready for forecasting"
-msgstr "Mark as ready for forecasting"
+msgid "Create prediction setup"
+msgstr "Create prediction setup"
 
-msgid "Configuration name"
-msgstr "Configuration name"
+msgid "Setup name"
+msgstr "Setup name"
 
 msgid "Create prediction"
 msgstr "Create prediction"
@@ -850,11 +850,11 @@ msgstr "Predict"
 msgid "Compare with..."
 msgstr "Compare with..."
 
-msgid "Configuration marked as ready for forecasting"
-msgstr "Configuration marked as ready for forecasting"
+msgid "Prediction setup created"
+msgstr "Prediction setup created"
 
-msgid "Failed to mark configuration as ready for forecasting"
-msgstr "Failed to mark configuration as ready for forecasting"
+msgid "Failed to create prediction setup"
+msgstr "Failed to create prediction setup"
 
 msgid "Error loading jobs"
 msgstr "Error loading jobs"
