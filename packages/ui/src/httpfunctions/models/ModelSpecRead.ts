@@ -24,5 +24,7 @@ export type ModelSpecRead = {
     target: FeatureType;
     archived?: boolean;
     usesChapkit?: boolean;
+    userOptionValues?: (Record<string, any> | null);
+    additionalContinuousCovariates?: Array<string>;
 };
 

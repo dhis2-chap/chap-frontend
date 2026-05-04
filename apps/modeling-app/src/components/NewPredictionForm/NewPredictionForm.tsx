@@ -12,11 +12,13 @@ import { NavigationConfirmModal } from '../NavigationConfirmModal';
 type NewPredictionFormProps = {
     configuredModelWithDataSourceId?: number;
     initialValues?: Partial<ModelExecutionFormValues>;
+    returnTo?: string;
 };
 
 export const NewPredictionForm = ({
     configuredModelWithDataSourceId,
     initialValues,
+    returnTo,
 }: NewPredictionFormProps = {}) => {
     const {
         methods,
@@ -27,6 +29,7 @@ export const NewPredictionForm = ({
     } = usePredictionFormController({
         configuredModelWithDataSourceId,
         initialValues,
+        returnTo,
     });
 
     const {

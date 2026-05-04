@@ -13,9 +13,11 @@ import { ModelExecutionFormValues } from '../../ModelExecutionForm/hooks/useMode
 import { prepareBacktestData } from '../../ModelExecutionForm/utils/prepareBacktestData';
 import { PERIOD_TYPES } from '@dhis2-chap/ui';
 import { buildOrgUnitFeatureCollection } from '../../ModelExecutionForm/utils/orgUnitGeoJson';
+import { buildPredictionRunMetaData } from '../../../utils/predictionRunMetadata';
 
 type Props = {
     configuredModelWithDataSourceId?: number;
+    returnTo?: string;
     onSuccess?: () => void;
     onError?: (error: ApiError) => void;
 };
@@ -27,6 +29,7 @@ export const N_PERIODS = {
 
 export const useCreatePrediction = ({
     configuredModelWithDataSourceId,
+    returnTo,
     onSuccess,
     onError,
 }: Props = {}) => {
@@ -40,7 +43,7 @@ export const useCreatePrediction = ({
         error,
     } = useMutation<JobResponse, ApiError, ModelExecutionFormValues>({
         mutationFn: async (formData: ModelExecutionFormValues) => {
-            const { model, observations, orgUnitResponse, dataSources } = await prepareBacktestData(
+            const { model, periods, observations, orgUnitResponse, dataSources } = await prepareBacktestData(
                 formData,
                 dataEngine,
                 queryClient,
@@ -50,14 +53,21 @@ export const useCreatePrediction = ({
                 orgUnitResponse.geojson.organisationUnits,
             );
 
+            const nPeriods = N_PERIODS[formData.periodType.toUpperCase() as keyof typeof N_PERIODS];
+
             const basePredictionRequest = {
                 name: formData.name,
                 geojson,
                 providedData: observations,
                 dataSources,
                 dataToBeFetched: [],
-                nPeriods: N_PERIODS[formData.periodType.toUpperCase() as keyof typeof N_PERIODS],
+                nPeriods,
                 type: 'forecasting' as const,
+                metaData: buildPredictionRunMetaData({
+                    nPeriods,
+                    periodType: formData.periodType,
+                    trainingPeriods: periods,
+                }),
             };
 
             if (configuredModelWithDataSourceId) {
@@ -81,8 +91,9 @@ export const useCreatePrediction = ({
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['jobs'] });
             queryClient.invalidateQueries({ queryKey: ['predictions'] });
+            queryClient.invalidateQueries({ queryKey: ['configuredModelsWithDataSource'] });
             onSuccess?.();
-            navigate('/jobs');
+            navigate(returnTo || '/jobs');
         },
         onError: (apiError: ApiError) => {
             onError?.(apiError);

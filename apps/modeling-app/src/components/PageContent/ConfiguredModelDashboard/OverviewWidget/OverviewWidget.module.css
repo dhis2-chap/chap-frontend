@@ -1,0 +1,50 @@
+.content {
+    padding: 16px;
+    padding-block-start: 8px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+}
+
+.item {
+    display: flex;
+    min-inline-size: 0;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.label {
+    color: var(--colors-grey700);
+    font-size: 13px;
+    line-height: 18px;
+}
+
+.value {
+    overflow-wrap: anywhere;
+    color: var(--colors-grey900);
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 500;
+}
+
+.link {
+    color: var(--colors-blue700);
+    text-decoration: none;
+}
+
+.link:hover,
+.link:focus {
+    color: var(--colors-blue800);
+    text-decoration: underline;
+}
+
+.emptyState,
+.loadingState {
+    padding: 18px;
+    color: var(--colors-grey700);
+    font-size: inherit;
+    line-height: 20px;
+}

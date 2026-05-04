@@ -1,7 +1,7 @@
 import i18n from '@dhis2/d2-i18n';
 import { useInitialFormState } from '@/pages/NewEvaluationPage/hooks/useInitialFormState';
 import { CircularLoader, NoticeBox } from '@dhis2/ui';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { z } from 'zod';
 import styles from './NewPredictionContent.module.css';
 import { useModels } from '@/hooks/useModels';
@@ -14,11 +14,18 @@ const predictionLocationStateSchema = z
     .passthrough()
     .optional();
 
-export const NewPredictionContent = () => {
+type Props = {
+    returnTo?: string;
+};
+
+export const NewPredictionContent = ({ returnTo }: Props) => {
     const location = useLocation();
+    const { configuredId } = useParams();
     const { models, isLoading: isModelsLoading, error: modelsError } = useModels();
     const { initialValues, isLoading } = useInitialFormState({ models, isModelsLoading });
     const { data: predictionLocationState } = predictionLocationStateSchema.safeParse(location.state);
+    const configuredModelWithDataSourceId = predictionLocationState?.configuredModelWithDataSourceId
+        ?? (configuredId ? Number(configuredId) : undefined);
 
     if (isLoading) {
         return (
@@ -40,8 +47,9 @@ export const NewPredictionContent = () => {
 
     return (
         <NewPredictionForm
-            configuredModelWithDataSourceId={predictionLocationState?.configuredModelWithDataSourceId}
+            configuredModelWithDataSourceId={configuredModelWithDataSourceId}
             initialValues={initialValues}
+            returnTo={returnTo}
         />
     );
 };

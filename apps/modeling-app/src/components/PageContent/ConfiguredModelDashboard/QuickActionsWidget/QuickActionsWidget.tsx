@@ -2,7 +2,6 @@ import {
     Button,
     IconExportItems24,
     IconImportItems24,
-    IconVisualizationLine24,
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { PERIOD_TYPES, Widget } from '@dhis2-chap/ui';
@@ -27,7 +26,7 @@ type Props = {
     configuredId?: string;
     configuredModelWithDataSource?: ConfiguredModelWithDataSourceReadWithPredictions;
     isLoading: boolean;
-    selectedPredictionId?: number;
+    latestPredictionId?: number;
 };
 
 const getPeriodType = (
@@ -80,10 +79,10 @@ export const QuickActionsWidget = ({
     configuredId,
     configuredModelWithDataSource,
     isLoading,
-    selectedPredictionId,
+    latestPredictionId,
 }: Props) => {
     const navigate = useNavigate();
-    const canPredict = !!configuredModelWithDataSource?.configuredModel?.id;
+    const canPredict = !!configuredId && !!configuredModelWithDataSource?.configuredModel?.id;
 
     const handlePredict = () => {
         if (!configuredModelWithDataSource) {
@@ -92,25 +91,17 @@ export const QuickActionsWidget = ({
 
         const returnTo = `/predictions/${configuredId}`;
         navigate(
-            `/predictions/new?returnTo=${encodeURIComponent(returnTo)}`,
+            `/predictions/${configuredId}/new?returnTo=${encodeURIComponent(returnTo)}`,
             { state: buildPredictionFormState(configuredModelWithDataSource) },
         );
     };
 
     const handleImport = () => {
-        if (!selectedPredictionId) {
+        if (!configuredId || !latestPredictionId) {
             return;
         }
 
-        navigate(`/predictions/runs/${selectedPredictionId}/import`);
-    };
-
-    const handleOutbreakThresholds = () => {
-        if (!selectedPredictionId) {
-            return;
-        }
-
-        navigate(`/predictions/runs/${selectedPredictionId}/alerts`);
+        navigate(`/predictions/${configuredId}/runs/${latestPredictionId}/import`);
     };
 
     return (
@@ -129,25 +120,16 @@ export const QuickActionsWidget = ({
                         className={styles.actionButton}
                         primary
                     >
-                        {i18n.t('Manual prediction')}
+                        {i18n.t('Run prediction')}
                     </Button>
                     <Button
                         dataTest="quick-action-import"
                         icon={<IconImportItems24 />}
                         onClick={handleImport}
-                        disabled={!selectedPredictionId}
+                        disabled={!latestPredictionId}
                         className={styles.actionButton}
                     >
-                        {i18n.t('Import')}
-                    </Button>
-                    <Button
-                        dataTest="quick-action-outbreak-thresholds"
-                        icon={<IconVisualizationLine24 />}
-                        onClick={handleOutbreakThresholds}
-                        disabled={!selectedPredictionId}
-                        className={styles.actionButton}
-                    >
-                        {i18n.t('Outbreak thresholds')}
+                        {i18n.t('Import latest run')}
                     </Button>
                 </div>
             </div>

@@ -3,6 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { ConfiguredModelDB } from '../models/ConfiguredModelDB';
+import type { ConfiguredModelInfoRead } from '../models/ConfiguredModelInfoRead';
 import type { ConfiguredModelWithDataSourceFromBacktestCreate } from '../models/ConfiguredModelWithDataSourceFromBacktestCreate';
 import type { ConfiguredModelWithDataSourceRead } from '../models/ConfiguredModelWithDataSourceRead';
 import type { ConfiguredModelWithDataSourceReadWithPredictions } from '../models/ConfiguredModelWithDataSourceReadWithPredictions';
@@ -54,6 +55,29 @@ export class ModelsService {
             url: '/v1/crud/configured-models',
             body: requestBody,
             mediaType: 'application/json',
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
+     * Get Configured Model Info
+     * ⚠️ **Experimental:** behavior and response shape may change without notice.
+     *
+     * Return the detail view for a single configured model, including its template.
+     * @param configuredModelId
+     * @returns ConfiguredModelInfoRead Successful Response
+     * @throws ApiError
+     */
+    public static getConfiguredModelInfoV1CrudConfiguredModelsConfiguredModelIdGet(
+        configuredModelId: number,
+    ): CancelablePromise<ConfiguredModelInfoRead> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/v1/crud/configured-models/{configuredModelId}',
+            path: {
+                'configuredModelId': configuredModelId,
+            },
             errors: {
                 422: `Validation Error`,
             },

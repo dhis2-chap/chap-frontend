@@ -11,8 +11,8 @@ export const ConfiguredModelDashboardPage: React.FC = () => {
     return (
         <>
             <PageHeader
-                pageTitle={i18n.t('Prediction dashboard')}
-                pageDescription={i18n.t('Manage and run predictions for a certain model and configuration.')}
+                pageTitle={i18n.t('Prediction setup')}
+                pageDescription={i18n.t('Manage scheduled and manual prediction runs for this setup.')}
             />
             <Button
                 className={styles.backButton}
@@ -20,7 +20,7 @@ export const ConfiguredModelDashboardPage: React.FC = () => {
                 icon={<IconArrowLeft16 />}
                 onClick={() => navigate('/predictions')}
             >
-                {i18n.t('Back to predictions')}
+                {i18n.t('Back to prediction setups')}
             </Button>
             <ConfiguredModelDashboard />
         </>

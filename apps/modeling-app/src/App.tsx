@@ -34,6 +34,7 @@ import { SyncUrlWithGlobalShell } from './utils/syncUrlWithGlobalShell';
 import { NewPredictionPage } from './pages/NewPredictionPage';
 import { PredictionImportPage } from './pages/PredictionImportPage';
 import { PredictionAlertsPage } from './pages/PredictionAlertsPage';
+import { PredictionRunDetailsPage } from './pages/PredictionRunDetailsPage';
 import { GuidesPage } from './pages/GuidesPage';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
@@ -127,10 +128,32 @@ const router = createHashRouter([
                                 element: <ReadyToPredictPage />,
                             },
                             {
-                                path: 'runs',
+                                path: ':configuredId',
                                 children: [
                                     {
-                                        path: ':predictionId/alerts',
+                                        index: true,
+                                        handle: {
+                                            collapseSidebar: true,
+                                        } satisfies RouteHandle,
+                                        element: <ConfiguredModelDashboardPage />,
+                                    },
+                                    {
+                                        path: 'new',
+                                        handle: {
+                                            collapseSidebar: true,
+                                        } satisfies RouteHandle,
+                                        element: <NewPredictionPage />,
+                                    },
+                                    {
+                                        path: 'runs/:predictionId',
+                                        handle: {
+                                            collapseSidebar: true,
+                                            fullWidth: true,
+                                        } satisfies RouteHandle,
+                                        element: <PredictionRunDetailsPage />,
+                                    },
+                                    {
+                                        path: 'runs/:predictionId/alerts',
                                         handle: {
                                             collapseSidebar: true,
                                             fullWidth: true,
@@ -138,27 +161,13 @@ const router = createHashRouter([
                                         element: <PredictionAlertsPage />,
                                     },
                                     {
-                                        path: ':predictionId/import',
+                                        path: 'runs/:predictionId/import',
                                         handle: {
                                             collapseSidebar: true,
                                         } satisfies RouteHandle,
                                         element: <PredictionImportPage />,
                                     },
                                 ],
-                            },
-                            {
-                                path: 'new',
-                                handle: {
-                                    collapseSidebar: true,
-                                } satisfies RouteHandle,
-                                element: <NewPredictionPage />,
-                            },
-                            {
-                                path: ':configuredId',
-                                handle: {
-                                    collapseSidebar: true,
-                                } satisfies RouteHandle,
-                                element: <ConfiguredModelDashboardPage />,
                             },
                         ],
                     },

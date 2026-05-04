@@ -1,0 +1,48 @@
+.content {
+    padding: 16px;
+    padding-block-start: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.row {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-block-end: 4px;
+    border-block-end: 1px solid var(--colors-grey300);
+}
+
+.row:last-child {
+    border-block-end: none;
+}
+
+.label {
+    color: var(--colors-grey700);
+    font-size: 13px;
+    line-height: 18px;
+}
+
+.value {
+    overflow-wrap: anywhere;
+    color: var(--colors-grey900);
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 500;
+}
+
+.loadingState,
+.emptyState {
+    padding: 18px;
+    color: var(--colors-grey700);
+    font-size: inherit;
+    line-height: 20px;
+}
+
+.loadingState {
+    display: flex;
+    min-block-size: 112px;
+    align-items: center;
+    justify-content: center;
+}

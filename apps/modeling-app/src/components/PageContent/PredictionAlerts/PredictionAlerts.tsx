@@ -59,9 +59,13 @@ export const PredictionAlerts = ({ prediction, model }: Props) => {
     };
 
     const handleSelectPrediction = (predictionId: number) => {
+        if (!configuredModelWithDataSourceId) {
+            return;
+        }
+
         const nextSearchParams = new URLSearchParams(searchParams);
         nextSearchParams.set('alertProbability', String(normalizedProbability));
-        navigate(`/predictions/runs/${predictionId}/alerts?${nextSearchParams.toString()}`);
+        navigate(`/predictions/${configuredModelWithDataSourceId}/runs/${predictionId}/alerts?${nextSearchParams.toString()}`);
     };
 
     return (

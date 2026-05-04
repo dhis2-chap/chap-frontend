@@ -1,0 +1,19 @@
+.backButton {
+    margin-block-start: 4px;
+}
+
+.loadingContainer,
+.errorContainer {
+    margin-block-start: 24px;
+}
+
+.loadingContainer {
+    display: flex;
+    min-block-size: 240px;
+    align-items: center;
+    justify-content: center;
+}
+
+.content {
+    margin-block-start: 24px;
+}

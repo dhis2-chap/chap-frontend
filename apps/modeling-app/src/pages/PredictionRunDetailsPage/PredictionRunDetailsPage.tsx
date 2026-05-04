@@ -6,13 +6,13 @@ import {
     NoticeBox,
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
-import { usePredictionById } from '../../components/PageContent/PredictionDetails/hooks/usePredictionById';
 import { PageHeader } from '../../features/common-features/PageHeader/PageHeader';
-import { PredictionAlerts } from '../../components/PageContent/PredictionAlerts';
+import { usePredictionById } from '../../components/PageContent/PredictionDetails/hooks/usePredictionById';
+import { PredictionResultWidget } from '../../components/PageContent/PredictionDetails/PredictionResultWidget/PredictionResultWidget.container';
 import { useModels } from '../../hooks/useModels';
-import styles from './PredictionAlertsPage.module.css';
+import styles from './PredictionRunDetailsPage.module.css';
 
-export const PredictionAlertsPage: React.FC = () => {
+export const PredictionRunDetailsPage: React.FC = () => {
     const navigate = useNavigate();
     const { configuredId, predictionId } = useParams();
     const { prediction, error, isLoading, isError } = usePredictionById(predictionId);
@@ -22,6 +22,7 @@ export const PredictionAlertsPage: React.FC = () => {
         isLoading: isModelsLoading,
     } = useModels({ includeArchived: true });
     const model = models?.find(modelSpec => modelSpec.name === prediction?.modelId);
+    const returnTo = configuredId ? `/predictions/${configuredId}` : '/predictions';
 
     if (isLoading || (prediction && isModelsLoading)) {
         return (
@@ -61,15 +62,11 @@ export const PredictionAlertsPage: React.FC = () => {
         );
     }
 
-    const returnTo = configuredId
-        ? `/predictions/${configuredId}`
-        : '/predictions';
-
     return (
         <>
             <PageHeader
-                pageTitle={i18n.t('Outbreak thresholds')}
-                pageDescription={i18n.t('Preview how outbreak probability thresholds affect all regions in this prediction.')}
+                pageTitle={i18n.t('Prediction run')}
+                pageDescription={prediction.name || i18n.t('Unnamed prediction')}
             />
             <Button
                 className={styles.backButton}
@@ -79,10 +76,12 @@ export const PredictionAlertsPage: React.FC = () => {
             >
                 {i18n.t('Back to prediction setup')}
             </Button>
-            <PredictionAlerts
-                prediction={prediction}
-                model={model}
-            />
+            <div className={styles.content}>
+                <PredictionResultWidget
+                    prediction={prediction}
+                    model={model}
+                />
+            </div>
         </>
     );
 };

@@ -4,11 +4,13 @@ import { useCreatePrediction } from './useCreatePrediction';
 type UsePredictionFormControllerOptions = {
     configuredModelWithDataSourceId?: number;
     initialValues?: Partial<ModelExecutionFormValues>;
+    returnTo?: string;
 };
 
 export const usePredictionFormController = ({
     configuredModelWithDataSourceId,
     initialValues,
+    returnTo,
 }: UsePredictionFormControllerOptions = {}) => {
     const { methods } = useModelExecutionFormState({ initialValues });
 
@@ -18,6 +20,7 @@ export const usePredictionFormController = ({
         error,
     } = useCreatePrediction({
         configuredModelWithDataSourceId,
+        returnTo,
         onSuccess: () => {
             methods.reset();
         },

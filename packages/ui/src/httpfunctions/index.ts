@@ -20,6 +20,7 @@ export { chap_core__model_spec__PeriodType } from './models/chap_core__model_spe
 export { chap_core__rest_api__services__schemas__PeriodType } from './models/chap_core__rest_api__services__schemas__PeriodType';
 export type { ChapDataSource } from './models/ChapDataSource';
 export type { ConfiguredModelDB } from './models/ConfiguredModelDB';
+export type { ConfiguredModelInfoRead } from './models/ConfiguredModelInfoRead';
 export type { ConfiguredModelRead } from './models/ConfiguredModelRead';
 export type { ConfiguredModelWithDataSourceFromBacktestCreate } from './models/ConfiguredModelWithDataSourceFromBacktestCreate';
 export type { ConfiguredModelWithDataSourceRead } from './models/ConfiguredModelWithDataSourceRead';

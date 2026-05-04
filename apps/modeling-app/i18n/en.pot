@@ -748,6 +748,15 @@ msgstr "The evaluation ID is invalid. Please try again."
 msgid "Summary"
 msgstr "Summary"
 
+msgid "Configuration"
+msgstr "Configuration"
+
+msgid "Last imported at"
+msgstr "Last imported at"
+
+msgid "Not imported"
+msgstr "Not imported"
+
 msgid "There was an error loading the evaluation summary. Please try again later."
 msgstr "There was an error loading the evaluation summary. Please try again later."
 
@@ -1188,6 +1197,9 @@ msgstr "Evaluate"
 
 msgid "Overview"
 msgstr "Overview"
+
+msgid "Scheduling"
+msgstr "Scheduling"
 
 msgid "Models"
 msgstr "Models"

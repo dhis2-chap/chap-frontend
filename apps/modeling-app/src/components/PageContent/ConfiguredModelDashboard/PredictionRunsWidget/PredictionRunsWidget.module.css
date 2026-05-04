@@ -1,0 +1,27 @@
+.content {
+    overflow: hidden;
+}
+
+.emptyState,
+.loadingState,
+.errorState {
+    padding: 18px;
+    color: var(--colors-grey700);
+    font-size: inherit;
+    line-height: 20px;
+}
+
+.emptyState {
+    color: var(--colors-grey700);
+}
+
+.loadingState {
+    display: flex;
+    min-block-size: 112px;
+    align-items: center;
+    justify-content: center;
+}
+
+.errorState {
+    color: var(--colors-red700);
+}

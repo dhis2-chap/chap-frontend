@@ -17,6 +17,7 @@ interface DataItemSelectProps {
     label?: string;
     value?: string;
     error?: string;
+    dataElementsOnly?: boolean;
 }
 
 export const DataItemSelect = ({
@@ -25,6 +26,7 @@ export const DataItemSelect = ({
     label,
     value,
     error,
+    dataElementsOnly = false,
 }: DataItemSelectProps) => {
     const { dataItem: initialDataItem } = useDataItemById(id);
 
@@ -55,6 +57,7 @@ export const DataItemSelect = ({
             label={label}
             value={value}
             error={error}
+            dataElementsOnly={dataElementsOnly}
         />
     );
 };
