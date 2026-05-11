@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import type { PredictionInfo } from '@dhis2-chap/ui';
 import {
     buildPredictionRunMetaData,
+    formatPeriodId,
     getNextPeriods,
     getPredictionPeriodIds,
     getTrainingDataToDate,
@@ -76,5 +77,18 @@ describe('predictionRunMetadata', () => {
             trainingDataToDate: '202604',
             predictionPeriods: ['202605', '202606'],
         });
+    });
+
+    it('formats monthly period ids for display', () => {
+        expect(formatPeriodId('202410')).toBe('October 2024');
+    });
+
+    it('formats weekly period ids for display', () => {
+        expect(formatPeriodId('2025W9')).toBe('Week 9, 2025');
+        expect(formatPeriodId('2025W09')).toBe('Week 9, 2025');
+    });
+
+    it('keeps unrecognized period ids unchanged', () => {
+        expect(formatPeriodId('not-a-period')).toBe('not-a-period');
     });
 });

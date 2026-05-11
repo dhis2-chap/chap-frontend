@@ -9,7 +9,7 @@ import { NewPredictionForm } from '@/components/NewPredictionForm';
 
 const predictionLocationStateSchema = z
     .object({
-        configuredModelWithDataSourceId: z.number().int().positive().optional(),
+        predictionSetupId: z.number().int().positive().optional(),
     })
     .passthrough()
     .optional();
@@ -24,7 +24,7 @@ export const NewPredictionContent = ({ returnTo }: Props) => {
     const { models, isLoading: isModelsLoading, error: modelsError } = useModels();
     const { initialValues, isLoading } = useInitialFormState({ models, isModelsLoading });
     const { data: predictionLocationState } = predictionLocationStateSchema.safeParse(location.state);
-    const configuredModelWithDataSourceId = predictionLocationState?.configuredModelWithDataSourceId
+    const predictionSetupId = predictionLocationState?.predictionSetupId
         ?? (configuredId ? Number(configuredId) : undefined);
 
     if (isLoading) {
@@ -47,7 +47,7 @@ export const NewPredictionContent = ({ returnTo }: Props) => {
 
     return (
         <NewPredictionForm
-            configuredModelWithDataSourceId={configuredModelWithDataSourceId}
+            predictionSetupId={predictionSetupId}
             initialValues={initialValues}
             returnTo={returnTo}
         />

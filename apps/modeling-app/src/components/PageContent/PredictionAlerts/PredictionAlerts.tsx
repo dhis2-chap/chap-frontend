@@ -6,7 +6,7 @@ import {
     ModelSpecRead,
 } from '@dhis2-chap/ui';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useConfiguredModelWithDataSource } from '../../../hooks/useConfiguredModelWithDataSource';
+import { usePredictionSetup } from '../../../hooks/usePredictionSetup';
 import { PredictionAlertsConfigurator } from './PredictionAlertsConfigurator';
 
 type Props = {
@@ -31,12 +31,12 @@ const getLatestPredictions = (predictions?: PredictionInfo[]) => (
 export const PredictionAlerts = ({ prediction, model }: Props) => {
     const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
-    const configuredModelWithDataSourceId = prediction.configuredModelWithDataSource?.id;
+    const predictionSetupId = prediction.predictionSetupId;
     const {
-        configuredModelWithDataSource,
+        predictionSetup,
         isLoading: isLoadingPredictionRuns,
-    } = useConfiguredModelWithDataSource(
-        configuredModelWithDataSourceId ? String(configuredModelWithDataSourceId) : undefined,
+    } = usePredictionSetup(
+        predictionSetupId ? String(predictionSetupId) : undefined,
     );
     const selectedProbability = Number(searchParams.get('alertProbability')) as OutbreakProbability
         || DEFAULT_OUTBREAK_PROBABILITY;
@@ -44,9 +44,9 @@ export const PredictionAlerts = ({ prediction, model }: Props) => {
         ? selectedProbability
         : DEFAULT_OUTBREAK_PROBABILITY;
     const predictionRuns = getLatestPredictions([
-        ...(configuredModelWithDataSource?.predictions ?? []),
+        ...(predictionSetup?.predictions ?? []),
         ...(
-            configuredModelWithDataSource?.predictions?.some(run => run.id === prediction.id)
+            predictionSetup?.predictions?.some(run => run.id === prediction.id)
                 ? []
                 : [prediction]
         ),
@@ -59,13 +59,13 @@ export const PredictionAlerts = ({ prediction, model }: Props) => {
     };
 
     const handleSelectPrediction = (predictionId: number) => {
-        if (!configuredModelWithDataSourceId) {
+        if (!predictionSetupId) {
             return;
         }
 
         const nextSearchParams = new URLSearchParams(searchParams);
         nextSearchParams.set('alertProbability', String(normalizedProbability));
-        navigate(`/predictions/${configuredModelWithDataSourceId}/runs/${predictionId}/alerts?${nextSearchParams.toString()}`);
+        navigate(`/predictions/${predictionSetupId}/runs/${predictionId}?${nextSearchParams.toString()}`);
     };
 
     return (

@@ -1,7 +1,9 @@
 import { useMemo } from 'react';
 import type { PredictionInfo } from '@dhis2-chap/ui';
 import { useParams } from 'react-router-dom';
-import { useConfiguredModelWithDataSource } from '../../../hooks/useConfiguredModelWithDataSource';
+import { JOB_STATUSES, useJobs } from '../../../hooks/useJobs';
+import { usePredictionSetup } from '../../../hooks/usePredictionSetup';
+import { ActivityWidget } from './ActivityWidget';
 import { MonitoringWidget } from './MonitoringWidget';
 import { OverviewWidget } from './OverviewWidget';
 import { PredictionRunsWidget } from './PredictionRunsWidget';
@@ -25,18 +27,31 @@ const getLatestPredictions = (predictions?: PredictionInfo[]) => (
 
 export const ConfiguredModelDashboard: React.FC = () => {
     const { configuredId } = useParams();
+    const parsedConfiguredId = Number(configuredId);
     const {
-        configuredModelWithDataSource,
+        predictionSetup,
         error,
-        hasValidConfiguredId,
+        hasValidPredictionSetupId,
         isLoading,
-    } = useConfiguredModelWithDataSource(configuredId);
+    } = usePredictionSetup(configuredId);
+    const {
+        jobs = [],
+        error: jobsError,
+        isLoading: isLoadingJobs,
+    } = useJobs({
+        predictionSetupId: parsedConfiguredId,
+        enabled: hasValidPredictionSetupId,
+    });
 
     const predictions = useMemo(() => (
-        hasValidConfiguredId
-            ? getLatestPredictions(configuredModelWithDataSource?.predictions)
+        hasValidPredictionSetupId
+            ? getLatestPredictions(predictionSetup?.predictions)
             : []
-    ), [configuredModelWithDataSource?.predictions, hasValidConfiguredId]);
+    ), [predictionSetup?.predictions, hasValidPredictionSetupId]);
+    const hasRunningJob = useMemo(() => jobs.some(job => (
+        job.status === JOB_STATUSES.PENDING
+        || job.status === JOB_STATUSES.STARTED
+    )), [jobs]);
 
     return (
         <div className={styles.container}>
@@ -44,27 +59,33 @@ export const ConfiguredModelDashboard: React.FC = () => {
                 <PredictionRunsWidget
                     configuredId={configuredId}
                     error={error}
-                    hasValidConfiguredId={hasValidConfiguredId}
+                    hasValidConfiguredId={hasValidPredictionSetupId}
+                    hasRunningJob={hasRunningJob}
                     isLoading={isLoading}
                     predictions={predictions}
                 />
                 <MonitoringWidget />
+                <ActivityWidget
+                    error={jobsError}
+                    hasValidConfiguredId={hasValidPredictionSetupId}
+                    isLoading={isLoadingJobs}
+                    jobs={jobs}
+                />
             </div>
             <div className={styles.rightColumn}>
                 <QuickActionsWidget
                     configuredId={configuredId}
-                    configuredModelWithDataSource={configuredModelWithDataSource}
+                    predictionSetup={predictionSetup}
                     isLoading={isLoading}
                     latestPredictionId={predictions[0]?.id}
                 />
                 <OverviewWidget
-                    configuredId={configuredId}
-                    hasValidConfiguredId={hasValidConfiguredId}
+                    hasValidConfiguredId={hasValidPredictionSetupId}
                     isLoading={isLoading}
                     predictions={predictions}
                 />
                 <SummaryWidget
-                    configuredModelWithDataSource={configuredModelWithDataSource}
+                    predictionSetup={predictionSetup}
                     isLoading={isLoading}
                 />
             </div>

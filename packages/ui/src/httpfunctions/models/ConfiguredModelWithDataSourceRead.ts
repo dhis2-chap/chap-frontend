@@ -6,12 +6,13 @@ import type { ConfiguredModelRead } from './ConfiguredModelRead';
 import type { DataSource } from './DataSource';
 export type ConfiguredModelWithDataSourceRead = {
     id: number;
-    name: string;
     created: (string | null);
     configuredModel: (ConfiguredModelRead | null);
+    backtestId: number;
     startPeriod: (string | null);
     orgUnits: Array<string>;
     dataSources: Array<DataSource>;
     periodType: (string | null);
+    archived?: boolean;
 };
 

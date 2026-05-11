@@ -1,6 +1,6 @@
 import {
     ApiError,
-    BackTestRead,
+    BacktestRead,
     BacktestsService,
     DataList,
     EvaluationEntry,
@@ -20,7 +20,7 @@ const quantiles = [0.1, 0.25, 0.5, 0.75, 0.9];
 
 type PlotDataRequestResult = {
     data: [EvaluationEntry[], DataList];
-    evaluation: BackTestRead;
+    evaluation: BacktestRead;
 };
 
 const select = (data: PlotDataRequestResult) => {
@@ -65,7 +65,7 @@ const defaultOptions = {
     orgUnits: undefined,
 };
 export const usePlotDataForEvaluations = (
-    evaluations: BackTestRead[],
+    evaluations: BacktestRead[],
     { orgUnits, splitPeriod }: UsePlotDataForEvaluationsOptions = defaultOptions,
 ) => {
     const queryClient = useQueryClient();

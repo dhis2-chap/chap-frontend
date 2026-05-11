@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { KeyboardEvent, MouseEvent } from 'react';
 import * as z from 'zod';
 import i18n from '@dhis2/d2-i18n';
@@ -29,6 +29,8 @@ import { NavigationConfirmModal } from '@/components/NavigationConfirmModal';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { usePredictionSeries } from '../../PredictionDetails/hooks/usePredictionSeries';
 import { PredictionAlertsDialog } from '../../PredictionAlerts';
+import { usePredictionSetup } from '@/hooks/usePredictionSetup';
+import { getPredictionSetupDataImportMappings } from '@/utils/predictionSetupImportMapping';
 
 type Props = {
     prediction: PredictionInfo;
@@ -43,6 +45,7 @@ const outbreakProbabilitySchema = z.custom<OutbreakProbability>(
 const importLocationStateSchema = z
     .object({
         alertProbability: outbreakProbabilitySchema.optional(),
+        useAlertOutputs: z.boolean().optional(),
     })
     .passthrough()
     .optional();
@@ -69,6 +72,14 @@ export const quantileMappingSchema = z.object({
 type QuantileMappingFormValues = z.infer<typeof quantileMappingSchema>;
 type MappingField = keyof QuantileMappingFormValues;
 
+const quantileMappingFields = [
+    'quantile_low',
+    'quantile_high',
+    'median',
+    'quantile_mid_low',
+    'quantile_mid_high',
+] as const satisfies MappingField[];
+
 export const QuantileMappingForm = ({ prediction, model }: Props) => {
     const navigate = useNavigate();
     const location = useLocation();
@@ -79,12 +90,13 @@ export const QuantileMappingForm = ({ prediction, model }: Props) => {
         isLoading: isSeriesLoading,
         error: seriesError,
     } = usePredictionSeries({ prediction, model });
+    const { predictionSetup } = usePredictionSetup(prediction.predictionSetupId ?? undefined);
     const unavailableThresholdCount = series.filter(orgUnitSeries => (
         !calculateMockEndemicThreshold(orgUnitSeries.actualCases).available
     )).length;
     const {
         handleSubmit,
-        formState: { errors, isDirty },
+        formState: { errors, isDirty, dirtyFields },
         setValue,
         clearErrors,
         control,
@@ -96,19 +108,37 @@ export const QuantileMappingForm = ({ prediction, model }: Props) => {
             median: '',
             quantile_mid_low: '',
             quantile_mid_high: '',
-            use_alert_outputs: true,
+            use_alert_outputs: locationState?.useAlertOutputs ?? true,
             alert_probability: locationState?.alertProbability ?? DEFAULT_OUTBREAK_PROBABILITY,
             outbreak_indicator: '',
         },
     });
     const { mutateAsync, isPending } = usePostPredictionData({
         onSuccess: () => {
-            const configuredModelWithDataSourceId = prediction.configuredModelWithDataSource?.id;
-            navigate(configuredModelWithDataSourceId
-                ? `/predictions/${configuredModelWithDataSourceId}`
+            navigate(prediction.predictionSetupId
+                ? `/predictions/${prediction.predictionSetupId}`
                 : '/predictions');
         },
     });
+
+    useEffect(() => {
+        const dataImportMappings = getPredictionSetupDataImportMappings(predictionSetup);
+
+        if (!dataImportMappings.length) {
+            return;
+        }
+
+        dataImportMappings.forEach(({ quantileKey, dataElementId }) => {
+            if (quantileMappingFields.includes(quantileKey as typeof quantileMappingFields[number])) {
+                const field = quantileKey as typeof quantileMappingFields[number];
+
+                if (!dirtyFields[field]) {
+                    setValue(field, dataElementId);
+                    clearErrors(field);
+                }
+            }
+        });
+    }, [clearErrors, dirtyFields, predictionSetup, setValue]);
 
     const onSubmit = async (data: QuantileMappingFormValues) => {
         await mutateAsync({
@@ -126,8 +156,8 @@ export const QuantileMappingForm = ({ prediction, model }: Props) => {
                 : [],
         });
     };
-    const returnTo = prediction.configuredModelWithDataSource?.id
-        ? `/predictions/${prediction.configuredModelWithDataSource.id}`
+    const returnTo = prediction.predictionSetupId
+        ? `/predictions/${prediction.predictionSetupId}`
         : '/predictions';
 
     const {

@@ -19,7 +19,7 @@ import {
     getPaginationRowModel,
     Column,
 } from '@tanstack/react-table';
-import { ConfiguredModelWithDataSourceRead } from '@dhis2-chap/ui';
+import { PredictionSetupRead } from '@dhis2-chap/ui';
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
 import styles from './ReadyToPredictTable.module.css';
@@ -28,7 +28,7 @@ import { ReadyToPredictTableFilters } from './ReadyToPredictTableFilters';
 import { useReadyToPredictTableFilters } from './hooks/useReadyToPredictTableFilters';
 import { useTablePaginationParams } from '../../../../hooks/useTablePaginationParams';
 
-const columnHelper = createColumnHelper<ConfiguredModelWithDataSourceRead>();
+const columnHelper = createColumnHelper<PredictionSetupRead>();
 
 const EMPTY_VALUE = '—';
 
@@ -54,7 +54,11 @@ const columns = [
         header: () => i18n.t('Date created'),
         cell: info => formatDateTime(info.getValue()),
     }),
-    columnHelper.accessor(row => row.configuredModel?.modelTemplate?.displayName || row.configuredModel?.name || '', {
+    columnHelper.accessor(row => (
+        row.configuredModelWithDataSource.configuredModel?.modelTemplate?.displayName
+        || row.configuredModelWithDataSource.configuredModel?.name
+        || ''
+    ), {
         id: 'model',
         header: () => i18n.t('Model'),
         cell: info => info.getValue() || EMPTY_VALUE,
@@ -69,20 +73,20 @@ const columns = [
     }),
 ];
 
-const getSortDirection = (column: Column<ConfiguredModelWithDataSourceRead>) => {
+const getSortDirection = (column: Column<PredictionSetupRead>) => {
     return column.getIsSorted() || 'default';
 };
 
 type Props = {
-    configuredModels: ConfiguredModelWithDataSourceRead[];
+    predictionSetups: PredictionSetupRead[];
 };
 
-export const ReadyToPredictTable = ({ configuredModels }: Props) => {
+export const ReadyToPredictTable = ({ predictionSetups }: Props) => {
     const { search } = useReadyToPredictTableFilters();
     const { pageIndex, pageSize, setPageIndex, setPageSize } = useTablePaginationParams();
 
     const table = useReactTable({
-        data: configuredModels || [],
+        data: predictionSetups || [],
         columns,
         state: {
             sorting: [{ id: 'created', desc: true }],

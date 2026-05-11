@@ -12,7 +12,7 @@ export const ConfiguredModelDashboardPage: React.FC = () => {
         <>
             <PageHeader
                 pageTitle={i18n.t('Prediction setup')}
-                pageDescription={i18n.t('Manage scheduled and manual prediction runs for this setup.')}
+                pageDescription={i18n.t('Run predictions, review activity, and manage this setup.')}
             />
             <Button
                 className={styles.backButton}

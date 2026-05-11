@@ -1,3 +1,14 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    max-block-size: calc(100vh - 176px);
+    min-block-size: 0;
+}
+
+.scrollableContent {
+    min-block-size: 0;
+}
+
 .content {
     display: flex;
     flex-direction: column;
@@ -12,6 +23,10 @@
     margin-block-start: var(--spacers-dp20, 20px);
     padding-block-start: var(--spacers-dp20, 20px);
     border-block-start: 1px solid var(--colors-grey300);
+}
+
+.configurationNotice {
+    margin-block-start: var(--spacers-dp12);
 }
 
 .mappingToggle,

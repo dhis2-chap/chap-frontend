@@ -22,7 +22,7 @@ export type MakePredictionWithDataSourceRequest = {
     geojson: FeatureCollectionModel;
     providedData: Array<ObservationBase>;
     dataToBeFetched: Array<FetchRequest>;
-    configuredModelWithDataSourceId: number;
+    predictionSetupId: number;
     nPeriods?: number;
     metaData?: Record<string, any>;
 };

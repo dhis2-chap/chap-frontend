@@ -6,6 +6,7 @@ import {
     ModalActions,
     ModalContent,
     ModalTitle,
+    NoticeBox,
     Switch,
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
@@ -73,15 +74,21 @@ const quantileFields: Array<{
 type MarkReadyForForecastingModalProps = {
     onClose: () => void;
     onSubmit: (data: MarkReadyForForecastingFormValues) => void | Promise<void>;
+    defaultValues?: Partial<MarkReadyForForecastingFormValues>;
+    title?: string;
     isSubmitting?: boolean;
 };
 
 export const MarkReadyForForecastingModal = ({
     onClose,
     onSubmit,
+    defaultValues,
+    title = i18n.t('Create prediction setup'),
     isSubmitting = false,
 }: MarkReadyForForecastingModalProps) => {
-    const [importMappingIsEnabled, setImportMappingIsEnabled] = useState(false);
+    const [importMappingIsEnabled, setImportMappingIsEnabled] = useState(
+        defaultValues?.use_import_mapping ?? false,
+    );
     const {
         control,
         handleSubmit,
@@ -99,6 +106,7 @@ export const MarkReadyForForecastingModal = ({
             median: '',
             quantile_mid_low: '',
             quantile_low: '',
+            ...defaultValues,
         },
     });
 
@@ -125,9 +133,9 @@ export const MarkReadyForForecastingModal = ({
 
     return (
         <Modal onClose={onClose} dataTest="mark-ready-for-forecasting-modal" large>
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <ModalTitle>{i18n.t('Create prediction setup')}</ModalTitle>
-                <ModalContent>
+            <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
+                <ModalTitle>{title}</ModalTitle>
+                <ModalContent className={styles.scrollableContent}>
                     <div className={styles.content}>
                         <Controller
                             name="name"
@@ -145,6 +153,11 @@ export const MarkReadyForForecastingModal = ({
                                 />
                             )}
                         />
+                        <NoticeBox
+                            className={styles.configurationNotice}
+                        >
+                            {i18n.t('You can change this configuration at any point.')}
+                        </NoticeBox>
 
                         <section className={styles.section}>
                             <div
@@ -181,7 +194,7 @@ export const MarkReadyForForecastingModal = ({
                                         {i18n.t('Set default import mapping')}
                                     </span>
                                     <span className={styles.mappingToggleDescription}>
-                                        {i18n.t('Choose the DHIS2 data elements to use by default when prediction outputs are imported. You can change this before each import.')}
+                                        {i18n.t('Choose the DHIS2 data elements to use by default when prediction outputs are imported.')}
                                     </span>
                                 </div>
                                 <span onClick={handleSwitchClick}>

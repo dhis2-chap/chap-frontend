@@ -8,6 +8,7 @@ import {
     DataTableHead,
     DataTableRow,
 } from '@dhis2/ui';
+import { IconClockHistory16 } from '@dhis2/ui-icons';
 import {
     Column,
     createColumnHelper,
@@ -18,11 +19,12 @@ import {
     useReactTable,
 } from '@tanstack/react-table';
 import type { PredictionInfo } from '@dhis2-chap/ui';
-import { Widget } from '@dhis2-chap/ui';
+import { StatusIndicator, Widget } from '@dhis2-chap/ui';
 import { Link } from 'react-router-dom';
-import { format } from 'date-fns';
+import { format, formatDistanceToNow } from 'date-fns';
 import { useMemo, useState } from 'react';
 import {
+    formatPeriodId,
     getPredictionPeriodIds,
     getTrainingDataToDate,
 } from '../../../../utils/predictionRunMetadata';
@@ -34,6 +36,20 @@ const columnHelper = createColumnHelper<PredictionInfo>();
 
 const formatDate = (created?: string | null) => (
     created ? format(new Date(created), 'dd.MM.yyyy, HH:mm') : EMPTY_VALUE
+);
+
+const formatRunCount = (count: number) => i18n.t('{{count}} run', {
+    count,
+    defaultValue: '{{count}} run',
+    defaultValue_plural: '{{count}} runs',
+});
+
+const formatLastRun = (created?: string | null) => (
+    created
+        ? i18n.t('Last run {{timeAgo}} ago', {
+                timeAgo: formatDistanceToNow(new Date(created)),
+            })
+        : i18n.t('No runs yet')
 );
 
 const formatPeriodList = (periods: string[]) => periods.join(', ');
@@ -73,14 +89,44 @@ type Props = {
     configuredId?: string;
     error?: unknown;
     hasValidConfiguredId: boolean;
+    hasRunningJob: boolean;
     isLoading: boolean;
     predictions: PredictionInfo[];
 };
+
+type WidgetHeaderProps = {
+    hasRunningJob: boolean;
+    predictions: PredictionInfo[];
+};
+
+const WidgetHeader = ({
+    hasRunningJob,
+    predictions,
+}: WidgetHeaderProps) => (
+    <div className={styles.header}>
+        <span className={styles.title}>{i18n.t('Completed predictions')}</span>
+        <div className={styles.meta}>
+            {hasRunningJob && (
+                <StatusIndicator
+                    label={i18n.t('Running job')}
+                    variant="info"
+                    active
+                />
+            )}
+            <span>{formatRunCount(predictions.length)}</span>
+            <span className={styles.lastRun}>
+                <IconClockHistory16 />
+                <span>{formatLastRun(predictions[0]?.created)}</span>
+            </span>
+        </div>
+    </div>
+);
 
 export const PredictionRunsWidget = ({
     configuredId,
     error,
     hasValidConfiguredId,
+    hasRunningJob,
     isLoading,
     predictions,
 }: Props) => {
@@ -89,11 +135,11 @@ export const PredictionRunsWidget = ({
     const [open, setOpen] = useState(true);
     const [sorting, setSorting] = useState<SortingState>([{ id: 'created', desc: true }]);
     const columns = useMemo(() => [
-        columnHelper.accessor('name', {
-            header: () => i18n.t('Run name'),
+        columnHelper.accessor('id', {
+            header: () => i18n.t('Run ID'),
             cell: info => (
                 <Link to={`/predictions/${configuredId}/runs/${info.row.original.id}`}>
-                    {info.getValue() || i18n.t('Unnamed prediction')}
+                    {info.getValue()}
                 </Link>
             ),
         }),
@@ -112,7 +158,7 @@ export const PredictionRunsWidget = ({
         columnHelper.accessor(row => getTrainingDataToDate(row) || '', {
             id: 'trainingDataToDate',
             header: () => i18n.t('Training data cutoff'),
-            cell: info => info.getValue() || EMPTY_VALUE,
+            cell: info => formatPeriodId(info.getValue()) || EMPTY_VALUE,
         }),
         columnHelper.display({
             id: 'actions',
@@ -140,7 +186,12 @@ export const PredictionRunsWidget = ({
 
     return (
         <Widget
-            header={i18n.t('Prediction runs')}
+            header={(
+                <WidgetHeader
+                    hasRunningJob={hasRunningJob}
+                    predictions={predictions}
+                />
+            )}
             open={open}
             onClose={() => setOpen(false)}
             onOpen={() => setOpen(true)}
@@ -163,17 +214,18 @@ export const PredictionRunsWidget = ({
                 )}
                 {!isLoading && !hasError && hasValidConfiguredId && !hasRuns && (
                     <div className={styles.emptyState}>
-                        {i18n.t('No prediction runs yet. Run a prediction manually or add a schedule to start producing runs.')}
+                        {i18n.t('No completed predictions yet. Run a prediction manually or add a schedule to start producing predictions.')}
                     </div>
                 )}
                 {!isLoading && !hasError && hasRuns && (
-                    <DataTable>
+                    <DataTable className={styles.flushTable}>
                         <DataTableHead>
                             {table.getHeaderGroups().map(headerGroup => (
                                 <DataTableRow key={headerGroup.id}>
                                     {headerGroup.headers.map(header => (
                                         <DataTableColumnHeader
                                             key={header.id}
+                                            className={styles.denseHeaderCell}
                                             {...(header.column.getCanSort() ? {
                                                 sortDirection: getSortDirection(header.column),
                                                 sortIconTitle: i18n.t('Sort by {{column}}', { column: header.column.id }),
@@ -192,7 +244,10 @@ export const PredictionRunsWidget = ({
                             {table.getRowModel().rows.map(row => (
                                 <DataTableRow key={row.id}>
                                     {row.getVisibleCells().map(cell => (
-                                        <DataTableCell key={cell.id}>
+                                        <DataTableCell
+                                            key={cell.id}
+                                            className={styles.denseCell}
+                                        >
                                             {flexRender(
                                                 cell.column.columnDef.cell,
                                                 cell.getContext(),

@@ -139,6 +139,35 @@ export const getTrainingDataToDate = (prediction: PredictionInfo) => (
     || prediction.dataset?.lastPeriod
 );
 
+export const formatPeriodId = (periodId: string | undefined | null) => {
+    if (!periodId) {
+        return undefined;
+    }
+
+    const monthDate = parse(periodId, 'yyyyMM', new Date());
+
+    if (/^\d{6}$/.test(periodId) && isValid(monthDate)) {
+        return format(monthDate, 'MMMM yyyy');
+    }
+
+    const weekMatch = periodId.match(/^(\d{4})W(\d{1,2})$/);
+
+    if (weekMatch) {
+        const [, year, week] = weekMatch;
+        const weekDate = parse(
+            `${year}-W${week.padStart(2, '0')}`,
+            'RRRR-\'W\'II',
+            new Date(),
+        );
+
+        if (isValid(weekDate)) {
+            return `Week ${Number(week)}, ${year}`;
+        }
+    }
+
+    return periodId;
+};
+
 export const buildPredictionRunMetaData = ({
     nPeriods,
     periodType,

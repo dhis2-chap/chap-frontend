@@ -2,7 +2,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type ConfiguredModelWithDataSourceFromBacktestCreate = {
-    name: string;
+export type PredictionSchedule = {
+    expression?: (string | null);
+    enabled?: boolean;
 };
 

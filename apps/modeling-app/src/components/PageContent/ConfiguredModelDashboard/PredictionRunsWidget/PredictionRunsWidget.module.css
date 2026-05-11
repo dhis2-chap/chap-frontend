@@ -2,6 +2,62 @@
     overflow: hidden;
 }
 
+.content .flushTable {
+    border: 0;
+    box-shadow: none;
+}
+
+.content .denseHeaderCell:last-of-type {
+    border-inline-end: 0;
+}
+
+.content .denseHeaderCell {
+    padding-block: 4px;
+    padding-inline: 10px;
+}
+
+.content .denseCell {
+    padding-block: 8px;
+    padding-inline: 10px;
+}
+
+.header {
+    display: flex;
+    flex: 1;
+    min-inline-size: 0;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.meta {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 12px;
+    color: var(--colors-grey700);
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 16px;
+}
+
+.lastRun {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.lastRun svg {
+    flex-shrink: 0;
+    color: var(--colors-grey700);
+}
+
 .emptyState,
 .loadingState,
 .errorState {

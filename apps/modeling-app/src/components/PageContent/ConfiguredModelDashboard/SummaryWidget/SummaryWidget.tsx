@@ -1,6 +1,6 @@
 import i18n from '@dhis2/d2-i18n';
 import { CircularLoader } from '@dhis2/ui';
-import type { ConfiguredModelWithDataSourceReadWithPredictions } from '@dhis2-chap/ui';
+import type { PredictionSetupReadWithPredictions } from '@dhis2-chap/ui';
 import { Widget } from '@dhis2-chap/ui';
 import { format } from 'date-fns';
 import styles from './SummaryWidget.module.css';
@@ -33,20 +33,20 @@ const formatPeriodType = (periodType?: string | null) => {
 };
 
 const getModelName = (
-    configuredModelWithDataSource: ConfiguredModelWithDataSourceReadWithPredictions,
+    predictionSetup: PredictionSetupReadWithPredictions,
 ) => (
-    configuredModelWithDataSource.configuredModel?.modelTemplate?.displayName
-    || configuredModelWithDataSource.configuredModel?.name
+    predictionSetup.configuredModelWithDataSource.configuredModel?.modelTemplate?.displayName
+    || predictionSetup.configuredModelWithDataSource.configuredModel?.name
     || EMPTY_VALUE
 );
 
 type Props = {
-    configuredModelWithDataSource?: ConfiguredModelWithDataSourceReadWithPredictions;
+    predictionSetup?: PredictionSetupReadWithPredictions;
     isLoading: boolean;
 };
 
 export const SummaryWidget = ({
-    configuredModelWithDataSource,
+    predictionSetup,
     isLoading,
 }: Props) => (
     <Widget
@@ -58,32 +58,32 @@ export const SummaryWidget = ({
                 <CircularLoader small />
             </div>
         )}
-        {!isLoading && !configuredModelWithDataSource && (
+        {!isLoading && !predictionSetup && (
             <div className={styles.emptyState}>
                 {i18n.t('No prediction setup found')}
             </div>
         )}
-        {!isLoading && configuredModelWithDataSource && (
+        {!isLoading && predictionSetup && (
             <div className={styles.content}>
                 <div className={styles.row}>
                     <span className={styles.label}>{i18n.t('Name')}</span>
-                    <span className={styles.value}>{configuredModelWithDataSource.name}</span>
+                    <span className={styles.value}>{predictionSetup.name}</span>
                 </div>
                 <div className={styles.row}>
                     <span className={styles.label}>{i18n.t('Model')}</span>
-                    <span className={styles.value}>{getModelName(configuredModelWithDataSource)}</span>
+                    <span className={styles.value}>{getModelName(predictionSetup)}</span>
                 </div>
                 <div className={styles.row}>
                     <span className={styles.label}>{i18n.t('Period type')}</span>
                     <span className={styles.value}>
-                        {formatPeriodType(configuredModelWithDataSource.periodType)}
+                        {formatPeriodType(predictionSetup.configuredModelWithDataSource.periodType)}
                     </span>
                 </div>
                 <div className={styles.row}>
                     <span className={styles.label}>{i18n.t('Organisation units')}</span>
                     <span className={styles.value}>
                         {formatCount(
-                            configuredModelWithDataSource.orgUnits.length,
+                            predictionSetup.configuredModelWithDataSource.orgUnits.length,
                             i18n.t('location'),
                             i18n.t('locations'),
                         )}
@@ -93,7 +93,7 @@ export const SummaryWidget = ({
                     <span className={styles.label}>{i18n.t('Data sources')}</span>
                     <span className={styles.value}>
                         {formatCount(
-                            configuredModelWithDataSource.dataSources.length,
+                            predictionSetup.configuredModelWithDataSource.dataSources.length,
                             i18n.t('source'),
                             i18n.t('sources'),
                         )}
@@ -101,7 +101,7 @@ export const SummaryWidget = ({
                 </div>
                 <div className={styles.row}>
                     <span className={styles.label}>{i18n.t('Created')}</span>
-                    <span className={styles.value}>{formatDate(configuredModelWithDataSource.created)}</span>
+                    <span className={styles.value}>{formatDate(predictionSetup.created)}</span>
                 </div>
             </div>
         )}

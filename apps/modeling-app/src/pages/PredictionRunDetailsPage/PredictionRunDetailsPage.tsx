@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
     Button,
@@ -8,13 +9,24 @@ import {
 import i18n from '@dhis2/d2-i18n';
 import { PageHeader } from '../../features/common-features/PageHeader/PageHeader';
 import { usePredictionById } from '../../components/PageContent/PredictionDetails/hooks/usePredictionById';
-import { PredictionResultWidget } from '../../components/PageContent/PredictionDetails/PredictionResultWidget/PredictionResultWidget.container';
 import { useModels } from '../../hooks/useModels';
 import styles from './PredictionRunDetailsPage.module.css';
+import {
+    getDefaultPredictionRunAlertSettings,
+    PredictionDetailsGrid,
+    type PredictionRunAlertSettings,
+} from '../../components/PageContent/PredictionDetails/PredictionDetailsGrid';
 
 export const PredictionRunDetailsPage: React.FC = () => {
     const navigate = useNavigate();
     const { configuredId, predictionId } = useParams();
+    const [savedSettings, setSavedSettings] = useState<PredictionRunAlertSettings>(
+        getDefaultPredictionRunAlertSettings,
+    );
+    const [draftSettings, setDraftSettings] = useState<PredictionRunAlertSettings>(
+        getDefaultPredictionRunAlertSettings,
+    );
+    const [isEditing, setIsEditing] = useState(false);
     const { prediction, error, isLoading, isError } = usePredictionById(predictionId);
     const {
         models,
@@ -23,6 +35,35 @@ export const PredictionRunDetailsPage: React.FC = () => {
     } = useModels({ includeArchived: true });
     const model = models?.find(modelSpec => modelSpec.name === prediction?.modelId);
     const returnTo = configuredId ? `/predictions/${configuredId}` : '/predictions';
+    const settings = isEditing ? draftSettings : savedSettings;
+
+    const handleEdit = () => {
+        setDraftSettings(savedSettings);
+        setIsEditing(true);
+    };
+
+    const handleCancel = () => {
+        setDraftSettings(savedSettings);
+        setIsEditing(false);
+    };
+
+    const handleSave = () => {
+        setSavedSettings(draftSettings);
+        setIsEditing(false);
+    };
+
+    const handleImport = () => {
+        if (!prediction || !configuredId) {
+            return;
+        }
+
+        navigate(`/predictions/${configuredId}/runs/${prediction.id}/import`, {
+            state: {
+                alertProbability: savedSettings.alertProbability,
+                useAlertOutputs: savedSettings.thresholdsEnabled,
+            },
+        });
+    };
 
     if (isLoading || (prediction && isModelsLoading)) {
         return (
@@ -65,7 +106,7 @@ export const PredictionRunDetailsPage: React.FC = () => {
     return (
         <>
             <PageHeader
-                pageTitle={i18n.t('Prediction run')}
+                pageTitle={i18n.t('Prediction details')}
                 pageDescription={prediction.name || i18n.t('Unnamed prediction')}
             />
             <Button
@@ -77,9 +118,16 @@ export const PredictionRunDetailsPage: React.FC = () => {
                 {i18n.t('Back to prediction setup')}
             </Button>
             <div className={styles.content}>
-                <PredictionResultWidget
+                <PredictionDetailsGrid
+                    isEditing={isEditing}
                     prediction={prediction}
                     model={model}
+                    settings={settings}
+                    onSettingsChange={setDraftSettings}
+                    onEdit={handleEdit}
+                    onCancel={handleCancel}
+                    onSave={handleSave}
+                    onImport={handleImport}
                 />
             </div>
         </>

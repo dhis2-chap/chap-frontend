@@ -2,12 +2,12 @@ import i18n from '@dhis2/d2-i18n';
 import { CircularLoader } from '@dhis2/ui';
 import { IconCheckmarkCircle16, IconVisualizationLine16 } from '@dhis2/ui-icons';
 import type {
-    BackTestRead,
-    ConfiguredModelWithDataSourceRead,
+    BacktestRead,
+    PredictionSetupRead,
 } from '@dhis2-chap/ui';
 import { Link } from 'react-router-dom';
 import { useBacktests } from '../../hooks/useBacktests';
-import { useConfiguredModelsWithDataSource } from '../../hooks/useConfiguredModelsWithDataSource';
+import { usePredictionSetups } from '../../hooks/usePredictionSetups';
 import styles from './DashboardPage.module.css';
 
 const MAX_WIDGET_ITEMS = 5;
@@ -34,7 +34,7 @@ const formatLocationCount = (count: number) => i18n.t('{{count}} locations', {
     defaultValue_plural: '{{count}} locations',
 });
 
-const getEvaluationModelName = (evaluation: BackTestRead) => (
+const getEvaluationModelName = (evaluation: BacktestRead) => (
     evaluation.configuredModel?.modelTemplate?.displayName
     || evaluation.configuredModel?.modelTemplate?.name
     || evaluation.configuredModel?.name
@@ -42,10 +42,10 @@ const getEvaluationModelName = (evaluation: BackTestRead) => (
     || EMPTY_VALUE
 );
 
-const getConfigurationModelName = (configuration: ConfiguredModelWithDataSourceRead) => (
-    configuration.configuredModel?.modelTemplate?.displayName
-    || configuration.configuredModel?.modelTemplate?.name
-    || configuration.configuredModel?.name
+const getPredictionSetupModelName = (predictionSetup: PredictionSetupRead) => (
+    predictionSetup.configuredModelWithDataSource.configuredModel?.modelTemplate?.displayName
+    || predictionSetup.configuredModelWithDataSource.configuredModel?.modelTemplate?.name
+    || predictionSetup.configuredModelWithDataSource.configuredModel?.name
     || EMPTY_VALUE
 );
 
@@ -74,7 +74,7 @@ const WidgetFrame = ({
 );
 
 type EvaluationRunsWidgetProps = {
-    evaluations?: BackTestRead[];
+    evaluations?: BacktestRead[];
     isLoading: boolean;
     error?: Error | null;
 };
@@ -138,25 +138,25 @@ const EvaluationRunsWidget = ({
     );
 };
 
-type ConfiguredModelsWidgetProps = {
-    configuredModels?: ConfiguredModelWithDataSourceRead[];
+type PredictionSetupsWidgetProps = {
+    predictionSetups?: PredictionSetupRead[];
     isLoading: boolean;
     error?: Error | null;
 };
 
-const ConfiguredModelsWidget = ({
-    configuredModels,
+const PredictionSetupsWidget = ({
+    predictionSetups,
     isLoading,
     error,
-}: ConfiguredModelsWidgetProps) => {
-    const latestConfigurations = [...(configuredModels || [])]
+}: PredictionSetupsWidgetProps) => {
+    const latestPredictionSetups = [...(predictionSetups || [])]
         .sort((first, second) => getCreatedTime(second.created) - getCreatedTime(first.created))
         .slice(0, MAX_WIDGET_ITEMS);
 
     return (
         <WidgetFrame
-            title={i18n.t('Ready to Forecast Configurations')}
-            footerLabel={i18n.t('See all approved configurations')}
+            title={i18n.t('Prediction Setups')}
+            footerLabel={i18n.t('See all prediction setups')}
             footerTo="/predictions"
         >
             {isLoading && (
@@ -166,31 +166,31 @@ const ConfiguredModelsWidget = ({
             )}
             {error && !isLoading && (
                 <div className={styles.errorState}>
-                    {i18n.t('Error loading prediction configurations')}
+                    {i18n.t('Error loading prediction setups')}
                 </div>
             )}
-            {!isLoading && !error && latestConfigurations.length === 0 && (
+            {!isLoading && !error && latestPredictionSetups.length === 0 && (
                 <div className={styles.emptyState}>
-                    {i18n.t('No prediction configurations yet')}
+                    {i18n.t('No prediction setups yet')}
                 </div>
             )}
-            {!isLoading && !error && latestConfigurations.length > 0 && (
+            {!isLoading && !error && latestPredictionSetups.length > 0 && (
                 <div className={styles.list}>
-                    {latestConfigurations.map(configuration => (
+                    {latestPredictionSetups.map(predictionSetup => (
                         <Link
                             className={styles.listItem}
-                            key={configuration.id}
-                            to={`/predictions/${configuration.id}`}
+                            key={predictionSetup.id}
+                            to={`/predictions/${predictionSetup.id}`}
                         >
                             <span className={`${styles.icon} ${styles.successIcon}`}>
                                 <IconCheckmarkCircle16 />
                             </span>
                             <span className={styles.itemContent}>
                                 <span className={styles.itemTitle}>
-                                    {configuration.name}
+                                    {predictionSetup.name}
                                 </span>
                                 <span className={styles.itemSubtitle}>
-                                    {getConfigurationModelName(configuration)}
+                                    {getPredictionSetupModelName(predictionSetup)}
                                 </span>
                             </span>
                         </Link>
@@ -208,10 +208,10 @@ export const DashboardPage: React.FC = () => {
         isLoading: evaluationsLoading,
     } = useBacktests();
     const {
-        configuredModels,
-        error: configuredModelsError,
-        isLoading: configuredModelsLoading,
-    } = useConfiguredModelsWithDataSource();
+        predictionSetups,
+        error: predictionSetupsError,
+        isLoading: predictionSetupsLoading,
+    } = usePredictionSetups();
 
     return (
         <div className={styles.dashboard}>
@@ -222,10 +222,10 @@ export const DashboardPage: React.FC = () => {
                     isLoading={evaluationsLoading}
                     error={evaluationsError}
                 />
-                <ConfiguredModelsWidget
-                    configuredModels={configuredModels}
-                    isLoading={configuredModelsLoading}
-                    error={configuredModelsError}
+                <PredictionSetupsWidget
+                    predictionSetups={predictionSetups}
+                    isLoading={predictionSetupsLoading}
+                    error={predictionSetupsError}
                 />
             </div>
         </div>

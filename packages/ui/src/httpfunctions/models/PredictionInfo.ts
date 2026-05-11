@@ -3,7 +3,6 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { ConfiguredModelDB } from './ConfiguredModelDB';
-import type { ConfiguredModelWithDataSourceRead } from './ConfiguredModelWithDataSourceRead';
 import type { DataSetMeta } from './DataSetMeta';
 export type PredictionInfo = {
     datasetId: number;
@@ -16,6 +15,6 @@ export type PredictionInfo = {
     id: number;
     configuredModel: (ConfiguredModelDB | null);
     dataset: DataSetMeta;
-    configuredModelWithDataSource?: (ConfiguredModelWithDataSourceRead | null);
+    predictionSetupId?: (number | null);
 };
 

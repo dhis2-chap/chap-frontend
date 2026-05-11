@@ -16,7 +16,7 @@ import { buildOrgUnitFeatureCollection } from '../../ModelExecutionForm/utils/or
 import { buildPredictionRunMetaData } from '../../../utils/predictionRunMetadata';
 
 type Props = {
-    configuredModelWithDataSourceId?: number;
+    predictionSetupId?: number;
     returnTo?: string;
     onSuccess?: () => void;
     onError?: (error: ApiError) => void;
@@ -28,7 +28,7 @@ export const N_PERIODS = {
 };
 
 export const useCreatePrediction = ({
-    configuredModelWithDataSourceId,
+    predictionSetupId,
     returnTo,
     onSuccess,
     onError,
@@ -43,6 +43,8 @@ export const useCreatePrediction = ({
         error,
     } = useMutation<JobResponse, ApiError, ModelExecutionFormValues>({
         mutationFn: async (formData: ModelExecutionFormValues) => {
+            const nPeriods = N_PERIODS[formData.periodType.toUpperCase() as keyof typeof N_PERIODS];
+
             const { model, periods, observations, orgUnitResponse, dataSources } = await prepareBacktestData(
                 formData,
                 dataEngine,
@@ -52,8 +54,6 @@ export const useCreatePrediction = ({
             const geojson: FeatureCollectionModel = buildOrgUnitFeatureCollection(
                 orgUnitResponse.geojson.organisationUnits,
             );
-
-            const nPeriods = N_PERIODS[formData.periodType.toUpperCase() as keyof typeof N_PERIODS];
 
             const basePredictionRequest = {
                 name: formData.name,
@@ -70,10 +70,10 @@ export const useCreatePrediction = ({
                 }),
             };
 
-            if (configuredModelWithDataSourceId) {
+            if (predictionSetupId) {
                 const predictionRequest: MakePredictionWithDataSourceRequest = {
                     ...basePredictionRequest,
-                    configuredModelWithDataSourceId,
+                    predictionSetupId,
                 };
 
                 return PredictionsService.makePredictionWithDataSourceV1AnalyticsMakePredictionWithDataSourcePost(
@@ -91,7 +91,7 @@ export const useCreatePrediction = ({
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['jobs'] });
             queryClient.invalidateQueries({ queryKey: ['predictions'] });
-            queryClient.invalidateQueries({ queryKey: ['configuredModelsWithDataSource'] });
+            queryClient.invalidateQueries({ queryKey: ['predictionSetups'] });
             onSuccess?.();
             navigate(returnTo || '/jobs');
         },

@@ -25,6 +25,8 @@ type Props = {
     status: string;
     result: string | undefined | null;
     type: string;
+    showGoToResult?: boolean;
+    allowDeleteSuccess?: boolean;
 };
 
 export const JobActionsMenu = ({
@@ -32,6 +34,8 @@ export const JobActionsMenu = ({
     status,
     result,
     type,
+    showGoToResult = true,
+    allowDeleteSuccess = true,
 }: Props) => {
     const navigate = useNavigate();
     const [flyoutMenuIsOpen, setFlyoutMenuIsOpen] = useState(false);
@@ -60,9 +64,13 @@ export const JobActionsMenu = ({
         setFlyoutMenuIsOpen(false);
     };
 
-    const canNavigateToResult = status === JOB_STATUSES.SUCCESS &&
+    const canNavigateToResult = showGoToResult &&
+        status === JOB_STATUSES.SUCCESS &&
         !!result &&
         (type === JOB_TYPES.CREATE_BACKTEST_WITH_DATA || type === JOB_TYPES.BACKTEST);
+    const canDelete = status === JOB_STATUSES.FAILED
+        || status === JOB_STATUSES.REVOKED
+        || (allowDeleteSuccess && status === JOB_STATUSES.SUCCESS);
 
     return (
         <>
@@ -115,7 +123,7 @@ export const JobActionsMenu = ({
                             />
                         )}
 
-                        {(status === JOB_STATUSES.SUCCESS || status === JOB_STATUSES.FAILED || status === JOB_STATUSES.REVOKED) && (
+                        {canDelete && (
                             <MenuItem
                                 label={i18n.t('Delete')}
                                 dataTest="job-overflow-delete"

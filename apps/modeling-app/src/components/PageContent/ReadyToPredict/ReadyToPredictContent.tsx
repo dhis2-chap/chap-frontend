@@ -3,10 +3,10 @@ import { CircularLoader, NoticeBox } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import styles from './ReadyToPredictContent.module.css';
 import { ReadyToPredictTable } from './ReadyToPredictTable';
-import { useConfiguredModelsWithDataSource } from '../../../hooks/useConfiguredModelsWithDataSource';
+import { usePredictionSetups } from '../../../hooks/usePredictionSetups';
 
 export const ReadyToPredictContent: React.FC = () => {
-    const { configuredModels, error, isLoading } = useConfiguredModelsWithDataSource();
+    const { predictionSetups, error, isLoading } = usePredictionSetups();
 
     if (isLoading) {
         return (
@@ -28,7 +28,7 @@ export const ReadyToPredictContent: React.FC = () => {
 
     return (
         <Card className={styles.container}>
-            <ReadyToPredictTable configuredModels={configuredModels || []} />
+            <ReadyToPredictTable predictionSetups={predictionSetups || []} />
         </Card>
     );
 };

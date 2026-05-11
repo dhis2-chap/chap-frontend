@@ -1,4 +1,4 @@
-import { ApiError, BackTestRead, BacktestsService } from '@dhis2-chap/ui';
+import { ApiError, BacktestRead, BacktestsService } from '@dhis2-chap/ui';
 import { useAlert } from '@dhis2/app-runtime';
 import i18n from '@dhis2/d2-i18n';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -25,11 +25,11 @@ export const useRenameEvaluation = ({ onSuccess, onError }: Props = {}) => {
         mutate: renameEvaluation,
         isLoading,
         error,
-    } = useMutation<BackTestRead, ApiError, Variables, unknown>(
+    } = useMutation<BacktestRead, ApiError, Variables, unknown>(
         ({ id, name }: Variables) => BacktestsService.updateBacktestV1CrudBacktestsBacktestIdPatch(id, { name }),
         {
-            onSuccess: (data: BackTestRead, variables: Variables) => {
-                queryClient.setQueryData<BackTestRead[]>(['backtests'], oldData =>
+            onSuccess: (data: BacktestRead, variables: Variables) => {
+                queryClient.setQueryData<BacktestRead[]>(['backtests'], oldData =>
                     oldData?.map(backtest =>
                         backtest.id === variables.id ? { ...backtest, name: variables.name } : backtest,
                     ),

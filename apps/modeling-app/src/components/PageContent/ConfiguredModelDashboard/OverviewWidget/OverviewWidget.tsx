@@ -3,7 +3,6 @@ import { CircularLoader } from '@dhis2/ui';
 import type { PredictionInfo } from '@dhis2-chap/ui';
 import { Widget } from '@dhis2-chap/ui';
 import { format } from 'date-fns';
-import { Link } from 'react-router-dom';
 import styles from './OverviewWidget.module.css';
 
 const EMPTY_VALUE = '—';
@@ -13,24 +12,17 @@ const formatDate = (created?: string | null) => (
 );
 
 type Props = {
-    configuredId?: string;
     hasValidConfiguredId: boolean;
     isLoading: boolean;
     predictions: PredictionInfo[];
 };
 
 export const OverviewWidget = ({
-    configuredId,
     hasValidConfiguredId,
     isLoading,
     predictions,
 }: Props) => {
     const latestPrediction = predictions[0];
-    const lastImportedPrediction = latestPrediction;
-    const lastImportedAt = lastImportedPrediction?.created;
-    const lastImportedRunPath = configuredId && lastImportedPrediction
-        ? `/predictions/${configuredId}/runs/${lastImportedPrediction.id}`
-        : undefined;
 
     return (
         <Widget
@@ -60,26 +52,6 @@ export const OverviewWidget = ({
                                 {latestPrediction
                                     ? formatDate(latestPrediction.created)
                                     : i18n.t('No runs yet')}
-                            </span>
-                        </div>
-                        <div className={styles.item}>
-                            <span className={styles.label}>{i18n.t('Last imported at')}</span>
-                            <span className={styles.value}>
-                                {lastImportedRunPath && lastImportedAt
-                                    ? (
-                                            <>
-                                                {formatDate(lastImportedAt)}
-                                                {' ('}
-                                                <Link
-                                                    className={styles.link}
-                                                    to={lastImportedRunPath}
-                                                >
-                                                    {`#${lastImportedPrediction.id}`}
-                                                </Link>
-                                                )
-                                            </>
-                                        )
-                                    : i18n.t('Not imported')}
                             </span>
                         </div>
                     </div>

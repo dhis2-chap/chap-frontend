@@ -3,7 +3,7 @@ import {
     FlyoutMenu,
     IconImportItems24,
     IconMore16,
-    IconVisualizationLine24,
+    IconView24,
     MenuItem,
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
@@ -22,12 +22,21 @@ export const PredictionRunActionsMenu = ({
     const navigate = useNavigate();
     const [flyoutMenuIsOpen, setFlyoutMenuIsOpen] = useState(false);
 
-    const navigateToRunWorkflow = (workflow: 'import' | 'alerts') => {
+    const navigateToView = () => {
         if (!configuredId) {
             return;
         }
 
-        navigate(`/predictions/${configuredId}/runs/${predictionId}/${workflow}`);
+        navigate(`/predictions/${configuredId}/runs/${predictionId}`);
+        setFlyoutMenuIsOpen(false);
+    };
+
+    const navigateToImport = () => {
+        if (!configuredId) {
+            return;
+        }
+
+        navigate(`/predictions/${configuredId}/runs/${predictionId}/import`);
         setFlyoutMenuIsOpen(false);
     };
 
@@ -40,16 +49,16 @@ export const PredictionRunActionsMenu = ({
             component={(
                 <FlyoutMenu dense>
                     <MenuItem
+                        label={i18n.t('View')}
+                        dataTest="prediction-run-overflow-view"
+                        icon={<IconView24 />}
+                        onClick={navigateToView}
+                    />
+                    <MenuItem
                         label={i18n.t('Import')}
                         dataTest="prediction-run-overflow-import"
                         icon={<IconImportItems24 />}
-                        onClick={() => navigateToRunWorkflow('import')}
-                    />
-                    <MenuItem
-                        label={i18n.t('Outbreak thresholds')}
-                        dataTest="prediction-run-overflow-alerts"
-                        icon={<IconVisualizationLine24 />}
-                        onClick={() => navigateToRunWorkflow('alerts')}
+                        onClick={navigateToImport}
                     />
                 </FlyoutMenu>
             )}

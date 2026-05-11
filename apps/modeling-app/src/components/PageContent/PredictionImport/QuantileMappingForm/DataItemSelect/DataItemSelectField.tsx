@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { Label, Layer, Popper, IconChevronDown16, IconCross16 } from '@dhis2/ui';
 import { useApiDataQuery } from '@/utils/useApiDataQuery';
@@ -32,6 +32,7 @@ export const DataItemSelectField = ({
     initialLoading,
     onChange,
     label,
+    value,
     error,
     dataElementsOnly = false,
 }: DataItemSelectFieldProps) => {
@@ -43,6 +44,24 @@ export const DataItemSelectField = ({
         return null;
     });
     const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
+
+    useEffect(() => {
+        setSelectedOption((current) => {
+            if (!value) {
+                return null;
+            }
+
+            if (current?.id === value) {
+                return current;
+            }
+
+            if (initialDataItem?.id === value) {
+                return initialDataItem;
+            }
+
+            return null;
+        });
+    }, [initialDataItem, value]);
 
     const debouncedQuery = useDebounce(searchQuery, 300);
 

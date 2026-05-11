@@ -2,11 +2,17 @@ import {
     Button,
     IconExportItems24,
     IconImportItems24,
+    IconSettings16,
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
+import { useState } from 'react';
 import { PERIOD_TYPES, Widget } from '@dhis2-chap/ui';
-import type { ConfiguredModelWithDataSourceReadWithPredictions } from '@dhis2-chap/ui';
+import type { DataImportMapping, PredictionSetupReadWithPredictions } from '@dhis2-chap/ui';
 import { useNavigate } from 'react-router-dom';
+import { MarkReadyForForecastingModal } from '../../EvaluationDetails/QuickActionsWidget/MarkReadyForForecastingModal';
+import type { MarkReadyForForecastingFormValues } from '../../EvaluationDetails/QuickActionsWidget/MarkReadyForForecastingModal';
+import { getPredictionSetupDataImportMappings } from '@/utils/predictionSetupImportMapping';
+import { useUpdatePredictionSetup } from './hooks/useUpdatePredictionSetup';
 import styles from './QuickActionsWidget.module.css';
 
 type PredictionFormLocationState = {
@@ -15,7 +21,7 @@ type PredictionFormLocationState = {
     fromDate?: string;
     orgUnits?: string[];
     modelId?: string;
-    configuredModelWithDataSourceId?: number;
+    predictionSetupId?: number;
     dataSources?: {
         covariate: string;
         dataElementId: string;
@@ -24,7 +30,7 @@ type PredictionFormLocationState = {
 
 type Props = {
     configuredId?: string;
-    configuredModelWithDataSource?: ConfiguredModelWithDataSourceReadWithPredictions;
+    predictionSetup?: PredictionSetupReadWithPredictions;
     isLoading: boolean;
     latestPredictionId?: number;
 };
@@ -45,14 +51,15 @@ const getPeriodType = (
 };
 
 const buildPredictionFormState = (
-    configuredModelWithDataSource: ConfiguredModelWithDataSourceReadWithPredictions,
+    predictionSetup: PredictionSetupReadWithPredictions,
 ): PredictionFormLocationState => {
+    const configuredModelWithDataSource = predictionSetup.configuredModelWithDataSource;
     const periodType = getPeriodType(configuredModelWithDataSource.periodType);
     const state: PredictionFormLocationState = {
         name: i18n.t('{{name}} prediction', {
-            name: configuredModelWithDataSource.name,
+            name: predictionSetup.name,
         }),
-        configuredModelWithDataSourceId: configuredModelWithDataSource.id,
+        predictionSetupId: predictionSetup.id,
         orgUnits: configuredModelWithDataSource.orgUnits,
         dataSources: configuredModelWithDataSource.dataSources.map(dataSource => ({
             covariate: dataSource.covariate,
@@ -75,24 +82,70 @@ const buildPredictionFormState = (
     return state;
 };
 
+const quantileKeys = [
+    'quantile_high',
+    'quantile_mid_high',
+    'median',
+    'quantile_mid_low',
+    'quantile_low',
+] as const;
+
+const getDataElementId = (
+    dataImportMappings: DataImportMapping[],
+    quantileKey: typeof quantileKeys[number],
+) => (
+    dataImportMappings.find(mapping => mapping.quantileKey === quantileKey)?.dataElementId ?? ''
+);
+
+const buildEditSetupFormValues = (
+    predictionSetup: PredictionSetupReadWithPredictions,
+): MarkReadyForForecastingFormValues => {
+    const dataImportMappings = getPredictionSetupDataImportMappings(predictionSetup);
+
+    return {
+        name: predictionSetup.name,
+        use_import_mapping: dataImportMappings.length > 0,
+        quantile_high: getDataElementId(dataImportMappings, 'quantile_high'),
+        quantile_mid_high: getDataElementId(dataImportMappings, 'quantile_mid_high'),
+        median: getDataElementId(dataImportMappings, 'median'),
+        quantile_mid_low: getDataElementId(dataImportMappings, 'quantile_mid_low'),
+        quantile_low: getDataElementId(dataImportMappings, 'quantile_low'),
+    };
+};
+
+const buildDataImportMappings = (
+    values: MarkReadyForForecastingFormValues,
+): DataImportMapping[] => {
+    if (!values.use_import_mapping) {
+        return [];
+    }
+
+    return quantileKeys.map(quantileKey => ({
+        quantileKey,
+        dataElementId: values[quantileKey],
+    }));
+};
+
 export const QuickActionsWidget = ({
     configuredId,
-    configuredModelWithDataSource,
+    predictionSetup,
     isLoading,
     latestPredictionId,
 }: Props) => {
     const navigate = useNavigate();
-    const canPredict = !!configuredId && !!configuredModelWithDataSource?.configuredModel?.id;
+    const [configurationModalIsOpen, setConfigurationModalIsOpen] = useState(false);
+    const { updatePredictionSetup, isUpdating } = useUpdatePredictionSetup();
+    const canPredict = !!configuredId && !!predictionSetup?.configuredModelWithDataSource.configuredModel?.id;
 
     const handlePredict = () => {
-        if (!configuredModelWithDataSource) {
+        if (!predictionSetup) {
             return;
         }
 
         const returnTo = `/predictions/${configuredId}`;
         navigate(
             `/predictions/${configuredId}/new?returnTo=${encodeURIComponent(returnTo)}`,
-            { state: buildPredictionFormState(configuredModelWithDataSource) },
+            { state: buildPredictionFormState(predictionSetup) },
         );
     };
 
@@ -104,35 +157,78 @@ export const QuickActionsWidget = ({
         navigate(`/predictions/${configuredId}/runs/${latestPredictionId}/import`);
     };
 
+    const handleEditSetup = () => {
+        setConfigurationModalIsOpen(true);
+    };
+
+    const handleEditSetupSubmit = async (values: MarkReadyForForecastingFormValues) => {
+        if (!predictionSetup) {
+            return;
+        }
+
+        const dataImportMappings = buildDataImportMappings(values);
+
+        await updatePredictionSetup({
+            predictionSetupId: predictionSetup.id,
+            data: {
+                name: values.name,
+                schedule: predictionSetup.schedule,
+                dataImportMappings,
+            },
+        });
+        setConfigurationModalIsOpen(false);
+    };
+
     return (
-        <Widget
-            header={i18n.t('Quick actions')}
-            noncollapsible
-        >
-            <div className={styles.content}>
-                <div className={styles.actionList}>
-                    <Button
-                        dataTest="quick-action-predict"
-                        icon={<IconExportItems24 />}
-                        onClick={handlePredict}
-                        loading={isLoading}
-                        disabled={!canPredict}
-                        className={styles.actionButton}
-                        primary
-                    >
-                        {i18n.t('Run prediction')}
-                    </Button>
-                    <Button
-                        dataTest="quick-action-import"
-                        icon={<IconImportItems24 />}
-                        onClick={handleImport}
-                        disabled={!latestPredictionId}
-                        className={styles.actionButton}
-                    >
-                        {i18n.t('Import latest run')}
-                    </Button>
+        <>
+            <Widget
+                header={i18n.t('Quick actions')}
+                noncollapsible
+            >
+                <div className={styles.content}>
+                    <div className={styles.actionList}>
+                        <Button
+                            dataTest="quick-action-predict"
+                            icon={<IconExportItems24 />}
+                            onClick={handlePredict}
+                            loading={isLoading}
+                            disabled={!canPredict}
+                            className={styles.actionButton}
+                            primary
+                        >
+                            {i18n.t('Run prediction')}
+                        </Button>
+                        <Button
+                            dataTest="quick-action-import"
+                            icon={<IconImportItems24 />}
+                            onClick={handleImport}
+                            disabled={!latestPredictionId}
+                            className={styles.actionButton}
+                        >
+                            {i18n.t('Import latest run')}
+                        </Button>
+                        <Button
+                            dataTest="quick-action-configuration"
+                            icon={<IconSettings16 />}
+                            onClick={handleEditSetup}
+                            disabled={!predictionSetup}
+                            className={styles.actionButton}
+                        >
+                            {i18n.t('Edit setup')}
+                        </Button>
+                    </div>
                 </div>
-            </div>
-        </Widget>
+            </Widget>
+
+            {configurationModalIsOpen && predictionSetup && (
+                <MarkReadyForForecastingModal
+                    onClose={() => setConfigurationModalIsOpen(false)}
+                    onSubmit={handleEditSetupSubmit}
+                    defaultValues={buildEditSetupFormValues(predictionSetup)}
+                    title={i18n.t('Edit prediction setup')}
+                    isSubmitting={isUpdating}
+                />
+            )}
+        </>
     );
 };

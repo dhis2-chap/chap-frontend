@@ -1,1 +1,0 @@
-export { PredictionAlertsPage } from './PredictionAlertsPage';

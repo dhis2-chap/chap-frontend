@@ -3,32 +3,34 @@ import { Button, IconCheckmarkCircle16, IconVisualizationLineMulti16, IconDuplic
 import i18n from '@dhis2/d2-i18n';
 import { useNavigate } from 'react-router-dom';
 import { Widget } from '@dhis2-chap/ui';
+import type { DataImportMapping } from '@dhis2-chap/ui';
 import { CopyBacktestModal } from '../../../BacktestsTable/BacktestActionsMenu/CopyBacktestModal';
 import { MarkReadyForForecastingModal } from './MarkReadyForForecastingModal';
 import type { MarkReadyForForecastingFormValues } from './MarkReadyForForecastingModal';
-import { useCreateConfiguredModelWithDataSourceFromBacktest } from './hooks/useCreateConfiguredModelWithDataSourceFromBacktest';
+import { useCreatePredictionSetup } from './hooks/useCreatePredictionSetup';
+import { buildPredictionSetupMetaData } from '@/utils/predictionSetupImportMapping';
 import styles from './QuickActionsWidget.module.css';
 
 type Props = {
     evaluationId: number;
-    readyForFollowUp: boolean;
     predictionSetupId?: number;
-    predictionSetupIsLoading?: boolean;
 };
 
 export const QuickActionsWidget = ({
     evaluationId,
-    readyForFollowUp,
     predictionSetupId,
-    predictionSetupIsLoading = false,
 }: Props) => {
     const navigate = useNavigate();
     const [markReadyModalIsOpen, setMarkReadyModalIsOpen] = useState(false);
     const [copyModalIsOpen, setCopyModalIsOpen] = useState(false);
     const {
-        createConfiguredModelWithDataSourceFromBacktest,
+        createPredictionSetup,
         isCreating,
-    } = useCreateConfiguredModelWithDataSourceFromBacktest();
+    } = useCreatePredictionSetup({
+        onSuccess: (predictionSetup) => {
+            navigate(`/predictions/${predictionSetup.id}`);
+        },
+    });
 
     const handleCompareWith = () => {
         navigate(`/evaluate/compare?baseEvaluation=${evaluationId}&returnTo=${encodeURIComponent(`/evaluate/${evaluationId}`)}`);
@@ -50,10 +52,25 @@ export const QuickActionsWidget = ({
         setMarkReadyModalIsOpen(true);
     };
 
-    const handleMarkReadySubmit = async ({ name }: MarkReadyForForecastingFormValues) => {
-        await createConfiguredModelWithDataSourceFromBacktest({
-            backtestId: evaluationId,
-            data: { name },
+    const handleMarkReadySubmit = async (values: MarkReadyForForecastingFormValues) => {
+        const dataImportMappings: DataImportMapping[] = [];
+
+        if (values.use_import_mapping) {
+            dataImportMappings.push(
+                { quantileKey: 'quantile_high', dataElementId: values.quantile_high },
+                { quantileKey: 'quantile_mid_high', dataElementId: values.quantile_mid_high },
+                { quantileKey: 'median', dataElementId: values.median },
+                { quantileKey: 'quantile_mid_low', dataElementId: values.quantile_mid_low },
+                { quantileKey: 'quantile_low', dataElementId: values.quantile_low },
+            );
+        }
+
+        await createPredictionSetup({
+            data: {
+                backtestId: evaluationId,
+                name: values.name,
+                metaData: buildPredictionSetupMetaData(dataImportMappings),
+            },
         });
         setMarkReadyModalIsOpen(false);
     };
@@ -66,14 +83,12 @@ export const QuickActionsWidget = ({
             >
                 <div className={styles.content}>
                     <div className={styles.actionList}>
-                        {readyForFollowUp ? (
+                        {predictionSetupId ? (
                             <Button
                                 onClick={handlePredict}
                                 dataTest="quick-action-predict"
                                 icon={<IconExportItems24 />}
                                 className={styles.actionButton}
-                                loading={predictionSetupIsLoading}
-                                disabled={!predictionSetupId || predictionSetupIsLoading}
                                 primary
                             >
                                 {i18n.t('Predict')}

@@ -2,7 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type BackTest = {
+export type Backtest = {
     datasetId: number;
     modelId: string;
     name?: (string | null);
@@ -11,7 +11,6 @@ export type BackTest = {
     id?: (number | null);
     orgUnits?: Array<string>;
     splitPeriods?: Array<string>;
-    readyForFollowUp?: boolean;
     aggregateMetrics?: Record<string, number>;
     modelDbId: number;
 };
