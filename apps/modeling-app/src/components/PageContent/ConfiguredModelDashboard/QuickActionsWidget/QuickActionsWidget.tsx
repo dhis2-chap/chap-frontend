@@ -12,7 +12,6 @@ import { useNavigate } from 'react-router-dom';
 import { MarkReadyForForecastingModal } from '../../EvaluationDetails/QuickActionsWidget/MarkReadyForForecastingModal';
 import type { MarkReadyForForecastingFormValues } from '../../EvaluationDetails/QuickActionsWidget/MarkReadyForForecastingModal';
 import { getPredictionSetupDataImportMappings } from '@/utils/predictionSetupImportMapping';
-import { toFiveFieldCronExpression } from '@/utils/cronSchedule';
 import { useUpdatePredictionSetup } from './hooks/useUpdatePredictionSetup';
 import styles from './QuickActionsWidget.module.css';
 
@@ -105,8 +104,6 @@ const buildEditSetupFormValues = (
 
     return {
         name: predictionSetup.name,
-        set_schedule: predictionSetup.schedule?.enabled ?? false,
-        schedule_expression: toFiveFieldCronExpression(predictionSetup.schedule?.expression),
         use_import_mapping: dataImportMappings.length > 0,
         quantile_high: getDataElementId(dataImportMappings, 'quantile_high'),
         quantile_mid_high: getDataElementId(dataImportMappings, 'quantile_mid_high'),
@@ -127,15 +124,6 @@ const buildDataImportMappings = (
         quantileKey,
         dataElementId: values[quantileKey],
     }));
-};
-
-const buildSchedule = (values: MarkReadyForForecastingFormValues) => {
-    const expression = values.schedule_expression.trim();
-
-    return {
-        enabled: values.set_schedule,
-        expression: expression || null,
-    };
 };
 
 export const QuickActionsWidget = ({
@@ -184,7 +172,6 @@ export const QuickActionsWidget = ({
             predictionSetupId: predictionSetup.id,
             data: {
                 name: values.name,
-                schedule: buildSchedule(values),
                 dataImportMappings,
             },
         });

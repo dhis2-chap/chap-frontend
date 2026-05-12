@@ -6,7 +6,6 @@ import { usePredictionSetup } from '../../../hooks/usePredictionSetup';
 import { ActivityWidget } from './ActivityWidget';
 import { PredictionRunsWidget } from './PredictionRunsWidget';
 import { QuickActionsWidget } from './QuickActionsWidget';
-import { SchedulingWidget } from './SchedulingWidget';
 import { SummaryWidget } from './SummaryWidget';
 import styles from './ConfiguredModelDashboard.module.css';
 
@@ -76,11 +75,6 @@ export const ConfiguredModelDashboard: React.FC = () => {
                     predictionSetup={predictionSetup}
                     isLoading={isLoading}
                     latestPredictionId={predictions[0]?.id}
-                />
-                <SchedulingWidget
-                    hasValidConfiguredId={hasValidPredictionSetupId}
-                    isLoading={isLoading}
-                    predictionSetup={predictionSetup}
                 />
                 <SummaryWidget
                     predictionSetup={predictionSetup}

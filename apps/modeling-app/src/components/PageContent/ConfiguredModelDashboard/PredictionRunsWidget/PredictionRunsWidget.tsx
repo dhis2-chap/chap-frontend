@@ -227,7 +227,7 @@ export const PredictionRunsWidget = ({
                 )}
                 {!isLoading && !hasError && hasValidConfiguredId && !hasRuns && (
                     <div className={styles.emptyState}>
-                        {i18n.t('No completed predictions yet. Run a prediction manually or add a schedule to start producing predictions.')}
+                        {i18n.t('No completed predictions yet. Run a prediction to start producing predictions.')}
                     </div>
                 )}
                 {!isLoading && !hasError && hasRuns && (

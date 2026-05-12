@@ -7,7 +7,7 @@ export const ReadyToPredictPage: React.FC = () => {
         <>
             <PageHeader
                 pageTitle={i18n.t('Ready to predict')}
-                pageDescription={i18n.t('Saved model configurations that are ready to be used to generate predictions, either on demand or on a schedule.')}
+                pageDescription={i18n.t('Saved model configurations that are ready to be used to generate predictions.')}
             />
             <ReadyToPredictContent />
         </>
