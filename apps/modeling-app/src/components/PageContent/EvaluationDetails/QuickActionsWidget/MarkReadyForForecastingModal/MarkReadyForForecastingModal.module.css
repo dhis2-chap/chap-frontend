@@ -87,3 +87,10 @@
     overflow: hidden;
     row-gap: var(--spacers-dp4);
 }
+
+.scheduleField {
+    box-sizing: border-box;
+    inline-size: calc(90% - 22px);
+    margin-inline: auto;
+    overflow: hidden;
+}

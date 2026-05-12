@@ -81,18 +81,15 @@
 }
 
 .statusIndicator {
+    display: inline-block;
     flex: 0 0 auto;
     inline-size: 8px;
     block-size: 8px;
     border-radius: 50%;
 }
 
-.statusYes {
+.statusOutbreak {
     background: var(--colors-red600);
-}
-
-.statusNo {
-    background: var(--colors-green500);
 }
 
 .statusUnavailable {

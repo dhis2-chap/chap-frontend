@@ -59,7 +59,7 @@ const DEFAULT_SETTINGS: PredictionRunAlertSettings = {
 
 export const getDefaultPredictionRunAlertSettings = () => ({ ...DEFAULT_SETTINGS });
 
-type StatusFilter = 'all' | ThresholdTileViewModel['status'];
+type StatusFilter = ThresholdTileViewModel['status'];
 
 const statusLabels = {
     outbreak: i18n.t('Outbreak'),
@@ -71,7 +71,6 @@ const statusFilterOptions: Array<{
     label: string;
     value: StatusFilter;
 }> = [
-    { label: i18n.t('All statuses'), value: 'all' },
     { label: i18n.t('Outbreak regions'), value: 'outbreak' },
     { label: i18n.t('No outbreak regions'), value: 'noOutbreak' },
     { label: i18n.t('Unavailable regions'), value: 'unavailable' },
@@ -201,7 +200,7 @@ export const PredictionDetailsGrid = ({
     settings,
 }: Props) => {
     const [regionSearch, setRegionSearch] = useState('');
-    const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
+    const [statusFilter, setStatusFilter] = useState<StatusFilter | undefined>(undefined);
     const [zoomRange, setZoomRange] = useState<ZoomRange | null>(null);
     const toolbarRef = useRef<HTMLDivElement>(null);
     const isToolbarStuckRef = useRef(false);
@@ -219,8 +218,8 @@ export const PredictionDetailsGrid = ({
     }, [prediction.id, settings.alertProbability, settings.thresholdsEnabled]);
 
     useEffect(() => {
-        if (!showThresholds && statusFilter !== 'all') {
-            setStatusFilter('all');
+        if (!showThresholds && statusFilter !== undefined) {
+            setStatusFilter(undefined);
         }
     }, [showThresholds, statusFilter]);
 
@@ -275,7 +274,7 @@ export const PredictionDetailsGrid = ({
     const normalizedRegionSearch = regionSearch.trim().toLocaleLowerCase();
     const filteredTiles = useMemo(() => (
         tiles.filter(tile => (
-            (!showThresholds || statusFilter === 'all' || tile.status === statusFilter) &&
+            (!showThresholds || !statusFilter || tile.status === statusFilter) &&
             (
                 normalizedRegionSearch.length === 0
                 || tile.orgUnitName.toLocaleLowerCase().includes(normalizedRegionSearch)
@@ -369,8 +368,15 @@ export const PredictionDetailsGrid = ({
                     <div className={styles.statusSelect}>
                         <SingleSelect
                             dense
-                            selected={statusFilter}
+                            clearable
+                            clearText={i18n.t('Clear')}
+                            placeholder={i18n.t('All statuses')}
+                            selected={statusFilter ?? ''}
                             onChange={({ selected }) => {
+                                if (!selected) {
+                                    setStatusFilter(undefined);
+                                    return;
+                                }
                                 if (statusFilterOptions.some(option => option.value === selected)) {
                                     setStatusFilter(selected as StatusFilter);
                                 }
@@ -458,7 +464,7 @@ export const PredictionDetailsGrid = ({
                 {filteredTiles.length > 0
                     ? (
                             <VirtuosoGrid
-                                key={`${prediction.id}-${statusFilter}-${normalizedRegionSearch}-${showThresholds}`}
+                                key={`${prediction.id}-${statusFilter ?? 'all'}-${normalizedRegionSearch}-${showThresholds}`}
                                 components={gridComponents}
                                 computeItemKey={(index: number) => filteredTiles[index]?.orgUnitId ?? index}
                                 customScrollParent={scrollParent ?? undefined}

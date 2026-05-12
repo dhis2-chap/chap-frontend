@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-05-10T23:32:14.220Z\n"
-"PO-Revision-Date: 2026-05-10T23:32:14.221Z\n"
+"POT-Creation-Date: 2026-05-11T00:50:27.857Z\n"
+"PO-Revision-Date: 2026-05-11T00:50:27.858Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -633,9 +633,6 @@ msgstr "Started"
 msgid "Finished"
 msgstr "Finished"
 
-msgid "Activity"
-msgstr "Activity"
-
 msgid "Recent activity"
 msgstr "Recent activity"
 
@@ -678,8 +675,27 @@ msgstr "Last run"
 msgid "No runs yet"
 msgstr "No runs yet"
 
+msgid "View"
+msgstr "View"
+
 msgid "Import"
 msgstr "Import"
+
+msgid "Delete prediction run"
+msgstr "Delete prediction run"
+
+msgid ""
+"This will permanently delete the prediction run from CHAP. It will not "
+"remove any values previously imported into DHIS2."
+msgstr ""
+"This will permanently delete the prediction run from CHAP. It will not "
+"remove any values previously imported into DHIS2."
+
+msgid "Prediction run deleted"
+msgstr "Prediction run deleted"
+
+msgid "Failed to delete prediction run"
+msgstr "Failed to delete prediction run"
 
 msgid "{{count}} run"
 msgid_plural "{{count}} run"
@@ -723,13 +739,25 @@ msgstr "Quick actions"
 msgid "Import latest run"
 msgstr "Import latest run"
 
-msgid "Configuration"
-msgstr "Configuration"
+msgid "Edit setup"
+msgstr "Edit setup"
+
+msgid "Edit prediction setup"
+msgstr "Edit prediction setup"
+
+msgid "Prediction setup updated"
+msgstr "Prediction setup updated"
+
+msgid "Failed to update prediction setup"
+msgstr "Failed to update prediction setup"
 
 msgid "{{count}} {{label}}"
 msgid_plural "{{count}} {{label}}"
 msgstr[0] "{{count}} {{label}}"
 msgstr[1] "{{count}} {{label}}"
+
+msgid "Configuration"
+msgstr "Configuration"
 
 msgid "No prediction setup found"
 msgstr "No prediction setup found"
@@ -896,6 +924,12 @@ msgstr "Start period"
 msgid "End period"
 msgstr "End period"
 
+msgid "CRON expression is required"
+msgstr "CRON expression is required"
+
+msgid "Enter a valid five-field CRON expression"
+msgstr "Enter a valid five-field CRON expression"
+
 msgid "Data element is required"
 msgstr "Data element is required"
 
@@ -928,6 +962,9 @@ msgstr "Set schedule"
 
 msgid "Choose when predictions should run automatically."
 msgstr "Choose when predictions should run automatically."
+
+msgid "CRON Expression"
+msgstr "CRON Expression"
 
 msgid "Set default import mapping"
 msgstr "Set default import mapping"
@@ -1310,9 +1347,6 @@ msgstr "Prediction data posted successfully"
 
 msgid "Error loading prediction configurations"
 msgstr "Error loading prediction configurations"
-
-msgid "View"
-msgstr "View"
 
 msgid "Date created"
 msgstr "Date created"

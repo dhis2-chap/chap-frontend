@@ -21,6 +21,14 @@
     padding-inline: 10px;
 }
 
+.clickableRow {
+    cursor: pointer;
+}
+
+.clickableRow:hover {
+    background-color: var(--colors-grey100);
+}
+
 .header {
     display: flex;
     flex: 1;
@@ -56,6 +64,12 @@
 .lastRun svg {
     flex-shrink: 0;
     color: var(--colors-grey700);
+}
+
+.lastRunTooltip {
+    cursor: help;
+    text-decoration: underline dotted var(--colors-grey500);
+    text-underline-offset: 3px;
 }
 
 .emptyState,

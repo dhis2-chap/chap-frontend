@@ -54,6 +54,7 @@ export const QuickActionsWidget = ({
 
     const handleMarkReadySubmit = async (values: MarkReadyForForecastingFormValues) => {
         const dataImportMappings: DataImportMapping[] = [];
+        const scheduleExpression = values.schedule_expression.trim();
 
         if (values.use_import_mapping) {
             dataImportMappings.push(
@@ -69,6 +70,12 @@ export const QuickActionsWidget = ({
             data: {
                 backtestId: evaluationId,
                 name: values.name,
+                schedule: values.set_schedule
+                    ? {
+                            enabled: true,
+                            expression: scheduleExpression,
+                        }
+                    : undefined,
                 metaData: buildPredictionSetupMetaData(dataImportMappings),
             },
         });

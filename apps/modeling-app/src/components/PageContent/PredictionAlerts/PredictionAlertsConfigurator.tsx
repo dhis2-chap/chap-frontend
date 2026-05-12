@@ -560,7 +560,13 @@ export const PredictionAlertsConfigurator = ({
                                     orgUnitSeries,
                                     selectedProbability,
                                 );
-                                const hasOutbreak = indicators.some(indicator => indicator.outbreak);
+                                const hasOutbreak = threshold.available &&
+                                    indicators.some(indicator => indicator.outbreak);
+                                const tooltipLabel = !threshold.available
+                                    ? i18n.t('Threshold unavailable')
+                                    : hasOutbreak
+                                        ? i18n.t('Outbreak detected')
+                                        : null;
 
                                 return (
                                     <button
@@ -577,26 +583,28 @@ export const PredictionAlertsConfigurator = ({
                                         <span className={styles.orgUnitName}>
                                             {orgUnitSeries.orgUnitName}
                                         </span>
-                                        <span
-                                            className={[
-                                                styles.statusIndicator,
-                                                !threshold.available
-                                                    ? styles.statusUnavailable
-                                                    : hasOutbreak
-                                                        ? styles.statusYes
-                                                        : styles.statusNo,
-                                            ].join(' ')}
-                                            aria-label={!threshold.available
-                                                ? i18n.t('Threshold unavailable')
-                                                : hasOutbreak
-                                                    ? i18n.t('Outbreak')
-                                                    : i18n.t('No outbreak')}
-                                            title={!threshold.available
-                                                ? i18n.t('Threshold unavailable')
-                                                : hasOutbreak
-                                                    ? i18n.t('Outbreak')
-                                                    : i18n.t('No outbreak')}
-                                        />
+                                        {hasOutbreak && tooltipLabel && (
+                                            <Tooltip content={tooltipLabel}>
+                                                <span
+                                                    className={[
+                                                        styles.statusIndicator,
+                                                        styles.statusOutbreak,
+                                                    ].join(' ')}
+                                                    aria-label={tooltipLabel}
+                                                />
+                                            </Tooltip>
+                                        )}
+                                        {!threshold.available && tooltipLabel && (
+                                            <Tooltip content={tooltipLabel}>
+                                                <span
+                                                    className={[
+                                                        styles.statusIndicator,
+                                                        styles.statusUnavailable,
+                                                    ].join(' ')}
+                                                    aria-label={tooltipLabel}
+                                                />
+                                            </Tooltip>
+                                        )}
                                     </button>
                                 );
                             })}

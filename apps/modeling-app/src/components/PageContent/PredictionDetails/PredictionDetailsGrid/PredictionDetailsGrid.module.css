@@ -1,7 +1,8 @@
 .container {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 340px;
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 340px);
     column-gap: 16px;
+    row-gap: 16px;
     margin-block-start: 24px;
 }
 
@@ -11,6 +12,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-wrap: wrap;
     gap: 16px;
     margin-block-end: 16px;
     padding: var(--spacers-dp8);
@@ -27,6 +29,7 @@
 
 .filters {
     display: flex;
+    flex: 1 1 auto;
     flex-wrap: wrap;
     align-items: center;
     gap: 8px;
@@ -72,6 +75,7 @@
 
 .zoomControls {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: flex-end;
     gap: 6px;
@@ -92,7 +96,7 @@
 
 .grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(320px, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 16px;
     align-items: start;
     padding-block-end: 24px;
@@ -157,7 +161,7 @@
 }
 
 .chart {
-    min-block-size: 260px;
+    min-block-size: clamp(220px, 24vw, 280px);
     padding: 8px 8px 0;
 }
 
@@ -232,6 +236,7 @@
     margin: 0;
     color: var(--colors-grey900);
     font-weight: 600;
+    text-align: end;
 }
 
 .segmentedControl {
@@ -320,7 +325,7 @@
     gap: 8px;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1240px) {
     .container {
         display: flex;
         flex-direction: column;
@@ -332,9 +337,28 @@
         position: static;
     }
 
+    .panelContent {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        align-items: start;
+    }
+
+    .panelContent > :last-child {
+        grid-column: 1 / -1;
+    }
+
+    .grid {
+        padding-block-end: 0;
+    }
+}
+
+@media (max-width: 900px) {
     .grid {
         grid-template-columns: minmax(0, 1fr);
-        padding-block-end: 0;
+    }
+
+    .panelContent {
+        display: flex;
     }
 
     .toolbar,
@@ -352,5 +376,22 @@
     .statusSelect {
         inline-size: 100%;
         min-inline-size: 0;
+    }
+}
+
+@media (max-width: 520px) {
+    .summaryList div {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .summaryList dd {
+        text-align: start;
+    }
+
+    .tileHeader {
+        align-items: flex-start;
+        flex-direction: column;
     }
 }

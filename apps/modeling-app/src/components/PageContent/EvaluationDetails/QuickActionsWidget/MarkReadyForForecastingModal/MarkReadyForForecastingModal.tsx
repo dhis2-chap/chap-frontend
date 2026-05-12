@@ -13,10 +13,15 @@ import i18n from '@dhis2/d2-i18n';
 import { useState } from 'react';
 import type { KeyboardEvent, MouseEvent } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { DataItemSelect } from '../../../PredictionImport/QuantileMappingForm/DataItemSelect';
+import {
+    getCronExpressionDescription,
+    isValidCronExpression,
+    toFiveFieldCronExpression,
+} from '@/utils/cronSchedule';
 import styles from './MarkReadyForForecastingModal.module.css';
 
 const requiredQuantileFields = [
@@ -33,12 +38,38 @@ const markReadyForForecastingSchema = z.object({
     name: z.string()
         .trim()
         .min(1, { message: i18n.t('Name is required') }),
+    set_schedule: z.boolean(),
+    schedule_expression: z.string(),
     use_import_mapping: z.boolean(),
     quantile_high: quantileFieldSchema,
     quantile_mid_high: quantileFieldSchema,
     median: quantileFieldSchema,
     quantile_mid_low: quantileFieldSchema,
     quantile_low: quantileFieldSchema,
+}).superRefine((values, context) => {
+    if (!values.set_schedule) {
+        return;
+    }
+
+    const scheduleExpression = values.schedule_expression.trim();
+
+    if (!scheduleExpression) {
+        context.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ['schedule_expression'],
+            message: i18n.t('CRON expression is required'),
+        });
+
+        return;
+    }
+
+    if (!isValidCronExpression(scheduleExpression)) {
+        context.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ['schedule_expression'],
+            message: i18n.t('Enter a valid five-field CRON expression'),
+        });
+    }
 }).superRefine((values, context) => {
     if (!values.use_import_mapping) {
         return;
@@ -89,6 +120,9 @@ export const MarkReadyForForecastingModal = ({
     const [importMappingIsEnabled, setImportMappingIsEnabled] = useState(
         defaultValues?.use_import_mapping ?? false,
     );
+    const [scheduleIsEnabled, setScheduleIsEnabled] = useState(
+        defaultValues?.set_schedule ?? false,
+    );
     const {
         control,
         handleSubmit,
@@ -100,6 +134,7 @@ export const MarkReadyForForecastingModal = ({
         shouldFocusError: false,
         defaultValues: {
             name: '',
+            set_schedule: false,
             use_import_mapping: false,
             quantile_high: '',
             quantile_mid_high: '',
@@ -107,8 +142,30 @@ export const MarkReadyForForecastingModal = ({
             quantile_mid_low: '',
             quantile_low: '',
             ...defaultValues,
+            schedule_expression: toFiveFieldCronExpression(
+                defaultValues?.schedule_expression,
+            ),
         },
     });
+    const scheduleExpression = useWatch({
+        control,
+        name: 'schedule_expression',
+    });
+    const scheduleDescription = getCronExpressionDescription(scheduleExpression ?? '');
+
+    const toggleSchedule = () => {
+        const nextIsEnabled = !scheduleIsEnabled;
+        setScheduleIsEnabled(nextIsEnabled);
+        setValue('set_schedule', nextIsEnabled, { shouldDirty: true });
+
+        if (nextIsEnabled && !scheduleExpression) {
+            setValue('schedule_expression', '0 12 * * *', { shouldDirty: true });
+        }
+
+        if (!nextIsEnabled) {
+            clearErrors('schedule_expression');
+        }
+    };
 
     const toggleImportMapping = () => {
         const nextIsEnabled = !importMappingIsEnabled;
@@ -124,6 +181,13 @@ export const MarkReadyForForecastingModal = ({
         if (event.key === 'Enter' || event.key === ' ') {
             event.preventDefault();
             toggleImportMapping();
+        }
+    };
+
+    const handleScheduleKeyDown = (event: KeyboardEvent) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            toggleSchedule();
         }
     };
 
@@ -161,8 +225,11 @@ export const MarkReadyForForecastingModal = ({
 
                         <section className={styles.section}>
                             <div
-                                className={styles.mappingToggleDisabled}
-                                aria-disabled="true"
+                                className={styles.mappingToggle}
+                                onClick={toggleSchedule}
+                                onKeyDown={handleScheduleKeyDown}
+                                role="button"
+                                tabIndex={0}
                             >
                                 <div className={styles.mappingToggleText}>
                                     <span className={styles.mappingToggleTitle}>
@@ -174,11 +241,42 @@ export const MarkReadyForForecastingModal = ({
                                 </div>
                                 <span onClick={handleSwitchClick}>
                                     <Switch
-                                        checked={false}
-                                        disabled
+                                        checked={scheduleIsEnabled}
+                                        onChange={toggleSchedule}
                                     />
                                 </span>
                             </div>
+                            <AnimatePresence initial={false}>
+                                {scheduleIsEnabled && (
+                                    <motion.div
+                                        className={styles.scheduleField}
+                                        initial={{ height: 0, opacity: 0, y: -4 }}
+                                        animate={{ height: 'auto', opacity: 1, y: 0 }}
+                                        exit={{ height: 0, opacity: 0, y: -4 }}
+                                        transition={{ duration: 0.18, ease: 'easeOut' }}
+                                    >
+                                        <Controller
+                                            name="schedule_expression"
+                                            control={control}
+                                            render={({ field }) => (
+                                                <InputField
+                                                    {...field}
+                                                    label={i18n.t('CRON Expression')}
+                                                    autoComplete="off"
+                                                    error={!!errors.schedule_expression}
+                                                    validationText={
+                                                        errors.schedule_expression?.message
+                                                        ?? scheduleDescription
+                                                    }
+                                                    onChange={({ value }) => field.onChange(value)}
+                                                    dataTest="prediction-schedule-cron-input"
+                                                    required
+                                                />
+                                            )}
+                                        />
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
                         </section>
 
                         <section className={styles.section}>

@@ -11,6 +11,7 @@
 
 .item {
     display: flex;
+    align-items: flex-start;
     min-inline-size: 0;
     flex-direction: column;
     gap: 6px;
@@ -28,6 +29,14 @@
     font-size: 14px;
     line-height: 20px;
     font-weight: 500;
+}
+
+.tooltipValue {
+    display: inline-block;
+    max-inline-size: 100%;
+    cursor: help;
+    text-decoration: underline dotted var(--colors-grey500);
+    text-underline-offset: 3px;
 }
 
 .link {

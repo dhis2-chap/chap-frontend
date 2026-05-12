@@ -12,3 +12,13 @@
 .actionButton {
     inline-size: 100%;
 }
+
+.actionIcon {
+    display: inline-flex;
+    align-items: center;
+}
+
+.actionIcon svg {
+    inline-size: 16px;
+    block-size: 16px;
+}

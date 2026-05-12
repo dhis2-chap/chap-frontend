@@ -4,10 +4,9 @@ import { useParams } from 'react-router-dom';
 import { JOB_STATUSES, useJobs } from '../../../hooks/useJobs';
 import { usePredictionSetup } from '../../../hooks/usePredictionSetup';
 import { ActivityWidget } from './ActivityWidget';
-import { MonitoringWidget } from './MonitoringWidget';
-import { OverviewWidget } from './OverviewWidget';
 import { PredictionRunsWidget } from './PredictionRunsWidget';
 import { QuickActionsWidget } from './QuickActionsWidget';
+import { SchedulingWidget } from './SchedulingWidget';
 import { SummaryWidget } from './SummaryWidget';
 import styles from './ConfiguredModelDashboard.module.css';
 
@@ -64,7 +63,6 @@ export const ConfiguredModelDashboard: React.FC = () => {
                     isLoading={isLoading}
                     predictions={predictions}
                 />
-                <MonitoringWidget />
                 <ActivityWidget
                     error={jobsError}
                     hasValidConfiguredId={hasValidPredictionSetupId}
@@ -79,10 +77,10 @@ export const ConfiguredModelDashboard: React.FC = () => {
                     isLoading={isLoading}
                     latestPredictionId={predictions[0]?.id}
                 />
-                <OverviewWidget
+                <SchedulingWidget
                     hasValidConfiguredId={hasValidPredictionSetupId}
                     isLoading={isLoading}
-                    predictions={predictions}
+                    predictionSetup={predictionSetup}
                 />
                 <SummaryWidget
                     predictionSetup={predictionSetup}

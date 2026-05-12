@@ -7,6 +7,7 @@ import {
     DataTableColumnHeader,
     DataTableHead,
     DataTableRow,
+    Tooltip,
 } from '@dhis2/ui';
 import { IconClockHistory16 } from '@dhis2/ui-icons';
 import {
@@ -20,7 +21,7 @@ import {
 } from '@tanstack/react-table';
 import type { PredictionInfo } from '@dhis2-chap/ui';
 import { StatusIndicator, Widget } from '@dhis2-chap/ui';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { format, formatDistanceToNow } from 'date-fns';
 import { useMemo, useState } from 'react';
 import {
@@ -102,25 +103,36 @@ type WidgetHeaderProps = {
 const WidgetHeader = ({
     hasRunningJob,
     predictions,
-}: WidgetHeaderProps) => (
-    <div className={styles.header}>
-        <span className={styles.title}>{i18n.t('Completed predictions')}</span>
-        <div className={styles.meta}>
-            {hasRunningJob && (
-                <StatusIndicator
-                    label={i18n.t('Running job')}
-                    variant="info"
-                    active
-                />
-            )}
-            <span>{formatRunCount(predictions.length)}</span>
-            <span className={styles.lastRun}>
-                <IconClockHistory16 />
-                <span>{formatLastRun(predictions[0]?.created)}</span>
-            </span>
+}: WidgetHeaderProps) => {
+    const latestCreated = predictions[0]?.created;
+    const lastRunLabel = formatLastRun(latestCreated);
+
+    return (
+        <div className={styles.header}>
+            <span className={styles.title}>{i18n.t('Completed predictions')}</span>
+            <div className={styles.meta}>
+                {hasRunningJob && (
+                    <StatusIndicator
+                        label={i18n.t('Running job')}
+                        variant="info"
+                        active
+                    />
+                )}
+                <span>{formatRunCount(predictions.length)}</span>
+                <span className={styles.lastRun}>
+                    <IconClockHistory16 />
+                    {latestCreated
+                        ? (
+                                <Tooltip content={formatDate(latestCreated)}>
+                                    <span className={styles.lastRunTooltip}>{lastRunLabel}</span>
+                                </Tooltip>
+                            )
+                        : <span>{lastRunLabel}</span>}
+                </span>
+            </div>
         </div>
-    </div>
-);
+    );
+};
 
 export const PredictionRunsWidget = ({
     configuredId,
@@ -134,6 +146,7 @@ export const PredictionRunsWidget = ({
     const hasRuns = predictions.length > 0;
     const [open, setOpen] = useState(true);
     const [sorting, setSorting] = useState<SortingState>([{ id: 'created', desc: true }]);
+    const navigate = useNavigate();
     const columns = useMemo(() => [
         columnHelper.accessor('id', {
             header: () => i18n.t('Run ID'),
@@ -241,21 +254,33 @@ export const PredictionRunsWidget = ({
                             ))}
                         </DataTableHead>
                         <DataTableBody>
-                            {table.getRowModel().rows.map(row => (
-                                <DataTableRow key={row.id}>
-                                    {row.getVisibleCells().map(cell => (
-                                        <DataTableCell
-                                            key={cell.id}
-                                            className={styles.denseCell}
-                                        >
-                                            {flexRender(
-                                                cell.column.columnDef.cell,
-                                                cell.getContext(),
-                                            )}
-                                        </DataTableCell>
-                                    ))}
-                                </DataTableRow>
-                            ))}
+                            {table.getRowModel().rows.map((row) => {
+                                const navigateToRun = () => navigate(
+                                    `/predictions/${configuredId}/runs/${row.original.id}`,
+                                );
+                                return (
+                                    <DataTableRow
+                                        key={row.id}
+                                        className={styles.clickableRow}
+                                    >
+                                        {row.getVisibleCells().map((cell) => {
+                                            const isActionsCell = cell.column.id === 'actions';
+                                            return (
+                                                <DataTableCell
+                                                    key={cell.id}
+                                                    className={styles.denseCell}
+                                                    onClick={isActionsCell ? undefined : navigateToRun}
+                                                >
+                                                    {flexRender(
+                                                        cell.column.columnDef.cell,
+                                                        cell.getContext(),
+                                                    )}
+                                                </DataTableCell>
+                                            );
+                                        })}
+                                    </DataTableRow>
+                                );
+                            })}
                         </DataTableBody>
                     </DataTable>
                 )}

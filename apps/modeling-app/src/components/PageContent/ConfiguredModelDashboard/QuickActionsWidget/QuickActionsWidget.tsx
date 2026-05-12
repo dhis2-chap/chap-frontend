@@ -1,8 +1,8 @@
 import {
     Button,
     IconExportItems24,
-    IconImportItems24,
-    IconSettings16,
+    IconSettings24,
+    IconView24,
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { useState } from 'react';
@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import { MarkReadyForForecastingModal } from '../../EvaluationDetails/QuickActionsWidget/MarkReadyForForecastingModal';
 import type { MarkReadyForForecastingFormValues } from '../../EvaluationDetails/QuickActionsWidget/MarkReadyForForecastingModal';
 import { getPredictionSetupDataImportMappings } from '@/utils/predictionSetupImportMapping';
+import { toFiveFieldCronExpression } from '@/utils/cronSchedule';
 import { useUpdatePredictionSetup } from './hooks/useUpdatePredictionSetup';
 import styles from './QuickActionsWidget.module.css';
 
@@ -104,6 +105,8 @@ const buildEditSetupFormValues = (
 
     return {
         name: predictionSetup.name,
+        set_schedule: predictionSetup.schedule?.enabled ?? false,
+        schedule_expression: toFiveFieldCronExpression(predictionSetup.schedule?.expression),
         use_import_mapping: dataImportMappings.length > 0,
         quantile_high: getDataElementId(dataImportMappings, 'quantile_high'),
         quantile_mid_high: getDataElementId(dataImportMappings, 'quantile_mid_high'),
@@ -124,6 +127,15 @@ const buildDataImportMappings = (
         quantileKey,
         dataElementId: values[quantileKey],
     }));
+};
+
+const buildSchedule = (values: MarkReadyForForecastingFormValues) => {
+    const expression = values.schedule_expression.trim();
+
+    return {
+        enabled: values.set_schedule,
+        expression: expression || null,
+    };
 };
 
 export const QuickActionsWidget = ({
@@ -149,12 +161,12 @@ export const QuickActionsWidget = ({
         );
     };
 
-    const handleImport = () => {
+    const handleShowLastRun = () => {
         if (!configuredId || !latestPredictionId) {
             return;
         }
 
-        navigate(`/predictions/${configuredId}/runs/${latestPredictionId}/import`);
+        navigate(`/predictions/${configuredId}/runs/${latestPredictionId}`);
     };
 
     const handleEditSetup = () => {
@@ -172,7 +184,7 @@ export const QuickActionsWidget = ({
             predictionSetupId: predictionSetup.id,
             data: {
                 name: values.name,
-                schedule: predictionSetup.schedule,
+                schedule: buildSchedule(values),
                 dataImportMappings,
             },
         });
@@ -189,7 +201,7 @@ export const QuickActionsWidget = ({
                     <div className={styles.actionList}>
                         <Button
                             dataTest="quick-action-predict"
-                            icon={<IconExportItems24 />}
+                            icon={<span className={styles.actionIcon}><IconExportItems24 /></span>}
                             onClick={handlePredict}
                             loading={isLoading}
                             disabled={!canPredict}
@@ -199,17 +211,17 @@ export const QuickActionsWidget = ({
                             {i18n.t('Run prediction')}
                         </Button>
                         <Button
-                            dataTest="quick-action-import"
-                            icon={<IconImportItems24 />}
-                            onClick={handleImport}
+                            dataTest="quick-action-show-last-run"
+                            icon={<span className={styles.actionIcon}><IconView24 /></span>}
+                            onClick={handleShowLastRun}
                             disabled={!latestPredictionId}
                             className={styles.actionButton}
                         >
-                            {i18n.t('Import latest run')}
+                            {i18n.t('Go to last run')}
                         </Button>
                         <Button
                             dataTest="quick-action-configuration"
-                            icon={<IconSettings16 />}
+                            icon={<span className={styles.actionIcon}><IconSettings24 /></span>}
                             onClick={handleEditSetup}
                             disabled={!predictionSetup}
                             className={styles.actionButton}
