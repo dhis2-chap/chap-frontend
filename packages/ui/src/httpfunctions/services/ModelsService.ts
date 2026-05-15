@@ -3,6 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { ConfiguredModelDB } from '../models/ConfiguredModelDB';
+import type { ConfiguredModelInfoRead } from '../models/ConfiguredModelInfoRead';
 import type { ModelConfigurationCreate } from '../models/ModelConfigurationCreate';
 import type { ModelSpecRead } from '../models/ModelSpecRead';
 import type { ModelTemplateRead } from '../models/ModelTemplateRead';
@@ -13,6 +14,8 @@ export class ModelsService {
     /**
      * List Model Templates
      * Lists all model templates from the db, including archived.
+     * Also syncs live chapkit services from the v2 service registry
+     * into the database (upsert by name).
      * @returns ModelTemplateRead Successful Response
      * @throws ApiError
      */
@@ -49,6 +52,27 @@ export class ModelsService {
             url: '/v1/crud/configured-models',
             body: requestBody,
             mediaType: 'application/json',
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
+     * Get Configured Model Info
+     * Return the detail view for a single configured model, including its template.
+     * @param configuredModelId
+     * @returns ConfiguredModelInfoRead Successful Response
+     * @throws ApiError
+     */
+    public static getConfiguredModelInfoV1CrudConfiguredModelsConfiguredModelIdGet(
+        configuredModelId: number,
+    ): CancelablePromise<ConfiguredModelInfoRead> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/v1/crud/configured-models/{configuredModelId}',
+            path: {
+                'configuredModelId': configuredModelId,
+            },
             errors: {
                 422: `Validation Error`,
             },

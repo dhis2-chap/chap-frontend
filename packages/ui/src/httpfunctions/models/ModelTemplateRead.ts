@@ -18,6 +18,7 @@ export type ModelTemplateRead = {
     organizationLogoUrl?: (string | null);
     contactEmail?: (string | null);
     citationInfo?: (string | null);
+    documentationUrl?: (string | null);
     supportedPeriodType?: chap_core__model_spec__PeriodType;
     userOptions?: (Record<string, any> | null);
     hpoSearchSpace?: (Record<string, any> | null);
@@ -26,9 +27,12 @@ export type ModelTemplateRead = {
     maxPredictionLength?: (number | null);
     target?: string;
     allowFreeAdditionalContinuousCovariates?: boolean;
+    requiresGeo?: boolean;
     name: string;
     id: number;
     version?: (string | null);
     archived?: boolean;
+    healthStatus?: (string | null);
+    usesChapkit?: boolean;
 };
 

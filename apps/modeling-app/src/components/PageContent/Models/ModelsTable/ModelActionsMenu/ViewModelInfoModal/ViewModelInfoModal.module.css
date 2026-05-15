@@ -1,0 +1,98 @@
+.section {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 20px;
+}
+
+.section:last-child {
+    margin-bottom: 0;
+}
+
+.sectionTitle {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--colors-grey900);
+    margin: 0 0 4px 0;
+}
+
+.metaGrid {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    column-gap: 16px;
+    row-gap: 6px;
+    align-items: baseline;
+}
+
+.metaLabel {
+    color: var(--colors-grey700);
+    font-size: 13px;
+}
+
+.metaValue {
+    color: var(--colors-grey900);
+    font-size: 13px;
+    word-break: break-word;
+}
+
+.description {
+    color: var(--colors-grey900);
+    font-size: 13px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    margin: 0;
+}
+
+.pillRow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.empty {
+    color: var(--colors-grey600);
+    font-size: 13px;
+    font-style: italic;
+}
+
+.optionsTable {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.optionsTable th,
+.optionsTable td {
+    text-align: left;
+    padding: 6px 8px;
+    border-bottom: 1px solid var(--colors-grey300);
+    vertical-align: top;
+}
+
+.optionsTable th {
+    font-weight: 600;
+    color: var(--colors-grey700);
+    background: var(--colors-grey100);
+}
+
+.optionsTable td code {
+    background: var(--colors-grey100);
+    padding: 1px 4px;
+    border-radius: 3px;
+    font-size: 12px;
+}
+
+.selectedValue {
+    font-weight: 600;
+    color: var(--colors-grey900);
+}
+
+.defaultValue {
+    color: var(--colors-grey700);
+}
+
+.loading {
+    display: flex;
+    justify-content: center;
+    padding: 40px 0;
+}
