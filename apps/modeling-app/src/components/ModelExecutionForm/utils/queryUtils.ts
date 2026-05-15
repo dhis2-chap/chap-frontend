@@ -86,9 +86,12 @@ export const fetchAnalytics = async (
         return await fetchAnalyticsViaAlias(
             dataElements, periods, orgUnits, dataEngine,
         );
-    } catch {
-        // Fall back to direct query if alias creation fails
-        // (e.g., DHIS2 instance does not support the query alias API)
+    } catch (error) {
+        console.warn(
+            'Query alias creation failed, falling back to direct analytics query.',
+            'This may fail for large queries that exceed URL length limits.',
+            error,
+        );
         return await dataEngine.query(
             ANALYTICS_QUERY(dataElements, periods, orgUnits),
         ) as AnalyticsResponse;
