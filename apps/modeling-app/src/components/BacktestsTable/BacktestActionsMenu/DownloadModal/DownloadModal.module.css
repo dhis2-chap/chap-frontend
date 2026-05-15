@@ -1,0 +1,16 @@
+.description {
+    color: var(--colors-grey700);
+    font-size: 14px;
+    margin: 0 0 var(--spacers-dp16) 0;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: row;
+    gap: var(--spacers-dp8);
+    flex-wrap: wrap;
+}
+
+.downloadLink {
+    text-decoration: none;
+}

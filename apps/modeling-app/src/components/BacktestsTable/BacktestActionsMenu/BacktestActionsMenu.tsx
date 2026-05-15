@@ -14,7 +14,7 @@ import { OverflowButton } from '@dhis2-chap/ui';
 import { EditBacktestModal } from './EditBacktestModal';
 import { DeleteBacktestModal } from './DeleteBacktestModal/DeleteBacktestModal';
 import { CopyBacktestModal } from './CopyBacktestModal';
-import { DownloadDatasetModal } from './DownloadDatasetModal';
+import { DownloadModal } from './DownloadModal';
 import { useNavigate } from 'react-router-dom';
 import { useIsFeatureAvailable, Features } from '../../../hooks/useIsFeatureAvailable';
 
@@ -33,6 +33,7 @@ export const BacktestActionsMenu = ({
 }: Props) => {
     const navigate = useNavigate();
     const { isAvailable: isDatasetDownloadAvailable } = useIsFeatureAvailable(Features.DATASET_DOWNLOAD);
+    const { isAvailable: isMetricsDownloadAvailable } = useIsFeatureAvailable(Features.METRICS_DOWNLOAD);
     const [flyoutMenuIsOpen, setFlyoutMenuIsOpen] = useState(false);
     const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
     const [editModalIsOpen, setEditModalIsOpen] = useState(false);
@@ -81,17 +82,15 @@ export const BacktestActionsMenu = ({
                                 setFlyoutMenuIsOpen(false);
                             }}
                         />
-                        {isDatasetDownloadAvailable && (
-                            <MenuItem
-                                label={i18n.t('Download dataset')}
-                                dataTest="backtest-overflow-download"
-                                icon={<IconDownload16 />}
-                                onClick={() => {
-                                    setDownloadModalIsOpen(true);
-                                    setFlyoutMenuIsOpen(false);
-                                }}
-                            />
-                        )}
+                        <MenuItem
+                            label={i18n.t('Download')}
+                            dataTest="backtest-overflow-download"
+                            icon={<IconDownload16 />}
+                            onClick={() => {
+                                setDownloadModalIsOpen(true);
+                                setFlyoutMenuIsOpen(false);
+                            }}
+                        />
                         <MenuItem
                             label={i18n.t('Delete')}
                             dataTest="backtest-overflow-delete"
@@ -129,8 +128,12 @@ export const BacktestActionsMenu = ({
             )}
 
             {downloadModalIsOpen && (
-                <DownloadDatasetModal
+                <DownloadModal
+                    backtestId={id}
+                    backtestName={name}
                     datasetId={datasetId}
+                    isDatasetDownloadAvailable={isDatasetDownloadAvailable}
+                    isMetricsDownloadAvailable={isMetricsDownloadAvailable}
                     onClose={() => setDownloadModalIsOpen(false)}
                 />
             )}
