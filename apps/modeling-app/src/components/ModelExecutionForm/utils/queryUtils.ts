@@ -46,7 +46,7 @@ const buildAnalyticsTargetPath = (
     return `/api/analytics?paging=false&dimension=${dimension}`;
 };
 
-export const fetchAnalyticsViaAlias = async (
+const fetchAnalyticsViaAlias = async (
     dataElements: string[],
     periods: string[],
     orgUnits: string[],
@@ -54,19 +54,45 @@ export const fetchAnalyticsViaAlias = async (
 ): Promise<AnalyticsResponse> => {
     const target = buildAnalyticsTargetPath(dataElements, periods, orgUnits);
 
-    const aliasResponse = await dataEngine.mutate({
+    const aliasResult = await dataEngine.mutate({
         resource: 'query/alias',
         type: 'create' as const,
         data: { target },
-    }) as unknown as { id: string };
+    });
+
+    const alias = aliasResult as Record<string, unknown>;
+    const aliasId = alias.id as string | undefined;
+
+    if (!aliasId) {
+        throw new Error('Failed to create query alias: no id in response');
+    }
 
     const analyticsResponse = await dataEngine.query({
         response: {
-            resource: `query/alias/${aliasResponse.id}`,
+            resource: `query/alias/${aliasId}`,
         },
     });
 
     return analyticsResponse as AnalyticsResponse;
+};
+
+export const fetchAnalytics = async (
+    dataElements: string[],
+    periods: string[],
+    orgUnits: string[],
+    dataEngine: ReturnType<typeof useDataEngine>,
+): Promise<AnalyticsResponse> => {
+    try {
+        return await fetchAnalyticsViaAlias(
+            dataElements, periods, orgUnits, dataEngine,
+        );
+    } catch {
+        // Fall back to direct query if alias creation fails
+        // (e.g., DHIS2 instance does not support the query alias API)
+        return await dataEngine.query(
+            ANALYTICS_QUERY(dataElements, periods, orgUnits),
+        ) as AnalyticsResponse;
+    }
 };
 
 export const ORG_UNITS_QUERY = (orgUnitIds: string[]) => ({
