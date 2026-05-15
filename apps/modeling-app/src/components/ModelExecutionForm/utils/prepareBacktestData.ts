@@ -9,7 +9,7 @@ import {
     toDHIS2PeriodData,
 } from '@dhis2-chap/ui';
 import { useDataEngine } from '@dhis2/app-runtime';
-import { AnalyticsResponse, OrgUnitResponse, ANALYTICS_QUERY, ORG_UNITS_QUERY } from './queryUtils';
+import { AnalyticsResponse, OrgUnitResponse, fetchAnalyticsViaAlias, ORG_UNITS_QUERY } from './queryUtils';
 import { generateBacktestDataHash } from './hashUtils';
 
 const calculatePeriods = (periodType: keyof typeof PERIOD_TYPES, fromDate: string, toDate: string): string[] => {
@@ -71,13 +71,12 @@ export const prepareBacktestData = async (
 
     const cachedAnalyticsResponse = queryClient.getQueryData(['new-backtest-data', 'analytics', hash]) as AnalyticsResponse | undefined;
 
-    const analyticsResponse = cachedAnalyticsResponse || await dataEngine.query(
-        ANALYTICS_QUERY(
-            dataItems,
-            periods,
-            formData.orgUnits.map(ou => ou.id),
-        ),
-    ) as AnalyticsResponse;
+    const analyticsResponse = cachedAnalyticsResponse || await fetchAnalyticsViaAlias(
+        dataItems,
+        periods,
+        formData.orgUnits.map(ou => ou.id),
+        dataEngine,
+    );
 
     if (!cachedAnalyticsResponse) {
         queryClient.setQueryData(['new-backtest-data', 'analytics', hash], analyticsResponse);
