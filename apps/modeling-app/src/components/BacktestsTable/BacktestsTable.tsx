@@ -39,7 +39,7 @@ import { useBacktestsTableFilters } from './hooks/useBacktestsTableFilters';
 import { useTablePaginationParams } from '../../hooks/useTablePaginationParams';
 
 const columnHelper = createColumnHelper<BacktestRead>();
-const EMPTY_VALUE = '—';
+const EMPTY_VALUE = '-';
 
 const formatDateTime = (created?: string | null) => (
     created ? format(new Date(created), 'dd.MM.yyyy, HH:mm') : EMPTY_VALUE

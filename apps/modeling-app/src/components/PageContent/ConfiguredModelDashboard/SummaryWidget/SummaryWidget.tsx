@@ -5,7 +5,7 @@ import { Widget } from '@dhis2-chap/ui';
 import { format } from 'date-fns';
 import styles from './SummaryWidget.module.css';
 
-const EMPTY_VALUE = '—';
+const EMPTY_VALUE = '-';
 
 const formatDate = (created?: string | null) => (
     created ? format(new Date(created), 'dd.MM.yyyy') : EMPTY_VALUE

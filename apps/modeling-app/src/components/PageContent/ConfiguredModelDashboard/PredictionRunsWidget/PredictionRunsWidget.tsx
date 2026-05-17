@@ -32,7 +32,7 @@ import {
 import { PredictionRunActionsMenu } from './PredictionRunActionsMenu';
 import styles from './PredictionRunsWidget.module.css';
 
-const EMPTY_VALUE = '—';
+const EMPTY_VALUE = '-';
 const columnHelper = createColumnHelper<PredictionInfo>();
 
 const formatDate = (created?: string | null) => (

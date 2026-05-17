@@ -31,7 +31,7 @@ import { JobActionsMenu } from '../../../JobsTable/JobActionsMenu/JobActionsMenu
 import { StatusCell } from '../../../JobsTable/TableCells/StatusCell';
 import styles from './ActivityWidget.module.css';
 
-const EMPTY_VALUE = '—';
+const EMPTY_VALUE = '-';
 const MAX_VISIBLE_ROWS = 5;
 const columnHelper = createColumnHelper<JobDescription>();
 

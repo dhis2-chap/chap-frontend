@@ -30,7 +30,7 @@ import { useTablePaginationParams } from '../../../../hooks/useTablePaginationPa
 
 const columnHelper = createColumnHelper<PredictionSetupRead>();
 
-const EMPTY_VALUE = '—';
+const EMPTY_VALUE = '-';
 
 const formatDateTime = (created?: string | null) => (
     created ? format(new Date(created), 'dd.MM.yyyy, HH:mm') : EMPTY_VALUE
@@ -154,7 +154,7 @@ export const ReadyToPredictTable = ({ predictionSetups }: Props) => {
                         )) : (
                         <DataTableRow>
                             <DataTableCell colSpan={String(table.getAllColumns().length)} align="center">
-                                {i18n.t('No prediction configurations yet — create one from a completed evaluation.') as string}
+                                {i18n.t('No prediction configurations yet - create one from a completed evaluation.') as string}
                             </DataTableCell>
                         </DataTableRow>
                     )}

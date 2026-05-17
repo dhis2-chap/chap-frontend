@@ -1,6 +1,6 @@
 import type { DataImportMapping } from '@dhis2-chap/ui';
 
-export const DEFAULT_IMPORT_MAPPING_METADATA_KEY = 'dataImportMappings';
+const DEFAULT_IMPORT_MAPPING_METADATA_KEY = 'dataImportMappings';
 
 type PredictionSetupWithImportMapping = {
     dataImportMappings?: unknown;
@@ -46,14 +46,6 @@ const getMetaData = (predictionSetup: PredictionSetupWithImportMapping) => {
 
     return undefined;
 };
-
-export const buildPredictionSetupMetaData = (
-    dataImportMappings: DataImportMapping[],
-) => (
-    dataImportMappings.length
-        ? { [DEFAULT_IMPORT_MAPPING_METADATA_KEY]: dataImportMappings }
-        : undefined
-);
 
 export const getPredictionSetupDataImportMappings = (
     predictionSetup?: PredictionSetupWithImportMapping | null,

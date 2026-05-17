@@ -11,7 +11,7 @@ import { usePredictionSetups } from '../../hooks/usePredictionSetups';
 import styles from './DashboardPage.module.css';
 
 const MAX_WIDGET_ITEMS = 5;
-const EMPTY_VALUE = '—';
+const EMPTY_VALUE = '-';
 
 const dateFormatter = new Intl.DateTimeFormat('en-GB');
 

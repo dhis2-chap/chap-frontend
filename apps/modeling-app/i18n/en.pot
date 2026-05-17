@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-05-11T00:50:27.857Z\n"
-"PO-Revision-Date: 2026-05-11T00:50:27.858Z\n"
+"POT-Creation-Date: 2026-05-12T13:39:15.517Z\n"
+"PO-Revision-Date: 2026-05-12T13:39:15.517Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -570,8 +570,90 @@ msgstr "Error loading models"
 msgid "An unknown error occurred"
 msgstr "An unknown error occurred"
 
+msgid "Cannot run prediction"
+msgstr "Cannot run prediction"
+
+msgid ""
+"Missing prediction setup details. Open the setup configuration and ensure "
+"model, period type, training start, and data mappings are configured."
+msgstr ""
+"Missing prediction setup details. Open the setup configuration and ensure "
+"model, period type, training start, and data mappings are configured."
+
+msgid "Prediction run name"
+msgstr "Prediction run name"
+
 msgid "Run prediction"
 msgstr "Run prediction"
+
+msgid "Offset"
+msgstr "Offset"
+
+msgid "Absolute"
+msgstr "Absolute"
+
+msgid "Last training period"
+msgstr "Last training period"
+
+msgid "periods back from {{anchor}}"
+msgstr "periods back from {{anchor}}"
+
+msgid "Unknown model"
+msgstr "Unknown model"
+
+msgid "target"
+msgstr "target"
+
+msgid "Prediction setup"
+msgstr "Prediction setup"
+
+msgid "Training start"
+msgstr "Training start"
+
+msgid "Will predict"
+msgstr "Will predict"
+
+msgid "Select a last training period to preview"
+msgstr "Select a last training period to preview"
+
+msgid "Hide details"
+msgstr "Hide details"
+
+msgid "Show details ({{orgUnitCount}} org units, {{mappingCount}} mappings)"
+msgstr "Show details ({{orgUnitCount}} org units, {{mappingCount}} mappings)"
+
+msgid "Org units"
+msgstr "Org units"
+
+msgid "None"
+msgstr "None"
+
+msgid "Data mappings"
+msgstr "Data mappings"
+
+msgid "Enter an offset (0 or negative)"
+msgstr "Enter an offset (0 or negative)"
+
+msgid "Offset must be 0 or negative"
+msgstr "Offset must be 0 or negative"
+
+msgid "Invalid offset"
+msgstr "Invalid offset"
+
+msgid "Resolved period is before training start"
+msgstr "Resolved period is before training start"
+
+msgid "Please select a period"
+msgstr "Please select a period"
+
+msgid "Invalid period"
+msgstr "Invalid period"
+
+msgid "Period must be completed (cannot be later than last completed period)"
+msgstr "Period must be completed (cannot be later than last completed period)"
+
+msgid "Period is before training start"
+msgstr "Period is before training start"
 
 msgid "{{count}} org units"
 msgid_plural "{{count}} org units"
@@ -654,33 +736,6 @@ msgstr "View all activity"
 msgid "No activity matches the selected status"
 msgstr "No activity matches the selected status"
 
-msgid "Monitoring"
-msgstr "Monitoring"
-
-msgid "Monitoring data will appear here."
-msgstr "Monitoring data will appear here."
-
-msgid "Scheduling"
-msgstr "Scheduling"
-
-msgid "Schedule"
-msgstr "Schedule"
-
-msgid "Not scheduled"
-msgstr "Not scheduled"
-
-msgid "Last run"
-msgstr "Last run"
-
-msgid "No runs yet"
-msgstr "No runs yet"
-
-msgid "View"
-msgstr "View"
-
-msgid "Import"
-msgstr "Import"
-
 msgid "Delete prediction run"
 msgstr "Delete prediction run"
 
@@ -691,11 +746,11 @@ msgstr ""
 "This will permanently delete the prediction run from CHAP. It will not "
 "remove any values previously imported into DHIS2."
 
-msgid "Prediction run deleted"
-msgstr "Prediction run deleted"
+msgid "View"
+msgstr "View"
 
-msgid "Failed to delete prediction run"
-msgstr "Failed to delete prediction run"
+msgid "Import"
+msgstr "Import"
 
 msgid "{{count}} run"
 msgid_plural "{{count}} run"
@@ -704,6 +759,9 @@ msgstr[1] "{{count}} runs"
 
 msgid "Last run {{timeAgo}} ago"
 msgstr "Last run {{timeAgo}} ago"
+
+msgid "No runs yet"
+msgstr "No runs yet"
 
 msgid "Completed predictions"
 msgstr "Completed predictions"
@@ -724,11 +782,17 @@ msgid "Error loading prediction runs"
 msgstr "Error loading prediction runs"
 
 msgid ""
-"No completed predictions yet. Run a prediction manually or add a schedule "
-"to start producing predictions."
+"No completed predictions yet. Run a prediction to start producing "
+"predictions."
 msgstr ""
-"No completed predictions yet. Run a prediction manually or add a schedule "
-"to start producing predictions."
+"No completed predictions yet. Run a prediction to start producing "
+"predictions."
+
+msgid "Prediction run deleted"
+msgstr "Prediction run deleted"
+
+msgid "Failed to delete prediction run"
+msgstr "Failed to delete prediction run"
 
 msgid "{{name}} prediction"
 msgstr "{{name}} prediction"
@@ -736,8 +800,8 @@ msgstr "{{name}} prediction"
 msgid "Quick actions"
 msgstr "Quick actions"
 
-msgid "Import latest run"
-msgstr "Import latest run"
+msgid "Go to last run"
+msgstr "Go to last run"
 
 msgid "Edit setup"
 msgstr "Edit setup"
@@ -924,12 +988,6 @@ msgstr "Start period"
 msgid "End period"
 msgstr "End period"
 
-msgid "CRON expression is required"
-msgstr "CRON expression is required"
-
-msgid "Enter a valid five-field CRON expression"
-msgstr "Enter a valid five-field CRON expression"
-
 msgid "Data element is required"
 msgstr "Data element is required"
 
@@ -956,15 +1014,6 @@ msgstr "Setup name"
 
 msgid "You can change this configuration at any point."
 msgstr "You can change this configuration at any point."
-
-msgid "Set schedule"
-msgstr "Set schedule"
-
-msgid "Choose when predictions should run automatically."
-msgstr "Choose when predictions should run automatically."
-
-msgid "CRON Expression"
-msgstr "CRON Expression"
 
 msgid "Set default import mapping"
 msgstr "Set default import mapping"
@@ -1202,6 +1251,9 @@ msgstr "Alert preview"
 msgid "Threshold unavailable"
 msgstr "Threshold unavailable"
 
+msgid "Outbreak detected"
+msgstr "Outbreak detected"
+
 msgid "Endemic threshold unavailable"
 msgstr "Endemic threshold unavailable"
 
@@ -1351,8 +1403,8 @@ msgstr "Error loading prediction configurations"
 msgid "Date created"
 msgstr "Date created"
 
-msgid "No prediction configurations yet — create one from a completed evaluation."
-msgstr "No prediction configurations yet — create one from a completed evaluation."
+msgid "No prediction configurations yet - create one from a completed evaluation."
+msgstr "No prediction configurations yet - create one from a completed evaluation."
 
 msgid "There are running jobs in the background"
 msgstr "There are running jobs in the background"
@@ -1742,9 +1794,6 @@ msgstr "Data Pruning"
 msgid "Requires superuser authority"
 msgstr "Requires superuser authority"
 
-msgid "Prediction setup"
-msgstr "Prediction setup"
-
 msgid "Run predictions, review activity, and manage this setup."
 msgstr "Run predictions, review activity, and manage this setup."
 
@@ -1877,19 +1926,11 @@ msgstr "Ready to predict"
 
 msgid ""
 "Saved model configurations that are ready to be used to generate "
-"predictions, either on demand or on a schedule."
+"predictions."
 msgstr ""
 "Saved model configurations that are ready to be used to generate "
-"predictions, either on demand or on a schedule."
+"predictions."
 
 msgctxt ") instead."
 msgid "Spaces are not allowed. Use dashes (-) or underscores ("
 msgstr "Spaces are not allowed. Use dashes (-) or underscores (_) instead."
-
-msgctxt "Application title"
-msgid "__MANIFEST_APP_TITLE"
-msgstr "Modeling"
-
-msgctxt "Application description"
-msgid "__MANIFEST_APP_DESCRIPTION"
-msgstr ""

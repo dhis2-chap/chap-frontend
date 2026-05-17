@@ -1,0 +1,48 @@
+.noticeBox {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacers-dp16);
+  padding: var(--spacers-dp16);
+  border: 0.5px solid var(--colors-grey400);
+  border-radius: 4px;
+  background-color: var(--colors-grey100);
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  color: var(--colors-grey600);
+}
+
+.title {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--colors-grey900);
+}
+
+.metadata {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacers-dp8);
+  margin: 0;
+}
+
+.metaRow {
+  display: grid;
+  grid-template-columns: minmax(140px, 200px) 1fr;
+  gap: 1rem;
+  align-items: baseline;
+}
+
+.metaTerm {
+  margin: 0;
+  font-size: 13px;
+  color: var(--colors-grey700);
+}
+
+.metaDefinition {
+  margin: 0;
+  font-size: 13px;
+  color: var(--colors-grey900);
+}

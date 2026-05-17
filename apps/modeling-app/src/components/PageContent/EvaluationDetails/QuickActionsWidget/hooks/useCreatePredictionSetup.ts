@@ -11,9 +11,7 @@ import { BACKTESTS_LIST_QUERY_KEY } from '@/hooks/useBacktests';
 import { PREDICTION_SETUPS_QUERY_KEY } from '@/hooks/usePredictionSetups';
 
 type CreatePredictionSetupVariables = {
-    data: PredictionSetupCreate & {
-        metaData?: Record<string, unknown>;
-    };
+    data: PredictionSetupCreate;
 };
 
 type UseCreatePredictionSetupOptions = {

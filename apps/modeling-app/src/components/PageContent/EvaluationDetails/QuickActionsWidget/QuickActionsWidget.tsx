@@ -8,7 +8,6 @@ import { CopyBacktestModal } from '../../../BacktestsTable/BacktestActionsMenu/C
 import { MarkReadyForForecastingModal } from './MarkReadyForForecastingModal';
 import type { MarkReadyForForecastingFormValues } from './MarkReadyForForecastingModal';
 import { useCreatePredictionSetup } from './hooks/useCreatePredictionSetup';
-import { buildPredictionSetupMetaData } from '@/utils/predictionSetupImportMapping';
 import styles from './QuickActionsWidget.module.css';
 
 type Props = {
@@ -69,7 +68,7 @@ export const QuickActionsWidget = ({
             data: {
                 backtestId: evaluationId,
                 name: values.name,
-                metaData: buildPredictionSetupMetaData(dataImportMappings),
+                dataImportMappings,
             },
         });
         setMarkReadyModalIsOpen(false);

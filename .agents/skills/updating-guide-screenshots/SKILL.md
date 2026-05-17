@@ -10,8 +10,8 @@ How to (re)capture screenshots for any user guide under `apps/modeling-app/docs/
 ## Prerequisites
 
 - DHIS2 running at `http://localhost:8080` and the CHAP app dev server running at `http://localhost:3000` (`pnpm start`).
-- A CHAP instance with the relevant data for the guide (e.g. at least one configured model, a dataset, etc. — depends on the guide).
-- Local dev DHIS2 credentials (ask the user if you don't already have them — do NOT commit them).
+- A CHAP instance with the relevant data for the guide (e.g. at least one configured model, a dataset, etc. - depends on the guide).
+- Local dev DHIS2 credentials (ask the user if you don't already have them - do NOT commit them).
 
 ## Setup
 
@@ -30,7 +30,7 @@ How to (re)capture screenshots for any user guide under `apps/modeling-app/docs/
   ```
   Could not resolve "./images/configure-step-1-navigate.png"
   ```
-- Capture real UI with real data — not placeholder content. Images should clearly show the forms, buttons, and state the guide step describes.
+- Capture real UI with real data - not placeholder content. Images should clearly show the forms, buttons, and state the guide step describes.
 
 ## Finishing
 
@@ -50,5 +50,5 @@ How to (re)capture screenshots for any user guide under `apps/modeling-app/docs/
 
 When adding a brand-new guide, also:
 - Import it in `apps/modeling-app/docs/guides.ts` and register it via `createGuide(...)`.
-- Set the `order` in the frontmatter appropriately — new guides go **last** unless the user specifies otherwise.
+- Set the `order` in the frontmatter appropriately - new guides go **last** unless the user specifies otherwise.
 - Frontmatter fields: `title`, `description`, `order`, `category` (usually `User Guides`).
