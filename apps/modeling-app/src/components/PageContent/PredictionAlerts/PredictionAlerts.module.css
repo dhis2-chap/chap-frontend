@@ -1,0 +1,488 @@
+.container {
+    margin-block-start: 24px;
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+}
+
+.dialogContainer {
+    flex-direction: column;
+    margin-block-start: 0;
+    font-size: 14px;
+}
+
+.leftColumn {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+}
+
+.rightColumn {
+    flex: 0 1 360px;
+    margin-inline-start: auto;
+    min-inline-size: 0;
+}
+
+.loadingContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-block-size: 300px;
+}
+
+.previewLayout {
+    display: flex;
+    gap: 16px;
+    padding-inline: 16px;
+    min-block-size: 440px;
+}
+
+.dialogPreviewLayout {
+    min-block-size: 470px;
+}
+
+.orgUnitList {
+    flex: 0 0 220px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-block-size: 440px;
+    overflow-y: auto;
+    padding-inline-end: 12px;
+    border-inline-end: 1px solid var(--colors-grey300);
+}
+
+.orgUnitButton {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    inline-size: 100%;
+    padding-block: 8px;
+    padding-inline: 8px;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    background: transparent;
+    color: var(--colors-grey900);
+    font: inherit;
+    text-align: start;
+    cursor: pointer;
+}
+
+.orgUnitButton:hover,
+.selectedOrgUnitButton {
+    background: var(--colors-grey100);
+    border-color: var(--colors-grey300);
+}
+
+.orgUnitName {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.statusIndicator {
+    display: inline-block;
+    flex: 0 0 auto;
+    inline-size: 8px;
+    block-size: 8px;
+    border-radius: 50%;
+}
+
+.statusOutbreak {
+    background: var(--colors-red600);
+}
+
+.statusUnavailable {
+    background: var(--colors-grey500);
+}
+
+.chartArea {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.panelContent {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-inline: 16px;
+    padding-block-end: 24px;
+}
+
+.thresholdContainer {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 360px;
+    column-gap: 16px;
+    row-gap: 0;
+    margin-block-start: 24px;
+}
+
+.thresholdGridColumn {
+    min-inline-size: 0;
+}
+
+.thresholdToolbar {
+    grid-column: 1 / -1;
+    position: sticky;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-block-end: 16px;
+    padding: var(--spacers-dp8);
+    inset-block-start: 0;
+    z-index: 2;
+    background: transparent;
+    transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.thresholdToolbarStuck {
+    background: var(--colors-white);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.zoomControls {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 6px;
+    flex: 0 0 auto;
+    min-block-size: 32px;
+}
+
+.thresholdFilters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    min-inline-size: 0;
+}
+
+.regionSearch {
+    flex: 0 0 auto;
+    inline-size: 260px;
+    max-inline-size: 100%;
+    min-inline-size: 220px;
+    transition: inline-size 0.3s ease;
+}
+
+.regionSearch:focus-within {
+    inline-size: 360px;
+}
+
+.statusFilter {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-inline-size: 0;
+}
+
+.filterLabel {
+    position: absolute;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    inline-size: 1px;
+    block-size: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    white-space: nowrap;
+}
+
+.statusSelect {
+    inline-size: 220px;
+    max-inline-size: 100%;
+}
+
+.thresholdPanelColumn {
+    min-inline-size: 0;
+    align-self: start;
+    position: sticky;
+    inset-block-start: 64px;
+}
+
+.thresholdGrid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(320px, 1fr));
+    gap: 16px;
+    align-items: start;
+    padding-block-end: 24px;
+}
+
+.thresholdGridItem {
+    min-inline-size: 0;
+}
+
+.thresholdTile {
+    min-inline-size: 0;
+    overflow: hidden;
+    border: 1px solid var(--colors-grey300);
+    border-radius: 3px;
+    background: var(--colors-white);
+}
+
+.thresholdTileHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-block-size: 48px;
+    padding: 12px;
+    border-block-end: 1px solid var(--colors-grey200);
+}
+
+.thresholdTileHeader h3 {
+    margin: 0;
+    min-inline-size: 0;
+    overflow: hidden;
+    color: var(--colors-grey900);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 20px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.thresholdStatusBadge {
+    flex: 0 0 auto;
+    border-radius: 3px;
+    padding: 3px 6px;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 14px;
+}
+
+.thresholdStatusOutbreak {
+    background: var(--colors-red100);
+    color: var(--colors-red800);
+}
+
+.thresholdStatusNoOutbreak {
+    background: var(--colors-green100);
+    color: var(--colors-green800);
+}
+
+.thresholdStatusUnavailable {
+    background: var(--colors-grey200);
+    color: var(--colors-grey800);
+}
+
+.thresholdChart {
+    min-block-size: 260px;
+    padding: 8px 8px 0;
+}
+
+.noFilteredRegions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-block-size: 180px;
+    border: 1px solid var(--colors-grey300);
+    border-radius: 3px;
+    background: var(--colors-white);
+    color: var(--colors-grey700);
+    font-size: 14px;
+    line-height: 20px;
+}
+
+.targetName {
+    margin: 0;
+    color: var(--colors-grey900);
+    font-size: 14px;
+    line-height: 20px;
+}
+
+.alertDialog {
+    width: min(1180px, calc(100vw - 48px)) !important;
+}
+
+.dialogContent {
+    max-block-size: calc(100vh - 190px);
+    overflow-y: auto;
+}
+
+.dialogProbabilityControl {
+    display: flex;
+    justify-content: flex-start;
+    margin-block-end: -4px;
+}
+
+.dialogProbabilityControl .panelSection {
+    inline-size: min(360px, 100%);
+}
+
+.actionBar {
+    margin-block-start: 16px;
+}
+
+.panelSection {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.panelSection h3 {
+    margin: 0;
+    color: var(--colors-grey900);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.probabilityControl {
+    gap: 8px;
+}
+
+.probabilityControl h3 {
+    font-size: 12px;
+    line-height: 16px;
+}
+
+.segmentedControl {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    border: 1px solid var(--colors-grey300);
+    border-radius: 5px;
+    background: var(--colors-white);
+    overflow: hidden;
+}
+
+.segmentButton {
+    position: relative;
+    min-block-size: 28px;
+    border: 0;
+    border-inline-end: 1px solid var(--colors-grey300);
+    background: var(--colors-white);
+    color: var(--colors-grey600);
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.segmentButton:last-child {
+    border-inline-end: 0;
+}
+
+.segmentButton:hover {
+    background: var(--colors-grey050);
+    color: var(--colors-grey800);
+}
+
+.selectedSegmentButton {
+    background: var(--colors-white);
+    color: var(--colors-grey900);
+}
+
+.selectedSegmentButton::after {
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline: 0;
+    block-size: 2px;
+    background: var(--colors-grey900);
+    content: '';
+}
+
+.selectedSegmentButton:hover {
+    background: var(--colors-grey050);
+    color: var(--colors-grey900);
+}
+
+.summaryList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 0;
+}
+
+.summaryList div {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.summaryList dt {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--colors-grey700);
+    line-height: 20px;
+}
+
+.summaryList dd {
+    margin: 0;
+    color: var(--colors-grey900);
+    font-weight: 600;
+}
+
+.tooltipIcon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--colors-grey600);
+    line-height: 0;
+    transform: translateY(-1px);
+}
+
+.tooltipIcon svg {
+    display: block;
+}
+
+@media (max-width: 900px) {
+    .container,
+    .previewLayout {
+        flex-direction: column;
+    }
+
+    .thresholdContainer {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .thresholdPanelColumn {
+        margin-block-start: 0;
+        order: -1;
+        position: static;
+    }
+
+    .thresholdGrid {
+        grid-template-columns: minmax(0, 1fr);
+        padding-block-end: 0;
+    }
+
+    .thresholdToolbar,
+    .thresholdFilters,
+    .statusFilter {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .zoomControls {
+        justify-content: flex-start;
+    }
+
+    .regionSearch,
+    .statusSelect {
+        inline-size: 100%;
+        min-inline-size: 0;
+    }
+
+    .rightColumn {
+        flex: 1 1 auto;
+        margin-inline-start: 0;
+    }
+
+    .orgUnitList {
+        flex-basis: auto;
+        max-block-size: 220px;
+        border-inline-end: 0;
+        border-block-end: 1px solid var(--colors-grey300);
+        padding-inline-end: 0;
+        padding-block-end: 12px;
+    }
+}

@@ -6,14 +6,18 @@ import {
     FeatureCollectionModel,
     JobResponse,
     MakePredictionRequest,
+    MakePredictionWithDataSourceRequest,
     PredictionsService,
 } from '@dhis2-chap/ui';
 import { ModelExecutionFormValues } from '../../ModelExecutionForm/hooks/useModelExecutionFormState';
 import { prepareBacktestData } from '../../ModelExecutionForm/utils/prepareBacktestData';
 import { PERIOD_TYPES } from '@dhis2-chap/ui';
 import { buildOrgUnitFeatureCollection } from '../../ModelExecutionForm/utils/orgUnitGeoJson';
+import { buildPredictionRunMetaData } from '../../../utils/predictionRunMetadata';
 
 type Props = {
+    predictionSetupId?: number;
+    returnTo?: string;
     onSuccess?: () => void;
     onError?: (error: ApiError) => void;
 };
@@ -23,7 +27,12 @@ export const N_PERIODS = {
     [PERIOD_TYPES.WEEK]: 12,
 };
 
-export const useCreatePrediction = ({ onSuccess, onError }: Props = {}) => {
+export const useCreatePrediction = ({
+    predictionSetupId,
+    returnTo,
+    onSuccess,
+    onError,
+}: Props = {}) => {
     const dataEngine = useDataEngine();
     const queryClient = useQueryClient();
     const navigate = useNavigate();
@@ -34,7 +43,9 @@ export const useCreatePrediction = ({ onSuccess, onError }: Props = {}) => {
         error,
     } = useMutation<JobResponse, ApiError, ModelExecutionFormValues>({
         mutationFn: async (formData: ModelExecutionFormValues) => {
-            const { model, observations, orgUnitResponse, dataSources } = await prepareBacktestData(
+            const nPeriods = N_PERIODS[formData.periodType.toUpperCase() as keyof typeof N_PERIODS];
+
+            const { model, periods, observations, orgUnitResponse, dataSources } = await prepareBacktestData(
                 formData,
                 dataEngine,
                 queryClient,
@@ -44,15 +55,35 @@ export const useCreatePrediction = ({ onSuccess, onError }: Props = {}) => {
                 orgUnitResponse.geojson.organisationUnits,
             );
 
-            const predictionRequest: MakePredictionRequest = {
+            const basePredictionRequest = {
                 name: formData.name,
                 geojson,
                 providedData: observations,
                 dataSources,
                 dataToBeFetched: [],
-                modelId: model.name,
-                nPeriods: N_PERIODS[formData.periodType.toUpperCase() as keyof typeof N_PERIODS],
+                nPeriods,
                 type: 'forecasting' as const,
+                metaData: buildPredictionRunMetaData({
+                    nPeriods,
+                    periodType: formData.periodType,
+                    trainingPeriods: periods,
+                }),
+            };
+
+            if (predictionSetupId) {
+                const predictionRequest: MakePredictionWithDataSourceRequest = {
+                    ...basePredictionRequest,
+                    predictionSetupId,
+                };
+
+                return PredictionsService.makePredictionWithDataSourceV1AnalyticsMakePredictionWithDataSourcePost(
+                    predictionRequest,
+                );
+            }
+
+            const predictionRequest: MakePredictionRequest = {
+                ...basePredictionRequest,
+                modelId: model.name,
             };
 
             return PredictionsService.makePredictionV1AnalyticsMakePredictionPost(predictionRequest);
@@ -60,8 +91,9 @@ export const useCreatePrediction = ({ onSuccess, onError }: Props = {}) => {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['jobs'] });
             queryClient.invalidateQueries({ queryKey: ['predictions'] });
+            queryClient.invalidateQueries({ queryKey: ['predictionSetups'] });
             onSuccess?.();
-            navigate('/jobs');
+            navigate(returnTo || '/jobs');
         },
         onError: (apiError: ApiError) => {
             onError?.(apiError);

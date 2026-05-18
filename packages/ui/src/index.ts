@@ -31,6 +31,7 @@ export {
     Tag,
     Widget,
 } from './ui';
+export { VirtuosoGrid } from 'react-virtuoso';
 
 export type { PillVariant } from './ui/Pill';
 export type { TagVariant } from './ui/Tag';
@@ -55,6 +56,30 @@ export {
     getQueue,
 } from './httpfunctions/core/request';
 export { buildPredictionSeries } from './utils/PredictionViewModel';
+export {
+    OUTBREAK_PROBABILITY_OPTIONS,
+    DEFAULT_OUTBREAK_PROBABILITY,
+    MINIMUM_THRESHOLD_OBSERVATIONS,
+    buildOutbreakIndicators,
+    buildOutbreakIndicatorsForSeries,
+    calculateMockEndemicThreshold,
+    getHighestSupportedOutbreakProbability,
+    getQuantileKeyForOutbreakProbability,
+    getSupportedOutbreakProbabilityBucket,
+    isOutbreakAtProbability,
+    parseOutbreakProbability,
+    type MockEndemicThresholdResult,
+    type OutbreakIndicator,
+    type OutbreakProbability,
+    type SupportedOutbreakProbabilityBucket,
+} from './utils/outbreakAlerts';
+export {
+    getStableMaxYForThresholdChart,
+    getThresholdTileViewModels,
+    type ThresholdSummary,
+    type ThresholdTileStatus,
+    type ThresholdTileViewModel,
+} from './utils/outbreakThresholdTiles';
 export {
     plotResultsToViewData,
     getStableMaxYByOrgUnitId,

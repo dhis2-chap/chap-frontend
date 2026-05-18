@@ -25,6 +25,8 @@ type Props = {
     status: string;
     result: string | undefined | null;
     type: string;
+    showGoToResult?: boolean;
+    allowDeleteSuccess?: boolean;
 };
 
 export const JobActionsMenu = ({
@@ -32,6 +34,8 @@ export const JobActionsMenu = ({
     status,
     result,
     type,
+    showGoToResult = true,
+    allowDeleteSuccess = true,
 }: Props) => {
     const navigate = useNavigate();
     const [flyoutMenuIsOpen, setFlyoutMenuIsOpen] = useState(false);
@@ -56,11 +60,17 @@ export const JobActionsMenu = ({
     const handleNavigateToResult = () => {
         if (type === JOB_TYPES.CREATE_BACKTEST_WITH_DATA || type === JOB_TYPES.BACKTEST) {
             navigate(`/evaluate/compare?baseEvaluation=${result}&returnTo=${encodeURIComponent('/jobs')}`);
-        } else if (type === JOB_TYPES.MAKE_PREDICTION) {
-            navigate(`/predictions/${result}`);
         }
         setFlyoutMenuIsOpen(false);
     };
+
+    const canNavigateToResult = showGoToResult &&
+        status === JOB_STATUSES.SUCCESS &&
+        !!result &&
+        (type === JOB_TYPES.CREATE_BACKTEST_WITH_DATA || type === JOB_TYPES.BACKTEST);
+    const canDelete = status === JOB_STATUSES.FAILED
+        || status === JOB_STATUSES.REVOKED
+        || (allowDeleteSuccess && status === JOB_STATUSES.SUCCESS);
 
     return (
         <>
@@ -73,11 +83,10 @@ export const JobActionsMenu = ({
                 }}
                 component={(
                     <FlyoutMenu dense>
-                        {status === JOB_STATUSES.SUCCESS && (
+                        {canNavigateToResult && (
                             <MenuItem
                                 label={i18n.t('Go to result')}
                                 dataTest="job-overflow-go-to-result"
-                                disabled={!result}
                                 icon={<IconArrowRight16 />}
                                 onClick={handleNavigateToResult}
                             />
@@ -114,7 +123,7 @@ export const JobActionsMenu = ({
                             />
                         )}
 
-                        {(status === JOB_STATUSES.SUCCESS || status === JOB_STATUSES.FAILED || status === JOB_STATUSES.REVOKED) && (
+                        {canDelete && (
                             <MenuItem
                                 label={i18n.t('Delete')}
                                 dataTest="job-overflow-delete"

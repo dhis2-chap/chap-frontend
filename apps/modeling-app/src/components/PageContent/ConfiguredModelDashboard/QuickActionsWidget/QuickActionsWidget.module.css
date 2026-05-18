@@ -1,0 +1,24 @@
+.content {
+    padding: 16px;
+    padding-block-start: 4px;
+}
+
+.actionList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.actionButton {
+    inline-size: 100%;
+}
+
+.actionIcon {
+    display: inline-flex;
+    align-items: center;
+}
+
+.actionIcon svg {
+    inline-size: 16px;
+    block-size: 16px;
+}

@@ -2,7 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type BackTestUpdate = {
+export type BacktestUpdate = {
     name?: (string | null);
 };
 

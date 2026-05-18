@@ -30,14 +30,15 @@ export const useCancelJob = ({ onSuccess, onError }: Props = {}) => {
         mutationFn: (jobId: string) => JobsService.cancelJobV1JobsJobIdCancelPost(jobId),
         onSuccess: (_data, jobId) => {
             // update the job status in the cache without refetching entire list
-            queryClient.setQueryData(['jobs'], (oldJobs: JobDescription[] | undefined) => {
-                return oldJobs?.map((job) => {
+            queryClient.setQueriesData<JobDescription[]>(
+                { queryKey: ['jobs'] },
+                oldJobs => oldJobs?.map((job) => {
                     if (job.id === jobId) {
                         return { ...job, status: JOB_STATUSES.REVOKED };
                     }
                     return job;
-                });
-            });
+                }),
+            );
             showSuccessAlert();
             onSuccess?.({ id: jobId });
         },

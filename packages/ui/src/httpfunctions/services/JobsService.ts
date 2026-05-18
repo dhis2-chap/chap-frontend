@@ -18,6 +18,7 @@ export class JobsService {
      * @param ids
      * @param status
      * @param type
+     * @param predictionSetupId
      * @returns JobDescription Successful Response
      * @throws ApiError
      */
@@ -25,6 +26,7 @@ export class JobsService {
         ids?: Array<string>,
         status?: Array<string>,
         type?: string,
+        predictionSetupId?: (number | null),
     ): CancelablePromise<Array<JobDescription>> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -33,6 +35,7 @@ export class JobsService {
                 'ids': ids,
                 'status': status,
                 'type': type,
+                'predictionSetupId': predictionSetupId,
             },
             errors: {
                 422: `Validation Error`,

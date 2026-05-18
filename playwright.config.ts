@@ -30,7 +30,7 @@ export default defineConfig({
     ],
     webServer: {
         command: isCI
-            ? 'pnpm --filter @dhis2-chap/ui build && pnpm --filter @dhis2-chap/modeling-app start'
+            ? 'pnpm --filter @dhis2-chap/ui exec d2-app-scripts build && pnpm --filter @dhis2-chap/modeling-app start'
             : 'pnpm start',
         url: appOrigin,
         reuseExistingServer: !isCI,

@@ -2,9 +2,9 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type BackTestCreate = {
+export type BacktestCreate = {
     datasetId: number;
-    modelId: string;
+    modelId: (number | string);
     name?: (string | null);
     created?: (string | null);
     modelTemplateVersion?: (string | null);

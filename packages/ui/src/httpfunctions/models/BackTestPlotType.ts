@@ -2,7 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type BackTestPlotType = {
+export type BacktestPlotType = {
     id: string;
     displayName: string;
     description?: string;

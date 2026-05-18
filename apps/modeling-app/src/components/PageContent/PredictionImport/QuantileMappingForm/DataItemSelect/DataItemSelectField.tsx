@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { Label, Layer, Popper, IconChevronDown16, IconCross16 } from '@dhis2/ui';
 import { useApiDataQuery } from '@/utils/useApiDataQuery';
@@ -23,6 +23,7 @@ interface DataItemSelectFieldProps {
     label?: string;
     value?: string;
     error?: string;
+    dataElementsOnly?: boolean;
 }
 
 export const DataItemSelectField = ({
@@ -31,7 +32,9 @@ export const DataItemSelectField = ({
     initialLoading,
     onChange,
     label,
+    value,
     error,
+    dataElementsOnly = false,
 }: DataItemSelectFieldProps) => {
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [selectedOption, setSelectedOption] = useState<DataItem | null>(() => {
@@ -42,18 +45,38 @@ export const DataItemSelectField = ({
     });
     const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
 
+    useEffect(() => {
+        setSelectedOption((current) => {
+            if (!value) {
+                return null;
+            }
+
+            if (current?.id === value) {
+                return current;
+            }
+
+            if (initialDataItem?.id === value) {
+                return initialDataItem;
+            }
+
+            return null;
+        });
+    }, [initialDataItem, value]);
+
     const debouncedQuery = useDebounce(searchQuery, 300);
 
     const anchorRef = useRef<HTMLDivElement>(null);
     const searchInputRef = useRef<HTMLInputElement>(null);
     const { data, isLoading } = useApiDataQuery<DataItemsResponse>({
-        queryKey: ['dataItems', debouncedQuery],
+        queryKey: ['dataItems', dataElementsOnly ? 'dataElements' : 'allDataItems', debouncedQuery],
         query: {
             resource: 'dataItems',
             params: {
                 filter: [
                     ...(debouncedQuery ? [`displayName:ilike:${debouncedQuery}`] : []),
-                    'dimensionItemType:in:[PROGRAM_DATA_ELEMENT,INDICATOR,PROGRAM_INDICATOR,DATA_ELEMENT]',
+                    dataElementsOnly
+                        ? 'dimensionItemType:in:[DATA_ELEMENT]'
+                        : 'dimensionItemType:in:[PROGRAM_DATA_ELEMENT,INDICATOR,PROGRAM_INDICATOR,DATA_ELEMENT]',
                 ],
                 fields: 'id,displayName',
                 order: 'displayName:asc',
@@ -186,7 +209,9 @@ export const DataItemSelectField = ({
                                     type="text"
                                     value={searchQuery}
                                     onChange={handleSearchInputChange}
-                                    placeholder={i18n.t('Search for indicators, data elements, or program indicators')}
+                                    placeholder={dataElementsOnly
+                                        ? i18n.t('Search for data elements')
+                                        : i18n.t('Search for indicators, data elements, or program indicators')}
                                     className={styles.searchInput}
                                 />
                             </div>

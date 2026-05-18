@@ -1,0 +1,54 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.modeSelector {
+  inline-size: fit-content;
+  margin-block-end: 0.75rem;
+}
+
+.inputRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.input {
+  font-family: inherit;
+  font-size: 0.9rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #adb5bd;
+  border-radius: 3px;
+  background: #fff;
+  inline-size: 16rem;
+  box-sizing: border-box;
+}
+
+.input:focus {
+  outline: 2px solid #2c6693;
+  outline-offset: -1px;
+  border-color: #2c6693;
+}
+
+.helper {
+  font-size: 0.85rem;
+  color: #6c757d;
+}
+
+.resolvedLabel {
+  font-size: 0.85rem;
+  color: #495057;
+  margin: 0;
+}
+
+.errorText {
+  font-size: 0.85rem;
+  color: #b71c1c;
+  margin: 0;
+}
+
+.hidden {
+  display: none;
+}

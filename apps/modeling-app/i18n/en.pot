@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-04-17T09:43:26.414Z\n"
-"PO-Revision-Date: 2026-04-17T09:43:26.415Z\n"
+"POT-Creation-Date: 2026-05-17T23:58:51.551Z\n"
+"PO-Revision-Date: 2026-05-17T23:58:51.552Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -570,6 +570,67 @@ msgstr "Error loading models"
 msgid "An unknown error occurred"
 msgstr "An unknown error occurred"
 
+msgid "Cannot run prediction"
+msgstr "Cannot run prediction"
+
+msgid ""
+"Missing prediction setup details. Open the setup configuration and ensure "
+"model, period type, training start, and data mappings are configured."
+msgstr ""
+"Missing prediction setup details. Open the setup configuration and ensure "
+"model, period type, training start, and data mappings are configured."
+
+msgid "Prediction run name"
+msgstr "Prediction run name"
+
+msgid "Run prediction"
+msgstr "Run prediction"
+
+msgid "Offset"
+msgstr "Offset"
+
+msgid "Absolute"
+msgstr "Absolute"
+
+msgid "Last training period"
+msgstr "Last training period"
+
+msgid "periods back from {{anchor}}"
+msgstr "periods back from {{anchor}}"
+
+msgid "Unknown model"
+msgstr "Unknown model"
+
+msgid "Run a new prediction"
+msgstr "Run a new prediction"
+
+msgid "Training start"
+msgstr "Training start"
+
+msgid "Enter an offset (0 or negative)"
+msgstr "Enter an offset (0 or negative)"
+
+msgid "Offset must be 0 or negative"
+msgstr "Offset must be 0 or negative"
+
+msgid "Invalid offset"
+msgstr "Invalid offset"
+
+msgid "Resolved period is before training start"
+msgstr "Resolved period is before training start"
+
+msgid "Please select a period"
+msgstr "Please select a period"
+
+msgid "Invalid period"
+msgstr "Invalid period"
+
+msgid "Period must be completed (cannot be later than last completed period)"
+msgstr "Period must be completed (cannot be later than last completed period)"
+
+msgid "Period is before training start"
+msgstr "Period is before training start"
+
 msgid "{{count}} org units"
 msgid_plural "{{count}} org units"
 msgstr[0] "{{count}} org unit"
@@ -623,6 +684,135 @@ msgstr "No organisation units match your search"
 
 msgid "You cannot select more than {{max}} organisation units at a time"
 msgstr "You cannot select more than {{max}} organisation units at a time"
+
+msgid "Started"
+msgstr "Started"
+
+msgid "Finished"
+msgstr "Finished"
+
+msgid "Recent activity"
+msgstr "Recent activity"
+
+msgid "Error loading jobs"
+msgstr "Error loading jobs"
+
+msgid "Invalid prediction setup"
+msgstr "Invalid prediction setup"
+
+msgid "No activity yet. Run a prediction to see job status and logs here."
+msgstr "No activity yet. Run a prediction to see job status and logs here."
+
+msgid "All statuses"
+msgstr "All statuses"
+
+msgid "View all activity"
+msgstr "View all activity"
+
+msgid "No activity matches the selected status"
+msgstr "No activity matches the selected status"
+
+msgid "Delete prediction run"
+msgstr "Delete prediction run"
+
+msgid ""
+"This will permanently delete the prediction run from CHAP. It will not "
+"remove any values previously imported into DHIS2."
+msgstr ""
+"This will permanently delete the prediction run from CHAP. It will not "
+"remove any values previously imported into DHIS2."
+
+msgid "View"
+msgstr "View"
+
+msgid "Import"
+msgstr "Import"
+
+msgid "{{count}} run"
+msgid_plural "{{count}} run"
+msgstr[0] "{{count}} run"
+msgstr[1] "{{count}} runs"
+
+msgid "Last run {{timeAgo}} ago"
+msgstr "Last run {{timeAgo}} ago"
+
+msgid "No runs yet"
+msgstr "No runs yet"
+
+msgid "Completed predictions"
+msgstr "Completed predictions"
+
+msgid "Running job"
+msgstr "Running job"
+
+msgid "Run ID"
+msgstr "Run ID"
+
+msgid "Prediction periods"
+msgstr "Prediction periods"
+
+msgid "Training data cutoff"
+msgstr "Training data cutoff"
+
+msgid "Error loading prediction runs"
+msgstr "Error loading prediction runs"
+
+msgid ""
+"No completed predictions yet. Run a prediction to start producing "
+"predictions."
+msgstr ""
+"No completed predictions yet. Run a prediction to start producing "
+"predictions."
+
+msgid "Prediction run deleted"
+msgstr "Prediction run deleted"
+
+msgid "Failed to delete prediction run"
+msgstr "Failed to delete prediction run"
+
+msgid "{{name}} prediction"
+msgstr "{{name}} prediction"
+
+msgid "Quick actions"
+msgstr "Quick actions"
+
+msgid "Go to last run"
+msgstr "Go to last run"
+
+msgid "Edit setup"
+msgstr "Edit setup"
+
+msgid "Edit prediction setup"
+msgstr "Edit prediction setup"
+
+msgid "Prediction setup updated"
+msgstr "Prediction setup updated"
+
+msgid "Failed to update prediction setup"
+msgstr "Failed to update prediction setup"
+
+msgid "{{count}} {{label}}"
+msgid_plural "{{count}} {{label}}"
+msgstr[0] "{{count}} {{label}}"
+msgstr[1] "{{count}} {{label}}"
+
+msgid "Configuration"
+msgstr "Configuration"
+
+msgid "No prediction setup found"
+msgstr "No prediction setup found"
+
+msgid "location"
+msgstr "location"
+
+msgid "locations"
+msgstr "locations"
+
+msgid "source"
+msgstr "source"
+
+msgid "sources"
+msgstr "sources"
 
 msgid "Please select a visualization."
 msgstr "Please select a visualization."
@@ -774,30 +964,54 @@ msgstr "Start period"
 msgid "End period"
 msgstr "End period"
 
-msgid "Create prediction"
-msgstr "Create prediction"
+msgid "Data element is required"
+msgstr "Data element is required"
+
+msgid "Quantile high"
+msgstr "Quantile high"
+
+msgid "Quantile mid high"
+msgstr "Quantile mid high"
+
+msgid "Median"
+msgstr "Median"
+
+msgid "Quantile mid low"
+msgstr "Quantile mid low"
+
+msgid "Quantile low"
+msgstr "Quantile low"
+
+msgid "Create prediction setup"
+msgstr "Create prediction setup"
+
+msgid "Setup name"
+msgstr "Setup name"
+
+msgid "You can change this configuration at any point."
+msgstr "You can change this configuration at any point."
+
+msgid "Set default import mapping"
+msgstr "Set default import mapping"
 
 msgid ""
-"You should only do predictions on well-tested and reliable models that have "
-"shown promise when evaluated. Do you still want to continue?"
+"Choose the DHIS2 data elements to use by default when prediction outputs "
+"are imported."
 msgstr ""
-"You should only do predictions on well-tested and reliable models that have "
-"shown promise when evaluated. Do you still want to continue?"
+"Choose the DHIS2 data elements to use by default when prediction outputs "
+"are imported."
 
-msgid "Continue"
-msgstr "Continue"
-
-msgid "Quick actions"
-msgstr "Quick actions"
+msgid "Predict"
+msgstr "Predict"
 
 msgid "Compare with..."
 msgstr "Compare with..."
 
-msgid "Predict..."
-msgstr "Predict..."
+msgid "Prediction setup created"
+msgstr "Prediction setup created"
 
-msgid "Error loading jobs"
-msgstr "Error loading jobs"
+msgid "Failed to create prediction setup"
+msgstr "Failed to create prediction setup"
 
 msgid "Are you sure you want to archive this model?"
 msgstr "Are you sure you want to archive this model?"
@@ -912,25 +1126,159 @@ msgstr "Model created successfully"
 msgid "Failed to create model"
 msgstr "Failed to create model"
 
-msgid "Error loading prediction"
-msgstr "Error loading prediction"
+msgid "Outbreak"
+msgstr "Outbreak"
 
-msgid "Prediction not found"
-msgstr "Prediction not found"
+msgid "No outbreak"
+msgstr "No outbreak"
+
+msgid "Unavailable"
+msgstr "Unavailable"
+
+msgid "Outbreak regions"
+msgstr "Outbreak regions"
+
+msgid "No outbreak regions"
+msgstr "No outbreak regions"
+
+msgid "Unavailable regions"
+msgstr "Unavailable regions"
+
+msgid "Unnamed prediction"
+msgstr "Unnamed prediction"
+
+msgid "Unable to load prediction data"
+msgstr "Unable to load prediction data"
 
 msgid ""
-"The prediction you are looking for does not exist or you do not have "
-"permission to access it."
+"There was a problem loading the prediction data required for alert "
+"configuration."
 msgstr ""
-"The prediction you are looking for does not exist or you do not have "
-"permission to access it."
+"There was a problem loading the prediction data required for alert "
+"configuration."
+
+msgid "No prediction data found"
+msgstr "No prediction data found"
+
+msgid "This prediction has no forecast data to configure alerts for."
+msgstr "This prediction has no forecast data to configure alerts for."
+
+msgid "Minimum outbreak probability"
+msgstr "Minimum outbreak probability"
+
+msgid "Prediction run"
+msgstr "Prediction run"
+
+msgid "Search regions"
+msgstr "Search regions"
+
+msgid "Status filter"
+msgstr "Status filter"
+
+msgid "Shift zoom left"
+msgstr "Shift zoom left"
+
+msgid "Shift zoom left one period"
+msgstr "Shift zoom left one period"
+
+msgid "Reset zoom"
+msgstr "Reset zoom"
+
+msgid "Shift zoom right"
+msgstr "Shift zoom right"
+
+msgid "Shift zoom right one period"
+msgstr "Shift zoom right one period"
+
+msgid "No regions match the selected filters."
+msgstr "No regions match the selected filters."
+
+msgid "Threshold controls"
+msgstr "Threshold controls"
+
+msgid "Prediction target"
+msgstr "Prediction target"
+
+msgid "Regions with alerts"
+msgstr "Regions with alerts"
+
+msgid "Number of regions with at least one forecast period marked as an outbreak."
+msgstr "Number of regions with at least one forecast period marked as an outbreak."
+
+msgid "Alert periods"
+msgstr "Alert periods"
+
+msgid "Total number of alerts across all regions."
+msgstr "Total number of alerts across all regions."
+
+msgid "Thresholds unavailable"
+msgstr "Thresholds unavailable"
 
 msgid ""
-"The model you are looking for does not exist or you do not have permission "
-"to access it."
+"Number of regions without enough historical disease data to calculate a "
+"threshold."
 msgstr ""
-"The model you are looking for does not exist or you do not have permission "
-"to access it."
+"Number of regions without enough historical disease data to calculate a "
+"threshold."
+
+msgid "Alert preview"
+msgstr "Alert preview"
+
+msgid "Threshold unavailable"
+msgstr "Threshold unavailable"
+
+msgid "Outbreak detected"
+msgstr "Outbreak detected"
+
+msgid "Endemic threshold unavailable"
+msgstr "Endemic threshold unavailable"
+
+msgid ""
+"At least {{count}} historical observations are required for the mocked "
+"threshold."
+msgid_plural ""
+"At least {{count}} historical observations are required for the mocked "
+"threshold."
+msgstr[0] ""
+"At least {{count}} historical observations are required for the mocked "
+"threshold."
+msgstr[1] ""
+"At least {{count}} historical observations are required for the mocked "
+"threshold."
+
+msgid "Adjust alert output"
+msgstr "Adjust alert output"
+
+msgid "Apply"
+msgstr "Apply"
+
+msgid ""
+"There was a problem loading the prediction data required for this "
+"prediction run."
+msgstr ""
+"There was a problem loading the prediction data required for this "
+"prediction run."
+
+msgid "This prediction has no forecast data to display."
+msgstr "This prediction has no forecast data to display."
+
+msgid "Prediction settings"
+msgstr "Prediction settings"
+
+msgid "Outbreak thresholds"
+msgstr "Outbreak thresholds"
+
+msgid "Show outbreak status and threshold overlays for this run."
+msgstr "Show outbreak status and threshold overlays for this run."
+
+msgid "Enabled"
+msgstr "Enabled"
+
+msgid "Disabled"
+msgstr "Disabled"
+
+msgid "Edit"
+msgstr "Edit"
 
 msgid "Prediction result"
 msgstr "Prediction result"
@@ -947,18 +1295,6 @@ msgstr "Map"
 msgid "No prediction data found."
 msgstr "No prediction data found."
 
-msgid "There was an error loading the prediction summary. Please try again later."
-msgstr "There was an error loading the prediction summary. Please try again later."
-
-msgid "Predicted periods"
-msgstr "Predicted periods"
-
-msgid "Import"
-msgstr "Import"
-
-msgid "Guide"
-msgstr "Guide"
-
 msgid "Loading"
 msgstr "Loading"
 
@@ -974,8 +1310,21 @@ msgstr "Select a data item..."
 msgid "Clear selection"
 msgstr "Clear selection"
 
+msgid "Search for data elements"
+msgstr "Search for data elements"
+
 msgid "Search for indicators, data elements, or program indicators"
 msgstr "Search for indicators, data elements, or program indicators"
+
+msgid "Unable to load alert data"
+msgstr "Unable to load alert data"
+
+msgid ""
+"There was a problem loading the prediction data required for outbreak "
+"indicator import."
+msgstr ""
+"There was a problem loading the prediction data required for outbreak "
+"indicator import."
 
 msgid "Import forecasted values"
 msgstr "Import forecasted values"
@@ -987,20 +1336,36 @@ msgstr ""
 "Importing forecasted values into DHIS2 requires you to set up five data "
 "elements for the quantiles outputted by the model."
 
-msgid "Quantile high"
-msgstr "Quantile high"
+msgid "Alert output"
+msgstr "Alert output"
 
-msgid "Quantile mid high"
-msgstr "Quantile mid high"
+msgid "Use alert outputs"
+msgstr "Use alert outputs"
 
-msgid "Median"
-msgstr "Median"
+msgid "Import outbreak indicator values."
+msgstr "Import outbreak indicator values."
 
-msgid "Quantile mid low"
-msgstr "Quantile mid low"
+msgid "Some outbreak indicators will be skipped"
+msgstr "Some outbreak indicators will be skipped"
 
-msgid "Quantile low"
-msgstr "Quantile low"
+msgid ""
+"Outbreak indicators will be skipped for one region due to insufficient "
+"disease data."
+msgid_plural ""
+"Outbreak indicators will be skipped for one region due to insufficient "
+"disease data."
+msgstr[0] ""
+"Outbreak indicators will be skipped for one region due to insufficient "
+"disease data."
+msgstr[1] ""
+"Outbreak indicators will be skipped for {{count}} regions due to "
+"insufficient disease data."
+
+msgid "Adjust"
+msgstr "Adjust"
+
+msgid "Outbreak indicator"
+msgstr "Outbreak indicator"
 
 msgid "Failed to post prediction data"
 msgstr "Failed to post prediction data"
@@ -1008,33 +1373,30 @@ msgstr "Failed to post prediction data"
 msgid "Prediction data posted successfully"
 msgstr "Prediction data posted successfully"
 
-msgid "Delete prediction"
-msgstr "Delete prediction"
+msgid "Error loading prediction configurations"
+msgstr "Error loading prediction configurations"
+
+msgid "Delete prediction setup"
+msgstr "Delete prediction setup"
 
 msgid ""
-"Are you sure you want to delete this prediction? This action cannot be "
-"undone."
+"This will permanently delete the setup, associated prediction runs, and "
+"associated data. This action cannot be undone."
 msgstr ""
-"Are you sure you want to delete this prediction? This action cannot be "
-"undone."
+"This will permanently delete the setup, associated prediction runs, and "
+"associated data. This action cannot be undone."
 
-msgid "View"
-msgstr "View"
+msgid "Date created"
+msgstr "Date created"
 
-msgid "Periods"
-msgstr "Periods"
+msgid "No prediction configurations yet - create one from a completed evaluation."
+msgstr "No prediction configurations yet - create one from a completed evaluation."
 
-msgid "New prediction"
-msgstr "New prediction"
+msgid "Prediction setup deleted"
+msgstr "Prediction setup deleted"
 
-msgid "No predictions available"
-msgstr "No predictions available"
-
-msgid "Prediction deleted"
-msgstr "Prediction deleted"
-
-msgid "Failed to delete prediction"
-msgstr "Failed to delete prediction"
+msgid "Failed to delete prediction setup"
+msgstr "Failed to delete prediction setup"
 
 msgid "There are running jobs in the background"
 msgstr "There are running jobs in the background"
@@ -1042,14 +1404,14 @@ msgstr "There are running jobs in the background"
 msgid "Running jobs"
 msgstr "Running jobs"
 
+msgid "Dashboard"
+msgstr "Dashboard"
+
 msgid "Evaluate"
 msgstr "Evaluate"
 
 msgid "Overview"
 msgstr "Overview"
-
-msgid "Predict"
-msgstr "Predict"
 
 msgid "Models"
 msgstr "Models"
@@ -1092,17 +1454,8 @@ msgstr "Location(s)"
 msgid "Shift zoom left (H)"
 msgstr "Shift zoom left (H)"
 
-msgid "Shift zoom left one period"
-msgstr "Shift zoom left one period"
-
-msgid "Reset zoom"
-msgstr "Reset zoom"
-
 msgid "Shift zoom right (L)"
 msgstr "Shift zoom right (L)"
-
-msgid "Shift zoom right one period"
-msgstr "Shift zoom right one period"
 
 msgid ""
 "Selected evaluations do not have any split periods in common. Please select "
@@ -1229,9 +1582,6 @@ msgstr "Select a data element..."
 msgid "Remove data element"
 msgstr "Remove data element"
 
-msgid "Search for data elements"
-msgstr "Search for data elements"
-
 msgid "At least one slot is required"
 msgstr "At least one slot is required"
 
@@ -1354,9 +1704,6 @@ msgstr ""
 msgid "Sharing"
 msgstr "Sharing"
 
-msgid "Edit"
-msgstr "Edit"
-
 msgid "Invalid URL format"
 msgstr "Invalid URL format"
 
@@ -1439,6 +1786,39 @@ msgstr "Data Pruning"
 msgid "Requires superuser authority"
 msgstr "Requires superuser authority"
 
+msgid "Prediction setup"
+msgstr "Prediction setup"
+
+msgid "Run predictions, review activity, and manage this setup."
+msgstr "Run predictions, review activity, and manage this setup."
+
+msgid "Back to prediction setups"
+msgstr "Back to prediction setups"
+
+msgid "Latest Evaluation Runs"
+msgstr "Latest Evaluation Runs"
+
+msgid "See all evaluation runs"
+msgstr "See all evaluation runs"
+
+msgid "Error loading evaluations"
+msgstr "Error loading evaluations"
+
+msgid "Unnamed evaluation"
+msgstr "Unnamed evaluation"
+
+msgid "Prediction Setups"
+msgstr "Prediction Setups"
+
+msgid "See all prediction setups"
+msgstr "See all prediction setups"
+
+msgid "Error loading prediction setups"
+msgstr "Error loading prediction setups"
+
+msgid "No prediction setups yet"
+msgstr "No prediction setups yet"
+
 msgid "Evaluation details"
 msgstr "Evaluation details"
 
@@ -1451,9 +1831,6 @@ msgstr ""
 
 msgid "Back to evaluations"
 msgstr "Back to evaluations"
-
-msgid "Error loading evaluations"
-msgstr "Error loading evaluations"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -1508,17 +1885,27 @@ msgstr "Back to models"
 msgid "Create a new evaluation to assess the performance of a model"
 msgstr "Create a new evaluation to assess the performance of a model"
 
-msgid "Create a new prediction to forecast outcomes using a model"
-msgstr "Create a new prediction to forecast outcomes using a model"
+msgid "Create a prediction run for this setup."
+msgstr "Create a prediction run for this setup."
 
-msgid "Back to predictions"
-msgstr "Back to predictions"
+msgid "Back to prediction setup"
+msgstr "Back to prediction setup"
 
-msgid "Prediction details"
-msgstr "Prediction details"
+msgid "Error loading prediction"
+msgstr "Error loading prediction"
 
-msgid "View the details of a prediction."
-msgstr "View the details of a prediction."
+msgid "Prediction not found"
+msgstr "Prediction not found"
+
+msgid ""
+"The prediction you are looking for does not exist or you do not have "
+"permission to access it."
+msgstr ""
+"The prediction you are looking for does not exist or you do not have "
+"permission to access it."
+
+msgid "The model for this prediction could not be loaded."
+msgstr "The model for this prediction could not be loaded."
 
 msgid "Import prediction"
 msgstr "Import prediction"
@@ -1526,23 +1913,18 @@ msgstr "Import prediction"
 msgid "Import the forecasted values of this prediction into DHIS2."
 msgstr "Import the forecasted values of this prediction into DHIS2."
 
-msgid "Back to prediction details"
-msgstr "Back to prediction details"
+msgid "Prediction details"
+msgstr "Prediction details"
 
-msgid "Error loading predictions"
-msgstr "Error loading predictions"
-
-msgid "Predictions"
-msgstr "Predictions"
+msgid "Ready to predict"
+msgstr "Ready to predict"
 
 msgid ""
-"Forecasted trends generated by applying a predictive model to current data. "
-"These can be reviewed and imported into DHIS2 to support decision-making in "
-"the field."
+"Saved model configurations that are ready to be used to generate "
+"predictions."
 msgstr ""
-"Forecasted trends generated by applying a predictive model to current data. "
-"These can be reviewed and imported into DHIS2 to support decision-making in "
-"the field."
+"Saved model configurations that are ready to be used to generate "
+"predictions."
 
 msgctxt ") instead."
 msgid "Spaces are not allowed. Use dashes (-) or underscores ("

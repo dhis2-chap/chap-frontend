@@ -7,7 +7,7 @@ import {
 } from '@dhis2/ui';
 import { useQuery } from '@tanstack/react-query';
 import {
-    BackTestRead,
+    BacktestRead,
     BacktestsService,
 } from '@dhis2-chap/ui';
 import css from './EvaluationSelector.module.css';
@@ -36,7 +36,7 @@ export const EvaluationCompatibleSelector = ({
         queryKey: ['backtests', 'compatible', compatibleEvaluationId],
         queryFn: () => {
             if (!compatibleEvaluationId) {
-                return Promise.resolve([] as BackTestRead[]);
+                return Promise.resolve([] as BacktestRead[]);
             }
             return BacktestsService.getCompatibleBacktestsV1AnalyticsCompatibleBacktestsBacktestIdGet(
                 compatibleEvaluationId,
@@ -97,9 +97,9 @@ export const EvaluationCompatibleSelector = ({
 
 interface EvaluationSelectorBaseProps
     extends Omit<SingleSelectProps, 'selected' | 'onChange'> {
-    onSelect: (evaluation: BackTestRead | undefined) => void;
-    selected?: BackTestRead | undefined;
-    available: BackTestRead[];
+    onSelect: (evaluation: BacktestRead | undefined) => void;
+    selected?: BacktestRead | undefined;
+    available: BacktestRead[];
     listMessage?: React.ReactNode;
 }
 

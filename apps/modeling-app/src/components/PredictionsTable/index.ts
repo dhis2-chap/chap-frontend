@@ -1,1 +1,0 @@
-export { PredictionsTable } from './PredictionsTable';
