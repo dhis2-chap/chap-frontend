@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-05-12T13:39:15.517Z\n"
-"PO-Revision-Date: 2026-05-12T13:39:15.517Z\n"
+"POT-Creation-Date: 2026-05-17T23:58:51.551Z\n"
+"PO-Revision-Date: 2026-05-17T23:58:51.552Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -601,35 +601,11 @@ msgstr "periods back from {{anchor}}"
 msgid "Unknown model"
 msgstr "Unknown model"
 
-msgid "target"
-msgstr "target"
-
-msgid "Prediction setup"
-msgstr "Prediction setup"
+msgid "Run a new prediction"
+msgstr "Run a new prediction"
 
 msgid "Training start"
 msgstr "Training start"
-
-msgid "Will predict"
-msgstr "Will predict"
-
-msgid "Select a last training period to preview"
-msgstr "Select a last training period to preview"
-
-msgid "Hide details"
-msgstr "Hide details"
-
-msgid "Show details ({{orgUnitCount}} org units, {{mappingCount}} mappings)"
-msgstr "Show details ({{orgUnitCount}} org units, {{mappingCount}} mappings)"
-
-msgid "Org units"
-msgstr "Org units"
-
-msgid "None"
-msgstr "None"
-
-msgid "Data mappings"
-msgstr "Data mappings"
 
 msgid "Enter an offset (0 or negative)"
 msgstr "Enter an offset (0 or negative)"
@@ -1400,11 +1376,27 @@ msgstr "Prediction data posted successfully"
 msgid "Error loading prediction configurations"
 msgstr "Error loading prediction configurations"
 
+msgid "Delete prediction setup"
+msgstr "Delete prediction setup"
+
+msgid ""
+"This will permanently delete the setup, associated prediction runs, and "
+"associated data. This action cannot be undone."
+msgstr ""
+"This will permanently delete the setup, associated prediction runs, and "
+"associated data. This action cannot be undone."
+
 msgid "Date created"
 msgstr "Date created"
 
 msgid "No prediction configurations yet - create one from a completed evaluation."
 msgstr "No prediction configurations yet - create one from a completed evaluation."
+
+msgid "Prediction setup deleted"
+msgstr "Prediction setup deleted"
+
+msgid "Failed to delete prediction setup"
+msgstr "Failed to delete prediction setup"
 
 msgid "There are running jobs in the background"
 msgstr "There are running jobs in the background"
@@ -1794,6 +1786,9 @@ msgstr "Data Pruning"
 msgid "Requires superuser authority"
 msgstr "Requires superuser authority"
 
+msgid "Prediction setup"
+msgstr "Prediction setup"
+
 msgid "Run predictions, review activity, and manage this setup."
 msgstr "Run predictions, review activity, and manage this setup."
 
@@ -1934,3 +1929,11 @@ msgstr ""
 msgctxt ") instead."
 msgid "Spaces are not allowed. Use dashes (-) or underscores ("
 msgstr "Spaces are not allowed. Use dashes (-) or underscores (_) instead."
+
+msgctxt "Application title"
+msgid "__MANIFEST_APP_TITLE"
+msgstr "Modeling"
+
+msgctxt "Application description"
+msgid "__MANIFEST_APP_DESCRIPTION"
+msgstr ""
