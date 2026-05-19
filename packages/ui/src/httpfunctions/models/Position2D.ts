@@ -2,4 +2,4 @@
 /* istanbul ignore file */
 /* tslint:disable */
 
-export type Coordinates = any[];
+export type Position2D = any[];

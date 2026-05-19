@@ -69,6 +69,13 @@ export const ExperimentalSettings = () => {
                                     onChange={() => toggleFeature(FEATURES.EVALUATION_PLOTS)}
                                     disabled={isSaving}
                                 />
+                                <ChoiceCard
+                                    title={i18n.t('Explainability widget')}
+                                    description={i18n.t('Show the explainability widget in prediction details (requires backend XAI support)')}
+                                    checked={settings.features[FEATURES.EXPLAINABILITY_WIDGET] ?? false}
+                                    onChange={() => toggleFeature(FEATURES.EXPLAINABILITY_WIDGET)}
+                                    disabled={isSaving}
+                                />
                             </div>
                         </div>
                     )}

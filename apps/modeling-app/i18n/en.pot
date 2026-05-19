@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-04-17T09:43:26.414Z\n"
-"PO-Revision-Date: 2026-04-17T09:43:26.415Z\n"
+"POT-Creation-Date: 2026-05-03T15:00:57.779Z\n"
+"PO-Revision-Date: 2026-05-03T15:00:57.780Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -254,26 +254,26 @@ msgstr "Failed"
 msgid "Revoked"
 msgstr "Revoked"
 
+msgid "Cancelled"
+msgstr "Cancelled"
+
+msgid "Create evaluation (Legacy)"
+msgstr "Create evaluation (Legacy)"
+
 msgid "Create evaluation"
 msgstr "Create evaluation"
 
 msgid "Make prediction"
 msgstr "Make prediction"
 
-msgid "Create dataset (deprecated)"
-msgstr "Create dataset (deprecated)"
-
-msgid "Create evaluation (deprecated)"
-msgstr "Create evaluation (deprecated)"
-
-msgid "Create evaluation (Legacy)"
-msgstr "Create evaluation (Legacy)"
-
 msgid "Create dataset"
 msgstr "Create dataset"
 
-msgid "Cancelled"
-msgstr "Cancelled"
+msgid "XAI surrogate training"
+msgstr "XAI surrogate training"
+
+msgid "Explanation generation"
+msgstr "Explanation generation"
 
 msgid "Map Data Items"
 msgstr "Map Data Items"
@@ -912,6 +912,241 @@ msgstr "Model created successfully"
 msgid "Failed to create model"
 msgstr "Failed to create model"
 
+msgid "Explainability"
+msgstr "Explainability"
+
+msgid "Explanation error"
+msgstr "Explanation error"
+
+msgid "Global"
+msgstr "Global"
+
+msgid "Local"
+msgstr "Local"
+
+msgid "Horizon"
+msgstr "Horizon"
+
+msgid "Training surrogate model ({{method}})…"
+msgstr "Training surrogate model ({{method}})…"
+
+msgid "Generating explanations ({{method}})…"
+msgstr "Generating explanations ({{method}})…"
+
+msgid "Computing local explanation…"
+msgstr "Computing local explanation…"
+
+msgid "Generate explanations to view Global, Local, and Horizon plots."
+msgstr "Generate explanations to view Global, Local, and Horizon plots."
+
+msgid "Compute Explanation"
+msgstr "Compute Explanation"
+
+msgid "Error"
+msgstr "Error"
+
+msgid "Failed to load global explanation"
+msgstr "Failed to load global explanation"
+
+msgid "No global explanation computed yet."
+msgstr "No global explanation computed yet."
+
+msgid "Importance"
+msgstr "Importance"
+
+msgid "SHAP Summary"
+msgstr "SHAP Summary"
+
+msgid "Recalculate"
+msgstr "Recalculate"
+
+msgid "Global Feature Importance"
+msgstr "Global Feature Importance"
+
+msgid "SHAP Summary — how feature values affect predictions"
+msgstr "SHAP Summary — how feature values affect predictions"
+
+msgid "SHAP summary data not yet computed."
+msgstr "SHAP summary data not yet computed."
+
+msgid "Compute"
+msgstr "Compute"
+
+msgid "Horizon summary has not been computed yet."
+msgstr "Horizon summary has not been computed yet."
+
+msgid "Compute Horizon Summary"
+msgstr "Compute Horizon Summary"
+
+msgid "Forecast Horizon Summary — {{orgUnit}}"
+msgstr "Forecast Horizon Summary — {{orgUnit}}"
+
+msgid "Average Horizon Importance — mean |SHAP| across {{n}} steps"
+msgstr "Average Horizon Importance — mean |SHAP| across {{n}} steps"
+
+msgid "SHAP Summary — {{orgUnit}} across horizon steps"
+msgstr "SHAP Summary — {{orgUnit}} across horizon steps"
+
+msgid "No forecast periods are available for this prediction."
+msgstr "No forecast periods are available for this prediction."
+
+msgid "About feature values"
+msgstr "About feature values"
+
+msgid ""
+"Feature values are taken from the dataset row that matches the forecast "
+"period when available."
+msgstr ""
+"Feature values are taken from the dataset row that matches the forecast "
+"period when available."
+
+msgid "Failed to load local explanation"
+msgstr "Failed to load local explanation"
+
+msgid "Waterfall"
+msgstr "Waterfall"
+
+msgid "SHAP Waterfall — {{orgUnit}}, {{period}}"
+msgstr "SHAP Waterfall — {{orgUnit}}, {{period}}"
+
+msgid "SHAP Summary — {{orgUnit}}, {{period}} highlighted"
+msgstr "SHAP Summary — {{orgUnit}}, {{period}} highlighted"
+
+msgid "{{method}} Feature Contributions — {{orgUnit}}, {{period}}"
+msgstr "{{method}} Feature Contributions — {{orgUnit}}, {{period}}"
+
+msgid "No explanation available for this selection."
+msgstr "No explanation available for this selection."
+
+msgid "Explain This Forecast"
+msgstr "Explain This Forecast"
+
+msgid "Good"
+msgstr "Good"
+
+msgid "explanations closely match the original model"
+msgstr "explanations closely match the original model"
+
+msgid "Moderate"
+msgstr "Moderate"
+
+msgid "directionally useful, magnitudes are approximate"
+msgstr "directionally useful, magnitudes are approximate"
+
+msgid "Poor"
+msgstr "Poor"
+
+msgid "explanations may not reflect the original model"
+msgstr "explanations may not reflect the original model"
+
+msgid "surrogate model"
+msgstr "surrogate model"
+
+msgid "Surrogate Model Quality"
+msgstr "Surrogate Model Quality"
+
+msgid "Hide metrics"
+msgstr "Hide metrics"
+
+msgid "Show metrics"
+msgstr "Show metrics"
+
+msgid ""
+"{{n}} feature(s) had no variation and were excluded from "
+"explanations{{colon}} {{list}}"
+msgstr ""
+"{{n}} feature(s) had no variation and were excluded from "
+"explanations{{colon}} {{list}}"
+
+msgid ""
+"{{n}} low-signal feature(s) removed by permutation selection{{colon}} "
+"{{list}}"
+msgstr ""
+"{{n}} low-signal feature(s) removed by permutation selection{{colon}} "
+"{{list}}"
+
+msgid "CV R²"
+msgstr "CV R²"
+
+msgid "MAE"
+msgstr "MAE"
+
+msgid "% MAPE"
+msgstr "% MAPE"
+
+msgid "Residual bias"
+msgstr "Residual bias"
+
+msgid "±{{std}}"
+msgstr "±{{std}}"
+
+msgid "Samples"
+msgstr "Samples"
+
+msgid "Unique rows"
+msgstr "Unique rows"
+
+msgid "{{pct}}% duplicated"
+msgstr "{{pct}}% duplicated"
+
+msgid "Stability"
+msgstr "Stability"
+
+msgid "ranking consistency"
+msgstr "ranking consistency"
+
+msgid ""
+"Predictions were rescaled from a transformed target space ({{method}}) — "
+"attributions are first-order approximations."
+msgstr ""
+"Predictions were rescaled from a transformed target space ({{method}}) — "
+"attributions are first-order approximations."
+
+msgid "Select XAI Method"
+msgstr "Select XAI Method"
+
+msgid "No methods available"
+msgstr "No methods available"
+
+msgid "No XAI methods are registered. Contact your administrator."
+msgstr "No XAI methods are registered. Contact your administrator."
+
+msgid "Search by name"
+msgstr "Search by name"
+
+msgid "No methods found"
+msgstr "No methods found"
+
+msgid "Automatic selection"
+msgstr "Automatic selection"
+
+msgid "All methods"
+msgstr "All methods"
+
+msgid "Confirm"
+msgstr "Confirm"
+
+msgid "Plots{{colon}} "
+msgstr "Plots{{colon}} "
+
+msgid "Change XAI method"
+msgstr "Change XAI method"
+
+msgid "Explanation job failed. Check Jobs for details."
+msgstr "Explanation job failed. Check Jobs for details."
+
+msgid "Explanation job was revoked. Check Jobs for details."
+msgstr "Explanation job was revoked. Check Jobs for details."
+
+msgid "Surrogate model training failed. Check Jobs for details."
+msgstr "Surrogate model training failed. Check Jobs for details."
+
+msgid "Surrogate model training was revoked. Check Jobs for details."
+msgstr "Surrogate model training was revoked. Check Jobs for details."
+
+msgid "Failed to start explanation run"
+msgstr "Failed to start explanation run"
+
 msgid "Error loading prediction"
 msgstr "Error loading prediction"
 
@@ -1193,9 +1428,6 @@ msgstr ""
 msgid "Your server is not secure"
 msgstr "Your server is not secure"
 
-msgid "Confirm"
-msgstr "Confirm"
-
 msgid "This action cannot be undone"
 msgstr "This action cannot be undone"
 
@@ -1278,9 +1510,6 @@ msgstr[1] "All {{count}} data elements were successfully pruned."
 msgid "{{failureCount}} of {{totalCount}} data elements failed to be pruned"
 msgstr "{{failureCount}} of {{totalCount}} data elements failed to be pruned"
 
-msgid "Error"
-msgstr "Error"
-
 msgid "Please remember to rerun your analytics tables to update the system."
 msgstr "Please remember to rerun your analytics tables to update the system."
 
@@ -1314,6 +1543,16 @@ msgstr "Show metric visualization plots in the evaluation dashboard"
 
 msgid "Show evaluation visualization plots in the evaluation dashboard"
 msgstr "Show evaluation visualization plots in the evaluation dashboard"
+
+msgid "Explainability widget"
+msgstr "Explainability widget"
+
+msgid ""
+"Show the explainability widget in prediction details (requires backend XAI "
+"support)"
+msgstr ""
+"Show the explainability widget in prediction details (requires backend XAI "
+"support)"
 
 msgid "Settings saved successfully"
 msgstr "Settings saved successfully"
@@ -1547,11 +1786,3 @@ msgstr ""
 msgctxt ") instead."
 msgid "Spaces are not allowed. Use dashes (-) or underscores ("
 msgstr "Spaces are not allowed. Use dashes (-) or underscores (_) instead."
-
-msgctxt "Application title"
-msgid "__MANIFEST_APP_TITLE"
-msgstr "Modeling"
-
-msgctxt "Application description"
-msgid "__MANIFEST_APP_DESCRIPTION"
-msgstr ""

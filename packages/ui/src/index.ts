@@ -55,6 +55,17 @@ export {
     getQueue,
 } from './httpfunctions/core/request';
 export { buildPredictionSeries } from './utils/PredictionViewModel';
+
+export {
+    FeatureImportanceChart,
+    ShapBeeswarmChart,
+    ShapWaterfallChart,
+    explainabilityAlignedTabChartHeight,
+    explainabilityBeeswarmChartHeight,
+    explainabilityImportanceChartHeight,
+    formatFeatureName,
+    CHART_COLORS,
+} from './components/explainability';
 export {
     plotResultsToViewData,
     getStableMaxYByOrgUnitId,
@@ -69,6 +80,7 @@ export {
     sortPeriods,
     comparePeriods,
     getLastNPeriods,
+    getPeriodLabel,
 } from './utils/timePeriodUtils';
 
 // Map utilities

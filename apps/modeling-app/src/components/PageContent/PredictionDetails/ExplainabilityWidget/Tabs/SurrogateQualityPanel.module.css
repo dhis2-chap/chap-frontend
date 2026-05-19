@@ -1,0 +1,131 @@
+.qualityPanel {
+    padding: 10px 14px;
+    background: var(--colors-grey050, #fbfcfd);
+    border: 1px solid var(--colors-grey200, #eef0f3);
+    border-radius: 6px;
+}
+
+.qualityHeaderRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.qualityHeaderLeft {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.qualityHeader {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--colors-grey800, #494e54);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.qualityBadge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--colors-grey800, #494e54);
+    flex: 1;
+    min-width: 0;
+    flex-wrap: wrap;
+}
+
+.qualityDot {
+    flex-shrink: 0;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.qualityBadgeText {
+    line-height: 1.4;
+}
+
+.qualityInlineNote {
+    font-size: 11px;
+    color: var(--colors-grey600, #7b8794);
+    margin: 6px 0 0 0;
+    line-height: 1.4;
+}
+
+.metricsToggle {
+    flex-shrink: 0;
+    border: none;
+    background: none;
+    font-size: 11px;
+    color: var(--colors-blue600, #1976d2);
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 3px;
+    white-space: nowrap;
+}
+
+.metricsToggle:hover {
+    background: var(--colors-blue050, #e3f2fd);
+}
+
+.metricsArea {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--colors-grey200, #eef0f3);
+}
+
+.metricsDescription {
+    font-size: 12px;
+    color: var(--colors-grey700, #6e7a8a);
+    margin: 0 0 10px 0;
+    line-height: 1.5;
+}
+
+.qualityMetrics {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+}
+
+.qualityMetric {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.qualityMetricLabel {
+    font-size: 10px;
+    color: var(--colors-grey600, #7b8794);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.qualityMetricValue {
+    font-size: 18px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+
+.qualityMetricRating {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.qualityBar {
+    height: 4px;
+    background: var(--colors-grey200, #eef0f3);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.qualityBarFill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}

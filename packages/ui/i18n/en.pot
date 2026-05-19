@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-04-17T08:51:37.760Z\n"
-"PO-Revision-Date: 2026-04-17T08:51:37.761Z\n"
+"POT-Creation-Date: 2026-05-02T18:20:09.413Z\n"
+"PO-Revision-Date: 2026-05-02T18:20:09.414Z\n"
 
 msgid "Median prediction"
 msgstr "Median prediction"
@@ -16,6 +16,84 @@ msgstr "80% prediction interval"
 
 msgid "50% prediction interval"
 msgstr "50% prediction interval"
+
+msgid "Feature Importance"
+msgstr "Feature Importance"
+
+msgid "Mean absolute SHAP value"
+msgstr "Mean absolute SHAP value"
+
+msgid "Importance{{colon}}"
+msgstr "Importance{{colon}}"
+
+msgid "Importance"
+msgstr "Importance"
+
+msgid "No feature importance data available"
+msgstr "No feature importance data available"
+
+msgid "SHAP Summary — Feature Impact"
+msgstr "SHAP Summary — Feature Impact"
+
+msgid "SHAP value (impact on model output)"
+msgstr "SHAP value (impact on model output)"
+
+msgid "Feature value{{colon}}"
+msgstr "Feature value{{colon}}"
+
+msgid "SHAP{{colon}}"
+msgstr "SHAP{{colon}}"
+
+msgid "All forecasts"
+msgstr "All forecasts"
+
+msgid "Selected instance"
+msgstr "Selected instance"
+
+msgid "No SHAP summary data available"
+msgstr "No SHAP summary data available"
+
+msgid "Low"
+msgstr "Low"
+
+msgid "High"
+msgstr "High"
+
+msgid "Feature value"
+msgstr "Feature value"
+
+msgid "Other features"
+msgstr "Other features"
+
+msgid "SHAP Feature Contributions"
+msgstr "SHAP Feature Contributions"
+
+msgid "Model output value"
+msgstr "Model output value"
+
+msgid "Actual forecast"
+msgstr "Actual forecast"
+
+msgid "Average model prediction"
+msgstr "Average model prediction"
+
+msgid "Model output for this instance"
+msgstr "Model output for this instance"
+
+msgid "Actual forecast{{colon}}"
+msgstr "Actual forecast{{colon}}"
+
+msgid "Other features (not shown)"
+msgstr "Other features (not shown)"
+
+msgid "SHAP value{{colon}}"
+msgstr "SHAP value{{colon}}"
+
+msgid "SHAP Values"
+msgstr "SHAP Values"
+
+msgid "No SHAP explanation data available"
+msgstr "No SHAP explanation data available"
 
 msgid "Median Prediction for {{predictionTargetName}}"
 msgstr "Median Prediction for {{predictionTargetName}}"

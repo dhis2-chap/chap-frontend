@@ -15,6 +15,8 @@ export const JOB_TYPES = {
     CREATE_BACKTEST_WITH_DATA: 'create_backtest_from_data',
     MAKE_PREDICTION: 'create_prediction',
     CREATE_DATASET: 'create_dataset',
+    XAI_SURROGATE: 'xai_surrogate',
+    XAI_EXPLANATIONS: 'xai_explanations',
 } as const;
 
 // This hook should fetch all jobs and start polling if jobs contains any PENDING or STARTED jobs.

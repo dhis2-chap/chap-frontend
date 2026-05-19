@@ -25,6 +25,7 @@ type Props = {
     status: string;
     result: string | undefined | null;
     type: string;
+    xaiMethod?: string | null;
 };
 
 export const JobActionsMenu = ({
@@ -32,6 +33,7 @@ export const JobActionsMenu = ({
     status,
     result,
     type,
+    xaiMethod,
 }: Props) => {
     const navigate = useNavigate();
     const [flyoutMenuIsOpen, setFlyoutMenuIsOpen] = useState(false);
@@ -53,11 +55,16 @@ export const JobActionsMenu = ({
         setViewLogsModalIsOpen(true);
     };
 
+    const isXaiJob = type === JOB_TYPES.XAI_SURROGATE || type === JOB_TYPES.XAI_EXPLANATIONS;
+
     const handleNavigateToResult = () => {
         if (type === JOB_TYPES.CREATE_BACKTEST_WITH_DATA || type === JOB_TYPES.BACKTEST) {
             navigate(`/evaluate/compare?baseEvaluation=${result}&returnTo=${encodeURIComponent('/jobs')}`);
         } else if (type === JOB_TYPES.MAKE_PREDICTION) {
             navigate(`/predictions/${result}`);
+        } else if (isXaiJob && result) {
+            const search = xaiMethod ? `?${new URLSearchParams({ xaiMethod }).toString()}` : '';
+            navigate(`/predictions/${result}${search}`);
         }
         setFlyoutMenuIsOpen(false);
     };

@@ -2,9 +2,9 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { Coordinates } from './Coordinates';
-export type PointModel = {
-    type?: string;
-    coordinates: Coordinates;
+export type RunExplanationsRequest = {
+    xaiMethod?: string;
+    outputStatistic?: string;
+    topK?: number;
 };
 

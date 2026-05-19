@@ -1,0 +1,227 @@
+import { useMemo } from 'react';
+import i18n from '@dhis2/d2-i18n';
+import Highcharts from 'highcharts';
+import HighchartsReact from 'highcharts-react-official';
+import type { FeatureAttribution } from '../../../httpfunctions/models/FeatureAttribution';
+import { formatFeatureName, CHART_COLORS } from '../utils';
+import styles from './ShapWaterfallChart.module.css';
+
+interface ShapWaterfallChartProps {
+    features: FeatureAttribution[];
+    baselinePrediction: number;
+    actualPrediction: number;
+    title?: string;
+    topK?: number;
+}
+
+const formatValue = (val: number | undefined | null): string => {
+    if (val === undefined || val === null) return '';
+    if (Number.isInteger(val)) return val.toLocaleString();
+    return val.toLocaleString(undefined, { maximumFractionDigits: 2 });
+};
+
+export const ShapWaterfallChart = ({
+    features,
+    baselinePrediction,
+    actualPrediction,
+    title,
+    topK = 8,
+}: ShapWaterfallChartProps) => {
+    const options: Highcharts.Options = useMemo(() => {
+        const sorted = [...features]
+            .sort((a, b) => Math.abs(b.importance) - Math.abs(a.importance))
+            .slice(0, topK)
+            .reverse();
+
+        const displayedSum = sorted.reduce((sum, f) => sum + f.importance, 0);
+        const totalSum = features.reduce((sum, f) => sum + f.importance, 0);
+        const modelOutput = baselinePrediction + totalSum;
+        const otherContribution = totalSum - displayedSum;
+        const hasOther = Math.abs(otherContribution) > 0.005;
+
+        const categories: string[] = [
+            `E[f(X)] = ${formatValue(baselinePrediction)}`,
+            ...sorted.map((f) => {
+                const valStr = f.actualValue != null ? ` = ${formatValue(f.actualValue)}` : '';
+                return `${formatFeatureName(f.featureName)}${valStr}`;
+            }),
+            ...(hasOther ? [i18n.t('Other features')] : []),
+            `f(x) = ${formatValue(modelOutput)}`,
+        ];
+
+        const data: Highcharts.PointOptionsObject[] = [
+            {
+                y: baselinePrediction,
+                color: CHART_COLORS.baseline,
+                dataLabels: { format: '{y:.1f}' },
+            },
+            ...sorted.map(f => ({
+                y: f.importance,
+                color: f.importance >= 0 ? CHART_COLORS.positive : CHART_COLORS.negative,
+                dataLabels: {
+                    format: `{y:+.2f}`,
+                },
+            })),
+            ...(hasOther
+                ? [
+                        {
+                            y: otherContribution,
+                            color: otherContribution >= 0 ? CHART_COLORS.positiveLight : CHART_COLORS.negativeLight,
+                            dataLabels: { format: '{y:+.2f}' },
+                        } as Highcharts.PointOptionsObject,
+                    ]
+                : []),
+            {
+                isSum: true,
+                color: CHART_COLORS.sum,
+                dataLabels: { format: '{y:.1f}' },
+            },
+        ];
+
+        const chartHeight = Math.max(280, (categories.length) * 44 + 100);
+
+        return {
+            chart: {
+                type: 'waterfall',
+                inverted: true,
+                height: chartHeight,
+                style: { fontFamily: 'inherit' },
+                margin: [50, 80, 60, 200],
+            },
+            title: {
+                text: title || i18n.t('SHAP Feature Contributions'),
+                style: { fontSize: '13px', fontWeight: '500' },
+                align: 'left' as Highcharts.AlignValue,
+            },
+            xAxis: {
+                categories,
+                title: { text: null },
+                labels: {
+                    style: { fontSize: '11px' },
+                    align: 'right' as Highcharts.AlignValue,
+                },
+            },
+            yAxis: {
+                title: {
+                    text: i18n.t('Model output value'),
+                    style: { fontSize: '11px' },
+                },
+                labels: { style: { fontSize: '11px' } },
+                gridLineColor: CHART_COLORS.waterfallGrid,
+                plotLines: [
+                    {
+                        value: baselinePrediction,
+                        color: CHART_COLORS.baselineLine,
+                        dashStyle: 'Dash' as Highcharts.DashStyleValue,
+                        width: 1,
+                        zIndex: 3,
+                        label: {
+                            text: `E[f(X)]`,
+                            style: { fontSize: '10px', color: CHART_COLORS.baselineLine },
+                        },
+                    },
+                    ...(Math.abs(actualPrediction - modelOutput) > 0.5
+                        ? [
+                                {
+                                    value: actualPrediction,
+                                    color: CHART_COLORS.forecastLine,
+                                    dashStyle: 'Dot' as Highcharts.DashStyleValue,
+                                    width: 2,
+                                    zIndex: 4,
+                                    label: {
+                                        text: `${i18n.t('Actual forecast')}: ${formatValue(actualPrediction)}`,
+                                        style: { fontSize: '10px', color: CHART_COLORS.forecastLine, fontWeight: '500' },
+                                    },
+                                },
+                            ]
+                        : []),
+                ],
+            },
+            tooltip: {
+                formatter: function (this: Highcharts.TooltipFormatterContextObject) {
+                    const idx = this.point.index;
+                    if (idx === 0) {
+                        return (
+                            `<b>E[f(X)] — ${i18n.t('Average model prediction')}</b><br/>`
+                            + `${baselinePrediction.toFixed(2)}`
+                        );
+                    }
+                    if (this.point.options.isSum) {
+                        let tip = `<b>f(x) — ${i18n.t('Model output for this instance')}</b><br/>`;
+                        tip += `${modelOutput.toFixed(2)}`;
+                        if (Math.abs(actualPrediction - modelOutput) > 0.5) {
+                            tip += `<br/><br/>${i18n.t('Actual forecast{{colon}}', { colon: ':' })} <b>${actualPrediction.toFixed(2)}</b>`;
+                        }
+                        return tip;
+                    }
+                    const otherIdx = sorted.length + 1;
+                    if (hasOther && idx === otherIdx) {
+                        const sign = otherContribution >= 0 ? '+' : '';
+                        return (
+                            `<b>${i18n.t('Other features (not shown)')}</b><br/>`
+                            + `${sign}${otherContribution.toFixed(2)}`
+                        );
+                    }
+                    const feat = sorted[idx - 1];
+                    if (!feat) return '';
+                    const sign = feat.importance >= 0 ? '+' : '';
+                    let tip = `<b>${formatFeatureName(feat.featureName)}</b><br/>`;
+                    tip += `${i18n.t('SHAP value{{colon}}', { colon: ':' })} <b>${sign}${feat.importance.toFixed(3)}</b>`;
+                    if (feat.actualValue != null) {
+                        tip += `<br/>${i18n.t('Feature value{{colon}}', { colon: ':' })} ${formatValue(feat.actualValue)}`;
+                    }
+                    return tip;
+                },
+            },
+            plotOptions: {
+                waterfall: {
+                    dataLabels: {
+                        enabled: true,
+                        style: {
+                            fontSize: '10px',
+                            fontWeight: 'normal',
+                            textOutline: 'none',
+                            color: CHART_COLORS.dataLabel,
+                        },
+                        inside: false,
+                    },
+                    lineColor: CHART_COLORS.waterfallBorder,
+                    lineWidth: 1,
+                    borderWidth: 0,
+                    pointPadding: 0.1,
+                },
+            },
+            legend: { enabled: false },
+            credits: { enabled: false },
+            series: [
+                {
+                    type: 'waterfall',
+                    name: i18n.t('SHAP Values'),
+                    data,
+                    upColor: CHART_COLORS.positive,
+                    color: CHART_COLORS.negative,
+                } as Highcharts.SeriesWaterfallOptions,
+            ],
+        };
+    }, [features, baselinePrediction, actualPrediction, title, topK]);
+
+    if (features.length === 0) {
+        return (
+            <div className={styles.empty}>
+                {i18n.t('No SHAP explanation data available')}
+            </div>
+        );
+    }
+
+    return (
+        <div className={styles.container}>
+            <HighchartsReact highcharts={Highcharts} options={options} />
+            <p className={styles.annotation}>
+                {i18n.t(
+                    'Red bars push the prediction higher; blue bars push it lower. '
+                    + 'Bar length shows how much each feature contributed to moving away from the average.',
+                )}
+            </p>
+        </div>
+    );
+};

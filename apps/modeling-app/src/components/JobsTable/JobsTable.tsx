@@ -108,6 +108,7 @@ const columns = [
                     result={info.row.original.result}
                     status={status}
                     type={info.row.original.type}
+                    xaiMethod={info.row.original.xaiMethod}
                 />
             );
         },

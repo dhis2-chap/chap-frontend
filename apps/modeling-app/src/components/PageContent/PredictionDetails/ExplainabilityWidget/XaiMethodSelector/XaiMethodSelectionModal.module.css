@@ -1,0 +1,127 @@
+.description {
+    margin-bottom: 16px;
+    font-size: 13px;
+    color: var(--colors-grey700);
+}
+
+.loading {
+    display: flex;
+    justify-content: center;
+    padding: 24px 0;
+}
+
+/* Filter bar */
+.filterBar {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--colors-grey300, #d5dde5);
+    border-radius: 4px;
+    padding: 0 16px;
+    gap: 16px;
+    block-size: 60px;
+    margin-bottom: 8px;
+}
+
+.searchContainer {
+    flex: 1;
+    max-inline-size: 320px;
+}
+
+/* Content area */
+.content {
+    inline-size: 70vw;
+    max-inline-size: 900px;
+    min-block-size: 200px;
+}
+
+.sectionLabel {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--colors-grey600);
+    margin-block: 12px 6px;
+}
+
+/* Method grid */
+.methodGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 12px;
+    padding-block-end: 8px;
+}
+
+.noResults {
+    color: var(--colors-grey700);
+    font-size: 0.875rem;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    block-size: 120px;
+    inline-size: 100%;
+}
+
+/* Method card */
+.methodCard {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 12px 16px;
+    border: 1px solid var(--colors-grey300);
+    border-radius: 4px;
+    background: var(--colors-white);
+    cursor: pointer;
+    text-align: left;
+    transition: border-color 0.15s, background 0.15s;
+    inline-size: 100%;
+}
+
+.methodCard:hover {
+    border-color: var(--colors-blue600);
+    background: var(--colors-blue050);
+}
+
+.methodCardSelected {
+    border-color: var(--colors-blue600);
+    background: var(--colors-blue050);
+    outline: 2px solid var(--colors-blue600);
+    outline-offset: -1px;
+}
+
+.methodName {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--colors-grey900);
+}
+
+.methodDescription {
+    font-size: 12px;
+    color: var(--colors-grey700);
+    line-height: 1.4;
+}
+
+.methodMeta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.methodAuthor {
+    font-size: 11px;
+    color: var(--colors-grey600);
+}
+
+.methodType {
+    font-size: 11px;
+    color: var(--colors-grey600);
+    background: var(--colors-grey200);
+    border-radius: 2px;
+    padding: 1px 5px;
+}
+
+.methodVisualizations {
+    font-size: 11px;
+    color: var(--colors-grey600);
+}

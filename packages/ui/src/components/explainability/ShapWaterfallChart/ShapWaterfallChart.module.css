@@ -1,0 +1,21 @@
+.container {
+    width: 100%;
+    min-height: 280px;
+}
+
+.empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 150px;
+    color: var(--colors-grey700, #6e7a8a);
+    font-size: 14px;
+}
+
+.annotation {
+    font-size: 11px;
+    color: var(--colors-grey600, #7b8794);
+    font-style: italic;
+    margin: 4px 0 0 0;
+    line-height: 1.4;
+}

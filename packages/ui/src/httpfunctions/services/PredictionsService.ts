@@ -4,6 +4,7 @@
 /* eslint-disable */
 import type { JobResponse } from '../models/JobResponse';
 import type { MakePredictionRequest } from '../models/MakePredictionRequest';
+import type { MakePredictionWithDataSourceRequest } from '../models/MakePredictionWithDataSourceRequest';
 import type { PredictionCreate } from '../models/PredictionCreate';
 import type { PredictionEntry } from '../models/PredictionEntry';
 import type { PredictionInfo } from '../models/PredictionInfo';
@@ -117,6 +118,26 @@ export class PredictionsService {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/v1/analytics/make-prediction',
+            body: requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
+     * Make Prediction With Data Source
+     * ⚠️ **Experimental:** behavior and response shape may change without notice.
+     * @param requestBody
+     * @returns JobResponse Successful Response
+     * @throws ApiError
+     */
+    public static makePredictionWithDataSourceV1AnalyticsMakePredictionWithDataSourcePost(
+        requestBody: MakePredictionWithDataSourceRequest,
+    ): CancelablePromise<JobResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/v1/analytics/make-prediction-with-data-source',
             body: requestBody,
             mediaType: 'application/json',
             errors: {

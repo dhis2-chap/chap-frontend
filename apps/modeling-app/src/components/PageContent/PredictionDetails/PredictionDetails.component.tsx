@@ -1,8 +1,11 @@
+import { useMemo } from 'react';
 import styles from './PredictionDetails.module.css';
 import { PredictionInfo, ModelSpecRead } from '@dhis2-chap/ui';
 import { PredictionResultWidget } from './PredictionResultWidget/PredictionResultWidget.container';
 import { PredictionSummaryWidget } from './PredictionSummaryWidget';
 import { QuickActionsWidget } from './QuickActionsWidget';
+import { ExplainabilityWidget } from './ExplainabilityWidget';
+import { useExperimentalFeature, FEATURES } from '@/features/settings/Experimental';
 
 type Props = {
     prediction: PredictionInfo;
@@ -13,6 +16,19 @@ export const PredictionDetailsComponent = ({
     prediction,
     model,
 }: Props) => {
+    const { enabled: isExplainabilityEnabled } = useExperimentalFeature(FEATURES.EXPLAINABILITY_WIDGET);
+    const orgUnits = useMemo(() => prediction.orgUnits || [], [prediction]);
+    const periods = useMemo(() => {
+        const lastPeriod = prediction.dataset?.lastPeriod;
+        if (!lastPeriod) return [];
+        const nPeriods = prediction.nPeriods || 3;
+        const periodsArr: string[] = [];
+        for (let i = 0; i < nPeriods; i++) {
+            periodsArr.push(`${lastPeriod}_${i + 1}`);
+        }
+        return periodsArr;
+    }, [prediction]);
+
     return (
         <div className={styles.container}>
             <div className={styles.leftColumn}>
@@ -23,6 +39,14 @@ export const PredictionDetailsComponent = ({
                     prediction={prediction}
                     model={model}
                 />
+                {isExplainabilityEnabled && (
+                    <ExplainabilityWidget
+                        predictionId={prediction.id}
+                        orgUnits={orgUnits}
+                        periods={periods}
+                        periodType={prediction.dataset?.periodType}
+                    />
+                )}
             </div>
             <div className={styles.rightColumn}>
                 <PredictionSummaryWidget

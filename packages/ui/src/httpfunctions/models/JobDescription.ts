@@ -10,5 +10,7 @@ export type JobDescription = {
     start_time: (string | null);
     end_time: (string | null);
     result: (string | null);
+    predictionId?: (number | null);
+    xaiMethod?: (string | null);
 };
 

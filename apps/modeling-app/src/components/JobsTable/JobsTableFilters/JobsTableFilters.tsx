@@ -7,6 +7,7 @@ import i18n from '@dhis2/d2-i18n';
 import styles from './JobsTableFilters.module.css';
 import { JOB_STATUSES, JOB_TYPES } from '../../../hooks/useJobs';
 import { useJobsTableFilters } from '../hooks/useJobsTableFilters';
+import { jobTypeLabels } from '../jobTypeLabels';
 
 export const JobsTableFilters = () => {
     const { search, setSearch, status, setStatus, type, setType } = useJobsTableFilters();
@@ -63,21 +64,21 @@ export const JobsTableFilters = () => {
                     onChange={e => setType(e.selected)}
                 >
                     <MenuItem
-                        label={i18n.t('Create evaluation')}
+                        label={jobTypeLabels[JOB_TYPES.CREATE_BACKTEST_WITH_DATA]}
                         value={JOB_TYPES.CREATE_BACKTEST_WITH_DATA}
                     />
                     <MenuItem
-                        label={i18n.t('Make prediction')}
+                        label={jobTypeLabels[JOB_TYPES.MAKE_PREDICTION]}
                         value={JOB_TYPES.MAKE_PREDICTION}
                     />
-                    {/* <MenuItem
-                        label={i18n.t('Create dataset (deprecated)')}
-                        value={JOB_TYPES.CREATE_DATASET}
+                    <MenuItem
+                        label={jobTypeLabels[JOB_TYPES.XAI_SURROGATE]}
+                        value={JOB_TYPES.XAI_SURROGATE}
                     />
                     <MenuItem
-                        label={i18n.t('Create evaluation (deprecated)')}
-                        value={JOB_TYPES.BACKTEST}
-                    />  */}
+                        label={jobTypeLabels[JOB_TYPES.XAI_EXPLANATIONS]}
+                        value={JOB_TYPES.XAI_EXPLANATIONS}
+                    />
                 </SingleSelect>
             </div>
         </>
