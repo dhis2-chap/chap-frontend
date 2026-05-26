@@ -41,7 +41,7 @@ services:
 
   dhis2-web:
     platform: linux/amd64
-    image: ${DHIS2_IMAGE:-dhis2/core:2.41.7}
+    image: ${DHIS2_IMAGE:-dhis2/core:2.42}
     restart: unless-stopped
     depends_on:
       dhis2-db:
