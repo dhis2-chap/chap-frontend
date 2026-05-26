@@ -1,5 +1,5 @@
 import {
-    BackTestRead,
+    BacktestRead,
     BacktestsService,
     createHighChartsData,
     DataElement,
@@ -19,7 +19,7 @@ const quantiles = [0.1, 0.25, 0.5, 0.75, 0.9];
 
 type PlotDataRequestResult = {
     data: [EvaluationEntry[], DataList];
-    evaluation: BackTestRead;
+    evaluation: BacktestRead;
 };
 
 const select = (data: PlotDataRequestResult) => {
@@ -41,7 +41,7 @@ type PlotDataResult = {
     evaluationEntries: EvaluationEntryExtend[];
     actualCases: DataElement[];
     splitPeriods: string[];
-    evaluation: BackTestRead;
+    evaluation: BacktestRead;
 };
 
 const plotResultToViewData = (
@@ -133,7 +133,7 @@ const plotResultToViewData = (
  * Hook to fetch plot data for a single organization unit with all split points.
  **/
 export const usePlotDataForEvaluationsByOrgUnit = (
-    backtest: BackTestRead,
+    backtest: BacktestRead,
     orgUnitId: string | undefined,
 ) => {
     const queries = useQueries({

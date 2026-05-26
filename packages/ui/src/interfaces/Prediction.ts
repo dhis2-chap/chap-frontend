@@ -1,13 +1,4 @@
-import { FullPredictionResponse, PredictionResponse, PredictionInfo } from '../httpfunctions';
-
-export interface FullPredictionResponseExtended extends FullPredictionResponse {
-    diseaseId: string;
-    dataValues: Array<PredictionResponseExtended>;
-}
-
-export interface PredictionResponseExtended extends PredictionResponse {
-    displayName: string;
-}
+import { PredictionInfo } from '../httpfunctions';
 
 // New, normalized view-models for predictions
 export type QuantileKey = 'quantile_low' | 'quantile_mid_low' | 'median' | 'quantile_mid_high' | 'quantile_high';
