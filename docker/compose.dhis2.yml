@@ -8,7 +8,7 @@ services:
         "if [ -f dhis2-demo.dump.gz ]; then echo 'dhis2-demo.dump.gz exists'; exit 0; fi; if [ -f demo.sql.gz ]; then mv demo.sql.gz dhis2-demo.dump.gz; else wget --output-document dhis2-demo.dump.gz \"$$DHIS2_DB_DUMP_URL\"; fi; echo 'Prepared dhis2-demo.dump.gz'",
       ]
     environment:
-      DHIS2_DB_DUMP_URL: ${DHIS2_DB_DUMP_URL:-https://databases.dhis2.org/climate/laos/2.41.7/demo.sql.gz}
+      DHIS2_DB_DUMP_URL: ${DHIS2_DB_DUMP_URL:-https://databases.dhis2.org/climate/laos/2.42/demo.sql.gz}
     working_dir: /opt/dump
     volumes:
       - dhis2-db-dump:/opt/dump
