@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-05-17T23:58:51.551Z\n"
-"PO-Revision-Date: 2026-05-17T23:58:51.552Z\n"
+"POT-Creation-Date: 2026-05-26T11:56:42.186Z\n"
+"PO-Revision-Date: 2026-05-26T11:56:42.187Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -770,9 +770,6 @@ msgstr "Prediction run deleted"
 msgid "Failed to delete prediction run"
 msgstr "Failed to delete prediction run"
 
-msgid "{{name}} prediction"
-msgstr "{{name}} prediction"
-
 msgid "Quick actions"
 msgstr "Quick actions"
 
@@ -1125,6 +1122,18 @@ msgstr "Model created successfully"
 
 msgid "Failed to create model"
 msgstr "Failed to create model"
+
+msgid "{{name}} prediction"
+msgstr "{{name}} prediction"
+
+msgid "Missing prediction setup id."
+msgstr "Missing prediction setup id."
+
+msgid "Error loading prediction setup"
+msgstr "Error loading prediction setup"
+
+msgid "Prediction setup not found."
+msgstr "Prediction setup not found."
 
 msgid "Outbreak"
 msgstr "Outbreak"
@@ -1929,11 +1938,3 @@ msgstr ""
 msgctxt ") instead."
 msgid "Spaces are not allowed. Use dashes (-) or underscores ("
 msgstr "Spaces are not allowed. Use dashes (-) or underscores (_) instead."
-
-msgctxt "Application title"
-msgid "__MANIFEST_APP_TITLE"
-msgstr "Modeling"
-
-msgctxt "Application description"
-msgid "__MANIFEST_APP_DESCRIPTION"
-msgstr ""

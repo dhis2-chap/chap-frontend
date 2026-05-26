@@ -9,11 +9,8 @@ import {
     startOfISOWeek,
 } from 'date-fns';
 import type { PredictionInfo } from '@dhis2-chap/ui';
-
-const PERIOD_TYPES = {
-    MONTH: 'MONTH',
-    WEEK: 'WEEK',
-} as const;
+import { PERIOD_TYPES } from '@dhis2-chap/ui';
+import { parseSupportedPeriodType } from '@/utils/supportedPeriodType';
 
 const PREDICTION_PERIOD_METADATA_KEYS = [
     'predictionPeriods',
@@ -29,16 +26,6 @@ const getStringArray = (value: unknown): string[] | undefined => (
 const getStringValue = (value: unknown): string | undefined => (
     typeof value === 'string' && value.length > 0 ? value : undefined
 );
-
-const normalizePeriodType = (periodType?: string | null) => {
-    const normalized = periodType?.toUpperCase();
-
-    if (normalized === PERIOD_TYPES.MONTH || normalized === PERIOD_TYPES.WEEK) {
-        return normalized;
-    }
-
-    return undefined;
-};
 
 const getMetadataPredictionPeriods = (metaData?: Record<string, unknown>) => {
     if (!metaData) {
@@ -80,7 +67,7 @@ export const getNextPeriods = (
         return [];
     }
 
-    const normalizedPeriodType = normalizePeriodType(periodType);
+    const normalizedPeriodType = parseSupportedPeriodType(periodType);
 
     if (normalizedPeriodType === PERIOD_TYPES.MONTH) {
         const lastPeriodDate = parse(lastPeriod, 'yyyyMM', new Date());

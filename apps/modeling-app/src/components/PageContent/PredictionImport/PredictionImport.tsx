@@ -1,5 +1,5 @@
 import { ModelSpecRead, PredictionInfo } from '@dhis2-chap/ui';
-import { QuantileMappingForm } from './QuantileMappingForm';
+import { QuantileMappingFormContainer } from './QuantileMappingForm/QuantileMappingFormContainer';
 import styles from './PredictionImport.module.css';
 
 type Props = {
@@ -10,7 +10,7 @@ type Props = {
 export const PredictionImport = ({ prediction, model }: Props) => {
     return (
         <div className={styles.container}>
-            <QuantileMappingForm
+            <QuantileMappingFormContainer
                 prediction={prediction}
                 model={model}
             />

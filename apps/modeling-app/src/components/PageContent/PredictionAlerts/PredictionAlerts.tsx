@@ -5,7 +5,7 @@ import {
     PredictionInfo,
     ModelSpecRead,
 } from '@dhis2-chap/ui';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { usePredictionSetup } from '../../../hooks/usePredictionSetup';
 import { PredictionAlertsConfigurator } from './PredictionAlertsConfigurator';
 
@@ -31,12 +31,15 @@ const getLatestPredictions = (predictions?: PredictionInfo[]) => (
 export const PredictionAlerts = ({ prediction, model }: Props) => {
     const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
-    const predictionSetupId = prediction.predictionSetupId;
+    const { configuredId } = useParams();
+    const predictionSetupId = configuredId ? Number(configuredId) : undefined;
     const {
         predictionSetup,
         isLoading: isLoadingPredictionRuns,
     } = usePredictionSetup(
-        predictionSetupId ? String(predictionSetupId) : undefined,
+        predictionSetupId !== undefined && Number.isFinite(predictionSetupId)
+            ? predictionSetupId
+            : undefined,
     );
     const selectedProbability = Number(searchParams.get('alertProbability')) as OutbreakProbability
         || DEFAULT_OUTBREAK_PROBABILITY;

@@ -5,18 +5,16 @@ import {
     ApiError,
     FeatureCollectionModel,
     JobResponse,
-    MakePredictionRequest,
-    MakePredictionWithDataSourceRequest,
-    PredictionsService,
+    PredictionSetupsService,
+    RunPredictionSetupRequest,
 } from '@dhis2-chap/ui';
 import { ModelExecutionFormValues } from '../../ModelExecutionForm/hooks/useModelExecutionFormState';
 import { prepareBacktestData } from '../../ModelExecutionForm/utils/prepareBacktestData';
 import { PERIOD_TYPES } from '@dhis2-chap/ui';
 import { buildOrgUnitFeatureCollection } from '../../ModelExecutionForm/utils/orgUnitGeoJson';
-import { buildPredictionRunMetaData } from '../../../utils/predictionRunMetadata';
 
 type Props = {
-    predictionSetupId?: number;
+    predictionSetupId: number;
     returnTo?: string;
     onSuccess?: () => void;
     onError?: (error: ApiError) => void;
@@ -32,7 +30,7 @@ export const useCreatePrediction = ({
     returnTo,
     onSuccess,
     onError,
-}: Props = {}) => {
+}: Props) => {
     const dataEngine = useDataEngine();
     const queryClient = useQueryClient();
     const navigate = useNavigate();
@@ -45,7 +43,7 @@ export const useCreatePrediction = ({
         mutationFn: async (formData: ModelExecutionFormValues) => {
             const nPeriods = N_PERIODS[formData.periodType.toUpperCase() as keyof typeof N_PERIODS];
 
-            const { model, periods, observations, orgUnitResponse, dataSources } = await prepareBacktestData(
+            const { observations, orgUnitResponse } = await prepareBacktestData(
                 formData,
                 dataEngine,
                 queryClient,
@@ -55,38 +53,18 @@ export const useCreatePrediction = ({
                 orgUnitResponse.geojson.organisationUnits,
             );
 
-            const basePredictionRequest = {
+            const predictionRequest: RunPredictionSetupRequest = {
                 name: formData.name,
                 geojson,
                 providedData: observations,
-                dataSources,
-                dataToBeFetched: [],
                 nPeriods,
-                type: 'forecasting' as const,
-                metaData: buildPredictionRunMetaData({
-                    nPeriods,
-                    periodType: formData.periodType,
-                    trainingPeriods: periods,
-                }),
+                type: 'prediction',
             };
 
-            if (predictionSetupId) {
-                const predictionRequest: MakePredictionWithDataSourceRequest = {
-                    ...basePredictionRequest,
-                    predictionSetupId,
-                };
-
-                return PredictionsService.makePredictionWithDataSourceV1AnalyticsMakePredictionWithDataSourcePost(
-                    predictionRequest,
-                );
-            }
-
-            const predictionRequest: MakePredictionRequest = {
-                ...basePredictionRequest,
-                modelId: model.name,
-            };
-
-            return PredictionsService.makePredictionV1AnalyticsMakePredictionPost(predictionRequest);
+            return PredictionSetupsService.runPredictionSetupV1CrudPredictionSetupsPredictionSetupIdRunPost(
+                predictionSetupId,
+                predictionRequest,
+            );
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['jobs'] });

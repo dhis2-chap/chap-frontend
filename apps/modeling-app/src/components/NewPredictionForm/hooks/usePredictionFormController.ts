@@ -8,22 +8,18 @@ import {
     useNewPredictionFormState,
 } from './useNewPredictionFormState';
 import {
-    SupportedPeriodType,
     getLastCompletedPeriod,
     inputValueToPeriod,
     periodToInputValue,
     shiftPeriod,
 } from '../utils/predictionPeriods';
+import { isSupportedPeriodType, type SupportedPeriodType } from '@/utils/supportedPeriodType';
 
 type UsePredictionFormControllerOptions = {
-    predictionSetupId?: number;
+    predictionSetupId: number;
     initialValues?: Partial<ModelExecutionFormValues>;
     returnTo?: string;
 };
-
-const isSupportedPeriodType = (value: unknown): value is SupportedPeriodType => (
-    value === PERIOD_TYPES.MONTH || value === PERIOD_TYPES.WEEK
-);
 
 const resolveSelectedPeriod = (
     values: NewPredictionFormValues,
@@ -46,7 +42,7 @@ export const usePredictionFormController = ({
     predictionSetupId,
     initialValues,
     returnTo,
-}: UsePredictionFormControllerOptions = {}) => {
+}: UsePredictionFormControllerOptions) => {
     const periodType = isSupportedPeriodType(initialValues?.periodType)
         ? initialValues.periodType
         : null;

@@ -30,11 +30,12 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { usePredictionSeries } from '../../PredictionDetails/hooks/usePredictionSeries';
 import { PredictionAlertsDialog } from '../../PredictionAlerts';
 import { usePredictionSetup } from '@/hooks/usePredictionSetup';
-import { getPredictionSetupDataImportMappings } from '@/utils/predictionSetupImportMapping';
+import { getPredictionSetupQuantileTargets } from '@/utils/predictionSetupImportMapping';
 
 type Props = {
     prediction: PredictionInfo;
     model: ModelSpecRead;
+    predictionSetupId: number;
 };
 
 const outbreakProbabilitySchema = z.custom<OutbreakProbability>(
@@ -80,7 +81,7 @@ const quantileMappingFields = [
     'quantile_mid_high',
 ] as const satisfies MappingField[];
 
-export const QuantileMappingForm = ({ prediction, model }: Props) => {
+export const QuantileMappingForm = ({ prediction, model, predictionSetupId }: Props) => {
     const navigate = useNavigate();
     const location = useLocation();
     const { data: locationState } = importLocationStateSchema.safeParse(location.state);
@@ -90,7 +91,7 @@ export const QuantileMappingForm = ({ prediction, model }: Props) => {
         isLoading: isSeriesLoading,
         error: seriesError,
     } = usePredictionSeries({ prediction, model });
-    const { predictionSetup } = usePredictionSetup(prediction.predictionSetupId ?? undefined);
+    const { predictionSetup } = usePredictionSetup(predictionSetupId);
     const unavailableThresholdCount = series.filter(orgUnitSeries => (
         !calculateMockEndemicThreshold(orgUnitSeries.actualCases).available
     )).length;
@@ -115,22 +116,20 @@ export const QuantileMappingForm = ({ prediction, model }: Props) => {
     });
     const { mutateAsync, isPending } = usePostPredictionData({
         onSuccess: () => {
-            navigate(prediction.predictionSetupId
-                ? `/predictions/${prediction.predictionSetupId}`
-                : '/predictions');
+            navigate(`/predictions/${predictionSetupId}`);
         },
     });
 
     useEffect(() => {
-        const dataImportMappings = getPredictionSetupDataImportMappings(predictionSetup);
+        const quantileTargets = getPredictionSetupQuantileTargets(predictionSetup);
 
-        if (!dataImportMappings.length) {
+        if (!quantileTargets.length) {
             return;
         }
 
-        dataImportMappings.forEach(({ quantileKey, dataElementId }) => {
-            if (quantileMappingFields.includes(quantileKey as typeof quantileMappingFields[number])) {
-                const field = quantileKey as typeof quantileMappingFields[number];
+        quantileTargets.forEach(({ quantile, dataElementId }) => {
+            if (quantileMappingFields.includes(quantile as typeof quantileMappingFields[number])) {
+                const field = quantile as typeof quantileMappingFields[number];
 
                 if (!dirtyFields[field]) {
                     setValue(field, dataElementId);
@@ -156,9 +155,7 @@ export const QuantileMappingForm = ({ prediction, model }: Props) => {
                 : [],
         });
     };
-    const returnTo = prediction.predictionSetupId
-        ? `/predictions/${prediction.predictionSetupId}`
-        : '/predictions';
+    const returnTo = `/predictions/${predictionSetupId}`;
 
     const {
         showConfirmModal,

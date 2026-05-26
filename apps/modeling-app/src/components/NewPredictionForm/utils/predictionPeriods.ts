@@ -15,8 +15,10 @@ import {
     comparePeriods,
     convertServerToClientPeriod,
 } from '@dhis2-chap/ui';
+import type { SupportedPeriodType } from '@/utils/supportedPeriodType';
 
-export type SupportedPeriodType = typeof PERIOD_TYPES.MONTH | typeof PERIOD_TYPES.WEEK;
+export type { SupportedPeriodType } from '@/utils/supportedPeriodType';
+export { isSupportedPeriodType, parseSupportedPeriodType } from '@/utils/supportedPeriodType';
 
 const formatMonth = (date: Date): string => format(date, 'yyyyMM');
 

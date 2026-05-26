@@ -1,33 +1,67 @@
 import i18n from '@dhis2/d2-i18n';
+import { useMemo } from 'react';
 import { useInitialFormState } from '@/pages/NewEvaluationPage/hooks/useInitialFormState';
 import { CircularLoader, NoticeBox } from '@dhis2/ui';
-import { useLocation, useParams } from 'react-router-dom';
-import { z } from 'zod';
+import { useParams } from 'react-router-dom';
 import styles from './NewPredictionContent.module.css';
 import { useModels } from '@/hooks/useModels';
 import { NewPredictionForm } from '@/components/NewPredictionForm';
-
-const predictionLocationStateSchema = z
-    .object({
-        predictionSetupId: z.number().int().positive().optional(),
-    })
-    .passthrough()
-    .optional();
+import { usePredictionSetup } from '@/hooks/usePredictionSetup';
+import { parseSupportedPeriodType } from '@/utils/supportedPeriodType';
 
 type Props = {
     returnTo?: string;
 };
 
 export const NewPredictionContent = ({ returnTo }: Props) => {
-    const location = useLocation();
     const { configuredId } = useParams();
-    const { models, isLoading: isModelsLoading, error: modelsError } = useModels();
-    const { initialValues, isLoading } = useInitialFormState({ models, isModelsLoading });
-    const { data: predictionLocationState } = predictionLocationStateSchema.safeParse(location.state);
-    const predictionSetupId = predictionLocationState?.predictionSetupId
-        ?? (configuredId ? Number(configuredId) : undefined);
+    const predictionSetupId = configuredId ? Number(configuredId) : undefined;
+    const hasValidSetupId = predictionSetupId !== undefined && Number.isFinite(predictionSetupId);
 
-    if (isLoading) {
+    const {
+        predictionSetup,
+        isLoading: isSetupLoading,
+        error: setupError,
+    } = usePredictionSetup(hasValidSetupId ? predictionSetupId : undefined);
+
+    const { models, isLoading: isModelsLoading, error: modelsError } = useModels();
+
+    const stateOverride = useMemo(() => {
+        if (!predictionSetup) {
+            return null;
+        }
+
+        const periodType = parseSupportedPeriodType(predictionSetup.periodType);
+
+        return {
+            name: i18n.t('{{name}} prediction', { name: predictionSetup.name }) as string,
+            periodType,
+            fromDate: periodType ? predictionSetup.startPeriod ?? undefined : undefined,
+            orgUnits: predictionSetup.orgUnits,
+            modelId: predictionSetup.configuredModel?.id != null
+                ? String(predictionSetup.configuredModel.id)
+                : undefined,
+            dataSources: predictionSetup.covariateSources,
+        };
+    }, [predictionSetup]);
+
+    const { initialValues, isLoading: isInitialValuesLoading } = useInitialFormState({
+        models,
+        isModelsLoading,
+        stateOverride,
+    });
+
+    if (!hasValidSetupId) {
+        return (
+            <div className={styles.errorContainer}>
+                <NoticeBox error title={i18n.t('Cannot run prediction')}>
+                    {i18n.t('Missing prediction setup id.')}
+                </NoticeBox>
+            </div>
+        );
+    }
+
+    if (isSetupLoading || isInitialValuesLoading) {
         return (
             <div className={styles.loadingContainer}>
                 <CircularLoader />
@@ -45,9 +79,19 @@ export const NewPredictionContent = ({ returnTo }: Props) => {
         );
     }
 
+    if (setupError || !predictionSetup) {
+        return (
+            <div className={styles.errorContainer}>
+                <NoticeBox error title={i18n.t('Error loading prediction setup')}>
+                    {setupError?.message || i18n.t('Prediction setup not found.')}
+                </NoticeBox>
+            </div>
+        );
+    }
+
     return (
         <NewPredictionForm
-            predictionSetupId={predictionSetupId}
+            predictionSetupId={predictionSetup.id}
             initialValues={initialValues}
             returnTo={returnTo}
         />

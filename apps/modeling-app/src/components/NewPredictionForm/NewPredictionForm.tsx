@@ -17,7 +17,7 @@ import { useNavigationBlocker } from '../../hooks/useNavigationBlocker';
 import { NavigationConfirmModal } from '../NavigationConfirmModal';
 
 type NewPredictionFormProps = {
-    predictionSetupId?: number;
+    predictionSetupId: number;
     initialValues?: Partial<ModelExecutionFormValues>;
     returnTo?: string;
 };
@@ -34,7 +34,7 @@ export const NewPredictionForm = ({
     predictionSetupId,
     initialValues,
     returnTo,
-}: NewPredictionFormProps = {}) => {
+}: NewPredictionFormProps) => {
     const {
         methods,
         handleStartPrediction,
