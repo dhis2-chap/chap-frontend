@@ -2,8 +2,4 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type DebugEntry = {
-    id?: (number | null);
-    timestamp: number;
-};
-
+export type Position3D = any[];

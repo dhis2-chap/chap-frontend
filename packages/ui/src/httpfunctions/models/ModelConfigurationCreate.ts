@@ -5,7 +5,7 @@
 export type ModelConfigurationCreate = {
     name: string;
     modelTemplateId: number;
-    userOptionValues?: (Record<string, any> | null);
+    userOptionValues?: Record<string, any>;
     additionalContinuousCovariates?: Array<string>;
 };
 
