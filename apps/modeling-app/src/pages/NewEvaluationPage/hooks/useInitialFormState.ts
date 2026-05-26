@@ -7,9 +7,25 @@ import { ModelExecutionFormValues } from '../../../components/ModelExecutionForm
 import { useDataItemByIds } from './useDataItemById';
 import { CovariateMapping } from '../../../components/ModelExecutionForm/hooks/useModelExecutionFormState';
 
+type DataSourceInput = {
+    covariate: string;
+    dataElementId: string;
+};
+
+type FormStateInput = {
+    name?: string;
+    periodType?: typeof PERIOD_TYPES.WEEK | typeof PERIOD_TYPES.MONTH;
+    fromDate?: string;
+    toDate?: string;
+    orgUnits?: string[];
+    modelId?: string;
+    dataSources?: DataSourceInput[];
+};
+
 type Props = {
     models: ModelSpecRead[] | undefined;
     isModelsLoading: boolean;
+    stateOverride?: FormStateInput | null;
 };
 
 const locationStateInnerSchema = z
@@ -44,13 +60,15 @@ const locationStateInnerSchema = z
 
 const evaluationFormLocationStateSchema = locationStateInnerSchema.optional();
 
-export const useInitialFormState = ({ models, isModelsLoading }: Props) => {
+export const useInitialFormState = ({ models, isModelsLoading, stateOverride }: Props) => {
     const location = useLocation();
 
     const {
-        data: locationState,
+        data: parsedLocationState,
         error,
     } = evaluationFormLocationStateSchema.safeParse(location.state);
+
+    const locationState = stateOverride ?? parsedLocationState;
 
     const {
         data: orgUnitsData,

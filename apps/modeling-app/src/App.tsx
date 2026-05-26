@@ -18,6 +18,7 @@ import { Layout } from './components/layout/Layout';
 import { RouteValidator } from './components/RouteValidator';
 import InfoAboutReportingBugs from './features/common-features/InfoAboutReportingBugs/InfoAboutReportingBugs';
 import WarnAboutIncompatibleVersion from './features/common-features/WarnAboutIncompatibleVersion/WarnAboutIncompatibleVersion';
+import { DashboardPage } from './pages/DashboardPage';
 import { EvaluationPage } from './pages/EvaluationPage';
 import { EvaluationDetailsPage } from './pages/EvaluationDetailsPage';
 import { ChapValidator } from './components/ChapValidator';
@@ -25,13 +26,14 @@ import { NewEvaluationPage } from './pages/NewEvaluationPage';
 import { JobsPage } from './pages/JobsPage';
 import { EvaluationComparePage } from './pages/EvaluationCompare';
 import { GetStartedPage } from './pages/GetStartedPage';
-import { PredictionsPage } from './pages/PredictionsPage';
-import { PredictionDetailsPage } from './pages/PredictionDetailsPage';
+import { ReadyToPredictPage } from './pages/ReadyToPredictPage';
+import { ConfiguredModelDashboardPage } from './pages/ConfiguredModelDashboardPage';
 import { ModelsPage } from './pages/ModelsPage';
 import { NewConfiguredModelPage } from './pages/NewConfiguredModelPage';
 import { SyncUrlWithGlobalShell } from './utils/syncUrlWithGlobalShell';
 import { NewPredictionPage } from './pages/NewPredictionPage';
 import { PredictionImportPage } from './pages/PredictionImportPage';
+import { PredictionRunDetailsPage } from './pages/PredictionRunDetailsPage';
 import { GuidesPage } from './pages/GuidesPage';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
@@ -63,7 +65,7 @@ const router = createHashRouter([
         children: [
             {
                 path: '/',
-                element: <Navigate to="/evaluate" replace />,
+                element: <Navigate to="/dashboard" replace />,
             },
             {
                 element: (
@@ -79,6 +81,10 @@ const router = createHashRouter([
                 ),
                 errorElement: <ErrorPage />,
                 children: [
+                    {
+                        path: '/dashboard',
+                        element: <DashboardPage />,
+                    },
                     {
                         path: '/evaluate',
                         children: [
@@ -118,28 +124,41 @@ const router = createHashRouter([
                         children: [
                             {
                                 index: true,
-                                element: <PredictionsPage />,
+                                element: <ReadyToPredictPage />,
                             },
                             {
-                                path: ':predictionId/import',
-                                handle: {
-                                    collapseSidebar: true,
-                                } satisfies RouteHandle,
-                                element: <PredictionImportPage />,
-                            },
-                            {
-                                path: ':predictionId',
-                                handle: {
-                                    collapseSidebar: true,
-                                } satisfies RouteHandle,
-                                element: <PredictionDetailsPage />,
-                            },
-                            {
-                                path: 'new',
-                                handle: {
-                                    collapseSidebar: true,
-                                } satisfies RouteHandle,
-                                element: <NewPredictionPage />,
+                                path: ':configuredId',
+                                children: [
+                                    {
+                                        index: true,
+                                        handle: {
+                                            collapseSidebar: true,
+                                        } satisfies RouteHandle,
+                                        element: <ConfiguredModelDashboardPage />,
+                                    },
+                                    {
+                                        path: 'new',
+                                        handle: {
+                                            collapseSidebar: true,
+                                        } satisfies RouteHandle,
+                                        element: <NewPredictionPage />,
+                                    },
+                                    {
+                                        path: 'runs/:predictionId',
+                                        handle: {
+                                            collapseSidebar: true,
+                                            fullWidth: true,
+                                        } satisfies RouteHandle,
+                                        element: <PredictionRunDetailsPage />,
+                                    },
+                                    {
+                                        path: 'runs/:predictionId/import',
+                                        handle: {
+                                            collapseSidebar: true,
+                                        } satisfies RouteHandle,
+                                        element: <PredictionImportPage />,
+                                    },
+                                ],
                             },
                         ],
                     },
