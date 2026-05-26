@@ -15,6 +15,5 @@ export type PredictionInfo = {
     id: number;
     configuredModel: (ConfiguredModelDB | null);
     dataset: DataSetMeta;
-    predictionSetupId?: (number | null);
 };
 

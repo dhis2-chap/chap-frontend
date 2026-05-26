@@ -94,12 +94,12 @@ export class BacktestsService {
      * @returns BacktestRead Successful Response
      * @throws ApiError
      */
-    public static getBacktestInfoV1CrudBacktestsBacktestIdInfoGet(
+    public static getBacktestInfoV1CrudBacktestsBacktestIdGet(
         backtestId: number,
     ): CancelablePromise<BacktestRead> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/v1/crud/backtests/{backtestId}/info',
+            url: '/v1/crud/backtests/{backtestId}',
             path: {
                 'backtestId': backtestId,
             },
@@ -147,6 +147,26 @@ export class BacktestsService {
             },
             body: requestBody,
             mediaType: 'application/json',
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
+     * Get Backtest Info
+     * @param backtestId
+     * @returns BacktestRead Successful Response
+     * @throws ApiError
+     */
+    public static getBacktestInfoV1CrudBacktestsBacktestIdInfoGet(
+        backtestId: number,
+    ): CancelablePromise<BacktestRead> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/v1/crud/backtests/{backtestId}/info',
+            path: {
+                'backtestId': backtestId,
+            },
             errors: {
                 422: `Validation Error`,
             },

@@ -2,11 +2,11 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { DataImportMapping } from './DataImportMapping';
-import type { PredictionSchedule } from './PredictionSchedule';
+import type { QuantileTarget } from './QuantileTarget';
 export type PredictionSetupUpdate = {
     name?: (string | null);
-    schedule?: (PredictionSchedule | null);
-    dataImportMappings?: (Array<DataImportMapping> | null);
+    scheduleCronExpression?: (string | null);
+    scheduleEnabled?: (boolean | null);
+    quantileTargets?: (Array<QuantileTarget> | null);
 };
 

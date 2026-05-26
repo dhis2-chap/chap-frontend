@@ -2,18 +2,23 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { ConfiguredModelWithDataSourceRead } from './ConfiguredModelWithDataSourceRead';
-import type { DataImportMapping } from './DataImportMapping';
+import type { ConfiguredModelRead } from './ConfiguredModelRead';
+import type { DataSource } from './DataSource';
 import type { PredictionInfo } from './PredictionInfo';
-import type { PredictionSchedule } from './PredictionSchedule';
+import type { QuantileTarget } from './QuantileTarget';
 export type PredictionSetupReadWithPredictions = {
     id: number;
     name: string;
     created: (string | null);
-    configuredModelWithDataSource: ConfiguredModelWithDataSourceRead;
-    schedule: PredictionSchedule;
-    dataImportMappings: Array<DataImportMapping>;
-    archived?: boolean;
+    backtestId: number;
+    configuredModel: ConfiguredModelRead;
+    startPeriod: (string | null);
+    orgUnits: Array<string>;
+    covariateSources: Array<DataSource>;
+    periodType: (string | null);
+    scheduleCronExpression: (string | null);
+    scheduleEnabled: boolean;
+    quantileTargets: Array<QuantileTarget>;
     predictions?: Array<PredictionInfo>;
 };
 

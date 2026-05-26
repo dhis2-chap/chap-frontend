@@ -1,7 +1,7 @@
 /* generated using openapi-typescript-codegen -- do not edit */
 /* istanbul ignore file */
 /* tslint:disable */
-
+/* eslint-disable */
 export { ApiError } from './core/ApiError';
 export { CancelablePromise, CancelError } from './core/CancelablePromise';
 export { OpenAPI } from './core/OpenAPI';
@@ -22,10 +22,8 @@ export type { ChapDataSource } from './models/ChapDataSource';
 export type { ConfiguredModelDB } from './models/ConfiguredModelDB';
 export type { ConfiguredModelInfoRead } from './models/ConfiguredModelInfoRead';
 export type { ConfiguredModelRead } from './models/ConfiguredModelRead';
-export type { ConfiguredModelWithDataSourceRead } from './models/ConfiguredModelWithDataSourceRead';
 export type { DataBaseResponse } from './models/DataBaseResponse';
 export type { DataElement } from './models/DataElement';
-export type { DataImportMapping } from './models/DataImportMapping';
 export type { DataList } from './models/DataList';
 export type { DatasetCreate } from './models/DatasetCreate';
 export type { DataSetInfo } from './models/DataSetInfo';
@@ -36,12 +34,10 @@ export type { DataSetWithObservations } from './models/DataSetWithObservations';
 export type { DataSource } from './models/DataSource';
 export type { DebugEntry } from './models/DebugEntry';
 export type { EvaluationEntry } from './models/EvaluationEntry';
-export type { EvaluationResponse } from './models/EvaluationResponse';
 export type { FeatureCollectionModel } from './models/FeatureCollectionModel';
 export type { FeatureModel } from './models/FeatureModel';
 export type { FeatureType } from './models/FeatureType';
 export type { FetchRequest } from './models/FetchRequest';
-export type { FullPredictionResponse } from './models/FullPredictionResponse';
 export type { HealthResponse } from './models/HealthResponse';
 export type { HTTPValidationError } from './models/HTTPValidationError';
 export type { ImportSummaryResponse } from './models/ImportSummaryResponse';
@@ -51,7 +47,6 @@ export type { LineString } from './models/LineString';
 export type { MakeBacktestRequest } from './models/MakeBacktestRequest';
 export type { MakeBacktestWithDataRequest } from './models/MakeBacktestWithDataRequest';
 export type { MakePredictionRequest } from './models/MakePredictionRequest';
-export type { MakePredictionWithDataSourceRequest } from './models/MakePredictionWithDataSourceRequest';
 export type { MetricInfo } from './models/MetricInfo';
 export type { MLServiceInfo_Input } from './models/MLServiceInfo_Input';
 export type { MLServiceInfo_Output } from './models/MLServiceInfo_Output';
@@ -73,14 +68,14 @@ export type { Position3D } from './models/Position3D';
 export type { PredictionCreate } from './models/PredictionCreate';
 export type { PredictionEntry } from './models/PredictionEntry';
 export type { PredictionInfo } from './models/PredictionInfo';
-export type { PredictionResponse } from './models/PredictionResponse';
-export type { PredictionSchedule } from './models/PredictionSchedule';
 export type { PredictionSetupCreate } from './models/PredictionSetupCreate';
 export type { PredictionSetupRead } from './models/PredictionSetupRead';
 export type { PredictionSetupReadWithPredictions } from './models/PredictionSetupReadWithPredictions';
 export type { PredictionSetupUpdate } from './models/PredictionSetupUpdate';
+export type { QuantileTarget } from './models/QuantileTarget';
 export type { RegistrationRequest } from './models/RegistrationRequest';
 export type { RegistrationResponse } from './models/RegistrationResponse';
+export type { RunPredictionSetupRequest } from './models/RunPredictionSetupRequest';
 export type { ServiceDetail } from './models/ServiceDetail';
 export type { ServiceListResponse } from './models/ServiceListResponse';
 export type { SystemInfoResponse } from './models/SystemInfoResponse';
@@ -94,6 +89,7 @@ export { JobsService } from './services/JobsService';
 export { MetricsService } from './services/MetricsService';
 export { ModelsService } from './services/ModelsService';
 export { PredictionsService } from './services/PredictionsService';
+export { PredictionSetupsService } from './services/PredictionSetupsService';
 export { ServicesService } from './services/ServicesService';
 export { SystemService } from './services/SystemService';
 export { VisualizationsService } from './services/VisualizationsService';

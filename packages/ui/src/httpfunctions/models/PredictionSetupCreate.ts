@@ -2,12 +2,12 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { DataImportMapping } from './DataImportMapping';
-import type { PredictionSchedule } from './PredictionSchedule';
+import type { QuantileTarget } from './QuantileTarget';
 export type PredictionSetupCreate = {
     backtestId: number;
     name: string;
-    schedule?: (PredictionSchedule | null);
-    dataImportMappings?: Array<DataImportMapping>;
+    scheduleCronExpression?: (string | null);
+    scheduleEnabled?: boolean;
+    quantileTargets?: Array<QuantileTarget>;
 };
 

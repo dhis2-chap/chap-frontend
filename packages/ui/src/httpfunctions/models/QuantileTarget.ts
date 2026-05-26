@@ -2,8 +2,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type PredictionSchedule = {
-    expression?: (string | null);
-    enabled?: boolean;
+export type QuantileTarget = {
+    quantile: string;
+    dataElementId: string;
 };
 
