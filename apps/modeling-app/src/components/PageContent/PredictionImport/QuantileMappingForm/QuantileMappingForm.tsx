@@ -40,7 +40,7 @@ type Props = {
 
 const outbreakProbabilitySchema = z.custom<OutbreakProbability>(
     value => OUTBREAK_PROBABILITY_OPTIONS.includes(value as OutbreakProbability),
-    { message: 'Alert probability is required' },
+    { message: i18n.t('Alert probability is required') },
 );
 
 const importLocationStateSchema = z
@@ -65,7 +65,7 @@ export const quantileMappingSchema = z.object({
         context.addIssue({
             code: z.ZodIssueCode.custom,
             path: ['outbreak_indicator'],
-            message: 'Outbreak indicator is required',
+            message: i18n.t('Outbreak indicator is required'),
         });
     }
 });
