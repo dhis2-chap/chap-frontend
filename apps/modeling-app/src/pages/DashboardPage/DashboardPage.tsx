@@ -43,9 +43,9 @@ const getEvaluationModelName = (evaluation: BacktestRead) => (
 );
 
 const getPredictionSetupModelName = (predictionSetup: PredictionSetupRead) => (
-    predictionSetup.configuredModelWithDataSource.configuredModel?.modelTemplate?.displayName
-    || predictionSetup.configuredModelWithDataSource.configuredModel?.modelTemplate?.name
-    || predictionSetup.configuredModelWithDataSource.configuredModel?.name
+    predictionSetup.configuredModel?.modelTemplate?.displayName
+    || predictionSetup.configuredModel?.modelTemplate?.name
+    || predictionSetup.configuredModel?.name
     || EMPTY_VALUE
 );
 

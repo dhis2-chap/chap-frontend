@@ -55,8 +55,8 @@ const columns = [
         cell: info => formatDateTime(info.getValue()),
     }),
     columnHelper.accessor(row => (
-        row.configuredModelWithDataSource.configuredModel?.modelTemplate?.displayName
-        || row.configuredModelWithDataSource.configuredModel?.name
+        row.configuredModel?.modelTemplate?.displayName
+        || row.configuredModel?.name
         || ''
     ), {
         id: 'model',

@@ -3,7 +3,7 @@ import { Button, IconCheckmarkCircle16, IconVisualizationLineMulti16, IconDuplic
 import i18n from '@dhis2/d2-i18n';
 import { useNavigate } from 'react-router-dom';
 import { Widget } from '@dhis2-chap/ui';
-import type { DataImportMapping } from '@dhis2-chap/ui';
+import type { QuantileTarget } from '@dhis2-chap/ui';
 import { CopyBacktestModal } from '../../../BacktestsTable/BacktestActionsMenu/CopyBacktestModal';
 import { MarkReadyForForecastingModal } from './MarkReadyForForecastingModal';
 import type { MarkReadyForForecastingFormValues } from './MarkReadyForForecastingModal';
@@ -52,15 +52,15 @@ export const QuickActionsWidget = ({
     };
 
     const handleMarkReadySubmit = async (values: MarkReadyForForecastingFormValues) => {
-        const dataImportMappings: DataImportMapping[] = [];
+        const quantileTargets: QuantileTarget[] = [];
 
         if (values.use_import_mapping) {
-            dataImportMappings.push(
-                { quantileKey: 'quantile_high', dataElementId: values.quantile_high },
-                { quantileKey: 'quantile_mid_high', dataElementId: values.quantile_mid_high },
-                { quantileKey: 'median', dataElementId: values.median },
-                { quantileKey: 'quantile_mid_low', dataElementId: values.quantile_mid_low },
-                { quantileKey: 'quantile_low', dataElementId: values.quantile_low },
+            quantileTargets.push(
+                { quantile: 'quantile_high', dataElementId: values.quantile_high },
+                { quantile: 'quantile_mid_high', dataElementId: values.quantile_mid_high },
+                { quantile: 'median', dataElementId: values.median },
+                { quantile: 'quantile_mid_low', dataElementId: values.quantile_mid_low },
+                { quantile: 'quantile_low', dataElementId: values.quantile_low },
             );
         }
 
@@ -68,7 +68,7 @@ export const QuickActionsWidget = ({
             data: {
                 backtestId: evaluationId,
                 name: values.name,
-                dataImportMappings,
+                quantileTargets,
             },
         });
         setMarkReadyModalIsOpen(false);

@@ -35,8 +35,8 @@ const formatPeriodType = (periodType?: string | null) => {
 const getModelName = (
     predictionSetup: PredictionSetupReadWithPredictions,
 ) => (
-    predictionSetup.configuredModelWithDataSource.configuredModel?.modelTemplate?.displayName
-    || predictionSetup.configuredModelWithDataSource.configuredModel?.name
+    predictionSetup.configuredModel?.modelTemplate?.displayName
+    || predictionSetup.configuredModel?.name
     || EMPTY_VALUE
 );
 
@@ -76,14 +76,14 @@ export const SummaryWidget = ({
                 <div className={styles.row}>
                     <span className={styles.label}>{i18n.t('Period type')}</span>
                     <span className={styles.value}>
-                        {formatPeriodType(predictionSetup.configuredModelWithDataSource.periodType)}
+                        {formatPeriodType(predictionSetup.periodType)}
                     </span>
                 </div>
                 <div className={styles.row}>
                     <span className={styles.label}>{i18n.t('Organisation units')}</span>
                     <span className={styles.value}>
                         {formatCount(
-                            predictionSetup.configuredModelWithDataSource.orgUnits.length,
+                            predictionSetup.orgUnits.length,
                             i18n.t('location'),
                             i18n.t('locations'),
                         )}
@@ -93,7 +93,7 @@ export const SummaryWidget = ({
                     <span className={styles.label}>{i18n.t('Data sources')}</span>
                     <span className={styles.value}>
                         {formatCount(
-                            predictionSetup.configuredModelWithDataSource.dataSources.length,
+                            predictionSetup.covariateSources.length,
                             i18n.t('source'),
                             i18n.t('sources'),
                         )}

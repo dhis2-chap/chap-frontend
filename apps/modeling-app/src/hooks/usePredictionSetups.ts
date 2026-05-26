@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import {
     ApiError,
-    ModelsService,
     PredictionSetupRead,
+    PredictionSetupsService,
 } from '@dhis2-chap/ui';
 
 export const PREDICTION_SETUPS_QUERY_KEY = 'predictionSetups' as const;
@@ -17,7 +17,7 @@ export const usePredictionSetups = ({
     const { data, error, isLoading } = useQuery<PredictionSetupRead[], ApiError>({
         queryKey: [PREDICTION_SETUPS_QUERY_KEY],
         queryFn: () =>
-            ModelsService.listPredictionSetupsV1CrudPredictionSetupsGet(),
+            PredictionSetupsService.listPredictionSetupsV1CrudPredictionSetupsGet(),
         enabled,
         staleTime: 5 * 60 * 1000,
         cacheTime: 5 * 60 * 1000,

@@ -4,8 +4,8 @@ import i18n from '@dhis2/d2-i18n';
 import {
     ApiError,
     DataBaseResponse,
-    ModelsService,
     PredictionSetupCreate,
+    PredictionSetupsService,
 } from '@dhis2-chap/ui';
 import { BACKTESTS_LIST_QUERY_KEY } from '@/hooks/useBacktests';
 import { PREDICTION_SETUPS_QUERY_KEY } from '@/hooks/usePredictionSetups';
@@ -41,7 +41,7 @@ export const useCreatePredictionSetup = ({
         CreatePredictionSetupVariables
     >({
         mutationFn: ({ data }) =>
-            ModelsService.createPredictionSetupV1CrudPredictionSetupsPost(data),
+            PredictionSetupsService.createPredictionSetupV1CrudPredictionSetupsPost(data),
         onSuccess: (predictionSetup, { data }) => {
             queryClient.invalidateQueries({ queryKey: [BACKTESTS_LIST_QUERY_KEY] });
             queryClient.invalidateQueries({ queryKey: [BACKTESTS_LIST_QUERY_KEY, data.backtestId] });

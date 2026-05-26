@@ -3,9 +3,9 @@ import { useAlert } from '@dhis2/app-runtime';
 import i18n from '@dhis2/d2-i18n';
 import {
     ApiError,
-    ModelsService,
     PredictionSetupRead,
     PredictionSetupUpdate,
+    PredictionSetupsService,
 } from '@dhis2-chap/ui';
 import { PREDICTION_SETUPS_QUERY_KEY } from '@/hooks/usePredictionSetups';
 
@@ -41,7 +41,7 @@ export const useUpdatePredictionSetup = ({
         UpdatePredictionSetupVariables
     >({
         mutationFn: ({ predictionSetupId, data }) =>
-            ModelsService.updatePredictionSetupV1CrudPredictionSetupsPredictionSetupIdPatch(
+            PredictionSetupsService.updatePredictionSetupV1CrudPredictionSetupsPredictionSetupIdPatch(
                 predictionSetupId,
                 data,
             ),

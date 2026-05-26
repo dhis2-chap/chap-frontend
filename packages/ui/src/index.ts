@@ -39,8 +39,6 @@ export { default as SplitPeriodSelector } from './components/evaluation/SplitPer
 
 // interfaces
 export type {
-    FullPredictionResponseExtended,
-    PredictionResponseExtended,
     PredictionOrgUnitSeries,
     PredictionPointVM,
     QuantileKey,

@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAlert } from '@dhis2/app-runtime';
 import i18n from '@dhis2/d2-i18n';
-import { ApiError, ModelsService } from '@dhis2-chap/ui';
+import { ApiError, PredictionSetupsService } from '@dhis2-chap/ui';
 import { PREDICTION_SETUPS_QUERY_KEY } from '@/hooks/usePredictionSetups';
 
 type UseDeletePredictionSetupOptions = {
@@ -27,7 +27,7 @@ export const useDeletePredictionSetup = ({
 
     const mutation = useMutation<void, ApiError, number>({
         mutationFn: async (predictionSetupId) => {
-            await ModelsService.deletePredictionSetupV1CrudPredictionSetupsPredictionSetupIdDelete(
+            await PredictionSetupsService.deletePredictionSetupV1CrudPredictionSetupsPredictionSetupIdDelete(
                 predictionSetupId,
             );
         },

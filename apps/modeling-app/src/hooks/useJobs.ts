@@ -128,7 +128,7 @@ export const useJobs = ({
                                 isActiveJob(job) &&
                                 !isActiveJob(pulledJob)
                             ) {
-                                const completedPredictionSetupId = job.predictionSetupId ?? predictionSetupId;
+                                const completedPredictionSetupId = job.prediction_setup_id ?? predictionSetupId;
 
                                 if (completedPredictionSetupId !== undefined) {
                                     completedPredictionSetupIds.add(completedPredictionSetupId);

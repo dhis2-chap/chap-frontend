@@ -1,37 +1,33 @@
 import { describe, expect, it } from 'vitest';
-import { getPredictionSetupDataImportMappings } from './predictionSetupImportMapping';
+import { getPredictionSetupQuantileTargets } from './predictionSetupImportMapping';
 
-const dataImportMappings = [
-    { quantileKey: 'quantile_high', dataElementId: 'high-id' },
-    { quantileKey: 'median', dataElementId: 'median-id' },
+const quantileTargets = [
+    { quantile: 'quantile_high', dataElementId: 'high-id' },
+    { quantile: 'median', dataElementId: 'median-id' },
 ];
 
 describe('predictionSetupImportMapping', () => {
-    it('reads legacy default import mappings from prediction setup metadata', () => {
-        expect(getPredictionSetupDataImportMappings({
-            metaData: {
-                dataImportMappings,
-            },
-        })).toEqual(dataImportMappings);
+    it('returns the quantile targets from the prediction setup', () => {
+        expect(getPredictionSetupQuantileTargets({
+            quantileTargets,
+        })).toEqual(quantileTargets);
     });
 
-    it('falls back to top-level import mappings', () => {
-        expect(getPredictionSetupDataImportMappings({
-            dataImportMappings,
-        })).toEqual(dataImportMappings);
-    });
-
-    it('normalizes object-shaped metadata mappings', () => {
-        expect(getPredictionSetupDataImportMappings({
-            metaData: {
-                dataImportMappings: {
-                    quantile_high: 'high-id',
-                    median: 'median-id',
-                },
+    it('normalizes object-shaped quantile targets', () => {
+        expect(getPredictionSetupQuantileTargets({
+            quantileTargets: {
+                quantile_high: 'high-id',
+                median: 'median-id',
             },
         })).toEqual([
-            { quantileKey: 'quantile_high', dataElementId: 'high-id' },
-            { quantileKey: 'median', dataElementId: 'median-id' },
+            { quantile: 'quantile_high', dataElementId: 'high-id' },
+            { quantile: 'median', dataElementId: 'median-id' },
         ]);
+    });
+
+    it('returns an empty array when nothing is provided', () => {
+        expect(getPredictionSetupQuantileTargets()).toEqual([]);
+        expect(getPredictionSetupQuantileTargets(null)).toEqual([]);
+        expect(getPredictionSetupQuantileTargets({})).toEqual([]);
     });
 });

@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import {
     ApiError,
-    ModelsService,
     PredictionSetupReadWithPredictions,
+    PredictionSetupsService,
 } from '@dhis2-chap/ui';
 import { PREDICTION_SETUPS_QUERY_KEY } from './usePredictionSetups';
 
@@ -19,7 +19,7 @@ export const usePredictionSetup = (predictionSetupId: string | number | undefine
             parsedPredictionSetupId,
         ],
         queryFn: () =>
-            ModelsService.getPredictionSetupV1CrudPredictionSetupsPredictionSetupIdGet(
+            PredictionSetupsService.getPredictionSetupV1CrudPredictionSetupsPredictionSetupIdGet(
                 parsedPredictionSetupId,
             ),
         enabled: hasValidPredictionSetupId,
