@@ -2,10 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type PredictionResponse = {
-    orgUnit: string;
-    dataElement: string;
-    period: string;
-    value: number;
+export type BacktestUpdate = {
+    name?: (string | null);
 };
 

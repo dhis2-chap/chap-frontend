@@ -26,7 +26,7 @@ import {
     RowSelectionState,
     SortingState,
 } from '@tanstack/react-table';
-import { BackTestRead, ModelSpecRead, Pill } from '@dhis2-chap/ui';
+import { BacktestRead, ModelSpecRead, Pill } from '@dhis2-chap/ui';
 import { Link, useNavigate } from 'react-router-dom';
 import styles from './BacktestsTable.module.css';
 import { BacktestActionsMenu } from './BacktestActionsMenu';
@@ -37,7 +37,7 @@ import { JOB_TYPES } from '../../hooks/useJobs';
 import { useBacktestsTableFilters } from './hooks/useBacktestsTableFilters';
 import { useTablePaginationParams } from '../../hooks/useTablePaginationParams';
 
-const columnHelper = createColumnHelper<BackTestRead>();
+const columnHelper = createColumnHelper<BacktestRead>();
 
 const columns = [
     columnHelper.display({
@@ -137,12 +137,12 @@ const columns = [
     }),
 ];
 
-const getSortDirection = (column: Column<BackTestRead>) => {
+const getSortDirection = (column: Column<BacktestRead>) => {
     return column.getIsSorted() || 'default';
 };
 
 type Props = {
-    backtests: BackTestRead[];
+    backtests: BacktestRead[];
     models: ModelSpecRead[];
 };
 

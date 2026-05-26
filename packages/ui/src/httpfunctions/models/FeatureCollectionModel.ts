@@ -4,7 +4,8 @@
 /* eslint-disable */
 import type { FeatureModel } from './FeatureModel';
 export type FeatureCollectionModel = {
-    type?: string;
+    bbox?: (any[] | null);
+    type: string;
     features: Array<FeatureModel>;
 };
 

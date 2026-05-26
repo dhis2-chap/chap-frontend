@@ -1,12 +1,12 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { ApiError, BackTestRead, BacktestsService } from '@dhis2-chap/ui';
+import { ApiError, BacktestRead, BacktestsService } from '@dhis2-chap/ui';
 import { BACKTESTS_LIST_QUERY_KEY } from './useBacktests';
 
 export const useBacktestById = (backtestId?: number) => {
     const queryClient = useQueryClient();
 
     const { data, error, isLoading, isFetching } = useQuery<
-        BackTestRead,
+        BacktestRead,
         ApiError
     >({
         queryKey: [BACKTESTS_LIST_QUERY_KEY, backtestId],
@@ -15,7 +15,7 @@ export const useBacktestById = (backtestId?: number) => {
                 backtestId!,
             ),
         initialData: () => {
-            const cachedList = queryClient.getQueryData<BackTestRead[]>([
+            const cachedList = queryClient.getQueryData<BacktestRead[]>([
                 BACKTESTS_LIST_QUERY_KEY,
             ]);
             return cachedList?.find(backtest => backtest.id === backtestId);

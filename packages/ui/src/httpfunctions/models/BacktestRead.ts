@@ -4,7 +4,7 @@
 /* eslint-disable */
 import type { ConfiguredModelRead } from './ConfiguredModelRead';
 import type { DataSetMeta } from './DataSetMeta';
-export type BackTestRead = {
+export type BacktestRead = {
     datasetId: number;
     modelId: string;
     name?: (string | null);
@@ -16,5 +16,6 @@ export type BackTestRead = {
     dataset: DataSetMeta;
     aggregateMetrics: Record<string, number>;
     configuredModel: (ConfiguredModelRead | null);
+    predictionSetupId?: (number | null);
 };
 
