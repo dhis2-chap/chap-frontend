@@ -1,2 +1,2 @@
-export { PredictionAlerts } from './PredictionAlerts';
+export { AlertPreviewPanel } from './AlertPreviewPanel';
 export { PredictionAlertsDialog } from './PredictionAlertsDialog';

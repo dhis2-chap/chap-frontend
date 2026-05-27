@@ -7,9 +7,9 @@ import styles from './NewPredictionPage.module.css';
 
 export const NewPredictionPage = () => {
     const navigate = useNavigate();
-    const { configuredId } = useParams();
+    const { predictionSetupId } = useParams();
     const [searchParams] = useSearchParams();
-    const returnTo = searchParams.get('returnTo') || (configuredId ? `/predictions/${configuredId}` : '/predictions');
+    const returnTo = searchParams.get('returnTo') || (predictionSetupId ? `/predictions/${predictionSetupId}` : '/predictions');
 
     return (
         <div>

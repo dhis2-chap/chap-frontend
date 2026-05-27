@@ -9,18 +9,15 @@ type Props = {
     model: ModelSpecRead;
 };
 
-const parsePredictionSetupId = (configuredId: string | undefined): number | undefined => {
-    if (!configuredId) {
-        return undefined;
-    }
-
-    const parsed = Number(configuredId);
-    return Number.isFinite(parsed) ? parsed : undefined;
-};
-
 export const QuantileMappingFormContainer = ({ prediction, model }: Props) => {
-    const { configuredId } = useParams();
-    const predictionSetupId = parsePredictionSetupId(configuredId);
+    const { predictionSetupId: predictionSetupIdParam } = useParams();
+    const parsedPredictionSetupId = predictionSetupIdParam
+        ? Number(predictionSetupIdParam)
+        : undefined;
+    const predictionSetupId = parsedPredictionSetupId !== undefined &&
+        Number.isFinite(parsedPredictionSetupId)
+        ? parsedPredictionSetupId
+        : undefined;
 
     if (predictionSetupId === undefined) {
         return (

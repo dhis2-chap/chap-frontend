@@ -7,15 +7,15 @@ import styles from './NewPredictionContent.module.css';
 import { useModels } from '@/hooks/useModels';
 import { NewPredictionForm } from '@/components/NewPredictionForm';
 import { usePredictionSetup } from '@/hooks/usePredictionSetup';
-import { parseSupportedPeriodType } from '@/utils/supportedPeriodType';
+import { parseSupportedPeriodType } from '@/utils/periods';
 
 type Props = {
     returnTo?: string;
 };
 
 export const NewPredictionContent = ({ returnTo }: Props) => {
-    const { configuredId } = useParams();
-    const predictionSetupId = configuredId ? Number(configuredId) : undefined;
+    const { predictionSetupId: predictionSetupIdParam } = useParams();
+    const predictionSetupId = predictionSetupIdParam ? Number(predictionSetupIdParam) : undefined;
     const hasValidSetupId = predictionSetupId !== undefined && Number.isFinite(predictionSetupId);
 
     const {

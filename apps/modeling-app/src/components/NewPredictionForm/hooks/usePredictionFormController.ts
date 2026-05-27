@@ -1,5 +1,4 @@
 import { useMemo } from 'react';
-import { PERIOD_TYPES } from '@dhis2-chap/ui';
 import { ModelExecutionFormValues } from '../../ModelExecutionForm/hooks/useModelExecutionFormState';
 import { useCreatePrediction } from './useCreatePrediction';
 import {
@@ -10,14 +9,22 @@ import {
 import {
     getLastCompletedPeriod,
     inputValueToPeriod,
+    isSupportedPeriodType,
     periodToInputValue,
     shiftPeriod,
+    type SupportedPeriodType,
 } from '../utils/predictionPeriods';
-import { isSupportedPeriodType, type SupportedPeriodType } from '@/utils/supportedPeriodType';
+
+type ReadyPredictionFormContext = {
+    periodType: SupportedPeriodType;
+    fromPeriod: string;
+    anchorPeriod: string;
+    initialValues: ModelExecutionFormValues;
+};
 
 type UsePredictionFormControllerOptions = {
     predictionSetupId: number;
-    initialValues?: Partial<ModelExecutionFormValues>;
+    context: ReadyPredictionFormContext;
     returnTo?: string;
 };
 
@@ -40,28 +47,16 @@ const resolveSelectedPeriod = (
 
 export const usePredictionFormController = ({
     predictionSetupId,
-    initialValues,
+    context,
     returnTo,
 }: UsePredictionFormControllerOptions) => {
-    const periodType = isSupportedPeriodType(initialValues?.periodType)
-        ? initialValues.periodType
-        : null;
-    const fromInputValue = initialValues?.fromDate ?? '';
-    const fromPeriod = periodType && fromInputValue
-        ? inputValueToPeriod(fromInputValue, periodType)
-        : null;
-    const anchorPeriod = useMemo(
-        () => (periodType ? getLastCompletedPeriod(periodType) : null),
-        [periodType],
-    );
-
-    const isContextReady = !!(periodType && fromPeriod && anchorPeriod);
+    const { periodType, fromPeriod, anchorPeriod, initialValues } = context;
 
     const { methods } = useNewPredictionFormState({
-        name: initialValues?.name ?? '',
-        periodType: periodType ?? PERIOD_TYPES.MONTH,
-        fromPeriod: fromPeriod ?? '',
-        anchorPeriod: anchorPeriod ?? '',
+        name: initialValues.name ?? '',
+        periodType,
+        fromPeriod,
+        anchorPeriod,
     });
 
     const {
@@ -77,10 +72,6 @@ export const usePredictionFormController = ({
     });
 
     const handleSubmit = (data: NewPredictionFormValues) => {
-        if (!isContextReady || !periodType || !anchorPeriod || !initialValues) {
-            return;
-        }
-
         const resolvedPeriod = resolveSelectedPeriod(data, periodType, anchorPeriod);
         if (!resolvedPeriod) {
             return;
@@ -91,13 +82,12 @@ export const usePredictionFormController = ({
         const mergedValues: ModelExecutionFormValues = {
             name: data.name,
             periodType,
-            fromDate: initialValues.fromDate ?? '',
+            fromDate: initialValues.fromDate,
             toDate,
-            orgUnits: initialValues.orgUnits ?? [],
-            modelId: initialValues.modelId ?? '',
-            covariateMappings: initialValues.covariateMappings ?? [],
-            // targetMapping is required by ModelExecutionFormValues - guarded by isContextReady upstream.
-            targetMapping: initialValues.targetMapping!,
+            orgUnits: initialValues.orgUnits,
+            modelId: initialValues.modelId,
+            covariateMappings: initialValues.covariateMappings,
+            targetMapping: initialValues.targetMapping,
         };
 
         createPrediction(mergedValues);
@@ -115,6 +105,46 @@ export const usePredictionFormController = ({
         periodType,
         fromPeriod,
         anchorPeriod,
-        isContextReady,
     };
 };
+
+export type { ReadyPredictionFormContext };
+
+export const buildReadyPredictionFormContext = (
+    initialValues?: Partial<ModelExecutionFormValues>,
+): ReadyPredictionFormContext | null => {
+    const periodType = initialValues?.periodType;
+    if (!isSupportedPeriodType(periodType) || !initialValues?.fromDate || !initialValues.targetMapping) {
+        return null;
+    }
+
+    const fromPeriod = inputValueToPeriod(initialValues.fromDate, periodType);
+    if (!fromPeriod) {
+        return null;
+    }
+
+    const anchorPeriod = getLastCompletedPeriod(periodType);
+
+    return {
+        periodType,
+        fromPeriod,
+        anchorPeriod,
+        initialValues: {
+            name: initialValues.name ?? '',
+            periodType,
+            fromDate: initialValues.fromDate,
+            toDate: initialValues.toDate ?? '',
+            orgUnits: initialValues.orgUnits ?? [],
+            modelId: initialValues.modelId ?? '',
+            covariateMappings: initialValues.covariateMappings ?? [],
+            targetMapping: initialValues.targetMapping,
+        },
+    };
+};
+
+export const useReadyPredictionFormContext = (
+    initialValues?: Partial<ModelExecutionFormValues>,
+) => useMemo(
+    () => buildReadyPredictionFormContext(initialValues),
+    [initialValues],
+);

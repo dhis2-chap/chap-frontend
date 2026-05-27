@@ -127,7 +127,7 @@ const router = createHashRouter([
                                 element: <ReadyToPredictPage />,
                             },
                             {
-                                path: ':configuredId',
+                                path: ':predictionSetupId',
                                 children: [
                                     {
                                         index: true,

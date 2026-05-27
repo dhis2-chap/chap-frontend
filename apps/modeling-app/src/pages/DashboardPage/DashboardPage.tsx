@@ -8,21 +8,13 @@ import type {
 import { Link } from 'react-router-dom';
 import { useBacktests } from '../../hooks/useBacktests';
 import { usePredictionSetups } from '../../hooks/usePredictionSetups';
+import { sortByCreatedDesc } from '../../utils/sortByCreated';
 import styles from './DashboardPage.module.css';
 
 const MAX_WIDGET_ITEMS = 5;
 const EMPTY_VALUE = '-';
 
 const dateFormatter = new Intl.DateTimeFormat('en-GB');
-
-const getCreatedTime = (created?: string | null) => {
-    if (!created) {
-        return 0;
-    }
-
-    const time = Date.parse(created);
-    return Number.isNaN(time) ? 0 : time;
-};
 
 const formatDate = (created?: string | null) => (
     created ? dateFormatter.format(new Date(created)) : EMPTY_VALUE
@@ -73,26 +65,42 @@ const WidgetFrame = ({
     </section>
 );
 
-type EvaluationRunsWidgetProps = {
-    evaluations?: BacktestRead[];
+type RecentItemsWidgetProps<T> = {
+    title: string;
+    footerLabel: string;
+    footerTo: string;
+    items?: T[];
     isLoading: boolean;
     error?: Error | null;
+    emptyMessage: string;
+    errorMessage: string;
+    getKey: (item: T) => string | number;
+    getLinkTo: (item: T) => string;
+    renderIcon: (item: T) => React.ReactNode;
+    renderContent: (item: T) => React.ReactNode;
 };
 
-const EvaluationRunsWidget = ({
-    evaluations,
+const RecentItemsWidget = <T extends { created?: string | null }>({
+    title,
+    footerLabel,
+    footerTo,
+    items,
     isLoading,
     error,
-}: EvaluationRunsWidgetProps) => {
-    const latestEvaluations = [...(evaluations || [])]
-        .sort((first, second) => getCreatedTime(second.created) - getCreatedTime(first.created))
-        .slice(0, MAX_WIDGET_ITEMS);
+    emptyMessage,
+    errorMessage,
+    getKey,
+    getLinkTo,
+    renderIcon,
+    renderContent,
+}: RecentItemsWidgetProps<T>) => {
+    const latestItems = sortByCreatedDesc(items ?? []).slice(0, MAX_WIDGET_ITEMS);
 
     return (
         <WidgetFrame
-            title={i18n.t('Latest Evaluation Runs')}
-            footerLabel={i18n.t('See all evaluation runs')}
-            footerTo="/evaluate"
+            title={title}
+            footerLabel={footerLabel}
+            footerTo={footerTo}
         >
             {isLoading && (
                 <div className={styles.loadingState}>
@@ -101,97 +109,25 @@ const EvaluationRunsWidget = ({
             )}
             {error && !isLoading && (
                 <div className={styles.errorState}>
-                    {i18n.t('Error loading evaluations')}
+                    {errorMessage}
                 </div>
             )}
-            {!isLoading && !error && latestEvaluations.length === 0 && (
+            {!isLoading && !error && latestItems.length === 0 && (
                 <div className={styles.emptyState}>
-                    {i18n.t('No evaluations available')}
+                    {emptyMessage}
                 </div>
             )}
-            {!isLoading && !error && latestEvaluations.length > 0 && (
+            {!isLoading && !error && latestItems.length > 0 && (
                 <div className={styles.list}>
-                    {latestEvaluations.map(evaluation => (
+                    {latestItems.map(item => (
                         <Link
                             className={styles.listItem}
-                            key={evaluation.id}
-                            to={`/evaluate/${evaluation.id}`}
+                            key={getKey(item)}
+                            to={getLinkTo(item)}
                         >
-                            <span className={styles.icon}>
-                                <IconVisualizationLine16 />
-                            </span>
+                            {renderIcon(item)}
                             <span className={styles.itemContent}>
-                                <span className={styles.itemTitle}>
-                                    {evaluation.name || i18n.t('Unnamed evaluation')}
-                                </span>
-                                <span className={styles.itemMeta}>
-                                    <span>{formatDate(evaluation.created)}</span>
-                                    <span>{formatLocationCount(evaluation.orgUnits?.length ?? 0)}</span>
-                                    <span>{getEvaluationModelName(evaluation)}</span>
-                                </span>
-                            </span>
-                        </Link>
-                    ))}
-                </div>
-            )}
-        </WidgetFrame>
-    );
-};
-
-type PredictionSetupsWidgetProps = {
-    predictionSetups?: PredictionSetupRead[];
-    isLoading: boolean;
-    error?: Error | null;
-};
-
-const PredictionSetupsWidget = ({
-    predictionSetups,
-    isLoading,
-    error,
-}: PredictionSetupsWidgetProps) => {
-    const latestPredictionSetups = [...(predictionSetups || [])]
-        .sort((first, second) => getCreatedTime(second.created) - getCreatedTime(first.created))
-        .slice(0, MAX_WIDGET_ITEMS);
-
-    return (
-        <WidgetFrame
-            title={i18n.t('Prediction Setups')}
-            footerLabel={i18n.t('See all prediction setups')}
-            footerTo="/predictions"
-        >
-            {isLoading && (
-                <div className={styles.loadingState}>
-                    <CircularLoader small />
-                </div>
-            )}
-            {error && !isLoading && (
-                <div className={styles.errorState}>
-                    {i18n.t('Error loading prediction setups')}
-                </div>
-            )}
-            {!isLoading && !error && latestPredictionSetups.length === 0 && (
-                <div className={styles.emptyState}>
-                    {i18n.t('No prediction setups yet')}
-                </div>
-            )}
-            {!isLoading && !error && latestPredictionSetups.length > 0 && (
-                <div className={styles.list}>
-                    {latestPredictionSetups.map(predictionSetup => (
-                        <Link
-                            className={styles.listItem}
-                            key={predictionSetup.id}
-                            to={`/predictions/${predictionSetup.id}`}
-                        >
-                            <span className={`${styles.icon} ${styles.successIcon}`}>
-                                <IconCheckmarkCircle16 />
-                            </span>
-                            <span className={styles.itemContent}>
-                                <span className={styles.itemTitle}>
-                                    {predictionSetup.name}
-                                </span>
-                                <span className={styles.itemSubtitle}>
-                                    {getPredictionSetupModelName(predictionSetup)}
-                                </span>
+                                {renderContent(item)}
                             </span>
                         </Link>
                     ))}
@@ -217,15 +153,61 @@ export const DashboardPage: React.FC = () => {
         <div className={styles.dashboard}>
             <h1 className={styles.screenReaderOnly}>{i18n.t('Dashboard')}</h1>
             <div className={styles.widgetGrid}>
-                <EvaluationRunsWidget
-                    evaluations={backtests}
+                <RecentItemsWidget
+                    title={i18n.t('Latest Evaluation Runs')}
+                    footerLabel={i18n.t('See all evaluation runs')}
+                    footerTo="/evaluate"
+                    items={backtests}
                     isLoading={evaluationsLoading}
                     error={evaluationsError}
+                    emptyMessage={i18n.t('No evaluations available')}
+                    errorMessage={i18n.t('Error loading evaluations')}
+                    getKey={evaluation => evaluation.id}
+                    getLinkTo={evaluation => `/evaluate/${evaluation.id}`}
+                    renderIcon={() => (
+                        <span className={styles.icon}>
+                            <IconVisualizationLine16 />
+                        </span>
+                    )}
+                    renderContent={evaluation => (
+                        <>
+                            <span className={styles.itemTitle}>
+                                {evaluation.name || i18n.t('Unnamed evaluation')}
+                            </span>
+                            <span className={styles.itemMeta}>
+                                <span>{formatDate(evaluation.created)}</span>
+                                <span>{formatLocationCount(evaluation.orgUnits?.length ?? 0)}</span>
+                                <span>{getEvaluationModelName(evaluation)}</span>
+                            </span>
+                        </>
+                    )}
                 />
-                <PredictionSetupsWidget
-                    predictionSetups={predictionSetups}
+                <RecentItemsWidget
+                    title={i18n.t('Prediction Setups')}
+                    footerLabel={i18n.t('See all prediction setups')}
+                    footerTo="/predictions"
+                    items={predictionSetups}
                     isLoading={predictionSetupsLoading}
                     error={predictionSetupsError}
+                    emptyMessage={i18n.t('No prediction setups yet')}
+                    errorMessage={i18n.t('Error loading prediction setups')}
+                    getKey={predictionSetup => predictionSetup.id}
+                    getLinkTo={predictionSetup => `/predictions/${predictionSetup.id}`}
+                    renderIcon={() => (
+                        <span className={`${styles.icon} ${styles.successIcon}`}>
+                            <IconCheckmarkCircle16 />
+                        </span>
+                    )}
+                    renderContent={predictionSetup => (
+                        <>
+                            <span className={styles.itemTitle}>
+                                {predictionSetup.name}
+                            </span>
+                            <span className={styles.itemSubtitle}>
+                                {getPredictionSetupModelName(predictionSetup)}
+                            </span>
+                        </>
+                    )}
                 />
             </div>
         </div>

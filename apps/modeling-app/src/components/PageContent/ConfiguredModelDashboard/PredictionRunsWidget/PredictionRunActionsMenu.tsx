@@ -13,37 +13,37 @@ import { useNavigate } from 'react-router-dom';
 import { DeletePredictionRunModal } from './DeletePredictionRunModal';
 
 type Props = {
-    configuredId?: string;
+    predictionSetupId?: string;
     predictionId: number;
 };
 
 export const PredictionRunActionsMenu = ({
-    configuredId,
+    predictionSetupId,
     predictionId,
 }: Props) => {
     const navigate = useNavigate();
     const [flyoutMenuIsOpen, setFlyoutMenuIsOpen] = useState(false);
     const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
-    const parsedConfiguredId = Number(configuredId);
-    const predictionSetupId = Number.isFinite(parsedConfiguredId)
-        ? parsedConfiguredId
+    const parsedPredictionSetupId = Number(predictionSetupId);
+    const numericPredictionSetupId = Number.isFinite(parsedPredictionSetupId)
+        ? parsedPredictionSetupId
         : undefined;
 
     const navigateToView = () => {
-        if (!configuredId) {
+        if (!predictionSetupId) {
             return;
         }
 
-        navigate(`/predictions/${configuredId}/runs/${predictionId}`);
+        navigate(`/predictions/${predictionSetupId}/runs/${predictionId}`);
         setFlyoutMenuIsOpen(false);
     };
 
     const navigateToImport = () => {
-        if (!configuredId) {
+        if (!predictionSetupId) {
             return;
         }
 
-        navigate(`/predictions/${configuredId}/runs/${predictionId}/import`);
+        navigate(`/predictions/${predictionSetupId}/runs/${predictionId}/import`);
         setFlyoutMenuIsOpen(false);
     };
 
@@ -85,7 +85,7 @@ export const PredictionRunActionsMenu = ({
             {deleteModalIsOpen && (
                 <DeletePredictionRunModal
                     predictionId={predictionId}
-                    predictionSetupId={predictionSetupId}
+                    predictionSetupId={numericPredictionSetupId}
                     onClose={() => setDeleteModalIsOpen(false)}
                 />
             )}

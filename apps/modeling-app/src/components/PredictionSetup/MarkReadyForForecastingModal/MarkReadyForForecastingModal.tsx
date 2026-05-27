@@ -16,16 +16,12 @@ import { AnimatePresence, motion } from 'motion/react';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { DataItemSelect } from '../../../PredictionImport/QuantileMappingForm/DataItemSelect';
+import { DataItemSelect } from '../../PageContent/PredictionImport/QuantileMappingForm/DataItemSelect';
+import {
+    QUANTILE_KEYS,
+    type PredictionSetupFormValues,
+} from '@/utils/predictionSetupImportMapping';
 import styles from './MarkReadyForForecastingModal.module.css';
-
-const requiredQuantileFields = [
-    'quantile_high',
-    'quantile_mid_high',
-    'median',
-    'quantile_mid_low',
-    'quantile_low',
-] as const;
 
 const quantileFieldSchema = z.string();
 
@@ -44,7 +40,7 @@ const markReadyForForecastingSchema = z.object({
         return;
     }
 
-    requiredQuantileFields.forEach((field) => {
+    QUANTILE_KEYS.forEach((field) => {
         if (!values[field]) {
             context.addIssue({
                 code: z.ZodIssueCode.custom,
@@ -55,13 +51,10 @@ const markReadyForForecastingSchema = z.object({
     });
 });
 
-export type MarkReadyForForecastingFormValues = z.infer<typeof markReadyForForecastingSchema>;
+export type MarkReadyForForecastingFormValues = PredictionSetupFormValues;
 
 const quantileFields: Array<{
-    name: keyof Pick<
-        MarkReadyForForecastingFormValues,
-        'quantile_high' | 'quantile_mid_high' | 'median' | 'quantile_mid_low' | 'quantile_low'
-    >;
+    name: typeof QUANTILE_KEYS[number];
     label: string;
 }> = [
     { name: 'quantile_high', label: i18n.t('Quantile high') },
@@ -116,7 +109,7 @@ export const MarkReadyForForecastingModal = ({
         setValue('use_import_mapping', nextIsEnabled, { shouldDirty: true });
 
         if (!nextIsEnabled) {
-            clearErrors(requiredQuantileFields);
+            clearErrors(QUANTILE_KEYS);
         }
     };
 

@@ -64,14 +64,14 @@ const getSortDirection = (column: Column<JobDescription>) => {
 
 type Props = {
     error?: unknown;
-    hasValidConfiguredId: boolean;
+    hasValidPredictionSetupId: boolean;
     isLoading: boolean;
     jobs: JobDescription[];
 };
 
 export const ActivityWidget = ({
     error,
-    hasValidConfiguredId,
+    hasValidPredictionSetupId,
     isLoading,
     jobs,
 }: Props) => {
@@ -167,17 +167,17 @@ export const ActivityWidget = ({
                         {i18n.t('Error loading jobs')}
                     </div>
                 )}
-                {!isLoading && !hasError && !hasValidConfiguredId && (
+                {!isLoading && !hasError && !hasValidPredictionSetupId && (
                     <div className={styles.emptyState}>
                         {i18n.t('Invalid prediction setup')}
                     </div>
                 )}
-                {!isLoading && !hasError && hasValidConfiguredId && jobs.length === 0 && (
+                {!isLoading && !hasError && hasValidPredictionSetupId && jobs.length === 0 && (
                     <div className={styles.emptyState}>
                         {i18n.t('No activity yet. Run a prediction to see job status and logs here.')}
                     </div>
                 )}
-                {!isLoading && !hasError && hasValidConfiguredId && jobs.length > 0 && (
+                {!isLoading && !hasError && hasValidPredictionSetupId && jobs.length > 0 && (
                     <>
                         <div className={styles.filterBar}>
                             <div className={styles.statusFilter}>

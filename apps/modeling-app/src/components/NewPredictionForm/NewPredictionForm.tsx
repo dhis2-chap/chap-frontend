@@ -9,7 +9,11 @@ import {
     NoticeBox,
 } from '@dhis2/ui';
 import { ModelExecutionFormValues } from '../ModelExecutionForm/hooks/useModelExecutionFormState';
-import { usePredictionFormController } from './hooks/usePredictionFormController';
+import {
+    type ReadyPredictionFormContext,
+    usePredictionFormController,
+    useReadyPredictionFormContext,
+} from './hooks/usePredictionFormController';
 import { PredictionSetupNoticeBox } from './components/PredictionSetupNoticeBox';
 import { PeriodSelectionField } from './components/PeriodSelectionField';
 import styles from './NewPredictionForm.module.css';
@@ -30,11 +34,15 @@ const ContextErrorNotice = ({ message }: { message: string }) => (
     </Card>
 );
 
-export const NewPredictionForm = ({
+const NewPredictionFormFields = ({
     predictionSetupId,
-    initialValues,
+    context,
     returnTo,
-}: NewPredictionFormProps) => {
+}: {
+    predictionSetupId: number;
+    context: ReadyPredictionFormContext;
+    returnTo?: string;
+}) => {
     const {
         methods,
         handleStartPrediction,
@@ -43,10 +51,9 @@ export const NewPredictionForm = ({
         periodType,
         fromPeriod,
         anchorPeriod,
-        isContextReady,
     } = usePredictionFormController({
         predictionSetupId,
-        initialValues,
+        context,
         returnTo,
     });
 
@@ -58,18 +65,6 @@ export const NewPredictionForm = ({
         shouldBlock: !isSubmitting && methods.formState.isDirty,
     });
 
-    if (!isContextReady || !periodType || !fromPeriod || !anchorPeriod || !initialValues?.targetMapping) {
-        return (
-            <div className={styles.container}>
-                <ContextErrorNotice
-                    message={i18n.t(
-                        'Missing prediction setup details. Open the setup configuration and ensure model, period type, training start, and data mappings are configured.',
-                    )}
-                />
-            </div>
-        );
-    }
-
     return (
         <>
             <FormProvider {...methods}>
@@ -77,7 +72,7 @@ export const NewPredictionForm = ({
                     <Card>
                         <div className={styles.formContainer}>
                             <PredictionSetupNoticeBox
-                                modelId={initialValues.modelId ?? ''}
+                                modelId={context.initialValues.modelId}
                                 periodType={periodType}
                                 fromPeriod={fromPeriod}
                             />
@@ -140,5 +135,63 @@ export const NewPredictionForm = ({
                 />
             )}
         </>
+    );
+};
+
+const NewPredictionFormReady = ({
+    predictionSetupId,
+    initialValues,
+    returnTo,
+}: {
+    predictionSetupId: number;
+    initialValues: Partial<ModelExecutionFormValues>;
+    returnTo?: string;
+}) => {
+    const context = useReadyPredictionFormContext(initialValues);
+
+    if (!context) {
+        return (
+            <div className={styles.container}>
+                <ContextErrorNotice
+                    message={i18n.t(
+                        'Missing prediction setup details. Open the setup configuration and ensure model, period type, training start, and data mappings are configured.',
+                    )}
+                />
+            </div>
+        );
+    }
+
+    return (
+        <NewPredictionFormFields
+            predictionSetupId={predictionSetupId}
+            context={context}
+            returnTo={returnTo}
+        />
+    );
+};
+
+export const NewPredictionForm = ({
+    predictionSetupId,
+    initialValues,
+    returnTo,
+}: NewPredictionFormProps) => {
+    if (!initialValues?.targetMapping) {
+        return (
+            <div className={styles.container}>
+                <ContextErrorNotice
+                    message={i18n.t(
+                        'Missing prediction setup details. Open the setup configuration and ensure model, period type, training start, and data mappings are configured.',
+                    )}
+                />
+            </div>
+        );
+    }
+
+    return (
+        <NewPredictionFormReady
+            predictionSetupId={predictionSetupId}
+            initialValues={initialValues}
+            returnTo={returnTo}
+        />
     );
 };

@@ -1,5 +1,20 @@
 import type { QuantileTarget } from '@dhis2-chap/ui';
 
+export const QUANTILE_KEYS = [
+    'quantile_high',
+    'quantile_mid_high',
+    'median',
+    'quantile_mid_low',
+    'quantile_low',
+] as const;
+
+export type QuantileKey = typeof QUANTILE_KEYS[number];
+
+export type PredictionSetupFormValues = {
+    name: string;
+    use_import_mapping: boolean;
+} & Record<QuantileKey, string>;
+
 const isRecord = (value: unknown): value is Record<string, unknown> => (
     !!value && typeof value === 'object' && !Array.isArray(value)
 );
@@ -39,4 +54,36 @@ export const getPredictionSetupQuantileTargets = (
     }
 
     return normalizeQuantileTargets(predictionSetup.quantileTargets);
+};
+
+export const buildQuantileTargetsFromForm = (
+    values: Pick<PredictionSetupFormValues, 'use_import_mapping' | QuantileKey>,
+): QuantileTarget[] => {
+    if (!values.use_import_mapping) {
+        return [];
+    }
+
+    return QUANTILE_KEYS.map(quantile => ({
+        quantile,
+        dataElementId: values[quantile],
+    }));
+};
+
+export const formValuesFromQuantileTargets = (
+    name: string,
+    quantileTargets: QuantileTarget[],
+): PredictionSetupFormValues => {
+    const getDataElementId = (quantileKey: QuantileKey) => (
+        quantileTargets.find(target => target.quantile === quantileKey)?.dataElementId ?? ''
+    );
+
+    return {
+        name,
+        use_import_mapping: quantileTargets.length > 0,
+        quantile_high: getDataElementId('quantile_high'),
+        quantile_mid_high: getDataElementId('quantile_mid_high'),
+        median: getDataElementId('median'),
+        quantile_mid_low: getDataElementId('quantile_mid_low'),
+        quantile_low: getDataElementId('quantile_low'),
+    };
 };

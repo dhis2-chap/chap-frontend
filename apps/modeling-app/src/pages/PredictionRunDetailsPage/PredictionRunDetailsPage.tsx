@@ -19,7 +19,7 @@ import {
 
 export const PredictionRunDetailsPage: React.FC = () => {
     const navigate = useNavigate();
-    const { configuredId, predictionId } = useParams();
+    const { predictionSetupId, predictionId } = useParams();
     const [savedSettings, setSavedSettings] = useState<PredictionRunAlertSettings>(
         getDefaultPredictionRunAlertSettings,
     );
@@ -34,7 +34,7 @@ export const PredictionRunDetailsPage: React.FC = () => {
         isLoading: isModelsLoading,
     } = useModels({ includeArchived: true });
     const model = models?.find(modelSpec => modelSpec.name === prediction?.modelId);
-    const returnTo = configuredId ? `/predictions/${configuredId}` : '/predictions';
+    const returnTo = predictionSetupId ? `/predictions/${predictionSetupId}` : '/predictions';
     const settings = isEditing ? draftSettings : savedSettings;
 
     const handleEdit = () => {
@@ -53,11 +53,11 @@ export const PredictionRunDetailsPage: React.FC = () => {
     };
 
     const handleImport = () => {
-        if (!prediction || !configuredId) {
+        if (!prediction || !predictionSetupId) {
             return;
         }
 
-        navigate(`/predictions/${configuredId}/runs/${prediction.id}/import`, {
+        navigate(`/predictions/${predictionSetupId}/runs/${prediction.id}/import`, {
             state: {
                 alertProbability: savedSettings.alertProbability,
                 useAlertOutputs: savedSettings.thresholdsEnabled,

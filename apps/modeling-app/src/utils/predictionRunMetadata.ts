@@ -1,15 +1,5 @@
-import {
-    addMonths,
-    addWeeks,
-    format,
-    getISOWeek,
-    getISOWeekYear,
-    isValid,
-    parse,
-    startOfISOWeek,
-} from 'date-fns';
 import type { PredictionInfo } from '@dhis2-chap/ui';
-import { parseSupportedPeriodType, SUPPORTED_PERIOD_TYPES } from './supportedPeriodType';
+import { formatPeriodId, getNextPeriods } from './periods';
 
 const PREDICTION_PERIOD_METADATA_KEYS = [
     'predictionPeriods',
@@ -57,59 +47,7 @@ const getMetadataTrainingDataToDate = (metaData?: Record<string, unknown>) => {
         || getStringValue(metaData.toDate);
 };
 
-export const getNextPeriods = (
-    lastPeriod: string | undefined | null,
-    periodType: string | undefined | null,
-    count: number | undefined | null,
-) => {
-    if (!lastPeriod || !count || count <= 0) {
-        return [];
-    }
-
-    const normalizedPeriodType = parseSupportedPeriodType(periodType);
-
-    if (normalizedPeriodType === SUPPORTED_PERIOD_TYPES.MONTH) {
-        const lastPeriodDate = parse(lastPeriod, 'yyyyMM', new Date());
-
-        if (!isValid(lastPeriodDate)) {
-            return [];
-        }
-
-        return Array.from({ length: count }, (_, index) => (
-            format(addMonths(lastPeriodDate, index + 1), 'yyyyMM')
-        ));
-    }
-
-    if (normalizedPeriodType === SUPPORTED_PERIOD_TYPES.WEEK) {
-        const weekMatch = lastPeriod.match(/^(\d{4})W(\d{1,2})$/);
-
-        if (!weekMatch) {
-            return [];
-        }
-
-        const [, year, week] = weekMatch;
-        const lastPeriodDate = parse(
-            `${year}-W${week.padStart(2, '0')}`,
-            'RRRR-\'W\'II',
-            new Date(),
-        );
-
-        if (!isValid(lastPeriodDate)) {
-            return [];
-        }
-
-        const padWeek = week.length > 1;
-        const startDate = addWeeks(startOfISOWeek(lastPeriodDate), 1);
-
-        return Array.from({ length: count }, (_, index) => {
-            const date = addWeeks(startDate, index);
-            const weekNumber = String(getISOWeek(date));
-            return `${getISOWeekYear(date)}W${padWeek ? weekNumber.padStart(2, '0') : weekNumber}`;
-        });
-    }
-
-    return [];
-};
+export { formatPeriodId, getNextPeriods };
 
 export const getPredictionPeriodIds = (prediction: PredictionInfo) => (
     getMetadataPredictionPeriods(prediction.metaData)
@@ -124,35 +62,6 @@ export const getTrainingDataToDate = (prediction: PredictionInfo) => (
     getMetadataTrainingDataToDate(prediction.metaData)
     || prediction.dataset?.lastPeriod
 );
-
-export const formatPeriodId = (periodId: string | undefined | null) => {
-    if (!periodId) {
-        return undefined;
-    }
-
-    const monthDate = parse(periodId, 'yyyyMM', new Date());
-
-    if (/^\d{6}$/.test(periodId) && isValid(monthDate)) {
-        return format(monthDate, 'MMMM yyyy');
-    }
-
-    const weekMatch = periodId.match(/^(\d{4})W(\d{1,2})$/);
-
-    if (weekMatch) {
-        const [, year, week] = weekMatch;
-        const weekDate = parse(
-            `${year}-W${week.padStart(2, '0')}`,
-            'RRRR-\'W\'II',
-            new Date(),
-        );
-
-        if (isValid(weekDate)) {
-            return `Week ${Number(week)}, ${year}`;
-        }
-    }
-
-    return periodId;
-};
 
 export const buildPredictionRunMetaData = ({
     nPeriods,

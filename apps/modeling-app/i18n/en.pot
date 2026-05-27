@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-05-26T11:56:42.186Z\n"
-"PO-Revision-Date: 2026-05-26T11:56:42.187Z\n"
+"POT-Creation-Date: 2026-05-27T09:53:24.061Z\n"
+"PO-Revision-Date: 2026-05-27T09:53:24.061Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -573,18 +573,18 @@ msgstr "An unknown error occurred"
 msgid "Cannot run prediction"
 msgstr "Cannot run prediction"
 
+msgid "Prediction run name"
+msgstr "Prediction run name"
+
+msgid "Run prediction"
+msgstr "Run prediction"
+
 msgid ""
 "Missing prediction setup details. Open the setup configuration and ensure "
 "model, period type, training start, and data mappings are configured."
 msgstr ""
 "Missing prediction setup details. Open the setup configuration and ensure "
 "model, period type, training start, and data mappings are configured."
-
-msgid "Prediction run name"
-msgstr "Prediction run name"
-
-msgid "Run prediction"
-msgstr "Run prediction"
 
 msgid "Offset"
 msgstr "Offset"
@@ -961,45 +961,11 @@ msgstr "Start period"
 msgid "End period"
 msgstr "End period"
 
-msgid "Data element is required"
-msgstr "Data element is required"
-
-msgid "Quantile high"
-msgstr "Quantile high"
-
-msgid "Quantile mid high"
-msgstr "Quantile mid high"
-
-msgid "Median"
-msgstr "Median"
-
-msgid "Quantile mid low"
-msgstr "Quantile mid low"
-
-msgid "Quantile low"
-msgstr "Quantile low"
+msgid "Predict"
+msgstr "Predict"
 
 msgid "Create prediction setup"
 msgstr "Create prediction setup"
-
-msgid "Setup name"
-msgstr "Setup name"
-
-msgid "You can change this configuration at any point."
-msgstr "You can change this configuration at any point."
-
-msgid "Set default import mapping"
-msgstr "Set default import mapping"
-
-msgid ""
-"Choose the DHIS2 data elements to use by default when prediction outputs "
-"are imported."
-msgstr ""
-"Choose the DHIS2 data elements to use by default when prediction outputs "
-"are imported."
-
-msgid "Predict"
-msgstr "Predict"
 
 msgid "Compare with..."
 msgstr "Compare with..."
@@ -1135,27 +1101,6 @@ msgstr "Error loading prediction setup"
 msgid "Prediction setup not found."
 msgstr "Prediction setup not found."
 
-msgid "Outbreak"
-msgstr "Outbreak"
-
-msgid "No outbreak"
-msgstr "No outbreak"
-
-msgid "Unavailable"
-msgstr "Unavailable"
-
-msgid "Outbreak regions"
-msgstr "Outbreak regions"
-
-msgid "No outbreak regions"
-msgstr "No outbreak regions"
-
-msgid "Unavailable regions"
-msgstr "Unavailable regions"
-
-msgid "Unnamed prediction"
-msgstr "Unnamed prediction"
-
 msgid "Unable to load prediction data"
 msgstr "Unable to load prediction data"
 
@@ -1171,67 +1116,6 @@ msgstr "No prediction data found"
 
 msgid "This prediction has no forecast data to configure alerts for."
 msgstr "This prediction has no forecast data to configure alerts for."
-
-msgid "Minimum outbreak probability"
-msgstr "Minimum outbreak probability"
-
-msgid "Prediction run"
-msgstr "Prediction run"
-
-msgid "Search regions"
-msgstr "Search regions"
-
-msgid "Status filter"
-msgstr "Status filter"
-
-msgid "Shift zoom left"
-msgstr "Shift zoom left"
-
-msgid "Shift zoom left one period"
-msgstr "Shift zoom left one period"
-
-msgid "Reset zoom"
-msgstr "Reset zoom"
-
-msgid "Shift zoom right"
-msgstr "Shift zoom right"
-
-msgid "Shift zoom right one period"
-msgstr "Shift zoom right one period"
-
-msgid "No regions match the selected filters."
-msgstr "No regions match the selected filters."
-
-msgid "Threshold controls"
-msgstr "Threshold controls"
-
-msgid "Prediction target"
-msgstr "Prediction target"
-
-msgid "Regions with alerts"
-msgstr "Regions with alerts"
-
-msgid "Number of regions with at least one forecast period marked as an outbreak."
-msgstr "Number of regions with at least one forecast period marked as an outbreak."
-
-msgid "Alert periods"
-msgstr "Alert periods"
-
-msgid "Total number of alerts across all regions."
-msgstr "Total number of alerts across all regions."
-
-msgid "Thresholds unavailable"
-msgstr "Thresholds unavailable"
-
-msgid ""
-"Number of regions without enough historical disease data to calculate a "
-"threshold."
-msgstr ""
-"Number of regions without enough historical disease data to calculate a "
-"threshold."
-
-msgid "Alert preview"
-msgstr "Alert preview"
 
 msgid "Threshold unavailable"
 msgstr "Threshold unavailable"
@@ -1261,18 +1145,17 @@ msgstr "Adjust alert output"
 msgid "Apply"
 msgstr "Apply"
 
-msgid ""
-"There was a problem loading the prediction data required for this "
-"prediction run."
-msgstr ""
-"There was a problem loading the prediction data required for this "
-"prediction run."
+msgid "Regions with alerts"
+msgstr "Regions with alerts"
 
-msgid "This prediction has no forecast data to display."
-msgstr "This prediction has no forecast data to display."
+msgid "Alert periods"
+msgstr "Alert periods"
 
-msgid "Prediction settings"
-msgstr "Prediction settings"
+msgid "Thresholds unavailable"
+msgstr "Thresholds unavailable"
+
+msgid "Prediction target"
+msgstr "Prediction target"
 
 msgid "Outbreak thresholds"
 msgstr "Outbreak thresholds"
@@ -1286,8 +1169,24 @@ msgstr "Enabled"
 msgid "Disabled"
 msgstr "Disabled"
 
+msgid "Minimum outbreak probability"
+msgstr "Minimum outbreak probability"
+
 msgid "Edit"
 msgstr "Edit"
+
+msgid ""
+"There was a problem loading the prediction data required for this "
+"prediction run."
+msgstr ""
+"There was a problem loading the prediction data required for this "
+"prediction run."
+
+msgid "This prediction has no forecast data to display."
+msgstr "This prediction has no forecast data to display."
+
+msgid "Prediction settings"
+msgstr "Prediction settings"
 
 msgid "Prediction result"
 msgstr "Prediction result"
@@ -1325,6 +1224,12 @@ msgstr "Search for data elements"
 msgid "Search for indicators, data elements, or program indicators"
 msgstr "Search for indicators, data elements, or program indicators"
 
+msgid "Alert probability is required"
+msgstr "Alert probability is required"
+
+msgid "Outbreak indicator is required"
+msgstr "Outbreak indicator is required"
+
 msgid "Unable to load alert data"
 msgstr "Unable to load alert data"
 
@@ -1344,6 +1249,21 @@ msgid ""
 msgstr ""
 "Importing forecasted values into DHIS2 requires you to set up five data "
 "elements for the quantiles outputted by the model."
+
+msgid "Quantile high"
+msgstr "Quantile high"
+
+msgid "Quantile mid high"
+msgstr "Quantile mid high"
+
+msgid "Median"
+msgstr "Median"
+
+msgid "Quantile mid low"
+msgstr "Quantile mid low"
+
+msgid "Quantile low"
+msgstr "Quantile low"
 
 msgid "Alert output"
 msgstr "Alert output"
@@ -1376,6 +1296,12 @@ msgstr "Adjust"
 msgid "Outbreak indicator"
 msgstr "Outbreak indicator"
 
+msgid "Cannot import prediction"
+msgstr "Cannot import prediction"
+
+msgid "Missing or invalid prediction setup id."
+msgstr "Missing or invalid prediction setup id."
+
 msgid "Failed to post prediction data"
 msgstr "Failed to post prediction data"
 
@@ -1407,11 +1333,72 @@ msgstr "Prediction setup deleted"
 msgid "Failed to delete prediction setup"
 msgstr "Failed to delete prediction setup"
 
+msgid "Data element is required"
+msgstr "Data element is required"
+
+msgid "Setup name"
+msgstr "Setup name"
+
+msgid "You can change this configuration at any point."
+msgstr "You can change this configuration at any point."
+
+msgid "Set default import mapping"
+msgstr "Set default import mapping"
+
+msgid ""
+"Choose the DHIS2 data elements to use by default when prediction outputs "
+"are imported."
+msgstr ""
+"Choose the DHIS2 data elements to use by default when prediction outputs "
+"are imported."
+
 msgid "There are running jobs in the background"
 msgstr "There are running jobs in the background"
 
 msgid "Running jobs"
 msgstr "Running jobs"
+
+msgid "Outbreak"
+msgstr "Outbreak"
+
+msgid "No outbreak"
+msgstr "No outbreak"
+
+msgid "Unavailable"
+msgstr "Unavailable"
+
+msgid "Outbreak regions"
+msgstr "Outbreak regions"
+
+msgid "No outbreak regions"
+msgstr "No outbreak regions"
+
+msgid "Unavailable regions"
+msgstr "Unavailable regions"
+
+msgid "Search regions"
+msgstr "Search regions"
+
+msgid "Status filter"
+msgstr "Status filter"
+
+msgid "Shift zoom left"
+msgstr "Shift zoom left"
+
+msgid "Shift zoom left one period"
+msgstr "Shift zoom left one period"
+
+msgid "Reset zoom"
+msgstr "Reset zoom"
+
+msgid "Shift zoom right"
+msgstr "Shift zoom right"
+
+msgid "Shift zoom right one period"
+msgstr "Shift zoom right one period"
+
+msgid "No regions match the selected filters."
+msgstr "No regions match the selected filters."
 
 msgid "Dashboard"
 msgstr "Dashboard"
@@ -1822,11 +1809,11 @@ msgstr "Prediction Setups"
 msgid "See all prediction setups"
 msgstr "See all prediction setups"
 
-msgid "Error loading prediction setups"
-msgstr "Error loading prediction setups"
-
 msgid "No prediction setups yet"
 msgstr "No prediction setups yet"
+
+msgid "Error loading prediction setups"
+msgstr "Error loading prediction setups"
 
 msgid "Evaluation details"
 msgstr "Evaluation details"
@@ -1924,6 +1911,9 @@ msgstr "Import the forecasted values of this prediction into DHIS2."
 
 msgid "Prediction details"
 msgstr "Prediction details"
+
+msgid "Unnamed prediction"
+msgstr "Unnamed prediction"
 
 msgid "Ready to predict"
 msgstr "Ready to predict"

@@ -87,9 +87,9 @@ const PredictionPeriodsCell = ({ prediction }: { prediction: PredictionInfo }) =
 };
 
 type Props = {
-    configuredId?: string;
+    predictionSetupId?: string;
     error?: unknown;
-    hasValidConfiguredId: boolean;
+    hasValidPredictionSetupId: boolean;
     hasRunningJob: boolean;
     isLoading: boolean;
     predictions: PredictionInfo[];
@@ -135,9 +135,9 @@ const WidgetHeader = ({
 };
 
 export const PredictionRunsWidget = ({
-    configuredId,
+    predictionSetupId,
     error,
-    hasValidConfiguredId,
+    hasValidPredictionSetupId,
     hasRunningJob,
     isLoading,
     predictions,
@@ -151,7 +151,7 @@ export const PredictionRunsWidget = ({
         columnHelper.accessor('id', {
             header: () => i18n.t('Run ID'),
             cell: info => (
-                <Link to={`/predictions/${configuredId}/runs/${info.row.original.id}`}>
+                <Link to={`/predictions/${predictionSetupId}/runs/${info.row.original.id}`}>
                     {info.getValue()}
                 </Link>
             ),
@@ -179,12 +179,12 @@ export const PredictionRunsWidget = ({
             enableSorting: false,
             cell: info => (
                 <PredictionRunActionsMenu
-                    configuredId={configuredId}
+                    predictionSetupId={predictionSetupId}
                     predictionId={info.row.original.id}
                 />
             ),
         }),
-    ], [configuredId]);
+    ], [predictionSetupId]);
     const table = useReactTable({
         data: predictions,
         columns,
@@ -220,12 +220,12 @@ export const PredictionRunsWidget = ({
                         {i18n.t('Error loading prediction runs')}
                     </div>
                 )}
-                {!isLoading && !hasError && !hasValidConfiguredId && (
+                {!isLoading && !hasError && !hasValidPredictionSetupId && (
                     <div className={styles.emptyState}>
                         {i18n.t('Invalid prediction setup')}
                     </div>
                 )}
-                {!isLoading && !hasError && hasValidConfiguredId && !hasRuns && (
+                {!isLoading && !hasError && hasValidPredictionSetupId && !hasRuns && (
                     <div className={styles.emptyState}>
                         {i18n.t('No completed predictions yet. Run a prediction to start producing predictions.')}
                     </div>
@@ -256,7 +256,7 @@ export const PredictionRunsWidget = ({
                         <DataTableBody>
                             {table.getRowModel().rows.map((row) => {
                                 const navigateToRun = () => navigate(
-                                    `/predictions/${configuredId}/runs/${row.original.id}`,
+                                    `/predictions/${predictionSetupId}/runs/${row.original.id}`,
                                 );
                                 return (
                                     <DataTableRow

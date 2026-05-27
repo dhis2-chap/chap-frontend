@@ -24,9 +24,11 @@ type Props = {
 
 export const usePredictionSeries = ({ prediction, model }: Props) => {
     const {
-        orgUnits: orgUnitIds = [],
         dataset,
     } = prediction;
+    const orgUnitIds = prediction.orgUnits?.length
+        ? prediction.orgUnits
+        : dataset.orgUnits ?? [];
 
     const {
         predictionEntries,
@@ -62,8 +64,11 @@ export const usePredictionSeries = ({ prediction, model }: Props) => {
     const predictionTargetId: string = dataset.dataSources?.find(
         dataSource => dataSource.covariate === model.target.name,
     )?.dataElementId ?? '';
+    const shouldLoadPredictionTarget = !!predictionTargetId;
 
     const { dataItem, isLoading: isDataItemLoading } = useDataItemById(predictionTargetId);
+    const isOrgUnitsQueryEnabled = orgUnitIds.length > 0;
+    const isActualCasesQueryEnabled = !!dataset.id;
 
     const orgUnitsMap = useMemo(() => {
         const map = new Map<string, { id: string; displayName: string }>();
@@ -87,11 +92,11 @@ export const usePredictionSeries = ({ prediction, model }: Props) => {
 
     return {
         series,
-        predictionTargetName: dataItem?.displayName ?? predictionTargetId,
+        predictionTargetName: dataItem?.displayName ?? (predictionTargetId || model.target.displayName),
         isLoading: isPredictionEntriesLoading
-            || isOrgUnitsLoading
-            || isDataItemLoading
-            || isActualCasesLoading,
+            || (isOrgUnitsQueryEnabled && isOrgUnitsLoading)
+            || (shouldLoadPredictionTarget && isDataItemLoading)
+            || (isActualCasesQueryEnabled && isActualCasesLoading),
         error: predictionEntriesError || orgUnitsError || actualCasesError,
     };
 };

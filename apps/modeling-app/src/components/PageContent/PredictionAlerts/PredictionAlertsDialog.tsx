@@ -9,7 +9,7 @@ import {
     ModalTitle,
 } from '@dhis2/ui';
 import type { ModelSpecRead, OutbreakProbability, PredictionInfo } from '@dhis2-chap/ui';
-import { PredictionAlertsConfigurator } from './PredictionAlertsConfigurator';
+import { AlertPreviewPanel } from './AlertPreviewPanel';
 import styles from './PredictionAlerts.module.css';
 
 type Props = {
@@ -43,12 +43,11 @@ export const PredictionAlertsDialog = ({
         >
             <ModalTitle>{i18n.t('Adjust alert output')}</ModalTitle>
             <ModalContent className={styles.dialogContent}>
-                <PredictionAlertsConfigurator
+                <AlertPreviewPanel
                     prediction={prediction}
                     model={model}
                     selectedProbability={draftProbability}
                     onSelectProbability={setDraftProbability}
-                    density="dialog"
                 />
             </ModalContent>
             <ModalActions>
