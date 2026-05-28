@@ -19,6 +19,15 @@ import CreatingAnEvaluation, {
 import CreatingAPrediction, {
     frontmatter as creatingAPredictionFrontmatter,
 } from './user-guides/creating-a-prediction/index.md';
+import ViewingEvaluationResults, {
+    frontmatter as viewingEvaluationResultsFrontmatter,
+} from './user-guides/viewing-evaluation-results/index.md';
+import ComparingEvaluations, {
+    frontmatter as comparingEvaluationsFrontmatter,
+} from './user-guides/comparing-evaluations/index.md';
+import Settings, {
+    frontmatter as settingsFrontmatter,
+} from './user-guides/settings/index.md';
 import WhatIsAModel, {
     frontmatter as whatIsAModelFrontmatter,
 } from './basics/what-is-a-model/index.mdx';
@@ -55,6 +64,9 @@ export const guides: Guide[] = [
     createGuide('configuring-a-model', configuringAModelFrontmatter, ConfiguringAModel),
     createGuide('creating-an-evaluation', creatingAnEvaluationFrontmatter, CreatingAnEvaluation),
     createGuide('creating-a-prediction', creatingAPredictionFrontmatter, CreatingAPrediction),
+    createGuide('viewing-evaluation-results', viewingEvaluationResultsFrontmatter, ViewingEvaluationResults),
+    createGuide('comparing-evaluations', comparingEvaluationsFrontmatter, ComparingEvaluations),
+    createGuide('settings', settingsFrontmatter, Settings),
 ];
 
 export const getGuideBySlug = (slug: string): Guide | undefined =>
