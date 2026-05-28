@@ -47,22 +47,28 @@ const scaleFactor = (level: ConfidenceLevel): number => {
 const buildChartOptions = (level: ConfidenceLevel): Highcharts.Options => {
     const factor = scaleFactor(level);
 
-    const bandData: Highcharts.PointOptionsObject[] = MAX_HALF_WIDTH
-        .map((hw, i) => {
-            const med = MEDIAN[i];
-            if (med === null || hw === 0) return null;
+    const bandData: Highcharts.PointOptionsObject[] = [];
+    MAX_HALF_WIDTH.forEach((hw, i) => {
+        const med = MEDIAN[i];
+        if (med !== null && hw !== 0) {
             const half = Math.round(hw * factor);
-            return { x: i, low: med - half, high: med + half };
-        })
-        .filter((d): d is Highcharts.PointOptionsObject => d !== null);
+            bandData.push({ x: i, low: med - half, high: med + half });
+        }
+    });
 
-    const actualSeries: Highcharts.PointOptionsObject[] = ACTUAL
-        .map((v, i) => (v !== null ? { x: i, y: v } : null))
-        .filter((d): d is Highcharts.PointOptionsObject => d !== null);
+    const actualSeries: Highcharts.PointOptionsObject[] = [];
+    ACTUAL.forEach((v, i) => {
+        if (v !== null) {
+            actualSeries.push({ x: i, y: v });
+        }
+    });
 
-    const medianSeries: Highcharts.PointOptionsObject[] = MEDIAN
-        .map((v, i) => (v !== null ? { x: i, y: v } : null))
-        .filter((d): d is Highcharts.PointOptionsObject => d !== null);
+    const medianSeries: Highcharts.PointOptionsObject[] = [];
+    MEDIAN.forEach((v, i) => {
+        if (v !== null) {
+            medianSeries.push({ x: i, y: v });
+        }
+    });
 
     return {
         chart: {
