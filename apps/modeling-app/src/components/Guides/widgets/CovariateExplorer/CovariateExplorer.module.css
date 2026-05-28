@@ -1,0 +1,62 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 24px auto;
+    border-radius: 8px;
+}
+
+.chartWrapper {
+    width: 100%;
+    padding: 32px 32px 0 0;
+    max-width: 750px;
+    background-color: var(--colors-grey100, #f3f5f7);
+    margin: 0 auto;
+}
+
+.toggleContainer {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+}
+
+.toggleButton {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border: 1px solid var(--colors-grey400, #a0adba);
+    border-radius: 4px;
+    background-color: var(--colors-white, #fff);
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.15s, border-color 0.15s;
+}
+
+.toggleButton:hover {
+    background-color: var(--colors-grey200, #e8edf2);
+    border-color: var(--colors-grey500, #6e7a8a);
+}
+
+.toggleButtonActive {
+    composes: toggleButton;
+    background-color: var(--colors-grey200, #e8edf2);
+    border-color: var(--colors-grey600, #4a5768);
+    font-weight: 500;
+}
+
+.indicator {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.hint {
+    margin-top: 10px;
+    font-size: 0.8rem;
+    color: var(--colors-grey700, #404b5a);
+    text-align: center;
+}
