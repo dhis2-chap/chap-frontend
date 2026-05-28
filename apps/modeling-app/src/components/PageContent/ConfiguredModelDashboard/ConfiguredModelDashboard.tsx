@@ -1,5 +1,4 @@
 import { useMemo } from 'react';
-import type { PredictionInfo } from '@dhis2-chap/ui';
 import { useParams } from 'react-router-dom';
 import { sortByCreatedDesc } from '../../../utils/sortByCreated';
 import { JOB_STATUSES, useJobs } from '../../../hooks/useJobs';

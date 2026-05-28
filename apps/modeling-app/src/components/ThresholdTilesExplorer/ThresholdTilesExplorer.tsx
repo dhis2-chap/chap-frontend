@@ -182,7 +182,6 @@ export const ThresholdTilesExplorer = ({
 
     useEffect(() => {
         setZoomRange(null);
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- caller controls reset keys
     }, zoomResetDeps);
 
     useEffect(() => {

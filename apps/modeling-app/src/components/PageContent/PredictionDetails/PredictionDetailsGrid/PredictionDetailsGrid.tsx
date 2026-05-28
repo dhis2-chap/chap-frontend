@@ -11,7 +11,6 @@ import {
 import {
     DEFAULT_OUTBREAK_PROBABILITY,
     getThresholdTileViewModels,
-    OUTBREAK_PROBABILITY_OPTIONS,
 } from '@dhis2-chap/ui';
 import type {
     ModelSpecRead,
