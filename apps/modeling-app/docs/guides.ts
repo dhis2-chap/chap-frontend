@@ -25,6 +25,12 @@ import WhatIsAModel, {
 import WhatIsAnEvaluation, {
     frontmatter as whatIsAnEvaluationFrontmatter,
 } from './basics/what-is-an-evaluation/index.mdx';
+import WhatAreCovariates, {
+    frontmatter as whatAreCovariatesFrontmatter,
+} from './basics/what-are-covariates/index.mdx';
+import WhatIsAPredictionInterval, {
+    frontmatter as whatIsAPredictionIntervalFrontmatter,
+} from './basics/what-is-a-prediction-interval/index.mdx';
 
 export interface GuideFrontmatter {
     title: string;
@@ -52,6 +58,8 @@ export const guides: Guide[] = [
     createGuide('getting-started', gettingStartedFrontmatter, GettingStarted),
     createGuide('what-is-a-model', whatIsAModelFrontmatter, WhatIsAModel),
     createGuide('what-is-an-evaluation', whatIsAnEvaluationFrontmatter, WhatIsAnEvaluation),
+    createGuide('what-are-covariates', whatAreCovariatesFrontmatter, WhatAreCovariates),
+    createGuide('what-is-a-prediction-interval', whatIsAPredictionIntervalFrontmatter, WhatIsAPredictionInterval),
     createGuide('configuring-a-model', configuringAModelFrontmatter, ConfiguringAModel),
     createGuide('creating-an-evaluation', creatingAnEvaluationFrontmatter, CreatingAnEvaluation),
     createGuide('creating-a-prediction', creatingAPredictionFrontmatter, CreatingAPrediction),
