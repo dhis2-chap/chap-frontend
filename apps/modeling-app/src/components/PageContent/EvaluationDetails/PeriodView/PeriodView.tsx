@@ -1,5 +1,5 @@
 import i18n from '@dhis2/d2-i18n';
-import { convertServerToClientPeriod, PERIOD_TYPES } from '@dhis2-chap/ui';
+import { convertServerToClientPeriod, PERIOD_TYPES } from '@dhis2-chap/core';
 import styles from '../EvaluationSummaryWidget/EvaluationSummaryWidget.module.css';
 
 type Props = {

@@ -1,0 +1,47 @@
+.content {
+    overflow: hidden;
+}
+
+.filterBar {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 8px 12px 12px;
+}
+
+.statusFilter {
+    inline-size: 180px;
+}
+
+.emptyState,
+.loadingState,
+.errorState {
+    padding: 18px;
+    color: var(--colors-grey700);
+    font-size: inherit;
+    line-height: 20px;
+}
+
+.loadingState {
+    display: flex;
+    min-block-size: 112px;
+    align-items: center;
+    justify-content: center;
+}
+
+.errorState {
+    color: var(--colors-red700);
+}
+
+.viewAllLink {
+    color: var(--colors-grey700);
+    font-size: 13px;
+    line-height: 18px;
+    white-space: nowrap;
+}
+
+.viewAllLink:hover {
+    color: var(--colors-grey700);
+    text-decoration: underline;
+}

@@ -6,7 +6,7 @@ import {
 } from './useSearchParamSelections';
 import { useEvaluationOverlap } from '../../hooks/useEvaluationOverlap';
 import { useOrgUnitsById } from '../../hooks/useOrgUnitsById';
-import { sortPeriods, PERIOD_TYPES } from '@dhis2-chap/ui';
+import { sortPeriods, PERIOD_TYPES } from '@dhis2-chap/core';
 
 export const useCompareSelectionController = ({
     maxSelectedOrgUnits = 10,

@@ -1,13 +1,8 @@
 import { useRef, useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ModelExecutionFormValues } from '../../ModelExecutionForm/hooks/useModelExecutionFormState';
-import {
-    BacktestsService,
-    FeatureCollectionModel,
-    MakeBacktestWithDataRequest,
-    ApiError,
-    PERIOD_TYPES,
-} from '@dhis2-chap/ui';
+import { PERIOD_TYPES } from '@dhis2-chap/core';
+import { BacktestsService, FeatureCollectionModel, MakeBacktestWithDataRequest, ApiError } from '@dhis2-chap/ui';
 import { useDataEngine } from '@dhis2/app-runtime';
 import { useNavigate } from 'react-router-dom';
 import { prepareBacktestData } from '../../ModelExecutionForm/utils/prepareBacktestData';

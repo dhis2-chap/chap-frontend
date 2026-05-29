@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { ModelData } from '../../interfaces/Evaluation';
 import { normalizeEvaluationModelsToSharedPeriods } from '../EvaluationResponse';
-import { PERIOD_TYPES } from '../timePeriodUtils';
+import { PERIOD_TYPES } from '@dhis2-chap/core';
 
 const createModel = (
     modelName: string,

@@ -10,7 +10,7 @@ import {
     joinRealAndPredictedData,
     normalizeEvaluationModelsToSharedPeriods,
 } from './EvaluationResponse';
-import { PERIOD_TYPES, sortPeriods } from './timePeriodUtils';
+import { PERIOD_TYPES, sortPeriods } from '@dhis2-chap/core';
 
 const Y_AXIS_HEADROOM_MULTIPLIER = 1.05;
 

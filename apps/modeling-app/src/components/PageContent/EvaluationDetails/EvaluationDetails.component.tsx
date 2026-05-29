@@ -17,6 +17,7 @@ export const EvaluationDetailsComponent = ({ evaluationId }: Props) => {
     const { backtest, isLoading: isBacktestLoading, error: backtestError } = useBacktestById(evaluationId);
     const { enabled: isMetricPlotsEnabled } = useExperimentalFeature(FEATURES.METRIC_PLOTS);
     const { enabled: isEvaluationPlotsEnabled } = useExperimentalFeature(FEATURES.EVALUATION_PLOTS);
+    const predictionSetupId = backtest?.predictionSetupId ?? undefined;
 
     if (isBacktestLoading) {
         return (
@@ -54,9 +55,6 @@ export const EvaluationDetailsComponent = ({ evaluationId }: Props) => {
     return (
         <div className={styles.container}>
             <div className={styles.leftColumn}>
-                <QuickActionsWidget
-                    evaluationId={evaluationId}
-                />
                 <ModelExecutionResultWidget
                     backtest={backtest}
                 />
@@ -72,6 +70,10 @@ export const EvaluationDetailsComponent = ({ evaluationId }: Props) => {
                 )}
             </div>
             <div className={styles.rightColumn}>
+                <QuickActionsWidget
+                    evaluationId={evaluationId}
+                    predictionSetupId={predictionSetupId}
+                />
                 <EvaluationSummaryWidget
                     evaluationId={evaluationId}
                 />
