@@ -1,0 +1,55 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 24px auto;
+    border-radius: 8px;
+}
+
+.chartWrapper {
+    width: 100%;
+    padding: 32px 32px 0 0;
+    max-width: 750px;
+    background-color: var(--colors-grey100, #f3f5f7);
+    margin: 0 auto;
+}
+
+.toggleContainer {
+    display: flex;
+    justify-content: center;
+    column-gap: 32px;
+    row-gap: 10px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+}
+
+.toggleCheckbox {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    line-height: 1.2;
+    color: var(--colors-grey800, #212934);
+}
+
+.toggleCheckbox input {
+    margin: 0;
+    cursor: pointer;
+}
+
+.indicator {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-left: 2px;
+    flex: 0 0 auto;
+}
+
+.hint {
+    margin-top: 10px;
+    font-size: 0.8rem;
+    color: var(--colors-grey700, #404b5a);
+    text-align: center;
+}

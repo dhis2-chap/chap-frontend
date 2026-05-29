@@ -1,0 +1,67 @@
+---
+title: Covariates
+description: Understanding what covariates are and how they help models make better predictions
+order: 3
+category: Core concepts
+---
+
+# What are Covariates?
+
+A **covariate** is any input variable that a model uses - alongside the disease cases themselves - to make better predictions.
+
+Think of it this way: if you were trying to predict next month's malaria cases, you wouldn't just look at last month's case count. You'd also consider the recent rainfall, the temperature, the time of year, and maybe the population size. Each of those additional pieces of information is a covariate.
+
+Covariates give the model context. Without them, a model can only look at past cases and try to extend the trend. With covariates, the model can learn *why* cases go up or down and use that understanding to make smarter predictions.
+
+## Real-world examples
+
+Different diseases are influenced by different factors. Here are some common covariates used in health forecasting:
+
+- **Rainfall** - Heavy rainfall creates breeding sites for mosquitoes, often leading to increased malaria cases a few weeks later
+- **Temperature** - Warmer temperatures speed up mosquito breeding cycles and viral replication, affecting diseases like dengue
+- **Humidity** - Influences how long mosquitoes survive and how well viruses spread
+- **Population** - Larger populations naturally have more cases, so the model needs to account for population size
+- **Elevation** - Mosquito-borne diseases are less common at higher altitudes
+
+The chart below shows a year of malaria cases alongside two covariates. Try toggling them on and off to see how they relate to the disease pattern:
+
+<CovariateExplorer />
+
+Notice how the rainfall peak in June-August is followed by a peak in malaria cases about one to two months later? That's exactly the kind of pattern a model can learn from covariates.
+
+## Required vs. optional covariates
+
+When you select a model in Chap, each model specifies which covariates it needs:
+
+- **Required covariates** are the inputs the model was designed around. The model cannot run without them. For example, a climate-driven malaria model might require rainfall and temperature data.
+- **Optional covariates** can improve predictions if available, but the model will still work without them. For example, humidity data might help, but the model can fall back on just rainfall and temperature.
+
+When setting up a model, Chap will clearly show you which covariates are required and which are optional.
+
+## Data mapping: connecting covariates to DHIS2
+
+Your covariate data lives in your DHIS2 system - as data elements, indicators, or program indicators. During setup, you need to tell the model where to find each covariate. This process is called **data mapping**.
+
+For example, if the model needs "rainfall," you map it to the specific DHIS2 data element that contains your rainfall measurements. If the model needs "population," you map it to your population indicator.
+
+Data mapping is straightforward: for each covariate the model expects, you select the corresponding item from your DHIS2 system. Chap guides you through this process when you configure a model.
+
+> See how to do this in the [Configuring a Model](/guides/configuring-a-model) guide.
+
+## Why covariates matter
+
+A model without covariates is like predicting the weather by only looking at yesterday's temperature. It might get the general trend right, but it will miss the sudden changes that matter most for planning.
+
+With the right covariates, models can:
+
+- **Detect early warning signals** - A spike in rainfall today may predict a surge in cases weeks from now
+- **Explain seasonal patterns** - Instead of just memorizing "cases go up in September," the model understands *why*
+- **Adapt to unusual conditions** - If this year's rainy season is heavier than normal, the model can adjust its predictions accordingly
+
+The quality of your covariates directly affects the quality of your predictions. Good, complete covariate data leads to narrower prediction intervals and more reliable forecasts.
+
+## Next: What is a Prediction Interval?
+
+When a model makes a prediction, it doesn't just give you a single number - it gives you a range. Understanding this range is key to using model outputs effectively for planning and decision-making.
+
+→ Continue to [What is a Prediction Interval?](/guides/what-is-a-prediction-interval)
