@@ -4,13 +4,17 @@ import {
     Button,
     ButtonStrip,
     CircularLoader,
+    IconChevronRight16,
     IconImportItems24,
     NoticeBox,
     Switch,
 } from '@dhis2/ui';
 import {
+    convertServerToClientPeriod,
     DEFAULT_OUTBREAK_PROBABILITY,
     getThresholdTileViewModels,
+    PERIOD_TYPES,
+    Tag,
 } from '@dhis2-chap/ui';
 import type {
     ModelSpecRead,
@@ -32,12 +36,8 @@ export type PredictionRunAlertSettings = {
 };
 
 type Props = {
-    isEditing: boolean;
     model: ModelSpecRead;
-    onCancel: () => void;
-    onEdit: () => void;
     onImport: () => void;
-    onSave: () => void;
     onSettingsChange: (settings: PredictionRunAlertSettings) => void;
     prediction: PredictionInfo;
     settings: PredictionRunAlertSettings;
@@ -45,18 +45,14 @@ type Props = {
 
 const DEFAULT_SETTINGS: PredictionRunAlertSettings = {
     alertProbability: DEFAULT_OUTBREAK_PROBABILITY,
-    thresholdsEnabled: true,
+    thresholdsEnabled: false,
 };
 
 export const getDefaultPredictionRunAlertSettings = () => ({ ...DEFAULT_SETTINGS });
 
 export const PredictionDetailsGrid = ({
-    isEditing,
     model,
-    onCancel,
-    onEdit,
     onImport,
-    onSave,
     onSettingsChange,
     prediction,
     settings,
@@ -75,6 +71,19 @@ export const PredictionDetailsGrid = ({
     } = useMemo(() => (
         getThresholdTileViewModels(series, settings.alertProbability)
     ), [series, settings.alertProbability]);
+
+    const predictionPeriods = useMemo(() => {
+        const points = series[0]?.points ?? [];
+        if (points.length === 0) {
+            return undefined;
+        }
+
+        const periodType = prediction.dataset.periodType as keyof typeof PERIOD_TYPES;
+        const first = convertServerToClientPeriod(points[0].period, periodType);
+        const last = convertServerToClientPeriod(points[points.length - 1].period, periodType);
+
+        return { first, last };
+    }, [series, prediction.dataset.periodType]);
 
     const updateSettings = (nextSettings: Partial<PredictionRunAlertSettings>) => {
         onSettingsChange({
@@ -119,93 +128,67 @@ export const PredictionDetailsGrid = ({
 
     const panelContent = (
         <>
-            <div className={styles.panelSection}>
-                <h3>{i18n.t('Prediction target')}</h3>
-                <p className={styles.targetName}>{predictionTargetName}</p>
-            </div>
+            {prediction.name && (
+                <div className={styles.panelSection}>
+                    <h3>{i18n.t('Prediction run')}</h3>
+                    <p className={styles.targetName}>{prediction.name}</p>
+                </div>
+            )}
 
-            {isEditing
-                ? (
-                        <>
-                            <div
-                                className={styles.toggleButton}
-                                onClick={toggleThresholds}
-                                onKeyDown={handleThresholdKeyDown}
-                                role="button"
-                                tabIndex={0}
-                            >
-                                <div className={styles.toggleText}>
-                                    <span className={styles.toggleTitle}>
-                                        {i18n.t('Outbreak thresholds')}
-                                    </span>
-                                    <span className={styles.toggleDescription}>
-                                        {i18n.t('Show outbreak status and threshold overlays for this run.')}
-                                    </span>
-                                </div>
-                                <span onClick={handleSwitchClick}>
-                                    <Switch
-                                        checked={settings.thresholdsEnabled}
-                                        onChange={toggleThresholds}
-                                    />
-                                </span>
-                            </div>
-                            {showThresholds && (
-                                <OutbreakProbabilityControl
-                                    selectedProbability={settings.alertProbability}
-                                    onSelectProbability={probability => updateSettings({ alertProbability: probability })}
-                                />
-                            )}
-                            {showThresholds && summaryList}
-                            <ButtonStrip end>
-                                <Button
-                                    small
-                                    onClick={onCancel}
-                                >
-                                    {i18n.t('Cancel')}
-                                </Button>
-                                <Button
-                                    small
-                                    primary
-                                    onClick={onSave}
-                                >
-                                    {i18n.t('Save')}
-                                </Button>
-                            </ButtonStrip>
-                        </>
-                    )
-                : (
-                        <>
-                            <dl className={styles.summaryList}>
-                                <SummaryRow
-                                    label={i18n.t('Outbreak thresholds')}
-                                    value={showThresholds ? i18n.t('Enabled') : i18n.t('Disabled')}
-                                />
-                                {showThresholds && (
-                                    <SummaryRow
-                                        label={i18n.t('Minimum outbreak probability')}
-                                        value={`${settings.alertProbability}%`}
-                                    />
-                                )}
-                            </dl>
-                            {showThresholds && summaryList}
-                            <ButtonStrip end>
-                                <Button
-                                    small
-                                    onClick={onEdit}
-                                >
-                                    {i18n.t('Edit')}
-                                </Button>
-                                <Button
-                                    small
-                                    primary
-                                    icon={<IconImportItems24 />}
-                                    onClick={onImport}
-                                >
-                                    {i18n.t('Import')}
-                                </Button>
-                            </ButtonStrip>
-                        </>
-                    )}
+            {predictionPeriods && (
+                <div className={styles.panelSection}>
+                    <h3>{i18n.t('Prediction periods')}</h3>
+                    <div className={styles.periodValues}>
+                        <Tag variant="info">{predictionPeriods.first}</Tag>
+                        {predictionPeriods.first !== predictionPeriods.last && (
+                            <>
+                                <IconChevronRight16 />
+                                <Tag variant="info">{predictionPeriods.last}</Tag>
+                            </>
+                        )}
+                    </div>
+                </div>
+            )}
+
+            <div
+                className={styles.toggleButton}
+                onClick={toggleThresholds}
+                onKeyDown={handleThresholdKeyDown}
+                role="button"
+                tabIndex={0}
+            >
+                <div className={styles.toggleText}>
+                    <span className={styles.toggleTitle}>
+                        {i18n.t('Outbreak thresholds')}
+                    </span>
+                    <span className={styles.toggleDescription}>
+                        {i18n.t('Show outbreak status and threshold overlays for this run.')}
+                    </span>
+                </div>
+                <span onClick={handleSwitchClick}>
+                    <Switch
+                        checked={settings.thresholdsEnabled}
+                        onChange={toggleThresholds}
+                    />
+                </span>
+            </div>
+            {showThresholds && (
+                <OutbreakProbabilityControl
+                    selectedProbability={settings.alertProbability}
+                    onSelectProbability={probability => updateSettings({ alertProbability: probability })}
+                />
+            )}
+            {showThresholds && summaryList}
+            <ButtonStrip end>
+                <Button
+                    small
+                    primary
+                    icon={<IconImportItems24 />}
+                    onClick={onImport}
+                >
+                    {i18n.t('Import')}
+                </Button>
+            </ButtonStrip>
         </>
     );
 

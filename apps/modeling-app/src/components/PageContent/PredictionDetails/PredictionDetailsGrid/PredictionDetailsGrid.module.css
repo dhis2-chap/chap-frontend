@@ -25,6 +25,12 @@
     line-height: 20px;
 }
 
+.periodValues {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
 .summaryList {
     display: flex;
     flex-direction: column;

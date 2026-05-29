@@ -20,13 +20,9 @@ import {
 export const PredictionRunDetailsPage: React.FC = () => {
     const navigate = useNavigate();
     const { predictionSetupId, predictionId } = useParams();
-    const [savedSettings, setSavedSettings] = useState<PredictionRunAlertSettings>(
+    const [settings, setSettings] = useState<PredictionRunAlertSettings>(
         getDefaultPredictionRunAlertSettings,
     );
-    const [draftSettings, setDraftSettings] = useState<PredictionRunAlertSettings>(
-        getDefaultPredictionRunAlertSettings,
-    );
-    const [isEditing, setIsEditing] = useState(false);
     const { prediction, error, isLoading, isError } = usePredictionById(predictionId);
     const {
         models,
@@ -35,22 +31,6 @@ export const PredictionRunDetailsPage: React.FC = () => {
     } = useModels({ includeArchived: true });
     const model = models?.find(modelSpec => modelSpec.name === prediction?.modelId);
     const returnTo = predictionSetupId ? `/predictions/${predictionSetupId}` : '/predictions';
-    const settings = isEditing ? draftSettings : savedSettings;
-
-    const handleEdit = () => {
-        setDraftSettings(savedSettings);
-        setIsEditing(true);
-    };
-
-    const handleCancel = () => {
-        setDraftSettings(savedSettings);
-        setIsEditing(false);
-    };
-
-    const handleSave = () => {
-        setSavedSettings(draftSettings);
-        setIsEditing(false);
-    };
 
     const handleImport = () => {
         if (!prediction || !predictionSetupId) {
@@ -59,8 +39,8 @@ export const PredictionRunDetailsPage: React.FC = () => {
 
         navigate(`/predictions/${predictionSetupId}/runs/${prediction.id}/import`, {
             state: {
-                alertProbability: savedSettings.alertProbability,
-                useAlertOutputs: savedSettings.thresholdsEnabled,
+                alertProbability: settings.alertProbability,
+                useAlertOutputs: settings.thresholdsEnabled,
             },
         });
     };
@@ -119,14 +99,10 @@ export const PredictionRunDetailsPage: React.FC = () => {
             </Button>
             <div className={styles.content}>
                 <PredictionDetailsGrid
-                    isEditing={isEditing}
                     prediction={prediction}
                     model={model}
                     settings={settings}
-                    onSettingsChange={setDraftSettings}
-                    onEdit={handleEdit}
-                    onCancel={handleCancel}
-                    onSave={handleSave}
+                    onSettingsChange={setSettings}
                     onImport={handleImport}
                 />
             </div>
