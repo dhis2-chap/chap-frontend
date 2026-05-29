@@ -24,7 +24,7 @@ import {
     JobDescription,
 } from '@dhis2-chap/ui';
 import styles from './JobsTable.module.css';
-import { JobsTableFilters } from './JobsTableFilters';
+import { JobsTableFilters, JobsTableFilterKey } from './JobsTableFilters';
 import { StatusCell } from './TableCells/StatusCell';
 import { JobTypeCell } from './TableCells/JobTypeCell';
 import { JobActionsMenu } from './JobActionsMenu/JobActionsMenu';
@@ -120,9 +120,10 @@ const getSortDirection = (column: Column<JobDescription>) => {
 
 type Props = {
     jobs: JobDescription[];
+    visibleFilters?: JobsTableFilterKey[];
 };
 
-export const JobsTable = ({ jobs }: Props) => {
+export const JobsTable = ({ jobs, visibleFilters }: Props) => {
     const { search, status, type } = useJobsTableFilters();
     const { pageIndex, pageSize, setPageIndex, setPageSize } = useTablePaginationParams();
 
@@ -158,7 +159,7 @@ export const JobsTable = ({ jobs }: Props) => {
         <div>
             <div className={styles.buttonContainer}>
                 <div className={styles.leftSection}>
-                    <JobsTableFilters />
+                    <JobsTableFilters visibleFilters={visibleFilters} />
                 </div>
             </div>
             <DataTable>

@@ -8,7 +8,7 @@ import type { ModelTemplateRead } from './ModelTemplateRead';
  *
  * Exposes the stored configuration (user option values, additional
  * covariates) alongside the parent model template, so the frontend can
- * render the user-option schema (e.g. the `n_lags` dynamic list) next
+ * render the user-option schema (e.g. the ``n_lags`` dynamic list) next
  * to the chosen values without stitching together multiple list calls.
  */
 export type ConfiguredModelInfoRead = {

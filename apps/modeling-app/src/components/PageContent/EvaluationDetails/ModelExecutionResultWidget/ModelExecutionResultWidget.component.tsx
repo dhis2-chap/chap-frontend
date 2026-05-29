@@ -1,14 +1,14 @@
 import { useMemo, useState } from 'react';
 import { CircularLoader, Menu, MenuItem } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
-import { Widget, ResultPlot, BackTestRead, getStableMaxYByOrgUnitId } from '@dhis2-chap/ui';
+import { Widget, ResultPlot, BacktestRead, getStableMaxYByOrgUnitId } from '@dhis2-chap/ui';
 import { SplitPeriodSlider } from '../../../../features/evaluation-compare/SplitPeriodSlider';
 import styles from './ModelExecutionResultWidget.module.css';
 import { usePlotDataForEvaluationsByOrgUnit } from '@/hooks/usePlotDataForEvaluationsByOrgUnit';
 import { ALL_LOCATIONS_ORG_UNIT } from './ModelExecutionResultWidget.container';
 
 type Props = {
-    backtest: BackTestRead;
+    backtest: BacktestRead;
     orgUnitIds: string[];
     orgUnitsMap: Map<string, { id: string; displayName: string }>;
     splitPeriods: string[];

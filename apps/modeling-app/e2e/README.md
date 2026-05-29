@@ -28,4 +28,4 @@ pnpm docker:e2e reset
 - `E2E_APP_URL` (default: `http://localhost:3000`)
 - `E2E_DHIS2_BASE_URL` (default: `http://localhost:8080`)
 - `E2E_DHIS2_USERNAME` (default: `system`)
-- `E2E_DHIS2_PASSWORD` (default: `S&stem123!`)
+- `E2E_DHIS2_PASSWORD` (default: `System123`)

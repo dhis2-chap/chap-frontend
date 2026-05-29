@@ -1,0 +1,1 @@
+export { ReadyToPredictContent } from './ReadyToPredictContent';

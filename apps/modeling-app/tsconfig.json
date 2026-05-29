@@ -13,7 +13,8 @@
     },
     "include": [
         "src/**/*",
-        "docs/**/*"
+        "docs/**/*",
+        "e2e/**/*"
     ],
     "exclude": [
         "node_modules",

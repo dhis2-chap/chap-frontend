@@ -1,0 +1,1 @@
+export { ReadyToPredictPage } from './ReadyToPredictPage';

@@ -5,7 +5,8 @@ import {
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { Table } from '@tanstack/react-table';
-import { ModelSpecRead, AuthorAssessedStatus, PERIOD_TYPES } from '@dhis2-chap/ui';
+import { PERIOD_TYPES } from '@dhis2-chap/core';
+import { ModelSpecRead, AuthorAssessedStatus } from '@dhis2-chap/ui';
 import styles from './ModelFilters.module.css';
 
 type Props = {

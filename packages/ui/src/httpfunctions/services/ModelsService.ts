@@ -59,6 +59,8 @@ export class ModelsService {
     }
     /**
      * Get Configured Model Info
+     * ⚠️ **Experimental:** behavior and response shape may change without notice.
+     *
      * Return the detail view for a single configured model, including its template.
      * @param configuredModelId
      * @returns ConfiguredModelInfoRead Successful Response
@@ -94,38 +96,6 @@ export class ModelsService {
             path: {
                 'configuredModelId': configuredModelId,
             },
-            errors: {
-                422: `Validation Error`,
-            },
-        });
-    }
-    /**
-     * List Models
-     * List all models from the db (alias for configured models)
-     * @returns ModelSpecRead Successful Response
-     * @throws ApiError
-     */
-    public static listModelsV1CrudModelsGet(): CancelablePromise<Array<ModelSpecRead>> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/v1/crud/models',
-        });
-    }
-    /**
-     * Add Model
-     * Add a model to the database (alias for configured models)
-     * @param requestBody
-     * @returns ConfiguredModelDB Successful Response
-     * @throws ApiError
-     */
-    public static addModelV1CrudModelsPost(
-        requestBody: ModelConfigurationCreate,
-    ): CancelablePromise<ConfiguredModelDB> {
-        return __request(OpenAPI, {
-            method: 'POST',
-            url: '/v1/crud/models',
-            body: requestBody,
-            mediaType: 'application/json',
             errors: {
                 422: `Validation Error`,
             },

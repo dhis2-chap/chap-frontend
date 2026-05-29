@@ -6,7 +6,7 @@ import {
     HighChartsData,
     ModelData,
 } from '../interfaces/Evaluation';
-import { PeriodType, sortPeriods } from './timePeriodUtils';
+import { PeriodType, sortPeriods } from '@dhis2-chap/core';
 
 function sortDhis2WeeklyAndMonthlyTime(a: string, b: string): number {
     const parseDate = (dateStr: string): Date => {

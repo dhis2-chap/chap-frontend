@@ -1,13 +1,10 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { CircularLoader, NoticeBox } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
-import { usePredictionEntries } from '../hooks/usePredictionEntries';
-import { useOrgUnitsById } from '../../../../hooks/useOrgUnitsById';
-import { useDataItemById } from '../../../../hooks/useDataItemById';
-import { useActualCasesByDatasetId } from '../../../../hooks/useActualCasesByDatasetId';
 import { PredictionResultWidgetComponent } from './PredictionResultWidget.component';
 import styles from './PredictionResultWidget.module.css';
-import { Widget, PredictionInfo, ModelSpecRead, buildPredictionSeries, getLastNPeriods, PERIOD_TYPES } from '@dhis2-chap/ui';
+import { Widget, PredictionInfo, ModelSpecRead } from '@dhis2-chap/ui';
+import { usePredictionSeries } from '../hooks/usePredictionSeries';
 
 type Props = {
     prediction: PredictionInfo;
@@ -27,79 +24,17 @@ const WidgetWrapper = ({ children }: { children: React.ReactNode }) => {
     );
 };
 
-const PERIODS_BY_PERIOD_TYPE = {
-    [PERIOD_TYPES.DAY]: 365 * 2,
-    [PERIOD_TYPES.WEEK]: 52 * 2,
-    [PERIOD_TYPES.MONTH]: 12 * 2,
-};
-
 export const PredictionResultWidget = ({ prediction, model }: Props) => {
-    const {
-        orgUnits: orgUnitIds = [],
-        dataset,
-    } = prediction;
-
-    const {
-        predictionEntries,
-        isLoading: isPredictionEntriesLoading,
-        error: predictionEntriesError,
-    } = usePredictionEntries(prediction.id);
-
-    const {
-        data: orgUnitsData,
-        isLoading: isOrgUnitsLoading,
-        error: orgUnitsError,
-    } = useOrgUnitsById(orgUnitIds);
-
-    const periods = useMemo(() => {
-        if (!dataset.lastPeriod) return undefined;
-        return getLastNPeriods(
-            dataset.lastPeriod,
-            dataset.periodType as keyof typeof PERIOD_TYPES,
-            PERIODS_BY_PERIOD_TYPE[dataset.periodType?.toUpperCase() as keyof typeof PERIODS_BY_PERIOD_TYPE],
-        );
-    }, [dataset]);
-
-    const {
-        data: actualCasesData,
-        isLoading: isActualCasesLoading,
-        error: actualCasesError,
-    } = useActualCasesByDatasetId({
-        datasetId: dataset?.id,
-        orgUnits: orgUnitIds,
-        periods,
-    });
-
-    const predictionTargetId: string = dataset.dataSources?.find(
-        dataSource => dataSource.covariate === model.target.name,
-    )?.dataElementId ?? '';
-
-    const { dataItem, isLoading: isDataItemLoading } = useDataItemById(predictionTargetId);
-
     const [selectedTab, setSelectedTab] = useState<'chart' | 'table' | 'map'>('chart');
     const [selectedOrgUnitId, setSelectedOrgUnitId] = useState<string | undefined>(undefined);
+    const {
+        series,
+        predictionTargetName,
+        isLoading,
+        error,
+    } = usePredictionSeries({ prediction, model });
 
-    const orgUnitsMap = useMemo(() => {
-        const map = new Map<string, { id: string; displayName: string }>();
-        orgUnitsData?.organisationUnits?.forEach((ou) => {
-            map.set(ou.id, ou);
-        });
-        return map;
-    }, [orgUnitsData]);
-
-    const series = useMemo(() => {
-        if (!predictionEntries.length || !orgUnitsMap.size) return [];
-        const builtSeries = buildPredictionSeries(
-            predictionEntries,
-            orgUnitsMap,
-            predictionTargetId,
-            actualCasesData?.data,
-            dataset.periodType as keyof typeof PERIOD_TYPES,
-        );
-        return builtSeries.sort((a, b) => a.orgUnitName.localeCompare(b.orgUnitName));
-    }, [predictionEntries, orgUnitsMap, predictionTargetId, actualCasesData, dataset.periodType]);
-
-    if (isPredictionEntriesLoading || isOrgUnitsLoading || isDataItemLoading || isActualCasesLoading) {
+    if (isLoading) {
         return (
             <WidgetWrapper>
                 <div className={styles.loadingContainer}>
@@ -109,7 +44,7 @@ export const PredictionResultWidget = ({ prediction, model }: Props) => {
         );
     }
 
-    if (predictionEntriesError || orgUnitsError || actualCasesError) {
+    if (error) {
         return (
             <WidgetWrapper>
                 <div className={styles.errorContainer}>
@@ -136,7 +71,7 @@ export const PredictionResultWidget = ({ prediction, model }: Props) => {
     return (
         <PredictionResultWidgetComponent
             series={series}
-            predictionTargetName={dataItem?.displayName ?? predictionTargetId}
+            predictionTargetName={predictionTargetName}
             selectedOrgUnitId={selectedOrgUnitId}
             selectedTab={selectedTab}
             onSelectOrgUnit={setSelectedOrgUnitId}

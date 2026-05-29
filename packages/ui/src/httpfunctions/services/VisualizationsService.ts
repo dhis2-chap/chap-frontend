@@ -2,7 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { BackTestPlotType } from '../models/BackTestPlotType';
+import type { BacktestPlotType } from '../models/BacktestPlotType';
 import type { DatasetPlotType } from '../models/DatasetPlotType';
 import type { MetricInfo } from '../models/MetricInfo';
 import type { VisualizationInfo } from '../models/VisualizationInfo';
@@ -116,10 +116,10 @@ export class VisualizationsService {
     }
     /**
      * List Backtest Plot Types
-     * @returns BackTestPlotType Successful Response
+     * @returns BacktestPlotType Successful Response
      * @throws ApiError
      */
-    public static listBacktestPlotTypesV1VisualizationBacktestPlotsGet(): CancelablePromise<Array<BackTestPlotType>> {
+    public static listBacktestPlotTypesV1VisualizationBacktestPlotsGet(): CancelablePromise<Array<BacktestPlotType>> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/v1/visualization/backtest-plots/',

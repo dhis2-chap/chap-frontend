@@ -1,0 +1,146 @@
+.dashboard {
+    inline-size: 100%;
+}
+
+.screenReaderOnly {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.widgetGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+    gap: 24px;
+    align-items: start;
+}
+
+.widgetTitle {
+    margin: 16px 0 14px;
+    color: var(--colors-grey900);
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 600;
+}
+
+.widget {
+    overflow: hidden;
+    background: var(--colors-white);
+    border: 1px solid var(--colors-grey400);
+    border-radius: 6px;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+}
+
+.listItem {
+    display: grid;
+    grid-template-columns: 22px minmax(0, 1fr);
+    gap: 10px;
+    padding: 16px 18px;
+    border-block-end: 1px solid var(--colors-grey300);
+}
+
+.listItem:hover {
+    background: var(--colors-grey100);
+}
+
+.icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-block-start: 2px;
+    color: var(--colors-grey500);
+}
+
+.successIcon {
+    color: var(--colors-green600);
+}
+
+.itemContent {
+    min-inline-size: 0;
+}
+
+.itemTitle {
+    display: block;
+    overflow-wrap: anywhere;
+    color: var(--colors-grey900);
+    font-size: inherit;
+    line-height: 20px;
+    font-weight: 600;
+}
+
+.itemMeta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 24px;
+    margin-block-start: 6px;
+    color: var(--colors-grey700);
+    font-size: inherit;
+    line-height: 20px;
+}
+
+.itemSubtitle {
+    display: block;
+    margin-block-start: 6px;
+    overflow-wrap: anywhere;
+    color: var(--colors-grey700);
+    font-size: inherit;
+    line-height: 20px;
+}
+
+.emptyState,
+.loadingState,
+.errorState {
+    padding: 18px;
+    color: var(--colors-grey700);
+    font-size: inherit;
+    line-height: 20px;
+}
+
+.loadingState {
+    display: flex;
+    min-block-size: 112px;
+    align-items: center;
+    justify-content: center;
+}
+
+.errorState {
+    color: var(--colors-red700);
+}
+
+.footerLink {
+    display: block;
+    padding: 14px 18px;
+    background: var(--colors-grey100);
+    color: var(--colors-grey700);
+    font-size: inherit;
+    line-height: 20px;
+}
+
+.footerLink:hover {
+    background: var(--colors-grey200);
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .widgetGrid {
+        gap: 12px;
+    }
+
+    .widgetTitle {
+        margin-block-start: 8px;
+    }
+
+    .listItem {
+        padding: 14px 16px;
+    }
+}

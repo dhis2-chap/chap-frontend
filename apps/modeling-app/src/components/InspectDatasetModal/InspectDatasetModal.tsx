@@ -2,7 +2,7 @@ import i18n from '@dhis2/d2-i18n';
 import { Modal, Button, ModalTitle, ModalContent, ButtonStrip, ModalActions } from '@dhis2/ui';
 import { VisualizationPlugin } from '../VisualizationPlugin';
 import { OrganisationUnit } from '../OrganisationUnitSelector';
-import { toDHIS2PeriodData, PERIOD_TYPES } from '@dhis2-chap/ui';
+import { toDHIS2PeriodData, PERIOD_TYPES } from '@dhis2-chap/core';
 import { useConfig } from '@dhis2/app-runtime';
 import { CovariateMapping } from '../ModelExecutionForm/hooks/useModelExecutionFormState';
 
