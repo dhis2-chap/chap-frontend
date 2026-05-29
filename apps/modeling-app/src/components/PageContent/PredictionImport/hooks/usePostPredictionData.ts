@@ -1,7 +1,13 @@
 import i18n from '@dhis2/d2-i18n';
 import { useAlert, useDataEngine } from '@dhis2/app-runtime';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { ApiError, PredictionEntry, PredictionsService, QuantileKey } from '@dhis2-chap/ui';
+import {
+    ApiError,
+    OutbreakIndicator,
+    PredictionEntry,
+    PredictionsService,
+    QuantileKey,
+} from '@dhis2-chap/ui';
 
 const STANDARD_QUANTILES = [0.1, 0.25, 0.5, 0.75, 0.9];
 
@@ -11,11 +17,13 @@ type QuantileMapping = {
     quantileHighId: string;
     quantileMidLowId: string;
     quantileMidHighId: string;
+    outbreakIndicatorId: string;
 };
 
 type PostPredictionDataVariables = {
     predictionId: number;
     quantileMapping: QuantileMapping;
+    outbreakIndicators: OutbreakIndicator[];
 };
 
 type UsePostPredictionDataOptions = {
@@ -91,6 +99,22 @@ const transformPredictionEntriesToDataValues = (
         .filter((value): value is NonNullable<typeof value> => value !== null);
 };
 
+const transformOutbreakIndicatorsToDataValues = (
+    outbreakIndicators: OutbreakIndicator[],
+    outbreakIndicatorId: string,
+) => {
+    if (!outbreakIndicatorId) {
+        return [];
+    }
+
+    return outbreakIndicators.map(indicator => ({
+        dataElement: outbreakIndicatorId,
+        period: indicator.period,
+        orgUnit: indicator.orgUnitId,
+        value: indicator.value,
+    }));
+};
+
 export const usePostPredictionData = ({ onSuccess, onError }: UsePostPredictionDataOptions = {}) => {
     const dataEngine = useDataEngine();
     const queryClient = useQueryClient();
@@ -99,7 +123,7 @@ export const usePostPredictionData = ({ onSuccess, onError }: UsePostPredictionD
 
     const mutation = useMutation<unknown, ApiError, PostPredictionDataVariables>({
         mutationFn: async (variables: PostPredictionDataVariables) => {
-            const { predictionId, quantileMapping } = variables;
+            const { predictionId, quantileMapping, outbreakIndicators } = variables;
 
             const queryKey = ['predictionEntries', predictionId, STANDARD_QUANTILES];
             const cachedPredictionEntries = queryClient.getQueryData<PredictionEntry[]>(queryKey);
@@ -110,7 +134,13 @@ export const usePostPredictionData = ({ onSuccess, onError }: UsePostPredictionD
                     STANDARD_QUANTILES,
                 );
 
-            const dataValues = transformPredictionEntriesToDataValues(predictionEntries, quantileMapping);
+            const dataValues = [
+                ...transformPredictionEntriesToDataValues(predictionEntries, quantileMapping),
+                ...transformOutbreakIndicatorsToDataValues(
+                    outbreakIndicators,
+                    quantileMapping.outbreakIndicatorId,
+                ),
+            ];
 
             const mutationRequest = {
                 resource: 'dataValueSets',

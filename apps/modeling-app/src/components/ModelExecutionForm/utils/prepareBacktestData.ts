@@ -1,13 +1,8 @@
 import { QueryClient } from '@tanstack/react-query';
 import i18n from '@dhis2/d2-i18n';
 import { ModelExecutionFormValues } from '../hooks/useModelExecutionFormState';
-import {
-    DataSource,
-    ModelSpecRead,
-    ObservationBase,
-    PERIOD_TYPES,
-    toDHIS2PeriodData,
-} from '@dhis2-chap/ui';
+import { PERIOD_TYPES, toDHIS2PeriodData } from '@dhis2-chap/core';
+import { DataSource, ModelSpecRead, ObservationBase } from '@dhis2-chap/ui';
 import { useDataEngine } from '@dhis2/app-runtime';
 import { AnalyticsResponse, OrgUnitResponse, fetchAnalytics, ORG_UNITS_QUERY } from './queryUtils';
 import { generateBacktestDataHash } from './hashUtils';

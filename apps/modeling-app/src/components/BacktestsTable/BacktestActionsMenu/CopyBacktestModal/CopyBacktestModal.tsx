@@ -12,6 +12,7 @@ import {
 import i18n from '@dhis2/d2-i18n';
 import clsx from 'clsx';
 import { useNavigate } from 'react-router-dom';
+import type { DataSource } from '@dhis2-chap/ui';
 import styles from './CopyBacktestModal.module.css';
 import { useBacktestById } from '../../../../hooks/useBacktestById';
 
@@ -66,7 +67,7 @@ export const CopyBacktestModal = ({ id, onClose, returnTo }: CopyBacktestModalPr
             state.modelId = String(backtest.configuredModel.id);
 
             if (selectedAttributes.dataSources && dataset?.dataSources?.length) {
-                state.dataSources = dataset.dataSources.map(dataSource => ({
+                state.dataSources = dataset.dataSources.map((dataSource: DataSource) => ({
                     covariate: dataSource.covariate,
                     dataElementId: dataSource.dataElementId,
                 }));

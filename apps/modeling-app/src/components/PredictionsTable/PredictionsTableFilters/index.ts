@@ -1,1 +1,0 @@
-export { PredictionsTableFilters } from './PredictionsTableFilters';

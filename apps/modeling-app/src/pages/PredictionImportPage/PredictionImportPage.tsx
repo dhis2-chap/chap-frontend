@@ -1,9 +1,7 @@
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import {
     CircularLoader,
     NoticeBox,
-    Button,
-    IconArrowLeft16,
 } from '@dhis2/ui';
 import { Card } from '@dhis2-chap/ui';
 import i18n from '@dhis2/d2-i18n';
@@ -11,13 +9,19 @@ import styles from './PredictionImportPage.module.css';
 import { usePredictionById } from '../../components/PageContent/PredictionDetails/hooks/usePredictionById';
 import { PageHeader } from '../../features/common-features/PageHeader/PageHeader';
 import { PredictionImport } from '../../components/PageContent/PredictionImport';
+import { useModels } from '../../hooks/useModels';
 
 export const PredictionImportPage: React.FC = () => {
     const { predictionId } = useParams();
-    const navigate = useNavigate();
     const { prediction, error, isLoading, isError } = usePredictionById(predictionId);
+    const {
+        models,
+        error: modelsError,
+        isLoading: isModelsLoading,
+    } = useModels({ includeArchived: true });
+    const model = models?.find(modelSpec => modelSpec.name === prediction?.modelId);
 
-    if (isLoading) {
+    if (isLoading || (prediction && isModelsLoading)) {
         return (
             <div className={styles.loadingContainer}>
                 <CircularLoader />
@@ -45,24 +49,26 @@ export const PredictionImportPage: React.FC = () => {
         );
     }
 
+    if (modelsError || !model) {
+        return (
+            <div className={styles.errorContainer}>
+                <NoticeBox error title={i18n.t('Model not found')}>
+                    {i18n.t('The model for this prediction could not be loaded.')}
+                </NoticeBox>
+            </div>
+        );
+    }
+
     return (
         <>
             <PageHeader
                 pageTitle={i18n.t('Import prediction')}
                 pageDescription={i18n.t('Import the forecasted values of this prediction into DHIS2.')}
             />
-            <div className={styles.backButton}>
-                <Button
-                    small
-                    icon={<IconArrowLeft16 />}
-                    onClick={() => navigate(`/predictions/${predictionId}`)}
-                >
-                    {i18n.t('Back to prediction details')}
-                </Button>
-            </div>
             <Card className={styles.container}>
                 <PredictionImport
                     prediction={prediction}
+                    model={model}
                 />
             </Card>
         </>

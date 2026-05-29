@@ -17,6 +17,7 @@ interface DataItemSelectProps {
     label?: string;
     value?: string;
     error?: string;
+    dataElementsOnly?: boolean;
 }
 
 export const DataItemSelect = ({
@@ -25,8 +26,10 @@ export const DataItemSelect = ({
     label,
     value,
     error,
+    dataElementsOnly = false,
 }: DataItemSelectProps) => {
-    const { dataItem: initialDataItem } = useDataItemById(id);
+    const selectedId = id ?? value;
+    const { dataItem: initialDataItem } = useDataItemById(selectedId);
 
     const { data: initialDataItemsData, isLoading: isLoadingInitialItems } = useApiDataQuery<DataItemsResponse>({
         queryKey: ['dataItems', 'initial'],
@@ -53,8 +56,9 @@ export const DataItemSelect = ({
             initialLoading={isLoadingInitialItems}
             onChange={onChange}
             label={label}
-            value={value}
+            value={selectedId}
             error={error}
+            dataElementsOnly={dataElementsOnly}
         />
     );
 };

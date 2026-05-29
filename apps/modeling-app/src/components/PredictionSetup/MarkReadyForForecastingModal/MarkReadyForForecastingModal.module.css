@@ -1,0 +1,89 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    max-block-size: calc(100vh - 176px);
+    min-block-size: 0;
+}
+
+.scrollableContent {
+    min-block-size: 0;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    padding-block-start: var(--spacers-dp8);
+    padding-block-end: var(--spacers-dp24);
+}
+
+.section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacers-dp12);
+    margin-block-start: var(--spacers-dp20, 20px);
+    padding-block-start: var(--spacers-dp20, 20px);
+    border-block-start: 1px solid var(--colors-grey300);
+}
+
+.configurationNotice {
+    margin-block-start: var(--spacers-dp12);
+}
+
+.mappingToggle,
+.mappingToggleDisabled {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacers-dp16);
+    box-sizing: border-box;
+    inline-size: calc(100% - 24px);
+    margin-inline: 12px;
+    padding: var(--spacers-dp12) var(--spacers-dp16);
+    border: 1px solid var(--colors-grey300);
+    border-radius: 4px;
+    background-color: var(--colors-grey050);
+    cursor: pointer;
+    user-select: none;
+}
+
+.mappingToggleDisabled {
+    cursor: not-allowed;
+    opacity: 0.72;
+}
+
+.mappingToggle:hover {
+    background-color: var(--colors-grey100);
+}
+
+.mappingToggle:focus {
+    outline: none;
+}
+
+.mappingToggleText {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.mappingToggleTitle {
+    color: var(--colors-grey900);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.mappingToggleDescription {
+    color: var(--colors-grey700);
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.quantileGrid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    box-sizing: border-box;
+    inline-size: calc(90% - 22px);
+    margin-inline: auto;
+    overflow: hidden;
+    row-gap: var(--spacers-dp4);
+}
