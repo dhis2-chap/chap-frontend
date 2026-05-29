@@ -5,7 +5,7 @@ import { getAppOrigin } from './config';
 
 const DEFAULT_DHIS2_BASE_URL = 'http://localhost:8080';
 const DEFAULT_DHIS2_USERNAME = 'system';
-const DEFAULT_DHIS2_PASSWORD = 'S&stem123!';
+const DEFAULT_DHIS2_PASSWORD = 'System123';
 const AUTH_FILE = path.resolve(__dirname, '../../../playwright/.auth/user.json');
 
 const normalizeBaseUrl = (url: string): string => url.replace(/\/+$/, '');
