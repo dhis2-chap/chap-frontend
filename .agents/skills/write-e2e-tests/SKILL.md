@@ -41,6 +41,24 @@ Use this skill to add a small number of high-signal e2e tests that cover the cri
 - Use unique names such as `E2E <thing> ${Date.now()}` so lingering records do not collide.
 - For local credentials, use the existing Playwright auth setup and environment variables. Confirm the active stack when needed; do not bake credentials into tests or skill files.
 
+## Sharing setup across related tests
+
+When several tests in the same spec genuinely observe the same fixture (e.g. a prediction setup created in one test, a prediction run from it in another, an activity page that needs that run to be visible), share the fixture rather than rebuilding it per test. Heavy setup like `createCompletedNaiveEvaluation` should not be paid 3 times for 3 related assertions.
+
+Pattern:
+
+- Wrap the related tests in `test.describe.serial('<feature>', () => { ... })` so they execute in declaration order and a failure in an earlier test skips the rest.
+- Hoist the shared resources into describe-scoped `let` variables (`evaluation`, `setup`, `predictionName`, etc.). Earlier tests assign them; later tests consume them.
+- Let the first test be the one that creates the fixture through its natural flow (typically UI creation) — that test already needs to do the work, so it doubles as the setup step. Do not add a `beforeAll` purely for parity with other test frameworks.
+- Each test should still have a single clear purpose and assertions that fail meaningfully on its own behavior. The serial chain is for sharing state, not for splitting one test into steps.
+
+When NOT to share:
+
+- The tests assert different aspects of the *same* creation flow (e.g. UI validation branches) — each needs a clean slate.
+- The tests can stand alone with cheap setup. Independence is the default.
+
+Trade-offs to accept consciously: a failure in an earlier test skips downstream tests, and reordering the file changes execution order. Both are usually fine for tightly coupled flows.
+
 ## Mocking
 
 Only mock when the mock is the behavior being tested or when an external system cannot reasonably be used. Good examples:
@@ -69,3 +87,4 @@ Avoid mocks for critical creation, persistence, navigation, job, and API integra
 - Is the amount of helper code smaller than the behavior it protects?
 - Are assertions durable and user-meaningful?
 - Are credentials and environment-specific secrets kept out of committed files?
+- For tests that share state, are they wrapped in `test.describe.serial` with hoisted variables, and is the dependency between them real (not just convenience)?

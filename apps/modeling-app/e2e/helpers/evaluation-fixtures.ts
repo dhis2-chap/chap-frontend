@@ -1,4 +1,4 @@
-import type { APIResponse, Page } from '@playwright/test';
+import type { Page } from '@playwright/test';
 import type {
     BacktestRead,
     DataBaseResponse,
@@ -57,7 +57,14 @@ const dhis2Url = (path: string, params?: Record<string, string>) => {
     return `${DHIS2_BASE_URL}/api/${path}${queryString}`;
 };
 
-export const readJson = async <T>(response: APIResponse, action: string): Promise<T> => {
+type JsonResponse = {
+    ok(): boolean;
+    status(): number;
+    text(): Promise<string>;
+    json(): Promise<unknown>;
+};
+
+export const readJson = async <T>(response: JsonResponse, action: string): Promise<T> => {
     if (!response.ok()) {
         throw new Error(`${action} failed with ${response.status()}: ${await response.text()}`);
     }
