@@ -67,6 +67,7 @@ type Props = {
     hasValidPredictionSetupId: boolean;
     isLoading: boolean;
     jobs: JobDescription[];
+    predictionSetupId?: string;
 };
 
 export const ActivityWidget = ({
@@ -74,6 +75,7 @@ export const ActivityWidget = ({
     hasValidPredictionSetupId,
     isLoading,
     jobs,
+    predictionSetupId,
 }: Props) => {
     const [open, setOpen] = useState(false);
     const [statusFilter, setStatusFilter] = useState<string | undefined>();
@@ -83,9 +85,12 @@ export const ActivityWidget = ({
         () => statusFilter ? [{ id: 'status', value: statusFilter }] : [],
         [statusFilter],
     );
-    const jobsPageTo = statusFilter
-        ? `/jobs?status=${encodeURIComponent(statusFilter)}`
+    const activityPageBase = predictionSetupId
+        ? `/predictions/${encodeURIComponent(predictionSetupId)}/activity`
         : '/jobs';
+    const jobsPageTo = statusFilter
+        ? `${activityPageBase}?status=${encodeURIComponent(statusFilter)}`
+        : activityPageBase;
 
     const columns = useMemo(() => [
         columnHelper.accessor('status', {

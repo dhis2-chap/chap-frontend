@@ -34,6 +34,7 @@ import { SyncUrlWithGlobalShell } from './utils/syncUrlWithGlobalShell';
 import { NewPredictionPage } from './pages/NewPredictionPage';
 import { PredictionImportPage } from './pages/PredictionImportPage';
 import { PredictionRunDetailsPage } from './pages/PredictionRunDetailsPage';
+import { PredictionActivityPage } from './pages/PredictionActivityPage';
 import { GuidesPage } from './pages/GuidesPage';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
@@ -157,6 +158,13 @@ const router = createHashRouter([
                                             collapseSidebar: true,
                                         } satisfies RouteHandle,
                                         element: <PredictionImportPage />,
+                                    },
+                                    {
+                                        path: 'activity',
+                                        handle: {
+                                            collapseSidebar: true,
+                                        } satisfies RouteHandle,
+                                        element: <PredictionActivityPage />,
                                     },
                                 ],
                             },

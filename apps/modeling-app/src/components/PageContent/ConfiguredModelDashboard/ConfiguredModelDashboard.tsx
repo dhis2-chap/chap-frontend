@@ -53,6 +53,7 @@ export const ConfiguredModelDashboard: React.FC = () => {
                     hasValidPredictionSetupId={hasValidPredictionSetupId}
                     isLoading={isLoadingJobs}
                     jobs={jobs}
+                    predictionSetupId={predictionSetupId}
                 />
             </div>
             <div className={styles.rightColumn}>
