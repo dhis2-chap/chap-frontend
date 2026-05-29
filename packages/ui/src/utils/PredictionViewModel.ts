@@ -4,7 +4,7 @@ import type {
     PredictionPointVM,
     QuantileKey,
 } from '../interfaces/Prediction';
-import { comparePeriods, PERIOD_TYPES } from './timePeriodUtils';
+import { comparePeriods, PERIOD_TYPES } from '@dhis2-chap/core';
 
 const QUANTILE_MAP: Record<number, QuantileKey> = {
     0.1: 'quantile_low',

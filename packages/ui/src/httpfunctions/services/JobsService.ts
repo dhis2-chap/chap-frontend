@@ -2,10 +2,10 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { BacktestRead } from '../models/BacktestRead';
 import type { DataBaseResponse } from '../models/DataBaseResponse';
-import type { EvaluationResponse } from '../models/EvaluationResponse';
-import type { FullPredictionResponse } from '../models/FullPredictionResponse';
 import type { JobDescription } from '../models/JobDescription';
+import type { PredictionInfo } from '../models/PredictionInfo';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
@@ -13,11 +13,12 @@ export class JobsService {
     /**
      * List Jobs
      * List all jobs currently in the queue.
-     * Optionally filters by a list of job IDs, a list of statuses, and/or a job type.
-     * Filtering order: IDs, then type, then status.
+     * Optionally filters by a list of job IDs, a list of statuses, a job type, and/or a
+     * prediction setup id. Filtering order: IDs, then type, then predictionSetupId, then status.
      * @param ids
      * @param status
      * @param type
+     * @param predictionSetupId
      * @returns JobDescription Successful Response
      * @throws ApiError
      */
@@ -25,6 +26,7 @@ export class JobsService {
         ids?: Array<string>,
         status?: Array<string>,
         type?: string,
+        predictionSetupId?: (number | null),
     ): CancelablePromise<Array<JobDescription>> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -33,6 +35,7 @@ export class JobsService {
                 'ids': ids,
                 'status': status,
                 'type': type,
+                'predictionSetupId': predictionSetupId,
             },
             errors: {
                 422: `Validation Error`,
@@ -123,12 +126,12 @@ export class JobsService {
     /**
      * Get Prediction Result
      * @param jobId
-     * @returns FullPredictionResponse Successful Response
+     * @returns PredictionInfo Successful Response
      * @throws ApiError
      */
     public static getPredictionResultV1JobsJobIdPredictionResultGet(
         jobId: string,
-    ): CancelablePromise<FullPredictionResponse> {
+    ): CancelablePromise<PredictionInfo> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/v1/jobs/{job_id}/prediction_result',
@@ -143,12 +146,12 @@ export class JobsService {
     /**
      * Get Evaluation Result
      * @param jobId
-     * @returns EvaluationResponse Successful Response
+     * @returns BacktestRead Successful Response
      * @throws ApiError
      */
     public static getEvaluationResultV1JobsJobIdEvaluationResultGet(
         jobId: string,
-    ): CancelablePromise<EvaluationResponse> {
+    ): CancelablePromise<BacktestRead> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/v1/jobs/{job_id}/evaluation_result',

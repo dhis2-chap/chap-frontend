@@ -5,9 +5,15 @@ import { useJobs } from '../../../hooks/useJobs';
 import { CircularLoader } from '@dhis2/ui';
 import styles from './JobsContent.module.css';
 import { JobsTable } from '../../JobsTable';
+import type { JobsTableFilterKey } from '../../JobsTable/JobsTableFilters';
 
-export const JobsContent = () => {
-    const { jobs, error, isLoading } = useJobs();
+type Props = {
+    predictionSetupId?: number;
+    visibleFilters?: JobsTableFilterKey[];
+};
+
+export const JobsContent = ({ predictionSetupId, visibleFilters }: Props = {}) => {
+    const { jobs, error, isLoading } = useJobs({ predictionSetupId });
 
     if (isLoading) {
         return (
@@ -30,7 +36,7 @@ export const JobsContent = () => {
     return (
         <div>
             <Card className={styles.container}>
-                <JobsTable jobs={jobs || []} />
+                <JobsTable jobs={jobs || []} visibleFilters={visibleFilters} />
             </Card>
         </div>
     );

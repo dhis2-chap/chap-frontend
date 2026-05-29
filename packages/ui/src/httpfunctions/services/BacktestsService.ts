@@ -2,11 +2,11 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { BackTest } from '../models/BackTest';
-import type { BackTestCreate } from '../models/BackTestCreate';
+import type { Backtest } from '../models/Backtest';
+import type { BacktestCreate } from '../models/BacktestCreate';
 import type { BacktestDomain } from '../models/BacktestDomain';
-import type { BackTestRead } from '../models/BackTestRead';
-import type { BackTestUpdate } from '../models/BackTestUpdate';
+import type { BacktestRead } from '../models/BacktestRead';
+import type { BacktestUpdate } from '../models/BacktestUpdate';
 import type { DataList } from '../models/DataList';
 import type { EvaluationEntry } from '../models/EvaluationEntry';
 import type { ImportSummaryResponse } from '../models/ImportSummaryResponse';
@@ -20,10 +20,10 @@ export class BacktestsService {
     /**
      * Get Backtests
      * Returns a list of backtests/evaluations with only the id and name
-     * @returns BackTestRead Successful Response
+     * @returns BacktestRead Successful Response
      * @throws ApiError
      */
-    public static getBacktestsV1CrudBacktestsGet(): CancelablePromise<Array<BackTestRead>> {
+    public static getBacktestsV1CrudBacktestsGet(): CancelablePromise<Array<BacktestRead>> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/v1/crud/backtests',
@@ -36,7 +36,7 @@ export class BacktestsService {
      * @throws ApiError
      */
     public static createBacktestV1CrudBacktestsPost(
-        requestBody: BackTestCreate,
+        requestBody: BacktestCreate,
     ): CancelablePromise<JobResponse> {
         return __request(OpenAPI, {
             method: 'POST',
@@ -71,12 +71,12 @@ export class BacktestsService {
     /**
      * Get Backtest
      * @param backtestId
-     * @returns BackTest Successful Response
+     * @returns Backtest Successful Response
      * @throws ApiError
      */
     public static getBacktestV1CrudBacktestsBacktestIdFullGet(
         backtestId: number,
-    ): CancelablePromise<BackTest> {
+    ): CancelablePromise<Backtest> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/v1/crud/backtests/{backtestId}/full',
@@ -91,15 +91,15 @@ export class BacktestsService {
     /**
      * Get Backtest Info
      * @param backtestId
-     * @returns BackTestRead Successful Response
+     * @returns BacktestRead Successful Response
      * @throws ApiError
      */
-    public static getBacktestInfoV1CrudBacktestsBacktestIdInfoGet(
+    public static getBacktestInfoV1CrudBacktestsBacktestIdGet(
         backtestId: number,
-    ): CancelablePromise<BackTestRead> {
+    ): CancelablePromise<BacktestRead> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/v1/crud/backtests/{backtestId}/info',
+            url: '/v1/crud/backtests/{backtestId}',
             path: {
                 'backtestId': backtestId,
             },
@@ -132,13 +132,13 @@ export class BacktestsService {
      * Update Backtest
      * @param backtestId
      * @param requestBody
-     * @returns BackTestRead Successful Response
+     * @returns BacktestRead Successful Response
      * @throws ApiError
      */
     public static updateBacktestV1CrudBacktestsBacktestIdPatch(
         backtestId: number,
-        requestBody: BackTestUpdate,
-    ): CancelablePromise<BackTestRead> {
+        requestBody: BacktestUpdate,
+    ): CancelablePromise<BacktestRead> {
         return __request(OpenAPI, {
             method: 'PATCH',
             url: '/v1/crud/backtests/{backtestId}',
@@ -153,15 +153,35 @@ export class BacktestsService {
         });
     }
     /**
+     * Get Backtest Info
+     * @param backtestId
+     * @returns BacktestRead Successful Response
+     * @throws ApiError
+     */
+    public static getBacktestInfoV1CrudBacktestsBacktestIdInfoGet(
+        backtestId: number,
+    ): CancelablePromise<BacktestRead> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/v1/crud/backtests/{backtestId}/info',
+            path: {
+                'backtestId': backtestId,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
      * Get Compatible Backtests
      * Return a list of backtests that are compatible for comparison with the given backtest
      * @param backtestId
-     * @returns BackTestRead Successful Response
+     * @returns BacktestRead Successful Response
      * @throws ApiError
      */
     public static getCompatibleBacktestsV1AnalyticsCompatibleBacktestsBacktestIdGet(
         backtestId: number,
-    ): CancelablePromise<Array<BackTestRead>> {
+    ): CancelablePromise<Array<BacktestRead>> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/v1/analytics/compatible-backtests/{backtestId}',
@@ -266,6 +286,37 @@ export class BacktestsService {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/v1/analytics/actualCases/{backtestId}',
+            path: {
+                'backtestId': backtestId,
+            },
+            query: {
+                'orgUnits': orgUnits,
+                'isDatasetId': isDatasetId,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
+     * Get Actual Cases Alias
+     * Return the actual disease cases corresponding to a backtest. Can optionally be filtered on org units.
+     *
+     * Note: If org_units is set to ["adm0"], the sum over all regions is returned.
+     * @param backtestId
+     * @param orgUnits
+     * @param isDatasetId
+     * @returns DataList Successful Response
+     * @throws ApiError
+     */
+    public static getActualCasesAliasV1AnalyticsActualCasesBacktestIdGet(
+        backtestId: number,
+        orgUnits?: Array<string>,
+        isDatasetId: boolean = false,
+    ): CancelablePromise<DataList> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/v1/analytics/actual-cases/{backtestId}',
             path: {
                 'backtestId': backtestId,
             },

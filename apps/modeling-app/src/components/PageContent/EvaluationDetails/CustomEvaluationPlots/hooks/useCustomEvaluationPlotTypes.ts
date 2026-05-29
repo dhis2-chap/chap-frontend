@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { ApiError, BackTestPlotType, VisualizationsService } from '@dhis2-chap/ui';
+import { ApiError, BacktestPlotType, VisualizationsService } from '@dhis2-chap/ui';
 
 export const useCustomEvaluationPlotTypes = () => {
-    const { data, error, isLoading } = useQuery<BackTestPlotType[], ApiError>({
+    const { data, error, isLoading } = useQuery<BacktestPlotType[], ApiError>({
         queryKey: ['custom-evaluation-plot-types'],
         queryFn: () => VisualizationsService.listBacktestPlotTypesV1VisualizationBacktestPlotsGet(),
         staleTime: 5 * 60 * 1000,

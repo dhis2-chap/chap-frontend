@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { z } from 'zod';
-import { BackTestRead } from '@dhis2-chap/ui';
+import { BacktestRead } from '@dhis2-chap/ui';
 import { useBacktests } from '../../hooks/useBacktests';
 
 const evaluationParamsSchema = z.object({
@@ -129,9 +129,9 @@ export const useSelectedEvaluations = () => {
 // not that we do not expose comparisonEvaluations here,
 // if we want to support more - implement here
 export type EvaluationControllerResult = {
-    baseEvaluation: BackTestRead | undefined;
-    comparisonEvaluation: BackTestRead | undefined;
-    evaluations: BackTestRead[] | undefined;
+    baseEvaluation: BacktestRead | undefined;
+    comparisonEvaluation: BacktestRead | undefined;
+    evaluations: BacktestRead[] | undefined;
 } & Pick<
     ReturnType<typeof useSelectedEvaluations>,
     'setBaseEvaluation' | 'setComparisonEvaluation'

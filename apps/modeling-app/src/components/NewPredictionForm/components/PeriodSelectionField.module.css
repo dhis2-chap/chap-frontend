@@ -1,0 +1,47 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.rangeRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  inline-size: 100%;
+}
+
+.input {
+  font-family: inherit;
+  font-size: 0.9rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #adb5bd;
+  border-radius: 3px;
+  background: #fff;
+  flex: 1;
+  min-inline-size: 0;
+  box-sizing: border-box;
+}
+
+.input:focus {
+  outline: 2px solid #2c6693;
+  outline-offset: -1px;
+  border-color: #2c6693;
+}
+
+.input:disabled {
+  background: #f1f3f5;
+  color: #495057;
+  cursor: not-allowed;
+}
+
+.separator {
+  color: #6c757d;
+  font-size: 1rem;
+}
+
+.errorText {
+  font-size: 0.85rem;
+  color: #b71c1c;
+  margin: 0;
+}

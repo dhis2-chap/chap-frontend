@@ -1,4 +1,4 @@
-import { BackTestRead, DataElement, EvaluationEntry } from '../httpfunctions';
+import { BacktestRead, DataElement, EvaluationEntry } from '../httpfunctions';
 import {
     EvaluationEntryExtend,
     EvaluationForSplitPoint,
@@ -10,7 +10,7 @@ import {
     joinRealAndPredictedData,
     normalizeEvaluationModelsToSharedPeriods,
 } from './EvaluationResponse';
-import { PERIOD_TYPES, sortPeriods } from './timePeriodUtils';
+import { PERIOD_TYPES, sortPeriods } from '@dhis2-chap/core';
 
 const Y_AXIS_HEADROOM_MULTIPLIER = 1.05;
 
@@ -18,7 +18,7 @@ export type PlotDataResult = {
     evaluationEntries: EvaluationEntryExtend[];
     actualCases: DataElement[];
     splitPeriods: string[];
-    evaluation: BackTestRead;
+    evaluation: BacktestRead;
 };
 
 type GroupedEntriesBySplitPeriod = Map<
@@ -29,7 +29,7 @@ type GroupedEntriesBySplitPeriod = Map<
 type GroupedPlotDataResult = {
     actualCasesByOrgUnit: Map<string, DataElement[]>;
     entriesBySplitPeriod: GroupedEntriesBySplitPeriod;
-    evaluation: BackTestRead;
+    evaluation: BacktestRead;
     quantileFunc: (item: EvaluationEntry) => string;
 };
 

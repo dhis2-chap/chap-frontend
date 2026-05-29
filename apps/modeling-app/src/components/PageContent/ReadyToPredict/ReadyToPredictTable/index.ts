@@ -1,0 +1,1 @@
+export { ReadyToPredictTable } from './ReadyToPredictTable';
