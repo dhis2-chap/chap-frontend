@@ -9,20 +9,10 @@ import {
     inputValueToPeriod,
     isPeriodAfter,
     isPeriodBefore,
-    shiftPeriod,
 } from '../utils/predictionPeriods';
-
-export const PERIOD_MODES = {
-    OFFSET: 'offset',
-    ABSOLUTE: 'absolute',
-} as const;
-
-export type PeriodMode = typeof PERIOD_MODES[keyof typeof PERIOD_MODES];
 
 export type NewPredictionFormValues = {
     name: string;
-    mode: PeriodMode;
-    offsetValue: number | null;
     absoluteValue: string | null;
 };
 
@@ -35,46 +25,8 @@ type SchemaContext = {
 const createNewPredictionFormSchema = ({ periodType, fromPeriod, anchorPeriod }: SchemaContext) => (
     z.object({
         name: z.string().min(1, { message: i18n.t('Name is required') }),
-        mode: z.enum([PERIOD_MODES.OFFSET, PERIOD_MODES.ABSOLUTE]),
-        offsetValue: z.number().int().nullable(),
         absoluteValue: z.string().nullable(),
     }).superRefine((data, ctx) => {
-        if (data.mode === PERIOD_MODES.OFFSET) {
-            if (data.offsetValue === null || data.offsetValue === undefined || Number.isNaN(data.offsetValue)) {
-                ctx.addIssue({
-                    code: z.ZodIssueCode.custom,
-                    path: ['offsetValue'],
-                    message: i18n.t('Enter an offset (0 or negative)'),
-                });
-                return;
-            }
-            if (data.offsetValue > 0) {
-                ctx.addIssue({
-                    code: z.ZodIssueCode.custom,
-                    path: ['offsetValue'],
-                    message: i18n.t('Offset must be 0 or negative'),
-                });
-                return;
-            }
-            const resolved = shiftPeriod(anchorPeriod, periodType, data.offsetValue);
-            if (!resolved) {
-                ctx.addIssue({
-                    code: z.ZodIssueCode.custom,
-                    path: ['offsetValue'],
-                    message: i18n.t('Invalid offset'),
-                });
-                return;
-            }
-            if (isPeriodBefore(resolved, fromPeriod, periodType)) {
-                ctx.addIssue({
-                    code: z.ZodIssueCode.custom,
-                    path: ['offsetValue'],
-                    message: i18n.t('Resolved period is before training start'),
-                });
-            }
-            return;
-        }
-
         if (!data.absoluteValue) {
             ctx.addIssue({
                 code: z.ZodIssueCode.custom,
@@ -132,8 +84,6 @@ export const useNewPredictionFormState = ({
         resolver: zodResolver(schema),
         defaultValues: {
             name,
-            mode: PERIOD_MODES.OFFSET,
-            offsetValue: 0,
             absoluteValue: null,
         },
         shouldFocusError: false,

@@ -96,6 +96,7 @@ const NewPredictionFormFields = ({
 
                                 <PeriodSelectionField
                                     periodType={periodType}
+                                    fromPeriod={fromPeriod}
                                     anchorPeriod={anchorPeriod}
                                 />
                             </div>

@@ -3,7 +3,6 @@ import { ModelExecutionFormValues } from '../../ModelExecutionForm/hooks/useMode
 import { useCreatePrediction } from './useCreatePrediction';
 import {
     NewPredictionFormValues,
-    PERIOD_MODES,
     useNewPredictionFormState,
 } from './useNewPredictionFormState';
 import {
@@ -11,7 +10,6 @@ import {
     inputValueToPeriod,
     isSupportedPeriodType,
     periodToInputValue,
-    shiftPeriod,
     type SupportedPeriodType,
 } from '../utils/predictionPeriods';
 
@@ -31,14 +29,7 @@ type UsePredictionFormControllerOptions = {
 const resolveSelectedPeriod = (
     values: NewPredictionFormValues,
     periodType: SupportedPeriodType,
-    anchorPeriod: string,
 ): string | null => {
-    if (values.mode === PERIOD_MODES.OFFSET) {
-        if (values.offsetValue === null || values.offsetValue === undefined) {
-            return null;
-        }
-        return shiftPeriod(anchorPeriod, periodType, values.offsetValue);
-    }
     if (!values.absoluteValue) {
         return null;
     }
@@ -72,7 +63,7 @@ export const usePredictionFormController = ({
     });
 
     const handleSubmit = (data: NewPredictionFormValues) => {
-        const resolvedPeriod = resolveSelectedPeriod(data, periodType, anchorPeriod);
+        const resolvedPeriod = resolveSelectedPeriod(data, periodType);
         if (!resolvedPeriod) {
             return;
         }
