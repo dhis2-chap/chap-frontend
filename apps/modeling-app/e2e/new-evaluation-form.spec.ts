@@ -91,11 +91,13 @@ const selectKnownModel = async (page: Page) => {
     }).first();
     await expect(modal).toBeVisible();
 
-    const selectModelButton = modal.locator('[data-test="model-select-naive-model"]');
-    await expect(selectModelButton).toBeVisible();
-    await selectModelButton.click();
+    const inspectModelButton = modal.locator('[data-test="model-inspect-naive-model"]');
+    await expect(inspectModelButton).toBeVisible();
+    await inspectModelButton.click();
 
-    await modal.getByRole('button', { name: 'Confirm Selection' }).click();
+    const useModelButton = modal.locator('[data-test="model-select-naive-model"]');
+    await expect(useModelButton).toBeVisible();
+    await useModelButton.click();
     await expect(modal).not.toBeVisible();
 };
 
