@@ -15,7 +15,6 @@ type Props = {
 
 export const EvaluationDetailsComponent = ({ evaluationId }: Props) => {
     const { backtest, isLoading: isBacktestLoading, error: backtestError } = useBacktestById(evaluationId);
-    const { enabled: isMetricPlotsEnabled } = useExperimentalFeature(FEATURES.METRIC_PLOTS);
     const { enabled: isEvaluationPlotsEnabled } = useExperimentalFeature(FEATURES.EVALUATION_PLOTS);
 
     if (isBacktestLoading) {
@@ -65,11 +64,11 @@ export const EvaluationDetailsComponent = ({ evaluationId }: Props) => {
                         evaluationId={evaluationId}
                     />
                 )}
-                {isMetricPlotsEnabled && (
+                {/* {isMetricPlotsEnabled && (
                     <MetricPlotWidget
                         evaluationId={evaluationId}
                     />
-                )}
+                )} */}
             </div>
             <div className={styles.rightColumn}>
                 <EvaluationSummaryWidget
