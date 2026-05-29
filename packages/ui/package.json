@@ -17,9 +17,16 @@
     },
     "main": "./build/cjs/index.js",
     "exports": {
-        "import": "./build/es/index.js",
-        "require": "./build/cjs/index.js",
-        "types": "./build/types/index.d.ts"
+        ".": {
+            "import": "./build/es/index.js",
+            "require": "./build/cjs/index.js",
+            "types": "./build/types/index.d.ts"
+        },
+        "./time-periods": {
+            "import": "./build/es/utils/timePeriodUtils.js",
+            "require": "./build/cjs/utils/timePeriodUtils.js",
+            "types": "./build/types/utils/timePeriodUtils.d.ts"
+        }
     },
     "peerDependencies": {
         "react": ">=18",

@@ -10,7 +10,7 @@ import {
     startOfMonth,
     subDays,
 } from 'date-fns';
-import { comparePeriods, convertServerToClientPeriod, PERIOD_TYPES } from '@dhis2-chap/ui';
+import { comparePeriods, convertServerToClientPeriod, PERIOD_TYPES } from '@dhis2-chap/ui/time-periods';
 import {
     isSupportedPeriodType,
     parseSupportedPeriodType,
