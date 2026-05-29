@@ -29,6 +29,7 @@ const viteConfig = defineConfig(async () => {
             alias: {
                 '@': path.resolve(__dirname, 'src'),
                 '@docs': path.resolve(__dirname, 'docs'),
+                '@dhis2-chap/ui': path.resolve(__dirname, '../../packages/ui/src'),
             },
         },
         clearScreen: true,
