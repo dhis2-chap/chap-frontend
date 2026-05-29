@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
     CircularLoader,
     IconInfo16,
@@ -12,6 +12,7 @@ import styles from './CustomEvaluationPlotsWidget.module.css'
 import { CustomEvaluationPlotsWidgetComponent } from './CustomEvaluationPlotsWidget.component'
 import { useCustomEvaluationPlotTypes } from './hooks/useCustomEvaluationPlotTypes'
 import { Widget } from '@dhis2-chap/ui'
+import { useFacetCoordinates } from './hooks/useFacetCoordinates'
 
 type Props = {
     evaluationId: number
@@ -69,12 +70,20 @@ export const CustomEvaluationPlotsWidget = ({ evaluationId }: Props) => {
         string | undefined
     >(undefined)
 
+    const { facetCoordinates } = useFacetCoordinates({
+        backtestId: evaluationId,
+        visualizationName: selectedVisualizationId, 
+    });
 
     const handleOnChangeVisualization = (visualizationId: string) => {
-        console.log('Selected visualization', visualizationId)
         setVisualizationId(visualizationId)
     }
     
+    useEffect(() => {
+        if (selectedVisualizationId === 'evaluation_plot' || selectedVisualizationId === 'predicted_vs_actual') {
+            console.log('facetCoordinates', facetCoordinates);
+        }
+    }, [selectedVisualizationId, facetCoordinates]);
 
     if (isTypesLoading) {
         return (
