@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-05-29T12:38:46.713Z\n"
-"PO-Revision-Date: 2026-05-29T12:38:46.714Z\n"
+"POT-Creation-Date: 2026-05-29T21:09:56.428Z\n"
+"PO-Revision-Date: 2026-05-29T21:09:56.429Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -160,6 +160,27 @@ msgstr "Learn more about Modeling and CHAP"
 
 msgid "Configure settings"
 msgstr "Configure settings"
+
+msgid "Until {{date}}"
+msgstr "Until {{date}}"
+
+msgid "Date"
+msgstr "Date"
+
+msgid "Previous month"
+msgstr "Previous month"
+
+msgid "Next month"
+msgstr "Next month"
+
+msgid "Clear date range"
+msgstr "Clear date range"
+
+msgid "Select date range"
+msgstr "Select date range"
+
+msgid "Done"
+msgstr "Done"
 
 msgid "Oops!"
 msgstr "Oops!"
@@ -664,6 +685,26 @@ msgstr "No organisation units match your search"
 msgid "You cannot select more than {{max}} organisation units at a time"
 msgstr "You cannot select more than {{max}} organisation units at a time"
 
+msgid "Last 7 days"
+msgstr "Last 7 days"
+
+msgid "Last 14 days"
+msgstr "Last 14 days"
+
+msgid "Last 30 days"
+msgstr "Last 30 days"
+
+msgid "Last 90 days"
+msgstr "Last 90 days"
+
+msgid "{{count}} job"
+msgid_plural "{{count}} job"
+msgstr[0] "{{count}} job"
+msgstr[1] "{{count}} jobs"
+
+msgid "Day"
+msgstr "Day"
+
 msgid "Started"
 msgstr "Started"
 
@@ -682,14 +723,17 @@ msgstr "Invalid prediction setup"
 msgid "No activity yet. Run a prediction to see job status and logs here."
 msgstr "No activity yet. Run a prediction to see job status and logs here."
 
+msgid "Activity view"
+msgstr "Activity view"
+
 msgid "All statuses"
 msgstr "All statuses"
 
 msgid "View all activity"
 msgstr "View all activity"
 
-msgid "No activity matches the selected status"
-msgstr "No activity matches the selected status"
+msgid "No activity matches the selected filters"
+msgstr "No activity matches the selected filters"
 
 msgid "Delete prediction run"
 msgstr "Delete prediction run"
