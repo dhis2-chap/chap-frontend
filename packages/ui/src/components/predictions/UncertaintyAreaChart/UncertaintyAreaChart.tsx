@@ -1,17 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import Highcharts from 'highcharts';
-import accessibility from 'highcharts/modules/accessibility';
-import highchartsMore from 'highcharts/highcharts-more';
-import exporting from 'highcharts/modules/exporting';
 import HighchartsReact from 'highcharts-react-official';
 import { PredictionOrgUnitSeries } from '../../../interfaces/Prediction';
+import { registerHighchartsModules } from '../../../utils/registerHighchartsModules';
 import type { SupportedOutbreakProbabilityBucket } from '../../../utils/outbreakAlerts';
 import type { ZoomRange } from '../../evaluation/ResultPlot/ResultPlot';
-
-accessibility(Highcharts);
-exporting(Highcharts);
-highchartsMore(Highcharts);
 
 type DisabledAnimationOptions = {
     chart: {
@@ -274,6 +268,8 @@ export const UncertaintyAreaChart = ({
     onZoomChange,
     maxY,
 }: PredicationChartProps) => {
+    registerHighchartsModules();
+
     const chartRef = useRef<HighchartsReact.RefObject | null>(null);
 
     const handleAfterSetExtremes = useCallback(
