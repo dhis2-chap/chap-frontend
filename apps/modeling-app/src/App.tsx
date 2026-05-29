@@ -36,6 +36,7 @@ import { PredictionImportPage } from './pages/PredictionImportPage';
 import { PredictionRunDetailsPage } from './pages/PredictionRunDetailsPage';
 import { PredictionActivityPage } from './pages/PredictionActivityPage';
 import { GuidesPage } from './pages/GuidesPage';
+import { ModelSelectorPrototypesPage } from './pages/ModelSelectorPrototypesPage';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
@@ -216,6 +217,11 @@ const router = createHashRouter([
                     collapseSidebar: true,
                 } satisfies RouteHandle,
                 element: <GetStartedPage />,
+            },
+            {
+                /* Standalone design playground (mock data, no backend required) */
+                path: '/model-selector-prototypes',
+                element: <ModelSelectorPrototypesPage />,
             },
             {
                 path: '/guides',
