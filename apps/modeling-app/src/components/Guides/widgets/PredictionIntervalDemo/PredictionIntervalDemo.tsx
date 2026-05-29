@@ -19,6 +19,26 @@ const COLORS = {
     gridLine: '#d5dde5',
 };
 
+const buildIntervalHoverMarker = (): Highcharts.PointMarkerOptionsObject => ({
+    enabled: false,
+    radius: 3,
+    symbol: 'circle',
+    fillColor: '#fff',
+    lineColor: COLORS.predicted,
+    lineWidth: 1.5,
+    states: {
+        hover: {
+            enabled: true,
+            radius: 3,
+            radiusPlus: 0,
+            fillColor: '#fff',
+            lineColor: COLORS.predicted,
+            lineWidth: 1.5,
+            lineWidthPlus: 0,
+        },
+    },
+});
+
 const MONTHS = [
     'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
     'Jan', 'Feb', 'Mar', 'Apr',
@@ -52,7 +72,11 @@ const buildChartOptions = (level: ConfidenceLevel): Highcharts.Options => {
         const med = MEDIAN[i];
         if (med !== null && hw !== 0) {
             const half = Math.round(hw * factor);
-            bandData.push({ x: i, low: med - half, high: med + half });
+            bandData.push({
+                x: i,
+                low: Math.max(0, med - half),
+                high: med + half,
+            });
         }
     });
 
@@ -144,7 +168,7 @@ const buildChartOptions = (level: ConfidenceLevel): Highcharts.Options => {
                     band.point.low !== undefined &&
                     band.point.high !== undefined
                 ) {
-                    html += `<span style="color:${COLORS.band}">\u25CF</span> <b>${level}% interval:</b> ${band.point.low}\u2013${band.point.high} cases<br/>`;
+                    html += `<span style="color:${COLORS.band}">\u25CF</span> <b>${level}% interval:</b> ${band.point.low}-${band.point.high} cases<br/>`;
                 }
 
                 html += '</div>';
@@ -164,7 +188,8 @@ const buildChartOptions = (level: ConfidenceLevel): Highcharts.Options => {
             areasplinerange: {
                 lineWidth: 0,
                 fillOpacity: 0.45,
-                marker: { enabled: false },
+                marker: buildIntervalHoverMarker(),
+                lowMarker: buildIntervalHoverMarker(),
             },
         },
         series: [

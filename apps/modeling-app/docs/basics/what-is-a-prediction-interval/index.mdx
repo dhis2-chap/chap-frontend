@@ -9,7 +9,7 @@ category: Core concepts
 
 When a model predicts "45 cases next month," that single number hides something important: *how confident is the model in that prediction?*
 
-A **prediction interval** answers that question. Instead of one number, the model gives you a range — like "between 30 and 70 cases." That range tells you how much uncertainty exists in the forecast.
+A **prediction interval** answers that question. Instead of one number, the model gives you a range - like "between 30 and 70 cases." That range tells you how much uncertainty exists in the forecast.
 
 ## The weather forecast analogy
 
@@ -18,34 +18,34 @@ Think about weather forecasts. A forecaster could say:
 - *"Tomorrow will be 20°C"*
 - *"Tomorrow will be between 18°C and 22°C"*
 
-The second version is more honest — and more useful. If you're planning an outdoor event, knowing the range helps you prepare for the best and worst cases.
+The second version is more honest - and more useful. If you're planning an outdoor event, knowing the range helps you prepare for the best and worst cases.
 
 Disease forecasting works the same way. A model that says "expect between 80 and 150 cases" is giving you actionable information: you can plan for the likely scenario (around the middle of the range) while also preparing for the upper end.
 
 ## How prediction intervals work in Chap
 
-Chap displays two prediction intervals on every forecast chart:
+Chap displays two prediction intervals on every forecast chart. These ranges describe what the model believes is plausible, not a guarantee about what will happen:
 
-- **50% interval** (inner band) — There's a 50% chance the actual value falls within this narrower range. Think of this as "the likely zone."
-- **80% interval** (outer band) — There's an 80% chance the actual value falls within this wider range. Think of this as "the safe planning zone."
+- **50% interval** (inner band) - The model assigns about a 50% chance to the actual value falling within this narrower range. Think of this as the model's "likely zone."
+- **80% interval** (outer band) - The model assigns about an 80% chance to the actual value falling within this wider range. Think of this as the model's "safe planning zone."
 
 The **median** line running through the middle is the model's best single estimate.
 
-Try adjusting the confidence level in the chart below to see how the prediction band widens as you ask for more confidence:
+Try adjusting the confidence level in the chart below to see how the prediction band widens as you ask the model to include more of the outcomes it considers plausible:
 
 <PredictionIntervalDemo />
 
-Notice how at 50% confidence, the band is quite narrow — the model is saying "I'm somewhat sure it'll be in this range." At 90% or 95%, the band widens considerably because the model is trying to capture almost all possible outcomes.
+Notice how at 50% confidence, the band is quite narrow - the model is saying "I think the most likely outcomes are in this range." At 90% or 95%, the band widens considerably because the model is including more of the outcomes it believes are possible. If a model is poorly calibrated, the real value may still fall outside these ranges more often than the percentage suggests.
 
 ## Reading the bands
 
 When you see a prediction chart in Chap, here's how to read it:
 
 1. **The median line** is the single best guess. If you had to pick one number, this is it.
-2. **The inner band (50%)** shows the range where cases will most likely fall. Half the time, the actual value will land inside this band.
-3. **The outer band (80%)** shows a wider safety margin. Four out of five times, the actual value will land here.
+2. **The inner band (50%)** shows the model's narrower likely range. If the model is well-calibrated, about half of comparable observations should land inside this band.
+3. **The outer band (80%)** shows a wider model uncertainty range. If the model is well-calibrated, about four out of five comparable observations should land here.
 
-If the actual observed value falls *outside* the outer band, that's noteworthy — it means something unusual happened that the model didn't expect.
+If the actual observed value falls *outside* the outer band, that's noteworthy - it means something unusual happened that the model didn't expect.
 
 ## Wider isn't always worse
 
@@ -60,26 +60,10 @@ Wide bands are the model being *honest* about what it doesn't know. This can hap
 - The forecast is far into the future (uncertainty grows with time)
 - An unusual event is affecting the pattern
 
-A well-calibrated model — one whose intervals are the right width — is more valuable than one that looks precise but is frequently wrong.
-
-## Using intervals for planning
-
-Different parts of the prediction interval are useful for different decisions:
-
-- **Median (best estimate):** Use for routine planning — ordering typical supply levels, scheduling regular staff
-- **Upper end of the 50% interval:** Use for moderate preparedness — having a reasonable buffer of supplies and staff
-- **Upper end of the 80% interval:** Use for worst-case planning — ensuring surge capacity, pre-positioning emergency supplies, alerting response teams
-
-For example, if a model predicts a median of 100 cases with an 80% interval of 60–180, a health program manager might:
-
-- Order supplies for 100 cases (the expected scenario)
-- Staff clinics to handle 130 cases (moderate buffer)
-- Have a contingency plan ready if cases reach 180 (the upper bound)
+A well-calibrated model - one whose intervals are the right width - is more valuable than one that looks precise but is frequently wrong.
 
 ## Next steps
 
 Now that you understand how to read model outputs, you're ready to see how these intervals are used when evaluating whether a model is actually performing well:
 
 → Learn how evaluation works in [What is an Evaluation?](/guides/what-is-an-evaluation)
-
-→ See how to interpret results in the [Understanding Evaluation Results](/guides/understanding-evaluation-results) guide

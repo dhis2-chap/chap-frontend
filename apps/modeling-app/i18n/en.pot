@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-05-29T07:35:17.361Z\n"
-"PO-Revision-Date: 2026-05-29T07:35:17.361Z\n"
+"POT-Creation-Date: 2026-05-29T12:38:46.713Z\n"
+"PO-Revision-Date: 2026-05-29T12:38:46.714Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -259,12 +259,6 @@ msgstr "Create evaluation"
 
 msgid "Make prediction"
 msgstr "Make prediction"
-
-msgid "Create dataset (deprecated)"
-msgstr "Create dataset (deprecated)"
-
-msgid "Create evaluation (deprecated)"
-msgstr "Create evaluation (deprecated)"
 
 msgid "Create evaluation (Legacy)"
 msgstr "Create evaluation (Legacy)"
@@ -586,17 +580,14 @@ msgstr ""
 "Missing prediction setup details. Open the setup configuration and ensure "
 "model, period type, training start, and data mappings are configured."
 
-msgid "Offset"
-msgstr "Offset"
+msgid "Training period"
+msgstr "Training period"
 
-msgid "Absolute"
-msgstr "Absolute"
+msgid "Training start period"
+msgstr "Training start period"
 
 msgid "Last training period"
 msgstr "Last training period"
-
-msgid "periods back from {{anchor}}"
-msgstr "periods back from {{anchor}}"
 
 msgid "Unknown model"
 msgstr "Unknown model"
@@ -606,18 +597,6 @@ msgstr "Run a new prediction"
 
 msgid "Training start"
 msgstr "Training start"
-
-msgid "Enter an offset (0 or negative)"
-msgstr "Enter an offset (0 or negative)"
-
-msgid "Offset must be 0 or negative"
-msgstr "Offset must be 0 or negative"
-
-msgid "Invalid offset"
-msgstr "Invalid offset"
-
-msgid "Resolved period is before training start"
-msgstr "Resolved period is before training start"
 
 msgid "Please select a period"
 msgstr "Please select a period"
@@ -906,9 +885,6 @@ msgstr ""
 "The model used to run this evaluation has been updated. You can still view "
 "the results of the run, but the metadata may not be accurate."
 
-msgid "Training period"
-msgstr "Training period"
-
 msgid "{{count}} locations"
 msgid_plural "{{count}} locations"
 msgstr[0] "{{count}} location"
@@ -1154,26 +1130,14 @@ msgstr "Alert periods"
 msgid "Thresholds unavailable"
 msgstr "Thresholds unavailable"
 
-msgid "Prediction target"
-msgstr "Prediction target"
+msgid "Prediction run"
+msgstr "Prediction run"
 
 msgid "Outbreak thresholds"
 msgstr "Outbreak thresholds"
 
 msgid "Show outbreak status and threshold overlays for this run."
 msgstr "Show outbreak status and threshold overlays for this run."
-
-msgid "Enabled"
-msgstr "Enabled"
-
-msgid "Disabled"
-msgstr "Disabled"
-
-msgid "Minimum outbreak probability"
-msgstr "Minimum outbreak probability"
-
-msgid "Edit"
-msgstr "Edit"
 
 msgid ""
 "There was a problem loading the prediction data required for this "
@@ -1289,6 +1253,9 @@ msgstr[0] ""
 msgstr[1] ""
 "Outbreak indicators will be skipped for {{count}} regions due to "
 "insufficient disease data."
+
+msgid "Minimum outbreak probability"
+msgstr "Minimum outbreak probability"
 
 msgid "Adjust"
 msgstr "Adjust"
@@ -1700,6 +1667,9 @@ msgstr ""
 msgid "Sharing"
 msgstr "Sharing"
 
+msgid "Edit"
+msgstr "Edit"
+
 msgid "Invalid URL format"
 msgstr "Invalid URL format"
 
@@ -1886,6 +1856,15 @@ msgstr "Create a prediction run for this setup."
 
 msgid "Back to prediction setup"
 msgstr "Back to prediction setup"
+
+msgid "Activity"
+msgstr "Activity"
+
+msgid "View and manage jobs for this prediction setup."
+msgstr "View and manage jobs for this prediction setup."
+
+msgid "The prediction setup id in the URL is not valid."
+msgstr "The prediction setup id in the URL is not valid."
 
 msgid "Error loading prediction"
 msgstr "Error loading prediction"

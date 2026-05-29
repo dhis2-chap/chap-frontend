@@ -160,8 +160,11 @@ export const CovariateExplorer = () => {
         temperature: false,
     });
 
-    const toggle = (key: keyof CovariateToggle) => {
-        setCovariates(prev => ({ ...prev, [key]: !prev[key] }));
+    const setCovariateVisibility = (
+        key: keyof CovariateToggle,
+        checked: boolean,
+    ) => {
+        setCovariates(prev => ({ ...prev, [key]: checked }));
     };
 
     const options = buildChartOptions(covariates);
@@ -172,34 +175,30 @@ export const CovariateExplorer = () => {
                 <HighchartsReact highcharts={Highcharts} options={options} />
             </div>
             <div className={styles.toggleContainer}>
-                <button
-                    className={
-                        covariates.rainfall
-                            ? styles.toggleButtonActive
-                            : styles.toggleButton
-                    }
-                    onClick={() => toggle('rainfall')}
-                >
+                <label className={styles.toggleCheckbox}>
+                    <input
+                        type="checkbox"
+                        checked={covariates.rainfall}
+                        onChange={event => setCovariateVisibility('rainfall', event.target.checked)}
+                    />
+                    <span>Rainfall</span>
                     <span
                         className={styles.indicator}
                         style={{ backgroundColor: COLORS.rainfall }}
                     />
-                    Rainfall
-                </button>
-                <button
-                    className={
-                        covariates.temperature
-                            ? styles.toggleButtonActive
-                            : styles.toggleButton
-                    }
-                    onClick={() => toggle('temperature')}
-                >
+                </label>
+                <label className={styles.toggleCheckbox}>
+                    <input
+                        type="checkbox"
+                        checked={covariates.temperature}
+                        onChange={event => setCovariateVisibility('temperature', event.target.checked)}
+                    />
+                    <span>Temperature</span>
                     <span
                         className={styles.indicator}
                         style={{ backgroundColor: COLORS.temperature }}
                     />
-                    Temperature
-                </button>
+                </label>
             </div>
             <p className={styles.hint}>
                 Toggle covariates to see how they relate to disease cases
