@@ -5,20 +5,15 @@
 import type { ConfiguredModelRead } from './ConfiguredModelRead';
 import type { DataSource } from './DataSource';
 import type { PredictionInfo } from './PredictionInfo';
-import type { QuantileTarget } from './QuantileTarget';
-export type PredictionSetupReadWithPredictions = {
+export type ConfiguredModelWithDataSourceReadWithPredictions = {
     id: number;
     name: string;
     created: (string | null);
-    backtestId: number;
-    configuredModel: ConfiguredModelRead;
+    configuredModel: (ConfiguredModelRead | null);
     startPeriod: (string | null);
     orgUnits: Array<string>;
-    covariateSources: Array<DataSource>;
+    dataSources: Array<DataSource>;
     periodType: (string | null);
-    scheduleCronExpression: (string | null);
-    scheduleEnabled: boolean;
-    quantileTargets: Array<QuantileTarget>;
     predictions?: Array<PredictionInfo>;
 };
 

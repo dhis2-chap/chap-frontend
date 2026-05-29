@@ -148,4 +148,80 @@ export class VisualizationsService {
             },
         });
     }
+    /**
+     * Get Facet Coordinates
+     * Returns unique structural dimension arrays available for layout faceting grids.
+     * @param visualizationName
+     * @param backtestId
+     * @returns any Successful Response
+     * @throws ApiError
+     */
+    public static getFacetCoordinatesV1VisualizationBacktestPlotsVisualizationNameBacktestIdFacetCoordsGet(
+        visualizationName: string,
+        backtestId: number,
+    ): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/v1/visualization/backtest-plots/{visualization_name}/{backtest_id}/facet-coords',
+            path: {
+                'visualization_name': visualizationName,
+                'backtest_id': backtestId,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
+     * Generate Isolated Plots
+     * Filters the source datasets by exact coordinate targets and generates a single Vega schema spec.
+     * @param visualizationName
+     * @param backtestId
+     * @param requestBody
+     * @returns any Successful Response
+     * @throws ApiError
+     */
+    public static generateIsolatedPlotsV1VisualizationBacktestPlotsVisualizationNameBacktestIdSubplotPost(
+        visualizationName: string,
+        backtestId: number,
+        requestBody: Record<string, any>,
+    ): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/v1/visualization/backtest-plots/{visualization_name}/{backtest_id}/subplot',
+            path: {
+                'visualization_name': visualizationName,
+                'backtest_id': backtestId,
+            },
+            body: requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
+     * Generate All Subplots
+     * Generates a full flat checklist mapping coordinate variations against their respective Vega specs.
+     * @param visualizationName
+     * @param backtestId
+     * @returns any Successful Response
+     * @throws ApiError
+     */
+    public static generateAllSubplotsV1VisualizationBacktestPlotsVisualizationNameBacktestIdSubplotsGet(
+        visualizationName: string,
+        backtestId: number,
+    ): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/v1/visualization/backtest-plots/{visualization_name}/{backtest_id}/subplots',
+            path: {
+                'visualization_name': visualizationName,
+                'backtest_id': backtestId,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
 }

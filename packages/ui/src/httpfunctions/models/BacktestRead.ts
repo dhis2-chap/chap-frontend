@@ -16,6 +16,5 @@ export type BacktestRead = {
     dataset: DataSetMeta;
     aggregateMetrics: Record<string, number>;
     configuredModel: (ConfiguredModelRead | null);
-    predictionSetupId?: (number | null);
 };
 

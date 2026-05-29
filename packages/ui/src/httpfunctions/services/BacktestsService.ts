@@ -299,37 +299,6 @@ export class BacktestsService {
         });
     }
     /**
-     * Get Actual Cases Alias
-     * Return the actual disease cases corresponding to a backtest. Can optionally be filtered on org units.
-     *
-     * Note: If org_units is set to ["adm0"], the sum over all regions is returned.
-     * @param backtestId
-     * @param orgUnits
-     * @param isDatasetId
-     * @returns DataList Successful Response
-     * @throws ApiError
-     */
-    public static getActualCasesAliasV1AnalyticsActualCasesBacktestIdGet(
-        backtestId: number,
-        orgUnits?: Array<string>,
-        isDatasetId: boolean = false,
-    ): CancelablePromise<DataList> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/v1/analytics/actual-cases/{backtestId}',
-            path: {
-                'backtestId': backtestId,
-            },
-            query: {
-                'orgUnits': orgUnits,
-                'isDatasetId': isDatasetId,
-            },
-            errors: {
-                422: `Validation Error`,
-            },
-        });
-    }
-    /**
      * Create Backtest With Data
      * @param requestBody
      * @param dryRun If True, only run validation and do not create a backtest

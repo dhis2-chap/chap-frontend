@@ -2,8 +2,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type QuantileTarget = {
-    quantile: string;
-    dataElementId: string;
+export type DebugEntry = {
+    id?: (number | null);
+    timestamp: number;
 };
 
