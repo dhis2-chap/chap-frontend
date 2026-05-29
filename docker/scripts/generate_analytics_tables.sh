@@ -10,7 +10,9 @@ ROUTE_NAME="${DHIS2_ROUTE_NAME}"
 ROUTE_CODE="${DHIS2_ROUTE_CODE}"
 ROUTE_URL="${DHIS2_ROUTE_URL}"
 ANALYTICS_TRIGGER_RESPONSE_FILE="/tmp/dhis2-analytics-trigger-response.json"
+ROUTE_LOOKUP_RESPONSE_FILE="/tmp/dhis2-route-lookup-response.json"
 ROUTE_CREATE_RESPONSE_FILE="/tmp/dhis2-route-create-response.json"
+ROUTE_UPDATE_RESPONSE_FILE="/tmp/dhis2-route-update-response.json"
 
 ANALYTICS_TRIGGER_STATUS=$(
     curl --silent --show-error \
@@ -53,34 +55,75 @@ while true; do
     sleep "$POLL_INTERVAL_SECONDS"
 done
 
-echo "Creating DHIS2 route '${ROUTE_CODE}' -> '${ROUTE_URL}'" 1>&2
+ROUTE_PAYLOAD=$(jq -n \
+    --arg name "${ROUTE_NAME}" \
+    --arg code "${ROUTE_CODE}" \
+    --arg url "${ROUTE_URL}" \
+    '{
+        name: $name,
+        code: $code,
+        url: $url,
+        authorities: ["F_CHAP_MODELING_APP"],
+        headers: { "Content-Type": "application/json" },
+        responseTimeoutSeconds: 30
+    }')
 
-CREATE_ROUTE_STATUS=$(
+ROUTE_LOOKUP_STATUS=$(
     curl --silent --show-error \
-        --output "${ROUTE_CREATE_RESPONSE_FILE}" \
+        --output "${ROUTE_LOOKUP_RESPONSE_FILE}" \
         --write-out "%{http_code}" \
         --user "$CREDENTIALS" \
-        --header "Content-Type: application/json" \
-        --request POST \
-        --data "$(jq -n \
-            --arg name "${ROUTE_NAME}" \
-            --arg code "${ROUTE_CODE}" \
-            --arg url "${ROUTE_URL}" \
-            '{
-                name: $name,
-                code: $code,
-                url: $url,
-                authorities: ["F_CHAP_MODELING_APP"],
-                headers: { "Content-Type": "application/json" },
-                responseTimeoutSeconds: 30
-            }')" \
-        "$BASE_URL/api/routes"
+        "$BASE_URL/api/routes?fields=id&filter=code:eq:${ROUTE_CODE}"
 )
 
-if [[ "$CREATE_ROUTE_STATUS" != "201" ]]; then
-    echo "Failed to create DHIS2 route; expected HTTP 201, got ${CREATE_ROUTE_STATUS}" 1>&2
-    cat "${ROUTE_CREATE_RESPONSE_FILE}" 1>&2 || true
+if [[ "$ROUTE_LOOKUP_STATUS" != "200" ]]; then
+    echo "Failed to look up DHIS2 route '${ROUTE_CODE}'; expected HTTP 200, got ${ROUTE_LOOKUP_STATUS}" 1>&2
+    cat "${ROUTE_LOOKUP_RESPONSE_FILE}" 1>&2 || true
     exit 1
 fi
 
-echo "DHIS2 route '${ROUTE_CODE}' created (HTTP 201)" 1>&2
+EXISTING_ROUTE_ID=$(jq -r '.routes[0].id // empty' "${ROUTE_LOOKUP_RESPONSE_FILE}")
+
+if [[ -n "$EXISTING_ROUTE_ID" ]]; then
+    echo "Updating DHIS2 route '${ROUTE_CODE}' (${EXISTING_ROUTE_ID}) -> '${ROUTE_URL}'" 1>&2
+
+    UPDATE_ROUTE_STATUS=$(
+        curl --silent --show-error \
+            --output "${ROUTE_UPDATE_RESPONSE_FILE}" \
+            --write-out "%{http_code}" \
+            --user "$CREDENTIALS" \
+            --header "Content-Type: application/json" \
+            --request PUT \
+            --data "$(echo "$ROUTE_PAYLOAD" | jq --arg id "$EXISTING_ROUTE_ID" '. + { id: $id }')" \
+            "$BASE_URL/api/routes/${EXISTING_ROUTE_ID}"
+    )
+
+    if [[ "$UPDATE_ROUTE_STATUS" != "200" && "$UPDATE_ROUTE_STATUS" != "204" ]]; then
+        echo "Failed to update DHIS2 route '${ROUTE_CODE}'; expected HTTP 200/204, got ${UPDATE_ROUTE_STATUS}" 1>&2
+        cat "${ROUTE_UPDATE_RESPONSE_FILE}" 1>&2 || true
+        exit 1
+    fi
+
+    echo "DHIS2 route '${ROUTE_CODE}' updated (HTTP ${UPDATE_ROUTE_STATUS})" 1>&2
+else
+    echo "Creating DHIS2 route '${ROUTE_CODE}' -> '${ROUTE_URL}'" 1>&2
+
+    CREATE_ROUTE_STATUS=$(
+        curl --silent --show-error \
+            --output "${ROUTE_CREATE_RESPONSE_FILE}" \
+            --write-out "%{http_code}" \
+            --user "$CREDENTIALS" \
+            --header "Content-Type: application/json" \
+            --request POST \
+            --data "$ROUTE_PAYLOAD" \
+            "$BASE_URL/api/routes"
+    )
+
+    if [[ "$CREATE_ROUTE_STATUS" != "201" ]]; then
+        echo "Failed to create DHIS2 route; expected HTTP 201, got ${CREATE_ROUTE_STATUS}" 1>&2
+        cat "${ROUTE_CREATE_RESPONSE_FILE}" 1>&2 || true
+        exit 1
+    fi
+
+    echo "DHIS2 route '${ROUTE_CODE}' created (HTTP 201)" 1>&2
+fi
