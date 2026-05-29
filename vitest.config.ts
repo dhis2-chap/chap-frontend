@@ -10,11 +10,12 @@ export default defineConfig({
     },
     resolve: {
         alias: {
-            // The package's exports point at build output, which isn't generated
-            // in the test job. Resolve the period utils to source so tests run
-            // without a prior build (the source only depends on date-fns).
-            '@dhis2-chap/ui/time-periods': fileURLToPath(
-                new URL('./packages/ui/src/utils/timePeriodUtils.ts', import.meta.url),
+            // Workspace package exports point at build output, which the test job
+            // does not generate (it runs `pnpm test` without `pnpm build`).
+            // @dhis2-chap/core is a pure, dependency-light leaf package, so we
+            // resolve it to source and run tests without a prior build.
+            '@dhis2-chap/core': fileURLToPath(
+                new URL('./packages/core/src/index.ts', import.meta.url),
             ),
         },
     },

@@ -92,7 +92,7 @@ export {
     sortPeriods,
     comparePeriods,
     getLastNPeriods,
-} from './utils/timePeriodUtils';
+} from '@dhis2-chap/core';
 
 // Map utilities
 export { parseOrgUnits } from './components/maps/utils';
