@@ -1,0 +1,1 @@
+export { PredictionActivityPage } from './PredictionActivityPage';

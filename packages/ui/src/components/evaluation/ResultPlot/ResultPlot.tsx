@@ -4,9 +4,7 @@ import Highcharts from 'highcharts';
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { HighChartsData } from '../../../interfaces/Evaluation';
 import { getPeriodNameFromId } from '../../../utils/Time';
-import enableOfflineExporting from 'highcharts/modules/offline-exporting';
-
-enableOfflineExporting(Highcharts);
+import { registerHighchartsModules } from '../../../utils/registerHighchartsModules';
 
 export interface ZoomRange {
     min: number;
@@ -184,6 +182,8 @@ function ResultPlotBase({
     zoomRange,
     onZoomChange,
 }: ResultPlotProps) {
+    registerHighchartsModules();
+
     const chartRef = useRef<HighchartsReact.RefObject | null>(null);
 
     const handleAfterSetExtremes = useCallback(

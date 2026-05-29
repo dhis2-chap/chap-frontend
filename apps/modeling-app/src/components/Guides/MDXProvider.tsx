@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { MDXProvider as BaseMDXProvider } from '@mdx-js/react';
-import { DataVisualization, ModelOutputChart, PredictionAnimation } from './widgets';
+import { CovariateExplorer, DataVisualization, ModelOutputChart, PredictionAnimation, PredictionIntervalDemo } from './widgets';
 import { ImageLightbox } from './ImageLightbox';
 import styles from './MDXProvider.module.css';
 import { Link } from 'react-router-dom';
@@ -50,9 +50,11 @@ const components = {
     img: (props: React.ImgHTMLAttributes<HTMLImageElement>) => (
         <ImageLightbox {...props} />
     ),
+    CovariateExplorer,
     DataVisualization,
     ModelOutputChart,
     PredictionAnimation,
+    PredictionIntervalDemo,
 };
 
 export const MDXProvider = ({ children }: MDXProviderProps) => {
