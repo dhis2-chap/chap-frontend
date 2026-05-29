@@ -10,7 +10,7 @@ import {
 } from '@dhis2-chap/ui';
 import { ModelExecutionFormValues } from '../../ModelExecutionForm/hooks/useModelExecutionFormState';
 import { prepareBacktestData } from '../../ModelExecutionForm/utils/prepareBacktestData';
-import { PERIOD_TYPES } from '@dhis2-chap/ui';
+import { PERIOD_TYPES } from '@dhis2-chap/core';
 import { buildOrgUnitFeatureCollection } from '../../ModelExecutionForm/utils/orgUnitGeoJson';
 
 type Props = {

@@ -1,11 +1,6 @@
 import { useMemo } from 'react';
-import {
-    buildPredictionSeries,
-    getLastNPeriods,
-    ModelSpecRead,
-    PERIOD_TYPES,
-    PredictionInfo,
-} from '@dhis2-chap/ui';
+import { getLastNPeriods, PERIOD_TYPES } from '@dhis2-chap/core';
+import { buildPredictionSeries, ModelSpecRead, PredictionInfo } from '@dhis2-chap/ui';
 import { useOrgUnitsById } from '../../../../hooks/useOrgUnitsById';
 import { useDataItemById } from '../../../../hooks/useDataItemById';
 import { useActualCasesByDatasetId } from '../../../../hooks/useActualCasesByDatasetId';

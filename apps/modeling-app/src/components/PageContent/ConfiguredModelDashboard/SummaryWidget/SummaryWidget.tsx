@@ -1,11 +1,8 @@
 import i18n from '@dhis2/d2-i18n';
 import { CircularLoader } from '@dhis2/ui';
 import type { PredictionSetupReadWithPredictions } from '@dhis2-chap/ui';
-import {
-    convertServerToClientPeriod,
-    PERIOD_TYPES,
-    Widget,
-} from '@dhis2-chap/ui';
+import { convertServerToClientPeriod, PERIOD_TYPES } from '@dhis2-chap/core';
+import { Widget } from '@dhis2-chap/ui';
 import { format } from 'date-fns';
 import { useBacktestById } from '../../../../hooks/useBacktestById';
 import styles from './SummaryWidget.module.css';

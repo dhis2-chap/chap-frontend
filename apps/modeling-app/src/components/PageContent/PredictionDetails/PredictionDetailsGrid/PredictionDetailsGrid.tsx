@@ -9,13 +9,8 @@ import {
     NoticeBox,
     Switch,
 } from '@dhis2/ui';
-import {
-    convertServerToClientPeriod,
-    DEFAULT_OUTBREAK_PROBABILITY,
-    getThresholdTileViewModels,
-    PERIOD_TYPES,
-    Tag,
-} from '@dhis2-chap/ui';
+import { convertServerToClientPeriod, PERIOD_TYPES } from '@dhis2-chap/core';
+import { DEFAULT_OUTBREAK_PROBABILITY, getThresholdTileViewModels, Tag } from '@dhis2-chap/ui';
 import type {
     ModelSpecRead,
     OutbreakProbability,

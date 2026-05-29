@@ -83,16 +83,6 @@ export {
     getStableMaxYByOrgUnitId,
     type PlotDataResult,
 } from './utils/plotDataForEvaluations';
-export {
-    PERIOD_TYPES,
-    type PeriodType,
-    type Period,
-    toDHIS2PeriodData,
-    convertServerToClientPeriod,
-    sortPeriods,
-    comparePeriods,
-    getLastNPeriods,
-} from '@dhis2-chap/core';
 
 // Map utilities
 export { parseOrgUnits } from './components/maps/utils';

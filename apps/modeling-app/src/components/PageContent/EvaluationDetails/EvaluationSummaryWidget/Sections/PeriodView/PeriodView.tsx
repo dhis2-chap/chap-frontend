@@ -1,5 +1,6 @@
 import i18n from '@dhis2/d2-i18n';
-import { convertServerToClientPeriod, PERIOD_TYPES, Tag } from '@dhis2-chap/ui';
+import { convertServerToClientPeriod, PERIOD_TYPES } from '@dhis2-chap/core';
+import { Tag } from '@dhis2-chap/ui';
 import styles from '../../EvaluationSummaryWidget.module.css';
 import { IconChevronRight16 } from '@dhis2/ui';
 import clsx from 'clsx';

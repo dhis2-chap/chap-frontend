@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { IconCalendar24 } from '@dhis2/ui';
-import { PERIOD_TYPES } from '@dhis2-chap/ui';
+import { PERIOD_TYPES } from '@dhis2-chap/core';
 import { useModels } from '@/hooks/useModels';
 import { formatPeriodId } from '../../../utils/predictionRunMetadata';
 import { SupportedPeriodType } from '../utils/predictionPeriods';
