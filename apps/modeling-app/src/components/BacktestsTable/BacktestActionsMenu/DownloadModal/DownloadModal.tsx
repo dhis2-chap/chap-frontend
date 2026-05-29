@@ -30,7 +30,7 @@ export const DownloadModal = ({
 }: DownloadModalProps) => {
     // Base URL is set in SetChapUrl.tsx and uses the correct route API
     const datasetDownloadUrl = `${OpenAPI.BASE}/v1/crud/datasets/${datasetId}/csv`;
-    const metricsDownloadUrl = `${OpenAPI.BASE}/v1/crud/backtests/${backtestId}/metrics/csv`;
+    const metricsDownloadUrl = `${OpenAPI.BASE}/v1/crud/metric/csv?backtestId=${backtestId}`;
 
     const safeName = (backtestName ?? `backtest-${backtestId}`)
         .replace(/[^a-z0-9-_]+/gi, '-')
