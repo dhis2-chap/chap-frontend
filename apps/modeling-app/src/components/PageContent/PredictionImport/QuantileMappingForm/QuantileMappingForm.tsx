@@ -81,6 +81,14 @@ const quantileMappingFields = [
     'quantile_mid_high',
 ] as const satisfies MappingField[];
 
+const quantileSuggestedKeywords: Record<typeof quantileMappingFields[number], string> = {
+    quantile_high: 'high',
+    quantile_mid_high: 'mid high',
+    median: 'median',
+    quantile_mid_low: 'mid low',
+    quantile_low: 'low',
+};
+
 export const QuantileMappingForm = ({ prediction, model, predictionSetupId }: Props) => {
     const navigate = useNavigate();
     const location = useLocation();
@@ -242,30 +250,40 @@ export const QuantileMappingForm = ({ prediction, model, predictionSetupId }: Pr
                         value={quantile_high}
                         onChange={id => updateQuantile('quantile_high', id)}
                         error={errors.quantile_high?.message}
+                        dataElementsOnly
+                        suggestedKeyword={quantileSuggestedKeywords.quantile_high}
                     />
                     <DataItemSelect
                         label={i18n.t('Quantile mid high')}
                         value={quantile_mid_high}
                         onChange={id => updateQuantile('quantile_mid_high', id)}
                         error={errors.quantile_mid_high?.message}
+                        dataElementsOnly
+                        suggestedKeyword={quantileSuggestedKeywords.quantile_mid_high}
                     />
                     <DataItemSelect
                         label={i18n.t('Median')}
                         value={median}
                         onChange={id => updateQuantile('median', id)}
                         error={errors.median?.message}
+                        dataElementsOnly
+                        suggestedKeyword={quantileSuggestedKeywords.median}
                     />
                     <DataItemSelect
                         label={i18n.t('Quantile mid low')}
                         value={quantile_mid_low}
                         onChange={id => updateQuantile('quantile_mid_low', id)}
                         error={errors.quantile_mid_low?.message}
+                        dataElementsOnly
+                        suggestedKeyword={quantileSuggestedKeywords.quantile_mid_low}
                     />
                     <DataItemSelect
                         label={i18n.t('Quantile low')}
                         value={quantile_low}
                         onChange={id => updateQuantile('quantile_low', id)}
                         error={errors.quantile_low?.message}
+                        dataElementsOnly
+                        suggestedKeyword={quantileSuggestedKeywords.quantile_low}
                     />
 
                     <div className={styles.alertOutput}>

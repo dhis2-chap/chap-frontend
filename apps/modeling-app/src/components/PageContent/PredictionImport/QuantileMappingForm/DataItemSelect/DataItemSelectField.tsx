@@ -19,6 +19,7 @@ interface DataItemSelectFieldProps {
     initialDataItem?: DataItem;
     initialDataItems: DataItem[];
     initialLoading: boolean;
+    suggestedKeyword?: string;
     onChange: (id: string | null) => void;
     label?: string;
     value?: string;
@@ -30,6 +31,7 @@ export const DataItemSelectField = ({
     initialDataItem,
     initialDataItems,
     initialLoading,
+    suggestedKeyword,
     onChange,
     label,
     value,
@@ -64,9 +66,36 @@ export const DataItemSelectField = ({
     }, [initialDataItem, value]);
 
     const debouncedQuery = useDebounce(searchQuery, 300);
+    const normalizedSuggestedKeyword = suggestedKeyword?.trim();
 
     const anchorRef = useRef<HTMLDivElement>(null);
     const searchInputRef = useRef<HTMLInputElement>(null);
+    const { data: suggestedData, isLoading: isLoadingSuggested } = useApiDataQuery<DataItemsResponse>({
+        queryKey: [
+            'dataItems',
+            dataElementsOnly ? 'dataElements' : 'allDataItems',
+            'suggested',
+            normalizedSuggestedKeyword,
+        ],
+        enabled: !!normalizedSuggestedKeyword,
+        query: {
+            resource: 'dataItems',
+            params: {
+                filter: [
+                    `displayName:ilike:${normalizedSuggestedKeyword ?? ''}`,
+                    dataElementsOnly
+                        ? 'dimensionItemType:in:[DATA_ELEMENT]'
+                        : 'dimensionItemType:in:[PROGRAM_DATA_ELEMENT,INDICATOR,PROGRAM_INDICATOR,DATA_ELEMENT]',
+                ],
+                fields: 'id,displayName',
+                order: 'displayName:asc',
+                page: 1,
+                pageSize: 20,
+            },
+        },
+        staleTime: 5 * 60 * 1000,
+        cacheTime: 10 * 60 * 1000,
+    });
     const { data, isLoading } = useApiDataQuery<DataItemsResponse>({
         queryKey: ['dataItems', dataElementsOnly ? 'dataElements' : 'allDataItems', debouncedQuery],
         query: {
@@ -89,7 +118,10 @@ export const DataItemSelectField = ({
     });
 
     const searchResults = data?.dataItems || [];
+    const suggestedItems = suggestedData?.dataItems || [];
     const displayItems = debouncedQuery ? searchResults : initialDataItems;
+    const suggestedItemIds = new Set(suggestedItems.map(item => item.id));
+    const defaultItems = displayItems.filter(item => !suggestedItemIds.has(item.id));
 
     const handleTriggerClick = () => {
         setIsDropdownOpen(!isDropdownOpen);
@@ -128,10 +160,52 @@ export const DataItemSelectField = ({
         onChange(null);
     };
 
+    const renderOption = (option: DataItem) => (
+        <li
+            key={option.id}
+            onClick={() => handleOptionClick(option)}
+            className={styles.dropDownItem}
+        >
+            <div>{option.displayName}</div>
+        </li>
+    );
+
     const renderList = () => {
         if ((isLoading || initialLoading) && debouncedQuery) {
             return <li className={styles.infoSearchItem}>{i18n.t('Loading')}</li>;
         }
+
+        if (!debouncedQuery && normalizedSuggestedKeyword) {
+            if (
+                (isLoadingSuggested || initialLoading) &&
+                suggestedItems.length === 0 &&
+                defaultItems.length === 0
+            ) {
+                return <li className={styles.infoSearchItem}>{i18n.t('Loading')}</li>;
+            }
+
+            if (suggestedItems.length > 0 || defaultItems.length > 0) {
+                return (
+                    <>
+                        {suggestedItems.length > 0 && (
+                            <>
+                                <li className={styles.sectionHeader}>{i18n.t('Suggested')}</li>
+                                {suggestedItems.map(renderOption)}
+                            </>
+                        )}
+                        {defaultItems.length > 0 && (
+                            <>
+                                <li className={styles.sectionHeader}>
+                                    {dataElementsOnly ? i18n.t('Data elements') : i18n.t('Data items')}
+                                </li>
+                                {defaultItems.map(renderOption)}
+                            </>
+                        )}
+                    </>
+                );
+            }
+        }
+
         if (displayItems.length === 0 && searchQuery.length === 0) {
             return (
                 <li className={styles.infoSearchItem}>
@@ -145,15 +219,7 @@ export const DataItemSelectField = ({
 
         return (
             <>
-                {displayItems.map(option => (
-                    <li
-                        key={option.id}
-                        onClick={() => handleOptionClick(option)}
-                        className={styles.dropDownItem}
-                    >
-                        <div>{option.displayName}</div>
-                    </li>
-                ))}
+                {displayItems.map(renderOption)}
             </>
         );
     };
