@@ -1,36 +1,69 @@
 import {
-    IconErrorFilled24,
     Label,
+    NoticeBox,
     SingleSelectField,
     SingleSelectOption,
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { Controller, Control, FieldErrors, useWatch, useFormContext } from 'react-hook-form';
 import { ModelExecutionFormValues } from '../../hooks/useModelExecutionFormState';
-import { PERIOD_TYPES } from '@dhis2-chap/core';
+import {
+    comparePeriodIds,
+    getLastCompletedPeriodId,
+    PERIOD_TYPES,
+    toDhis2FixedPeriodType,
+} from '@dhis2-chap/core';
+import { PeriodRangeField } from '@dhis2-chap/ui';
+import { type Dhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
 import styles from './PeriodSelector.module.css';
 
 type Props = {
     control: Control<ModelExecutionFormValues>;
     errors: FieldErrors<ModelExecutionFormValues>;
+    periodSettings: Dhis2PeriodSettings;
+    periodSettingsError?: Error | null;
+    periodSettingsLoading?: boolean;
 };
 
-const getInputType = (periodType: keyof typeof PERIOD_TYPES): string => {
-    switch (periodType) {
-        case PERIOD_TYPES.DAY:
-            return 'date';
-        case PERIOD_TYPES.WEEK:
-            return 'week';
-        case PERIOD_TYPES.MONTH:
-            return 'month';
-        default:
-            return 'text';
-    }
-};
-
-export const PeriodSelector = ({ control, errors }: Props) => {
+export const PeriodSelector = ({
+    control,
+    errors,
+    periodSettings,
+    periodSettingsError,
+    periodSettingsLoading,
+}: Props) => {
     const periodType = useWatch({ control, name: 'periodType' });
+    const fromPeriodId = useWatch({ control, name: 'fromPeriodId' });
+    const toPeriodId = useWatch({ control, name: 'toPeriodId' });
     const methods = useFormContext<ModelExecutionFormValues>();
+    const dhis2PeriodType = toDhis2FixedPeriodType(periodType);
+    const rangeError = (() => {
+        if (!fromPeriodId || !toPeriodId) {
+            return undefined;
+        }
+
+        try {
+            const comparison = comparePeriodIds({
+                a: toPeriodId,
+                b: fromPeriodId,
+                calendar: periodSettings.calendar,
+                locale: periodSettings.locale,
+            });
+            return comparison < 0
+                ? i18n.t('End period must be after start period')
+                : undefined;
+        } catch {
+            return i18n.t('Invalid period');
+        }
+    })();
+    const maxPeriodId = dhis2PeriodType
+        ? getLastCompletedPeriodId({
+                periodType: dhis2PeriodType,
+                calendar: periodSettings.calendar,
+                locale: periodSettings.locale,
+                timeZone: periodSettings.timeZone,
+            })
+        : undefined;
 
     const onPeriodTypeChange = (selected: string) => {
         const selectedCastToPeriodType = selected as keyof typeof PERIOD_TYPES;
@@ -41,8 +74,8 @@ export const PeriodSelector = ({ control, errors }: Props) => {
         }
 
         if (selected !== periodType) {
-            methods.resetField('fromDate');
-            methods.resetField('toDate');
+            methods.setValue('fromPeriodId', '', { shouldValidate: true, shouldDirty: true });
+            methods.setValue('toPeriodId', '', { shouldValidate: true, shouldDirty: true });
         }
     };
 
@@ -78,60 +111,32 @@ export const PeriodSelector = ({ control, errors }: Props) => {
                 />
                 {errors.periodType && <p className={styles.errorText}>{errors.periodType.message}</p>}
             </div>
-            <div className={styles.datePickersContainer}>
-                <div className={styles.datePickerField}>
-                    <Label>{i18n.t('From period')}</Label>
-                    <Controller
-                        name="fromDate"
-                        control={control}
-                        render={({ field }) => (
-                            <div>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                    <input
-                                        className={styles.input}
-                                        type={periodType ? getInputType(periodType) : 'text'}
-                                        disabled={!periodType}
-                                        value={field.value}
-                                        onChange={e => field.onChange(e.target.value)}
-                                        data-test="evaluation-from-date-input"
-                                        style={{ opacity: periodType ? 1 : 0.6 }}
-                                    />
-                                    {errors.fromDate && <IconErrorFilled24 color="#d32f2f" />}
-                                </div>
-                                {errors.fromDate && (
-                                    <p className={styles.errorText}>{errors.fromDate.message}</p>
-                                )}
-                            </div>
-                        )}
-                    />
-                </div>
-                <div className={styles.datePickerField}>
-                    <Label>{i18n.t('To period')}</Label>
-                    <Controller
-                        name="toDate"
-                        control={control}
-                        render={({ field }) => (
-                            <div>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                    <input
-                                        className={styles.input}
-                                        type={periodType ? getInputType(periodType) : 'text'}
-                                        disabled={!periodType}
-                                        value={field.value}
-                                        onChange={e => field.onChange(e.target.value)}
-                                        data-test="evaluation-to-date-input"
-                                        style={{ opacity: periodType ? 1 : 0.6 }}
-                                    />
-                                    {errors.toDate && <IconErrorFilled24 color="#d32f2f" />}
-                                </div>
-                                {errors.toDate && (
-                                    <p className={styles.errorText}>{errors.toDate.message}</p>
-                                )}
-                            </div>
-                        )}
-                    />
-                </div>
-            </div>
+
+            {periodSettingsError ? (
+                <NoticeBox
+                    error
+                    title={i18n.t('Period selection is unavailable')}
+                    className={styles.periodSettingsNotice}
+                >
+                    {periodSettingsError.message}
+                </NoticeBox>
+            ) : dhis2PeriodType && (
+                <PeriodRangeField
+                    periodType={dhis2PeriodType}
+                    calendar={periodSettings.calendar}
+                    locale={periodSettings.locale}
+                    fromValue={fromPeriodId}
+                    toValue={toPeriodId}
+                    maxPeriodId={maxPeriodId}
+                    disabled={periodSettingsLoading}
+                    fromError={errors.fromPeriodId?.message}
+                    toError={errors.toPeriodId?.message || rangeError}
+                    fromDataTest="evaluation-from-period-input"
+                    toDataTest="evaluation-to-period-input"
+                    onFromChange={period => methods.setValue('fromPeriodId', period.id, { shouldValidate: true, shouldDirty: true })}
+                    onToChange={period => methods.setValue('toPeriodId', period.id, { shouldValidate: true, shouldDirty: true })}
+                />
+            )}
         </>
     );
 };

@@ -1,8 +1,14 @@
 import { useModelExecutionFormState, ModelExecutionFormValues } from '../../ModelExecutionForm/hooks/useModelExecutionFormState';
 import { useCreateNewBacktest } from './useCreateNewBacktest';
+import { useDhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
 
 export const useEvaluationFormController = (initialValues?: Partial<ModelExecutionFormValues>) => {
-    const { methods } = useModelExecutionFormState({ initialValues });
+    const {
+        settings: periodSettings,
+        isLoading: periodSettingsLoading,
+        error: periodSettingsError,
+    } = useDhis2PeriodSettings();
+    const { methods } = useModelExecutionFormState({ initialValues, periodSettings });
 
     const {
         createNewBacktest,
@@ -15,6 +21,7 @@ export const useEvaluationFormController = (initialValues?: Partial<ModelExecuti
         closeSummaryModal,
         error,
     } = useCreateNewBacktest({
+        periodSettings,
         onSuccess: () => {
             methods.reset();
         },
@@ -53,5 +60,8 @@ export const useEvaluationFormController = (initialValues?: Partial<ModelExecuti
         summaryModalOpen,
         closeSummaryModal,
         error,
+        periodSettings,
+        periodSettingsLoading,
+        periodSettingsError,
     };
 };

@@ -12,9 +12,11 @@ import { ModelExecutionFormValues } from '../../ModelExecutionForm/hooks/useMode
 import { prepareBacktestData } from '../../ModelExecutionForm/utils/prepareBacktestData';
 import { PERIOD_TYPES } from '@dhis2-chap/core';
 import { buildOrgUnitFeatureCollection } from '../../ModelExecutionForm/utils/orgUnitGeoJson';
+import { type Dhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
 
 type Props = {
     predictionSetupId: number;
+    periodSettings: Dhis2PeriodSettings;
     returnTo?: string;
     onSuccess?: () => void;
     onError?: (error: ApiError) => void;
@@ -27,6 +29,7 @@ export const N_PERIODS = {
 
 export const useCreatePrediction = ({
     predictionSetupId,
+    periodSettings,
     returnTo,
     onSuccess,
     onError,
@@ -47,6 +50,7 @@ export const useCreatePrediction = ({
                 formData,
                 dataEngine,
                 queryClient,
+                periodSettings,
             );
 
             const geojson: FeatureCollectionModel = buildOrgUnitFeatureCollection(

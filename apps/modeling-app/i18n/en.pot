@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-05-29T21:09:56.428Z\n"
-"PO-Revision-Date: 2026-05-29T21:09:56.429Z\n"
+"POT-Creation-Date: 2026-05-29T22:34:32.324Z\n"
+"PO-Revision-Date: 2026-05-29T22:34:32.325Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -436,11 +436,14 @@ msgstr "Select model"
 msgid "EWARS Evaluation 22-24"
 msgstr "EWARS Evaluation 22-24"
 
-msgid "From period"
-msgstr "From period"
+msgid "End period must be after start period"
+msgstr "End period must be after start period"
 
-msgid "To period"
-msgstr "To period"
+msgid "Invalid period"
+msgstr "Invalid period"
+
+msgid "Period selection is unavailable"
+msgstr "Period selection is unavailable"
 
 msgid "Reason"
 msgstr "Reason"
@@ -524,14 +527,11 @@ msgstr "Missing id for org unit"
 msgid "Period type is required"
 msgstr "Period type is required"
 
-msgid "Start date is required"
-msgstr "Start date is required"
+msgid "Start period is required"
+msgstr "Start period is required"
 
-msgid "End date is required"
-msgstr "End date is required"
-
-msgid "End date cannot be in the future"
-msgstr "End date cannot be in the future"
+msgid "End period is required"
+msgstr "End period is required"
 
 msgid "At least one org unit is required"
 msgstr "At least one org unit is required"
@@ -545,8 +545,8 @@ msgstr "Please map the covariates to valid data items"
 msgid "Please map the target to a valid data item"
 msgstr "Please map the target to a valid data item"
 
-msgid "End period must be after start period"
-msgstr "End period must be after start period"
+msgid "End period cannot be in the future"
+msgstr "End period cannot be in the future"
 
 msgid "Model not found"
 msgstr "Model not found"
@@ -594,6 +594,12 @@ msgstr "Prediction run name"
 msgid "Run prediction"
 msgstr "Run prediction"
 
+msgid "Loading period settings"
+msgstr "Loading period settings"
+
+msgid "Preparing period selection."
+msgstr "Preparing period selection."
+
 msgid ""
 "Missing prediction setup details. Open the setup configuration and ensure "
 "model, period type, training start, and data mappings are configured."
@@ -621,9 +627,6 @@ msgstr "Training start"
 
 msgid "Please select a period"
 msgstr "Please select a period"
-
-msgid "Invalid period"
-msgstr "Invalid period"
 
 msgid "Period must be completed (cannot be later than last completed period)"
 msgstr "Period must be completed (cannot be later than last completed period)"
@@ -1951,3 +1954,11 @@ msgstr ""
 msgctxt ") instead."
 msgid "Spaces are not allowed. Use dashes (-) or underscores ("
 msgstr "Spaces are not allowed. Use dashes (-) or underscores (_) instead."
+
+msgctxt "Application title"
+msgid "__MANIFEST_APP_TITLE"
+msgstr "Modeling"
+
+msgctxt "Application description"
+msgid "__MANIFEST_APP_DESCRIPTION"
+msgstr ""
