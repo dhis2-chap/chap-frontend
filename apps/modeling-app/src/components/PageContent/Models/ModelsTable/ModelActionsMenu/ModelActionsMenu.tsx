@@ -5,10 +5,12 @@ import {
     IconView16,
     IconMore16,
     IconArchive16,
+    IconInfo16,
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { OverflowButton } from '@dhis2-chap/ui';
 import { DeleteModelModal } from './DeleteModelModal';
+import { ViewModelInfoModal } from './ViewModelInfoModal';
 import { useNavigate } from 'react-router-dom';
 
 type Props = {
@@ -19,6 +21,7 @@ type Props = {
 export const ModelActionsMenu = ({ id, archived }: Props) => {
     const [flyoutMenuIsOpen, setFlyoutMenuIsOpen] = useState(false);
     const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
+    const [infoModalIsOpen, setInfoModalIsOpen] = useState(false);
     const navigate = useNavigate();
 
     const navigateToEvaluations = () => {
@@ -34,6 +37,15 @@ export const ModelActionsMenu = ({ id, archived }: Props) => {
                 onClick={() => setFlyoutMenuIsOpen(prev => !prev)}
                 component={(
                     <FlyoutMenu dense>
+                        <MenuItem
+                            label={i18n.t('View info')}
+                            dataTest="model-overflow-view-info"
+                            icon={<IconInfo16 />}
+                            onClick={() => {
+                                setInfoModalIsOpen(true);
+                                setFlyoutMenuIsOpen(false);
+                            }}
+                        />
                         <MenuItem
                             label={i18n.t('View evaluations')}
                             dataTest="model-overflow-view"
@@ -55,6 +67,13 @@ export const ModelActionsMenu = ({ id, archived }: Props) => {
                     </FlyoutMenu>
                 )}
             />
+
+            {infoModalIsOpen && (
+                <ViewModelInfoModal
+                    id={id}
+                    onClose={() => setInfoModalIsOpen(false)}
+                />
+            )}
 
             {deleteModalIsOpen && (
                 <DeleteModelModal

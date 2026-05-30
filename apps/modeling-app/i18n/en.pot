@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-05-30T21:20:43.227Z\n"
-"PO-Revision-Date: 2026-05-30T21:20:43.229Z\n"
+"POT-Creation-Date: 2026-05-30T21:37:07.898Z\n"
+"PO-Revision-Date: 2026-05-30T21:37:07.898Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -1031,8 +1031,116 @@ msgstr ""
 msgid "Archive"
 msgstr "Archive"
 
+msgid "View info"
+msgstr "View info"
+
 msgid "View evaluations"
 msgstr "View evaluations"
+
+msgid "Any"
+msgstr "Any"
+
+msgid "True"
+msgstr "True"
+
+msgid "False"
+msgstr "False"
+
+msgid "Model details{{colon}} {{name}}"
+msgstr "Model details{{colon}} {{name}}"
+
+msgid "Model details"
+msgstr "Model details"
+
+msgid "Error loading model details"
+msgstr "Error loading model details"
+
+msgid "General"
+msgstr "General"
+
+msgid "Display name"
+msgstr "Display name"
+
+msgid "Configuration name"
+msgstr "Configuration name"
+
+msgid "Configured model ID"
+msgstr "Configured model ID"
+
+msgid "Organization"
+msgstr "Organization"
+
+msgid "Contact"
+msgstr "Contact"
+
+msgid "Archived"
+msgstr "Archived"
+
+msgid "Active"
+msgstr "Active"
+
+msgid "Description"
+msgstr "Description"
+
+msgid "Model template"
+msgstr "Model template"
+
+msgid "Template name"
+msgstr "Template name"
+
+msgid "Version"
+msgstr "Version"
+
+msgid "Supported period"
+msgstr "Supported period"
+
+msgid "Requires geo"
+msgstr "Requires geo"
+
+msgid "Yes"
+msgstr "Yes"
+
+msgid "No"
+msgstr "No"
+
+msgid "Min prediction length"
+msgstr "Min prediction length"
+
+msgid "Max prediction length"
+msgstr "Max prediction length"
+
+msgid "Documentation"
+msgstr "Documentation"
+
+msgid "Required"
+msgstr "Required"
+
+msgid "Additional"
+msgstr "Additional"
+
+msgid "Allow free additional"
+msgstr "Allow free additional"
+
+msgid "User options"
+msgstr "User options"
+
+msgid "This model has no configurable user options."
+msgstr "This model has no configurable user options."
+
+msgid "Option"
+msgstr "Option"
+
+msgid "Selected value"
+msgstr "Selected value"
+
+msgid "Default"
+msgstr "Default"
+
+msgid "default"
+msgstr "default"
+
+msgid "Citation"
+msgstr "Citation"
 
 msgid "Model archived"
 msgstr "Model archived"
@@ -1040,17 +1148,8 @@ msgstr "Model archived"
 msgid "Failed to archive model"
 msgstr "Failed to archive model"
 
-msgid "Any"
-msgstr "Any"
-
 msgid "No covariate names available"
 msgstr "No covariate names available"
-
-msgid "Archived"
-msgstr "Archived"
-
-msgid "Active"
-msgstr "Active"
 
 msgid "New model"
 msgstr "New model"
@@ -1086,14 +1185,8 @@ msgstr "Enter covariate name"
 msgid "Add"
 msgstr "Add"
 
-msgid "Required"
-msgstr "Required"
-
 msgid "Remove"
 msgstr "Remove"
-
-msgid "Model template"
-msgstr "Model template"
 
 msgid "Select the base model template"
 msgstr "Select the base model template"
@@ -1806,9 +1899,6 @@ msgstr "Error saving route"
 msgid "Route saved successfully"
 msgstr "Route saved successfully"
 
-msgid "General"
-msgstr "General"
-
 msgid "Data Pruning"
 msgstr "Data Pruning"
 
@@ -1970,3 +2060,11 @@ msgstr ""
 msgctxt ") instead."
 msgid "Spaces are not allowed. Use dashes (-) or underscores ("
 msgstr "Spaces are not allowed. Use dashes (-) or underscores (_) instead."
+
+msgctxt "Application title"
+msgid "__MANIFEST_APP_TITLE"
+msgstr "Modeling"
+
+msgctxt "Application description"
+msgid "__MANIFEST_APP_DESCRIPTION"
+msgstr ""
