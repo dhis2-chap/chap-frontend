@@ -191,7 +191,7 @@ export const ModelSelectionModal = ({
     const hasAuthorNote = focusedModel?.authorNote && focusedModel.authorNote !== 'No Author note yet';
 
     return (
-        <Modal fluid className={styles.modelModal} onClose={handleModalClose}>
+        <Modal fluid onClose={handleModalClose}>
             <ModalTitle>{i18n.t('Select Model')}</ModalTitle>
             <ModalContent>
                 <div className={styles.stage}>

@@ -407,11 +407,6 @@ msgstr "Production"
 msgid "Approved for general use."
 msgstr "Approved for general use."
 
-msgid "{{count}} covariates"
-msgid_plural "{{count}} covariates"
-msgstr[0] "{{count}} covariate"
-msgstr[1] "{{count}} covariates"
-
 msgid "Author note"
 msgstr "Author note"
 
@@ -420,15 +415,6 @@ msgstr "Selected"
 
 msgid "Select Model"
 msgstr "Select Model"
-
-msgid "Search by title"
-msgstr "Search by title"
-
-msgid "Period Type"
-msgstr "Period Type"
-
-msgid "Assessment Status"
-msgstr "Assessment Status"
 
 msgid "Any period"
 msgstr "Any period"
