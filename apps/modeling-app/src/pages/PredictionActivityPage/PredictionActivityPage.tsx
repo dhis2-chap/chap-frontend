@@ -30,7 +30,7 @@ export const PredictionActivityPage: React.FC = () => {
             {hasValidPredictionSetupId ? (
                 <JobsContent
                     predictionSetupId={parsedPredictionSetupId}
-                    visibleFilters={['status']}
+                    visibleFilters={['status', 'date']}
                 />
             ) : (
                 <NoticeBox error title={i18n.t('Invalid prediction setup')}>

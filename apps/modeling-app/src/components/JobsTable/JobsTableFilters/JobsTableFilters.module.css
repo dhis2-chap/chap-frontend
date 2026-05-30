@@ -13,6 +13,11 @@
     inline-size: 200px;
 }
 
+.dateRangeContainer {
+    margin-inline-end: var(--spacers-dp8);
+    flex: 0 0 auto;
+}
+
 .singleSelectMenuItem {
     max-inline-size: 100%;
     white-space: nowrap;

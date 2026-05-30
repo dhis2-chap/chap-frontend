@@ -2,6 +2,62 @@
     overflow: hidden;
 }
 
+.viewBar {
+    display: flex;
+    min-block-size: 44px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 8px 12px;
+    border-block-end: 1px solid var(--colors-grey300);
+}
+
+.tabs {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--colors-grey400);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.tab,
+.activeTab {
+    min-inline-size: 76px;
+    block-size: 28px;
+    padding: 0 12px;
+    border: 0;
+    border-inline-end: 1px solid var(--colors-grey400);
+    background: var(--colors-white);
+    color: var(--colors-grey800);
+    cursor: pointer;
+    font: inherit;
+    font-size: 13px;
+    line-height: 28px;
+}
+
+.tab:last-child,
+.activeTab:last-child {
+    border-inline-end: 0;
+}
+
+.tab:hover {
+    background: var(--colors-grey100);
+}
+
+.activeTab {
+    background: var(--colors-grey200);
+    font-weight: 500;
+}
+
+.periodSelect {
+    inline-size: 156px;
+}
+
+.chart {
+    min-block-size: 420px;
+    padding: 4px 12px 12px;
+}
+
 .filterBar {
     display: flex;
     align-items: flex-end;
@@ -10,8 +66,18 @@
     padding: 8px 12px 12px;
 }
 
+.filterControls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
 .statusFilter {
     inline-size: 180px;
+}
+
+.dateFilter {
+    flex: 0 0 auto;
 }
 
 .emptyState,
