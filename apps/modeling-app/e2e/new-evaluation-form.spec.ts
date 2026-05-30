@@ -1,4 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
+import { readJson } from './helpers/evaluation-fixtures';
+import { openPeriodPickerAtYear, selectPeriod } from './helpers/period-picker';
 
 const REQUIRED_DATA_MAPPINGS = [
     {
@@ -24,7 +26,7 @@ const getMonthValueWithOffset = (offset: number): string => {
     date.setMonth(date.getMonth() + offset);
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
-    return `${year}-${month}`;
+    return `${year}${month}`;
 };
 
 const isBacktestCreateRequest = (url: string, method: string): boolean => {
@@ -91,11 +93,13 @@ const selectKnownModel = async (page: Page) => {
     }).first();
     await expect(modal).toBeVisible();
 
-    const selectModelButton = modal.locator('[data-test="model-select-naive-model"]');
-    await expect(selectModelButton).toBeVisible();
-    await selectModelButton.click();
+    const inspectModelButton = modal.locator('[data-test="model-inspect-naive-model"]');
+    await expect(inspectModelButton).toBeVisible();
+    await inspectModelButton.click();
 
-    await modal.getByRole('button', { name: 'Confirm Selection' }).click();
+    const useModelButton = modal.locator('[data-test="model-select-naive-model"]');
+    await expect(useModelButton).toBeVisible();
+    await useModelButton.click();
     await expect(modal).not.toBeVisible();
 };
 
@@ -146,8 +150,8 @@ const mapRequiredDataSources = async (page: Page) => {
 };
 
 type PrepareValidFormDataOptions = {
-    fromDate?: string;
-    toDate?: string;
+    fromPeriodId?: string;
+    toPeriodId?: string;
 };
 
 const prepareValidFormData = async (
@@ -155,20 +159,20 @@ const prepareValidFormData = async (
     name: string,
     options: PrepareValidFormDataOptions = {},
 ) => {
+    const twoMonthsAgo = getMonthValueWithOffset(-2);
     const previousMonth = getMonthValueWithOffset(-1);
-    const currentMonth = getMonthValueWithOffset(0);
     const nextMonth = getMonthValueWithOffset(1);
-    const fromDate = options.fromDate ?? previousMonth;
-    const toDate = options.toDate ?? currentMonth;
+    const fromPeriodId = options.fromPeriodId ?? twoMonthsAgo;
+    const toPeriodId = options.toPeriodId ?? previousMonth;
 
     await page.locator('[data-test="evaluation-name-input"] input').fill(name);
-    await page.locator('[data-test="evaluation-from-date-input"]').fill(fromDate);
-    await page.locator('[data-test="evaluation-to-date-input"]').fill(toDate);
+    await selectPeriod(page, 'evaluation-from-period-input', fromPeriodId);
+    await selectPeriod(page, 'evaluation-to-period-input', toPeriodId);
     await selectOrgUnitLevel(page);
     await selectKnownModel(page);
     await mapRequiredDataSources(page);
 
-    return { previousMonth, currentMonth, nextMonth, fromDate, toDate };
+    return { twoMonthsAgo, previousMonth, nextMonth, fromPeriodId, toPeriodId };
 };
 
 test('validates period rules with invalid values', async ({ page }) => {
@@ -184,21 +188,22 @@ test('validates period rules with invalid values', async ({ page }) => {
     });
 
     await page.goto(newEvaluationUrl);
-    const { previousMonth, currentMonth, nextMonth } = await prepareValidFormData(
+    const { twoMonthsAgo, previousMonth, nextMonth } = await prepareValidFormData(
         page,
         'Validation check',
     );
 
-    await page.locator('[data-test="evaluation-from-date-input"]').fill(currentMonth);
-    await page.locator('[data-test="evaluation-to-date-input"]').fill(previousMonth);
+    await selectPeriod(page, 'evaluation-from-period-input', previousMonth);
+    await selectPeriod(page, 'evaluation-to-period-input', twoMonthsAgo);
     await page.getByRole('button', { name: 'Start dry run' }).click();
     await expect(page.getByText('End period must be after start period')).toBeVisible();
     await expect(backtestCreateRequestCount).toBe(0);
 
-    await page.locator('[data-test="evaluation-from-date-input"]').fill(currentMonth);
-    await page.locator('[data-test="evaluation-to-date-input"]').fill(nextMonth);
-    await page.getByRole('button', { name: 'Start dry run' }).click();
-    await expect(page.getByText('End date cannot be in the future')).toBeVisible();
+    await selectPeriod(page, 'evaluation-from-period-input', twoMonthsAgo);
+    await selectPeriod(page, 'evaluation-to-period-input', previousMonth);
+    await openPeriodPickerAtYear(page, 'evaluation-to-period-input', nextMonth);
+    await expect(page.locator(`[data-test="evaluation-to-period-input-option-${nextMonth}"]`)).toBeDisabled();
+    await page.keyboard.press('Escape');
     await expect(backtestCreateRequestCount).toBe(0);
 });
 
@@ -224,41 +229,6 @@ test('accepts valid values without client-side validation errors', async ({ page
     await expect(backtestCreateRequestCount).toBe(1);
 });
 
-test('submits valid data, navigates to jobs, and shows the created job', async ({ page }) => {
-    const newEvaluationUrl = '/#/evaluate/new';
-    const evaluationName = `E2E import ${Date.now()}`;
-
-    await page.goto(newEvaluationUrl);
-
-    await prepareValidFormData(page, evaluationName, {
-        fromDate: '2020-01',
-        toDate: '2024-12',
-    });
-
-    const createImportRequest = page.waitForRequest(request =>
-        isBacktestImportRequest(request.url(), request.method()),
-    );
-    const createImportResponse = page.waitForResponse(response =>
-        isBacktestImportRequest(response.url(), response.request().method()),
-    );
-
-    await page.getByRole('button', { name: 'Start import' }).click();
-
-    const request = await createImportRequest;
-    await expect(
-        request.postDataJSON() as { name?: string },
-    ).toMatchObject({ name: evaluationName });
-
-    const response = await createImportResponse;
-    await expect(response.ok()).toBeTruthy();
-    const importResponseBody = (await response.json()) as { id?: string | null };
-    await expect(importResponseBody.id).toBeTruthy();
-
-    await expect(page).toHaveURL(/\/#\/jobs(?:\?.*)?$/);
-    await expect(page.getByRole('heading', { name: 'Active jobs' })).toBeVisible();
-    await expect(page.getByRole('cell', { name: evaluationName })).toBeVisible();
-});
-
 test('submits valid data, navigates to jobs, and auto-updates the created job to success', async ({ page }) => {
     const newEvaluationUrl = '/#/evaluate/new';
     const evaluationName = `E2E successful evaluation ${Date.now()}`;
@@ -266,8 +236,8 @@ test('submits valid data, navigates to jobs, and auto-updates the created job to
     await page.goto(newEvaluationUrl);
 
     await prepareValidFormData(page, evaluationName, {
-        fromDate: '2020-01',
-        toDate: '2024-12',
+        fromPeriodId: '202001',
+        toPeriodId: '202412',
     });
 
     const createImportRequest = page.waitForRequest(request =>
@@ -284,9 +254,10 @@ test('submits valid data, navigates to jobs, and auto-updates the created job to
         request.postDataJSON() as { name?: string },
     ).toMatchObject({ name: evaluationName });
 
-    const response = await createImportResponse;
-    await expect(response.ok()).toBeTruthy();
-    const importResponseBody = (await response.json()) as { id?: string | null };
+    const importResponseBody = await readJson<{ id?: string | null }>(
+        await createImportResponse,
+        'Create evaluation import',
+    );
     await expect(importResponseBody.id).toBeTruthy();
 
     await expect(page).toHaveURL(/\/#\/jobs(?:\?.*)?$/);

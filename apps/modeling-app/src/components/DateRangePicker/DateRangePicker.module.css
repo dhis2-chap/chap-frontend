@@ -1,0 +1,257 @@
+.container {
+    inline-size: 180px;
+    transition: inline-size 0.3s ease;
+}
+
+.hasValue {
+    inline-size: 280px;
+}
+
+.anchor {
+    position: relative;
+    inline-size: 100%;
+}
+
+.trigger {
+    display: flex;
+    block-size: 32px;
+    inline-size: 100%;
+    align-items: center;
+    gap: 8px;
+    padding: 0 10px;
+    border: 1px solid var(--colors-grey500);
+    border-radius: 3px;
+    background: var(--colors-white);
+    color: var(--colors-grey900);
+    cursor: pointer;
+    font: inherit;
+    font-size: 14px;
+    line-height: 20px;
+    text-align: start;
+}
+
+.trigger:focus-visible,
+.clearButton:focus-visible,
+.navButton:focus-visible,
+.dayButton:focus-visible {
+    outline: 3px solid var(--colors-blue200);
+    outline-offset: 1px;
+}
+
+.placeholder {
+    color: var(--colors-grey600);
+}
+
+.withClear {
+    padding-inline-end: 34px;
+}
+
+.triggerIcon {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    color: var(--colors-grey700);
+}
+
+.triggerText {
+    display: inline-flex;
+    align-items: center;
+    margin-block-start: 2px;
+    min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.clearButton {
+    position: absolute;
+    inset-block-start: 4px;
+    inset-inline-end: 4px;
+    display: inline-flex;
+    block-size: 24px;
+    inline-size: 24px;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    border-radius: 3px;
+    background: transparent;
+    color: var(--colors-grey600);
+    cursor: pointer;
+}
+
+.clearButton:hover {
+    color: var(--colors-grey800);
+}
+
+.popover {
+    max-inline-size: calc(100vw - 32px);
+    padding: 12px;
+    border: 1px solid var(--colors-grey300);
+    border-radius: 3px;
+    background: var(--colors-white);
+    box-shadow: var(--elevations-e400);
+}
+
+.months {
+    display: flex;
+    gap: 16px;
+}
+
+.month {
+    inline-size: 252px;
+}
+
+.monthHeader {
+    display: grid;
+    grid-template-columns: 32px 1fr 32px;
+    align-items: center;
+    min-block-size: 32px;
+    margin-block-end: 8px;
+}
+
+.monthTitle {
+    color: var(--colors-grey900);
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 20px;
+    text-align: center;
+}
+
+.navButton,
+.navSpacer {
+    display: inline-flex;
+    block-size: 28px;
+    inline-size: 28px;
+    align-items: center;
+    justify-content: center;
+}
+
+.navButton {
+    padding: 0;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    background: transparent;
+    color: var(--colors-grey800);
+    cursor: pointer;
+}
+
+.navButton:hover {
+    border-color: var(--colors-grey300);
+    background: var(--colors-grey100);
+}
+
+.weekdays,
+.days {
+    display: grid;
+    grid-template-columns: repeat(7, 36px);
+}
+
+.weekdays {
+    margin-block-end: 4px;
+}
+
+.weekday {
+    block-size: 28px;
+    color: var(--colors-grey700);
+    font-size: 13px;
+    line-height: 28px;
+    text-align: center;
+}
+
+.dayButton {
+    position: relative;
+    block-size: 36px;
+    inline-size: 36px;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: var(--colors-grey900);
+    cursor: pointer;
+    font: inherit;
+    font-size: 14px;
+    line-height: 36px;
+    text-align: center;
+}
+
+.dayButton:hover {
+    background: var(--colors-grey100);
+}
+
+.outsideMonth {
+    color: var(--colors-grey500);
+}
+
+.disabledDay,
+.disabledDay:hover {
+    background: transparent;
+    color: var(--colors-grey400);
+    cursor: not-allowed;
+}
+
+.today {
+    font-weight: 600;
+}
+
+.today:not(.rangeStart, .rangeEnd) {
+    color: var(--colors-blue700);
+}
+
+.today:not(.rangeStart, .rangeEnd)::after {
+    position: absolute;
+    inset-block-end: 4px;
+    inset-inline-start: 50%;
+    display: block;
+    block-size: 4px;
+    inline-size: 4px;
+    border-radius: 50%;
+    background: var(--colors-blue600);
+    content: '';
+    transform: translateX(-50%);
+}
+
+.inRange {
+    background: var(--colors-blue050);
+}
+
+.rangeStart,
+.rangeEnd {
+    background: var(--colors-blue600);
+    color: var(--colors-white);
+    font-weight: 600;
+}
+
+.rangeStart {
+    border-start-start-radius: 3px;
+    border-end-start-radius: 3px;
+}
+
+.rangeEnd {
+    border-start-end-radius: 3px;
+    border-end-end-radius: 3px;
+}
+
+.singleDay {
+    border-radius: 3px;
+}
+
+.rangeStart:hover,
+.rangeEnd:hover {
+    background: var(--colors-blue700);
+}
+
+.footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-block-start: 12px;
+    padding-block-start: 12px;
+    border-block-start: 1px solid var(--colors-grey300);
+}
+
+@media (max-width: 640px) {
+    .months {
+        flex-direction: column;
+    }
+}

@@ -22,6 +22,7 @@
         }
     },
     "dependencies": {
+        "@dhis2/multi-calendar-dates": "^2.1.2",
         "date-fns": "^4.1.0"
     },
     "devDependencies": {

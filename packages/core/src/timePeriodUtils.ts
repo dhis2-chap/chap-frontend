@@ -6,13 +6,7 @@ import {
     subMonths,
     subWeeks,
     startOfISOWeek,
-    endOfISOWeek,
-    startOfMonth,
-    endOfMonth,
     getISOWeek,
-    isAfter,
-    isSameMonth,
-    isSameYear,
     isValid,
     getISOWeekYear,
 } from 'date-fns';
@@ -25,133 +19,9 @@ export const PERIOD_TYPES = {
     ANY: 'ANY',
 } as const;
 
-export const MAX_YEAR_SPAN = 100;
-
 export type PeriodType = typeof PERIOD_TYPES[keyof typeof PERIOD_TYPES];
 
-export interface Period {
-    startDate: Date | undefined;
-    endDate: Date | undefined;
-    id: string;
-}
-
 // This page seems ai-generated, but it's actually a result of hard manual labour.
-
-/**
- * Converts a date range to an array of DHIS2 Period objects.
- * @param start - The start date string
- * @param end - The end date string
- * @param periodType - The period type (PERIOD_TYPES.WEEK or PERIOD_TYPES.MONTH)
- * @returns An array of Period objects
- */
-export const toDHIS2PeriodData = (start: string, end: string, periodType: keyof typeof PERIOD_TYPES): Period[] => {
-    if (periodType.toUpperCase() === PERIOD_TYPES.WEEK) return getWeeks(start, end);
-    if (periodType.toUpperCase() === PERIOD_TYPES.MONTH) return getMonths(start, end);
-    console.error('Invalid period type:', periodType);
-    return [];
-};
-
-/**
- * Generates an array of Period objects for each week in the given range.
- * @param start - The start date in ISO week format (e.g., "2024-W01")
- * @param end - The end date in ISO week format (e.g., "2024-W52")
- * @returns An array of Period objects for each week in the range
- */
-const getWeeks = (start: string, end: string): Period[] => {
-    try {
-        // Parse ISO week format (e.g., "2024-W01")
-        const startDate = parse(start, 'RRRR-\'W\'II', new Date());
-        const endDate = parse(end, 'RRRR-\'W\'II', new Date());
-
-        if (!isValid(startDate) || !isValid(endDate)) {
-            console.error('Invalid date format provided for weeks:', { start, end });
-            return [];
-        }
-
-        const yearDifference = getISOWeekYear(endDate) - getISOWeekYear(startDate);
-        if (yearDifference > MAX_YEAR_SPAN) {
-            return [];
-        }
-
-        const weeks: Period[] = [];
-        let currentDate = startOfISOWeek(startDate);
-        const endWeekStart = startOfISOWeek(endDate);
-
-        while (!isAfter(currentDate, endWeekStart)) {
-            const isoYear = getISOWeekYear(currentDate);
-            const weekNumber = getISOWeek(currentDate);
-            const weekString = `${isoYear}W${String(weekNumber)}`;
-
-            const weekStart = startOfISOWeek(currentDate);
-            const weekEnd = endOfISOWeek(currentDate);
-
-            weeks.push({
-                endDate: new Date(format(weekEnd, 'yyyy-MM-dd')),
-                startDate: new Date(format(weekStart, 'yyyy-MM-dd')),
-                id: weekString,
-            });
-
-            currentDate = addWeeks(currentDate, 1);
-        }
-
-        return weeks;
-    } catch (error) {
-        console.error('Error parsing week dates:', error);
-        return [];
-    }
-};
-
-/**
- * Generates an array of Period objects for each month in the given range.
- * @param start - The start date in month format (e.g., "2024-01")
- * @param end - The end date in month format (e.g., "2024-12")
- * @returns An array of Period objects for each month in the range
- */
-const getMonths = (start: string, end: string): Period[] => {
-    try {
-        // Parse month format (e.g., "2024-01")
-        const startDate = parse(start, 'yyyy-MM', new Date());
-        const endDate = parse(end, 'yyyy-MM', new Date());
-
-        // Check if parsed dates are valid
-        if (!isValid(startDate) || !isValid(endDate)) {
-            console.error('Invalid date format provided for months:', { start, end });
-            return [];
-        }
-
-        // Safety check for date ranges exceeding MAX_YEAR_SPAN
-        const yearDifference = endDate.getFullYear() - startDate.getFullYear();
-        if (yearDifference > MAX_YEAR_SPAN) {
-            return [];
-        }
-
-        const months: Period[] = [];
-        let currentDate = startDate;
-
-        while (
-            isAfter(endDate, currentDate)
-            || (isSameYear(currentDate, endDate) && isSameMonth(currentDate, endDate))
-        ) {
-            const monthId = format(currentDate, 'yyyyMM');
-
-            const monthStart = startOfMonth(currentDate);
-            const monthEnd = endOfMonth(currentDate);
-
-            months.push({
-                id: monthId,
-                endDate: new Date(format(monthEnd, 'yyyy-MM-dd')),
-                startDate: new Date(format(monthStart, 'yyyy-MM-dd')),
-            });
-
-            currentDate = addMonths(currentDate, 1);
-        }
-
-        return months;
-    } catch (error) {
-        console.error('Error parsing month dates:', error);
-        return [];
-    }
-};
 
 /**
  * Converts a basic ISO format period to an extended ISO format.

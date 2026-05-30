@@ -30,7 +30,10 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { usePredictionSeries } from '../../PredictionDetails/hooks/usePredictionSeries';
 import { PredictionAlertsDialog } from '../../PredictionAlerts';
 import { usePredictionSetup } from '@/hooks/usePredictionSetup';
-import { getPredictionSetupQuantileTargets } from '@/utils/predictionSetupImportMapping';
+import {
+    getPredictionSetupQuantileTargets,
+    QUANTILE_SUGGESTED_KEYWORDS,
+} from '@/utils/predictionSetupImportMapping';
 
 type Props = {
     prediction: PredictionInfo;
@@ -242,30 +245,40 @@ export const QuantileMappingForm = ({ prediction, model, predictionSetupId }: Pr
                         value={quantile_high}
                         onChange={id => updateQuantile('quantile_high', id)}
                         error={errors.quantile_high?.message}
+                        dataElementsOnly
+                        suggestedKeyword={QUANTILE_SUGGESTED_KEYWORDS.quantile_high}
                     />
                     <DataItemSelect
                         label={i18n.t('Quantile mid high')}
                         value={quantile_mid_high}
                         onChange={id => updateQuantile('quantile_mid_high', id)}
                         error={errors.quantile_mid_high?.message}
+                        dataElementsOnly
+                        suggestedKeyword={QUANTILE_SUGGESTED_KEYWORDS.quantile_mid_high}
                     />
                     <DataItemSelect
                         label={i18n.t('Median')}
                         value={median}
                         onChange={id => updateQuantile('median', id)}
                         error={errors.median?.message}
+                        dataElementsOnly
+                        suggestedKeyword={QUANTILE_SUGGESTED_KEYWORDS.median}
                     />
                     <DataItemSelect
                         label={i18n.t('Quantile mid low')}
                         value={quantile_mid_low}
                         onChange={id => updateQuantile('quantile_mid_low', id)}
                         error={errors.quantile_mid_low?.message}
+                        dataElementsOnly
+                        suggestedKeyword={QUANTILE_SUGGESTED_KEYWORDS.quantile_mid_low}
                     />
                     <DataItemSelect
                         label={i18n.t('Quantile low')}
                         value={quantile_low}
                         onChange={id => updateQuantile('quantile_low', id)}
                         error={errors.quantile_low?.message}
+                        dataElementsOnly
+                        suggestedKeyword={QUANTILE_SUGGESTED_KEYWORDS.quantile_low}
                     />
 
                     <div className={styles.alertOutput}>

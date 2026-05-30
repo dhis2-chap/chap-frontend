@@ -5,3 +5,4 @@ export * from './OverflowButton';
 export * from './StatusIndicator';
 export * from './Tag';
 export * from './Widget';
+export * from './PeriodPicker';
