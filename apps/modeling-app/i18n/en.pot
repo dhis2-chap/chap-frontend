@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-05-30T19:01:31.856Z\n"
-"PO-Revision-Date: 2026-05-30T19:01:31.859Z\n"
+"POT-Creation-Date: 2026-05-30T20:08:29.754Z\n"
+"PO-Revision-Date: 2026-05-30T20:08:29.755Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -358,6 +358,40 @@ msgstr "All org units must be at the same level"
 msgid "Confirm Selection"
 msgstr "Confirm Selection"
 
+msgid "Production"
+msgstr "Production"
+
+msgid "Approved for general use."
+msgstr "Approved for general use."
+
+msgid "Testing"
+msgstr "Testing"
+
+msgid "Prepared for more extensive testing; not yet approved for production."
+msgstr "Prepared for more extensive testing; not yet approved for production."
+
+msgid "Limited"
+msgstr "Limited"
+
+msgid "Tested on a small dataset. Requires manual tuning and close monitoring."
+msgstr "Tested on a small dataset. Requires manual tuning and close monitoring."
+
+msgid "Experimental"
+msgstr "Experimental"
+
+msgid ""
+"An early prototype with no formal validation - only for initial "
+"experimentation."
+msgstr ""
+"An early prototype with no formal validation - only for initial "
+"experimentation."
+
+msgid "Deprecated"
+msgstr "Deprecated"
+
+msgid "This model is not intended for use or has been deprecated."
+msgstr "This model is not intended for use or has been deprecated."
+
 msgid "Monthly"
 msgstr "Monthly"
 
@@ -370,63 +404,20 @@ msgstr "Weekly"
 msgid "Daily"
 msgstr "Daily"
 
-msgid "Any"
-msgstr "Any"
-
-msgid "Deprecated"
-msgstr "Deprecated"
-
-msgid "This model is not intended for use or has been deprecated."
-msgstr "This model is not intended for use or has been deprecated."
-
-msgid "Experimental"
-msgstr "Experimental"
-
-msgid ""
-"An early prototype with no formal validation - only for initial "
-"experimentation."
-msgstr ""
-"An early prototype with no formal validation - only for initial "
-"experimentation."
-
-msgid "Limited"
-msgstr "Limited"
-
-msgid "Tested on a small dataset. Requires manual tuning and close monitoring."
-msgstr "Tested on a small dataset. Requires manual tuning and close monitoring."
-
-msgid "Testing"
-msgstr "Testing"
-
-msgid "Prepared for more extensive testing; not yet approved for production."
-msgstr "Prepared for more extensive testing; not yet approved for production."
-
-msgid "Production"
-msgstr "Production"
-
-msgid "Approved for general use."
-msgstr "Approved for general use."
-
-msgid "Author note"
-msgstr "Author note"
-
-msgid "Selected"
-msgstr "Selected"
+msgid "Any period"
+msgstr "Any period"
 
 msgid "Select Model"
 msgstr "Select Model"
 
-msgid "Any period"
-msgstr "Any period"
-
 msgid "Search models"
 msgstr "Search models"
 
-msgid "Period"
-msgstr "Period"
-
 msgid "Clear statuses"
 msgstr "Clear statuses"
+
+msgid "Period"
+msgstr "Period"
 
 msgid "Covariates"
 msgstr "Covariates"
@@ -439,6 +430,12 @@ msgstr "Author"
 
 msgid "Unknown"
 msgstr "Unknown"
+
+msgid "Author note"
+msgstr "Author note"
+
+msgid "Selected"
+msgstr "Selected"
 
 msgid "Use this model"
 msgstr "Use this model"
@@ -1043,6 +1040,9 @@ msgstr "Model archived"
 msgid "Failed to archive model"
 msgstr "Failed to archive model"
 
+msgid "Any"
+msgstr "Any"
+
 msgid "No covariate names available"
 msgstr "No covariate names available"
 
@@ -1226,6 +1226,15 @@ msgstr "No prediction data found."
 
 msgid "Loading"
 msgstr "Loading"
+
+msgid "Suggested"
+msgstr "Suggested"
+
+msgid "Data elements"
+msgstr "Data elements"
+
+msgid "Data items"
+msgstr "Data items"
 
 msgid "Start typing to search for data items"
 msgstr "Start typing to search for data items"
