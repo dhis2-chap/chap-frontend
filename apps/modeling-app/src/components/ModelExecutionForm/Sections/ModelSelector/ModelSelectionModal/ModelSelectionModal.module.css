@@ -8,7 +8,9 @@
     display: grid;
     grid-template-columns: minmax(280px, 320px) minmax(0, 1fr);
     inline-size: 100%;
-    min-block-size: 460px;
+    block-size: min(520px, calc(100vh - 180px));
+    min-block-size: 0;
+    overflow: hidden;
 }
 
 .rail {
@@ -17,6 +19,7 @@
     flex-direction: column;
     min-block-size: 0;
     min-inline-size: 0;
+    overflow: hidden;
 }
 
 .controls {
@@ -26,6 +29,7 @@
     flex-direction: column;
     gap: 8px;
     min-inline-size: 0;
+    flex-shrink: 0;
 }
 
 .controls > * {
@@ -50,8 +54,11 @@
     margin: 0;
     padding: 0;
     overflow-y: auto;
+    overscroll-behavior: contain;
     display: flex;
+    flex: 1 1 auto;
     flex-direction: column;
+    min-block-size: 0;
 }
 
 .listItem {
@@ -114,7 +121,11 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
+    min-block-size: 0;
     min-inline-size: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
 }
 
 .detailHeader {
@@ -229,6 +240,7 @@
 .detailActions {
     margin-block-start: auto;
     padding-block-start: 12px;
+    flex-shrink: 0;
 }
 
 @media (max-width: 760px) {
@@ -239,13 +251,14 @@
 
     .wrapper {
         grid-template-columns: 1fr;
+        grid-template-rows: minmax(140px, 40%) minmax(0, 1fr);
+        block-size: min(620px, calc(100vh - 180px));
         min-block-size: 0;
     }
 
     .rail {
         border-inline-end: none;
         border-block-end: 1px solid var(--colors-grey200);
-        max-block-size: 260px;
     }
 
     .controls {
