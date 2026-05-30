@@ -285,77 +285,79 @@ export const ModelSelectionModal = ({
                         <section className={styles.detail}>
                             {focusedModel ? (
                                 <>
-                                    <header className={styles.detailHeader}>
-                                        <div>
-                                            <h3 className={styles.detailName}>{getModelName(focusedModel)}</h3>
-                                        </div>
-                                    </header>
+                                    <div className={styles.detailBody}>
+                                        <header className={styles.detailHeader}>
+                                            <div>
+                                                <h3 className={styles.detailName}>{getModelName(focusedModel)}</h3>
+                                            </div>
+                                        </header>
 
-                                    <p className={styles.detailDescription}>{focusedModel.description}</p>
+                                        <p className={styles.detailDescription}>{focusedModel.description}</p>
 
-                                    <dl className={styles.specs}>
-                                        <div className={styles.spec}>
-                                            <dt>
-                                                <IconCalendar16 color="#212934" />
-                                                {i18n.t('Period')}
-                                            </dt>
-                                            <dd>{getPeriodLabel(focusedModel)}</dd>
-                                        </div>
-                                        <div className={styles.spec}>
-                                            <dt>
-                                                <IconArrowRight16 color="#212934" />
-                                                {i18n.t('Target')}
-                                            </dt>
-                                            <dd>{focusedModel.target?.displayName}</dd>
-                                        </div>
-                                        <div className={styles.spec}>
-                                            <dt>
-                                                <IconDimensionData16 color="#212934" />
-                                                {i18n.t('Covariates')}
-                                            </dt>
-                                            <dd>
-                                                {focusedModel.covariates && focusedModel.covariates.length > 0
-                                                    ? focusedModel.covariates.map(covariate => covariate.displayName).join(', ')
-                                                    : i18n.t('None')}
-                                            </dd>
-                                        </div>
-                                        <div className={styles.spec}>
-                                            <dt>
-                                                <IconWorld16 color="#212934" />
-                                                {i18n.t('Author')}
-                                            </dt>
-                                            <dd>
-                                                {focusedModel.author || i18n.t('Unknown')}
-                                                {focusedModel.organization ? ` · ${focusedModel.organization}` : ''}
-                                            </dd>
-                                        </div>
-                                        {focusedReadiness && (
+                                        <dl className={styles.specs}>
                                             <div className={styles.spec}>
                                                 <dt>
-                                                    <IconFlag16 color="#212934" />
-                                                    {i18n.t('Status')}
+                                                    <IconCalendar16 color="#212934" />
+                                                    {i18n.t('Period')}
+                                                </dt>
+                                                <dd>{getPeriodLabel(focusedModel)}</dd>
+                                            </div>
+                                            <div className={styles.spec}>
+                                                <dt>
+                                                    <IconArrowRight16 color="#212934" />
+                                                    {i18n.t('Target')}
+                                                </dt>
+                                                <dd>{focusedModel.target?.displayName}</dd>
+                                            </div>
+                                            <div className={styles.spec}>
+                                                <dt>
+                                                    <IconDimensionData16 color="#212934" />
+                                                    {i18n.t('Covariates')}
                                                 </dt>
                                                 <dd>
-                                                    <Tooltip content={focusedReadiness.description}>
-                                                        <span className={styles.readinessPill}>
-                                                            <span
-                                                                className={styles.readinessLegendDot}
-                                                                style={{ backgroundColor: focusedReadiness.color }}
-                                                            />
-                                                            {focusedReadiness.label}
-                                                        </span>
-                                                    </Tooltip>
+                                                    {focusedModel.covariates && focusedModel.covariates.length > 0
+                                                        ? focusedModel.covariates.map(covariate => covariate.displayName).join(', ')
+                                                        : i18n.t('None')}
                                                 </dd>
                                             </div>
-                                        )}
-                                    </dl>
+                                            <div className={styles.spec}>
+                                                <dt>
+                                                    <IconWorld16 color="#212934" />
+                                                    {i18n.t('Author')}
+                                                </dt>
+                                                <dd>
+                                                    {focusedModel.author || i18n.t('Unknown')}
+                                                    {focusedModel.organization ? ` · ${focusedModel.organization}` : ''}
+                                                </dd>
+                                            </div>
+                                            {focusedReadiness && (
+                                                <div className={styles.spec}>
+                                                    <dt>
+                                                        <IconFlag16 color="#212934" />
+                                                        {i18n.t('Status')}
+                                                    </dt>
+                                                    <dd>
+                                                        <Tooltip content={focusedReadiness.description}>
+                                                            <span className={styles.readinessPill}>
+                                                                <span
+                                                                    className={styles.readinessLegendDot}
+                                                                    style={{ backgroundColor: focusedReadiness.color }}
+                                                                />
+                                                                {focusedReadiness.label}
+                                                            </span>
+                                                        </Tooltip>
+                                                    </dd>
+                                                </div>
+                                            )}
+                                        </dl>
 
-                                    {hasAuthorNote && (
-                                        <div className={styles.authorNote}>
-                                            <span className={styles.authorNoteLabel}>{i18n.t('Author note')}</span>
-                                            {focusedModel.authorNote}
-                                        </div>
-                                    )}
+                                        {hasAuthorNote && (
+                                            <div className={styles.authorNote}>
+                                                <span className={styles.authorNoteLabel}>{i18n.t('Author note')}</span>
+                                                {focusedModel.authorNote}
+                                            </div>
+                                        )}
+                                    </div>
 
                                     <div className={styles.detailActions}>
                                         <ButtonStrip end>

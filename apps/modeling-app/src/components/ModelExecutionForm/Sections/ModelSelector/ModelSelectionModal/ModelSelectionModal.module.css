@@ -123,6 +123,16 @@
     gap: 12px;
     min-block-size: 0;
     min-inline-size: 0;
+    overflow: hidden;
+}
+
+.detailBody {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: 12px;
+    min-block-size: 0;
+    min-inline-size: 0;
     overflow-x: hidden;
     overflow-y: auto;
     overscroll-behavior: contain;
@@ -238,7 +248,7 @@
 }
 
 .detailActions {
-    margin-block-start: auto;
+    margin-block-start: 0;
     padding-block-start: 12px;
     flex-shrink: 0;
 }
