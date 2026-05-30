@@ -7,17 +7,28 @@ import i18n from '@dhis2/d2-i18n';
 import styles from './JobsTableFilters.module.css';
 import { JOB_STATUSES, JOB_TYPES } from '../../../hooks/useJobs';
 import { useJobsTableFilters } from '../hooks/useJobsTableFilters';
+import { DateRangePicker } from '../../DateRangePicker';
 
-export type JobsTableFilterKey = 'search' | 'status' | 'type';
+export type JobsTableFilterKey = 'date' | 'search' | 'status' | 'type';
 
-const DEFAULT_VISIBLE_FILTERS: JobsTableFilterKey[] = ['search', 'status', 'type'];
+const DEFAULT_VISIBLE_FILTERS: JobsTableFilterKey[] = ['search', 'status', 'type', 'date'];
 
 type Props = {
     visibleFilters?: JobsTableFilterKey[];
 };
 
 export const JobsTableFilters = ({ visibleFilters = DEFAULT_VISIBLE_FILTERS }: Props) => {
-    const { search, setSearch, status, setStatus, type, setType } = useJobsTableFilters();
+    const {
+        dateRange,
+        search,
+        setDateRange,
+        setSearch,
+        status,
+        setStatus,
+        type,
+        setType,
+    } = useJobsTableFilters();
+
     return (
         <>
             {visibleFilters.includes('search') && (
@@ -84,6 +95,14 @@ export const JobsTableFilters = ({ visibleFilters = DEFAULT_VISIBLE_FILTERS }: P
                             value={JOB_TYPES.MAKE_PREDICTION}
                         />
                     </SingleSelect>
+                </div>
+            )}
+            {visibleFilters.includes('date') && (
+                <div className={styles.dateRangeContainer}>
+                    <DateRangePicker
+                        value={dateRange}
+                        onChange={setDateRange}
+                    />
                 </div>
             )}
         </>

@@ -158,6 +158,15 @@
     border-block-end: none;
 }
 
+.sectionHeader {
+    padding: 0.5rem 0.75rem 0.25rem;
+    color: #4b5563;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    line-height: 1.25;
+    text-transform: uppercase;
+}
+
 .infoSearchItem {
     padding: 0.5rem 0.75rem;
     color: #6b7280;

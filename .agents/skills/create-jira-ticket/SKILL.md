@@ -60,7 +60,8 @@ Issue type ids (display names are Norwegian — aliases given):
 
 **You decide each run:**
 - **Issue type** — reason from the actual change. Bug-fix-shaped work → `Bug`; new capability, docs, or improvement → `Feature`. Default to one of those two; never use `Task`, `Epic`, or `Story` unless the user explicitly asks.
-- **Summary** — short and plain, a few words. The user wants tickets that are simple and not text-heavy, so resist padding. The description body is just a link to the PR.
+- **Summary** — short and plain, a few words. The user wants tickets that are simple and not text-heavy, so resist padding.
+- **Description** — unless the user says otherwise, write the ticket as planned work, not completed work. Use wording like "we should..." and describe the user need, expected behavior, and acceptance-level outcomes as if implementation has not happened yet. Do not mention implementation details, files, tests, refactors, libraries, or other technical solution details unless the user explicitly asks for them or they are essential to define the work. Do not add the PR title or PR link to the Jira description; Atlassian will connect the PR automatically after the PR title is tagged with `[CLIM-xxx]`.
 
 **Only when the user asks:**
 - A status transition (e.g. "move it to In Review"). Not a default — fresh tickets stay where they land.
@@ -69,7 +70,7 @@ Issue type ids (display names are Norwegian — aliases given):
 ## Workflow
 
 1. **Identify the PR(s).** Usually a PR number. If they reference a branch with no PR, find it with `gh pr list --head <branch>` or ask. One ticket per PR.
-2. **Read the PR** to choose type and summary: `gh pr view <num> --json title,body,url`.
+2. **Read the PR** to choose type, summary, and the planned-work description: `gh pr view <num> --json title,body,url`.
 3. **Auth** (load `.env.local`, confirm `JIRA_EMAIL` present, sanity-check `myself` → 200).
 4. **Create + wire up** each ticket using the calls below.
 5. **Report** the ticket keys and links back.
@@ -91,9 +92,7 @@ curl -s -u "$JIRA_EMAIL:$JIRA_API_TOKEN" -X POST \
   "components":[ { "id": "10917" } ],
   "description": { "type": "doc", "version": 1, "content": [
     { "type": "paragraph", "content": [
-      { "type": "text", "text": "PR: " },
-      { "type": "text", "text": "https://github.com/dhis2-chap/chap-frontend/pull/190",
-        "marks": [ { "type": "link", "attrs": { "href": "https://github.com/dhis2-chap/chap-frontend/pull/190" } } ] }
+      { "type": "text", "text": "We should add clearer conceptual guidance for covariates and prediction intervals so users can understand when to use these concepts and how they affect prediction setup decisions." }
     ] }
   ] }
 } }
