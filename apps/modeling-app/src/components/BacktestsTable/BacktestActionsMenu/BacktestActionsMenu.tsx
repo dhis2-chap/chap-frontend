@@ -34,6 +34,7 @@ export const BacktestActionsMenu = ({
     const navigate = useNavigate();
     const { isAvailable: isDatasetDownloadAvailable } = useIsFeatureAvailable(Features.DATASET_DOWNLOAD);
     const { isAvailable: isMetricsDownloadAvailable } = useIsFeatureAvailable(Features.METRICS_DOWNLOAD);
+    const isDownloadAvailable = isDatasetDownloadAvailable || isMetricsDownloadAvailable;
     const [flyoutMenuIsOpen, setFlyoutMenuIsOpen] = useState(false);
     const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
     const [editModalIsOpen, setEditModalIsOpen] = useState(false);
@@ -82,15 +83,17 @@ export const BacktestActionsMenu = ({
                                 setFlyoutMenuIsOpen(false);
                             }}
                         />
-                        <MenuItem
-                            label={i18n.t('Download')}
-                            dataTest="backtest-overflow-download"
-                            icon={<IconDownload16 />}
-                            onClick={() => {
-                                setDownloadModalIsOpen(true);
-                                setFlyoutMenuIsOpen(false);
-                            }}
-                        />
+                        {isDownloadAvailable && (
+                            <MenuItem
+                                label={i18n.t('Download')}
+                                dataTest="backtest-overflow-download"
+                                icon={<IconDownload16 />}
+                                onClick={() => {
+                                    setDownloadModalIsOpen(true);
+                                    setFlyoutMenuIsOpen(false);
+                                }}
+                            />
+                        )}
                         <MenuItem
                             label={i18n.t('Delete')}
                             dataTest="backtest-overflow-delete"
@@ -127,7 +130,7 @@ export const BacktestActionsMenu = ({
                 />
             )}
 
-            {downloadModalIsOpen && (
+            {downloadModalIsOpen && isDownloadAvailable && (
                 <DownloadModal
                     backtestId={id}
                     backtestName={name}
