@@ -73,6 +73,7 @@ const getMonthlyReferenceLabel = (periodId: string) => (
 
 const getMonthlyYear = (periodId: string) => periodId.slice(0, 4);
 const getMonthlyMonth = (periodId: string) => Number(periodId.slice(4, 6));
+const isWeeklyPeriodType = (periodType: Dhis2FixedPeriodType) => periodType.includes('WEEKLY');
 
 const formatGregorianMonthName = (periodId: string, locale: string) => {
     const year = Number(getMonthlyYear(periodId));
@@ -171,11 +172,17 @@ const getPeriodCellPrimaryLabel = (
     return getFallbackMonthlyCellLabel(period, calendar, locale);
 };
 
-const getPeriodSecondaryLabel = (period: Dhis2FixedPeriod) => (
-    isMonthlyPeriodType(period.periodType)
-        ? getMonthlyReferenceLabel(period.id)
-        : period.id
-);
+const getPeriodSecondaryLabel = (period: Dhis2FixedPeriod) => {
+    if (isMonthlyPeriodType(period.periodType)) {
+        return getMonthlyReferenceLabel(period.id);
+    }
+
+    if (isWeeklyPeriodType(period.periodType)) {
+        return undefined;
+    }
+
+    return period.id;
+};
 
 const YEAR_SELECT_PAST_YEARS = 100;
 const YEAR_SELECT_FUTURE_YEARS = 25;
@@ -373,69 +380,80 @@ export const PeriodPicker = ({
                     >
                         <div className={styles.popover}>
                             <div className={styles.header}>
-                                <button
-                                    type="button"
-                                    className={styles.iconButton}
-                                    aria-label={i18n.t('Previous year')}
-                                    data-test={dataTest ? `${dataTest}-previous-year` : undefined}
-                                    onClick={() => setVisibleYear(year => year - 1)}
-                                >
-                                    <IconChevronLeft16 />
-                                </button>
-                                <div className={styles.yearSelectWrapper}>
-                                    <select
-                                        className={styles.yearSelect}
-                                        aria-label={i18n.t('Select year')}
-                                        data-test={dataTest ? `${dataTest}-visible-year` : undefined}
-                                        value={visibleYear}
-                                        onChange={event => setVisibleYear(Number(event.target.value))}
-                                    >
-                                        {yearOptions.map(year => (
-                                            <option
-                                                key={year}
-                                                value={year}
-                                            >
-                                                {year}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    <svg
-                                        className={styles.yearSelectIcon}
-                                        width="16"
-                                        height="16"
-                                        viewBox="0 0 16 16"
-                                        fill="none"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        aria-hidden="true"
-                                        focusable="false"
-                                    >
-                                        <path
-                                            d="M10.1465 6.85363L10.8536 6.14652L8.00004 3.29297L5.14648 6.14652L5.85359 6.85363L8.00004 4.70718L10.1465 6.85363ZM5.85367 9.1466L5.14656 9.8537L8.00011 12.7073L10.8537 9.8537L10.1466 9.1466L8.00011 11.293L5.85367 9.1466Z"
-                                            fill="currentColor"
-                                        />
-                                    </svg>
+                                <div className={styles.yearNavigation}>
+                                    <div className={styles.yearNavigationPrevious}>
+                                        <button
+                                            type="button"
+                                            className={styles.iconButton}
+                                            aria-label={i18n.t('Previous year')}
+                                            data-test={dataTest ? `${dataTest}-previous-year` : undefined}
+                                            onClick={() => setVisibleYear(year => year - 1)}
+                                        >
+                                            <IconChevronLeft16 />
+                                        </button>
+                                    </div>
+                                    <div className={styles.yearSelectWrapper}>
+                                        <select
+                                            className={styles.yearSelect}
+                                            aria-label={i18n.t('Select year')}
+                                            data-test={dataTest ? `${dataTest}-visible-year` : undefined}
+                                            value={visibleYear}
+                                            onChange={event => setVisibleYear(Number(event.target.value))}
+                                        >
+                                            {yearOptions.map(year => (
+                                                <option
+                                                    key={year}
+                                                    value={year}
+                                                >
+                                                    {year}
+                                                </option>
+                                            ))}
+                                        </select>
+                                        <svg
+                                            className={styles.yearSelectIcon}
+                                            width="16"
+                                            height="16"
+                                            viewBox="0 0 16 16"
+                                            fill="none"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            aria-hidden="true"
+                                            focusable="false"
+                                        >
+                                            <path
+                                                d="M10.1465 6.85363L10.8536 6.14652L8.00004 3.29297L5.14648 6.14652L5.85359 6.85363L8.00004 4.70718L10.1465 6.85363ZM5.85367 9.1466L5.14656 9.8537L8.00011 12.7073L10.8537 9.8537L10.1466 9.1466L8.00011 11.293L5.85367 9.1466Z"
+                                                fill="currentColor"
+                                            />
+                                        </svg>
+                                    </div>
+                                    <div className={styles.yearNavigationNext}>
+                                        <button
+                                            type="button"
+                                            className={styles.iconButton}
+                                            aria-label={i18n.t('Next year')}
+                                            data-test={dataTest ? `${dataTest}-next-year` : undefined}
+                                            onClick={() => setVisibleYear(year => year + 1)}
+                                        >
+                                            <IconChevronRight16 />
+                                        </button>
+                                    </div>
                                 </div>
-                                <button
-                                    type="button"
-                                    className={styles.iconButton}
-                                    aria-label={i18n.t('Next year')}
-                                    data-test={dataTest ? `${dataTest}-next-year` : undefined}
-                                    onClick={() => setVisibleYear(year => year + 1)}
-                                >
-                                    <IconChevronRight16 />
-                                </button>
                             </div>
 
                             <div className={isMonthlyPeriodType(periodType) ? styles.monthGrid : styles.weekList}>
                                 {periods.map((period) => {
                                     const selected = selectedPeriod?.id === period.id;
                                     const periodDisabled = periodIsDisabled(period);
+                                    const secondaryLabel = getPeriodSecondaryLabel(period);
+                                    const buttonClassName = [
+                                        selected ? styles.periodButtonSelected : styles.periodButton,
+                                        secondaryLabel ? undefined : styles.periodButtonSingleLine,
+                                    ].filter(Boolean).join(' ');
 
                                     return (
                                         <button
                                             type="button"
                                             key={period.id}
-                                            className={selected ? styles.periodButtonSelected : styles.periodButton}
+                                            className={buttonClassName}
                                             disabled={periodDisabled}
                                             aria-pressed={selected}
                                             title={getPeriodPrimaryLabel(period, calendar, locale)}
@@ -445,9 +463,11 @@ export const PeriodPicker = ({
                                             <span className={styles.periodName}>
                                                 {getPeriodCellPrimaryLabel(period, calendar, locale)}
                                             </span>
-                                            <span className={styles.periodId}>
-                                                {getPeriodSecondaryLabel(period)}
-                                            </span>
+                                            {secondaryLabel && (
+                                                <span className={styles.periodId}>
+                                                    {secondaryLabel}
+                                                </span>
+                                            )}
                                         </button>
                                     );
                                 })}

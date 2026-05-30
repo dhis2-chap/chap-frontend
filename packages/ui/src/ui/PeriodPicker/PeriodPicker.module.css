@@ -56,44 +56,61 @@
 }
 
 .header {
-  display: grid;
-  grid-template-columns: 1fr 28px max-content 28px;
+  display: flex;
   align-items: center;
-  inline-size: 100%;
+  justify-content: flex-end;
+  gap: 4px;
+  width: 100%;
   padding: 4px;
-  background: #f8f9fa;
+  font-size: 1em;
   border-block-end: 1px solid #e8edf2;
+  background: #f8f9fa;
 }
 
-.header .iconButton:first-child {
-  grid-column: 2;
+.yearNavigation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ffffff;
+  border: 1px solid #e8edf2;
+  border-radius: 3px;
 }
 
-.header .yearSelectWrapper {
-  grid-column: 3;
+.yearNavigationPrevious {
+  border-inline-end: 1px solid #e8edf2;
 }
 
-.header .iconButton:last-child {
-  grid-column: 4;
+.yearNavigationNext {
+  border-inline-start: 1px solid #e8edf2;
+}
+
+.yearNavigationPrevious,
+.yearNavigationNext,
+.yearSelectWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.yearNavigationPrevious,
+.yearNavigationNext {
+  inline-size: 20px;
+  flex-shrink: 0;
 }
 
 .yearSelectWrapper {
   position: relative;
-  display: flex;
-  align-items: center;
-  box-sizing: border-box;
-  inline-size: max-content;
-  block-size: 24px;
+  flex: 0 1 auto;
   overflow: hidden;
-  background: var(--colors-white);
-  border-block: 1px solid #e8edf2;
 }
 
 .yearSelect {
-  inline-size: auto;
+  inline-size: 100%;
   max-inline-size: 100%;
-  block-size: 100%;
-  padding-block: 0;
+  block-size: 24px;
+  box-sizing: border-box;
+  padding-block-start: 1px;
+  padding-block-end: 0;
   padding-inline-start: 4px;
   padding-inline-end: 16px;
   overflow: hidden;
@@ -102,17 +119,16 @@
   border: 0;
   border-radius: 0;
   appearance: none;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 22px;
   text-align: start;
   white-space: nowrap;
+}
+
+.yearSelect:hover {
+  background: #f3f5f7;
   cursor: pointer;
 }
 
-.yearSelect:hover,
 .yearSelect:focus {
-  color: #212934;
   background: #f3f5f7;
   outline-color: #4a5768;
 }
@@ -120,49 +136,26 @@
 .yearSelectIcon {
   position: absolute;
   inset-inline-end: 0;
-  inset-block-start: 50%;
   pointer-events: none;
   color: #4a5768;
-  transform: translateY(-50%);
 }
 
 .iconButton {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
-  inline-size: 28px;
+  inline-size: 20px;
   block-size: 24px;
-  padding: 0;
+  padding: 4px 2px;
   color: #4a5768;
-  background: var(--colors-white);
-  border: 1px solid #e8edf2;
-  border-radius: 3px;
-  cursor: pointer;
-}
-
-.iconButton:first-child {
-  border-start-end-radius: 0;
-  border-end-end-radius: 0;
-}
-
-.iconButton:last-child {
-  border-start-start-radius: 0;
-  border-end-start-radius: 0;
+  background: none;
+  border: 0;
 }
 
 .iconButton:hover {
   color: #212934;
-  background: #f3f5f7;
-  border-color: #e8edf2;
-}
-
-.iconButton:focus {
-  outline: none;
-}
-
-.iconButton:focus-visible {
-  outline: 2px solid var(--colors-teal400);
-  outline-offset: -2px;
+  background-color: #f3f5f7;
+  cursor: pointer;
 }
 
 .monthGrid {
@@ -216,6 +209,12 @@
 .periodButtonSelected {
   color: var(--colors-white);
   background: #00695c;
+}
+
+.periodButtonSingleLine {
+  justify-content: center;
+  min-block-size: 34px;
+  padding-block: 3px;
 }
 
 .periodButton:disabled,
