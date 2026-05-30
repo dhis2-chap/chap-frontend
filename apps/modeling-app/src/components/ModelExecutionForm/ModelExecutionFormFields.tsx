@@ -7,10 +7,14 @@ import { ModelSelector } from './Sections/ModelSelector/ModelSelector';
 import { DatasetConfiguration } from './Sections/DatasetConfiguration';
 import styles from './ModelExecutionFormFields.module.css';
 import { ButtonStrip } from '@dhis2/ui';
+import { type Dhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
 
 type Props = {
     methods: UseFormReturn<ModelExecutionFormValues>;
     onSubmit: (data: ModelExecutionFormValues) => void;
+    periodSettings: Dhis2PeriodSettings;
+    periodSettingsError?: Error | null;
+    periodSettingsLoading?: boolean;
     actions?: React.ReactNode;
     footer?: React.ReactNode;
 };
@@ -18,6 +22,9 @@ type Props = {
 export const ModelExecutionFormFields = ({
     methods,
     onSubmit,
+    periodSettings,
+    periodSettingsError,
+    periodSettingsLoading,
     actions,
     footer,
 }: Props) => {
@@ -38,6 +45,9 @@ export const ModelExecutionFormFields = ({
                 <PeriodSelector
                     control={control}
                     errors={errors}
+                    periodSettings={periodSettings}
+                    periodSettingsError={periodSettingsError}
+                    periodSettingsLoading={periodSettingsLoading}
                 />
 
                 <LocationSelector
@@ -52,6 +62,7 @@ export const ModelExecutionFormFields = ({
                 <DatasetConfiguration
                     control={control}
                     errors={errors}
+                    periodSettings={periodSettings}
                 />
             </form>
 

@@ -83,11 +83,11 @@ export const CopyBacktestModal = ({ id, onClose, returnTo }: CopyBacktestModalPr
 
             if (selectedAttributes.period) {
                 if (dataset?.firstPeriod) {
-                    state.fromDate = dataset.firstPeriod;
+                    state.fromPeriodId = dataset.firstPeriod;
                 }
 
                 if (dataset?.lastPeriod) {
-                    state.toDate = dataset.lastPeriod;
+                    state.toPeriodId = dataset.lastPeriod;
                 }
             }
         }
