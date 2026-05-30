@@ -36,7 +36,7 @@ export const NewPredictionContent = ({ returnTo }: Props) => {
         return {
             name: i18n.t('{{name}} prediction', { name: predictionSetup.name }) as string,
             periodType,
-            fromDate: periodType ? predictionSetup.startPeriod ?? undefined : undefined,
+            fromPeriodId: periodType ? predictionSetup.startPeriod ?? undefined : undefined,
             orgUnits: predictionSetup.orgUnits,
             modelId: predictionSetup.configuredModel?.id != null
                 ? String(predictionSetup.configuredModel.id)

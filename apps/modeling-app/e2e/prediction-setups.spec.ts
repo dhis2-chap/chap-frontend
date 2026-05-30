@@ -4,6 +4,7 @@ import {
     createCompletedNaiveEvaluation,
     readJson,
 } from './helpers/evaluation-fixtures';
+import { selectPeriod } from './helpers/period-picker';
 
 test.setTimeout(240_000);
 
@@ -58,9 +59,7 @@ test.describe.serial('prediction setup', () => {
         await expect(page.getByRole('heading', { name: 'Run prediction' })).toBeVisible();
 
         await page.locator('[data-test="prediction-name-input"] input').fill(predictionName);
-        await page.locator('[data-test="prediction-absolute-period-input"]').fill(
-            `${latestEvaluationPeriod.slice(0, 4)}-${latestEvaluationPeriod.slice(4, 6)}`,
-        );
+        await selectPeriod(page, 'prediction-absolute-period-input', latestEvaluationPeriod);
 
         const runPredictionResponse = page.waitForResponse(response =>
             response.request().method() === 'POST' &&

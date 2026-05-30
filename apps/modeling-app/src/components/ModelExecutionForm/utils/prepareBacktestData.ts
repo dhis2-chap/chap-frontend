@@ -1,18 +1,28 @@
 import { QueryClient } from '@tanstack/react-query';
 import i18n from '@dhis2/d2-i18n';
 import { ModelExecutionFormValues } from '../hooks/useModelExecutionFormState';
-import { PERIOD_TYPES, toDHIS2PeriodData } from '@dhis2-chap/core';
+import { getPeriodsInRange, PERIOD_TYPES, toDhis2FixedPeriodType } from '@dhis2-chap/core';
 import { DataSource, ModelSpecRead, ObservationBase } from '@dhis2-chap/ui';
 import { useDataEngine } from '@dhis2/app-runtime';
 import { AnalyticsResponse, OrgUnitResponse, fetchAnalytics, ORG_UNITS_QUERY } from './queryUtils';
 import { generateBacktestDataHash } from './hashUtils';
+import { type Dhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
 
-const calculatePeriods = (periodType: keyof typeof PERIOD_TYPES, fromDate: string, toDate: string): string[] => {
-    const selectedPeriodType = PERIOD_TYPES[periodType];
+const calculatePeriods = (
+    periodType: keyof typeof PERIOD_TYPES,
+    fromPeriodId: string,
+    toPeriodId: string,
+    periodSettings: Dhis2PeriodSettings,
+): string[] => {
+    const selectedPeriodType = toDhis2FixedPeriodType(periodType);
     if (!selectedPeriodType) return [];
 
-    const dateRange = toDHIS2PeriodData(fromDate, toDate, selectedPeriodType);
-    return dateRange.map(period => period.id);
+    return getPeriodsInRange({
+        startPeriodId: fromPeriodId,
+        endPeriodId: toPeriodId,
+        calendar: periodSettings.calendar,
+        locale: periodSettings.locale,
+    }).map(period => period.id);
 };
 
 export type PreparedBacktestData = {
@@ -29,6 +39,7 @@ export const prepareBacktestData = async (
     formData: ModelExecutionFormValues,
     dataEngine: ReturnType<typeof useDataEngine>,
     queryClient: QueryClient,
+    periodSettings: Dhis2PeriodSettings,
 ): Promise<PreparedBacktestData> => {
     const model = queryClient.getQueryData<ModelSpecRead[]>(['models'])
         ?.find(model => model.id === Number(formData.modelId));
@@ -41,8 +52,9 @@ export const prepareBacktestData = async (
 
     const periods = calculatePeriods(
         formData.periodType,
-        formData.fromDate,
-        formData.toDate,
+        formData.fromPeriodId,
+        formData.toPeriodId,
+        periodSettings,
     );
 
     const dataItems = [

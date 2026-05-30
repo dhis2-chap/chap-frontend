@@ -19,15 +19,18 @@ import { InspectDatasetModal } from '../../../InspectDatasetModal';
 import { PERIOD_TYPES } from '@dhis2-chap/core';
 import { useInstalledDVVersion } from '../../../../utils/useInstalledDVVersion';
 import { ConditionalTooltip } from '../../../ConditionalTooltip';
+import { type Dhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
 
 type Props = {
     control: Control<ModelExecutionFormValues>;
     errors: FieldErrors<ModelExecutionFormValues>;
+    periodSettings: Dhis2PeriodSettings;
 };
 
 export const DatasetConfiguration = ({
     control,
     errors,
+    periodSettings,
 }: Props) => {
     const [isDataMappingModalOpen, setIsDataMappingModalOpen] = useState(false);
     const [isInspectDatasetModalOpen, setIsInspectDatasetModalOpen] = useState(false);
@@ -119,8 +122,9 @@ export const DatasetConfiguration = ({
                     onClose={() => setIsInspectDatasetModalOpen(false)}
                     selectedOrgUnits={methods.getValues('orgUnits') as OrganisationUnit[]}
                     periodType={methods.getValues('periodType') as keyof typeof PERIOD_TYPES}
-                    fromDate={methods.getValues('fromDate') as string}
-                    toDate={methods.getValues('toDate') as string}
+                    fromPeriodId={methods.getValues('fromPeriodId') as string}
+                    toPeriodId={methods.getValues('toPeriodId') as string}
+                    periodSettings={periodSettings}
                     covariateMappings={methods.getValues('covariateMappings') as CovariateMapping[]}
                     targetMapping={methods.getValues('targetMapping') as CovariateMapping}
                 />
