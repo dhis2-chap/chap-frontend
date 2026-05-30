@@ -157,6 +157,10 @@ export const ModelSelectionModal = ({
 
         return sortedModels.filter((model) => {
             const normalizedPeriodType = normalizePeriodType(model.supportedPeriodType);
+            if (!normalizedPeriodType) {
+                return false;
+            }
+
             const matchesSearch = (
                 !query
                 || getModelName(model).toLowerCase().includes(query)
