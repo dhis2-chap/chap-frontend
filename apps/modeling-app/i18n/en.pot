@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-05-29T22:34:32.324Z\n"
-"PO-Revision-Date: 2026-05-29T22:34:32.325Z\n"
+"POT-Creation-Date: 2026-05-30T19:01:31.856Z\n"
+"PO-Revision-Date: 2026-05-30T19:01:31.859Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -164,23 +164,23 @@ msgstr "Configure settings"
 msgid "Until {{date}}"
 msgstr "Until {{date}}"
 
-msgid "Date"
-msgstr "Date"
-
 msgid "Previous month"
 msgstr "Previous month"
 
 msgid "Next month"
 msgstr "Next month"
 
-msgid "Clear date range"
-msgstr "Clear date range"
-
 msgid "Select date range"
 msgstr "Select date range"
 
 msgid "Done"
 msgstr "Done"
+
+msgid "Date"
+msgstr "Date"
+
+msgid "Clear date range"
+msgstr "Clear date range"
 
 msgid "Oops!"
 msgstr "Oops!"
@@ -422,14 +422,23 @@ msgstr "Any period"
 msgid "Search models"
 msgstr "Search models"
 
+msgid "Period"
+msgstr "Period"
+
 msgid "All period types"
 msgstr "All period types"
 
 msgid "Clear statuses"
 msgstr "Clear statuses"
 
+msgid "Covariates"
+msgstr "Covariates"
+
 msgid "None"
 msgstr "None"
+
+msgid "Author"
+msgstr "Author"
 
 msgid "Unknown"
 msgstr "Unknown"
@@ -463,9 +472,6 @@ msgstr "Feature"
 
 msgid "Org unit"
 msgstr "Org unit"
-
-msgid "Period"
-msgstr "Period"
 
 msgid "{{periods}} and {{count}} more"
 msgid_plural "{{periods}} and {{count}} more"
@@ -718,6 +724,9 @@ msgstr[1] "{{count}} jobs"
 msgid "Day"
 msgstr "Day"
 
+msgid "Jobs"
+msgstr "Jobs"
+
 msgid "Started"
 msgstr "Started"
 
@@ -738,6 +747,12 @@ msgstr "No activity yet. Run a prediction to see job status and logs here."
 
 msgid "Activity view"
 msgstr "Activity view"
+
+msgid "Chart"
+msgstr "Chart"
+
+msgid "Table"
+msgstr "Table"
 
 msgid "All statuses"
 msgstr "All statuses"
@@ -1031,12 +1046,6 @@ msgstr "Model archived"
 msgid "Failed to archive model"
 msgstr "Failed to archive model"
 
-msgid "Author"
-msgstr "Author"
-
-msgid "Covariates"
-msgstr "Covariates"
-
 msgid "No covariate names available"
 msgstr "No covariate names available"
 
@@ -1211,12 +1220,6 @@ msgstr "Prediction settings"
 
 msgid "Prediction result"
 msgstr "Prediction result"
-
-msgid "Chart"
-msgstr "Chart"
-
-msgid "Table"
-msgstr "Table"
 
 msgid "Map"
 msgstr "Map"
@@ -1435,9 +1438,6 @@ msgstr "Overview"
 
 msgid "Models"
 msgstr "Models"
-
-msgid "Jobs"
-msgstr "Jobs"
 
 msgid "Guides"
 msgstr "Guides"
@@ -1964,11 +1964,3 @@ msgstr ""
 msgctxt ") instead."
 msgid "Spaces are not allowed. Use dashes (-) or underscores ("
 msgstr "Spaces are not allowed. Use dashes (-) or underscores (_) instead."
-
-msgctxt "Application title"
-msgid "__MANIFEST_APP_TITLE"
-msgstr "Modeling"
-
-msgctxt "Application description"
-msgid "__MANIFEST_APP_DESCRIPTION"
-msgstr ""

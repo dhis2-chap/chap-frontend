@@ -1,5 +1,6 @@
 .stage {
-    inline-size: min(88vw, 1120px);
+    inline-size: 100%;
+    max-inline-size: 1120px;
 }
 
 .wrapper {
@@ -204,7 +205,7 @@
 
 @media (max-width: 760px) {
     .stage {
-        inline-size: min(88vw, 480px);
+        max-inline-size: 100%;
     }
 
     .wrapper {
