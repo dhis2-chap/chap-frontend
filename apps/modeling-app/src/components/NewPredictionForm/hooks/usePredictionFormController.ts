@@ -45,7 +45,6 @@ export const usePredictionFormController = ({
 
     const { methods } = useNewPredictionFormState({
         name: initialValues.name ?? '',
-        periodType,
         fromPeriod,
         anchorPeriod,
         periodSettings,

@@ -3,13 +3,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import i18n from '@dhis2/d2-i18n';
-import {
-    comparePeriodIds,
-    PERIOD_TYPES,
-} from '@dhis2-chap/core';
-import {
-    SupportedPeriodType,
-} from '../utils/predictionPeriods';
+import { comparePeriodIds } from '@dhis2-chap/core';
 import { type Dhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
 
 export type NewPredictionFormValues = {
@@ -18,7 +12,6 @@ export type NewPredictionFormValues = {
 };
 
 type SchemaContext = {
-    periodType: SupportedPeriodType;
     fromPeriod: string;
     anchorPeriod: string;
     periodSettings: Dhis2PeriodSettings;
@@ -85,7 +78,6 @@ const createNewPredictionFormSchema = ({
 
 type UseNewPredictionFormStateOptions = {
     name: string;
-    periodType: SupportedPeriodType;
     fromPeriod: string;
     anchorPeriod: string;
     periodSettings: Dhis2PeriodSettings;
@@ -93,14 +85,13 @@ type UseNewPredictionFormStateOptions = {
 
 export const useNewPredictionFormState = ({
     name,
-    periodType,
     fromPeriod,
     anchorPeriod,
     periodSettings,
 }: UseNewPredictionFormStateOptions) => {
     const schema = useMemo(
-        () => createNewPredictionFormSchema({ periodType, fromPeriod, anchorPeriod, periodSettings }),
-        [periodType, fromPeriod, anchorPeriod, periodSettings],
+        () => createNewPredictionFormSchema({ fromPeriod, anchorPeriod, periodSettings }),
+        [fromPeriod, anchorPeriod, periodSettings],
     );
 
     const methods = useForm<NewPredictionFormValues>({
@@ -114,5 +105,3 @@ export const useNewPredictionFormState = ({
 
     return { methods };
 };
-
-export const PERIOD_TYPE_FALLBACK = PERIOD_TYPES.MONTH;
