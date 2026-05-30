@@ -1,0 +1,22 @@
+.container {
+  display: flex;
+  gap: 1rem;
+  margin-block-start: 1rem;
+}
+
+.field {
+  flex: 1;
+  min-inline-size: 0;
+}
+
+.errorText {
+  color: var(--colors-red700);
+  font-size: 0.875rem;
+  margin-block-start: 4px;
+}
+
+@media (max-width: 640px) {
+  .container {
+    flex-direction: column;
+  }
+}

@@ -24,7 +24,23 @@ const getMonthValueWithOffset = (offset: number): string => {
     date.setMonth(date.getMonth() + offset);
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
-    return `${year}-${month}`;
+    return `${year}${month}`;
+};
+
+const openPeriodPickerAtYear = async (page: Page, triggerDataTest: string, periodId: string) => {
+    await page.locator(`[data-test="${triggerDataTest}"]`).click();
+
+    const targetYear = Number(periodId.slice(0, 4));
+    const visibleYear = page.locator(`[data-test="${triggerDataTest}-visible-year"]`);
+
+    await visibleYear.selectOption(String(targetYear));
+    await expect(visibleYear).toHaveValue(String(targetYear));
+};
+
+const selectPeriod = async (page: Page, triggerDataTest: string, periodId: string) => {
+    await openPeriodPickerAtYear(page, triggerDataTest, periodId);
+
+    await page.locator(`[data-test="${triggerDataTest}-option-${periodId}"]`).click();
 };
 
 const isBacktestCreateRequest = (url: string, method: string): boolean => {
@@ -146,8 +162,8 @@ const mapRequiredDataSources = async (page: Page) => {
 };
 
 type PrepareValidFormDataOptions = {
-    fromDate?: string;
-    toDate?: string;
+    fromPeriodId?: string;
+    toPeriodId?: string;
 };
 
 const prepareValidFormData = async (
@@ -155,20 +171,20 @@ const prepareValidFormData = async (
     name: string,
     options: PrepareValidFormDataOptions = {},
 ) => {
+    const twoMonthsAgo = getMonthValueWithOffset(-2);
     const previousMonth = getMonthValueWithOffset(-1);
-    const currentMonth = getMonthValueWithOffset(0);
     const nextMonth = getMonthValueWithOffset(1);
-    const fromDate = options.fromDate ?? previousMonth;
-    const toDate = options.toDate ?? currentMonth;
+    const fromPeriodId = options.fromPeriodId ?? twoMonthsAgo;
+    const toPeriodId = options.toPeriodId ?? previousMonth;
 
     await page.locator('[data-test="evaluation-name-input"] input').fill(name);
-    await page.locator('[data-test="evaluation-from-date-input"]').fill(fromDate);
-    await page.locator('[data-test="evaluation-to-date-input"]').fill(toDate);
+    await selectPeriod(page, 'evaluation-from-period-input', fromPeriodId);
+    await selectPeriod(page, 'evaluation-to-period-input', toPeriodId);
     await selectOrgUnitLevel(page);
     await selectKnownModel(page);
     await mapRequiredDataSources(page);
 
-    return { previousMonth, currentMonth, nextMonth, fromDate, toDate };
+    return { twoMonthsAgo, previousMonth, nextMonth, fromPeriodId, toPeriodId };
 };
 
 test('validates period rules with invalid values', async ({ page }) => {
@@ -184,21 +200,22 @@ test('validates period rules with invalid values', async ({ page }) => {
     });
 
     await page.goto(newEvaluationUrl);
-    const { previousMonth, currentMonth, nextMonth } = await prepareValidFormData(
+    const { twoMonthsAgo, previousMonth, nextMonth } = await prepareValidFormData(
         page,
         'Validation check',
     );
 
-    await page.locator('[data-test="evaluation-from-date-input"]').fill(currentMonth);
-    await page.locator('[data-test="evaluation-to-date-input"]').fill(previousMonth);
+    await selectPeriod(page, 'evaluation-from-period-input', previousMonth);
+    await selectPeriod(page, 'evaluation-to-period-input', twoMonthsAgo);
     await page.getByRole('button', { name: 'Start dry run' }).click();
     await expect(page.getByText('End period must be after start period')).toBeVisible();
     await expect(backtestCreateRequestCount).toBe(0);
 
-    await page.locator('[data-test="evaluation-from-date-input"]').fill(currentMonth);
-    await page.locator('[data-test="evaluation-to-date-input"]').fill(nextMonth);
-    await page.getByRole('button', { name: 'Start dry run' }).click();
-    await expect(page.getByText('End date cannot be in the future')).toBeVisible();
+    await selectPeriod(page, 'evaluation-from-period-input', twoMonthsAgo);
+    await selectPeriod(page, 'evaluation-to-period-input', previousMonth);
+    await openPeriodPickerAtYear(page, 'evaluation-to-period-input', nextMonth);
+    await expect(page.locator(`[data-test="evaluation-to-period-input-option-${nextMonth}"]`)).toBeDisabled();
+    await page.keyboard.press('Escape');
     await expect(backtestCreateRequestCount).toBe(0);
 });
 
@@ -231,8 +248,8 @@ test('submits valid data, navigates to jobs, and shows the created job', async (
     await page.goto(newEvaluationUrl);
 
     await prepareValidFormData(page, evaluationName, {
-        fromDate: '2020-01',
-        toDate: '2024-12',
+        fromPeriodId: '202001',
+        toPeriodId: '202412',
     });
 
     const createImportRequest = page.waitForRequest(request =>
@@ -266,8 +283,8 @@ test('submits valid data, navigates to jobs, and auto-updates the created job to
     await page.goto(newEvaluationUrl);
 
     await prepareValidFormData(page, evaluationName, {
-        fromDate: '2020-01',
-        toDate: '2024-12',
+        fromPeriodId: '202001',
+        toPeriodId: '202412',
     });
 
     const createImportRequest = page.waitForRequest(request =>

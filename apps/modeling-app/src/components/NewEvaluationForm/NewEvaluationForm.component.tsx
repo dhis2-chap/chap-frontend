@@ -37,6 +37,9 @@ export const NewEvaluationFormComponent = ({ initialValues }: NewEvaluationFormP
         closeSummaryModal,
         handleDryRun,
         isValidationLoading,
+        periodSettings,
+        periodSettingsLoading,
+        periodSettingsError,
     } = useEvaluationFormController(initialValues);
 
     const [splitButtonOpen, setSplitButtonOpen] = useState(false);
@@ -57,12 +60,16 @@ export const NewEvaluationFormComponent = ({ initialValues }: NewEvaluationFormP
                         <ModelExecutionFormFields
                             onSubmit={handleSubmit}
                             methods={methods}
+                            periodSettings={periodSettings}
+                            periodSettingsError={periodSettingsError}
+                            periodSettingsLoading={periodSettingsLoading}
                             actions={(
                                 <div className={styles.buttons}>
                                     <ButtonStrip end>
                                         <Button
                                             onClick={handleDryRun}
                                             loading={isValidationLoading}
+                                            disabled={!!periodSettingsError || periodSettingsLoading}
                                             primary
                                         >
                                             {i18n.t('Start dry run')}
@@ -71,7 +78,7 @@ export const NewEvaluationFormComponent = ({ initialValues }: NewEvaluationFormP
                                         <SplitButton
                                             onClick={handleStartJob}
                                             icon={<IconArrowRightMulti16 />}
-                                            disabled={isSubmitting || isValidationLoading}
+                                            disabled={isSubmitting || isValidationLoading || !!periodSettingsError || periodSettingsLoading}
                                             open={splitButtonOpen}
                                             onToggle={() => setSplitButtonOpen(prev => !prev)}
                                             component={(

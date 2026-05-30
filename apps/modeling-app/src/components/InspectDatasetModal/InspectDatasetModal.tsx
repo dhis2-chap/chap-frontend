@@ -2,16 +2,18 @@ import i18n from '@dhis2/d2-i18n';
 import { Modal, Button, ModalTitle, ModalContent, ButtonStrip, ModalActions } from '@dhis2/ui';
 import { VisualizationPlugin } from '../VisualizationPlugin';
 import { OrganisationUnit } from '../OrganisationUnitSelector';
-import { toDHIS2PeriodData, PERIOD_TYPES } from '@dhis2-chap/core';
+import { getPeriodIdsInRange, PERIOD_TYPES, toDhis2FixedPeriodType } from '@dhis2-chap/core';
 import { useConfig } from '@dhis2/app-runtime';
 import { CovariateMapping } from '../ModelExecutionForm/hooks/useModelExecutionFormState';
+import { type Dhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
 
 type Props = {
     onClose: () => void;
     selectedOrgUnits: OrganisationUnit[];
     periodType: keyof typeof PERIOD_TYPES;
-    fromDate: string;
-    toDate: string;
+    fromPeriodId: string;
+    toPeriodId: string;
+    periodSettings: Dhis2PeriodSettings;
     covariateMappings: CovariateMapping[];
     targetMapping: CovariateMapping;
 };
@@ -20,21 +22,26 @@ export const InspectDatasetModal = ({
     onClose,
     selectedOrgUnits,
     periodType,
-    fromDate,
-    toDate,
+    fromPeriodId,
+    toPeriodId,
+    periodSettings,
     covariateMappings,
     targetMapping,
 }: Props) => {
     const { baseUrl } = useConfig();
 
     const calculatePeriods = () => {
-        const selectedPeriodType = PERIOD_TYPES[periodType];
-        if (!selectedPeriodType) return [];
+        const selectedPeriodType = toDhis2FixedPeriodType(periodType);
+        if (!selectedPeriodType) {
+            return [];
+        }
 
-        const dateRange = toDHIS2PeriodData(fromDate, toDate, selectedPeriodType);
-        return dateRange.map(period => ({
-            id: period.id,
-        }));
+        return getPeriodIdsInRange({
+            startPeriodId: fromPeriodId,
+            endPeriodId: toPeriodId,
+            calendar: periodSettings.calendar,
+            locale: periodSettings.locale,
+        }).map(id => ({ id }));
     };
 
     const calculateDataDimensions = () => {

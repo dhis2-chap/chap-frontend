@@ -6,12 +6,14 @@ import {
     useNewPredictionFormState,
 } from './useNewPredictionFormState';
 import {
-    getLastCompletedPeriod,
-    inputValueToPeriod,
+    getLastCompletedPeriodId,
+    toDhis2FixedPeriodType,
+} from '@dhis2-chap/core';
+import {
     isSupportedPeriodType,
-    periodToInputValue,
     type SupportedPeriodType,
 } from '../utils/predictionPeriods';
+import { type Dhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
 
 type ReadyPredictionFormContext = {
     periodType: SupportedPeriodType;
@@ -23,22 +25,20 @@ type ReadyPredictionFormContext = {
 type UsePredictionFormControllerOptions = {
     predictionSetupId: number;
     context: ReadyPredictionFormContext;
+    periodSettings: Dhis2PeriodSettings;
     returnTo?: string;
 };
 
 const resolveSelectedPeriod = (
     values: NewPredictionFormValues,
-    periodType: SupportedPeriodType,
 ): string | null => {
-    if (!values.absoluteValue) {
-        return null;
-    }
-    return inputValueToPeriod(values.absoluteValue, periodType);
+    return values.periodId || null;
 };
 
 export const usePredictionFormController = ({
     predictionSetupId,
     context,
+    periodSettings,
     returnTo,
 }: UsePredictionFormControllerOptions) => {
     const { periodType, fromPeriod, anchorPeriod, initialValues } = context;
@@ -48,6 +48,7 @@ export const usePredictionFormController = ({
         periodType,
         fromPeriod,
         anchorPeriod,
+        periodSettings,
     });
 
     const {
@@ -56,6 +57,7 @@ export const usePredictionFormController = ({
         error,
     } = useCreatePrediction({
         predictionSetupId,
+        periodSettings,
         returnTo,
         onSuccess: () => {
             methods.reset();
@@ -63,18 +65,16 @@ export const usePredictionFormController = ({
     });
 
     const handleSubmit = (data: NewPredictionFormValues) => {
-        const resolvedPeriod = resolveSelectedPeriod(data, periodType);
+        const resolvedPeriod = resolveSelectedPeriod(data);
         if (!resolvedPeriod) {
             return;
         }
 
-        const toDate = periodToInputValue(resolvedPeriod, periodType);
-
         const mergedValues: ModelExecutionFormValues = {
             name: data.name,
             periodType,
-            fromDate: initialValues.fromDate,
-            toDate,
+            fromPeriodId: initialValues.fromPeriodId,
+            toPeriodId: resolvedPeriod,
             orgUnits: initialValues.orgUnits,
             modelId: initialValues.modelId,
             covariateMappings: initialValues.covariateMappings,
@@ -103,28 +103,34 @@ export type { ReadyPredictionFormContext };
 
 export const buildReadyPredictionFormContext = (
     initialValues?: Partial<ModelExecutionFormValues>,
+    periodSettings?: Dhis2PeriodSettings,
 ): ReadyPredictionFormContext | null => {
     const periodType = initialValues?.periodType;
-    if (!isSupportedPeriodType(periodType) || !initialValues?.fromDate || !initialValues.targetMapping) {
+    if (!isSupportedPeriodType(periodType) || !initialValues?.fromPeriodId || !initialValues.targetMapping) {
         return null;
     }
 
-    const fromPeriod = inputValueToPeriod(initialValues.fromDate, periodType);
-    if (!fromPeriod) {
+    const dhis2PeriodType = toDhis2FixedPeriodType(periodType);
+    if (!dhis2PeriodType || !periodSettings) {
         return null;
     }
 
-    const anchorPeriod = getLastCompletedPeriod(periodType);
+    const anchorPeriod = getLastCompletedPeriodId({
+        periodType: dhis2PeriodType,
+        calendar: periodSettings.calendar,
+        locale: periodSettings.locale,
+        timeZone: periodSettings.timeZone,
+    });
 
     return {
         periodType,
-        fromPeriod,
+        fromPeriod: initialValues.fromPeriodId,
         anchorPeriod,
         initialValues: {
             name: initialValues.name ?? '',
             periodType,
-            fromDate: initialValues.fromDate,
-            toDate: initialValues.toDate ?? '',
+            fromPeriodId: initialValues.fromPeriodId,
+            toPeriodId: initialValues.toPeriodId ?? '',
             orgUnits: initialValues.orgUnits ?? [],
             modelId: initialValues.modelId ?? '',
             covariateMappings: initialValues.covariateMappings ?? [],
@@ -135,7 +141,8 @@ export const buildReadyPredictionFormContext = (
 
 export const useReadyPredictionFormContext = (
     initialValues?: Partial<ModelExecutionFormValues>,
+    periodSettings?: Dhis2PeriodSettings,
 ) => useMemo(
-    () => buildReadyPredictionFormContext(initialValues),
-    [initialValues],
+    () => buildReadyPredictionFormContext(initialValues, periodSettings),
+    [initialValues, periodSettings],
 );
