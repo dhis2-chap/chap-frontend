@@ -32,16 +32,20 @@ export const InspectDatasetModal = ({
 
     const calculatePeriods = () => {
         const selectedPeriodType = toDhis2FixedPeriodType(periodType);
-        if (!selectedPeriodType) {
+        if (!selectedPeriodType || !fromPeriodId || !toPeriodId) {
             return [];
         }
 
-        return getPeriodsInRange({
-            startPeriodId: fromPeriodId,
-            endPeriodId: toPeriodId,
-            calendar: periodSettings.calendar,
-            locale: periodSettings.locale,
-        }).map(period => ({ id: period.id }));
+        try {
+            return getPeriodsInRange({
+                startPeriodId: fromPeriodId,
+                endPeriodId: toPeriodId,
+                calendar: periodSettings.calendar,
+                locale: periodSettings.locale,
+            }).map(period => ({ id: period.id }));
+        } catch {
+            return [];
+        }
     };
 
     const calculateDataDimensions = () => {
