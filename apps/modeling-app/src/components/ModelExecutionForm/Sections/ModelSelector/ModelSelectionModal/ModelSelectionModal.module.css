@@ -1,11 +1,13 @@
 .stage {
-    inline-size: 100%;
-    max-inline-size: 1120px;
+    box-sizing: border-box;
+    inline-size: min(1120px, calc(100vw - 64px));
+    max-inline-size: 100%;
 }
 
 .wrapper {
     display: grid;
-    grid-template-columns: 320px minmax(0, 1fr);
+    grid-template-columns: minmax(280px, 320px) minmax(0, 1fr);
+    inline-size: 100%;
     min-block-size: 460px;
 }
 
@@ -14,6 +16,7 @@
     display: flex;
     flex-direction: column;
     min-block-size: 0;
+    min-inline-size: 0;
 }
 
 .controls {
@@ -22,12 +25,24 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
+    min-inline-size: 0;
+}
+
+.controls > * {
+    max-inline-size: 100%;
+    min-inline-size: 0;
 }
 
 .filters {
     display: grid;
     grid-template-columns: 1fr;
     gap: 6px;
+    min-inline-size: 0;
+}
+
+.filters > * {
+    max-inline-size: 100%;
+    min-inline-size: 0;
 }
 
 .list {
@@ -44,6 +59,7 @@
     align-items: center;
     gap: 8px;
     inline-size: 100%;
+    min-inline-size: 0;
     min-block-size: 36px;
     padding: 8px 14px;
     border: none;
@@ -106,6 +122,11 @@
     align-items: center;
     justify-content: space-between;
     gap: 12px;
+    min-inline-size: 0;
+}
+
+.detailHeader > div {
+    min-inline-size: 0;
 }
 
 .detailName {
@@ -114,12 +135,14 @@
     font-weight: 700;
     line-height: 22px;
     color: #212934;
+    overflow-wrap: anywhere;
 }
 
 .readinessPill {
     display: inline-flex;
     align-items: center;
     gap: 6px;
+    max-inline-size: 100%;
     color: var(--colors-grey700);
     font-size: 14px;
     font-weight: 400;
@@ -139,20 +162,23 @@
     font-size: 13px;
     line-height: 1.45;
     color: #4a5768;
+    overflow-wrap: anywhere;
 }
 
 .specs {
     margin: 0;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 22px 56px;
     padding-block-start: 2px;
+    min-inline-size: 0;
 }
 
 .spec {
     display: flex;
     flex-direction: column;
     gap: 2px;
+    min-inline-size: 0;
 }
 
 .spec dt {
@@ -176,6 +202,7 @@
     font-size: 14px;
     font-weight: 400;
     line-height: 20px;
+    overflow-wrap: anywhere;
 }
 
 .authorNote {
@@ -183,6 +210,7 @@
     font-size: 12px;
     line-height: 1.4;
     color: #4a5768;
+    overflow-wrap: anywhere;
 }
 
 .authorNoteLabel {
@@ -205,6 +233,7 @@
 
 @media (max-width: 760px) {
     .stage {
+        inline-size: 100%;
         max-inline-size: 100%;
     }
 
