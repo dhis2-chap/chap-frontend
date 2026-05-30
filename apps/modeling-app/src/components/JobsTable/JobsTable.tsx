@@ -31,6 +31,11 @@ import { JobActionsMenu } from './JobActionsMenu/JobActionsMenu';
 import { JOB_STATUSES } from '../../hooks/useJobs';
 import { useJobsTableFilters } from './hooks/useJobsTableFilters';
 import { useTablePaginationParams } from '../../hooks/useTablePaginationParams';
+import {
+    hasDateRangeValue,
+    isJobInDateRange,
+    type DateRangeValue,
+} from '../../utils/jobDateRange';
 
 const columnHelper = createColumnHelper<JobDescription>();
 
@@ -64,6 +69,9 @@ const columns = [
     }),
     columnHelper.accessor('start_time', {
         header: i18n.t('Start date'),
+        filterFn: (row, _columnId, filterValue) => (
+            isJobInDateRange(row.original, filterValue as DateRangeValue)
+        ),
         cell: (info) => {
             const value = info.getValue();
             return value ? format(new Date(value), 'dd-MM-yyyy hh:mm') : undefined;
@@ -124,7 +132,7 @@ type Props = {
 };
 
 export const JobsTable = ({ jobs, visibleFilters }: Props) => {
-    const { search, status, type } = useJobsTableFilters();
+    const { dateRange, search, status, type } = useJobsTableFilters();
     const { pageIndex, pageSize, setPageIndex, setPageSize } = useTablePaginationParams();
 
     const table = useReactTable({
@@ -139,6 +147,7 @@ export const JobsTable = ({ jobs, visibleFilters }: Props) => {
                 ...(search ? [{ id: 'name', value: search }] : []),
                 ...(status ? [{ id: 'status', value: status }] : []),
                 ...(type ? [{ id: 'type', value: type }] : []),
+                ...(hasDateRangeValue(dateRange) ? [{ id: 'start_time', value: dateRange }] : []),
             ],
             pagination: {
                 pageIndex,

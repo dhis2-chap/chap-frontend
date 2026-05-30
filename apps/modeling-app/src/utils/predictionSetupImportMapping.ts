@@ -10,6 +10,14 @@ export const QUANTILE_KEYS = [
 
 export type QuantileKey = typeof QUANTILE_KEYS[number];
 
+export const QUANTILE_SUGGESTED_KEYWORDS: Record<QuantileKey, string> = {
+    quantile_high: 'high',
+    quantile_mid_high: 'mid high',
+    median: 'median',
+    quantile_mid_low: 'mid low',
+    quantile_low: 'low',
+};
+
 export type PredictionSetupFormValues = {
     name: string;
     use_import_mapping: boolean;

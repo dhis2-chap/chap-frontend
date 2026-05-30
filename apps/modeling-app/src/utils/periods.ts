@@ -7,10 +7,7 @@ import {
     isValid,
     parse,
     startOfISOWeek,
-    startOfMonth,
-    subDays,
 } from 'date-fns';
-import { comparePeriods, convertServerToClientPeriod, PERIOD_TYPES } from '@dhis2-chap/core';
 import {
     isSupportedPeriodType,
     parseSupportedPeriodType,
@@ -29,7 +26,7 @@ const formatWeek = (date: Date, padWeek = true): string => {
     return `${isoYear}W${padWeek ? weekNumber.padStart(2, '0') : weekNumber}`;
 };
 
-export const parsePeriod = (
+const parsePeriod = (
     period: string,
     periodType: SupportedPeriodType,
 ): Date | null => {
@@ -46,34 +43,6 @@ export const parsePeriod = (
     const [, year, week] = weekMatch;
     const parsed = parse(`${year}-W${week.padStart(2, '0')}`, 'RRRR-\'W\'II', new Date());
     return isValid(parsed) ? parsed : null;
-};
-
-export const getLastCompletedPeriod = (
-    periodType: SupportedPeriodType,
-    now: Date = new Date(),
-): string => {
-    if (periodType === SUPPORTED_PERIOD_TYPES.MONTH) {
-        return formatMonth(subDays(startOfMonth(now), 1));
-    }
-
-    return formatWeek(subDays(startOfISOWeek(now), 1));
-};
-
-export const shiftPeriod = (
-    period: string,
-    periodType: SupportedPeriodType,
-    delta: number,
-): string | null => {
-    const parsed = parsePeriod(period, periodType);
-    if (!parsed) {
-        return null;
-    }
-
-    if (periodType === SUPPORTED_PERIOD_TYPES.MONTH) {
-        return formatMonth(addMonths(parsed, delta));
-    }
-
-    return formatWeek(addWeeks(startOfISOWeek(parsed), delta));
 };
 
 export const getNextPeriods = (
@@ -147,39 +116,3 @@ export const formatPeriodId = (periodId: string | undefined | null) => {
 
     return periodId;
 };
-
-export const periodToInputValue = (
-    period: string,
-    periodType: SupportedPeriodType,
-): string => convertServerToClientPeriod(period, periodType);
-
-export const inputValueToPeriod = (
-    value: string,
-    periodType: SupportedPeriodType,
-): string | null => {
-    if (!value) {
-        return null;
-    }
-
-    if (periodType === SUPPORTED_PERIOD_TYPES.MONTH) {
-        const parsed = parse(value, 'yyyy-MM', new Date());
-        return isValid(parsed) ? formatMonth(parsed) : null;
-    }
-
-    const parsed = parse(value, 'RRRR-\'W\'II', new Date());
-    return isValid(parsed) ? formatWeek(parsed) : null;
-};
-
-export const isPeriodBefore = (
-    a: string,
-    b: string,
-    periodType: SupportedPeriodType,
-): boolean => comparePeriods(a, b, periodType) < 0;
-
-export const isPeriodAfter = (
-    a: string,
-    b: string,
-    periodType: SupportedPeriodType,
-): boolean => comparePeriods(a, b, periodType) > 0;
-
-export const PERIOD_TYPE_FALLBACK = PERIOD_TYPES.MONTH;

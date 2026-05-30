@@ -9,6 +9,7 @@ import { prepareBacktestData } from '../../ModelExecutionForm/utils/prepareBackt
 import { ImportSummaryCorrected } from '../../ModelExecutionForm/types';
 import { getImportSummaryFromApiError } from '@/components/ModelExecutionForm/utils/importSummaryUtils';
 import { buildOrgUnitFeatureCollection } from '@/components/ModelExecutionForm/utils/orgUnitGeoJson';
+import { DEFAULT_PERIOD_SETTINGS, type Dhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
 
 const N_SPLITS = 10;
 
@@ -23,11 +24,13 @@ const N_STRIDES = {
 };
 
 type Props = {
+    periodSettings?: Dhis2PeriodSettings;
     onSuccess?: () => void;
     onError?: (error: ApiError) => void;
 };
 
 export const useCreateNewBacktest = ({
+    periodSettings = DEFAULT_PERIOD_SETTINGS,
     onSuccess,
     onError,
 }: Props = {}) => {
@@ -43,6 +46,7 @@ export const useCreateNewBacktest = ({
             formData,
             dataEngine,
             queryClient,
+            periodSettings,
         );
 
         const filteredGeoJson: FeatureCollectionModel = buildOrgUnitFeatureCollection(

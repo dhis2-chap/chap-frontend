@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-05-29T07:35:17.361Z\n"
-"PO-Revision-Date: 2026-05-29T07:35:17.361Z\n"
+"POT-Creation-Date: 2026-05-30T21:37:07.898Z\n"
+"PO-Revision-Date: 2026-05-30T21:37:07.898Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -161,6 +161,27 @@ msgstr "Learn more about Modeling and CHAP"
 msgid "Configure settings"
 msgstr "Configure settings"
 
+msgid "Until {{date}}"
+msgstr "Until {{date}}"
+
+msgid "Previous month"
+msgstr "Previous month"
+
+msgid "Next month"
+msgstr "Next month"
+
+msgid "Select date range"
+msgstr "Select date range"
+
+msgid "Done"
+msgstr "Done"
+
+msgid "Date"
+msgstr "Date"
+
+msgid "Clear date range"
+msgstr "Clear date range"
+
 msgid "Oops!"
 msgstr "Oops!"
 
@@ -260,12 +281,6 @@ msgstr "Create evaluation"
 msgid "Make prediction"
 msgstr "Make prediction"
 
-msgid "Create dataset (deprecated)"
-msgstr "Create dataset (deprecated)"
-
-msgid "Create evaluation (deprecated)"
-msgstr "Create evaluation (deprecated)"
-
 msgid "Create evaluation (Legacy)"
 msgstr "Create evaluation (Legacy)"
 
@@ -343,6 +358,40 @@ msgstr "All org units must be at the same level"
 msgid "Confirm Selection"
 msgstr "Confirm Selection"
 
+msgid "Production"
+msgstr "Production"
+
+msgid "Approved for general use."
+msgstr "Approved for general use."
+
+msgid "Testing"
+msgstr "Testing"
+
+msgid "Prepared for more extensive testing; not yet approved for production."
+msgstr "Prepared for more extensive testing; not yet approved for production."
+
+msgid "Limited"
+msgstr "Limited"
+
+msgid "Tested on a small dataset. Requires manual tuning and close monitoring."
+msgstr "Tested on a small dataset. Requires manual tuning and close monitoring."
+
+msgid "Experimental"
+msgstr "Experimental"
+
+msgid ""
+"An early prototype with no formal validation - only for initial "
+"experimentation."
+msgstr ""
+"An early prototype with no formal validation - only for initial "
+"experimentation."
+
+msgid "Deprecated"
+msgstr "Deprecated"
+
+msgid "This model is not intended for use or has been deprecated."
+msgstr "This model is not intended for use or has been deprecated."
+
 msgid "Monthly"
 msgstr "Monthly"
 
@@ -355,47 +404,32 @@ msgstr "Weekly"
 msgid "Daily"
 msgstr "Daily"
 
-msgid "Any"
-msgstr "Any"
+msgid "Any period"
+msgstr "Any period"
 
-msgid "Deprecated"
-msgstr "Deprecated"
+msgid "Select Model"
+msgstr "Select Model"
 
-msgid "This model is not intended for use or has been deprecated."
-msgstr "This model is not intended for use or has been deprecated."
+msgid "Search models"
+msgstr "Search models"
 
-msgid "Experimental"
-msgstr "Experimental"
+msgid "Clear statuses"
+msgstr "Clear statuses"
 
-msgid ""
-"An early prototype with no formal validation - only for initial "
-"experimentation."
-msgstr ""
-"An early prototype with no formal validation - only for initial "
-"experimentation."
+msgid "Period"
+msgstr "Period"
 
-msgid "Limited"
-msgstr "Limited"
+msgid "Covariates"
+msgstr "Covariates"
 
-msgid "Tested on a small dataset. Requires manual tuning and close monitoring."
-msgstr "Tested on a small dataset. Requires manual tuning and close monitoring."
+msgid "None"
+msgstr "None"
 
-msgid "Testing"
-msgstr "Testing"
+msgid "Author"
+msgstr "Author"
 
-msgid "Prepared for more extensive testing; not yet approved for production."
-msgstr "Prepared for more extensive testing; not yet approved for production."
-
-msgid "Production"
-msgstr "Production"
-
-msgid "Approved for general use."
-msgstr "Approved for general use."
-
-msgid "{{count}} covariates"
-msgid_plural "{{count}} covariates"
-msgstr[0] "{{count}} covariate"
-msgstr[1] "{{count}} covariates"
+msgid "Unknown"
+msgstr "Unknown"
 
 msgid "Author note"
 msgstr "Author note"
@@ -403,17 +437,11 @@ msgstr "Author note"
 msgid "Selected"
 msgstr "Selected"
 
-msgid "Select Model"
-msgstr "Select Model"
+msgid "Use this model"
+msgstr "Use this model"
 
-msgid "Search by title"
-msgstr "Search by title"
-
-msgid "Period Type"
-msgstr "Period Type"
-
-msgid "Assessment Status"
-msgstr "Assessment Status"
+msgid "Select a model to see details"
+msgstr "Select a model to see details"
 
 msgid "Select model"
 msgstr "Select model"
@@ -421,11 +449,14 @@ msgstr "Select model"
 msgid "EWARS Evaluation 22-24"
 msgstr "EWARS Evaluation 22-24"
 
-msgid "From period"
-msgstr "From period"
+msgid "End period must be after start period"
+msgstr "End period must be after start period"
 
-msgid "To period"
-msgstr "To period"
+msgid "Invalid period"
+msgstr "Invalid period"
+
+msgid "Period selection is unavailable"
+msgstr "Period selection is unavailable"
 
 msgid "Reason"
 msgstr "Reason"
@@ -435,9 +466,6 @@ msgstr "Feature"
 
 msgid "Org unit"
 msgstr "Org unit"
-
-msgid "Period"
-msgstr "Period"
 
 msgid "{{periods}} and {{count}} more"
 msgid_plural "{{periods}} and {{count}} more"
@@ -509,14 +537,11 @@ msgstr "Missing id for org unit"
 msgid "Period type is required"
 msgstr "Period type is required"
 
-msgid "Start date is required"
-msgstr "Start date is required"
+msgid "Start period is required"
+msgstr "Start period is required"
 
-msgid "End date is required"
-msgstr "End date is required"
-
-msgid "End date cannot be in the future"
-msgstr "End date cannot be in the future"
+msgid "End period is required"
+msgstr "End period is required"
 
 msgid "At least one org unit is required"
 msgstr "At least one org unit is required"
@@ -530,8 +555,8 @@ msgstr "Please map the covariates to valid data items"
 msgid "Please map the target to a valid data item"
 msgstr "Please map the target to a valid data item"
 
-msgid "End period must be after start period"
-msgstr "End period must be after start period"
+msgid "End period cannot be in the future"
+msgstr "End period cannot be in the future"
 
 msgid "Model not found"
 msgstr "Model not found"
@@ -579,6 +604,12 @@ msgstr "Prediction run name"
 msgid "Run prediction"
 msgstr "Run prediction"
 
+msgid "Loading period settings"
+msgstr "Loading period settings"
+
+msgid "Preparing period selection."
+msgstr "Preparing period selection."
+
 msgid ""
 "Missing prediction setup details. Open the setup configuration and ensure "
 "model, period type, training start, and data mappings are configured."
@@ -586,17 +617,14 @@ msgstr ""
 "Missing prediction setup details. Open the setup configuration and ensure "
 "model, period type, training start, and data mappings are configured."
 
-msgid "Offset"
-msgstr "Offset"
+msgid "Training period"
+msgstr "Training period"
 
-msgid "Absolute"
-msgstr "Absolute"
+msgid "Training start period"
+msgstr "Training start period"
 
 msgid "Last training period"
 msgstr "Last training period"
-
-msgid "periods back from {{anchor}}"
-msgstr "periods back from {{anchor}}"
 
 msgid "Unknown model"
 msgstr "Unknown model"
@@ -607,23 +635,8 @@ msgstr "Run a new prediction"
 msgid "Training start"
 msgstr "Training start"
 
-msgid "Enter an offset (0 or negative)"
-msgstr "Enter an offset (0 or negative)"
-
-msgid "Offset must be 0 or negative"
-msgstr "Offset must be 0 or negative"
-
-msgid "Invalid offset"
-msgstr "Invalid offset"
-
-msgid "Resolved period is before training start"
-msgstr "Resolved period is before training start"
-
 msgid "Please select a period"
 msgstr "Please select a period"
-
-msgid "Invalid period"
-msgstr "Invalid period"
 
 msgid "Period must be completed (cannot be later than last completed period)"
 msgstr "Period must be completed (cannot be later than last completed period)"
@@ -685,6 +698,29 @@ msgstr "No organisation units match your search"
 msgid "You cannot select more than {{max}} organisation units at a time"
 msgstr "You cannot select more than {{max}} organisation units at a time"
 
+msgid "Last 7 days"
+msgstr "Last 7 days"
+
+msgid "Last 14 days"
+msgstr "Last 14 days"
+
+msgid "Last 30 days"
+msgstr "Last 30 days"
+
+msgid "Last 90 days"
+msgstr "Last 90 days"
+
+msgid "{{count}} job"
+msgid_plural "{{count}} job"
+msgstr[0] "{{count}} job"
+msgstr[1] "{{count}} jobs"
+
+msgid "Day"
+msgstr "Day"
+
+msgid "Jobs"
+msgstr "Jobs"
+
 msgid "Started"
 msgstr "Started"
 
@@ -703,14 +739,23 @@ msgstr "Invalid prediction setup"
 msgid "No activity yet. Run a prediction to see job status and logs here."
 msgstr "No activity yet. Run a prediction to see job status and logs here."
 
+msgid "Activity view"
+msgstr "Activity view"
+
+msgid "Chart"
+msgstr "Chart"
+
+msgid "Table"
+msgstr "Table"
+
 msgid "All statuses"
 msgstr "All statuses"
 
 msgid "View all activity"
 msgstr "View all activity"
 
-msgid "No activity matches the selected status"
-msgstr "No activity matches the selected status"
+msgid "No activity matches the selected filters"
+msgstr "No activity matches the selected filters"
 
 msgid "Delete prediction run"
 msgstr "Delete prediction run"
@@ -906,9 +951,6 @@ msgstr ""
 "The model used to run this evaluation has been updated. You can still view "
 "the results of the run, but the metadata may not be accurate."
 
-msgid "Training period"
-msgstr "Training period"
-
 msgid "{{count}} locations"
 msgid_plural "{{count}} locations"
 msgstr[0] "{{count}} location"
@@ -995,6 +1037,9 @@ msgstr "View info"
 msgid "View evaluations"
 msgstr "View evaluations"
 
+msgid "Any"
+msgstr "Any"
+
 msgid "True"
 msgstr "True"
 
@@ -1021,9 +1066,6 @@ msgstr "Configuration name"
 
 msgid "Configured model ID"
 msgstr "Configured model ID"
-
-msgid "Author"
-msgstr "Author"
 
 msgid "Organization"
 msgstr "Organization"
@@ -1067,20 +1109,11 @@ msgstr "Min prediction length"
 msgid "Max prediction length"
 msgstr "Max prediction length"
 
-msgid "Source"
-msgstr "Source"
-
 msgid "Documentation"
 msgstr "Documentation"
 
-msgid "Covariates"
-msgstr "Covariates"
-
 msgid "Required"
 msgstr "Required"
-
-msgid "None"
-msgstr "None"
 
 msgid "Additional"
 msgstr "Additional"
@@ -1253,26 +1286,14 @@ msgstr "Alert periods"
 msgid "Thresholds unavailable"
 msgstr "Thresholds unavailable"
 
-msgid "Prediction target"
-msgstr "Prediction target"
+msgid "Prediction run"
+msgstr "Prediction run"
 
 msgid "Outbreak thresholds"
 msgstr "Outbreak thresholds"
 
 msgid "Show outbreak status and threshold overlays for this run."
 msgstr "Show outbreak status and threshold overlays for this run."
-
-msgid "Enabled"
-msgstr "Enabled"
-
-msgid "Disabled"
-msgstr "Disabled"
-
-msgid "Minimum outbreak probability"
-msgstr "Minimum outbreak probability"
-
-msgid "Edit"
-msgstr "Edit"
 
 msgid ""
 "There was a problem loading the prediction data required for this "
@@ -1290,12 +1311,6 @@ msgstr "Prediction settings"
 msgid "Prediction result"
 msgstr "Prediction result"
 
-msgid "Chart"
-msgstr "Chart"
-
-msgid "Table"
-msgstr "Table"
-
 msgid "Map"
 msgstr "Map"
 
@@ -1304,6 +1319,15 @@ msgstr "No prediction data found."
 
 msgid "Loading"
 msgstr "Loading"
+
+msgid "Suggested"
+msgstr "Suggested"
+
+msgid "Data elements"
+msgstr "Data elements"
+
+msgid "Data items"
+msgstr "Data items"
 
 msgid "Start typing to search for data items"
 msgstr "Start typing to search for data items"
@@ -1388,6 +1412,9 @@ msgstr[0] ""
 msgstr[1] ""
 "Outbreak indicators will be skipped for {{count}} regions due to "
 "insufficient disease data."
+
+msgid "Minimum outbreak probability"
+msgstr "Minimum outbreak probability"
 
 msgid "Adjust"
 msgstr "Adjust"
@@ -1510,9 +1537,6 @@ msgstr "Overview"
 
 msgid "Models"
 msgstr "Models"
-
-msgid "Jobs"
-msgstr "Jobs"
 
 msgid "Guides"
 msgstr "Guides"
@@ -1799,6 +1823,9 @@ msgstr ""
 msgid "Sharing"
 msgstr "Sharing"
 
+msgid "Edit"
+msgstr "Edit"
+
 msgid "Invalid URL format"
 msgstr "Invalid URL format"
 
@@ -1983,6 +2010,15 @@ msgstr "Create a prediction run for this setup."
 msgid "Back to prediction setup"
 msgstr "Back to prediction setup"
 
+msgid "Activity"
+msgstr "Activity"
+
+msgid "View and manage jobs for this prediction setup."
+msgstr "View and manage jobs for this prediction setup."
+
+msgid "The prediction setup id in the URL is not valid."
+msgstr "The prediction setup id in the URL is not valid."
+
 msgid "Error loading prediction"
 msgstr "Error loading prediction"
 
@@ -2024,3 +2060,11 @@ msgstr ""
 msgctxt ") instead."
 msgid "Spaces are not allowed. Use dashes (-) or underscores ("
 msgstr "Spaces are not allowed. Use dashes (-) or underscores (_) instead."
+
+msgctxt "Application title"
+msgid "__MANIFEST_APP_TITLE"
+msgstr "Modeling"
+
+msgctxt "Application description"
+msgid "__MANIFEST_APP_DESCRIPTION"
+msgstr ""

@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-05-08T13:55:10.240Z\n"
-"PO-Revision-Date: 2026-05-08T13:55:10.241Z\n"
+"POT-Creation-Date: 2026-05-29T23:42:08.256Z\n"
+"PO-Revision-Date: 2026-05-29T23:42:08.257Z\n"
 
 msgid "Median prediction"
 msgstr "Median prediction"
@@ -61,3 +61,27 @@ msgstr "Number of cases"
 
 msgid "More"
 msgstr "More"
+
+msgid "Month {{month}}, {{year}}"
+msgstr "Month {{month}}, {{year}}"
+
+msgid "Month {{month}}"
+msgstr "Month {{month}}"
+
+msgid "Select period"
+msgstr "Select period"
+
+msgid "Previous year"
+msgstr "Previous year"
+
+msgid "Select year"
+msgstr "Select year"
+
+msgid "Next year"
+msgstr "Next year"
+
+msgid "From period"
+msgstr "From period"
+
+msgid "To period"
+msgstr "To period"

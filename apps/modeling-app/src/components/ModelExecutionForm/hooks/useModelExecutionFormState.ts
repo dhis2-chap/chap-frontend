@@ -2,8 +2,13 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import i18n from '@dhis2/d2-i18n';
-import { parseISO, isAfter, isEqual, isFuture } from 'date-fns';
-import { PERIOD_TYPES } from '@dhis2-chap/core';
+import {
+    comparePeriodIds,
+    getLastCompletedPeriodId,
+    PERIOD_TYPES,
+    toDhis2FixedPeriodType,
+} from '@dhis2-chap/core';
+import { DEFAULT_PERIOD_SETTINGS, type Dhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
 
 export const dimensionItemTypeSchema = z.enum(['DATA_ELEMENT', 'INDICATOR', 'PROGRAM_INDICATOR']);
 
@@ -24,15 +29,72 @@ export const covariateMappingSchema = z.object({
     dataItem: dataItemSchema,
 });
 
-export const modelExecutionFormSchema = z
-    .object({
+export type ModelExecutionPeriodType = typeof PERIOD_TYPES.WEEK | typeof PERIOD_TYPES.MONTH;
+
+const isPeriodRangeValid = (
+    fromPeriodId: string,
+    toPeriodId: string,
+    settings: Dhis2PeriodSettings,
+) => {
+    if (!fromPeriodId || !toPeriodId) {
+        return true;
+    }
+
+    try {
+        return comparePeriodIds({
+            a: toPeriodId,
+            b: fromPeriodId,
+            calendar: settings.calendar,
+            locale: settings.locale,
+        }) >= 0;
+    } catch {
+        return false;
+    }
+};
+
+const isCompletedPeriod = (
+    toPeriodId: string,
+    periodType: ModelExecutionPeriodType,
+    settings: Dhis2PeriodSettings,
+) => {
+    if (!toPeriodId) {
+        return true;
+    }
+
+    const dhis2PeriodType = toDhis2FixedPeriodType(periodType);
+    if (!dhis2PeriodType) {
+        return false;
+    }
+
+    try {
+        const lastCompletedPeriodId = getLastCompletedPeriodId({
+            periodType: dhis2PeriodType,
+            calendar: settings.calendar,
+            locale: settings.locale,
+            timeZone: settings.timeZone,
+        });
+
+        return comparePeriodIds({
+            a: toPeriodId,
+            b: lastCompletedPeriodId,
+            calendar: settings.calendar,
+            locale: settings.locale,
+        }) <= 0;
+    } catch {
+        return false;
+    }
+};
+
+export const createModelExecutionFormSchema = (
+    periodSettings: Dhis2PeriodSettings = DEFAULT_PERIOD_SETTINGS,
+) => (
+    z.object({
         name: z.string().min(1, { message: i18n.t('Name is required') }),
         periodType: z.enum(['WEEK', 'MONTH'], { message: i18n.t('Period type is required') }),
-        fromDate: z.string().min(1, { message: i18n.t('Start date is required') }),
-        toDate: z
+        fromPeriodId: z.string().min(1, { message: i18n.t('Start period is required') }),
+        toPeriodId: z
             .string()
-            .min(1, { message: i18n.t('End date is required') })
-            .refine(data => !isFuture(parseISO(data)), { message: i18n.t('End date cannot be in the future') }),
+            .min(1, { message: i18n.t('End period is required') }),
         orgUnits: z.array(orgUnitSchema).min(1, { message: i18n.t('At least one org unit is required') }),
         modelId: z.string().min(1, { message: i18n.t('Please select a model') }),
         covariateMappings: z
@@ -46,30 +108,36 @@ export const modelExecutionFormSchema = z
             { message: i18n.t('Please map the target to a valid data item') },
         ),
     })
-    .refine((data) => {
-        const fromDate = parseISO(data.fromDate);
-        const toDate = parseISO(data.toDate);
-        return isAfter(toDate, fromDate) || isEqual(toDate, fromDate);
-    }, { path: ['toDate'], message: i18n.t('End period must be after start period') });
+        .refine((data) => {
+            return isPeriodRangeValid(data.fromPeriodId, data.toPeriodId, periodSettings);
+        }, { path: ['toPeriodId'], message: i18n.t('End period must be after start period') })
+        .refine((data) => {
+            return isCompletedPeriod(data.toPeriodId, data.periodType, periodSettings);
+        }, { path: ['toPeriodId'], message: i18n.t('End period cannot be in the future') })
+);
+
+export const modelExecutionFormSchema = createModelExecutionFormSchema();
 
 export type CovariateMapping = z.infer<typeof covariateMappingSchema>;
 
-export type ModelExecutionFormValues = z.infer<typeof modelExecutionFormSchema>;
+export type ModelExecutionFormValues = z.infer<ReturnType<typeof createModelExecutionFormSchema>>;
 
 type UseModelExecutionFormStateOptions = {
     initialValues?: Partial<ModelExecutionFormValues>;
+    periodSettings?: Dhis2PeriodSettings;
 };
 
 export const useModelExecutionFormState = ({
     initialValues,
+    periodSettings = DEFAULT_PERIOD_SETTINGS,
 }: UseModelExecutionFormStateOptions = {}) => {
     const methods = useForm<ModelExecutionFormValues>({
-        resolver: zodResolver(modelExecutionFormSchema),
+        resolver: zodResolver(createModelExecutionFormSchema(periodSettings)),
         defaultValues: {
             name: initialValues?.name ?? '',
             periodType: initialValues?.periodType ?? PERIOD_TYPES.MONTH,
-            fromDate: initialValues?.fromDate ?? '',
-            toDate: initialValues?.toDate ?? '',
+            fromPeriodId: initialValues?.fromPeriodId ?? '',
+            toPeriodId: initialValues?.toPeriodId ?? '',
             orgUnits: initialValues?.orgUnits ?? [],
             modelId: initialValues?.modelId ?? '',
             covariateMappings: initialValues?.covariateMappings ?? [],

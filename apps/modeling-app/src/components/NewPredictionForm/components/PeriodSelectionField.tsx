@@ -1,65 +1,66 @@
 import i18n from '@dhis2/d2-i18n';
 import { Controller, useFormContext } from 'react-hook-form';
 import { Label } from '@dhis2/ui';
+import { PeriodPicker } from '@dhis2-chap/ui';
+import { toDhis2FixedPeriodType } from '@dhis2-chap/core';
 import { NewPredictionFormValues } from '../hooks/useNewPredictionFormState';
-import {
-    SupportedPeriodType,
-    periodToInputValue,
-} from '../utils/predictionPeriods';
+import { SupportedPeriodType } from '../utils/predictionPeriods';
+import { type Dhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
 import styles from './PeriodSelectionField.module.css';
 
 type Props = {
     periodType: SupportedPeriodType;
     fromPeriod: string;
     anchorPeriod: string;
+    periodSettings: Dhis2PeriodSettings;
 };
-
-const getInputType = (periodType: SupportedPeriodType): 'month' | 'week' => (
-    periodType === 'WEEK' ? 'week' : 'month'
-);
 
 export const PeriodSelectionField = ({
     periodType,
     fromPeriod,
     anchorPeriod,
+    periodSettings,
 }: Props) => {
     const { control, formState } = useFormContext<NewPredictionFormValues>();
+    const dhis2PeriodType = toDhis2FixedPeriodType(periodType);
+    const errorMessage = formState.errors.periodId?.message;
 
-    const inputType = getInputType(periodType);
-    const fromInputValue = periodToInputValue(fromPeriod, periodType);
-    const maxInputValue = periodToInputValue(anchorPeriod, periodType);
-
-    const errorMessage = formState.errors.absoluteValue?.message;
+    if (!dhis2PeriodType) {
+        return null;
+    }
 
     return (
         <div className={styles.container}>
             <Label>{i18n.t('Training period')}</Label>
 
             <div className={styles.rangeRow}>
-                <input
-                    className={styles.input}
-                    type={inputType}
-                    value={fromInputValue}
+                <PeriodPicker
+                    value={fromPeriod}
+                    periodType={dhis2PeriodType}
+                    calendar={periodSettings.calendar}
+                    locale={periodSettings.locale}
                     disabled
-                    aria-label={i18n.t('Training start period')}
-                    data-test="prediction-from-period-input"
+                    ariaLabel={i18n.t('Training start period')}
+                    dataTest="prediction-from-period-input"
+                    onChange={() => undefined}
                 />
 
                 <span className={styles.separator} aria-hidden="true">→</span>
 
                 <Controller
                     control={control}
-                    name="absoluteValue"
+                    name="periodId"
                     render={({ field }) => (
-                        <input
-                            className={styles.input}
-                            type={inputType}
-                            min={fromInputValue}
-                            max={maxInputValue}
+                        <PeriodPicker
                             value={field.value ?? ''}
-                            onChange={e => field.onChange(e.target.value || null)}
-                            aria-label={i18n.t('Last training period')}
-                            data-test="prediction-absolute-period-input"
+                            periodType={dhis2PeriodType}
+                            calendar={periodSettings.calendar}
+                            locale={periodSettings.locale}
+                            minPeriodId={fromPeriod}
+                            maxPeriodId={anchorPeriod}
+                            ariaLabel={i18n.t('Last training period')}
+                            dataTest="prediction-absolute-period-input"
+                            onChange={period => field.onChange(period.id)}
                         />
                     )}
                 />

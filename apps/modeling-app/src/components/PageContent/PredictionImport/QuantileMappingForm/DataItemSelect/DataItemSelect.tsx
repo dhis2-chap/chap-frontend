@@ -18,6 +18,7 @@ interface DataItemSelectProps {
     value?: string;
     error?: string;
     dataElementsOnly?: boolean;
+    suggestedKeyword?: string;
 }
 
 export const DataItemSelect = ({
@@ -27,6 +28,7 @@ export const DataItemSelect = ({
     value,
     error,
     dataElementsOnly = false,
+    suggestedKeyword,
 }: DataItemSelectProps) => {
     const selectedId = id ?? value;
     const { dataItem: initialDataItem } = useDataItemById(selectedId);
@@ -54,6 +56,7 @@ export const DataItemSelect = ({
             initialDataItem={initialDataItem}
             initialDataItems={initialDataItems}
             initialLoading={isLoadingInitialItems}
+            suggestedKeyword={suggestedKeyword}
             onChange={onChange}
             label={label}
             value={selectedId}

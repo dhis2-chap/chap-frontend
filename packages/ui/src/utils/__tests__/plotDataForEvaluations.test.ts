@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest';
+import { PERIOD_TYPES } from '@dhis2-chap/core';
+import type { BacktestRead, EvaluationEntry } from '../../httpfunctions';
 import {
     getStableMaxYByOrgUnitId,
+    plotResultsToViewData,
 } from '../plotDataForEvaluations';
 
 const createViewData = ({
@@ -36,6 +39,52 @@ const createViewData = ({
             })),
         },
     ],
+});
+
+const createBacktest = (periodType: string): BacktestRead => ({
+    aggregateMetrics: {},
+    configuredModel: null,
+    dataset: {
+        id: 1,
+        name: 'Dataset',
+        periodType,
+    },
+    datasetId: 1,
+    id: 1,
+    modelId: 'model',
+});
+
+const createEvaluationEntry = (
+    splitPeriod: string,
+): EvaluationEntry => ({
+    orgUnit: 'adm0',
+    period: splitPeriod,
+    quantile: 0.5,
+    splitPeriod,
+    value: 1,
+});
+
+describe('plotResultsToViewData', () => {
+    it('orders weekly split periods chronologically', () => {
+        const viewData = plotResultsToViewData([
+            {
+                actualCases: [],
+                evaluation: createBacktest(PERIOD_TYPES.WEEK),
+                evaluationEntries: [
+                    createEvaluationEntry('2024W10'),
+                    createEvaluationEntry('2024W2'),
+                    createEvaluationEntry('2024W1'),
+                ],
+                splitPeriods: [],
+            },
+        ]);
+
+        expect(viewData.map(item => item.splitPoint)).toEqual([
+            '2024W1',
+            '2024W2',
+            '2024W10',
+        ]);
+    });
 });
 
 describe('getStableMaxYByOrgUnitId', () => {
