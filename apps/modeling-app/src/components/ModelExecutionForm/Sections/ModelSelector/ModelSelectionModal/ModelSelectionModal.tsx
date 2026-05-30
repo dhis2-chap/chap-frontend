@@ -39,8 +39,6 @@ type ReadinessConfig = {
     rank: number;
 };
 
-const ALL_PERIOD_TYPES = 'ALL_PERIOD_TYPES';
-
 const READINESS_BY_STATUS: Record<AuthorAssessedStatus, ReadinessConfig> = {
     [AuthorAssessedStatus.GREEN]: {
         label: i18n.t('Production'),
@@ -136,7 +134,7 @@ export const ModelSelectionModal = ({
     onConfirm,
 }: Props) => {
     const [search, setSearch] = useState('');
-    const [periodTypeFilter, setPeriodTypeFilter] = useState(ALL_PERIOD_TYPES);
+    const [periodTypeFilter, setPeriodTypeFilter] = useState<string>();
     const [statusFilters, setStatusFilters] = useState<string[]>([]);
     const [focusedId, setFocusedId] = useState<number | undefined>(undefined);
 
@@ -167,7 +165,7 @@ export const ModelSelectionModal = ({
                 || (model.organization ?? '').toLowerCase().includes(query)
             );
             const matchesPeriodType = (
-                periodTypeFilter === ALL_PERIOD_TYPES
+                !periodTypeFilter
                 || normalizedPeriodType === periodTypeFilter
                 || normalizedPeriodType === PERIOD_TYPES.ANY
             );
@@ -207,15 +205,13 @@ export const ModelSelectionModal = ({
                                 <div className={styles.filters}>
                                     <SingleSelect
                                         dense
-                                        selected={periodTypeFilter}
-                                        prefix={i18n.t('Period')}
-                                        onChange={({ selected }) => setPeriodTypeFilter(selected)}
+                                        clearable
+                                        clearText={i18n.t('Clear')}
+                                        selected={periodTypeFilter ?? ''}
+                                        placeholder={i18n.t('Period type')}
+                                        onChange={({ selected }) => setPeriodTypeFilter(selected || undefined)}
                                         dataTest="model-period-type-filter"
                                     >
-                                        <MenuItem
-                                            label={i18n.t('All period types')}
-                                            value={ALL_PERIOD_TYPES}
-                                        />
                                         <MenuItem
                                             label={i18n.t('Monthly')}
                                             value={PERIOD_TYPES.MONTH}

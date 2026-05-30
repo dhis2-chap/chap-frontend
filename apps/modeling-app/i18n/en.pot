@@ -425,9 +425,6 @@ msgstr "Search models"
 msgid "Period"
 msgstr "Period"
 
-msgid "All period types"
-msgstr "All period types"
-
 msgid "Clear statuses"
 msgstr "Clear statuses"
 
