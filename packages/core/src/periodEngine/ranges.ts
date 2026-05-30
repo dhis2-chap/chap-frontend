@@ -26,10 +26,8 @@ type PeriodCountOptions = PeriodIdOptions & {
     count: number;
 };
 
-const DHIS2_PERIOD_YEAR_LENGTH = 4;
-
 const getPeriodIdYear = (period: Dhis2FixedPeriod): number => {
-    const year = Number.parseInt(period.id.slice(0, DHIS2_PERIOD_YEAR_LENGTH), 10);
+    const year = parseInt(period.id.substring(0, 4), 10);
 
     if (Number.isNaN(year)) {
         throw new Error(`Could not determine the year for period "${period.id}"`);

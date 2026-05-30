@@ -1,4 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
+import { readJson } from './helpers/evaluation-fixtures';
+import { openPeriodPickerAtYear, selectPeriod } from './helpers/period-picker';
 
 const REQUIRED_DATA_MAPPINGS = [
     {
@@ -25,22 +27,6 @@ const getMonthValueWithOffset = (offset: number): string => {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     return `${year}${month}`;
-};
-
-const openPeriodPickerAtYear = async (page: Page, triggerDataTest: string, periodId: string) => {
-    await page.locator(`[data-test="${triggerDataTest}"]`).click();
-
-    const targetYear = Number(periodId.slice(0, 4));
-    const visibleYear = page.locator(`[data-test="${triggerDataTest}-visible-year"]`);
-
-    await visibleYear.selectOption(String(targetYear));
-    await expect(visibleYear).toHaveValue(String(targetYear));
-};
-
-const selectPeriod = async (page: Page, triggerDataTest: string, periodId: string) => {
-    await openPeriodPickerAtYear(page, triggerDataTest, periodId);
-
-    await page.locator(`[data-test="${triggerDataTest}-option-${periodId}"]`).click();
 };
 
 const isBacktestCreateRequest = (url: string, method: string): boolean => {
@@ -241,41 +227,6 @@ test('accepts valid values without client-side validation errors', async ({ page
     await expect(backtestCreateRequestCount).toBe(1);
 });
 
-test('submits valid data, navigates to jobs, and shows the created job', async ({ page }) => {
-    const newEvaluationUrl = '/#/evaluate/new';
-    const evaluationName = `E2E import ${Date.now()}`;
-
-    await page.goto(newEvaluationUrl);
-
-    await prepareValidFormData(page, evaluationName, {
-        fromPeriodId: '202001',
-        toPeriodId: '202412',
-    });
-
-    const createImportRequest = page.waitForRequest(request =>
-        isBacktestImportRequest(request.url(), request.method()),
-    );
-    const createImportResponse = page.waitForResponse(response =>
-        isBacktestImportRequest(response.url(), response.request().method()),
-    );
-
-    await page.getByRole('button', { name: 'Start import' }).click();
-
-    const request = await createImportRequest;
-    await expect(
-        request.postDataJSON() as { name?: string },
-    ).toMatchObject({ name: evaluationName });
-
-    const response = await createImportResponse;
-    await expect(response.ok()).toBeTruthy();
-    const importResponseBody = (await response.json()) as { id?: string | null };
-    await expect(importResponseBody.id).toBeTruthy();
-
-    await expect(page).toHaveURL(/\/#\/jobs(?:\?.*)?$/);
-    await expect(page.getByRole('heading', { name: 'Active jobs' })).toBeVisible();
-    await expect(page.getByRole('cell', { name: evaluationName })).toBeVisible();
-});
-
 test('submits valid data, navigates to jobs, and auto-updates the created job to success', async ({ page }) => {
     const newEvaluationUrl = '/#/evaluate/new';
     const evaluationName = `E2E successful evaluation ${Date.now()}`;
@@ -301,9 +252,10 @@ test('submits valid data, navigates to jobs, and auto-updates the created job to
         request.postDataJSON() as { name?: string },
     ).toMatchObject({ name: evaluationName });
 
-    const response = await createImportResponse;
-    await expect(response.ok()).toBeTruthy();
-    const importResponseBody = (await response.json()) as { id?: string | null };
+    const importResponseBody = await readJson<{ id?: string | null }>(
+        await createImportResponse,
+        'Create evaluation import',
+    );
     await expect(importResponseBody.id).toBeTruthy();
 
     await expect(page).toHaveURL(/\/#\/jobs(?:\?.*)?$/);
