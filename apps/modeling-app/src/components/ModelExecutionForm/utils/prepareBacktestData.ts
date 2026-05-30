@@ -1,7 +1,7 @@
 import { QueryClient } from '@tanstack/react-query';
 import i18n from '@dhis2/d2-i18n';
 import { ModelExecutionFormValues } from '../hooks/useModelExecutionFormState';
-import { getPeriodIdsInRange, PERIOD_TYPES, toDhis2FixedPeriodType } from '@dhis2-chap/core';
+import { getPeriodsInRange, PERIOD_TYPES, toDhis2FixedPeriodType } from '@dhis2-chap/core';
 import { DataSource, ModelSpecRead, ObservationBase } from '@dhis2-chap/ui';
 import { useDataEngine } from '@dhis2/app-runtime';
 import { AnalyticsResponse, OrgUnitResponse, fetchAnalytics, ORG_UNITS_QUERY } from './queryUtils';
@@ -17,12 +17,12 @@ const calculatePeriods = (
     const selectedPeriodType = toDhis2FixedPeriodType(periodType);
     if (!selectedPeriodType) return [];
 
-    return getPeriodIdsInRange({
+    return getPeriodsInRange({
         startPeriodId: fromPeriodId,
         endPeriodId: toPeriodId,
         calendar: periodSettings.calendar,
         locale: periodSettings.locale,
-    });
+    }).map(period => period.id);
 };
 
 export type PreparedBacktestData = {

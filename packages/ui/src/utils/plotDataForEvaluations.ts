@@ -201,9 +201,9 @@ export const plotResultsToViewData = (
 
     const allSplitPeriods = periodType
         ? sortPeriods(
-                Array.from(splitPeriods),
-                periodType as keyof typeof PERIOD_TYPES,
-            )
+            Array.from(splitPeriods),
+            periodType as keyof typeof PERIOD_TYPES,
+        )
         : Array.from(splitPeriods);
 
     const allOrgunits = Array.from(orgUnits);

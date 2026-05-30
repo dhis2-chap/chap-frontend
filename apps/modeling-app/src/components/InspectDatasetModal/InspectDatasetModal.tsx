@@ -2,7 +2,7 @@ import i18n from '@dhis2/d2-i18n';
 import { Modal, Button, ModalTitle, ModalContent, ButtonStrip, ModalActions } from '@dhis2/ui';
 import { VisualizationPlugin } from '../VisualizationPlugin';
 import { OrganisationUnit } from '../OrganisationUnitSelector';
-import { getPeriodIdsInRange, PERIOD_TYPES, toDhis2FixedPeriodType } from '@dhis2-chap/core';
+import { getPeriodsInRange, PERIOD_TYPES, toDhis2FixedPeriodType } from '@dhis2-chap/core';
 import { useConfig } from '@dhis2/app-runtime';
 import { CovariateMapping } from '../ModelExecutionForm/hooks/useModelExecutionFormState';
 import { type Dhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
@@ -36,12 +36,12 @@ export const InspectDatasetModal = ({
             return [];
         }
 
-        return getPeriodIdsInRange({
+        return getPeriodsInRange({
             startPeriodId: fromPeriodId,
             endPeriodId: toPeriodId,
             calendar: periodSettings.calendar,
             locale: periodSettings.locale,
-        }).map(id => ({ id }));
+        }).map(period => ({ id: period.id }));
     };
 
     const calculateDataDimensions = () => {
