@@ -19,6 +19,7 @@ import { z } from 'zod';
 import { DataItemSelect } from '../../PageContent/PredictionImport/QuantileMappingForm/DataItemSelect';
 import {
     QUANTILE_KEYS,
+    QUANTILE_SUGGESTED_KEYWORDS,
     type PredictionSetupFormValues,
 } from '@/utils/predictionSetupImportMapping';
 import styles from './MarkReadyForForecastingModal.module.css';
@@ -196,6 +197,7 @@ export const MarkReadyForForecastingModal = ({
                                                         onChange={field.onChange}
                                                         error={errors[name]?.message}
                                                         dataElementsOnly
+                                                        suggestedKeyword={QUANTILE_SUGGESTED_KEYWORDS[name]}
                                                     />
                                                 )}
                                             />

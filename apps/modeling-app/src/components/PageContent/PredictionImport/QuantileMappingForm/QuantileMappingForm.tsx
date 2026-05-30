@@ -30,7 +30,10 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { usePredictionSeries } from '../../PredictionDetails/hooks/usePredictionSeries';
 import { PredictionAlertsDialog } from '../../PredictionAlerts';
 import { usePredictionSetup } from '@/hooks/usePredictionSetup';
-import { getPredictionSetupQuantileTargets } from '@/utils/predictionSetupImportMapping';
+import {
+    getPredictionSetupQuantileTargets,
+    QUANTILE_SUGGESTED_KEYWORDS,
+} from '@/utils/predictionSetupImportMapping';
 
 type Props = {
     prediction: PredictionInfo;
@@ -80,14 +83,6 @@ const quantileMappingFields = [
     'quantile_mid_low',
     'quantile_mid_high',
 ] as const satisfies MappingField[];
-
-const quantileSuggestedKeywords: Record<typeof quantileMappingFields[number], string> = {
-    quantile_high: 'high',
-    quantile_mid_high: 'mid high',
-    median: 'median',
-    quantile_mid_low: 'mid low',
-    quantile_low: 'low',
-};
 
 export const QuantileMappingForm = ({ prediction, model, predictionSetupId }: Props) => {
     const navigate = useNavigate();
@@ -251,7 +246,7 @@ export const QuantileMappingForm = ({ prediction, model, predictionSetupId }: Pr
                         onChange={id => updateQuantile('quantile_high', id)}
                         error={errors.quantile_high?.message}
                         dataElementsOnly
-                        suggestedKeyword={quantileSuggestedKeywords.quantile_high}
+                        suggestedKeyword={QUANTILE_SUGGESTED_KEYWORDS.quantile_high}
                     />
                     <DataItemSelect
                         label={i18n.t('Quantile mid high')}
@@ -259,7 +254,7 @@ export const QuantileMappingForm = ({ prediction, model, predictionSetupId }: Pr
                         onChange={id => updateQuantile('quantile_mid_high', id)}
                         error={errors.quantile_mid_high?.message}
                         dataElementsOnly
-                        suggestedKeyword={quantileSuggestedKeywords.quantile_mid_high}
+                        suggestedKeyword={QUANTILE_SUGGESTED_KEYWORDS.quantile_mid_high}
                     />
                     <DataItemSelect
                         label={i18n.t('Median')}
@@ -267,7 +262,7 @@ export const QuantileMappingForm = ({ prediction, model, predictionSetupId }: Pr
                         onChange={id => updateQuantile('median', id)}
                         error={errors.median?.message}
                         dataElementsOnly
-                        suggestedKeyword={quantileSuggestedKeywords.median}
+                        suggestedKeyword={QUANTILE_SUGGESTED_KEYWORDS.median}
                     />
                     <DataItemSelect
                         label={i18n.t('Quantile mid low')}
@@ -275,7 +270,7 @@ export const QuantileMappingForm = ({ prediction, model, predictionSetupId }: Pr
                         onChange={id => updateQuantile('quantile_mid_low', id)}
                         error={errors.quantile_mid_low?.message}
                         dataElementsOnly
-                        suggestedKeyword={quantileSuggestedKeywords.quantile_mid_low}
+                        suggestedKeyword={QUANTILE_SUGGESTED_KEYWORDS.quantile_mid_low}
                     />
                     <DataItemSelect
                         label={i18n.t('Quantile low')}
@@ -283,7 +278,7 @@ export const QuantileMappingForm = ({ prediction, model, predictionSetupId }: Pr
                         onChange={id => updateQuantile('quantile_low', id)}
                         error={errors.quantile_low?.message}
                         dataElementsOnly
-                        suggestedKeyword={quantileSuggestedKeywords.quantile_low}
+                        suggestedKeyword={QUANTILE_SUGGESTED_KEYWORDS.quantile_low}
                     />
 
                     <div className={styles.alertOutput}>
