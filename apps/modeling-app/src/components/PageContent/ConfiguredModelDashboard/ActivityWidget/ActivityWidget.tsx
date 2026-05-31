@@ -30,6 +30,7 @@ import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import { JOB_STATUSES } from '../../../../hooks/useJobs';
 import { DateRangePicker } from '../../../DateRangePicker';
+import { useDhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
 import { JobActionsMenu } from '../../../JobsTable/JobActionsMenu/JobActionsMenu';
 import { StatusCell } from '../../../JobsTable/TableCells/StatusCell';
 import {
@@ -343,6 +344,7 @@ export const ActivityWidget = ({
     jobs,
     predictionSetupId,
 }: Props) => {
+    const { settings: periodSettings } = useDhis2PeriodSettings();
     const [open, setOpen] = useState(false);
     const [activityView, setActivityView] = useState<ActivityView>('chart');
     const [selectedPeriod, setSelectedPeriod] = usePersistedActivityPeriod();
@@ -584,6 +586,7 @@ export const ActivityWidget = ({
                                         </div>
                                         <div className={styles.dateFilter}>
                                             <DateRangePicker
+                                                calendar={periodSettings?.calendar}
                                                 value={dateRange}
                                                 onChange={setDateRange}
                                             />

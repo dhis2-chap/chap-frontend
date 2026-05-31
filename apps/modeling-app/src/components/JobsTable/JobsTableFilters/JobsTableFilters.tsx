@@ -8,6 +8,7 @@ import styles from './JobsTableFilters.module.css';
 import { JOB_STATUSES, JOB_TYPES } from '../../../hooks/useJobs';
 import { useJobsTableFilters } from '../hooks/useJobsTableFilters';
 import { DateRangePicker } from '../../DateRangePicker';
+import { useDhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
 
 export type JobsTableFilterKey = 'date' | 'search' | 'status' | 'type';
 
@@ -28,6 +29,7 @@ export const JobsTableFilters = ({ visibleFilters = DEFAULT_VISIBLE_FILTERS }: P
         type,
         setType,
     } = useJobsTableFilters();
+    const { settings: periodSettings } = useDhis2PeriodSettings();
 
     return (
         <>
@@ -100,6 +102,7 @@ export const JobsTableFilters = ({ visibleFilters = DEFAULT_VISIBLE_FILTERS }: P
             {visibleFilters.includes('date') && (
                 <div className={styles.dateRangeContainer}>
                     <DateRangePicker
+                        calendar={periodSettings?.calendar}
                         value={dateRange}
                         onChange={setDateRange}
                     />
