@@ -56,12 +56,29 @@ const getInitialVisibleDate = (value: DateRangeValue, calendar?: Dhis2Calendar) 
         : isoDate;
 };
 
+const getMonthsInYear = (calendar: Dhis2Calendar) => (
+    calendar === 'ethiopic' || calendar === 'coptic' || calendar === 'ethioaa' ? 13 : 12
+);
+
 const shiftVisibleMonth = (dateString: string, amount: number, calendar?: Dhis2Calendar) => {
     if (isNonGregorianCalendar(calendar)) {
-        const isoString = calendarDateToIso(dateString, calendar!);
-        const date = parseDateRangeParam(isoString) ?? new Date();
-        const shifted = formatDateRangeParam(addMonths(date, amount));
-        return isoToCalendarDate(shifted, calendar!);
+        const [yearStr, monthStr] = dateString.split('-');
+        let year = Number(yearStr);
+        let month = Number(monthStr);
+
+        month += amount;
+
+        const monthsInYear = getMonthsInYear(calendar!);
+        while (month > monthsInYear) {
+            month -= monthsInYear;
+            year += 1;
+        }
+        while (month < 1) {
+            month += monthsInYear;
+            year -= 1;
+        }
+
+        return `${year}-${padWithZeroes(month)}-01`;
     }
     const date = parseDateRangeParam(dateString) ?? new Date();
     return formatDateRangeParam(addMonths(date, amount));
