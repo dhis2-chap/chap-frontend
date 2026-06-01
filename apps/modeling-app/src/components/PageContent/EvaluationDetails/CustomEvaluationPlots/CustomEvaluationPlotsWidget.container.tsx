@@ -159,6 +159,8 @@ export const CustomEvaluationPlotsWidget = ({ evaluationId }: Props) => {
                 <CustomEvaluationPlotsWidgetComponent
                     evaluationId={evaluationId}
                     selectedVisualizationId={selectedVisualizationId}
+                    filterLocation={filterLocation}
+                    filterSplitPeriod={filterSplitPeriod}
                 />
             </WidgetWrapper>
         </div>
