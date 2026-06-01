@@ -24,7 +24,12 @@
 
 .visualizationContainer {
     inline-size: 100%;
-    block-size: 60vh;
+    max-block-size: 60vh;
+}
+
+.singleIsolatedPlot {
+    block-size: auto;
+    min-block-size: 440px;
 }
 
 .card {
@@ -36,6 +41,10 @@
     block-size: 100%;
 }
 
+.singleIsolatedPlot .vegaEmbed {
+    block-size: auto;
+    min-block-size: 440px;
+}
 .controlsRow {
     display: flex;
     gap: 12px;
