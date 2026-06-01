@@ -7,6 +7,7 @@ import {
     type Dhis2Calendar,
     normalizeDhis2CalendarSetting,
 } from '@dhis2-chap/core';
+import { useExperimentalFeature, FEATURES } from '@/features/settings/Experimental';
 
 export type Dhis2PeriodSettings = {
     calendar: Dhis2Calendar;
@@ -32,6 +33,7 @@ export const DEFAULT_PERIOD_SETTINGS: Dhis2PeriodSettings = {
 
 export const useDhis2PeriodSettings = () => {
     const dataEngine = useDataEngine();
+    const { enabled: calendarOverrideEnabled } = useExperimentalFeature(FEATURES.DHIS2_CALENDAR);
 
     const query = useQuery<Dhis2PeriodSettings, Error>({
         queryKey: ['dhis2-period-settings'],
@@ -51,8 +53,14 @@ export const useDhis2PeriodSettings = () => {
         },
     });
 
+    const settings = query.data ?? DEFAULT_PERIOD_SETTINGS;
+
+    const effectiveSettings: Dhis2PeriodSettings = calendarOverrideEnabled
+        ? settings
+        : { ...settings, calendar: DEFAULT_DHIS2_CALENDAR as Dhis2Calendar };
+
     return {
-        settings: query.data ?? DEFAULT_PERIOD_SETTINGS,
+        settings: effectiveSettings,
         isLoading: query.isLoading,
         error: query.error ?? null,
     };

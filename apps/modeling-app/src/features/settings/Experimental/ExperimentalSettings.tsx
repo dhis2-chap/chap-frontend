@@ -69,6 +69,13 @@ export const ExperimentalSettings = () => {
                                     onChange={() => toggleFeature(FEATURES.EVALUATION_PLOTS)}
                                     disabled={isSaving}
                                 />
+                                <ChoiceCard
+                                    title={i18n.t('DHIS2 calendar override')}
+                                    description={i18n.t('Use the calendar configured in DHIS2 system settings instead of the default Gregorian calendar. Supports Ethiopian, Nepali, and other DHIS2 calendars.')}
+                                    checked={settings.features[FEATURES.DHIS2_CALENDAR] ?? false}
+                                    onChange={() => toggleFeature(FEATURES.DHIS2_CALENDAR)}
+                                    disabled={isSaving}
+                                />
                             </div>
                         </div>
                     )}
