@@ -111,12 +111,17 @@ export const QuantileMappingForm = ({ prediction, model, predictionSetupId }: Pr
 
     const {
         thresholdMap,
+        isLoading: isThresholdsLoading,
+        error: thresholdsError,
     } = useEndemicThresholds({
         datasetId: prediction.datasetId,
         periodIds: allPeriods,
         locations: orgUnitIds,
         enabled: series.length > 0,
     });
+
+    const isLoading = isSeriesLoading || isThresholdsLoading;
+    const error = seriesError || thresholdsError;
 
     const unavailableThresholdCount = series.filter((orgUnitSeries) => {
         const thresholds = thresholdMap?.get(orgUnitSeries.orgUnitId);
@@ -231,7 +236,7 @@ export const QuantileMappingForm = ({ prediction, model, predictionSetupId }: Pr
         setValue('alert_probability', probability, { shouldDirty: true });
     };
 
-    if (isSeriesLoading) {
+    if (isLoading) {
         return (
             <div className={styles.loadingContainer}>
                 <CircularLoader />
@@ -239,7 +244,7 @@ export const QuantileMappingForm = ({ prediction, model, predictionSetupId }: Pr
         );
     }
 
-    if (seriesError) {
+    if (error) {
         return (
             <NoticeBox error title={i18n.t('Unable to load alert data')}>
                 {i18n.t('There was a problem loading the prediction data required for outbreak indicator import.')}
