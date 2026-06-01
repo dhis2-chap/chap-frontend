@@ -99,12 +99,16 @@ const ThresholdTile = ({
     zoomRange?: ZoomRange | null;
     onZoomChange?: (range: ZoomRange | null) => void;
 }) => {
+    const thresholdForMaxY = tile.endemicThresholds.length > 0
+        ? tile.endemicThresholds
+        : tile.endemicThreshold;
+
     const maxY = useMemo(() => (
         getStableMaxYForThresholdChart(
             tile.series,
-            showThresholds ? tile.endemicThreshold : null,
+            showThresholds ? thresholdForMaxY : null,
         )
-    ), [showThresholds, tile.endemicThreshold, tile.series]);
+    ), [showThresholds, thresholdForMaxY, tile.series]);
 
     return (
         <article className={styles.tile}>
@@ -129,6 +133,7 @@ const ThresholdTile = ({
                     predictionTargetName={predictionTargetName}
                     series={tile.series}
                     endemicThreshold={showThresholds ? tile.endemicThreshold : undefined}
+                    endemicThresholds={showThresholds ? tile.endemicThresholds : undefined}
                     outbreakPeriods={showThresholds
                         ? tile.indicators.map(indicator => ({
                                 period: indicator.period,

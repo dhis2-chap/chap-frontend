@@ -16,6 +16,11 @@ export type ActualCasePoint = {
     value: number | null;
 };
 
+export type EndemicThresholdPoint = {
+    period: string;
+    value: number | null;
+};
+
 export type MockEndemicThresholdResult = {
     available: boolean;
     threshold: number | null;
@@ -116,7 +121,43 @@ export const isOutbreakAtProbability = (
 export const buildOutbreakIndicatorsForSeries = (
     series: PredictionOrgUnitSeries,
     selectedProbability: OutbreakProbability,
+    thresholds?: EndemicThresholdPoint[],
 ): OutbreakIndicator[] => {
+    if (thresholds) {
+        const thresholdByPeriod = new Map(
+            thresholds.map(t => [t.period, t.value]),
+        );
+
+        return series.points
+            .filter((point) => {
+                const value = thresholdByPeriod.get(point.period);
+                return value !== undefined && value !== null;
+            })
+            .map((point) => {
+                const threshold = thresholdByPeriod.get(point.period) as number;
+                return {
+                    orgUnitId: series.orgUnitId,
+                    orgUnitName: series.orgUnitName,
+                    period: point.period,
+                    threshold,
+                    supportedProbability: getSupportedOutbreakProbabilityBucket(
+                        point,
+                        threshold,
+                    ),
+                    outbreak: isOutbreakAtProbability(
+                        point,
+                        threshold,
+                        selectedProbability,
+                    ),
+                    value: isOutbreakAtProbability(
+                        point,
+                        threshold,
+                        selectedProbability,
+                    ) ? '1' : '0',
+                };
+            });
+    }
+
     const thresholdResult = calculateMockEndemicThreshold(series.actualCases);
 
     if (!thresholdResult.available || thresholdResult.threshold === null) {
@@ -150,8 +191,13 @@ export const buildOutbreakIndicatorsForSeries = (
 export const buildOutbreakIndicators = (
     series: PredictionOrgUnitSeries[],
     selectedProbability: OutbreakProbability,
+    thresholdMap?: Map<string, EndemicThresholdPoint[]>,
 ): OutbreakIndicator[] => series.flatMap(orgUnitSeries => (
-    buildOutbreakIndicatorsForSeries(orgUnitSeries, selectedProbability)
+    buildOutbreakIndicatorsForSeries(
+        orgUnitSeries,
+        selectedProbability,
+        thresholdMap?.get(orgUnitSeries.orgUnitId),
+    )
 ));
 
 export const getHighestSupportedOutbreakProbability = (

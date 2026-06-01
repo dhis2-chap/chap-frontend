@@ -91,4 +91,6 @@ export { PredictionsService } from './services/PredictionsService';
 export { PredictionSetupsService } from './services/PredictionSetupsService';
 export { ServicesService } from './services/ServicesService';
 export { SystemService } from './services/SystemService';
+export { ThresholdsService } from './services/ThresholdsService';
+export type { ThresholdRequest, ThresholdEntry, ThresholdStrategyInfo } from './services/ThresholdsService';
 export { VisualizationsService } from './services/VisualizationsService';

@@ -4,7 +4,7 @@ import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import { PredictionOrgUnitSeries } from '../../../interfaces/Prediction';
 import { registerHighchartsModules } from '../../../utils/registerHighchartsModules';
-import type { SupportedOutbreakProbabilityBucket } from '../../../utils/outbreakAlerts';
+import type { EndemicThresholdPoint, SupportedOutbreakProbabilityBucket } from '../../../utils/outbreakAlerts';
 import type { ZoomRange } from '../../evaluation/ResultPlot/ResultPlot';
 
 type DisabledAnimationOptions = {
@@ -38,6 +38,7 @@ const getChartOptions = (
     onAfterSetExtremes?: Highcharts.AxisSetExtremesEventCallbackFunction,
     hideResetButton = false,
     maxY?: number,
+    endemicThresholds?: EndemicThresholdPoint[],
 ): Highcharts.Options => {
     const isTile = variant === 'tile';
     const disabledAnimationOptions = getDisabledAnimationOptions();
@@ -118,7 +119,34 @@ const getChartOptions = (
         });
     }
 
-    if (endemicThreshold !== undefined && endemicThreshold !== null) {
+    if (endemicThresholds && endemicThresholds.length > 0) {
+        const thresholdByPeriod = new Map(
+            endemicThresholds.map(t => [t.period, t.value]),
+        );
+        const thresholdData = periods
+            .map(period => ({
+                name: period,
+                x: periodIndexById.get(period),
+                y: thresholdByPeriod.get(period) ?? null,
+            }))
+            .filter(point => point.y !== null);
+
+        if (thresholdData.length > 0) {
+            chartSeries.push({
+                type: 'line',
+                data: thresholdData,
+                name: i18n.t('Endemic threshold'),
+                color: '#212934',
+                dashStyle: 'Dash',
+                zIndex: 5,
+                marker: {
+                    enabled: false,
+                },
+                lineWidth: 2,
+                connectNulls: false,
+            });
+        }
+    } else if (endemicThreshold !== undefined && endemicThreshold !== null) {
         chartSeries.push({
             type: 'line',
             data: periods.map(period => ({
@@ -242,6 +270,7 @@ interface PredicationChartProps {
     series: PredictionOrgUnitSeries;
     predictionTargetName: string;
     endemicThreshold?: number | null;
+    endemicThresholds?: EndemicThresholdPoint[];
     outbreakPeriods?: OutbreakPeriodChartInfo[];
     variant?: UncertaintyAreaChartVariant;
     zoomRange?: ZoomRange | null;
@@ -262,6 +291,7 @@ export const UncertaintyAreaChart = ({
     series,
     predictionTargetName,
     endemicThreshold,
+    endemicThresholds,
     outbreakPeriods = [],
     variant = 'default',
     zoomRange,
@@ -320,11 +350,13 @@ export const UncertaintyAreaChart = ({
             handleAfterSetExtremes,
             hasExternalZoomControls,
             maxY,
+            endemicThresholds,
         );
     }, [
         series,
         predictionTargetName,
         endemicThreshold,
+        endemicThresholds,
         outbreakPeriods,
         variant,
         handleAfterSetExtremes,

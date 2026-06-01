@@ -1,10 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { KeyboardEvent, MouseEvent } from 'react';
 import * as z from 'zod';
 import i18n from '@dhis2/d2-i18n';
 import {
     buildOutbreakIndicators,
-    calculateMockEndemicThreshold,
     DEFAULT_OUTBREAK_PROBABILITY,
     ModelSpecRead,
     OUTBREAK_PROBABILITY_OPTIONS,
@@ -27,6 +26,7 @@ import { usePostPredictionData } from '../hooks/usePostPredictionData';
 import { useNavigationBlocker } from '@/hooks/useNavigationBlocker';
 import { NavigationConfirmModal } from '@/components/NavigationConfirmModal';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useEndemicThresholds } from '@/hooks/useEndemicThresholds';
 import { usePredictionSeries } from '../../PredictionDetails/hooks/usePredictionSeries';
 import { PredictionAlertsDialog } from '../../PredictionAlerts';
 import { usePredictionSetup } from '@/hooks/usePredictionSetup';
@@ -95,9 +95,34 @@ export const QuantileMappingForm = ({ prediction, model, predictionSetupId }: Pr
         error: seriesError,
     } = usePredictionSeries({ prediction, model });
     const { predictionSetup } = usePredictionSetup(predictionSetupId);
-    const unavailableThresholdCount = series.filter(orgUnitSeries => (
-        !calculateMockEndemicThreshold(orgUnitSeries.actualCases).available
-    )).length;
+
+    const allPeriods = useMemo(() => {
+        const periodSet = new Set<string>();
+        for (const s of series) {
+            s.actualCases?.forEach(ac => periodSet.add(ac.period));
+            s.points.forEach(p => periodSet.add(p.period));
+        }
+        return Array.from(periodSet);
+    }, [series]);
+
+    const orgUnitIds = useMemo(() => (
+        series.map(s => s.orgUnitId)
+    ), [series]);
+
+    const {
+        thresholdMap,
+    } = useEndemicThresholds({
+        datasetId: prediction.datasetId,
+        periodIds: allPeriods,
+        locations: orgUnitIds,
+        enabled: series.length > 0,
+    });
+
+    const unavailableThresholdCount = series.filter((orgUnitSeries) => {
+        const thresholds = thresholdMap?.get(orgUnitSeries.orgUnitId);
+        if (!thresholds) return true;
+        return !thresholds.some(t => t.value !== null);
+    }).length;
     const {
         handleSubmit,
         formState: { errors, isDirty, dirtyFields },
@@ -154,7 +179,7 @@ export const QuantileMappingForm = ({ prediction, model, predictionSetupId }: Pr
                 outbreakIndicatorId: data.use_alert_outputs ? data.outbreak_indicator : '',
             },
             outbreakIndicators: data.use_alert_outputs
-                ? buildOutbreakIndicators(series, data.alert_probability)
+                ? buildOutbreakIndicators(series, data.alert_probability, thresholdMap)
                 : [],
         });
     };

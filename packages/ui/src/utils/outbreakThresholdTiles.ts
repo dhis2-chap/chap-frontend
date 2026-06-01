@@ -2,6 +2,7 @@ import type { PredictionOrgUnitSeries } from '../interfaces/Prediction';
 import {
     buildOutbreakIndicatorsForSeries,
     calculateMockEndemicThreshold,
+    type EndemicThresholdPoint,
     type OutbreakIndicator,
     type OutbreakProbability,
 } from './outbreakAlerts';
@@ -12,6 +13,7 @@ export type ThresholdTileStatus = 'outbreak' | 'noOutbreak' | 'unavailable';
 
 export type ThresholdTileViewModel = {
     endemicThreshold: number | null;
+    endemicThresholds: EndemicThresholdPoint[];
     indicators: OutbreakIndicator[];
     orgUnitId: string;
     orgUnitName: string;
@@ -43,8 +45,12 @@ const getNumericMax = (values: Array<number | null | undefined>): number | undef
 
 export const getStableMaxYForThresholdChart = (
     series: PredictionOrgUnitSeries,
-    endemicThreshold: number | null,
+    endemicThresholdOrPoints: number | null | EndemicThresholdPoint[],
 ): number | undefined => {
+    const thresholdValues = Array.isArray(endemicThresholdOrPoints)
+        ? endemicThresholdOrPoints.map(t => t.value)
+        : [endemicThresholdOrPoints];
+
     const rawMax = getNumericMax([
         ...(series.actualCases?.map(actualCase => actualCase.value) ?? []),
         ...series.points.flatMap(point => [
@@ -54,7 +60,7 @@ export const getStableMaxYForThresholdChart = (
             point.quantiles.quantile_mid_high,
             point.quantiles.quantile_high,
         ]),
-        endemicThreshold,
+        ...thresholdValues,
     ]);
 
     if (rawMax === undefined) {
@@ -67,11 +73,37 @@ export const getStableMaxYForThresholdChart = (
 export const getThresholdTileViewModels = (
     series: PredictionOrgUnitSeries[],
     selectedProbability: OutbreakProbability,
+    thresholdMap?: Map<string, EndemicThresholdPoint[]>,
 ): {
     summary: ThresholdSummary;
     tiles: ThresholdTileViewModel[];
 } => {
     const tiles = series.map((orgUnitSeries) => {
+        const apiThresholds = thresholdMap?.get(orgUnitSeries.orgUnitId);
+
+        if (apiThresholds) {
+            const hasAnyValue = apiThresholds.some(t => t.value !== null);
+            const indicators = buildOutbreakIndicatorsForSeries(
+                orgUnitSeries, selectedProbability, apiThresholds,
+            );
+            const hasOutbreak = indicators.some(indicator => indicator.outbreak);
+            const status: ThresholdTileStatus = !hasAnyValue
+                ? 'unavailable'
+                : hasOutbreak
+                    ? 'outbreak'
+                    : 'noOutbreak';
+
+            return {
+                endemicThreshold: null,
+                endemicThresholds: apiThresholds,
+                indicators,
+                orgUnitId: orgUnitSeries.orgUnitId,
+                orgUnitName: orgUnitSeries.orgUnitName,
+                series: orgUnitSeries,
+                status,
+            };
+        }
+
         const threshold = calculateMockEndemicThreshold(orgUnitSeries.actualCases);
         const indicators = buildOutbreakIndicatorsForSeries(orgUnitSeries, selectedProbability);
         const hasOutbreak = indicators.some(indicator => indicator.outbreak);
@@ -83,6 +115,7 @@ export const getThresholdTileViewModels = (
 
         return {
             endemicThreshold: threshold.threshold,
+            endemicThresholds: [],
             indicators,
             orgUnitId: orgUnitSeries.orgUnitId,
             orgUnitName: orgUnitSeries.orgUnitName,

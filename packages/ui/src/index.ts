@@ -68,6 +68,7 @@ export {
     getSupportedOutbreakProbabilityBucket,
     isOutbreakAtProbability,
     parseOutbreakProbability,
+    type EndemicThresholdPoint,
     type MockEndemicThresholdResult,
     type OutbreakIndicator,
     type OutbreakProbability,
