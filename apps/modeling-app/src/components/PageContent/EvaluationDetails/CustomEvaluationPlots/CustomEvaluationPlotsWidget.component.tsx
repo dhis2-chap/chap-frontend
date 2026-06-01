@@ -38,6 +38,8 @@ export const CustomEvaluationPlotsWidgetComponent = ({
 }: Props) => {
     const selectionComplete = !!selectedVisualizationId;
 
+    const hasFilters = !!filterLocation && !!filterSplitPeriod;
+
     const {
         visualization,
         isLoading: isVisualizationLoading,
@@ -62,6 +64,11 @@ export const CustomEvaluationPlotsWidgetComponent = ({
         requestBody,
     });
 
+    const plotSpec = hasFilters ? (isolatedPlotsData ?? visualization) : visualization;
+
+    const isPlotLoading = isVisualizationLoading || (hasFilters && isIsolatedPlotsLoading);
+    const showError = visualizationError || (hasFilters && isolatedPlotsError);
+
     useEffect(() => {
         if (!selectionComplete) return;
 
@@ -84,7 +91,7 @@ export const CustomEvaluationPlotsWidgetComponent = ({
             filterLocation,
             filterSplitPeriod,
         });
-    }, [isolatedPlotsError, isolatedPlotsData, evaluationId, selectedVisualizationId, filterLocation, filterSplitPeriod, selectionComplete]);
+    }, [isolatedPlotsError, isolatedPlotsData, selectedVisualizationId, filterLocation, filterSplitPeriod, selectionComplete]);
 
     useEffect(() => {
         if (!visualizationError) return;
@@ -105,7 +112,7 @@ export const CustomEvaluationPlotsWidgetComponent = ({
         );
     }
 
-    if (isVisualizationLoading || isIsolatedPlotsLoading) {
+    if (isPlotLoading) {
         return (
             <div className={styles.loadingContainer}>
                 <CircularLoader />
@@ -113,7 +120,7 @@ export const CustomEvaluationPlotsWidgetComponent = ({
         );
     }
 
-    if (visualizationError) {
+    if (showError) {
         return (
             <div className={styles.mutedErrorContainer}>
                 <div className={styles.mutedErrorContent}>
@@ -131,7 +138,7 @@ export const CustomEvaluationPlotsWidgetComponent = ({
         );
     }
 
-    if (!visualization ) {
+    if (!plotSpec) {
         return (
             <div className={styles.errorContainer}>
                 {i18n.t('No visualization found')}
@@ -143,7 +150,7 @@ export const CustomEvaluationPlotsWidgetComponent = ({
         <div className={styles.card}>
             <div className={styles.visualizationContainer}>
                 <VegaEmbed
-                    spec={visualization}
+                    spec={plotSpec}
                     className={styles.vegaEmbed}
                     options={VEGA_OPTIONS}
                 />
