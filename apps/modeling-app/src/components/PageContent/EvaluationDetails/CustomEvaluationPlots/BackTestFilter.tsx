@@ -1,6 +1,6 @@
 import { useOrgUnitsById } from "@/hooks/useOrgUnitsById";
 import { Button, MenuItem, SingleSelect } from "@dhis2/ui";
-import { useMemo,useState } from "react";
+import { useEffect, useMemo,useState } from "react";
 import i18n from '@dhis2/d2-i18n'
 import styles from './CustomEvaluationPlotsWidget.module.css'
 
@@ -17,8 +17,7 @@ type Props = {
 
 export const BackTestFilter = ({ split_periods, locations, filterLocation, filterSplitPeriod, setFilterLocation, setFilterSplitPeriod }: Props) => {
     const organisationUnits = useOrgUnitsById(locations);
-    
-    
+        
     const orgUnitOptions = useMemo(() => {
         return organisationUnits.data?.organisationUnits.map(ou => ({
             label: ou.displayName,
@@ -69,8 +68,9 @@ export const BackTestFilter = ({ split_periods, locations, filterLocation, filte
                     ))}
                 </SingleSelect>
 
-                <Button
                 
+                <Button
+
                     onClick={() => {
                         setFilterLocation(undefined);
                         setFilterSplitPeriod(undefined);
