@@ -13,7 +13,7 @@ import { CustomEvaluationPlotsWidgetComponent } from './CustomEvaluationPlotsWid
 import { useCustomEvaluationPlotTypes } from './hooks/useCustomEvaluationPlotTypes'
 import { Widget } from '@dhis2-chap/ui'
 import { useFacetCoordinates } from '../../../BacktestsTable/hooks/useFacetCoordinates'
-import { BackTestFilter } from '../BackTestFilter'
+import { BackTestFilter } from './BackTestFilter'
 
 type Props = {
     evaluationId: number
@@ -61,6 +61,8 @@ const WidgetWrapper = ({
 
 export const CustomEvaluationPlotsWidget = ({ evaluationId }: Props) => {
     const [open, setOpen] = useState(false)
+    const [filterLocation, setFilterLocation] = useState<string | undefined>(undefined);
+    const [filterSplitPeriod, setFilterSplitPeriod] = useState<string | undefined>(undefined);
     const {
         customEvaluationPlotTypes,
         isLoading: isTypesLoading,
@@ -146,6 +148,10 @@ export const CustomEvaluationPlotsWidget = ({ evaluationId }: Props) => {
                         <BackTestFilter
                             split_periods={(facetCoordinates as any)?.split_period}
                             locations={(facetCoordinates as any)?.location}
+                            filterLocation={filterLocation}
+                            filterSplitPeriod={filterSplitPeriod}
+                            setFilterLocation={setFilterLocation}
+                            setFilterSplitPeriod={setFilterSplitPeriod}
                         />
                     )}
                 </div>
