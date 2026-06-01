@@ -12,10 +12,13 @@ import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 export class ModelsService {
     /**
-     * List Model Templates
-     * Lists all model templates from the db, including archived.
-     * Also syncs live chapkit services from the v2 service registry
-     * into the database (upsert by name).
+     * Browse available model templates
+     * List every model template that can be configured into a runnable model — including archived ones, so historical references stay resolvable.
+     *
+     * Acts as the discovery endpoint: it is also where the CHAPKit v2 service registry
+     * gets pulled in, so a template's ``health_status = "live"`` reflects whether the
+     * backing CHAPKit service is currently registered. Stale CHAPKit templates whose
+     * services have disappeared are auto-archived as a side effect.
      * @returns ModelTemplateRead Successful Response
      * @throws ApiError
      */
@@ -26,8 +29,12 @@ export class ModelsService {
         });
     }
     /**
-     * List Configured Models
-     * List all configured models from the db
+     * Browse configured (ready-to-run) models
+     * List every configured model — a template + user-chosen options bundled into something you can actually run.
+     *
+     * Use this to populate model pickers in backtest / prediction creation flows. Each
+     * entry carries the configuration values along with template metadata so you can
+     * surface "Model X (CRPS-tuned, 12 lags, ERA5)" or similar in a UI.
      * @returns ModelSpecRead Successful Response
      * @throws ApiError
      */
@@ -38,8 +45,13 @@ export class ModelsService {
         });
     }
     /**
-     * Add Configured Model
-     * Add a configured model to the database
+     * Configure a template into a runnable model
+     * Bind a model template together with user-chosen option values into a new, named configured model — the unit that backtests and predictions actually reference.
+     *
+     * Use this when an operator has filled out the configuration form for a template
+     * (lags, precision, extra covariates, ...) and wants to save it. The new row
+     * inherits whether the template originated from a CHAPKit service. Returns 404 if
+     * the template id is unknown.
      * @param requestBody
      * @returns ConfiguredModelDB Successful Response
      * @throws ApiError
@@ -58,10 +70,12 @@ export class ModelsService {
         });
     }
     /**
-     * Get Configured Model Info
+     * View one configured model with its template
      * ⚠️ **Experimental:** behavior and response shape may change without notice.
      *
-     * Return the detail view for a single configured model, including its template.
+     * Look up a configured model together with the template it came from — the data you need to render a model detail pane (name, configuration values, covariates, version, ...).
+     *
+     * 404 if the id is unknown.
      * @param configuredModelId
      * @returns ConfiguredModelInfoRead Successful Response
      * @throws ApiError
@@ -81,8 +95,11 @@ export class ModelsService {
         });
     }
     /**
-     * Delete Configured Model
-     * Soft delete a configured model by setting archived to True
+     * Retire a configured model
+     * Soft-delete a configured model so it stops showing up in pickers, while keeping the underlying row intact so historical backtests / predictions that reference it still resolve.
+     *
+     * The row stays in the database with ``archived=True``; existing references remain
+     * valid. 404 if the id is unknown.
      * @param configuredModelId
      * @returns any Successful Response
      * @throws ApiError

@@ -48,6 +48,7 @@ export type {
 } from './interfaces/Prediction';
 
 export type { VisualizationInfo } from './httpfunctions/models/VisualizationInfo';
+export type { chap_core__rest_api__data_models__DataBaseResponse as DataBaseResponse } from './httpfunctions/index';
 
 // Services
 export {

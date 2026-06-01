@@ -12,8 +12,14 @@ import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 export class ServicesService {
     /**
-     * Register Service
-     * Register a new service with the orchestrator.
+     * Onboard a CHAPKit model service
+     * Announce a CHAPKit-hosted model service so CHAP Core can route work to it.
+     *
+     * The orchestrator records the service and returns the absolute ping URL the service
+     * must hit periodically to stay live. As a side effect, the service's templates and
+     * default configurations are eagerly pulled into the v1 CRUD tables, so backtests and
+     * predictions can target it without waiting for the next lazy sync. Requires the
+     * ``X-Service-Key`` header.
      * @param requestBody
      * @param xServiceKey
      * @returns RegistrationResponse Successful Response
@@ -37,8 +43,13 @@ export class ServicesService {
         });
     }
     /**
-     * Ping Service
-     * Send a keepalive ping for a registered service.
+     * Send a keepalive heartbeat for a service
+     * Tell the orchestrator the service is still alive so it is not evicted from the registry.
+     *
+     * Called by the CHAPKit service itself on a timer — typically once a minute. The
+     * orchestrator marks the service "live", which is what surfaces as
+     * ``health_status = "live"`` on its model templates. Requires the ``X-Service-Key``
+     * header. Returns 404 if the service id is unknown.
      * @param serviceId
      * @param xServiceKey
      * @returns PingResponse Successful Response
@@ -63,8 +74,8 @@ export class ServicesService {
         });
     }
     /**
-     * List Services
-     * List all registered services.
+     * Browse currently live model services
+     * List every CHAPKit model service currently registered, so operators can see at a glance what compute is available to route work to.
      * @returns ServiceListResponse Successful Response
      * @throws ApiError
      */
@@ -75,8 +86,11 @@ export class ServicesService {
         });
     }
     /**
-     * Get Service
-     * Get details of a specific registered service.
+     * Inspect one registered service
+     * Look up everything the orchestrator knows about a single service — its declared info, the URL it is reachable at, and when it last pinged.
+     *
+     * Used to diagnose registration issues or populate a service-detail panel. Returns
+     * 404 if the service id is unknown.
      * @param serviceId
      * @returns ServiceDetail Successful Response
      * @throws ApiError
@@ -96,8 +110,13 @@ export class ServicesService {
         });
     }
     /**
-     * Deregister Service
-     * Deregister a service.
+     * Off-board a model service
+     * Remove a service from the registry — used by the service itself on graceful shutdown, or by an operator forcing eviction.
+     *
+     * Templates produced by the service stay in the database (so historical backtests
+     * still resolve) but lose their ``health_status = "live"`` marker. Requires the
+     * ``X-Service-Key`` header. Returns 204 on success and 404 if the service id is
+     * unknown.
      * @param serviceId
      * @param xServiceKey
      * @returns void

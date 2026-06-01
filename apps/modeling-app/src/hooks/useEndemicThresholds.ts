@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import {
     ApiError,
-    ThresholdsService,
+    DatasetsService,
     type EndemicThresholdPoint,
     type ThresholdEntry,
 } from '@dhis2-chap/ui';
@@ -31,7 +31,7 @@ export const useEndemicThresholds = ({
         queryFn: async () => {
             if (!datasetId) throw new Error('datasetId is required');
 
-            return await ThresholdsService.getThresholdsV1AnalyticsThresholdsPost({
+            return await DatasetsService.computeThresholdsV1AnalyticsThresholdsPost({
                 datasetId,
                 periodIds,
                 strategy,
