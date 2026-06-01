@@ -78,6 +78,10 @@ export const CustomEvaluationPlotsWidget = ({ evaluationId }: Props) => {
         visualizationName: selectedVisualizationId,
     })
 
+    useEffect(() => {
+        console.log('Facet coordinates updated:', facetCoordinates);
+    }, [facetCoordinates]) 
+
     const handleOnChangeVisualization = (visualizationId: string) => {
         setVisualizationId(visualizationId)
         setFilterLocation(undefined)

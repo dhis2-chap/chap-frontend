@@ -77,24 +77,14 @@ export const CustomEvaluationPlotsWidgetComponent = ({
         if (!selectionComplete) return;
 
         if (!isolatedPlotsError) {
-            console.log('CustomEvaluationPlotsWidget: isolated plots data', {
-                data: isolatedPlotsData,
-                evaluationId,
-                selectedVisualizationId,
-                filterLocation,
-                filterSplitPeriod,
-            });
-            return;
-        }
-
-        console.error('CustomEvaluationPlotsWidget: isolated plots load error', {
-            message: isolatedPlotsError?.message,
+         console.error('CustomEvaluationPlotsWidget: isolated plots load error', {
             error: isolatedPlotsError,
             evaluationId,
             selectedVisualizationId,
             filterLocation,
             filterSplitPeriod,
         });
+    }
     }, [isolatedPlotsError, isolatedPlotsData, selectedVisualizationId, filterLocation, filterSplitPeriod, selectionComplete]);
 
     useEffect(() => {
