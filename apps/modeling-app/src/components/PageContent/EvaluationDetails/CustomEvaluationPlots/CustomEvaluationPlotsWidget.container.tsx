@@ -12,7 +12,8 @@ import styles from './CustomEvaluationPlotsWidget.module.css'
 import { CustomEvaluationPlotsWidgetComponent } from './CustomEvaluationPlotsWidget.component'
 import { useCustomEvaluationPlotTypes } from './hooks/useCustomEvaluationPlotTypes'
 import { Widget } from '@dhis2-chap/ui'
-import { useFacetCoordinates } from './hooks/useFacetCoordinates'
+import { useFacetCoordinates } from '../../../BacktestsTable/hooks/useFacetCoordinates'
+import { BackTestFilter } from '../BackTestFilter'
 
 type Props = {
     evaluationId: number
@@ -72,19 +73,13 @@ export const CustomEvaluationPlotsWidget = ({ evaluationId }: Props) => {
 
     const { facetCoordinates } = useFacetCoordinates({
         backtestId: evaluationId,
-        visualizationName: selectedVisualizationId, 
-    });
+        visualizationName: selectedVisualizationId,
+    })
 
     const handleOnChangeVisualization = (visualizationId: string) => {
         setVisualizationId(visualizationId)
     }
     
-    useEffect(() => {
-        if (selectedVisualizationId === 'evaluation_plot' || selectedVisualizationId === 'predicted_vs_actual') {
-            console.log('facetCoordinates', facetCoordinates);
-        }
-    }, [selectedVisualizationId, facetCoordinates]);
-
     if (isTypesLoading) {
         return (
             <div className={styles.container}>
@@ -147,9 +142,11 @@ export const CustomEvaluationPlotsWidget = ({ evaluationId }: Props) => {
                             ))}
                         </SingleSelect>
                     </div>
-                    {(selectedVisualizationId === 'evaluation_plot' ||
-                        selectedVisualizationId === 'predicted_vs_actual') && (
-                        <div>Somethings here</div>
+                    {!!facetCoordinates && (
+                        <BackTestFilter
+                            split_periods={(facetCoordinates as any)?.split_period}
+                            locations={(facetCoordinates as any)?.location}
+                        />
                     )}
                 </div>
 
