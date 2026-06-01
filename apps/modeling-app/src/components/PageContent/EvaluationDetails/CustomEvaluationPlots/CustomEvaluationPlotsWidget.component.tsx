@@ -65,6 +65,10 @@ export const CustomEvaluationPlotsWidgetComponent = ({
     });
 
     const plotSpec = hasFilters ? (isolatedPlotsData ?? visualization) : visualization;
+    const isSingleIsolatedPlot = hasFilters && !!isolatedPlotsData;
+    const visualizationContainerClass = isSingleIsolatedPlot
+        ? `${styles.visualizationContainer} ${styles.singleIsolatedPlot}`
+        : styles.visualizationContainer;
 
     const isPlotLoading = isVisualizationLoading || (hasFilters && isIsolatedPlotsLoading);
     const showError = visualizationError || (hasFilters && isolatedPlotsError);
@@ -148,7 +152,7 @@ export const CustomEvaluationPlotsWidgetComponent = ({
 
     return (
         <div className={styles.card}>
-            <div className={styles.visualizationContainer}>
+            <div className={visualizationContainerClass}>
                 <VegaEmbed
                     spec={plotSpec}
                     className={styles.vegaEmbed}
