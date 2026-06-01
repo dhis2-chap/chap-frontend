@@ -80,6 +80,8 @@ export const CustomEvaluationPlotsWidget = ({ evaluationId }: Props) => {
 
     const handleOnChangeVisualization = (visualizationId: string) => {
         setVisualizationId(visualizationId)
+        setFilterLocation(undefined)
+        setFilterSplitPeriod(undefined)
     }
     
     if (isTypesLoading) {
