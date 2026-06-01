@@ -1,20 +1,43 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { CircularLoader, IconWarning24 } from '@dhis2/ui';
 import { VegaEmbed } from 'react-vega';
 import i18n from '@dhis2/d2-i18n';
 import { useCustomEvaluationPlotVisualization } from './hooks/useCustomEvaluationPlotVisualization';
 import styles from './CustomEvaluationPlotsWidget.module.css';
+import { useIsolatedPlots } from '@/components/BacktestsTable/hooks/useIsolatedPlots';
 
 type Props = {
     evaluationId: number;
     selectedVisualizationId?: string;
+    filterLocation?: string;
+    filterSplitPeriod?: string;
+};
+
+const VEGA_OPTIONS = {
+    actions: {
+        export: true,
+        compiled: false,
+        source: false,
+        editor: false,
+    },
+    i18n: {
+        CLICK_TO_VIEW_ACTIONS: i18n.t('Click to view actions'),
+        COMPILED_ACTION: i18n.t('View Compiled Vega'),
+        EDITOR_ACTION: i18n.t('Open in Vega Editor'),
+        PNG_ACTION: i18n.t('Save as PNG'),
+        SOURCE_ACTION: i18n.t('View Source'),
+        SVG_ACTION: i18n.t('Save as SVG'),
+    },
 };
 
 export const CustomEvaluationPlotsWidgetComponent = ({
     evaluationId,
     selectedVisualizationId,
+    filterLocation,
+    filterSplitPeriod,
 }: Props) => {
     const selectionComplete = !!selectedVisualizationId;
+
     const {
         visualization,
         isLoading: isVisualizationLoading,
@@ -24,8 +47,48 @@ export const CustomEvaluationPlotsWidgetComponent = ({
         visualizationId: selectedVisualizationId,
     });
 
+    const requestBody = useMemo(() => ({
+        location: filterLocation,
+        split_period: filterSplitPeriod,
+    }), [filterLocation, filterSplitPeriod]);
+
+    const {
+        plotsData: isolatedPlotsData,
+        isLoading: isIsolatedPlotsLoading,
+        error: isolatedPlotsError,
+    } = useIsolatedPlots({
+        visualizationName: selectedVisualizationId,
+        backtestId: evaluationId,
+        requestBody,
+    });
+
+    useEffect(() => {
+        if (!selectionComplete) return;
+
+        if (!isolatedPlotsError) {
+            console.log('CustomEvaluationPlotsWidget: isolated plots data', {
+                data: isolatedPlotsData,
+                evaluationId,
+                selectedVisualizationId,
+                filterLocation,
+                filterSplitPeriod,
+            });
+            return;
+        }
+
+        console.error('CustomEvaluationPlotsWidget: isolated plots load error', {
+            message: isolatedPlotsError?.message,
+            error: isolatedPlotsError,
+            evaluationId,
+            selectedVisualizationId,
+            filterLocation,
+            filterSplitPeriod,
+        });
+    }, [isolatedPlotsError, isolatedPlotsData, evaluationId, selectedVisualizationId, filterLocation, filterSplitPeriod, selectionComplete]);
+
     useEffect(() => {
         if (!visualizationError) return;
+        
         console.error('CustomEvaluationPlotsWidget: visualization load error', {
             message: visualizationError?.message,
             error: visualizationError,
@@ -42,7 +105,7 @@ export const CustomEvaluationPlotsWidgetComponent = ({
         );
     }
 
-    if (isVisualizationLoading) {
+    if (isVisualizationLoading || isIsolatedPlotsLoading) {
         return (
             <div className={styles.loadingContainer}>
                 <CircularLoader />
@@ -68,7 +131,7 @@ export const CustomEvaluationPlotsWidgetComponent = ({
         );
     }
 
-    if (!visualization) {
+    if (!visualization ) {
         return (
             <div className={styles.errorContainer}>
                 {i18n.t('No visualization found')}
@@ -82,22 +145,7 @@ export const CustomEvaluationPlotsWidgetComponent = ({
                 <VegaEmbed
                     spec={visualization}
                     className={styles.vegaEmbed}
-                    options={{
-                        actions: {
-                            export: true,
-                            compiled: false,
-                            source: false,
-                            editor: false,
-                        },
-                        i18n: {
-                            CLICK_TO_VIEW_ACTIONS: i18n.t('Click to view actions'),
-                            COMPILED_ACTION: i18n.t('View Compiled Vega'),
-                            EDITOR_ACTION: i18n.t('Open in Vega Editor'),
-                            PNG_ACTION: i18n.t('Save as PNG'),
-                            SOURCE_ACTION: i18n.t('View Source'),
-                            SVG_ACTION: i18n.t('Save as SVG'),
-                        },
-                    }}
+                    options={VEGA_OPTIONS}
                 />
             </div>
         </div>
