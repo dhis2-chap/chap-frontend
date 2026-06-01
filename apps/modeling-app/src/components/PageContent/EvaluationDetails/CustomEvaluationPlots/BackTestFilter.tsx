@@ -1,5 +1,5 @@
 import { useOrgUnitsById } from "@/hooks/useOrgUnitsById";
-import { MenuItem, SingleSelect } from "@dhis2/ui";
+import { Button, MenuItem, SingleSelect } from "@dhis2/ui";
 import { useMemo,useState } from "react";
 import i18n from '@dhis2/d2-i18n'
 import styles from './CustomEvaluationPlotsWidget.module.css'
@@ -68,6 +68,16 @@ export const BackTestFilter = ({ split_periods, locations, filterLocation, filte
                         />
                     ))}
                 </SingleSelect>
+
+                <Button
+                
+                    onClick={() => {
+                        setFilterLocation(undefined);
+                        setFilterSplitPeriod(undefined);
+                    }}
+                >
+                    {i18n.t('Clear filters')}
+                </Button>
             </div>
         
     );
