@@ -37,7 +37,7 @@ export const BackTestFilter = ({
 
     const orgUnitIds = useMemo(() => facetCoords?.location ?? [], [facetCoords?.location]);
     const organisationUnits = useOrgUnitsById(orgUnitIds);
-    const isOrgUnitsLoading = organisationUnits.loading || false;
+    const isOrgUnitsLoading = organisationUnits.isLoading || false;
 
     const orgUnitOptions = useMemo(() =>
         organisationUnits.data?.organisationUnits.map(ou => ({

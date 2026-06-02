@@ -2,7 +2,6 @@ import { useEffect, useMemo } from 'react';
 import { CircularLoader, IconWarning24 } from '@dhis2/ui';
 import { VegaEmbed } from 'react-vega';
 import i18n from '@dhis2/d2-i18n';
-import { useCustomEvaluationPlotVisualization } from './hooks/useCustomEvaluationPlotVisualization';
 import styles from './CustomEvaluationPlotsWidget.module.css';
 import { useIsolatedPlots } from '@/components/BacktestsTable/hooks/useIsolatedPlots';
 
@@ -47,15 +46,6 @@ export const CustomEvaluationPlotsWidgetComponent = ({
         return !!filterHorizonPeriod;
     }, [filterLocation, filterSplitPeriod, filterHorizonPeriod, selectedVisualizationId]);
 
-    const {
-        visualization,
-        isLoading: isVisualizationLoading,
-        error: visualizationError,
-    } = useCustomEvaluationPlotVisualization({
-        evaluationId,
-        visualizationId: selectedVisualizationId,
-    });
-
     const requestBody = useMemo(
         () =>
             hasFilters
@@ -78,15 +68,11 @@ export const CustomEvaluationPlotsWidgetComponent = ({
         requestBody,
     });
 
-    const plotSpec = hasFilters ? (isolatedPlotsData ?? visualization) : visualization;
-    const isSingleIsolatedPlot = hasFilters && !!isolatedPlotsData;
-
-    const visualizationContainerClass = isSingleIsolatedPlot
+    const visualizationContainerClass = isolatedPlotsData
         ? `${styles.visualizationContainer} ${styles.singleIsolatedPlot}`
         : styles.visualizationContainer;
 
-    const isPlotLoading = isVisualizationLoading || (hasFilters && isIsolatedPlotsLoading);
-    const showError = visualizationError || (hasFilters && isolatedPlotsError);
+    const showError = isolatedPlotsError;
 
     useEffect(() => {
         if (!selectionComplete || !isolatedPlotsError) return;
@@ -100,21 +86,6 @@ export const CustomEvaluationPlotsWidgetComponent = ({
         });
     }, [isolatedPlotsError, evaluationId, selectedVisualizationId, filterLocation, filterSplitPeriod, selectionComplete]);
 
-    useEffect(() => {
-        if (!visualizationError) return;
-
-        console.error('CustomEvaluationPlotsWidget: visualization load error', {
-            message: visualizationError?.message,
-            error: visualizationError,
-            evaluationId,
-            selectedVisualizationId,
-        });
-    }, [visualizationError, evaluationId, selectedVisualizationId]);
-
-    useEffect(() => {
-        console.log('Plot spec updated:', plotSpec);
-    }, [plotSpec]);
-
     if (!selectionComplete) {
         return (
             <div className={styles.emptyState}>
@@ -123,7 +94,19 @@ export const CustomEvaluationPlotsWidgetComponent = ({
         );
     }
 
-    if (isPlotLoading) {
+    if (!hasFilters) {
+        return (
+            <div className={styles.emptyState}>
+                <p>
+                    {selectedVisualizationId === 'evaluation_plot'
+                        ? i18n.t('Please select an organisation unit and split period to view this visualization.')
+                        : i18n.t('Please select a horizon period to view this visualization.')}
+                </p>
+            </div>
+        );
+    }
+
+    if (isIsolatedPlotsLoading) {
         return (
             <div className={styles.loadingContainer}>
                 <CircularLoader />
@@ -149,7 +132,7 @@ export const CustomEvaluationPlotsWidgetComponent = ({
         );
     }
 
-    if (!plotSpec) {
+    if (!isolatedPlotsData) {
         return (
             <div className={styles.errorContainer}>
                 {i18n.t('No visualization found')}
@@ -161,7 +144,7 @@ export const CustomEvaluationPlotsWidgetComponent = ({
         <div className={styles.card}>
             <div className={visualizationContainerClass}>
                 <VegaEmbed
-                    spec={plotSpec}
+                    spec={isolatedPlotsData}
                     className={styles.vegaEmbed}
                     options={VEGA_OPTIONS}
                 />
