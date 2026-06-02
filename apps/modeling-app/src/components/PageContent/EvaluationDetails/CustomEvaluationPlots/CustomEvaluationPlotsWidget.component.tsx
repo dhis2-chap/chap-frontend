@@ -44,7 +44,7 @@ export const CustomEvaluationPlotsWidgetComponent = ({
         if (selectedVisualizationId === 'evaluation_plot') {
             return !!filterLocation && !!filterSplitPeriod;
         }
-        return  !!filterHorizonPeriod;
+        return !!filterHorizonPeriod;
     }, [filterLocation, filterSplitPeriod, filterHorizonPeriod, selectedVisualizationId]);
 
     const {
@@ -60,10 +60,10 @@ export const CustomEvaluationPlotsWidgetComponent = ({
         () =>
             hasFilters
                 ? {
-                      location: filterLocation,
-                      split_period: filterSplitPeriod,
-                      ...(selectedVisualizationId !== 'evaluation_plot' && { horizon_period: filterHorizonPeriod }),
-                  }
+                        location: filterLocation,
+                        split_period: filterSplitPeriod,
+                        ...(selectedVisualizationId !== 'evaluation_plot' && { horizon_period: filterHorizonPeriod }),
+                    }
                 : undefined,
         [hasFilters, filterLocation, filterSplitPeriod, filterHorizonPeriod, selectedVisualizationId],
     );
@@ -80,7 +80,7 @@ export const CustomEvaluationPlotsWidgetComponent = ({
 
     const plotSpec = hasFilters ? (isolatedPlotsData ?? visualization) : visualization;
     const isSingleIsolatedPlot = hasFilters && !!isolatedPlotsData;
-    
+
     const visualizationContainerClass = isSingleIsolatedPlot
         ? `${styles.visualizationContainer} ${styles.singleIsolatedPlot}`
         : styles.visualizationContainer;
@@ -102,7 +102,7 @@ export const CustomEvaluationPlotsWidgetComponent = ({
 
     useEffect(() => {
         if (!visualizationError) return;
-        
+
         console.error('CustomEvaluationPlotsWidget: visualization load error', {
             message: visualizationError?.message,
             error: visualizationError,
@@ -113,7 +113,7 @@ export const CustomEvaluationPlotsWidgetComponent = ({
 
     useEffect(() => {
         console.log('Plot spec updated:', plotSpec);
-    }, [plotSpec])
+    }, [plotSpec]);
 
     if (!selectionComplete) {
         return (

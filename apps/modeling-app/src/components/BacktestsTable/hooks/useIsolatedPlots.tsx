@@ -32,9 +32,9 @@ export const useIsolatedPlots = ({
             !!visualizationName &&
             !!requestBody,
         staleTime: 5 * 60 * 1000,
-        // Note: In TanStack Query v5+, cacheTime is renamed to gcTime. 
+        // Note: In TanStack Query v5+, cacheTime is renamed to gcTime.
         // Keeping cacheTime here to match your existing implementation template.
-        cacheTime: 5 * 60 * 1000, 
+        cacheTime: 5 * 60 * 1000,
         retry: 0,
         refetchOnWindowFocus: false,
     });

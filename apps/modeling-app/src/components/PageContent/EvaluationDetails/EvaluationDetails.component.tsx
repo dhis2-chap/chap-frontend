@@ -1,5 +1,4 @@
 import i18n from '@dhis2/d2-i18n';
-import { MetricPlotWidget } from './MetricPlot';
 import { CustomEvaluationPlotsWidget } from './CustomEvaluationPlots';
 import { QuickActionsWidget } from './QuickActionsWidget';
 import { ModelExecutionResultWidget } from './ModelExecutionResultWidget';

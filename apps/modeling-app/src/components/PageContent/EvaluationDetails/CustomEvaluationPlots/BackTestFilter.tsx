@@ -1,6 +1,6 @@
-import { useOrgUnitsById } from "@/hooks/useOrgUnitsById";
-import { Button, MenuItem, SingleSelect } from "@dhis2/ui";
-import { useMemo, useCallback } from "react";
+import { useOrgUnitsById } from '@/hooks/useOrgUnitsById';
+import { Button, MenuItem, SingleSelect } from '@dhis2/ui';
+import { useMemo, useCallback } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import styles from './CustomEvaluationPlotsWidget.module.css';
 
@@ -22,30 +22,29 @@ type Props = {
 };
 
 export const BackTestFilter = ({
-    facetCoords, filterLocation, filterSplitPeriod, filterHorizonPeriod, visualizationId,    
-    setFilterLocation, setFilterSplitPeriod, setFilterHorizonPeriod
+    facetCoords, filterLocation, filterSplitPeriod, filterHorizonPeriod, visualizationId,
+    setFilterLocation, setFilterSplitPeriod, setFilterHorizonPeriod,
 }: Props) => {
-    
-    const splitPeriodOptions = useMemo(() => 
+    const splitPeriodOptions = useMemo(() =>
         (facetCoords?.split_period ?? []).map(val => ({ value: val, label: val })),
-        [facetCoords?.split_period]
+    [facetCoords?.split_period],
     );
 
-    const horizonOptions = useMemo(() => 
+    const horizonOptions = useMemo(() =>
         (facetCoords?.horizon_periods ?? []).map(val => ({ value: String(val), label: String(val) })),
-        [facetCoords?.horizon_periods]
+    [facetCoords?.horizon_periods],
     );
 
     const orgUnitIds = useMemo(() => facetCoords?.location ?? [], [facetCoords?.location]);
     const organisationUnits = useOrgUnitsById(orgUnitIds);
-    const isOrgUnitsLoading = organisationUnits.loading || false; 
-        
-    const orgUnitOptions = useMemo(() => 
+    const isOrgUnitsLoading = organisationUnits.loading || false;
+
+    const orgUnitOptions = useMemo(() =>
         organisationUnits.data?.organisationUnits.map(ou => ({
             label: ou.displayName,
             value: ou.id,
         })) ?? [],
-        [organisationUnits.data?.organisationUnits]
+    [organisationUnits.data?.organisationUnits],
     );
 
     const handleClearFilters = useCallback(() => {
@@ -56,20 +55,20 @@ export const BackTestFilter = ({
 
     const showLocation = facetCoords?.location && facetCoords.location.length > 0;
     const showSplitPeriod = facetCoords?.split_period && facetCoords.split_period.length > 0;
-    const showHorizon = visualizationId !== "evaluation_plot" && facetCoords?.horizon_periods && facetCoords.horizon_periods.length > 0;
+    const showHorizon = visualizationId !== 'evaluation_plot' && facetCoords?.horizon_periods && facetCoords.horizon_periods.length > 0;
 
     return (
         <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-            
+
             {showLocation && (
                 <SingleSelect
                     className={styles.singleSelectContainer}
                     dense
                     placeholder={i18n.t('Select organisation unit')}
                     selected={filterLocation}
-                    loading={isOrgUnitsLoading} 
+                    loading={isOrgUnitsLoading}
                     disabled={isOrgUnitsLoading}
-                    onChange={(e) => setFilterLocation(e.selected)}
+                    onChange={e => setFilterLocation(e.selected)}
                 >
                     {orgUnitOptions.map(({ value, label }) => (
                         <MenuItem key={value} value={value} label={label} />
@@ -83,7 +82,7 @@ export const BackTestFilter = ({
                     dense
                     placeholder={i18n.t('Select split period')}
                     selected={filterSplitPeriod}
-                    onChange={(e) => setFilterSplitPeriod(e.selected)}
+                    onChange={e => setFilterSplitPeriod(e.selected)}
                 >
                     {splitPeriodOptions.map(({ value, label }) => (
                         <MenuItem key={value} value={value} label={label} />
@@ -97,7 +96,7 @@ export const BackTestFilter = ({
                     dense
                     placeholder={i18n.t('Select horizon period')}
                     selected={filterHorizonPeriod}
-                    onChange={(e) => setFilterHorizonPeriod(e.selected)}
+                    onChange={e => setFilterHorizonPeriod(e.selected)}
                 >
                     {horizonOptions.map(({ value, label }) => (
                         <MenuItem key={value} value={value} label={label} />

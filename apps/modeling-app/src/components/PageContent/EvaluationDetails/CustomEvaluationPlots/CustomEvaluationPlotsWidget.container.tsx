@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
 import {
     CircularLoader,
     IconInfo16,
@@ -6,26 +6,26 @@ import {
     NoticeBox,
     SingleSelect,
     Tooltip,
-} from '@dhis2/ui'
-import i18n from '@dhis2/d2-i18n'
-import styles from './CustomEvaluationPlotsWidget.module.css'
-import { CustomEvaluationPlotsWidgetComponent } from './CustomEvaluationPlotsWidget.component'
-import { useCustomEvaluationPlotTypes } from './hooks/useCustomEvaluationPlotTypes'
-import { Widget } from '@dhis2-chap/ui'
-import { useFacetCoordinates } from '../../../BacktestsTable/hooks/useFacetCoordinates'
-import { BackTestFilter } from './BackTestFilter'
+} from '@dhis2/ui';
+import i18n from '@dhis2/d2-i18n';
+import styles from './CustomEvaluationPlotsWidget.module.css';
+import { CustomEvaluationPlotsWidgetComponent } from './CustomEvaluationPlotsWidget.component';
+import { useCustomEvaluationPlotTypes } from './hooks/useCustomEvaluationPlotTypes';
+import { Widget } from '@dhis2-chap/ui';
+import { useFacetCoordinates } from '../../../BacktestsTable/hooks/useFacetCoordinates';
+import { BackTestFilter } from './BackTestFilter';
 
 type Props = {
-    evaluationId: number
-}
+    evaluationId: number;
+};
 
 type WidgetWrapperProps = {
-    children: React.ReactNode
-    open: boolean
-    onOpen: () => void
-    onClose: () => void
-    className?: string
-}
+    children: React.ReactNode;
+    open: boolean;
+    onOpen: () => void;
+    onClose: () => void;
+    className?: string;
+};
 
 const WidgetWrapper = ({
     children,
@@ -35,12 +35,12 @@ const WidgetWrapper = ({
 }: WidgetWrapperProps) => {
     return (
         <Widget
-            header={
+            header={(
                 <div className={styles.header}>
                     <span>{i18n.t('Evaluation plots')}</span>
                     <Tooltip
                         content={i18n.t(
-                            'Evaluation plots are configured system-wide and defined by system administrators / model developers. If you experience issues, please contact your system administrator.'
+                            'Evaluation plots are configured system-wide and defined by system administrators / model developers. If you experience issues, please contact your system administrator.',
                         )}
                         placement="top"
                     >
@@ -49,18 +49,18 @@ const WidgetWrapper = ({
                         </span>
                     </Tooltip>
                 </div>
-            }
+            )}
             open={open}
             onOpen={onOpen}
             onClose={onClose}
         >
             <div className={styles.content}>{children}</div>
         </Widget>
-    )
-}
+    );
+};
 
 export const CustomEvaluationPlotsWidget = ({ evaluationId }: Props) => {
-    const [open, setOpen] = useState(false)
+    const [open, setOpen] = useState(false);
     const [filterLocation, setFilterLocation] = useState<string | undefined>(undefined);
     const [filterSplitPeriod, setFilterSplitPeriod] = useState<string | undefined>(undefined);
     const [filterHorizonPeriod, setFilterHorizonPeriod] = useState<string | undefined>(undefined);
@@ -68,28 +68,28 @@ export const CustomEvaluationPlotsWidget = ({ evaluationId }: Props) => {
         customEvaluationPlotTypes,
         isLoading: isTypesLoading,
         error: typesError,
-    } = useCustomEvaluationPlotTypes()
+    } = useCustomEvaluationPlotTypes();
 
     const [selectedVisualizationId, setVisualizationId] = useState<
         string | undefined
-    >(undefined)
+    >(undefined);
 
     const { facetCoordinates } = useFacetCoordinates({
         backtestId: evaluationId,
         visualizationName: selectedVisualizationId,
-    })
+    });
 
     useEffect(() => {
         console.log('Facet coordinates updated:', facetCoordinates);
-    }, [facetCoordinates]) 
+    }, [facetCoordinates]);
 
     const handleOnChangeVisualization = (visualizationId: string) => {
-        setVisualizationId(visualizationId)
-        setFilterLocation(undefined)
-        setFilterSplitPeriod(undefined)
-        setFilterHorizonPeriod(undefined)
-    }
-    
+        setVisualizationId(visualizationId);
+        setFilterLocation(undefined);
+        setFilterSplitPeriod(undefined);
+        setFilterHorizonPeriod(undefined);
+    };
+
     if (isTypesLoading) {
         return (
             <div className={styles.container}>
@@ -103,7 +103,7 @@ export const CustomEvaluationPlotsWidget = ({ evaluationId }: Props) => {
                     </div>
                 </WidgetWrapper>
             </div>
-        )
+        );
     }
 
     if (typesError) {
@@ -118,14 +118,14 @@ export const CustomEvaluationPlotsWidget = ({ evaluationId }: Props) => {
                         <NoticeBox title={i18n.t('Unable to load data')} error>
                             <p>
                                 {i18n.t(
-                                    'There was a problem loading required data. See the browser console for details.'
+                                    'There was a problem loading required data. See the browser console for details.',
                                 )}
                             </p>
                         </NoticeBox>
                     </div>
                 </WidgetWrapper>
             </div>
-        )
+        );
     }
 
     return (
@@ -141,9 +141,9 @@ export const CustomEvaluationPlotsWidget = ({ evaluationId }: Props) => {
                             dense
                             selected={selectedVisualizationId}
                             placeholder={i18n.t('Select visualization')}
-                            onChange={(e) => handleOnChangeVisualization(e.selected)}
+                            onChange={e => handleOnChangeVisualization(e.selected)}
                         >
-                            {(customEvaluationPlotTypes ?? []).map((v) => (
+                            {(customEvaluationPlotTypes ?? []).map(v => (
                                 <MenuItem
                                     key={v.id}
                                     value={v.id}
@@ -153,7 +153,7 @@ export const CustomEvaluationPlotsWidget = ({ evaluationId }: Props) => {
                         </SingleSelect>
                     </div>
                     {!!facetCoordinates && (
-                                <BackTestFilter
+                        <BackTestFilter
                             visualizationId={selectedVisualizationId!}
                             facetCoords={facetCoordinates}
                             filterLocation={filterLocation}
@@ -163,7 +163,7 @@ export const CustomEvaluationPlotsWidget = ({ evaluationId }: Props) => {
                             setFilterSplitPeriod={setFilterSplitPeriod}
                             setFilterHorizonPeriod={setFilterHorizonPeriod}
                         />
-                    )}                        
+                    )}
                 </div>
 
                 <CustomEvaluationPlotsWidgetComponent
@@ -175,5 +175,5 @@ export const CustomEvaluationPlotsWidget = ({ evaluationId }: Props) => {
                 />
             </WidgetWrapper>
         </div>
-    )
-}
+    );
+};
