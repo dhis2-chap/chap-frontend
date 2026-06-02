@@ -61,6 +61,6 @@ export const useEndemicThresholds = ({
     return {
         thresholdMap,
         isLoading: isQueryEnabled && isLoading,
-        error,
+        error: isQueryEnabled ? error : null,
     };
 };
