@@ -41,11 +41,10 @@ export const CustomEvaluationPlotsWidgetComponent = ({
     const selectionComplete = !!selectedVisualizationId;
 
     const hasFilters = useMemo(() => {
-        const baseFilters = !!filterLocation;
         if (selectedVisualizationId === 'evaluation_plot') {
-            return baseFilters && !!filterSplitPeriod;
+            return !!filterLocation && !!filterSplitPeriod;
         }
-        return baseFilters && !!filterHorizonPeriod;
+        return  !!filterHorizonPeriod;
     }, [filterLocation, filterSplitPeriod, filterHorizonPeriod, selectedVisualizationId]);
 
     const {
@@ -111,6 +110,10 @@ export const CustomEvaluationPlotsWidgetComponent = ({
             selectedVisualizationId,
         });
     }, [visualizationError, evaluationId, selectedVisualizationId]);
+
+    useEffect(() => {
+        console.log('Plot spec updated:', plotSpec);
+    }, [plotSpec])
 
     if (!selectionComplete) {
         return (

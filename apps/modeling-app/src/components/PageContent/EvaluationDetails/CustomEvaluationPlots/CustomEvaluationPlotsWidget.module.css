@@ -33,6 +33,7 @@
 }
 
 .card {
+    width: fit-content;
     overflow: auto;
 }
 
