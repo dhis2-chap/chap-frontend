@@ -1,84 +1,113 @@
 import { useOrgUnitsById } from "@/hooks/useOrgUnitsById";
 import { Button, MenuItem, SingleSelect } from "@dhis2/ui";
-import { useEffect, useMemo,useState } from "react";
-import i18n from '@dhis2/d2-i18n'
-import styles from './CustomEvaluationPlotsWidget.module.css'
+import { useMemo, useCallback } from "react";
+import i18n from '@dhis2/d2-i18n';
+import styles from './CustomEvaluationPlotsWidget.module.css';
 
-
+type FacetCoords = {
+    split_period?: string[];
+    location?: string[];
+    horizon_periods?: number[];
+};
 
 type Props = {
-    split_periods: string[];
-    locations: string[];
-    filterLocation: string | undefined;
-    filterSplitPeriod: string | undefined;
-    setFilterLocation: (location: string | undefined) => void;
-    setFilterSplitPeriod: (splitPeriod: string | undefined) => void;
-}
+    facetCoords?: FacetCoords;
+    filterLocation?: string;
+    filterSplitPeriod?: string;
+    filterHorizonPeriod?: string;
+    visualizationId: string;
+    setFilterLocation: (val: string | undefined) => void;
+    setFilterSplitPeriod: (val: string | undefined) => void;
+    setFilterHorizonPeriod: (val: string | undefined) => void;
+};
 
-export const BackTestFilter = ({ split_periods, locations, filterLocation, filterSplitPeriod, setFilterLocation, setFilterSplitPeriod }: Props) => {
-    const organisationUnits = useOrgUnitsById(locations);
+export const BackTestFilter = ({
+    facetCoords, filterLocation, filterSplitPeriod, filterHorizonPeriod, visualizationId,    
+    setFilterLocation, setFilterSplitPeriod, setFilterHorizonPeriod
+}: Props) => {
+    
+    const splitPeriodOptions = useMemo(() => 
+        (facetCoords?.split_period ?? []).map(val => ({ value: val, label: val })),
+        [facetCoords?.split_period]
+    );
+
+    const horizonOptions = useMemo(() => 
+        (facetCoords?.horizon_periods ?? []).map(val => ({ value: String(val), label: String(val) })),
+        [facetCoords?.horizon_periods]
+    );
+
+    const orgUnitIds = useMemo(() => facetCoords?.location ?? [], [facetCoords?.location]);
+    const organisationUnits = useOrgUnitsById(orgUnitIds);
+    const isOrgUnitsLoading = organisationUnits.loading || false; 
         
-    const orgUnitOptions = useMemo(() => {
-        return organisationUnits.data?.organisationUnits.map(ou => ({
+    const orgUnitOptions = useMemo(() => 
+        organisationUnits.data?.organisationUnits.map(ou => ({
             label: ou.displayName,
             value: ou.id,
-        })) ?? [];
-    }, [organisationUnits.data?.organisationUnits]);
+        })) ?? [],
+        [organisationUnits.data?.organisationUnits]
+    );
 
-    
+    const handleClearFilters = useCallback(() => {
+        setFilterLocation(undefined);
+        setFilterSplitPeriod(undefined);
+        setFilterHorizonPeriod(undefined);
+    }, [setFilterLocation, setFilterSplitPeriod, setFilterHorizonPeriod]);
+
+    const showLocation = facetCoords?.location && facetCoords.location.length > 0;
+    const showSplitPeriod = facetCoords?.split_period && facetCoords.split_period.length > 0;
+    const showHorizon = visualizationId !== "evaluation_plot" && facetCoords?.horizon_periods && facetCoords.horizon_periods.length > 0;
 
     return (
-        <div style={{ display: 'flex' , gap: '16px'}}>
+        <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+            
+            {showLocation && (
+                <SingleSelect
+                    className={styles.singleSelectContainer}
+                    dense
+                    placeholder={i18n.t('Select organisation unit')}
+                    selected={filterLocation}
+                    loading={isOrgUnitsLoading} 
+                    disabled={isOrgUnitsLoading}
+                    onChange={(e) => setFilterLocation(e.selected)}
+                >
+                    {orgUnitOptions.map(({ value, label }) => (
+                        <MenuItem key={value} value={value} label={label} />
+                    ))}
+                </SingleSelect>
+            )}
 
-            <SingleSelect
-                className={styles.singleSelectContainer}
-                dense
-                placeholder={i18n.t('Select organisation unit')}
-                selected={filterLocation}
-                onChange={(e) => {
-                    setFilterLocation(e.selected);
-                    console.log('Selected location:', e.selected);
-                }}
-            >
-                {orgUnitOptions.map(option => (
-                    <MenuItem
-                        key={option.value}
-                        value={option.value}
-                        label={option.label}
-                    />
-                ))}
-            </SingleSelect>
-
+            {showSplitPeriod && (
                 <SingleSelect
                     className={styles.singleSelectContainer}
                     dense
                     placeholder={i18n.t('Select split period')}
                     selected={filterSplitPeriod}
-                    onChange={(e) => {
-                        setFilterSplitPeriod(e.selected);
-                        console.log('Selected split period:', e.selected);
-                    }}
+                    onChange={(e) => setFilterSplitPeriod(e.selected)}
                 >
-                    {split_periods.map(option => (
-                        <MenuItem
-                            key={option}
-                            value={option}
-                            label={option}
-                        />
+                    {splitPeriodOptions.map(({ value, label }) => (
+                        <MenuItem key={value} value={value} label={label} />
                     ))}
                 </SingleSelect>
+            )}
 
-                
-                <Button
-
-                    onClick={() => {
-                        setFilterLocation(undefined);
-                        setFilterSplitPeriod(undefined);
-                    }}
+            {showHorizon && (
+                <SingleSelect
+                    className={styles.singleSelectContainer}
+                    dense
+                    placeholder={i18n.t('Select horizon period')}
+                    selected={filterHorizonPeriod}
+                    onChange={(e) => setFilterHorizonPeriod(e.selected)}
                 >
-                    {i18n.t('Clear filters')}
-                </Button>
-            </div>
-        
+                    {horizonOptions.map(({ value, label }) => (
+                        <MenuItem key={value} value={value} label={label} />
+                    ))}
+                </SingleSelect>
+            )}
+
+            <Button onClick={handleClearFilters}>
+                {i18n.t('Clear filters')}
+            </Button>
+        </div>
     );
 };
