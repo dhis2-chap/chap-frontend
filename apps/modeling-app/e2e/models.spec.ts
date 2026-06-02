@@ -112,7 +112,7 @@ test('shows archived models when Include archived is enabled', async ({ page }) 
 
     await expect(archivedRow).toHaveCount(0);
 
-    await page.getByRole('checkbox', { name: 'Include archived' }).check();
+    await page.getByRole('checkbox', { name: 'Include archived' }).click();
 
     await expect(page).toHaveURL(/includeArchived=true/);
     await expect(archivedRow).toBeVisible();
