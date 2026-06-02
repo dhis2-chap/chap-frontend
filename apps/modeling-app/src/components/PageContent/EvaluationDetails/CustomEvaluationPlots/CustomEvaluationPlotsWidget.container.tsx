@@ -63,6 +63,7 @@ export const CustomEvaluationPlotsWidget = ({ evaluationId }: Props) => {
     const [open, setOpen] = useState(false)
     const [filterLocation, setFilterLocation] = useState<string | undefined>(undefined);
     const [filterSplitPeriod, setFilterSplitPeriod] = useState<string | undefined>(undefined);
+    const [filterHorizonPeriod, setFilterHorizonPeriod] = useState<string | undefined>(undefined);
     const {
         customEvaluationPlotTypes,
         isLoading: isTypesLoading,
@@ -86,6 +87,7 @@ export const CustomEvaluationPlotsWidget = ({ evaluationId }: Props) => {
         setVisualizationId(visualizationId)
         setFilterLocation(undefined)
         setFilterSplitPeriod(undefined)
+        setFilterHorizonPeriod(undefined)
     }
     
     if (isTypesLoading) {
@@ -151,15 +153,17 @@ export const CustomEvaluationPlotsWidget = ({ evaluationId }: Props) => {
                         </SingleSelect>
                     </div>
                     {!!facetCoordinates && (
-                        <BackTestFilter
-                            split_periods={(facetCoordinates as any)?.split_period}
-                            locations={(facetCoordinates as any)?.location}
+                                <BackTestFilter
+                            visualizationId={selectedVisualizationId!}
+                            facetCoords={facetCoordinates}
                             filterLocation={filterLocation}
                             filterSplitPeriod={filterSplitPeriod}
+                            filterHorizonPeriod={filterHorizonPeriod}
                             setFilterLocation={setFilterLocation}
                             setFilterSplitPeriod={setFilterSplitPeriod}
+                            setFilterHorizonPeriod={setFilterHorizonPeriod}
                         />
-                    )}
+                    )}                        
                 </div>
 
                 <CustomEvaluationPlotsWidgetComponent
@@ -167,6 +171,7 @@ export const CustomEvaluationPlotsWidget = ({ evaluationId }: Props) => {
                     selectedVisualizationId={selectedVisualizationId}
                     filterLocation={filterLocation}
                     filterSplitPeriod={filterSplitPeriod}
+                    filterHorizonPeriod={filterHorizonPeriod}
                 />
             </WidgetWrapper>
         </div>
