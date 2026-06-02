@@ -11,6 +11,7 @@ type Props = {
     selectedVisualizationId?: string;
     filterLocation?: string;
     filterSplitPeriod?: string;
+    filterHorizonPeriod?: string;
 };
 
 const VEGA_OPTIONS = {
@@ -35,10 +36,17 @@ export const CustomEvaluationPlotsWidgetComponent = ({
     selectedVisualizationId,
     filterLocation,
     filterSplitPeriod,
+    filterHorizonPeriod,
 }: Props) => {
     const selectionComplete = !!selectedVisualizationId;
 
-    const hasFilters = !!filterLocation && !!filterSplitPeriod;
+    const hasFilters = useMemo(() => {
+        const baseFilters = !!filterLocation;
+        if (selectedVisualizationId === 'evaluation_plot') {
+            return baseFilters && !!filterSplitPeriod;
+        }
+        return baseFilters && !!filterHorizonPeriod;
+    }, [filterLocation, filterSplitPeriod, filterHorizonPeriod, selectedVisualizationId]);
 
     const {
         visualization,
@@ -49,10 +57,17 @@ export const CustomEvaluationPlotsWidgetComponent = ({
         visualizationId: selectedVisualizationId,
     });
 
-    const requestBody = useMemo(() => ({
-        location: filterLocation,
-        split_period: filterSplitPeriod,
-    }), [filterLocation, filterSplitPeriod]);
+    const requestBody = useMemo(
+        () =>
+            hasFilters
+                ? {
+                      location: filterLocation,
+                      split_period: filterSplitPeriod,
+                      ...(selectedVisualizationId !== 'evaluation_plot' && { horizon_period: filterHorizonPeriod }),
+                  }
+                : undefined,
+        [hasFilters, filterLocation, filterSplitPeriod, filterHorizonPeriod, selectedVisualizationId],
+    );
 
     const {
         plotsData: isolatedPlotsData,
@@ -66,6 +81,7 @@ export const CustomEvaluationPlotsWidgetComponent = ({
 
     const plotSpec = hasFilters ? (isolatedPlotsData ?? visualization) : visualization;
     const isSingleIsolatedPlot = hasFilters && !!isolatedPlotsData;
+    
     const visualizationContainerClass = isSingleIsolatedPlot
         ? `${styles.visualizationContainer} ${styles.singleIsolatedPlot}`
         : styles.visualizationContainer;
@@ -74,18 +90,16 @@ export const CustomEvaluationPlotsWidgetComponent = ({
     const showError = visualizationError || (hasFilters && isolatedPlotsError);
 
     useEffect(() => {
-        if (!selectionComplete) return;
+        if (!selectionComplete || !isolatedPlotsError) return;
 
-        if (!isolatedPlotsError) {
-         console.error('CustomEvaluationPlotsWidget: isolated plots load error', {
+        console.error('CustomEvaluationPlotsWidget: isolated plots load error', {
             error: isolatedPlotsError,
             evaluationId,
             selectedVisualizationId,
             filterLocation,
             filterSplitPeriod,
         });
-    }
-    }, [isolatedPlotsError, isolatedPlotsData, selectedVisualizationId, filterLocation, filterSplitPeriod, selectionComplete]);
+    }, [isolatedPlotsError, evaluationId, selectedVisualizationId, filterLocation, filterSplitPeriod, selectionComplete]);
 
     useEffect(() => {
         if (!visualizationError) return;
