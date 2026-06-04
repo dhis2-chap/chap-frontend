@@ -1,13 +1,13 @@
 import { useOrgUnitsById } from '@/hooks/useOrgUnitsById';
 import { Button, MenuItem, SingleSelect } from '@dhis2/ui';
-import { useMemo, useCallback } from 'react';
+import { useMemo, useCallback, useEffect } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import styles from './CustomEvaluationPlotsWidget.module.css';
 
 type FacetCoords = {
     split_period?: string[];
     location?: string[];
-    horizon_periods?: number[];
+    horizon_distance?: number[];
 };
 
 type Props = {
@@ -22,7 +22,7 @@ type Props = {
 };
 
 export const BackTestFilter = ({
-    facetCoords, filterLocation, filterSplitPeriod, filterHorizonPeriod, visualizationId,
+    facetCoords, filterLocation, filterSplitPeriod, filterHorizonPeriod,
     setFilterLocation, setFilterSplitPeriod, setFilterHorizonPeriod,
 }: Props) => {
     const splitPeriodOptions = useMemo(() =>
@@ -31,8 +31,8 @@ export const BackTestFilter = ({
     );
 
     const horizonOptions = useMemo(() =>
-        (facetCoords?.horizon_periods ?? []).map(val => ({ value: String(val), label: String(val) })),
-    [facetCoords?.horizon_periods],
+        (facetCoords?.horizon_distance ?? []).map(val => ({ value: String(val), label: String(val) })),
+    [facetCoords?.horizon_distance],
     );
 
     const orgUnitIds = useMemo(() => facetCoords?.location ?? [], [facetCoords?.location]);
@@ -55,7 +55,11 @@ export const BackTestFilter = ({
 
     const showLocation = facetCoords?.location && facetCoords.location.length > 0;
     const showSplitPeriod = facetCoords?.split_period && facetCoords.split_period.length > 0;
-    const showHorizon = visualizationId !== 'evaluation_plot' && facetCoords?.horizon_periods && facetCoords.horizon_periods.length > 0;
+    const showHorizon = facetCoords?.horizon_distance && facetCoords.horizon_distance.length > 0;
+
+    useEffect(() => {
+        console.log('Facet coords updated:', facetCoords);
+    }, [facetCoords]);
 
     return (
         <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>

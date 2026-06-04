@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-06-02T12:27:28.094Z\n"
-"PO-Revision-Date: 2026-06-02T12:27:28.096Z\n"
+"POT-Creation-Date: 2026-06-03T13:39:07.613Z\n"
+"PO-Revision-Date: 2026-06-03T13:39:07.619Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -656,6 +656,16 @@ msgstr "Save as SVG"
 
 msgid "Please select a visualization."
 msgstr "Please select a visualization."
+
+msgid ""
+"Please select an organisation unit and split period to view this "
+"visualization."
+msgstr ""
+"Please select an organisation unit and split period to view this "
+"visualization."
+
+msgid "Please select a horizon period to view this visualization."
+msgstr "Please select a horizon period to view this visualization."
 
 msgid "This plot has encountered an unexpected error and could not be displayed."
 msgstr "This plot has encountered an unexpected error and could not be displayed."
