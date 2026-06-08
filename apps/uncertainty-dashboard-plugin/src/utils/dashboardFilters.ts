@@ -1,19 +1,22 @@
-import i18n from '@dhis2/d2-i18n';
 import { getFallbackMonthlyPeriods } from './periods';
 import type {
     DashboardFilterItem,
     DashboardItemFilters,
+    OrgUnitOption,
 } from '@/types';
 
 type OrgUnitFilterState =
     | {
-        status: 'valid';
-        orgUnitId: string;
-        orgUnitName: string;
+        status: 'single';
+        orgUnit: OrgUnitOption;
     }
     | {
-        status: 'invalid';
-        message: string;
+        status: 'none';
+        options: [];
+    }
+    | {
+        status: 'multiple';
+        options: OrgUnitOption[];
     };
 
 type PeriodFilterState = {
@@ -39,30 +42,56 @@ const getOrgUnitId = (filterItem: DashboardFilterItem): string | undefined => {
     return filterItem.id;
 };
 
+const isConcreteOrgUnitId = (orgUnitId: string): boolean => (
+    !orgUnitId.startsWith('OU_GROUP-') &&
+    !orgUnitId.startsWith('LEVEL-') &&
+    !orgUnitId.startsWith('USER_ORGUNIT')
+);
+
+const getOrgUnitOption = (filterItem: DashboardFilterItem): OrgUnitOption | null => {
+    const orgUnitId = getOrgUnitId(filterItem);
+
+    if (!orgUnitId || !isConcreteOrgUnitId(orgUnitId)) {
+        return null;
+    }
+
+    return {
+        id: orgUnitId,
+        displayName: getFilterItemName(filterItem) ?? orgUnitId,
+        ...(filterItem.path ? { path: filterItem.path } : {}),
+    };
+};
+
+const getUniqueOrgUnitOptions = (orgUnitOptions: OrgUnitOption[]): OrgUnitOption[] => (
+    Array.from(new Map(orgUnitOptions.map(orgUnit => [orgUnit.id, orgUnit])).values())
+);
+
 const parseOrgUnitFilter = (filters: DashboardItemFilters): OrgUnitFilterState => {
     const orgUnitFilters = filters.ou ?? [];
 
-    if (orgUnitFilters.length !== 1) {
+    if (orgUnitFilters.length === 0) {
         return {
-            status: 'invalid',
-            message: i18n.t('Select exactly one organisation unit in the dashboard filters.'),
+            status: 'none',
+            options: [],
         };
     }
 
-    const [filterItem] = orgUnitFilters;
-    const orgUnitId = getOrgUnitId(filterItem);
+    const orgUnitOptions = getUniqueOrgUnitOptions(
+        orgUnitFilters
+            .map(getOrgUnitOption)
+            .filter((orgUnit): orgUnit is OrgUnitOption => !!orgUnit),
+    );
 
-    if (!orgUnitId) {
+    if (orgUnitFilters.length === 1 && orgUnitOptions.length === 1) {
         return {
-            status: 'invalid',
-            message: i18n.t('Select exactly one organisation unit in the dashboard filters.'),
+            status: 'single',
+            orgUnit: orgUnitOptions[0],
         };
     }
 
     return {
-        status: 'valid',
-        orgUnitId,
-        orgUnitName: getFilterItemName(filterItem) ?? orgUnitId,
+        status: 'multiple',
+        options: orgUnitOptions,
     };
 };
 

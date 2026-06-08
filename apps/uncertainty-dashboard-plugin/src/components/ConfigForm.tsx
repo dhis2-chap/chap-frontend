@@ -81,6 +81,7 @@ export const ConfigForm = ({
         onSave({
             version: CONFIG_VERSION,
             ...parsedValues,
+            ...(config?.fallbackOrgUnit ? { fallbackOrgUnit: config.fallbackOrgUnit } : {}),
         });
     };
 

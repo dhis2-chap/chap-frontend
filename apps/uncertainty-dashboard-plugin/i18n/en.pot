@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-06-08T13:57:59.869Z\n"
-"PO-Revision-Date: 2026-06-08T13:57:59.870Z\n"
+"POT-Creation-Date: 2026-06-08T18:18:12.776Z\n"
+"PO-Revision-Date: 2026-06-08T18:18:12.777Z\n"
 
 msgid "Configure uncertainty chart"
 msgstr "Configure uncertainty chart"
@@ -56,6 +56,24 @@ msgstr "Clear selection"
 msgid "Search data items"
 msgstr "Search data items"
 
+msgid "Start typing to search for organisation units"
+msgstr "Start typing to search for organisation units"
+
+msgid "Select organisation unit"
+msgstr "Select organisation unit"
+
+msgid "Search organisation units"
+msgstr "Search organisation units"
+
+msgid "No dashboard organisation unit filter is selected."
+msgstr "No dashboard organisation unit filter is selected."
+
+msgid "Dashboard filter contains multiple organisation units."
+msgstr "Dashboard filter contains multiple organisation units."
+
+msgid "Dashboard organisation unit filter does not identify one unit."
+msgstr "Dashboard organisation unit filter does not identify one unit."
+
 msgid "Could not load chart data"
 msgstr "Could not load chart data"
 
@@ -65,12 +83,11 @@ msgstr "There was a problem loading analytics data for this chart."
 msgid "Chart is waiting for data"
 msgstr "Chart is waiting for data"
 
-msgid ""
-"Showing a historical monthly fallback window because no dashboard period is "
-"selected."
-msgstr ""
-"Showing a historical monthly fallback window because no dashboard period is "
-"selected."
+msgid "Showing the last 24 completed monthly periods."
+msgstr "Showing the last 24 completed monthly periods."
+
+msgid "Organisation unit"
+msgstr "Organisation unit"
 
 msgid "CHAP uncertainty chart"
 msgstr "CHAP uncertainty chart"
@@ -111,14 +128,14 @@ msgstr "Quantile 0.9"
 msgid "Missing organisation unit filter"
 msgstr "Missing organisation unit filter"
 
+msgid "Select an organisation unit to show this chart."
+msgstr "Select an organisation unit to show this chart."
+
 msgid "Chart configuration saved"
 msgstr "Chart configuration saved"
 
 msgid "Failed to save chart configuration"
 msgstr "Failed to save chart configuration"
-
-msgid "Select exactly one organisation unit in the dashboard filters."
-msgstr "Select exactly one organisation unit in the dashboard filters."
 
 msgctxt "Application title"
 msgid "__MANIFEST_APP_TITLE"

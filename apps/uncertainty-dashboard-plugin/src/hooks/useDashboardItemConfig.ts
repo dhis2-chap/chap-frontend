@@ -49,11 +49,19 @@ export const useDashboardItemConfig = (dashboardItemId: string | undefined) => {
     });
 };
 
-export const useSaveDashboardItemConfig = (dashboardItemId: string | undefined) => {
+type SaveDashboardItemConfigOptions = {
+    showSuccessAlert?: boolean;
+};
+
+export const useSaveDashboardItemConfig = (
+    dashboardItemId: string | undefined,
+    options: SaveDashboardItemConfigOptions = {},
+) => {
     const engine = useDataEngine();
     const queryClient = useQueryClient();
     const { show: showSuccessAlert } = useAlert(i18n.t('Chart configuration saved'), { success: true });
     const { show: showErrorAlert } = useAlert(i18n.t('Failed to save chart configuration'), { critical: true });
+    const shouldShowSuccessAlert = options.showSuccessAlert ?? true;
 
     return useMutation<unknown, Error, PluginConfig>({
         mutationFn: async (config) => {
@@ -73,7 +81,9 @@ export const useSaveDashboardItemConfig = (dashboardItemId: string | undefined) 
                 queryClient.setQueryData(getConfigQueryKey(dashboardItemId), config);
             }
 
-            showSuccessAlert();
+            if (shouldShowSuccessAlert) {
+                showSuccessAlert();
+            }
         },
         onError: (error) => {
             console.error('Failed to save chart configuration:', error);

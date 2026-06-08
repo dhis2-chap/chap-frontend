@@ -1,4 +1,7 @@
-import { useEffect } from 'react';
+import {
+    useEffect,
+    useState,
+} from 'react';
 import i18n from '@dhis2/d2-i18n';
 import {
     CircularLoader,
@@ -11,9 +14,20 @@ import {
     useDeleteDashboardItemConfig,
     useSaveDashboardItemConfig,
 } from '@/hooks/useDashboardItemConfig';
-import type { DashboardPluginProps } from '@/types';
+import {
+    parseDashboardFilters,
+    type ParsedDashboardFilters,
+} from '@/utils/dashboardFilters';
+import type {
+    DashboardPluginProps,
+    OrgUnitOption,
+    PluginConfig,
+} from '@/types';
 import { ConfigForm } from './ConfigForm';
+import { OrgUnitPicker } from './OrgUnitPicker';
 import styles from './PluginContent.module.css';
+
+type OrgUnitFilterState = ParsedDashboardFilters['orgUnit'];
 
 const LoadingState = () => (
     <div className={styles.centeredState}>
@@ -35,48 +49,171 @@ const PassiveState = ({
     </div>
 );
 
+const ChartLoadingState = () => (
+    <div className={styles.chartState}>
+        <CircularLoader />
+    </div>
+);
+
+const ChartPassiveState = ({
+    title,
+    children,
+}: {
+    title: string;
+    children: React.ReactNode;
+}) => (
+    <div className={styles.chartState}>
+        <div className={styles.noticeWrap}>
+            <NoticeBox title={title}>{children}</NoticeBox>
+        </div>
+    </div>
+);
+
+const getDashboardOrgUnit = (orgUnitFilter: OrgUnitFilterState): OrgUnitOption | null => (
+    orgUnitFilter.status === 'single' ? orgUnitFilter.orgUnit : null
+);
+
+const getSelectorOptions = (orgUnitFilter: OrgUnitFilterState): OrgUnitOption[] | undefined => (
+    orgUnitFilter.status === 'multiple' && orgUnitFilter.options.length > 0
+        ? orgUnitFilter.options
+        : undefined
+);
+
+const getFilterMatchedOrgUnit = (
+    orgUnit: OrgUnitOption | null | undefined,
+    orgUnitFilter: OrgUnitFilterState,
+): OrgUnitOption | null => {
+    if (!orgUnit) {
+        return null;
+    }
+
+    if (orgUnitFilter.status !== 'multiple' || orgUnitFilter.options.length === 0) {
+        return orgUnit;
+    }
+
+    return orgUnitFilter.options.find(option => option.id === orgUnit.id) ?? null;
+};
+
+const getSelectorHelperText = (orgUnitFilter: OrgUnitFilterState): string => {
+    if (orgUnitFilter.status === 'none') {
+        return i18n.t('No dashboard organisation unit filter is selected.');
+    }
+
+    if (orgUnitFilter.status === 'multiple') {
+        return orgUnitFilter.options.length > 0
+            ? i18n.t('Dashboard filter contains multiple organisation units.')
+            : i18n.t('Dashboard organisation unit filter does not identify one unit.');
+    }
+
+    return '';
+};
+
+const buildConfigWithFallbackOrgUnit = (
+    config: PluginConfig,
+    orgUnit: OrgUnitOption | null,
+): PluginConfig => {
+    const nextConfig = { ...config };
+
+    if (orgUnit) {
+        nextConfig.fallbackOrgUnit = orgUnit;
+    } else {
+        delete nextConfig.fallbackOrgUnit;
+    }
+
+    return nextConfig;
+};
+
 const ChartContent = ({
     config,
     dashboardItemFilters,
+    onFallbackOrgUnitChange,
+    isSavingFallbackOrgUnit,
 }: Pick<DashboardPluginProps, 'dashboardItemFilters'> & {
-    config: NonNullable<ReturnType<typeof useDashboardItemConfig>['data']>;
+    config: PluginConfig;
+    onFallbackOrgUnitChange: (config: PluginConfig) => void;
+    isSavingFallbackOrgUnit: boolean;
 }) => {
+    const parsedFilters = parseDashboardFilters(dashboardItemFilters);
+    const dashboardOrgUnit = getDashboardOrgUnit(parsedFilters.orgUnit);
+    const selectorOptions = getSelectorOptions(parsedFilters.orgUnit);
+    const storedFallbackOrgUnit = getFilterMatchedOrgUnit(
+        config.fallbackOrgUnit,
+        parsedFilters.orgUnit,
+    );
+    const [draftFallbackOrgUnit, setDraftFallbackOrgUnit] = useState<
+        OrgUnitOption | null | undefined
+    >(undefined);
+    const fallbackOrgUnit = draftFallbackOrgUnit === undefined
+        ? storedFallbackOrgUnit
+        : getFilterMatchedOrgUnit(draftFallbackOrgUnit, parsedFilters.orgUnit);
+    const selectedOrgUnit = dashboardOrgUnit ?? fallbackOrgUnit;
+    const shouldShowOrgUnitSelector = !dashboardOrgUnit;
     const analytics = useAnalyticsSeries({
         config,
+        orgUnit: selectedOrgUnit,
         dashboardItemFilters,
     });
 
-    if (analytics.status === 'loading') {
-        return <LoadingState />;
-    }
+    const handleFallbackOrgUnitChange = (orgUnit: OrgUnitOption | null) => {
+        setDraftFallbackOrgUnit(orgUnit);
+        onFallbackOrgUnitChange(buildConfigWithFallbackOrgUnit(config, orgUnit));
+    };
 
-    if (analytics.error) {
-        return (
-            <PassiveState title={i18n.t('Could not load chart data')}>
-                {i18n.t('There was a problem loading analytics data for this chart.')}
-            </PassiveState>
-        );
-    }
+    const renderChartBody = () => {
+        if (analytics.status === 'loading') {
+            return <ChartLoadingState />;
+        }
 
-    if (analytics.status === 'invalid') {
+        if (analytics.error) {
+            return (
+                <ChartPassiveState title={i18n.t('Could not load chart data')}>
+                    {i18n.t('There was a problem loading analytics data for this chart.')}
+                </ChartPassiveState>
+            );
+        }
+
+        if (analytics.status === 'invalid') {
+            return (
+                <ChartPassiveState title={i18n.t('Chart is waiting for data')}>
+                    {analytics.message}
+                </ChartPassiveState>
+            );
+        }
+
         return (
-            <PassiveState title={i18n.t('Chart is waiting for data')}>
-                {analytics.message}
-            </PassiveState>
+            <>
+                {analytics.periodSource === 'fallback' && (
+                    <p className={styles.fallbackNote}>
+                        {i18n.t('Showing the last 24 completed monthly periods.')}
+                    </p>
+                )}
+                <div className={styles.chartSurface}>
+                    <UncertaintyAreaChart
+                        series={analytics.series}
+                        predictionTargetName={config.targetDataItem.displayName}
+                    />
+                </div>
+            </>
         );
-    }
+    };
 
     return (
         <div className={styles.chartWrap}>
-            {analytics.periodSource === 'fallback' && (
-                <p className={styles.fallbackNote}>
-                    {i18n.t('Showing a historical monthly fallback window because no dashboard period is selected.')}
-                </p>
+            {shouldShowOrgUnitSelector && (
+                <div className={styles.orgUnitToolbar}>
+                    <div className={styles.orgUnitControl}>
+                        <OrgUnitPicker
+                            label={i18n.t('Organisation unit')}
+                            value={fallbackOrgUnit}
+                            onChange={handleFallbackOrgUnitChange}
+                            options={selectorOptions}
+                            disabled={isSavingFallbackOrgUnit}
+                            helperText={getSelectorHelperText(parsedFilters.orgUnit)}
+                        />
+                    </div>
+                </div>
             )}
-            <UncertaintyAreaChart
-                series={analytics.series}
-                predictionTargetName={config.targetDataItem.displayName}
-            />
+            {renderChartBody()}
         </div>
     );
 };
@@ -89,6 +226,10 @@ export const PluginContent = ({
 }: DashboardPluginProps) => {
     const configQuery = useDashboardItemConfig(dashboardItemId);
     const saveConfigMutation = useSaveDashboardItemConfig(dashboardItemId);
+    const saveFallbackOrgUnitMutation = useSaveDashboardItemConfig(
+        dashboardItemId,
+        { showSuccessAlert: false },
+    );
     const deleteConfigMutation = useDeleteDashboardItemConfig(dashboardItemId);
     const config = configQuery.data ?? null;
 
@@ -160,6 +301,10 @@ export const PluginContent = ({
             <ChartContent
                 config={config}
                 dashboardItemFilters={dashboardItemFilters}
+                onFallbackOrgUnitChange={
+                    nextConfig => saveFallbackOrgUnitMutation.mutate(nextConfig)
+                }
+                isSavingFallbackOrgUnit={saveFallbackOrgUnitMutation.isPending}
             />
         </div>
     );

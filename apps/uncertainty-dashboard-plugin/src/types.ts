@@ -14,6 +14,12 @@ export const DataItemSchema = z.object({
     dimensionItemType: TargetDimensionItemTypeSchema,
 });
 
+export const OrgUnitSchema = z.object({
+    id: z.string().min(1),
+    displayName: z.string().min(1),
+    path: z.string().optional(),
+});
+
 export const QuantileDataItemSchema = DataItemSchema.extend({
     dimensionItemType: z.literal('DATA_ELEMENT'),
 });
@@ -28,10 +34,12 @@ export const PluginConfigSchema = z.object({
         quantile_mid_high: QuantileDataItemSchema,
         quantile_high: QuantileDataItemSchema,
     }),
+    fallbackOrgUnit: OrgUnitSchema.optional(),
 });
 
 export type TargetDimensionItemType = z.infer<typeof TargetDimensionItemTypeSchema>;
 export type DataItemOption = z.infer<typeof DataItemSchema>;
+export type OrgUnitOption = z.infer<typeof OrgUnitSchema>;
 export type PluginConfig = z.infer<typeof PluginConfigSchema>;
 
 export type DashboardFilterItem = {

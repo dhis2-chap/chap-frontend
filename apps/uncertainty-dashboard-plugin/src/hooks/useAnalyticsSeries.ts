@@ -11,16 +11,19 @@ import { parseDashboardFilters } from '@/utils/dashboardFilters';
 import { getFallbackMonthlyPeriodsEndingAt } from '@/utils/periods';
 import type {
     DashboardItemFilters,
+    OrgUnitOption,
     PluginConfig,
 } from '@/types';
 
 type UseAnalyticsSeriesOptions = {
     config: PluginConfig;
+    orgUnit: OrgUnitOption | null;
     dashboardItemFilters?: DashboardItemFilters;
 };
 
 export const useAnalyticsSeries = ({
     config,
+    orgUnit,
     dashboardItemFilters,
 }: UseAnalyticsSeriesOptions) => {
     const engine = useDataEngine();
@@ -29,27 +32,27 @@ export const useAnalyticsSeries = ({
         config.targetDataItem.id,
         ...QUANTILE_FIELDS.map(field => config.quantiles[field.key].id),
     ];
-    const canQuery = parsedFilters.orgUnit.status === 'valid';
+    const canQuery = !!orgUnit;
 
     const query = useQuery({
         queryKey: [
             'analytics',
             dataItemIds,
-            parsedFilters.orgUnit.status === 'valid' ? parsedFilters.orgUnit.orgUnitId : undefined,
+            orgUnit?.id,
             parsedFilters.periods.periodIds,
         ],
         enabled: canQuery,
         staleTime: 5 * 60 * 1000,
         cacheTime: 10 * 60 * 1000,
         queryFn: async () => {
-            if (parsedFilters.orgUnit.status !== 'valid') {
+            if (!orgUnit) {
                 throw new Error(i18n.t('Missing organisation unit filter'));
             }
 
             const response = await fetchAnalytics(
                 dataItemIds,
                 parsedFilters.periods.periodIds,
-                parsedFilters.orgUnit.orgUnitId,
+                orgUnit.id,
                 engine,
             );
 
@@ -72,16 +75,16 @@ export const useAnalyticsSeries = ({
             return fetchAnalytics(
                 dataItemIds,
                 anchoredFallbackPeriods,
-                parsedFilters.orgUnit.orgUnitId,
+                orgUnit.id,
                 engine,
             );
         },
     });
 
-    if (parsedFilters.orgUnit.status === 'invalid') {
+    if (!orgUnit) {
         return {
             status: 'invalid' as const,
-            message: parsedFilters.orgUnit.message,
+            message: i18n.t('Select an organisation unit to show this chart.'),
             isLoading: false,
             error: undefined,
             periodSource: parsedFilters.periods.source,
@@ -100,7 +103,7 @@ export const useAnalyticsSeries = ({
     const result = buildAnalyticsSeries({
         config,
         response: query.data,
-        fallbackOrgUnitName: parsedFilters.orgUnit.orgUnitName,
+        fallbackOrgUnitName: orgUnit.displayName,
     });
 
     if (result.status === 'invalid') {
