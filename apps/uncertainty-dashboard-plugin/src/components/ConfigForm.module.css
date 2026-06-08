@@ -1,0 +1,54 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacers-dp16);
+    height: 100%;
+    overflow: auto;
+    padding: var(--spacers-dp16);
+}
+
+.header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacers-dp4);
+}
+
+.title {
+    color: var(--colors-grey900);
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 22px;
+    margin: 0;
+}
+
+.description {
+    color: var(--colors-grey700);
+    font-size: 13px;
+    line-height: 18px;
+    margin: 0;
+}
+
+.section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacers-dp12);
+}
+
+.sectionTitle {
+    color: var(--colors-grey900);
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 18px;
+    margin: 0;
+}
+
+.grid {
+    display: grid;
+    gap: var(--spacers-dp12);
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.actions {
+    display: flex;
+    justify-content: flex-end;
+}

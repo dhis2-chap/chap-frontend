@@ -1,0 +1,67 @@
+import { z } from 'zod';
+import type { QuantileKey } from '@dhis2-chap/ui';
+
+export const TargetDimensionItemTypeSchema = z.enum([
+    'PROGRAM_DATA_ELEMENT',
+    'INDICATOR',
+    'PROGRAM_INDICATOR',
+    'DATA_ELEMENT',
+]);
+
+export const DataItemSchema = z.object({
+    id: z.string().min(1),
+    displayName: z.string().min(1),
+    dimensionItemType: TargetDimensionItemTypeSchema,
+});
+
+export const QuantileDataItemSchema = DataItemSchema.extend({
+    dimensionItemType: z.literal('DATA_ELEMENT'),
+});
+
+export const PluginConfigSchema = z.object({
+    version: z.literal(1),
+    targetDataItem: DataItemSchema,
+    quantiles: z.object({
+        quantile_low: QuantileDataItemSchema,
+        quantile_mid_low: QuantileDataItemSchema,
+        median: QuantileDataItemSchema,
+        quantile_mid_high: QuantileDataItemSchema,
+        quantile_high: QuantileDataItemSchema,
+    }),
+});
+
+export type TargetDimensionItemType = z.infer<typeof TargetDimensionItemTypeSchema>;
+export type DataItemOption = z.infer<typeof DataItemSchema>;
+export type PluginConfig = z.infer<typeof PluginConfigSchema>;
+
+export type DashboardFilterItem = {
+    id?: string;
+    name?: string;
+    displayName?: string;
+    path?: string;
+};
+
+export type DashboardItemFilters = {
+    pe?: DashboardFilterItem[];
+    ou?: DashboardFilterItem[];
+    [dimension: string]: DashboardFilterItem[] | undefined;
+};
+
+export type DashboardMode = 'view' | 'edit' | 'print';
+
+export type DashboardItemDetails = {
+    itemTitle?: string;
+    appUrl?: string;
+    onRemove?: () => void;
+};
+
+export type DashboardPluginProps = {
+    dashboardItemId: string;
+    dashboardItemFilters?: DashboardItemFilters;
+    dashboardMode?: DashboardMode;
+    setDashboardItemDetails?: (details: DashboardItemDetails) => void;
+    cacheId?: string;
+    isParentCached?: boolean;
+};
+
+export type QuantileDataItems = Record<QuantileKey, DataItemOption>;
