@@ -19,6 +19,10 @@ export type MakeBacktestRequest = {
      */
     stride?: number;
     /**
+     * Number of times the model is retrained, evenly spaced across the splits. 1 means train once.
+     */
+    nRetrain?: number;
+    /**
      * Human-friendly name for the resulting backtest row.
      */
     name: string;
