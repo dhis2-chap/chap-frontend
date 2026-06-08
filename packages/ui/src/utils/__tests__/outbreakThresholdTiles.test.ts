@@ -4,6 +4,7 @@ import {
     getStableMaxYForThresholdChart,
     getThresholdTileViewModels,
 } from '../outbreakThresholdTiles';
+import type { EndemicThresholdPoint } from '../outbreakAlerts';
 
 const point = (
     period: string,
@@ -58,13 +59,26 @@ const series = ({
     ],
 });
 
+const thresholdMap = (
+    entries: Array<[string, number | null]>,
+): Map<string, EndemicThresholdPoint[]> => new Map(
+    entries.map(([orgUnitId, value]) => [
+        orgUnitId,
+        [{ period: '202401', value }],
+    ]),
+);
+
 describe('getThresholdTileViewModels', () => {
     it('preserves the incoming region order regardless of outbreak status', () => {
         const { tiles } = getThresholdTileViewModels([
             series({ id: 'no-outbreak', name: 'Beta', highQuantile: 5 }),
             series({ id: 'unavailable', name: 'Charlie', actualValues: [10, null, null, 16] }),
             series({ id: 'outbreak', name: 'Alpha', highQuantile: 50 }),
-        ], 75);
+        ], 75, thresholdMap([
+            ['no-outbreak', 17],
+            ['unavailable', null],
+            ['outbreak', 17],
+        ]));
 
         expect(tiles.map(viewModel => viewModel.orgUnitId)).toEqual([
             'no-outbreak',
@@ -79,7 +93,12 @@ describe('getThresholdTileViewModels', () => {
             series({ id: 'alpha-outbreak', name: 'Alpha', highQuantile: 50 }),
             series({ id: 'beta-unavailable', name: 'Beta', actualValues: [10] }),
             series({ id: 'alpha-unavailable', name: 'Alpha', actualValues: [10] }),
-        ], 75);
+        ], 75, thresholdMap([
+            ['zulu-outbreak', 17],
+            ['alpha-outbreak', 17],
+            ['beta-unavailable', null],
+            ['alpha-unavailable', null],
+        ]));
 
         expect(tiles.map(viewModel => viewModel.orgUnitId)).toEqual([
             'zulu-outbreak',
@@ -91,9 +110,10 @@ describe('getThresholdTileViewModels', () => {
 
     it('updates status when the selected probability changes', () => {
         const candidate = series({ id: 'region-a', name: 'Region A', highQuantile: 50 });
+        const thresholds = thresholdMap([['region-a', 17]]);
 
-        expect(getThresholdTileViewModels([candidate], 10).tiles[0].status).toBe('outbreak');
-        expect(getThresholdTileViewModels([candidate], 90).tiles[0].status).toBe('noOutbreak');
+        expect(getThresholdTileViewModels([candidate], 10, thresholds).tiles[0].status).toBe('outbreak');
+        expect(getThresholdTileViewModels([candidate], 90, thresholds).tiles[0].status).toBe('noOutbreak');
     });
 
     it('returns summary counts for the selected probability', () => {
@@ -102,7 +122,12 @@ describe('getThresholdTileViewModels', () => {
             series({ id: 'outbreak-b', name: 'Outbreak B', highQuantile: 50 }),
             series({ id: 'unavailable', name: 'Unavailable', actualValues: [10] }),
             series({ id: 'quiet', name: 'Quiet', highQuantile: 5 }),
-        ], 75);
+        ], 75, thresholdMap([
+            ['outbreak-a', 17],
+            ['outbreak-b', 17],
+            ['unavailable', null],
+            ['quiet', 17],
+        ]));
 
         expect(summary).toEqual({
             alertPeriods: 2,

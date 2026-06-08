@@ -1,7 +1,6 @@
 import type { PredictionOrgUnitSeries } from '../interfaces/Prediction';
 import {
     buildOutbreakIndicatorsForSeries,
-    calculateMockEndemicThreshold,
     type EndemicThresholdPoint,
     type OutbreakIndicator,
     type OutbreakProbability,
@@ -78,7 +77,7 @@ export const getThresholdTileViewModels = (
     summary: ThresholdSummary;
     tiles: ThresholdTileViewModel[];
 } => {
-    const tiles = series.map((orgUnitSeries) => {
+    const tiles = series.map((orgUnitSeries): ThresholdTileViewModel => {
         const apiThresholds = thresholdMap?.get(orgUnitSeries.orgUnitId);
 
         if (apiThresholds) {
@@ -104,23 +103,14 @@ export const getThresholdTileViewModels = (
             };
         }
 
-        const threshold = calculateMockEndemicThreshold(orgUnitSeries.actualCases);
-        const indicators = buildOutbreakIndicatorsForSeries(orgUnitSeries, selectedProbability);
-        const hasOutbreak = indicators.some(indicator => indicator.outbreak);
-        const status: ThresholdTileStatus = !threshold.available
-            ? 'unavailable'
-            : hasOutbreak
-                ? 'outbreak'
-                : 'noOutbreak';
-
         return {
-            endemicThreshold: threshold.threshold,
+            endemicThreshold: null,
             endemicThresholds: [],
-            indicators,
+            indicators: [],
             orgUnitId: orgUnitSeries.orgUnitId,
             orgUnitName: orgUnitSeries.orgUnitName,
             series: orgUnitSeries,
-            status,
+            status: 'unavailable',
         };
     });
 
