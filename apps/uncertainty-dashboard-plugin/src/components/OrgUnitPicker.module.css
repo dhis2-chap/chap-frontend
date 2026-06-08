@@ -32,7 +32,7 @@
 }
 
 .triggerButtonWithClear {
-    padding-right: calc(var(--spacers-dp24) + 24px);
+    padding-right: calc(var(--spacers-dp8) + 24px);
 }
 
 .triggerButtonDisabled,
