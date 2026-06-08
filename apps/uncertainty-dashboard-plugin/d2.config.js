@@ -13,7 +13,6 @@ const config = {
         { namespace: 'chap-dashboard-plugin', authorities: ['F_CHAP_DASHBOARD_PLUGIN'] },
     ],
     entryPoints: {
-        app: './src/App.tsx',
         plugin: './src/Plugin.tsx',
     },
 

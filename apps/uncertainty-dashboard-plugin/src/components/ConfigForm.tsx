@@ -2,7 +2,10 @@ import { useEffect } from 'react';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import i18n from '@dhis2/d2-i18n';
-import { Button } from '@dhis2/ui';
+import {
+    Button,
+    InputField,
+} from '@dhis2/ui';
 import {
     Controller,
     Resolver,
@@ -24,6 +27,7 @@ import { DataItemPicker } from './DataItemPicker';
 import styles from './ConfigForm.module.css';
 
 const ConfigFormSchema = z.object({
+    title: z.string().optional(),
     targetDataItem: DataItemSchema,
     quantiles: z.object({
         quantile_low: QuantileDataItemSchema,
@@ -35,6 +39,7 @@ const ConfigFormSchema = z.object({
 });
 
 type ConfigFormValues = {
+    title: string;
     targetDataItem: DataItemOption | null;
     quantiles: Record<QuantileKey, DataItemOption | null>;
 };
@@ -46,6 +51,7 @@ type ConfigFormProps = {
 };
 
 const getDefaultValues = (config: PluginConfig | null): ConfigFormValues => ({
+    title: config?.title ?? '',
     targetDataItem: config?.targetDataItem ?? null,
     quantiles: {
         quantile_low: config?.quantiles.quantile_low ?? null,
@@ -76,11 +82,16 @@ export const ConfigForm = ({
     }, [config, reset]);
 
     const handleValidSubmit: SubmitHandler<ConfigFormValues> = (values) => {
-        const parsedValues = ConfigFormSchema.parse(values);
+        const {
+            title,
+            ...parsedValues
+        } = ConfigFormSchema.parse(values);
+        const normalizedTitle = title?.trim();
 
         onSave({
             version: CONFIG_VERSION,
             ...parsedValues,
+            ...(normalizedTitle ? { title: normalizedTitle } : {}),
             ...(config?.fallbackOrgUnit ? { fallbackOrgUnit: config.fallbackOrgUnit } : {}),
         });
     };
@@ -93,6 +104,24 @@ export const ConfigForm = ({
                     {i18n.t('Choose the actual data item and the five forecast quantile data elements.')}
                 </p>
             </div>
+
+            <section className={styles.section}>
+                <h2 className={styles.sectionTitle}>{i18n.t('Display')}</h2>
+                <Controller
+                    control={control}
+                    name="title"
+                    render={({ field }) => (
+                        <InputField
+                            label={i18n.t('Chart title')}
+                            value={field.value}
+                            placeholder={i18n.t('Use target data item name')}
+                            onChange={({ value }: { value?: string }) => {
+                                field.onChange(value ?? '');
+                            }}
+                        />
+                    )}
+                />
+            </section>
 
             <section className={styles.section}>
                 <h2 className={styles.sectionTitle}>{i18n.t('Actual values')}</h2>

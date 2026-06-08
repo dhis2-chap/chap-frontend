@@ -26,6 +26,7 @@ export const QuantileDataItemSchema = DataItemSchema.extend({
 
 export const PluginConfigSchema = z.object({
     version: z.literal(1),
+    title: z.string().optional(),
     targetDataItem: DataItemSchema,
     quantiles: z.object({
         quantile_low: QuantileDataItemSchema,

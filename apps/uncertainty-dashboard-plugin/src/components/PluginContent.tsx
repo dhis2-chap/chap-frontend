@@ -166,6 +166,16 @@ const buildConfigWithFallbackOrgUnit = (
     return nextConfig;
 };
 
+const getDashboardItemTitle = (config: PluginConfig | null): string => {
+    const customTitle = config?.title?.trim();
+
+    if (customTitle) {
+        return customTitle;
+    }
+
+    return config?.targetDataItem.displayName ?? i18n.t('CHAP uncertainty chart');
+};
+
 const ChartContent = ({
     config,
     dashboardItemFilters,
@@ -275,17 +285,22 @@ export const PluginContent = ({
     const config = configQuery.data ?? null;
 
     useEffect(() => {
-        if (!setDashboardItemDetails) {
+        if (!setDashboardItemDetails || configQuery.isLoading) {
             return;
         }
 
         setDashboardItemDetails({
-            itemTitle: config?.targetDataItem.displayName ?? i18n.t('CHAP uncertainty chart'),
+            itemTitle: getDashboardItemTitle(config),
             onRemove: () => {
                 deleteConfigMutation.mutate();
             },
         });
-    }, [config?.targetDataItem.displayName, deleteConfigMutation, setDashboardItemDetails]);
+    }, [
+        config,
+        configQuery.isLoading,
+        deleteConfigMutation,
+        setDashboardItemDetails,
+    ]);
 
     if (!dashboardItemId) {
         return (

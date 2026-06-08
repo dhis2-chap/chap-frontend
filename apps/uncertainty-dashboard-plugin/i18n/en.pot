@@ -5,14 +5,23 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-06-08T19:10:22.751Z\n"
-"PO-Revision-Date: 2026-06-08T19:10:22.752Z\n"
+"POT-Creation-Date: 2026-06-08T19:39:11.071Z\n"
+"PO-Revision-Date: 2026-06-08T19:39:11.072Z\n"
 
 msgid "Configure uncertainty chart"
 msgstr "Configure uncertainty chart"
 
 msgid "Choose the actual data item and the five forecast quantile data elements."
 msgstr "Choose the actual data item and the five forecast quantile data elements."
+
+msgid "Display"
+msgstr "Display"
+
+msgid "Chart title"
+msgstr "Chart title"
+
+msgid "Use target data item name"
+msgstr "Use target data item name"
 
 msgid "Actual values"
 msgstr "Actual values"
@@ -65,6 +74,9 @@ msgstr "No organisation units available"
 msgid "Select organisation unit"
 msgstr "Select organisation unit"
 
+msgid "CHAP uncertainty chart"
+msgstr "CHAP uncertainty chart"
+
 msgid "Could not load chart data"
 msgstr "Could not load chart data"
 
@@ -73,9 +85,6 @@ msgstr "There was a problem loading analytics data for this chart."
 
 msgid "Chart is waiting for data"
 msgstr "Chart is waiting for data"
-
-msgid "CHAP uncertainty chart"
-msgstr "CHAP uncertainty chart"
 
 msgid "Missing dashboard item"
 msgstr "Missing dashboard item"
