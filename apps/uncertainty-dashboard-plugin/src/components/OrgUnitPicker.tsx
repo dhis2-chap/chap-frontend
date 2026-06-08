@@ -2,13 +2,19 @@ import {
     useEffect,
     useMemo,
     useRef,
+    useState,
 } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import {
     CircularLoader,
+    IconChevronDown16,
+    IconCross16,
+    Layer,
     NoticeBox,
     OrganisationUnitTree,
+    Popper,
 } from '@dhis2/ui';
+import classNames from 'classnames';
 import { useApiDataQuery } from '@/utils/useApiDataQuery';
 import type { OrgUnitOption } from '@/types';
 import styles from './OrgUnitPicker.module.css';
@@ -88,6 +94,8 @@ export const OrgUnitPicker = ({
     options: fixedOptions,
     disabled = false,
 }: OrgUnitPickerProps) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const anchorRef = useRef<HTMLDivElement>(null);
     const treePanelRef = useRef<HTMLDivElement>(null);
     const {
         data,
@@ -115,7 +123,7 @@ export const OrgUnitPicker = ({
     useEffect(() => {
         const treePanel = treePanelRef.current;
 
-        if (!treePanel || selectedPaths.length === 0) {
+        if (!isOpen || !treePanel || selectedPaths.length === 0) {
             return undefined;
         }
 
@@ -126,18 +134,19 @@ export const OrgUnitPicker = ({
                 return;
             }
 
-            const scrollTop = (
-                selectedNode.offsetTop
-                - treePanel.offsetTop
+            selectedNode.scrollIntoView({ block: 'center', inline: 'nearest' });
+
+            const treePanelRect = treePanel.getBoundingClientRect();
+            const selectedNodeRect = selectedNode.getBoundingClientRect();
+            const scrollOffset = (
+                selectedNodeRect.top
+                - treePanelRect.top
                 - (treePanel.clientHeight / 2)
-                + (selectedNode.clientHeight / 2)
+                + (selectedNodeRect.height / 2)
             );
-            treePanel.scrollTop = Math.max(0, scrollTop);
-            observer.disconnect();
+            treePanel.scrollTop = Math.max(0, treePanel.scrollTop + scrollOffset);
         };
         const observer = new MutationObserver(scrollSelectedNodeIntoView);
-
-        scrollSelectedNodeIntoView();
 
         observer.observe(treePanel, {
             attributes: true,
@@ -146,57 +155,69 @@ export const OrgUnitPicker = ({
             subtree: true,
         });
 
-        const timeoutId = window.setTimeout(() => {
-            scrollSelectedNodeIntoView();
-            observer.disconnect();
-        }, 1000);
+        const timeoutIds = [
+            0,
+            100,
+            300,
+            800,
+            1500,
+        ].map(timeout => window.setTimeout(scrollSelectedNodeIntoView, timeout));
 
         return () => {
             observer.disconnect();
-            window.clearTimeout(timeoutId);
+            timeoutIds.forEach(timeoutId => window.clearTimeout(timeoutId));
         };
-    }, [rootIds.length, selectedPaths]);
+    }, [isOpen, rootIds.length, selectedPaths]);
 
     const handleChange = (payload: OrganisationUnitEventPayload) => {
         if (disabled) {
             return;
         }
 
-        onChange(payload.checked
+        const nextValue = payload.checked
             ? {
                     id: payload.id,
                     displayName: payload.displayName,
                     path: payload.path,
                 }
-            : null);
+            : null;
+
+        onChange(nextValue);
+        setIsOpen(false);
     };
 
-    if (isLoading) {
-        return (
-            <div className={styles.treeState}>
-                <CircularLoader />
-            </div>
-        );
-    }
+    const handleClear = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.stopPropagation();
+        onChange(null);
+        setIsOpen(false);
+    };
 
-    if (error) {
-        return (
-            <div className={styles.treeNotice}>
-                <NoticeBox title={i18n.t('Could not load organisation units')} />
-            </div>
-        );
-    }
+    const renderPopoverContent = () => {
+        if (isLoading) {
+            return (
+                <div className={styles.treeState}>
+                    <CircularLoader />
+                </div>
+            );
+        }
 
-    if (rootIds.length === 0) {
-        return (
-            <div className={styles.treeNotice}>
-                <NoticeBox title={i18n.t('No organisation units available')} />
-            </div>
-        );
-    }
+        if (error) {
+            return (
+                <div className={styles.treeNotice}>
+                    <NoticeBox title={i18n.t('Could not load organisation units')} />
+                </div>
+            );
+        }
 
-    return (
-        <div ref={treePanelRef} className={styles.treePanel}>
+        if (rootIds.length === 0) {
+            return (
+                <div className={styles.treeNotice}>
+                    <NoticeBox title={i18n.t('No organisation units available')} />
+                </div>
+            );
+        }
+
+        return (
             <OrganisationUnitTree
                 roots={rootIds}
                 selected={selectedPaths}
@@ -208,6 +229,54 @@ export const OrgUnitPicker = ({
                 isUserDataViewFallback
                 dataTest="chap-org-unit-tree"
             />
+        );
+    };
+
+    return (
+        <div className={styles.field}>
+            <div ref={anchorRef} className={styles.selectContainer}>
+                <button
+                    type="button"
+                    className={classNames(styles.triggerButton, {
+                        [styles.triggerButtonDisabled]: disabled,
+                        [styles.triggerButtonWithClear]: value,
+                    })}
+                    disabled={disabled}
+                    aria-haspopup="dialog"
+                    aria-expanded={isOpen}
+                    onClick={() => setIsOpen(open => !open)}
+                >
+                    <span
+                        className={classNames(styles.triggerText, {
+                            [styles.placeholder]: !value,
+                        })}
+                    >
+                        {value?.displayName ?? i18n.t('Select organisation unit')}
+                    </span>
+                    <span className={styles.iconContainer}>
+                        <IconChevronDown16 />
+                    </span>
+                </button>
+                {value && !disabled && (
+                    <button
+                        type="button"
+                        className={styles.clearButton}
+                        aria-label={i18n.t('Clear selection')}
+                        onClick={handleClear}
+                    >
+                        <IconCross16 />
+                    </button>
+                )}
+            </div>
+            {isOpen && (
+                <Layer onBackdropClick={() => setIsOpen(false)}>
+                    <Popper reference={anchorRef} placement="bottom-start">
+                        <div ref={treePanelRef} className={styles.popover}>
+                            {renderPopoverContent()}
+                        </div>
+                    </Popper>
+                </Layer>
+            )}
         </div>
     );
 };
