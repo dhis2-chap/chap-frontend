@@ -1,24 +1,25 @@
 import {
+    useEffect,
     useMemo,
     useRef,
-    useState,
 } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import {
-    IconChevronDown16,
-    IconCross16,
-    InputField,
-    Layer,
-    Popper,
+    CircularLoader,
+    NoticeBox,
+    OrganisationUnitTree,
 } from '@dhis2/ui';
-import classNames from 'classnames';
 import { useApiDataQuery } from '@/utils/useApiDataQuery';
-import { useDebouncedValue } from '@/utils/useDebouncedValue';
 import type { OrgUnitOption } from '@/types';
 import styles from './OrgUnitPicker.module.css';
 
-type OrganisationUnitsResponse = {
+type DataViewRootOrgUnitsResponse = {
     organisationUnits: OrgUnitOption[];
+};
+
+type OrganisationUnitEventPayload = OrgUnitOption & {
+    checked: boolean;
+    selected: string[];
 };
 
 type OrgUnitPickerProps = {
@@ -28,15 +29,58 @@ type OrgUnitPickerProps = {
     disabled?: boolean;
 };
 
-const matchesSearchQuery = (orgUnit: OrgUnitOption, searchQuery: string): boolean => {
-    const normalizedSearchQuery = searchQuery.trim().toLowerCase();
+const DATA_VIEW_ROOT_ORG_UNITS_QUERY = {
+    resource: 'organisationUnits',
+    params: {
+        userDataViewFallback: true,
+        fields: [
+            'id',
+            'displayName',
+            'path',
+        ],
+    },
+};
 
-    if (!normalizedSearchQuery) {
-        return true;
+const getPathAncestors = (path: string | undefined): string[] => {
+    if (!path) {
+        return [];
     }
 
-    return orgUnit.displayName.toLowerCase().includes(normalizedSearchQuery);
+    const ids = path.split('/').filter(Boolean);
+    return ids
+        .slice(0, -1)
+        .map((_, index) => `/${ids.slice(0, index + 1).join('/')}`);
 };
+
+const getUniquePaths = (paths: string[]): string[] => (
+    Array.from(new Set(paths.filter(Boolean)))
+);
+
+const getFilterPaths = (options: OrgUnitOption[] | undefined): string[] => (
+    options
+        ?.map(option => option.path)
+        .filter((path): path is string => !!path) ?? []
+);
+
+const getInitiallyExpandedPaths = ({
+    roots,
+    selectedPath,
+    filterPaths,
+}: {
+    roots: OrgUnitOption[];
+    selectedPath: string | undefined;
+    filterPaths: string[];
+}): string[] => (
+    getUniquePaths([
+        ...(roots.length === 1 && roots[0].path ? [roots[0].path] : []),
+        ...getPathAncestors(selectedPath),
+        ...filterPaths.flatMap(getPathAncestors),
+    ])
+);
+
+const toSelectedPaths = (value: OrgUnitOption | null): string[] => (
+    value?.path ? [value.path] : []
+);
 
 export const OrgUnitPicker = ({
     value,
@@ -44,146 +88,126 @@ export const OrgUnitPicker = ({
     options: fixedOptions,
     disabled = false,
 }: OrgUnitPickerProps) => {
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const [searchQuery, setSearchQuery] = useState('');
-    const debouncedSearchQuery = useDebouncedValue(searchQuery, 300);
-    const anchorRef = useRef<HTMLDivElement>(null);
-    const shouldSearchApi = !fixedOptions;
-    const { data, isLoading } = useApiDataQuery<OrganisationUnitsResponse>({
+    const treePanelRef = useRef<HTMLDivElement>(null);
+    const {
+        data,
+        error,
+        isLoading,
+    } = useApiDataQuery<DataViewRootOrgUnitsResponse>({
         queryKey: [
             'organisationUnits',
-            'picker',
-            debouncedSearchQuery,
-            shouldSearchApi,
+            'dataViewRoots',
         ],
-        query: {
-            resource: 'organisationUnits',
-            params: {
-                filter: debouncedSearchQuery
-                    ? [`displayName:ilike:${debouncedSearchQuery}`]
-                    : undefined,
-                fields: 'id,displayName,path',
-                order: 'displayName:asc',
-                page: 1,
-                pageSize: 25,
-            },
-        },
-        enabled: shouldSearchApi,
-        staleTime: 5 * 60 * 1000,
-        cacheTime: 10 * 60 * 1000,
+        query: DATA_VIEW_ROOT_ORG_UNITS_QUERY,
+        staleTime: Infinity,
+        cacheTime: Infinity,
     });
-    const options = useMemo(() => {
-        if (!fixedOptions) {
-            return data?.organisationUnits ?? [];
+    const roots = data?.organisationUnits ?? [];
+    const rootIds = useMemo(() => roots.map(root => root.id), [roots]);
+    const filterPaths = useMemo(() => getFilterPaths(fixedOptions), [fixedOptions]);
+    const selectedPaths = useMemo(() => toSelectedPaths(value), [value]);
+    const initiallyExpanded = useMemo(() => getInitiallyExpandedPaths({
+        roots,
+        selectedPath: value?.path,
+        filterPaths,
+    }), [filterPaths, roots, value?.path]);
+
+    useEffect(() => {
+        const treePanel = treePanelRef.current;
+
+        if (!treePanel || selectedPaths.length === 0) {
+            return undefined;
         }
 
-        return fixedOptions.filter(orgUnit => matchesSearchQuery(orgUnit, debouncedSearchQuery));
-    }, [data?.organisationUnits, debouncedSearchQuery, fixedOptions]);
+        const scrollSelectedNodeIntoView = () => {
+            const selectedNode = treePanel.querySelector<HTMLElement>('.checked');
 
-    const handleOpen = () => {
+            if (!selectedNode) {
+                return;
+            }
+
+            const scrollTop = (
+                selectedNode.offsetTop
+                - treePanel.offsetTop
+                - (treePanel.clientHeight / 2)
+                + (selectedNode.clientHeight / 2)
+            );
+            treePanel.scrollTop = Math.max(0, scrollTop);
+            observer.disconnect();
+        };
+        const observer = new MutationObserver(scrollSelectedNodeIntoView);
+
+        scrollSelectedNodeIntoView();
+
+        observer.observe(treePanel, {
+            attributes: true,
+            attributeFilter: ['class'],
+            childList: true,
+            subtree: true,
+        });
+
+        const timeoutId = window.setTimeout(() => {
+            scrollSelectedNodeIntoView();
+            observer.disconnect();
+        }, 1000);
+
+        return () => {
+            observer.disconnect();
+            window.clearTimeout(timeoutId);
+        };
+    }, [rootIds.length, selectedPaths]);
+
+    const handleChange = (payload: OrganisationUnitEventPayload) => {
         if (disabled) {
             return;
         }
 
-        setSearchQuery('');
-        setIsDropdownOpen(current => !current);
+        onChange(payload.checked
+            ? {
+                    id: payload.id,
+                    displayName: payload.displayName,
+                    path: payload.path,
+                }
+            : null);
     };
 
-    const handleClose = () => {
-        setSearchQuery('');
-        setIsDropdownOpen(false);
-    };
+    if (isLoading) {
+        return (
+            <div className={styles.treeState}>
+                <CircularLoader />
+            </div>
+        );
+    }
 
-    const handleSelect = (option: OrgUnitOption) => {
-        onChange(option);
-        handleClose();
-    };
+    if (error) {
+        return (
+            <div className={styles.treeNotice}>
+                <NoticeBox title={i18n.t('Could not load organisation units')} />
+            </div>
+        );
+    }
 
-    const handleClear = (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.stopPropagation();
-        onChange(null);
-        setSearchQuery('');
-    };
-
-    const renderOptions = () => {
-        if (isLoading) {
-            return <li className={styles.infoItem}>{i18n.t('Loading')}</li>;
-        }
-
-        if (options.length === 0) {
-            return (
-                <li className={styles.infoItem}>
-                    {searchQuery
-                        ? i18n.t('No matches found')
-                        : i18n.t('Start typing to search for organisation units')}
-                </li>
-            );
-        }
-
-        return options.map(option => (
-            <li
-                key={option.id}
-                className={styles.resultItem}
-                onClick={() => handleSelect(option)}
-                role="option"
-            >
-                <span className={styles.resultName}>{option.displayName}</span>
-            </li>
-        ));
-    };
+    if (rootIds.length === 0) {
+        return (
+            <div className={styles.treeNotice}>
+                <NoticeBox title={i18n.t('No organisation units available')} />
+            </div>
+        );
+    }
 
     return (
-        <div className={styles.field}>
-            <div ref={anchorRef} className={styles.selectContainer}>
-                <button
-                    type="button"
-                    className={classNames(styles.triggerButton, {
-                        [styles.triggerButtonDisabled]: disabled,
-                    })}
-                    onClick={handleOpen}
-                    disabled={disabled}
-                >
-                    <span
-                        className={classNames(styles.triggerText, {
-                            [styles.placeholder]: !value,
-                        })}
-                    >
-                        {value?.displayName ?? i18n.t('Select organisation unit')}
-                    </span>
-                    <span className={styles.iconContainer}>
-                        {value && !disabled && (
-                            <button
-                                type="button"
-                                className={styles.clearButton}
-                                onClick={handleClear}
-                                aria-label={i18n.t('Clear selection')}
-                            >
-                                <IconCross16 />
-                            </button>
-                        )}
-                        <IconChevronDown16 />
-                    </span>
-                </button>
-            </div>
-            {isDropdownOpen && (
-                <Layer onBackdropClick={handleClose}>
-                    <Popper reference={anchorRef} placement="bottom-start">
-                        <div className={styles.dropdown}>
-                            <InputField
-                                className={styles.search}
-                                value={searchQuery}
-                                placeholder={i18n.t('Search organisation units')}
-                                onChange={({ value: nextValue }: { value?: string }) => {
-                                    setSearchQuery(nextValue ?? '');
-                                }}
-                            />
-                            <ul className={styles.resultsList} role="listbox">
-                                {renderOptions()}
-                            </ul>
-                        </div>
-                    </Popper>
-                </Layer>
-            )}
+        <div ref={treePanelRef} className={styles.treePanel}>
+            <OrganisationUnitTree
+                roots={rootIds}
+                selected={selectedPaths}
+                initiallyExpanded={initiallyExpanded}
+                filter={filterPaths.length ? filterPaths : undefined}
+                onChange={handleChange}
+                disableSelection={disabled}
+                singleSelection
+                isUserDataViewFallback
+                dataTest="chap-org-unit-tree"
+            />
         </div>
     );
 };

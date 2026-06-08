@@ -63,7 +63,7 @@
 }
 
 .orgUnitControl {
-    max-width: 300px;
-    min-width: min(240px, 100%);
+    max-width: 360px;
+    min-width: min(280px, 100%);
     width: 100%;
 }
