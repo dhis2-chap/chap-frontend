@@ -7,14 +7,14 @@ import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 export class MetricsService {
     /**
-     * Get Metrics Csv
-     * Download per-location / per-time_period / per-horizon metric values as a
-     * long-format CSV. Every applicable metric in
-     * `chap_core.assessment.metrics.available_metrics` is included as rows.
+     * Export backtest metrics for offline analysis
+     * Download every scoring metric computed for a backtest as a CSV, broken down by region, time period, and forecast horizon.
      *
-     * Currently takes a single backtest via the `backtestId` query parameter; the
-     * path is scoped to `/metric/` so it can be extended to accept multiple
-     * evaluations later without a breaking change.
+     * Use this when you want to pull metrics into pandas, Excel, or BI tooling for
+     * analysis the built-in plots don't cover — for example comparing several backtests
+     * side by side, or weighting locations differently. The path is scoped to ``/metric/``
+     * so it can be extended to multi-backtest exports later without breaking callers.
+     * 404 if the backtest is unknown.
      * @param backtestId
      * @returns any Successful Response
      * @throws ApiError
