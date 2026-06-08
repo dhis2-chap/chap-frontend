@@ -14,8 +14,13 @@ import {
 import {
     Button,
     ButtonStrip,
+    Checkbox,
     CircularLoader,
     IconImportItems24,
+    Modal,
+    ModalActions,
+    ModalContent,
+    ModalTitle,
     NoticeBox,
     Switch,
 } from '@dhis2/ui';
@@ -34,6 +39,8 @@ import {
     getPredictionSetupQuantileTargets,
     QUANTILE_SUGGESTED_KEYWORDS,
 } from '@/utils/predictionSetupImportMapping';
+import { useAuthority } from '@/hooks/useAuthority';
+import { ConditionalTooltip } from '@/components/ConditionalTooltip';
 
 type Props = {
     prediction: PredictionInfo;
@@ -89,12 +96,18 @@ export const QuantileMappingForm = ({ prediction, model, predictionSetupId }: Pr
     const location = useLocation();
     const { data: locationState } = importLocationStateSchema.safeParse(location.state);
     const [isAlertsDialogOpen, setIsAlertsDialogOpen] = useState(false);
+    const [clearPreviousValues, setClearPreviousValues] = useState(false);
+    const [pendingImportData, setPendingImportData] = useState<QuantileMappingFormValues | null>(null);
     const {
         series,
         isLoading: isSeriesLoading,
         error: seriesError,
     } = usePredictionSeries({ prediction, model });
     const { predictionSetup } = usePredictionSetup(predictionSetupId);
+    const {
+        hasAuthority: canDeleteDataValues,
+        isLoading: isDeleteAuthorityLoading,
+    } = useAuthority({ authority: 'F_DATAVALUE_DELETE' });
     const unavailableThresholdCount = series.filter(orgUnitSeries => (
         !calculateMockEndemicThreshold(orgUnitSeries.actualCases).available
     )).length;
@@ -122,6 +135,15 @@ export const QuantileMappingForm = ({ prediction, model, predictionSetupId }: Pr
             navigate(`/predictions/${predictionSetupId}`);
         },
     });
+    const canClearPreviousValues = canDeleteDataValues === true;
+
+    useEffect(() => {
+        if (canDeleteDataValues === true) {
+            setClearPreviousValues(true);
+        } else if (canDeleteDataValues === false) {
+            setClearPreviousValues(false);
+        }
+    }, [canDeleteDataValues]);
 
     useEffect(() => {
         const quantileTargets = getPredictionSetupQuantileTargets(predictionSetup);
@@ -142,22 +164,64 @@ export const QuantileMappingForm = ({ prediction, model, predictionSetupId }: Pr
         });
     }, [clearErrors, dirtyFields, predictionSetup, setValue]);
 
-    const onSubmit = async (data: QuantileMappingFormValues) => {
-        await mutateAsync({
-            predictionId: prediction.id,
-            quantileMapping: {
-                quantileLowId: data.quantile_low,
-                quantileHighId: data.quantile_high,
-                quantileMedianId: data.median,
-                quantileMidLowId: data.quantile_mid_low,
-                quantileMidHighId: data.quantile_mid_high,
-                outbreakIndicatorId: data.use_alert_outputs ? data.outbreak_indicator : '',
-            },
-            outbreakIndicators: data.use_alert_outputs
-                ? buildOutbreakIndicators(series, data.alert_probability)
-                : [],
-        });
+    const onSubmit = (data: QuantileMappingFormValues) => {
+        setPendingImportData(data);
     };
+
+    const handleConfirmImport = async () => {
+        if (!pendingImportData) {
+            return;
+        }
+
+        try {
+            await mutateAsync({
+                prediction,
+                fallbackOrgUnitIds: predictionSetup?.orgUnits ?? [],
+                clearPreviousValues,
+                quantileMapping: {
+                    quantileLowId: pendingImportData.quantile_low,
+                    quantileHighId: pendingImportData.quantile_high,
+                    quantileMedianId: pendingImportData.median,
+                    quantileMidLowId: pendingImportData.quantile_mid_low,
+                    quantileMidHighId: pendingImportData.quantile_mid_high,
+                    outbreakIndicatorId: pendingImportData.use_alert_outputs
+                        ? pendingImportData.outbreak_indicator
+                        : '',
+                },
+                outbreakIndicators: pendingImportData.use_alert_outputs
+                    ? buildOutbreakIndicators(series, pendingImportData.alert_probability)
+                    : [],
+            });
+        } catch {
+            // Alerts are handled by the mutation hook; keep the modal open so the user can retry or cancel.
+        }
+    };
+
+    const handleCancelImport = () => {
+        if (!isPending) {
+            setPendingImportData(null);
+        }
+    };
+
+    const importButtonLabel = clearPreviousValues
+        ? i18n.t('Clear and import')
+        : i18n.t('Import');
+
+    const clearPreviousValuesCheckbox = (
+        <span className={styles.clearPreviousValuesTooltipTarget}>
+            <Checkbox
+                label={i18n.t('Clear previous values')}
+                name="clearPreviousValues"
+                checked={clearPreviousValues}
+                onChange={() => setClearPreviousValues(prev => !prev)}
+                disabled={!canClearPreviousValues}
+            />
+        </span>
+    );
+
+    const confirmationMessage = clearPreviousValues
+        ? i18n.t('This will clear existing values for the selected output data elements, then import this prediction into DHIS2.')
+        : i18n.t('This will import this prediction into DHIS2 without clearing existing values first.');
     const returnTo = `/predictions/${predictionSetupId}`;
 
     const {
@@ -344,6 +408,15 @@ export const QuantileMappingForm = ({ prediction, model, predictionSetupId }: Pr
                         )}
                     </div>
 
+                    <div className={styles.clearPreviousValues}>
+                        <ConditionalTooltip
+                            enabled={!isDeleteAuthorityLoading && !canClearPreviousValues}
+                            content={i18n.t('Requires data value delete authority.')}
+                        >
+                            {clearPreviousValuesCheckbox}
+                        </ConditionalTooltip>
+                    </div>
+
                     <ButtonStrip end className={styles.buttonStrip}>
                         <Button
                             type="button"
@@ -356,7 +429,7 @@ export const QuantileMappingForm = ({ prediction, model, predictionSetupId }: Pr
                             loading={isPending}
                             primary
                         >
-                            {i18n.t('Import')}
+                            {importButtonLabel}
                         </Button>
                     </ButtonStrip>
                 </div>
@@ -368,6 +441,32 @@ export const QuantileMappingForm = ({ prediction, model, predictionSetupId }: Pr
                     onConfirm={handleConfirmNavigation}
                     onCancel={handleCancelNavigation}
                 />
+            )}
+
+            {pendingImportData && (
+                <Modal onClose={handleCancelImport} small>
+                    <ModalTitle>
+                        {clearPreviousValues ? i18n.t('Clear and import prediction') : i18n.t('Import prediction')}
+                    </ModalTitle>
+                    <ModalContent>
+                        <p>{confirmationMessage}</p>
+                    </ModalContent>
+                    <ModalActions>
+                        <ButtonStrip>
+                            <Button onClick={handleCancelImport} secondary disabled={isPending}>
+                                {i18n.t('Cancel')}
+                            </Button>
+                            <Button
+                                onClick={handleConfirmImport}
+                                loading={isPending}
+                                primary={!clearPreviousValues}
+                                destructive={clearPreviousValues}
+                            >
+                                {importButtonLabel}
+                            </Button>
+                        </ButtonStrip>
+                    </ModalActions>
+                </Modal>
             )}
 
             {isAlertsDialogOpen && (

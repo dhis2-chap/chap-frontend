@@ -150,6 +150,18 @@
     line-height: 1.4;
 }
 
+.clearPreviousValues {
+    display: flex;
+    align-items: center;
+    margin-block-start: var(--spacers-dp16);
+    padding-block-start: var(--spacers-dp16);
+    border-block-start: 1px solid var(--colors-grey300);
+}
+
+.clearPreviousValuesTooltipTarget {
+    display: inline-flex;
+}
+
 .buttonStrip {
     margin-block-start: var(--spacers-dp8);
 }

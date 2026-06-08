@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-05-30T21:57:15.594Z\n"
-"PO-Revision-Date: 2026-05-30T21:57:15.600Z\n"
+"POT-Creation-Date: 2026-06-08T18:59:36.713Z\n"
+"PO-Revision-Date: 2026-06-08T18:59:36.713Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -1359,6 +1359,26 @@ msgstr "Alert probability is required"
 msgid "Outbreak indicator is required"
 msgstr "Outbreak indicator is required"
 
+msgid "Clear and import"
+msgstr "Clear and import"
+
+msgid "Clear previous values"
+msgstr "Clear previous values"
+
+msgid ""
+"This will clear existing values for the selected output data elements, then "
+"import this prediction into DHIS2."
+msgstr ""
+"This will clear existing values for the selected output data elements, then "
+"import this prediction into DHIS2."
+
+msgid ""
+"This will import this prediction into DHIS2 without clearing existing "
+"values first."
+msgstr ""
+"This will import this prediction into DHIS2 without clearing existing "
+"values first."
+
 msgid "Unable to load alert data"
 msgstr "Unable to load alert data"
 
@@ -1428,6 +1448,15 @@ msgstr "Adjust"
 msgid "Outbreak indicator"
 msgstr "Outbreak indicator"
 
+msgid "Requires data value delete authority."
+msgstr "Requires data value delete authority."
+
+msgid "Clear and import prediction"
+msgstr "Clear and import prediction"
+
+msgid "Import prediction"
+msgstr "Import prediction"
+
 msgid "Cannot import prediction"
 msgstr "Cannot import prediction"
 
@@ -1436,6 +1465,9 @@ msgstr "Missing or invalid prediction setup id."
 
 msgid "Failed to post prediction data"
 msgstr "Failed to post prediction data"
+
+msgid "Previous values may have been cleared, but the new import did not complete"
+msgstr "Previous values may have been cleared, but the new import did not complete"
 
 msgid "Prediction data posted successfully"
 msgstr "Prediction data posted successfully"
@@ -2040,9 +2072,6 @@ msgstr ""
 
 msgid "The model for this prediction could not be loaded."
 msgstr "The model for this prediction could not be loaded."
-
-msgid "Import prediction"
-msgstr "Import prediction"
 
 msgid "Import the forecasted values of this prediction into DHIS2."
 msgstr "Import the forecasted values of this prediction into DHIS2."
