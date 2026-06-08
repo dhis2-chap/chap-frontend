@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest';
 import type { PredictionOrgUnitSeries, PredictionPointVM } from '../../interfaces/Prediction';
 import {
     buildOutbreakIndicatorsForSeries,
-    calculateMockEndemicThreshold,
     getSupportedOutbreakProbabilityBucket,
     isOutbreakAtProbability,
     parseOutbreakProbability,
@@ -52,34 +51,6 @@ describe('outbreak alert utilities', () => {
         expect(isOutbreakAtProbability(basePoint, 51, 10)).toBe(false);
     });
 
-    it('calculates mock endemic threshold as mean plus two population standard deviations', () => {
-        const result = calculateMockEndemicThreshold([
-            { period: '202301', value: 10 },
-            { period: '202302', value: 12 },
-            { period: '202303', value: 14 },
-            { period: '202304', value: 16 },
-        ]);
-
-        expect(result.available).toBe(true);
-        expect(result.observationCount).toBe(4);
-        expect(result.threshold).toBeCloseTo(17.4721, 4);
-    });
-
-    it('marks threshold unavailable with fewer than four non-null observations', () => {
-        const result = calculateMockEndemicThreshold([
-            { period: '202301', value: 10 },
-            { period: '202302', value: null },
-            { period: '202303', value: 14 },
-            { period: '202304', value: 16 },
-        ]);
-
-        expect(result).toEqual({
-            available: false,
-            threshold: null,
-            observationCount: 3,
-        });
-    });
-
     it('builds forecast-period outbreak indicators and skips unavailable thresholds', () => {
         const series: PredictionOrgUnitSeries = {
             targetId: 'target',
@@ -103,7 +74,10 @@ describe('outbreak alert utilities', () => {
             ],
         };
 
-        const indicators = buildOutbreakIndicatorsForSeries(series, 75);
+        const indicators = buildOutbreakIndicatorsForSeries(series, 75, [
+            { period: '202401', value: 20 },
+            { period: '202402', value: 20 },
+        ]);
 
         expect(indicators).toHaveLength(2);
         expect(indicators[0]).toMatchObject({
@@ -121,9 +95,9 @@ describe('outbreak alert utilities', () => {
             value: '0',
         });
 
-        expect(buildOutbreakIndicatorsForSeries({
-            ...series,
-            actualCases: [{ period: '202301', value: 10 }],
-        }, 75)).toEqual([]);
+        expect(buildOutbreakIndicatorsForSeries(series, 75)).toEqual([]);
+        expect(buildOutbreakIndicatorsForSeries(series, 75, [
+            { period: '202401', value: null },
+        ])).toEqual([]);
     });
 });

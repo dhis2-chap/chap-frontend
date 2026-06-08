@@ -1,10 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { KeyboardEvent, MouseEvent } from 'react';
 import * as z from 'zod';
 import i18n from '@dhis2/d2-i18n';
 import {
     buildOutbreakIndicators,
-    calculateMockEndemicThreshold,
     DEFAULT_OUTBREAK_PROBABILITY,
     ModelSpecRead,
     OUTBREAK_PROBABILITY_OPTIONS,
@@ -32,6 +31,7 @@ import { usePostPredictionData } from '../hooks/usePostPredictionData';
 import { useNavigationBlocker } from '@/hooks/useNavigationBlocker';
 import { NavigationConfirmModal } from '@/components/NavigationConfirmModal';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useEndemicThresholds } from '@/hooks/useEndemicThresholds';
 import { usePredictionSeries } from '../../PredictionDetails/hooks/usePredictionSeries';
 import { PredictionAlertsDialog } from '../../PredictionAlerts';
 import { usePredictionSetup } from '@/hooks/usePredictionSetup';
@@ -108,9 +108,39 @@ export const QuantileMappingForm = ({ prediction, model, predictionSetupId }: Pr
         hasAuthority: canDeleteDataValues,
         isLoading: isDeleteAuthorityLoading,
     } = useAuthority({ authority: 'F_DATAVALUE_DELETE' });
-    const unavailableThresholdCount = series.filter(orgUnitSeries => (
-        !calculateMockEndemicThreshold(orgUnitSeries.actualCases).available
-    )).length;
+
+    const allPeriods = useMemo(() => {
+        const periodSet = new Set<string>();
+        for (const s of series) {
+            s.actualCases?.forEach(ac => periodSet.add(ac.period));
+            s.points.forEach(p => periodSet.add(p.period));
+        }
+        return Array.from(periodSet);
+    }, [series]);
+
+    const orgUnitIds = useMemo(() => (
+        series.map(s => s.orgUnitId)
+    ), [series]);
+
+    const {
+        thresholdMap,
+        isLoading: isThresholdsLoading,
+        error: thresholdsError,
+    } = useEndemicThresholds({
+        datasetId: prediction.datasetId,
+        periodIds: allPeriods,
+        locations: orgUnitIds,
+        enabled: series.length > 0,
+    });
+
+    const isLoading = isSeriesLoading || isThresholdsLoading;
+    const error = seriesError || thresholdsError;
+
+    const unavailableThresholdCount = series.filter((orgUnitSeries) => {
+        const thresholds = thresholdMap?.get(orgUnitSeries.orgUnitId);
+        if (!thresholds) return true;
+        return !thresholds.some(t => t.value !== null);
+    }).length;
     const {
         handleSubmit,
         formState: { errors, isDirty, dirtyFields },
@@ -189,7 +219,7 @@ export const QuantileMappingForm = ({ prediction, model, predictionSetupId }: Pr
                         : '',
                 },
                 outbreakIndicators: pendingImportData.use_alert_outputs
-                    ? buildOutbreakIndicators(series, pendingImportData.alert_probability)
+                    ? buildOutbreakIndicators(series, pendingImportData.alert_probability, thresholdMap)
                     : [],
             });
         } catch {
@@ -270,7 +300,7 @@ export const QuantileMappingForm = ({ prediction, model, predictionSetupId }: Pr
         setValue('alert_probability', probability, { shouldDirty: true });
     };
 
-    if (isSeriesLoading) {
+    if (isLoading) {
         return (
             <div className={styles.loadingContainer}>
                 <CircularLoader />
@@ -278,7 +308,7 @@ export const QuantileMappingForm = ({ prediction, model, predictionSetupId }: Pr
         );
     }
 
-    if (seriesError) {
+    if (error) {
         return (
             <NoticeBox error title={i18n.t('Unable to load alert data')}>
                 {i18n.t('There was a problem loading the prediction data required for outbreak indicator import.')}

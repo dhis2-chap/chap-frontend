@@ -7,17 +7,17 @@ import {
 } from '@dhis2/ui';
 import {
     buildOutbreakIndicatorsForSeries,
-    calculateMockEndemicThreshold,
     getStableMaxYForThresholdChart,
-    MINIMUM_THRESHOLD_OBSERVATIONS,
     UncertaintyAreaChart,
     Widget,
 } from '@dhis2-chap/ui';
 import type {
+    EndemicThresholdPoint,
     ModelSpecRead,
     OutbreakProbability,
     PredictionInfo,
 } from '@dhis2-chap/ui';
+import { useEndemicThresholds } from '@/hooks/useEndemicThresholds';
 import { OutbreakProbabilityControl } from '../../ThresholdTilesExplorer';
 import { usePredictionSeries } from '../PredictionDetails/hooks/usePredictionSeries';
 import styles from './PredictionAlerts.module.css';
@@ -39,24 +39,59 @@ export const AlertPreviewPanel = ({
     const {
         series,
         predictionTargetName,
-        isLoading,
-        error,
+        isLoading: isSeriesLoading,
+        error: seriesError,
     } = usePredictionSeries({ prediction, model });
 
+    const allPeriods = useMemo(() => {
+        const periodSet = new Set<string>();
+        for (const s of series) {
+            s.actualCases?.forEach(ac => periodSet.add(ac.period));
+            s.points.forEach(p => periodSet.add(p.period));
+        }
+        return Array.from(periodSet);
+    }, [series]);
+
+    const orgUnitIds = useMemo(() => (
+        series.map(s => s.orgUnitId)
+    ), [series]);
+
+    const {
+        thresholdMap,
+        isLoading: isThresholdsLoading,
+        error: thresholdsError,
+    } = useEndemicThresholds({
+        datasetId: prediction.datasetId,
+        periodIds: allPeriods,
+        locations: orgUnitIds,
+        enabled: series.length > 0,
+    });
+
+    const isLoading = isSeriesLoading || isThresholdsLoading;
+    const error = seriesError || thresholdsError;
+
     const selectedSeries = series.find(s => s.orgUnitId === selectedOrgUnitId) ?? series[0];
-    const selectedThreshold = useMemo(() => (
-        calculateMockEndemicThreshold(selectedSeries?.actualCases)
-    ), [selectedSeries]);
+    const selectedThresholds: EndemicThresholdPoint[] = useMemo(() => (
+        thresholdMap?.get(selectedSeries?.orgUnitId) ?? []
+    ), [thresholdMap, selectedSeries?.orgUnitId]);
+    const hasThreshold = selectedThresholds.some(t => t.value !== null);
     const selectedMaxY = useMemo(() => (
         selectedSeries
-            ? getStableMaxYForThresholdChart(selectedSeries, selectedThreshold.threshold)
+            ? getStableMaxYForThresholdChart(
+                    selectedSeries,
+                    selectedThresholds.length > 0 ? selectedThresholds : null,
+                )
             : undefined
-    ), [selectedSeries, selectedThreshold.threshold]);
+    ), [selectedSeries, selectedThresholds]);
     const selectedIndicators = useMemo(() => (
         selectedSeries
-            ? buildOutbreakIndicatorsForSeries(selectedSeries, selectedProbability)
+            ? buildOutbreakIndicatorsForSeries(
+                    selectedSeries,
+                    selectedProbability,
+                    selectedThresholds.length > 0 ? selectedThresholds : undefined,
+                )
             : []
-    ), [selectedSeries, selectedProbability]);
+    ), [selectedSeries, selectedProbability, selectedThresholds]);
 
     useEffect(() => {
         setSelectedOrgUnitId(undefined);
@@ -100,14 +135,16 @@ export const AlertPreviewPanel = ({
                     <div className={[styles.previewLayout, styles.dialogPreviewLayout].join(' ')}>
                         <div className={styles.orgUnitList}>
                             {series.map((orgUnitSeries) => {
-                                const threshold = calculateMockEndemicThreshold(orgUnitSeries.actualCases);
+                                const orgThresholds = thresholdMap?.get(orgUnitSeries.orgUnitId) ?? [];
+                                const orgHasThreshold = orgThresholds.some(t => t.value !== null);
                                 const indicators = buildOutbreakIndicatorsForSeries(
                                     orgUnitSeries,
                                     selectedProbability,
+                                    orgThresholds.length > 0 ? orgThresholds : undefined,
                                 );
-                                const hasOutbreak = threshold.available &&
+                                const hasOutbreak = orgHasThreshold &&
                                     indicators.some(indicator => indicator.outbreak);
-                                const tooltipLabel = !threshold.available
+                                const tooltipLabel = !orgHasThreshold
                                     ? i18n.t('Threshold unavailable')
                                     : hasOutbreak
                                         ? i18n.t('Outbreak detected')
@@ -139,7 +176,7 @@ export const AlertPreviewPanel = ({
                                                 />
                                             </Tooltip>
                                         )}
-                                        {!threshold.available && tooltipLabel && (
+                                        {!orgHasThreshold && tooltipLabel && (
                                             <Tooltip content={tooltipLabel}>
                                                 <span
                                                     className={[
@@ -155,17 +192,15 @@ export const AlertPreviewPanel = ({
                             })}
                         </div>
                         <div className={styles.chartArea}>
-                            {!selectedThreshold.available && (
+                            {!hasThreshold && (
                                 <NoticeBox warning title={i18n.t('Endemic threshold unavailable')}>
-                                    {i18n.t('At least {{count}} historical observations are required for the mocked threshold.', {
-                                        count: MINIMUM_THRESHOLD_OBSERVATIONS,
-                                    })}
+                                    {i18n.t('Insufficient historical data to compute the endemic threshold for this location.')}
                                 </NoticeBox>
                             )}
                             <UncertaintyAreaChart
                                 predictionTargetName={predictionTargetName}
                                 series={selectedSeries}
-                                endemicThreshold={selectedThreshold.threshold}
+                                endemicThresholds={selectedThresholds.length > 0 ? selectedThresholds : undefined}
                                 outbreakPeriods={selectedIndicators.map(indicator => ({
                                     period: indicator.period,
                                     outbreak: indicator.outbreak,
