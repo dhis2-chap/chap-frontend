@@ -94,20 +94,6 @@ const getFilterMatchedOrgUnit = (
     return orgUnitFilter.options.find(option => option.id === orgUnit.id) ?? null;
 };
 
-const getSelectorHelperText = (orgUnitFilter: OrgUnitFilterState): string => {
-    if (orgUnitFilter.status === 'none') {
-        return i18n.t('No dashboard organisation unit filter is selected.');
-    }
-
-    if (orgUnitFilter.status === 'multiple') {
-        return orgUnitFilter.options.length > 0
-            ? i18n.t('Dashboard filter contains multiple organisation units.')
-            : i18n.t('Dashboard organisation unit filter does not identify one unit.');
-    }
-
-    return '';
-};
-
 const buildConfigWithFallbackOrgUnit = (
     config: PluginConfig,
     orgUnit: OrgUnitOption | null,
@@ -173,6 +159,10 @@ const ChartContent = ({
         }
 
         if (analytics.status === 'invalid') {
+            if (shouldShowOrgUnitSelector && !selectedOrgUnit) {
+                return null;
+            }
+
             return (
                 <ChartPassiveState title={i18n.t('Chart is waiting for data')}>
                     {analytics.message}
@@ -181,19 +171,12 @@ const ChartContent = ({
         }
 
         return (
-            <>
-                {analytics.periodSource === 'fallback' && (
-                    <p className={styles.fallbackNote}>
-                        {i18n.t('Showing the last 24 completed monthly periods.')}
-                    </p>
-                )}
-                <div className={styles.chartSurface}>
-                    <UncertaintyAreaChart
-                        series={analytics.series}
-                        predictionTargetName={config.targetDataItem.displayName}
-                    />
-                </div>
-            </>
+            <div className={styles.chartSurface}>
+                <UncertaintyAreaChart
+                    series={analytics.series}
+                    predictionTargetName={config.targetDataItem.displayName}
+                />
+            </div>
         );
     };
 
@@ -203,12 +186,10 @@ const ChartContent = ({
                 <div className={styles.orgUnitToolbar}>
                     <div className={styles.orgUnitControl}>
                         <OrgUnitPicker
-                            label={i18n.t('Organisation unit')}
                             value={fallbackOrgUnit}
                             onChange={handleFallbackOrgUnitChange}
                             options={selectorOptions}
                             disabled={isSavingFallbackOrgUnit}
-                            helperText={getSelectorHelperText(parsedFilters.orgUnit)}
                         />
                     </div>
                 </div>

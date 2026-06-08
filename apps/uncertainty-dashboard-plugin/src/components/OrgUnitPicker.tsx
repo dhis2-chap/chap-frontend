@@ -8,7 +8,6 @@ import {
     IconChevronDown16,
     IconCross16,
     InputField,
-    Label,
     Layer,
     Popper,
 } from '@dhis2/ui';
@@ -23,12 +22,10 @@ type OrganisationUnitsResponse = {
 };
 
 type OrgUnitPickerProps = {
-    label: string;
     value: OrgUnitOption | null;
     onChange: (value: OrgUnitOption | null) => void;
     options?: OrgUnitOption[];
     disabled?: boolean;
-    helperText?: string;
 };
 
 const matchesSearchQuery = (orgUnit: OrgUnitOption, searchQuery: string): boolean => {
@@ -42,12 +39,10 @@ const matchesSearchQuery = (orgUnit: OrgUnitOption, searchQuery: string): boolea
 };
 
 export const OrgUnitPicker = ({
-    label,
     value,
     onChange,
     options: fixedOptions,
     disabled = false,
-    helperText,
 }: OrgUnitPickerProps) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
@@ -133,16 +128,12 @@ export const OrgUnitPicker = ({
                 role="option"
             >
                 <span className={styles.resultName}>{option.displayName}</span>
-                {option.path && (
-                    <span className={styles.resultPath}>{option.path}</span>
-                )}
             </li>
         ));
     };
 
     return (
         <div className={styles.field}>
-            <Label className={styles.label}>{label}</Label>
             <div ref={anchorRef} className={styles.selectContainer}>
                 <button
                     type="button"
@@ -174,7 +165,6 @@ export const OrgUnitPicker = ({
                     </span>
                 </button>
             </div>
-            {helperText && <span className={styles.helperText}>{helperText}</span>}
             {isDropdownOpen && (
                 <Layer onBackdropClick={handleClose}>
                     <Popper reference={anchorRef} placement="bottom-start">

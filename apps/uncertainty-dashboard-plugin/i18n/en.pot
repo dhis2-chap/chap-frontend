@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-06-08T18:18:12.776Z\n"
-"PO-Revision-Date: 2026-06-08T18:18:12.777Z\n"
+"POT-Creation-Date: 2026-06-08T18:31:53.100Z\n"
+"PO-Revision-Date: 2026-06-08T18:31:53.101Z\n"
 
 msgid "Configure uncertainty chart"
 msgstr "Configure uncertainty chart"
@@ -65,15 +65,6 @@ msgstr "Select organisation unit"
 msgid "Search organisation units"
 msgstr "Search organisation units"
 
-msgid "No dashboard organisation unit filter is selected."
-msgstr "No dashboard organisation unit filter is selected."
-
-msgid "Dashboard filter contains multiple organisation units."
-msgstr "Dashboard filter contains multiple organisation units."
-
-msgid "Dashboard organisation unit filter does not identify one unit."
-msgstr "Dashboard organisation unit filter does not identify one unit."
-
 msgid "Could not load chart data"
 msgstr "Could not load chart data"
 
@@ -82,12 +73,6 @@ msgstr "There was a problem loading analytics data for this chart."
 
 msgid "Chart is waiting for data"
 msgstr "Chart is waiting for data"
-
-msgid "Showing the last 24 completed monthly periods."
-msgstr "Showing the last 24 completed monthly periods."
-
-msgid "Organisation unit"
-msgstr "Organisation unit"
 
 msgid "CHAP uncertainty chart"
 msgstr "CHAP uncertainty chart"
