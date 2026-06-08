@@ -38,6 +38,7 @@ const getChartOptions = (
     onAfterSetExtremes?: Highcharts.AxisSetExtremesEventCallbackFunction,
     hideResetButton = false,
     maxY?: number,
+    chartHeight?: Highcharts.ChartOptions['height'],
 ): Highcharts.Options => {
     const isTile = variant === 'tile';
     const disabledAnimationOptions = getDisabledAnimationOptions();
@@ -218,7 +219,7 @@ const getChartOptions = (
         },
         chart: {
             ...disabledAnimationOptions.chart,
-            height: isTile ? 240 : (9 / 16 * 100) + '%',
+            height: chartHeight ?? (isTile ? 240 : (9 / 16 * 100) + '%'),
             marginBottom: isTile ? 48 : 125,
             zooming: {
                 type: 'x',
@@ -247,6 +248,7 @@ interface PredicationChartProps {
     zoomRange?: ZoomRange | null;
     onZoomChange?: (range: ZoomRange | null) => void;
     maxY?: number;
+    chartHeight?: Highcharts.ChartOptions['height'];
 }
 
 export interface OutbreakPeriodChartInfo {
@@ -267,6 +269,7 @@ export const UncertaintyAreaChart = ({
     zoomRange,
     onZoomChange,
     maxY,
+    chartHeight,
 }: PredicationChartProps) => {
     registerHighchartsModules();
 
@@ -320,6 +323,7 @@ export const UncertaintyAreaChart = ({
             handleAfterSetExtremes,
             hasExternalZoomControls,
             maxY,
+            chartHeight,
         );
     }, [
         series,
@@ -330,6 +334,7 @@ export const UncertaintyAreaChart = ({
         handleAfterSetExtremes,
         hasExternalZoomControls,
         maxY,
+        chartHeight,
     ]);
 
     return (

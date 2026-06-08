@@ -29,6 +29,63 @@ import styles from './PluginContent.module.css';
 
 type OrgUnitFilterState = ParsedDashboardFilters['orgUnit'];
 
+const DEFAULT_DASHBOARD_CHART_HEIGHT = 460;
+const MIN_DASHBOARD_CHART_HEIGHT = 320;
+const MAX_DASHBOARD_CHART_HEIGHT = 520;
+const DASHBOARD_CHART_HEIGHT_RATIO = 0.48;
+
+const getDashboardChartHeight = ({
+    width,
+    height,
+}: {
+    width: number;
+    height: number;
+}): number => {
+    const availableHeight = Math.max(0, height);
+    const maxHeightForBox = availableHeight > 0
+        ? Math.min(MAX_DASHBOARD_CHART_HEIGHT, availableHeight)
+        : MAX_DASHBOARD_CHART_HEIGHT;
+    const minHeightForBox = availableHeight > 0
+        ? Math.min(MIN_DASHBOARD_CHART_HEIGHT, availableHeight)
+        : MIN_DASHBOARD_CHART_HEIGHT;
+    const targetHeight = width > 0
+        ? width * DASHBOARD_CHART_HEIGHT_RATIO
+        : DEFAULT_DASHBOARD_CHART_HEIGHT;
+
+    return Math.round(Math.max(
+        minHeightForBox,
+        Math.min(maxHeightForBox, targetHeight),
+    ));
+};
+
+const useDashboardChartHeight = (
+    chartSurface: HTMLDivElement | null,
+): number => {
+    const [chartHeight, setChartHeight] = useState(DEFAULT_DASHBOARD_CHART_HEIGHT);
+
+    useEffect(() => {
+        if (!chartSurface) {
+            return undefined;
+        }
+
+        const updateChartHeight = () => {
+            const { width, height } = chartSurface.getBoundingClientRect();
+            setChartHeight(getDashboardChartHeight({ width, height }));
+        };
+
+        updateChartHeight();
+
+        const resizeObserver = new ResizeObserver(updateChartHeight);
+        resizeObserver.observe(chartSurface);
+
+        return () => {
+            resizeObserver.disconnect();
+        };
+    }, [chartSurface]);
+
+    return chartHeight;
+};
+
 const LoadingState = () => (
     <div className={styles.centeredState}>
         <CircularLoader />
@@ -119,6 +176,8 @@ const ChartContent = ({
     onFallbackOrgUnitChange: (config: PluginConfig) => void;
     isSavingFallbackOrgUnit: boolean;
 }) => {
+    const [chartSurface, setChartSurface] = useState<HTMLDivElement | null>(null);
+    const chartHeight = useDashboardChartHeight(chartSurface);
     const parsedFilters = parseDashboardFilters(dashboardItemFilters);
     const dashboardOrgUnit = getDashboardOrgUnit(parsedFilters.orgUnit);
     const selectorOptions = getSelectorOptions(parsedFilters.orgUnit);
@@ -171,8 +230,9 @@ const ChartContent = ({
         }
 
         return (
-            <div className={styles.chartSurface}>
+            <div ref={setChartSurface} className={styles.chartSurface}>
                 <UncertaintyAreaChart
+                    chartHeight={chartHeight}
                     series={analytics.series}
                     predictionTargetName={config.targetDataItem.displayName}
                 />
