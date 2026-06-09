@@ -1,5 +1,7 @@
 import {
+    useCallback,
     useEffect,
+    useRef,
     useState,
 } from 'react';
 import i18n from '@dhis2/d2-i18n';
@@ -58,32 +60,43 @@ const getDashboardChartHeight = ({
     ));
 };
 
-const useDashboardChartHeight = (
-    chartSurface: HTMLDivElement | null,
-): number => {
+const useDashboardChartHeight = (): {
+    chartHeight: number;
+    chartSurfaceRef: (chartSurface: HTMLDivElement | null) => void;
+} => {
     const [chartHeight, setChartHeight] = useState(DEFAULT_DASHBOARD_CHART_HEIGHT);
+    const resizeObserverRef = useRef<ResizeObserver | null>(null);
 
-    useEffect(() => {
+    const chartSurfaceRef = useCallback((chartSurface: HTMLDivElement | null) => {
+        resizeObserverRef.current?.disconnect();
+        resizeObserverRef.current = null;
+
         if (!chartSurface) {
-            return undefined;
+            return;
         }
 
         const updateChartHeight = () => {
             const { width, height } = chartSurface.getBoundingClientRect();
-            setChartHeight(getDashboardChartHeight({ width, height }));
+            const nextChartHeight = getDashboardChartHeight({ width, height });
+
+            setChartHeight(currentChartHeight => (
+                currentChartHeight === nextChartHeight
+                    ? currentChartHeight
+                    : nextChartHeight
+            ));
         };
 
         updateChartHeight();
 
         const resizeObserver = new ResizeObserver(updateChartHeight);
         resizeObserver.observe(chartSurface);
+        resizeObserverRef.current = resizeObserver;
+    }, []);
 
-        return () => {
-            resizeObserver.disconnect();
-        };
-    }, [chartSurface]);
-
-    return chartHeight;
+    return {
+        chartHeight,
+        chartSurfaceRef,
+    };
 };
 
 const LoadingState = () => (
@@ -123,6 +136,12 @@ const ChartPassiveState = ({
         <div className={styles.noticeWrap}>
             <NoticeBox title={title}>{children}</NoticeBox>
         </div>
+    </div>
+);
+
+const ChartEmptyState = ({ children }: { children: React.ReactNode }) => (
+    <div className={styles.chartEmptyState}>
+        {children}
     </div>
 );
 
@@ -186,8 +205,10 @@ const ChartContent = ({
     onFallbackOrgUnitChange: (config: PluginConfig) => void;
     isSavingFallbackOrgUnit: boolean;
 }) => {
-    const [chartSurface, setChartSurface] = useState<HTMLDivElement | null>(null);
-    const chartHeight = useDashboardChartHeight(chartSurface);
+    const {
+        chartHeight,
+        chartSurfaceRef,
+    } = useDashboardChartHeight();
     const parsedFilters = parseDashboardFilters(dashboardItemFilters);
     const dashboardOrgUnit = getDashboardOrgUnit(parsedFilters.orgUnit);
     const selectorOptions = getSelectorOptions(parsedFilters.orgUnit);
@@ -229,18 +250,22 @@ const ChartContent = ({
 
         if (analytics.status === 'invalid') {
             if (shouldShowOrgUnitSelector && !selectedOrgUnit) {
-                return null;
+                return (
+                    <ChartEmptyState>
+                        {i18n.t('Select an organisation unit to show the chart.')}
+                    </ChartEmptyState>
+                );
             }
 
             return (
-                <ChartPassiveState title={i18n.t('Chart is waiting for data')}>
+                <ChartEmptyState>
                     {analytics.message}
-                </ChartPassiveState>
+                </ChartEmptyState>
             );
         }
 
         return (
-            <div ref={setChartSurface} className={styles.chartSurface}>
+            <div ref={chartSurfaceRef} className={styles.chartSurface}>
                 <UncertaintyAreaChart
                     chartHeight={chartHeight}
                     series={analytics.series}

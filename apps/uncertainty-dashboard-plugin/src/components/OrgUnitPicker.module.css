@@ -12,23 +12,23 @@
 .triggerButton {
     align-items: center;
     background: var(--colors-white);
-    border: 1px solid var(--colors-grey400);
+    border: 1px solid #d8dee5;
     border-radius: 3px;
     color: var(--colors-grey900);
     cursor: pointer;
     display: flex;
     font: inherit;
     font-size: 14px;
-    gap: var(--spacers-dp8);
+    gap: 6px;
     justify-content: space-between;
     min-height: 32px;
-    padding: 0 var(--spacers-dp24) 0 var(--spacers-dp8);
+    padding: 0 8px;
     text-align: left;
     width: 100%;
 }
 
 .triggerButton:hover {
-    border-color: var(--colors-grey600);
+    border-color: #cfd7df;
 }
 
 .triggerButtonWithClear {
