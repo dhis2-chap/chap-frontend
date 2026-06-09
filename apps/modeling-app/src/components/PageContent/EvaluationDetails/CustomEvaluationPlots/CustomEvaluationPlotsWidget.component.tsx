@@ -13,23 +13,6 @@ type Props = {
     filterHorizonPeriod?: string;
 };
 
-const VEGA_OPTIONS = {
-    actions: {
-        export: true,
-        compiled: false,
-        source: false,
-        editor: false,
-    },
-    i18n: {
-        CLICK_TO_VIEW_ACTIONS: i18n.t('Click to view actions'),
-        COMPILED_ACTION: i18n.t('View Compiled Vega'),
-        EDITOR_ACTION: i18n.t('Open in Vega Editor'),
-        PNG_ACTION: i18n.t('Save as PNG'),
-        SOURCE_ACTION: i18n.t('View Source'),
-        SVG_ACTION: i18n.t('Save as SVG'),
-    },
-};
-
 export const CustomEvaluationPlotsWidgetComponent = ({
     evaluationId,
     selectedVisualizationId,
@@ -37,6 +20,22 @@ export const CustomEvaluationPlotsWidgetComponent = ({
     filterSplitPeriod,
     filterHorizonPeriod,
 }: Props) => {
+    const vegaOptions = useMemo(() => ({
+        actions: {
+            export: true,
+            compiled: false,
+            source: false,
+            editor: false,
+        },
+        i18n: {
+            CLICK_TO_VIEW_ACTIONS: i18n.t('Click to view actions'),
+            COMPILED_ACTION: i18n.t('View Compiled Vega'),
+            EDITOR_ACTION: i18n.t('Open in Vega Editor'),
+            PNG_ACTION: i18n.t('Save as PNG'),
+            SOURCE_ACTION: i18n.t('View Source'),
+            SVG_ACTION: i18n.t('Save as SVG'),
+        },
+    }), []);
     const selectionComplete = !!selectedVisualizationId;
 
     const hasFilters = useMemo(() => {
@@ -146,7 +145,7 @@ export const CustomEvaluationPlotsWidgetComponent = ({
                 <VegaEmbed
                     spec={isolatedPlotsData}
                     className={styles.vegaEmbed}
-                    options={VEGA_OPTIONS}
+                    options={vegaOptions}
                 />
             </div>
         </div>

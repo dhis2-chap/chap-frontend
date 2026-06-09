@@ -63,11 +63,7 @@ export const EvaluationDetailsComponent = ({ evaluationId }: Props) => {
                         evaluationId={evaluationId}
                     />
                 )}
-                {/* {isMetricPlotsEnabled && (
-                    <MetricPlotWidget
-                        evaluationId={evaluationId}
-                    />
-                )} */}
+
             </div>
             <div className={styles.rightColumn}>
                 <EvaluationSummaryWidget

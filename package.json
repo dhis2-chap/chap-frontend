@@ -12,7 +12,7 @@
         "linter:check": "turbo linter:check --parallel",
         "tsc:check": "turbo tsc:check --parallel",
         "format": "d2-style apply",
-        "start": "turbo start  -- --proxy http://localhost:8080/",
+        "start": "turbo start",
         "docker:e2e": "./docker/scripts/e2e-stack.sh",
         "build": "turbo build",
         "test": "vitest run",
