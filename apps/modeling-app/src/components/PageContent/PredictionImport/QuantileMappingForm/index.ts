@@ -1,2 +1,3 @@
-export { QuantileMappingForm, quantileMappingSchema } from './QuantileMappingForm';
+export { QuantileMappingForm } from './QuantileMappingForm';
+export { quantileMappingSchema } from './quantileMappingFormSchema';
 export { QuantileMappingFormContainer } from './QuantileMappingFormContainer';

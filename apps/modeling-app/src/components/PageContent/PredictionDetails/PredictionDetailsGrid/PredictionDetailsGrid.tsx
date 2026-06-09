@@ -17,6 +17,7 @@ import type {
     PredictionInfo,
 } from '@dhis2-chap/ui';
 import { useMemo } from 'react';
+import { useEndemicThresholds } from '@/hooks/useEndemicThresholds';
 import {
     OutbreakProbabilityControl,
     SummaryRow,
@@ -55,17 +56,44 @@ export const PredictionDetailsGrid = ({
     const {
         series,
         predictionTargetName,
-        isLoading,
-        error,
+        isLoading: isSeriesLoading,
+        error: seriesError,
     } = usePredictionSeries({ prediction, model });
     const showThresholds = settings.thresholdsEnabled;
+
+    const allPeriods = useMemo(() => {
+        const periodSet = new Set<string>();
+        for (const s of series) {
+            s.actualCases?.forEach(ac => periodSet.add(ac.period));
+            s.points.forEach(p => periodSet.add(p.period));
+        }
+        return Array.from(periodSet);
+    }, [series]);
+
+    const orgUnitIds = useMemo(() => (
+        series.map(s => s.orgUnitId)
+    ), [series]);
+
+    const {
+        thresholdMap,
+        isLoading: isThresholdsLoading,
+        error: thresholdsError,
+    } = useEndemicThresholds({
+        datasetId: prediction.datasetId,
+        periodIds: allPeriods,
+        locations: orgUnitIds,
+        enabled: series.length > 0,
+    });
+
+    const isLoading = isSeriesLoading || isThresholdsLoading;
+    const error = seriesError || thresholdsError;
 
     const {
         summary,
         tiles,
     } = useMemo(() => (
-        getThresholdTileViewModels(series, settings.alertProbability)
-    ), [series, settings.alertProbability]);
+        getThresholdTileViewModels(series, settings.alertProbability, thresholdMap)
+    ), [series, settings.alertProbability, thresholdMap]);
 
     const predictionPeriods = useMemo(() => {
         const points = series[0]?.points ?? [];
