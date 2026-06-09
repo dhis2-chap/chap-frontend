@@ -46,8 +46,8 @@ export const QuantileMappingFormContent = ({
     const location = useLocation();
     const { data: locationState } = importLocationStateSchema.safeParse(location.state);
     const [isAlertsDialogOpen, setIsAlertsDialogOpen] = useState(false);
+    const [isImportConfirmationOpen, setIsImportConfirmationOpen] = useState(false);
     const [clearPreviousValuesPreference, setClearPreviousValuesPreference] = useState(true);
-    const [pendingImportData, setPendingImportData] = useState<QuantileMappingFormValues | null>(null);
     const defaultQuantileMappingFields = useMemo(
         () => getDefaultQuantileMappingFields(predictionSetup),
         [predictionSetup],
@@ -74,7 +74,12 @@ export const QuantileMappingFormContent = ({
             keepDirtyValues: true,
         },
     });
-    const { mutateAsync, isPending } = usePostPredictionData({
+    const {
+        mutateAsync,
+        isPending,
+        reset: resetImport,
+        progress: importProgress,
+    } = usePostPredictionData({
         onSuccess: () => {
             navigate(`/predictions/${predictionSetupId}`);
         },
@@ -129,32 +134,28 @@ export const QuantileMappingFormContent = ({
         setValue('alert_probability', probability, { shouldDirty: true });
     };
 
-    const handleSubmitImport = (data: QuantileMappingFormValues) => {
-        setPendingImportData(data);
+    const handleSubmitImport = () => {
+        setIsImportConfirmationOpen(true);
     };
 
-    const handleConfirmImport = async () => {
-        if (!pendingImportData) {
-            return;
-        }
-
+    const handleConfirmImport = async (data: QuantileMappingFormValues) => {
         try {
             await mutateAsync({
                 prediction,
                 fallbackOrgUnitIds: predictionSetup.orgUnits ?? [],
                 clearPreviousValues,
                 quantileMapping: {
-                    quantileLowId: pendingImportData.quantile_low,
-                    quantileHighId: pendingImportData.quantile_high,
-                    quantileMedianId: pendingImportData.median,
-                    quantileMidLowId: pendingImportData.quantile_mid_low,
-                    quantileMidHighId: pendingImportData.quantile_mid_high,
-                    outbreakIndicatorId: pendingImportData.use_alert_outputs
-                        ? pendingImportData.outbreak_indicator
+                    quantileLowId: data.quantile_low,
+                    quantileHighId: data.quantile_high,
+                    quantileMedianId: data.median,
+                    quantileMidLowId: data.quantile_mid_low,
+                    quantileMidHighId: data.quantile_mid_high,
+                    outbreakIndicatorId: data.use_alert_outputs
+                        ? data.outbreak_indicator
                         : '',
                 },
-                outbreakIndicators: pendingImportData.use_alert_outputs
-                    ? buildOutbreakIndicators(series, pendingImportData.alert_probability, thresholdMap)
+                outbreakIndicators: data.use_alert_outputs
+                    ? buildOutbreakIndicators(series, data.alert_probability, thresholdMap)
                     : [],
             });
         } catch {
@@ -164,7 +165,8 @@ export const QuantileMappingFormContent = ({
 
     const handleCancelImport = () => {
         if (!isPending) {
-            setPendingImportData(null);
+            setIsImportConfirmationOpen(false);
+            resetImport();
         }
     };
 
@@ -219,7 +221,7 @@ export const QuantileMappingFormContent = ({
                         </Button>
                         <Button
                             type="submit"
-                            loading={isPending}
+                            disabled={isPending}
                             primary
                         >
                             {importButtonLabel}
@@ -235,12 +237,13 @@ export const QuantileMappingFormContent = ({
                 />
             )}
 
-            {pendingImportData && (
+            {isImportConfirmationOpen && (
                 <ImportConfirmationModal
                     clearPreviousValues={clearPreviousValues}
                     isPending={isPending}
+                    progress={importProgress}
                     onCancel={handleCancelImport}
-                    onConfirm={handleConfirmImport}
+                    onConfirm={handleSubmit(handleConfirmImport)}
                 />
             )}
 

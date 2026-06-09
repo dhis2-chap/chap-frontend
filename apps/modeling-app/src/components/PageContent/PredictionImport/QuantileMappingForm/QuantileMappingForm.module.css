@@ -165,3 +165,83 @@
 .buttonStrip {
     margin-block-start: var(--spacers-dp8);
 }
+
+.importProgressList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacers-dp8);
+    margin: var(--spacers-dp16) 0 0;
+    padding: var(--spacers-dp12) 0 0;
+    border-block-start: 1px solid var(--colors-grey300);
+    list-style: none;
+}
+
+.importProgressStep {
+    display: grid;
+    grid-template-columns: 18px 1fr;
+    align-items: center;
+    gap: var(--spacers-dp8);
+    color: var(--colors-grey700);
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.importProgressStep[data-status="active"] {
+    color: var(--colors-grey900);
+    font-weight: 500;
+}
+
+.importProgressStep[data-status="complete"] {
+    color: var(--colors-grey800);
+}
+
+.importProgressStep[data-status="failed"] {
+    color: var(--colors-red700);
+    font-weight: 500;
+}
+
+.importProgressIcon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 18px;
+    block-size: 18px;
+    color: var(--colors-grey500);
+}
+
+.importProgressStep[data-status="active"] .importProgressIcon {
+    color: var(--colors-blue700);
+}
+
+.importProgressStep[data-status="complete"] .importProgressIcon {
+    color: var(--colors-green600);
+}
+
+.importProgressStep[data-status="failed"] .importProgressIcon {
+    color: var(--colors-red700);
+}
+
+.importProgressWaitingDot {
+    display: block;
+    inline-size: 6px;
+    block-size: 6px;
+    border-radius: 50%;
+    background-color: var(--colors-grey400);
+}
+
+.importProgressSpinner {
+    box-sizing: border-box;
+    display: block;
+    inline-size: 12px;
+    block-size: 12px;
+    border: 2px solid var(--colors-blue200);
+    border-block-start-color: var(--colors-blue700);
+    border-radius: 50%;
+    animation: importProgressSpin 0.75s linear infinite;
+}
+
+@keyframes importProgressSpin {
+    to {
+        transform: rotate(360deg);
+    }
+}

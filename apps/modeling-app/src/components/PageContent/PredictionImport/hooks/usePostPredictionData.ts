@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { useAlert, useDataEngine } from '@dhis2/app-runtime';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -19,6 +20,7 @@ import {
     type PredictionDataValue,
     type QuantileMapping,
 } from '../utils/predictionImportDataValues';
+import { assertDataValueSetImportAccepted } from '../utils/dataValueSetImportSummary';
 import { useDhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
 
 type PostPredictionDataVariables = {
@@ -34,6 +36,25 @@ type UsePostPredictionDataOptions = {
     onError?: (error: Error) => void;
 };
 
+export type PredictionImportProgressStep =
+    | 'prepareData'
+    | 'validateImport'
+    | 'validateClear'
+    | 'clearPreviousValues'
+    | 'importData';
+
+export type PredictionImportProgress = {
+    currentStep: PredictionImportProgressStep | null;
+    completedSteps: PredictionImportProgressStep[];
+    failedStep: PredictionImportProgressStep | null;
+};
+
+const initialImportProgress: PredictionImportProgress = {
+    currentStep: null,
+    completedSteps: [],
+    failedStep: null,
+};
+
 class ImportAfterClearError extends Error {
     readonly importCause: unknown;
 
@@ -43,70 +64,6 @@ class ImportAfterClearError extends Error {
         this.importCause = cause;
     }
 }
-
-const isRecord = (value: unknown): value is Record<string, unknown> => (
-    !!value && typeof value === 'object' && !Array.isArray(value)
-);
-
-const getResponseRecord = (result: unknown): Record<string, unknown> | undefined => {
-    if (!isRecord(result)) {
-        return undefined;
-    }
-
-    return isRecord(result.response) ? result.response : result;
-};
-
-const getImportCountRecord = (
-    response: Record<string, unknown> | undefined,
-): Record<string, unknown> | undefined => {
-    if (!response) {
-        return undefined;
-    }
-
-    if (isRecord(response.importCount)) {
-        return response.importCount;
-    }
-
-    if (isRecord(response.dataValueCount)) {
-        return response.dataValueCount;
-    }
-
-    return undefined;
-};
-
-const getCount = (
-    count: Record<string, unknown> | undefined,
-    key: string,
-): number => {
-    const value = count?.[key];
-    return typeof value === 'number' ? value : 0;
-};
-
-const hasConflicts = (response: Record<string, unknown> | undefined): boolean => {
-    const conflicts = response?.conflicts ?? response?.importConflicts;
-    return Array.isArray(conflicts) && conflicts.length > 0;
-};
-
-const assertDataValueSetImportAccepted = (
-    result: unknown,
-    { allowIgnored }: { allowIgnored: boolean },
-) => {
-    const response = getResponseRecord(result);
-    const count = getImportCountRecord(response);
-    const status = response?.status;
-
-    if (status === 'ERROR') {
-        throw new Error('DHIS2 rejected the data value import.');
-    }
-
-    if (!allowIgnored && hasConflicts(response)) {
-        throw new Error('DHIS2 reported conflicts while importing data values.');
-    }
-
-    if (!allowIgnored && getCount(count, 'ignored') > 0) {
-        throw new Error('DHIS2 ignored one or more data values.');
-    }
-};
 
 const getOrgUnitIdsForClear = (
     prediction: PredictionInfo,
@@ -135,6 +92,7 @@ const getForecastPeriodIds = (
 export const usePostPredictionData = ({ onSuccess, onError }: UsePostPredictionDataOptions = {}) => {
     const dataEngine = useDataEngine();
     const queryClient = useQueryClient();
+    const [progress, setProgress] = useState<PredictionImportProgress>(initialImportProgress);
     const { settings: periodSettings } = useDhis2PeriodSettings();
     const { show: showErrorAlert } = useAlert(i18n.t('Failed to post prediction data'), { critical: true });
     const { show: showImportAfterClearErrorAlert } = useAlert(
@@ -155,8 +113,50 @@ export const usePostPredictionData = ({ onSuccess, onError }: UsePostPredictionD
         },
     });
 
+    const runProgressStep = async <T>(
+        step: PredictionImportProgressStep,
+        action: () => Promise<T>,
+    ): Promise<T> => {
+        setProgress(current => ({
+            ...current,
+            currentStep: step,
+            failedStep: null,
+            completedSteps: current.completedSteps.filter(completedStep => completedStep !== step),
+        }));
+
+        try {
+            const result = await action();
+            setProgress(current => ({
+                ...current,
+                currentStep: current.currentStep === step ? null : current.currentStep,
+                completedSteps: current.completedSteps.includes(step)
+                    ? current.completedSteps
+                    : [...current.completedSteps, step],
+            }));
+            return result;
+        } catch (error) {
+            setProgress(current => ({
+                ...current,
+                currentStep: current.currentStep === step ? null : current.currentStep,
+                failedStep: step,
+            }));
+            throw error;
+        }
+    };
+
+    const completeProgressStep = (step: PredictionImportProgressStep) => {
+        setProgress(current => ({
+            ...current,
+            completedSteps: current.completedSteps.includes(step)
+                ? current.completedSteps
+                : [...current.completedSteps, step],
+        }));
+    };
+
     const mutation = useMutation<unknown, Error, PostPredictionDataVariables>({
         mutationFn: async (variables: PostPredictionDataVariables) => {
+            setProgress(initialImportProgress);
+
             const {
                 prediction,
                 quantileMapping,
@@ -165,66 +165,94 @@ export const usePostPredictionData = ({ onSuccess, onError }: UsePostPredictionD
                 fallbackOrgUnitIds,
             } = variables;
 
-            const queryKey = ['predictionEntries', prediction.id, STANDARD_QUANTILES];
-            const cachedPredictionEntries = queryClient.getQueryData<PredictionEntry[]>(queryKey);
+            const { dataValues, predictionEntries } = await runProgressStep(
+                'prepareData',
+                async () => {
+                    const queryKey = ['predictionEntries', prediction.id, STANDARD_QUANTILES];
+                    const cachedPredictionEntries = queryClient.getQueryData<PredictionEntry[]>(queryKey);
 
-            const predictionEntries = cachedPredictionEntries
-                ?? await PredictionsService.getPredictionEntriesV1AnalyticsPredictionEntryPredictionIdGet(
-                    prediction.id,
-                    STANDARD_QUANTILES,
-                );
+                    const predictionEntries = cachedPredictionEntries
+                        ?? await PredictionsService.getPredictionEntriesV1AnalyticsPredictionEntryPredictionIdGet(
+                            prediction.id,
+                            STANDARD_QUANTILES,
+                        );
 
-            const dataValues = [
-                ...transformPredictionEntriesToDataValues(predictionEntries, quantileMapping),
-                ...transformOutbreakIndicatorsToDataValues(
-                    outbreakIndicators,
-                    quantileMapping.outbreakIndicatorId,
+                    return {
+                        predictionEntries,
+                        dataValues: [
+                            ...transformPredictionEntriesToDataValues(predictionEntries, quantileMapping),
+                            ...transformOutbreakIndicatorsToDataValues(
+                                outbreakIndicators,
+                                quantileMapping.outbreakIndicatorId,
+                            ),
+                        ],
+                    };
+                },
+            );
+
+            await runProgressStep(
+                'validateImport',
+                async () => assertDataValueSetImportAccepted(
+                    await mutateDataValueSet(dataValues, { dryRun: true }),
+                    { allowIgnored: false },
                 ),
-            ];
-
-            assertDataValueSetImportAccepted(
-                await mutateDataValueSet(dataValues, { dryRun: true }),
-                { allowIgnored: false },
             );
 
             if (clearPreviousValues) {
-                const clearDataValues = buildClearDataValues({
-                    dataElementIds: getSelectedOutputDataElementIds(quantileMapping),
-                    orgUnitIds: getOrgUnitIdsForClear(
-                        prediction,
-                        fallbackOrgUnitIds,
-                        predictionEntries,
-                    ),
-                    forecastPeriodIds: getForecastPeriodIds(prediction, predictionEntries),
-                    periodType: prediction.dataset?.periodType,
-                    calendar: periodSettings.calendar,
-                    locale: periodSettings.locale,
-                });
+                const clearDataValues = await runProgressStep(
+                    'validateClear',
+                    async () => {
+                        const clearDataValues = buildClearDataValues({
+                            dataElementIds: getSelectedOutputDataElementIds(quantileMapping),
+                            orgUnitIds: getOrgUnitIdsForClear(
+                                prediction,
+                                fallbackOrgUnitIds,
+                                predictionEntries,
+                            ),
+                            forecastPeriodIds: getForecastPeriodIds(prediction, predictionEntries),
+                            periodType: prediction.dataset?.periodType,
+                            calendar: periodSettings.calendar,
+                            locale: periodSettings.locale,
+                        });
+
+                        if (clearDataValues.length) {
+                            assertDataValueSetImportAccepted(
+                                await mutateDataValueSet(clearDataValues, {
+                                    importStrategy: 'DELETE',
+                                    dryRun: true,
+                                }),
+                                { allowIgnored: true },
+                            );
+                        }
+
+                        return clearDataValues;
+                    },
+                );
 
                 if (clearDataValues.length) {
-                    const clearParams = {
-                        importStrategy: 'DELETE',
-                    };
-
-                    assertDataValueSetImportAccepted(
-                        await mutateDataValueSet(clearDataValues, {
-                            ...clearParams,
-                            dryRun: true,
-                        }),
-                        { allowIgnored: true },
+                    await runProgressStep(
+                        'clearPreviousValues',
+                        async () => assertDataValueSetImportAccepted(
+                            await mutateDataValueSet(clearDataValues, {
+                                importStrategy: 'DELETE',
+                            }),
+                            { allowIgnored: true },
+                        ),
                     );
-
-                    assertDataValueSetImportAccepted(
-                        await mutateDataValueSet(clearDataValues, clearParams),
-                        { allowIgnored: true },
-                    );
+                } else {
+                    completeProgressStep('clearPreviousValues');
                 }
             }
 
             try {
-                const result = await mutateDataValueSet(dataValues);
-                assertDataValueSetImportAccepted(result, { allowIgnored: false });
-                return result;
+                return await runProgressStep(
+                    'importData',
+                    async () => {
+                        const result = await mutateDataValueSet(dataValues);
+                        assertDataValueSetImportAccepted(result, { allowIgnored: false });
+                        return result;
+                    },
+                );
             } catch (error) {
                 if (clearPreviousValues) {
                     throw new ImportAfterClearError(error);
@@ -253,6 +281,10 @@ export const usePostPredictionData = ({ onSuccess, onError }: UsePostPredictionD
         mutateAsync: mutation.mutateAsync,
         isPending: mutation.isPending,
         error: mutation.error,
-        reset: mutation.reset,
+        reset: () => {
+            mutation.reset();
+            setProgress(initialImportProgress);
+        },
+        progress,
     };
 };

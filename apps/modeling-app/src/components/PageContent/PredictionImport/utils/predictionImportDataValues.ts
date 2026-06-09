@@ -1,13 +1,15 @@
 import {
     DEFAULT_DHIS2_CALENDAR,
     DEFAULT_DHIS2_LOCALE,
+    createFixedPeriodFromPeriodId,
+    getFixedPeriodByDate,
     getLastNPeriodIds,
     getNextPeriodIds,
     getPeriodsInRange,
     sortPeriodIds,
     toDhis2FixedPeriodType,
 } from '@dhis2-chap/core';
-import type { Dhis2Calendar } from '@dhis2-chap/core';
+import type { Dhis2Calendar, Dhis2FixedPeriodType } from '@dhis2-chap/core';
 import type {
     OutbreakIndicator,
     PredictionEntry,
@@ -20,6 +22,8 @@ const CLEAR_WINDOW_PERIODS_BY_TYPE = {
     MONTHLY: 12,
     WEEKLY: 52,
 } as const;
+
+const CLEAR_PERIOD_TYPES = ['MONTHLY', 'WEEKLY'] as const satisfies Dhis2FixedPeriodType[];
 
 const QUANTILE_STRINGS = {
     QUANTILE_LOW: 'quantile_low',
@@ -179,12 +183,34 @@ export const buildClearPeriodIds = ({
         count: periodCount,
         ...periodEngineOptions,
     }).at(-1) ?? lastForecastPeriod;
-
-    return getPeriodsInRange({
-        startPeriodId,
-        endPeriodId,
+    const startPeriod = createFixedPeriodFromPeriodId({
+        periodId: startPeriodId,
         ...periodEngineOptions,
-    }).map(period => period.id);
+    });
+    const endPeriod = createFixedPeriodFromPeriodId({
+        periodId: endPeriodId,
+        ...periodEngineOptions,
+    });
+    const clearPeriodIds = CLEAR_PERIOD_TYPES.flatMap((clearPeriodType) => {
+        const clearStartPeriod = getFixedPeriodByDate({
+            periodType: clearPeriodType,
+            date: startPeriod.startDate,
+            ...periodEngineOptions,
+        });
+        const clearEndPeriod = getFixedPeriodByDate({
+            periodType: clearPeriodType,
+            date: endPeriod.endDate,
+            ...periodEngineOptions,
+        });
+
+        return getPeriodsInRange({
+            startPeriodId: clearStartPeriod.id,
+            endPeriodId: clearEndPeriod.id,
+            ...periodEngineOptions,
+        }).map(period => period.id);
+    });
+
+    return sortPeriodIds(deduplicateIds(clearPeriodIds), periodEngineOptions);
 };
 
 export const buildClearDataValues = ({
