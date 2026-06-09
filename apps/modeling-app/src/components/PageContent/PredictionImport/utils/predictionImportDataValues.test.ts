@@ -12,9 +12,8 @@ describe('predictionImportDataValues', () => {
             forecastPeriodIds: ['202605', '202606'],
             periodType: 'MONTH',
         });
-        const monthlyPeriods = periods.filter(period => !period.includes('W'));
 
-        expect(monthlyPeriods).toEqual([
+        expect(periods).toEqual([
             '202505',
             '202506',
             '202507',
@@ -42,11 +41,7 @@ describe('predictionImportDataValues', () => {
             '202705',
             '202706',
         ]);
-        expect(periods).toEqual(expect.arrayContaining([
-            '2025W18',
-            '2026W1',
-            '2027W26',
-        ]));
+        expect(periods.some(period => period.includes('W'))).toBe(false);
     });
 
     it('builds a weekly clear window one year around the forecast periods', () => {
@@ -54,30 +49,21 @@ describe('predictionImportDataValues', () => {
             forecastPeriodIds: ['2026W2', '2026W1'],
             periodType: 'WEEK',
         });
-        const weeklyPeriods = periods.filter(period => period.includes('W'));
 
-        expect(weeklyPeriods).toHaveLength(106);
-        expect(weeklyPeriods.slice(0, 3)).toEqual(['2025W1', '2025W2', '2025W3']);
-        expect(weeklyPeriods.slice(-3)).toEqual(['2026W52', '2026W53', '2027W1']);
-        expect(periods).toEqual(expect.arrayContaining([
-            '202501',
-            '202601',
-            '202701',
-        ]));
+        expect(periods).toHaveLength(106);
+        expect(periods.slice(0, 3)).toEqual(['2025W1', '2025W2', '2025W3']);
+        expect(periods.slice(-3)).toEqual(['2026W52', '2026W53', '2027W1']);
+        expect(periods.some(period => !period.includes('W'))).toBe(false);
     });
 
-    it('includes weekly periods that analytics can aggregate into a monthly chart bucket', () => {
+    it('keeps clear windows on the prediction setup period type', () => {
         const periods = buildClearPeriodIds({
             forecastPeriodIds: ['202501', '202503'],
             periodType: 'MONTH',
         });
 
-        expect(periods).toEqual(expect.arrayContaining([
-            '202412',
-            '2024W50',
-            '2024W51',
-            '2024W52',
-        ]));
+        expect(periods).toContain('202412');
+        expect(periods.some(period => period.includes('W'))).toBe(false);
     });
 
     it('builds clear data values as a data element, org unit, and period cartesian product', () => {
@@ -88,7 +74,7 @@ describe('predictionImportDataValues', () => {
             periodType: 'MONTH',
         });
 
-        expect(dataValues).toHaveLength(540);
+        expect(dataValues).toHaveLength(100);
         expect(dataValues).toEqual(expect.arrayContaining([
             {
                 dataElement: 'de-a',
@@ -96,16 +82,12 @@ describe('predictionImportDataValues', () => {
                 period: '202505',
             },
             {
-                dataElement: 'de-a',
-                orgUnit: 'ou-a',
-                period: '2025W18',
-            },
-            {
                 dataElement: 'de-b',
                 orgUnit: 'ou-b',
                 period: '202705',
             },
         ]));
+        expect(dataValues.some(({ period }) => period.includes('W'))).toBe(false);
     });
 
     it('maps standard quantiles to selected data elements and skips non-standard quantiles', () => {
