@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-06-09T06:54:57.697Z\n"
-"PO-Revision-Date: 2026-06-09T06:54:57.709Z\n"
+"POT-Creation-Date: 2026-06-09T11:28:01.084Z\n"
+"PO-Revision-Date: 2026-06-09T11:28:01.084Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -839,6 +839,18 @@ msgstr "Prediction setup updated"
 msgid "Failed to update prediction setup"
 msgstr "Failed to update prediction setup"
 
+msgid "Scheduling"
+msgstr "Scheduling"
+
+msgid "No prediction setup found"
+msgstr "No prediction setup found"
+
+msgid "Enabled"
+msgstr "Enabled"
+
+msgid "Disabled"
+msgstr "Disabled"
+
 msgid "{{count}} {{label}}"
 msgid_plural "{{count}} {{label}}"
 msgstr[0] "{{count}} {{label}}"
@@ -846,9 +858,6 @@ msgstr[1] "{{count}} {{label}}"
 
 msgid "Configuration"
 msgstr "Configuration"
-
-msgid "No prediction setup found"
-msgstr "No prediction setup found"
 
 msgid "location"
 msgstr "location"
@@ -1387,6 +1396,18 @@ msgstr "Search for data elements"
 msgid "Search for indicators, data elements, or program indicators"
 msgstr "Search for indicators, data elements, or program indicators"
 
+msgid "Checking import with DHIS2"
+msgstr "Checking import with DHIS2"
+
+msgid "Checking values to clear"
+msgstr "Checking values to clear"
+
+msgid "Clearing previous values"
+msgstr "Clearing previous values"
+
+msgid "Importing prediction values"
+msgstr "Importing prediction values"
+
 msgid "Clear and import"
 msgstr "Clear and import"
 
@@ -1409,6 +1430,9 @@ msgstr "Clear and import prediction"
 
 msgid "Import prediction"
 msgstr "Import prediction"
+
+msgid "Import progress"
+msgstr "Import progress"
 
 msgid "Quantile high"
 msgstr "Quantile high"
@@ -1815,6 +1839,9 @@ msgstr "Show metric visualization plots in the evaluation dashboard"
 
 msgid "Show evaluation visualization plots in the evaluation dashboard"
 msgstr "Show evaluation visualization plots in the evaluation dashboard"
+
+msgid "Show scheduling information in the prediction setup dashboard"
+msgstr "Show scheduling information in the prediction setup dashboard"
 
 msgid "Settings saved successfully"
 msgstr "Settings saved successfully"

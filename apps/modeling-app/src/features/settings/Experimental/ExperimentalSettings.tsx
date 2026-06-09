@@ -69,6 +69,13 @@ export const ExperimentalSettings = () => {
                                     onChange={() => toggleFeature(FEATURES.EVALUATION_PLOTS)}
                                     disabled={isSaving}
                                 />
+                                <ChoiceCard
+                                    title={i18n.t('Scheduling')}
+                                    description={i18n.t('Show scheduling information in the prediction setup dashboard')}
+                                    checked={settings.features[FEATURES.SCHEDULING] ?? false}
+                                    onChange={() => toggleFeature(FEATURES.SCHEDULING)}
+                                    disabled={isSaving}
+                                />
                             </div>
                         </div>
                     )}
