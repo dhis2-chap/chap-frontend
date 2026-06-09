@@ -3,10 +3,16 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Health check response.
+ * Liveness check response indicating the API process is reachable.
  */
 export type HealthResponse = {
+    /**
+     * Always `success` when the API is reachable.
+     */
     status: string;
+    /**
+     * Human-readable status message.
+     */
     message: string;
 };
 

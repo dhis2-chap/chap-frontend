@@ -3,7 +3,6 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { ConfiguredModelDB } from './ConfiguredModelDB';
-import type { ConfiguredModelWithDataSourceRead } from './ConfiguredModelWithDataSourceRead';
 import type { DataSetMeta } from './DataSetMeta';
 /**
  * Summary read view for a prediction — fields + joined dataset/model, no per-period forecasts.
@@ -49,6 +48,5 @@ export type PredictionInfo = {
      * Slim dataset summary the prediction was run against.
      */
     dataset: DataSetMeta;
-    configuredModelWithDataSource?: (ConfiguredModelWithDataSourceRead | null);
 };
 
