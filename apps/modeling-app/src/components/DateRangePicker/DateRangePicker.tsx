@@ -9,8 +9,7 @@ import {
     Layer,
     Popper,
 } from '@dhis2/ui';
-import { useDatePicker } from '@dhis2/multi-calendar-dates';
-import { Temporal } from '@js-temporal/polyfill';
+import { convertFromIso8601, convertToIso8601, useDatePicker } from '@dhis2/multi-calendar-dates';
 import { addMonths, format, isAfter, isBefore, isSameDay, startOfDay } from 'date-fns';
 import cx from 'classnames';
 import { type Dhis2Calendar } from '@dhis2-chap/core';
@@ -39,35 +38,17 @@ const isNonGregorianCalendar = (calendar?: Dhis2Calendar) => (
 
 const padWithZeroes = (n: number) => String(n).padStart(2, '0');
 
-const toTemporalDate = (dateString: string, calendar: Dhis2Calendar): Temporal.PlainDate => {
-    const [yearStr, monthStr, dayStr] = dateString.split('-');
-    const parts: Temporal.PlainDateLike = {
-        month: Number(monthStr),
-        day: Number(dayStr),
-        calendar,
-    };
-    if (calendar === 'ethiopic') {
-        parts.eraYear = Number(yearStr);
-        parts.era = 'era1';
-    } else {
-        parts.year = Number(yearStr);
-    }
-    return Temporal.PlainDate.from(parts);
-};
+const formatDateParts = ({ year, month, day }: { year: number; month: number; day: number }): string => (
+    `${year}-${padWithZeroes(month)}-${padWithZeroes(day)}`
+);
 
-const formatTemporalDate = (date: Temporal.PlainDate): string => {
-    const year = date.eraYear ?? date.year;
-    return `${year}-${padWithZeroes(date.month)}-${padWithZeroes(date.day)}`;
-};
-
-const calendarDateToIso = (calendarDateString: string, calendar: Dhis2Calendar): string => {
-    const isoDate = toTemporalDate(calendarDateString, calendar).withCalendar('iso8601');
-    return `${isoDate.year}-${padWithZeroes(isoDate.month)}-${padWithZeroes(isoDate.day)}`;
-};
+const calendarDateToIso = (calendarDateString: string, calendar: Dhis2Calendar): string => (
+    formatDateParts(convertToIso8601(calendarDateString, calendar))
+);
 
 const isoToCalendarDate = (isoDateString: string, calendar: Dhis2Calendar): string => {
-    const calDate = Temporal.PlainDate.from(isoDateString).withCalendar(calendar);
-    return formatTemporalDate(calDate);
+    const { eraYear, year, month, day } = convertFromIso8601(isoDateString, calendar);
+    return formatDateParts({ year: eraYear ?? year, month, day });
 };
 
 const getInitialVisibleDate = (value: DateRangeValue, calendar?: Dhis2Calendar) => {
@@ -77,11 +58,22 @@ const getInitialVisibleDate = (value: DateRangeValue, calendar?: Dhis2Calendar) 
         : isoDate;
 };
 
+// Ethiopic and coptic years have a 13th month (Pagume); the other supported calendars have 12.
+const MONTHS_IN_YEAR: Partial<Record<Dhis2Calendar, number>> = {
+    ethiopic: 13,
+    coptic: 13,
+};
+
 const shiftVisibleMonth = (dateString: string, amount: number, calendar?: Dhis2Calendar) => {
     if (isNonGregorianCalendar(calendar)) {
-        const date = toTemporalDate(dateString, calendar!);
-        const shifted = date.add({ months: amount });
-        return formatTemporalDate(shifted);
+        const [yearStr, monthStr] = dateString.split('-');
+        const monthsInYear = MONTHS_IN_YEAR[calendar!] ?? 12;
+        const monthIndex = (Number(yearStr) * monthsInYear) + (Number(monthStr) - 1) + amount;
+        return formatDateParts({
+            year: Math.floor(monthIndex / monthsInYear),
+            month: (monthIndex % monthsInYear) + 1,
+            day: 1,
+        });
     }
     const date = parseDateRangeParam(dateString) ?? new Date();
     return formatDateRangeParam(addMonths(date, amount));
@@ -93,8 +85,7 @@ const formatDisplayDate = (dateString?: string, calendar?: Dhis2Calendar) => {
         return undefined;
     }
     if (isNonGregorianCalendar(calendar) && dateString) {
-        const calDate = Temporal.PlainDate.from(dateString).withCalendar(calendar!);
-        return formatTemporalDate(calDate);
+        return isoToCalendarDate(dateString, calendar!);
     }
     return format(date, 'MMM d, yyyy');
 };

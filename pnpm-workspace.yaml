@@ -1,15 +1,3 @@
-# These hoists are needed for @dhis2/app-shell since it uses directly some libraries that were hoisted by yarn 1
-# This is a better alternative than pnpm's shamefullyHoist https://pnpm.io/settings#shamefullyhoist until we update the way that @dhis2/app-shell works
-publicHoistPattern:
-  - "@dhis2/*"
-  - "typeface-roboto"
-  - "prop-types"
-  - "post-robot"
-  - "styled-jsx"
-  # the older versions of use-query-params and tanstack needs to be hoisted, otherwise linting fails
-  - "@tanstack/*"
-  - "serialize-query-params" 
-
 packages:
   - apps/*
   - packages/*
@@ -21,3 +9,24 @@ onlyBuiltDependencies:
   - core-js-pure
   - esbuild
   - maplibre-gl
+
+# Chrome >=149 ships CLDR data that returns era codes AM/AA for the ethiopic,
+# ethioaa and coptic calendars; the polyfill only knows era0/era1 and throws on
+# any date computation in those calendars. The patch renames the era names to
+# match (old ICU keeps working via the auto-generated era0/era1 aliases).
+# Mirrors the unreleased upstream fix in @dhis2/multi-calendar-dates; drop the
+# patch once a release ships it.
+patchedDependencies:
+  '@js-temporal/polyfill@0.4.3': patches/@js-temporal__polyfill@0.4.3.patch
+
+# These hoists are needed for @dhis2/app-shell since it uses directly some libraries that were hoisted by yarn 1
+# This is a better alternative than pnpm's shamefullyHoist https://pnpm.io/settings#shamefullyhoist until we update the way that @dhis2/app-shell works
+publicHoistPattern:
+  - '@dhis2/*'
+  - typeface-roboto
+  - prop-types
+  - post-robot
+  - styled-jsx
+  # the older versions of use-query-params and tanstack needs to be hoisted, otherwise linting fails
+  - '@tanstack/*'
+  - serialize-query-params
