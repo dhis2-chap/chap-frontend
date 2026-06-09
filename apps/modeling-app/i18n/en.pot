@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-06-08T18:59:36.713Z\n"
-"PO-Revision-Date: 2026-06-08T18:59:36.713Z\n"
+"POT-Creation-Date: 2026-06-09T05:56:05.354Z\n"
+"PO-Revision-Date: 2026-06-09T05:56:05.354Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -1317,97 +1317,6 @@ msgstr "Map"
 msgid "No prediction data found."
 msgstr "No prediction data found."
 
-msgid "Loading"
-msgstr "Loading"
-
-msgid "Suggested"
-msgstr "Suggested"
-
-msgid "Data elements"
-msgstr "Data elements"
-
-msgid "Data items"
-msgstr "Data items"
-
-msgid "Start typing to search for data items"
-msgstr "Start typing to search for data items"
-
-msgid "No matches found"
-msgstr "No matches found"
-
-msgid "Select a data item..."
-msgstr "Select a data item..."
-
-msgid "Clear selection"
-msgstr "Clear selection"
-
-msgid "Search for data elements"
-msgstr "Search for data elements"
-
-msgid "Search for indicators, data elements, or program indicators"
-msgstr "Search for indicators, data elements, or program indicators"
-
-msgid "Alert probability is required"
-msgstr "Alert probability is required"
-
-msgid "Outbreak indicator is required"
-msgstr "Outbreak indicator is required"
-
-msgid "Clear and import"
-msgstr "Clear and import"
-
-msgid "Clear previous values"
-msgstr "Clear previous values"
-
-msgid ""
-"This will clear existing values for the selected output data elements, then "
-"import this prediction into DHIS2."
-msgstr ""
-"This will clear existing values for the selected output data elements, then "
-"import this prediction into DHIS2."
-
-msgid ""
-"This will import this prediction into DHIS2 without clearing existing "
-"values first."
-msgstr ""
-"This will import this prediction into DHIS2 without clearing existing "
-"values first."
-
-msgid "Unable to load alert data"
-msgstr "Unable to load alert data"
-
-msgid ""
-"There was a problem loading the prediction data required for outbreak "
-"indicator import."
-msgstr ""
-"There was a problem loading the prediction data required for outbreak "
-"indicator import."
-
-msgid "Import forecasted values"
-msgstr "Import forecasted values"
-
-msgid ""
-"Importing forecasted values into DHIS2 requires you to set up five data "
-"elements for the quantiles outputted by the model."
-msgstr ""
-"Importing forecasted values into DHIS2 requires you to set up five data "
-"elements for the quantiles outputted by the model."
-
-msgid "Quantile high"
-msgstr "Quantile high"
-
-msgid "Quantile mid high"
-msgstr "Quantile mid high"
-
-msgid "Median"
-msgstr "Median"
-
-msgid "Quantile mid low"
-msgstr "Quantile mid low"
-
-msgid "Quantile low"
-msgstr "Quantile low"
-
 msgid "Alert output"
 msgstr "Alert output"
 
@@ -1445,17 +1354,108 @@ msgstr "Outbreak indicator"
 msgid "Requires data value delete authority."
 msgstr "Requires data value delete authority."
 
+msgid "Clear previous values"
+msgstr "Clear previous values"
+
+msgid "Loading"
+msgstr "Loading"
+
+msgid "Suggested"
+msgstr "Suggested"
+
+msgid "Data elements"
+msgstr "Data elements"
+
+msgid "Data items"
+msgstr "Data items"
+
+msgid "Start typing to search for data items"
+msgstr "Start typing to search for data items"
+
+msgid "No matches found"
+msgstr "No matches found"
+
+msgid "Select a data item..."
+msgstr "Select a data item..."
+
+msgid "Clear selection"
+msgstr "Clear selection"
+
+msgid "Search for data elements"
+msgstr "Search for data elements"
+
+msgid "Search for indicators, data elements, or program indicators"
+msgstr "Search for indicators, data elements, or program indicators"
+
+msgid "Clear and import"
+msgstr "Clear and import"
+
+msgid ""
+"This will clear existing values for the selected output data elements, then "
+"import this prediction into DHIS2."
+msgstr ""
+"This will clear existing values for the selected output data elements, then "
+"import this prediction into DHIS2."
+
+msgid ""
+"This will import this prediction into DHIS2 without clearing existing "
+"values first."
+msgstr ""
+"This will import this prediction into DHIS2 without clearing existing "
+"values first."
+
 msgid "Clear and import prediction"
 msgstr "Clear and import prediction"
 
 msgid "Import prediction"
 msgstr "Import prediction"
 
+msgid "Quantile high"
+msgstr "Quantile high"
+
+msgid "Quantile mid high"
+msgstr "Quantile mid high"
+
+msgid "Median"
+msgstr "Median"
+
+msgid "Quantile mid low"
+msgstr "Quantile mid low"
+
+msgid "Quantile low"
+msgstr "Quantile low"
+
+msgid "Unable to load alert data"
+msgstr "Unable to load alert data"
+
+msgid ""
+"There was a problem loading the prediction data required for outbreak "
+"indicator import."
+msgstr ""
+"There was a problem loading the prediction data required for outbreak "
+"indicator import."
+
 msgid "Cannot import prediction"
 msgstr "Cannot import prediction"
 
 msgid "Missing or invalid prediction setup id."
 msgstr "Missing or invalid prediction setup id."
+
+msgid "Import forecasted values"
+msgstr "Import forecasted values"
+
+msgid ""
+"Importing forecasted values into DHIS2 requires you to set up five data "
+"elements for the quantiles outputted by the model."
+msgstr ""
+"Importing forecasted values into DHIS2 requires you to set up five data "
+"elements for the quantiles outputted by the model."
+
+msgid "Alert probability is required"
+msgstr "Alert probability is required"
+
+msgid "Outbreak indicator is required"
+msgstr "Outbreak indicator is required"
 
 msgid "Failed to post prediction data"
 msgstr "Failed to post prediction data"
