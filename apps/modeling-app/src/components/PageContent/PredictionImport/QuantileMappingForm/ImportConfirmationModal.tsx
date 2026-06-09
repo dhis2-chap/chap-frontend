@@ -151,7 +151,6 @@ export const ImportConfirmationModal = ({
                     </Button>
                     <Button
                         onClick={onConfirm}
-                        loading={isPending}
                         disabled={isPending}
                         primary={!clearPreviousValues}
                         destructive={clearPreviousValues}
