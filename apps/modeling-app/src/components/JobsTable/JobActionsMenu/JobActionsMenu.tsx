@@ -59,7 +59,7 @@ export const JobActionsMenu = ({
 
     const handleNavigateToResult = () => {
         if (type === JOB_TYPES.CREATE_BACKTEST_WITH_DATA || type === JOB_TYPES.BACKTEST) {
-            navigate(`/evaluate/compare?baseEvaluation=${result}&returnTo=${encodeURIComponent('/jobs')}`);
+            navigate(`/evaluate/${result}?returnTo=${encodeURIComponent('/jobs')}`);
         }
         setFlyoutMenuIsOpen(false);
     };

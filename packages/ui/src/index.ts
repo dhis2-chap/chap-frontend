@@ -48,6 +48,7 @@ export type {
 } from './interfaces/Prediction';
 
 export type { VisualizationInfo } from './httpfunctions/models/VisualizationInfo';
+export type { chap_core__rest_api__data_models__DataBaseResponse as DataBaseResponse } from './httpfunctions/index';
 
 // Services
 export {
@@ -59,16 +60,14 @@ export { buildPredictionSeries } from './utils/PredictionViewModel';
 export {
     OUTBREAK_PROBABILITY_OPTIONS,
     DEFAULT_OUTBREAK_PROBABILITY,
-    MINIMUM_THRESHOLD_OBSERVATIONS,
     buildOutbreakIndicators,
     buildOutbreakIndicatorsForSeries,
-    calculateMockEndemicThreshold,
     getHighestSupportedOutbreakProbability,
     getQuantileKeyForOutbreakProbability,
     getSupportedOutbreakProbabilityBucket,
     isOutbreakAtProbability,
     parseOutbreakProbability,
-    type MockEndemicThresholdResult,
+    type EndemicThresholdPoint,
     type OutbreakIndicator,
     type OutbreakProbability,
     type SupportedOutbreakProbabilityBucket,

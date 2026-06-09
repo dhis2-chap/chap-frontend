@@ -24,6 +24,7 @@ export const DATASTORE_RESOURCE = 'dataStore/modeling/experimental';
 export const FEATURES = {
     METRIC_PLOTS: 'metricPlots',
     EVALUATION_PLOTS: 'evaluationPlots',
+    SCHEDULING: 'scheduling',
     DHIS2_CALENDAR: 'dhis2Calendar',
 } as const;
 
