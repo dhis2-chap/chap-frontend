@@ -1,9 +1,12 @@
 import { useCallback, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import type { DateRangeValue } from '../../../utils/jobDateRange';
 
 const PARAM_KEYS = {
+    fromDate: 'fromDate',
     search: 'search',
     status: 'status',
+    toDate: 'toDate',
     type: 'type',
 };
 
@@ -12,6 +15,8 @@ export const useJobsTableFilters = () => {
 
     const search = searchParams.get(PARAM_KEYS.search) || '';
     const status = searchParams.get(PARAM_KEYS.status) || undefined;
+    const fromDate = searchParams.get(PARAM_KEYS.fromDate) || undefined;
+    const toDate = searchParams.get(PARAM_KEYS.toDate) || undefined;
     const type = searchParams.get(PARAM_KEYS.type) || undefined;
 
     const setSearch = useCallback(
@@ -59,15 +64,43 @@ export const useJobsTableFilters = () => {
         [setSearchParams],
     );
 
+    const setDateRange = useCallback(
+        (dateRange: DateRangeValue) => {
+            setSearchParams((prev) => {
+                const updatedParams = new URLSearchParams(prev);
+
+                if (dateRange.fromDate) {
+                    updatedParams.set(PARAM_KEYS.fromDate, dateRange.fromDate);
+                } else {
+                    updatedParams.delete(PARAM_KEYS.fromDate);
+                }
+
+                if (dateRange.toDate) {
+                    updatedParams.set(PARAM_KEYS.toDate, dateRange.toDate);
+                } else {
+                    updatedParams.delete(PARAM_KEYS.toDate);
+                }
+
+                return updatedParams;
+            });
+        },
+        [setSearchParams],
+    );
+
     return useMemo(
         () => ({
+            dateRange: {
+                fromDate,
+                toDate,
+            },
             search,
             setSearch,
+            setDateRange,
             status,
             setStatus,
             type,
             setType,
         }),
-        [search, setSearch, status, setStatus, type, setType],
+        [fromDate, search, setDateRange, setSearch, setStatus, setType, status, toDate, type],
     );
 };

@@ -5,10 +5,29 @@
   padding-block: 1rem;
 }
 
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacers-dp32);
+  max-inline-size: 60%;
+  margin: auto;
+  padding-block: var(--spacers-dp24);
+}
+
+.formFields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacers-dp24);
+  inline-size: 80%;
+  margin-inline: auto;
+}
+
 .buttons {
   display: flex;
   justify-content: flex-end;
-  margin-block-start: 1rem;
+  inline-size: 80%;
+  margin-inline: auto;
+  margin-block-start: var(--spacers-dp16);
 }
 
 .errorNotice {

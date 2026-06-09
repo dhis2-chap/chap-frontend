@@ -1,0 +1,154 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+}
+
+.dialogContainer {
+    flex-direction: column;
+    margin-block-start: 0;
+    font-size: 14px;
+}
+
+.leftColumn {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+}
+
+.loadingContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-block-size: 300px;
+}
+
+.previewLayout {
+    display: flex;
+    gap: 16px;
+    padding-inline: 16px;
+    min-block-size: 440px;
+}
+
+.dialogPreviewLayout {
+    min-block-size: 470px;
+}
+
+.orgUnitList {
+    flex: 0 0 220px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-block-size: 440px;
+    overflow-y: auto;
+    padding-inline-end: 12px;
+    border-inline-end: 1px solid var(--colors-grey300);
+}
+
+.orgUnitButton {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    inline-size: 100%;
+    padding-block: 8px;
+    padding-inline: 8px;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    background: transparent;
+    color: var(--colors-grey900);
+    font: inherit;
+    text-align: start;
+    cursor: pointer;
+}
+
+.orgUnitButton:hover,
+.selectedOrgUnitButton {
+    background: var(--colors-grey100);
+    border-color: var(--colors-grey300);
+}
+
+.orgUnitName {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.statusIndicator {
+    display: inline-block;
+    flex: 0 0 auto;
+    inline-size: 8px;
+    block-size: 8px;
+    border-radius: 50%;
+}
+
+.statusOutbreak {
+    background: var(--colors-red600);
+}
+
+.statusUnavailable {
+    background: var(--colors-grey500);
+}
+
+.chartArea {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.alertDialog {
+    width: min(1180px, calc(100vw - 48px)) !important;
+}
+
+.dialogContent {
+    max-block-size: calc(100vh - 190px);
+    overflow-y: auto;
+}
+
+.dialogProbabilityControl {
+    display: flex;
+    justify-content: flex-start;
+    margin-block-end: -4px;
+}
+
+.dialogProbabilityControl > div {
+    inline-size: min(360px, 100%);
+}
+
+.summaryLabel {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--colors-grey700);
+    line-height: 20px;
+}
+
+.tooltipIcon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--colors-grey600);
+    line-height: 0;
+    transform: translateY(-1px);
+}
+
+.tooltipIcon svg {
+    display: block;
+}
+
+@media (max-width: 900px) {
+    .container,
+    .previewLayout {
+        flex-direction: column;
+    }
+
+    .orgUnitList {
+        flex-basis: auto;
+        max-block-size: 220px;
+        border-inline-end: 0;
+        border-block-end: 1px solid var(--colors-grey300);
+        padding-inline-end: 0;
+        padding-block-end: 12px;
+    }
+}

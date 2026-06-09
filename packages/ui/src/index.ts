@@ -30,7 +30,10 @@ export {
     StatusIndicator,
     Tag,
     Widget,
+    PeriodPicker,
+    PeriodRangeField,
 } from './ui';
+export { VirtuosoGrid } from 'react-virtuoso';
 
 export type { PillVariant } from './ui/Pill';
 export type { TagVariant } from './ui/Tag';
@@ -45,6 +48,7 @@ export type {
 } from './interfaces/Prediction';
 
 export type { VisualizationInfo } from './httpfunctions/models/VisualizationInfo';
+export type { chap_core__rest_api__data_models__DataBaseResponse as DataBaseResponse } from './httpfunctions/index';
 
 // Services
 export {
@@ -54,20 +58,32 @@ export {
 } from './httpfunctions/core/request';
 export { buildPredictionSeries } from './utils/PredictionViewModel';
 export {
+    OUTBREAK_PROBABILITY_OPTIONS,
+    DEFAULT_OUTBREAK_PROBABILITY,
+    buildOutbreakIndicators,
+    buildOutbreakIndicatorsForSeries,
+    getHighestSupportedOutbreakProbability,
+    getQuantileKeyForOutbreakProbability,
+    getSupportedOutbreakProbabilityBucket,
+    isOutbreakAtProbability,
+    parseOutbreakProbability,
+    type EndemicThresholdPoint,
+    type OutbreakIndicator,
+    type OutbreakProbability,
+    type SupportedOutbreakProbabilityBucket,
+} from './utils/outbreakAlerts';
+export {
+    getStableMaxYForThresholdChart,
+    getThresholdTileViewModels,
+    type ThresholdSummary,
+    type ThresholdTileStatus,
+    type ThresholdTileViewModel,
+} from './utils/outbreakThresholdTiles';
+export {
     plotResultsToViewData,
     getStableMaxYByOrgUnitId,
     type PlotDataResult,
 } from './utils/plotDataForEvaluations';
-export {
-    PERIOD_TYPES,
-    type PeriodType,
-    type Period,
-    toDHIS2PeriodData,
-    convertServerToClientPeriod,
-    sortPeriods,
-    comparePeriods,
-    getLastNPeriods,
-} from './utils/timePeriodUtils';
 
 // Map utilities
 export { parseOrgUnits } from './components/maps/utils';

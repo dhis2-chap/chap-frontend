@@ -24,13 +24,18 @@ import {
     JobDescription,
 } from '@dhis2-chap/ui';
 import styles from './JobsTable.module.css';
-import { JobsTableFilters } from './JobsTableFilters';
+import { JobsTableFilters, JobsTableFilterKey } from './JobsTableFilters';
 import { StatusCell } from './TableCells/StatusCell';
 import { JobTypeCell } from './TableCells/JobTypeCell';
 import { JobActionsMenu } from './JobActionsMenu/JobActionsMenu';
 import { JOB_STATUSES } from '../../hooks/useJobs';
 import { useJobsTableFilters } from './hooks/useJobsTableFilters';
 import { useTablePaginationParams } from '../../hooks/useTablePaginationParams';
+import {
+    hasDateRangeValue,
+    isJobInDateRange,
+    type DateRangeValue,
+} from '../../utils/jobDateRange';
 
 const columnHelper = createColumnHelper<JobDescription>();
 
@@ -64,6 +69,9 @@ const columns = [
     }),
     columnHelper.accessor('start_time', {
         header: i18n.t('Start date'),
+        filterFn: (row, _columnId, filterValue) => (
+            isJobInDateRange(row.original, filterValue as DateRangeValue)
+        ),
         cell: (info) => {
             const value = info.getValue();
             return value ? format(new Date(value), 'dd-MM-yyyy hh:mm') : undefined;
@@ -120,10 +128,11 @@ const getSortDirection = (column: Column<JobDescription>) => {
 
 type Props = {
     jobs: JobDescription[];
+    visibleFilters?: JobsTableFilterKey[];
 };
 
-export const JobsTable = ({ jobs }: Props) => {
-    const { search, status, type } = useJobsTableFilters();
+export const JobsTable = ({ jobs, visibleFilters }: Props) => {
+    const { dateRange, search, status, type } = useJobsTableFilters();
     const { pageIndex, pageSize, setPageIndex, setPageSize } = useTablePaginationParams();
 
     const table = useReactTable({
@@ -138,6 +147,7 @@ export const JobsTable = ({ jobs }: Props) => {
                 ...(search ? [{ id: 'name', value: search }] : []),
                 ...(status ? [{ id: 'status', value: status }] : []),
                 ...(type ? [{ id: 'type', value: type }] : []),
+                ...(hasDateRangeValue(dateRange) ? [{ id: 'start_time', value: dateRange }] : []),
             ],
             pagination: {
                 pageIndex,
@@ -158,7 +168,7 @@ export const JobsTable = ({ jobs }: Props) => {
         <div>
             <div className={styles.buttonContainer}>
                 <div className={styles.leftSection}>
-                    <JobsTableFilters />
+                    <JobsTableFilters visibleFilters={visibleFilters} />
                 </div>
             </div>
             <DataTable>

@@ -1,0 +1,33 @@
+{
+    "name": "@dhis2-chap/core",
+    "packageManager": "pnpm@10.14.0",
+    "type": "commonjs",
+    "version": "5.1.0",
+    "private": true,
+    "module": "./build/es/index.js",
+    "types": "./build/types/index.d.ts",
+    "license": "MIT",
+    "scripts": {
+        "build": "d2-app-scripts build && tsc --emitDeclarationOnly --outDir ./build/types",
+        "start": "concurrently -n build,types --hide types \"d2-app-scripts build --watch\" \"tsc --emitDeclarationOnly --outDir ./build/types --watch\"",
+        "linter:check": "eslint . --config ../../eslint.config.mts",
+        "tsc:check": "tsc --noEmit"
+    },
+    "main": "./build/cjs/index.js",
+    "exports": {
+        ".": {
+            "import": "./build/es/index.js",
+            "require": "./build/cjs/index.js",
+            "types": "./build/types/index.d.ts"
+        }
+    },
+    "dependencies": {
+        "@dhis2/multi-calendar-dates": "^2.1.2",
+        "date-fns": "^4.1.0"
+    },
+    "devDependencies": {
+        "@dhis2/cli-app-scripts": "12.11.0",
+        "@types/node": "^22.10.1",
+        "typescript": "^5.7.2"
+    }
+}
