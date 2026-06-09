@@ -1,0 +1,58 @@
+.content {
+    padding: 16px;
+    padding-block-start: 8px;
+}
+
+.row {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.label {
+    color: var(--colors-grey700);
+    font-size: 13px;
+    line-height: 18px;
+}
+
+.enabledValue,
+.disabledValue {
+    color: var(--colors-grey900);
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 500;
+}
+
+.enabledValue::before,
+.disabledValue::before {
+    content: "";
+    display: inline-block;
+    inline-size: 8px;
+    block-size: 8px;
+    margin-inline-end: 8px;
+    border-radius: 50%;
+    vertical-align: 1px;
+}
+
+.enabledValue::before {
+    background: var(--colors-green600);
+}
+
+.disabledValue::before {
+    background: var(--colors-grey500);
+}
+
+.loadingState,
+.emptyState {
+    padding: 18px;
+    color: var(--colors-grey700);
+    font-size: inherit;
+    line-height: 20px;
+}
+
+.loadingState {
+    display: flex;
+    min-block-size: 72px;
+    align-items: center;
+    justify-content: center;
+}
