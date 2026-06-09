@@ -1,4 +1,5 @@
 import { useDataEngine } from '@dhis2/app-runtime';
+import { queryViaAlias } from '@/utils/queryAlias';
 
 export type AnalyticsResponse = {
     response: {
@@ -53,27 +54,9 @@ const fetchAnalyticsViaAlias = async (
     dataEngine: ReturnType<typeof useDataEngine>,
 ): Promise<AnalyticsResponse> => {
     const target = buildAnalyticsTargetPath(dataElements, periods, orgUnits);
-
-    const aliasResult = await dataEngine.mutate({
-        resource: 'query/alias',
-        type: 'create' as const,
-        data: { target },
-    });
-
-    const alias = aliasResult as Record<string, unknown>;
-    const aliasId = alias.id as string | undefined;
-
-    if (!aliasId) {
-        throw new Error('Failed to create query alias: no id in response');
-    }
-
-    const analyticsResponse = await dataEngine.query({
-        response: {
-            resource: `query/alias/${aliasId}`,
-        },
-    });
-
-    return analyticsResponse as AnalyticsResponse;
+    return {
+        response: await queryViaAlias<AnalyticsResponse['response']>(dataEngine, target),
+    };
 };
 
 export const fetchAnalytics = async (
@@ -108,3 +91,41 @@ export const ORG_UNITS_QUERY = (orgUnitIds: string[]) => ({
         },
     },
 });
+
+const buildOrgUnitsTargetPath = (orgUnitIds: string[]): string => {
+    const params = new URLSearchParams({
+        filter: `id:in:[${orgUnitIds.join(',')}]`,
+        fields: 'id,geometry,parent[id],level,displayName,code',
+        paging: 'false',
+    });
+
+    return `/api/organisationUnits?${params.toString()}`;
+};
+
+const fetchOrgUnitsViaAlias = async (
+    orgUnitIds: string[],
+    dataEngine: ReturnType<typeof useDataEngine>,
+): Promise<OrgUnitResponse> => {
+    const target = buildOrgUnitsTargetPath(orgUnitIds);
+    return {
+        geojson: await queryViaAlias<OrgUnitResponse['geojson']>(dataEngine, target),
+    };
+};
+
+export const fetchOrgUnits = async (
+    orgUnitIds: string[],
+    dataEngine: ReturnType<typeof useDataEngine>,
+): Promise<OrgUnitResponse> => {
+    try {
+        return await fetchOrgUnitsViaAlias(orgUnitIds, dataEngine);
+    } catch (error) {
+        console.warn(
+            'Query alias creation failed, falling back to direct organisation unit query.',
+            'This may fail for large queries that exceed URL length limits.',
+            error,
+        );
+        return await dataEngine.query(
+            ORG_UNITS_QUERY(orgUnitIds),
+        ) as OrgUnitResponse;
+    }
+};
