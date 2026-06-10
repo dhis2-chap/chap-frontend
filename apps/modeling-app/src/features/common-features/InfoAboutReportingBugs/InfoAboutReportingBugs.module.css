@@ -1,20 +1,66 @@
 .infoAboutReportingBugs {
-    background-color: rgb(252, 181, 49);
-    color: white;
-    font-weight: 400;
+    background: #f5fbff;
+    border-block: 1px solid #c5e3fc;
+    color: var(--colors-grey900);
 }
 
 .infoAboutReportingBugsInner {
-    margin: auto;
-    padding: 0.6rem 10px;
-    font-size: 15px;
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--spacers-dp12);
+    max-inline-size: 1400px;
+    margin: auto;
+    padding: var(--spacers-dp8) 10px;
+    font-size: 15px;
+}
+
+.message {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    gap: var(--spacers-dp8);
+    justify-content: flex-start;
+    line-height: 20px;
+    min-width: 0;
+}
+
+.messageText {
+    line-height: 20px;
+    min-width: 0;
+}
+
+.infoIcon,
+.actions {
+    flex: none;
+}
+
+.infoIcon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    block-size: 24px;
+    inline-size: 24px;
+}
+
+.actions {
+    display: flex;
     align-items: center;
     gap: var(--spacers-dp8);
 }
 
-.icon {
-    line-height: 1;
-    padding-inline-end: 0.4rem;
+@media (max-width: 640px) {
+    .infoAboutReportingBugsInner {
+        gap: var(--spacers-dp8);
+        padding-inline: var(--spacers-dp8);
+    }
+
+    .message {
+        gap: var(--spacers-dp4);
+    }
+
+    .actions {
+        margin-inline-start: 28px;
+    }
 }

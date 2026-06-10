@@ -124,6 +124,39 @@ export const SidenavLinkBase = ({
     </li>
 );
 
+interface SidenavButtonProps {
+    icon?: React.ReactNode;
+    label: React.ReactNode;
+    onClick: () => void;
+    disabled?: boolean;
+    dataTest?: string;
+}
+
+export const SidenavButton = ({
+    icon,
+    label,
+    onClick,
+    disabled,
+    dataTest,
+}: SidenavButtonProps) => (
+    <SidenavLinkBase disabled={disabled}>
+        <button
+            type="button"
+            className={styles['sidenav-button']}
+            disabled={disabled}
+            data-test={dataTest}
+            onClick={onClick}
+        >
+            {label}
+            {icon && (
+                <span className={styles['sidenav-button-trailing-icon']}>
+                    {icon}
+                </span>
+            )}
+        </button>
+    </SidenavLinkBase>
+);
+
 /**
  * If children is a string, it will be rendered as a link.
  * if not it's up to the rendered child to render an "a"-tag for proper styling
