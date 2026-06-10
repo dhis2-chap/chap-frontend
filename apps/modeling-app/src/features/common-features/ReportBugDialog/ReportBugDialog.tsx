@@ -23,12 +23,12 @@ export const REPORT_EMAIL = 'chap@dhis2.org';
 
 const getCurrentHashRoute = () => {
     if (typeof window === 'undefined') {
-        return i18n.t('Unknown page');
+        return 'Unknown page';
     }
 
     const hashRoute = window.location.hash.replace(/^#/, '').split('?')[0];
 
-    return hashRoute || i18n.t('Unknown page');
+    return hashRoute || 'Unknown page';
 };
 
 type ReportTemplateProps = {
@@ -42,25 +42,23 @@ const createReportTemplate = ({
     dhis2Version,
     modelingAppVersion,
 }: ReportTemplateProps) => [
-    i18n.t(`What happened?
+    `What happened?
 
 
 What did you expect to happen?
 
 
-Steps to reproduce{{colon}}
+Steps to reproduce:
 1.
 2.
 3.
 
-Helpful details{{colon}}`, {
-        colon: ':',
-    }),
-    `${i18n.t('Page{{colon}}', { colon: ':' })} ${getCurrentHashRoute()}`,
-    `${i18n.t('Time{{colon}}', { colon: ':' })} ${new Date().toISOString()}`,
-    `${i18n.t('Modeling App version{{colon}}', { colon: ':' })} ${modelingAppVersion}`,
-    `${i18n.t('CHAP version{{colon}}', { colon: ':' })} ${chapVersion}`,
-    `${i18n.t('DHIS2 version{{colon}}', { colon: ':' })} ${dhis2Version}`,
+Helpful details:`,
+    `Page: ${getCurrentHashRoute()}`,
+    `Time: ${new Date().toISOString()}`,
+    `Modeling App version: ${modelingAppVersion}`,
+    `CHAP version: ${chapVersion}`,
+    `DHIS2 version: ${dhis2Version}`,
 ].join('\n');
 
 type Props = {
@@ -71,7 +69,7 @@ export const ReportBugDialog = ({ onClose }: Props) => {
     const { appVersion, serverVersion, systemInfo } = useConfig();
     const { route } = useRoute();
     const { status } = useChapStatus({ route });
-    const unknownVersion = i18n.t('Unknown');
+    const unknownVersion = 'Unknown';
     const chapVersion = status?.chap_core_version ?? unknownVersion;
     const dhis2Version =
         serverVersion?.full ?? systemInfo?.version ?? unknownVersion;
