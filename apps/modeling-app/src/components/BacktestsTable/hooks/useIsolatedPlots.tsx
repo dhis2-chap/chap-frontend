@@ -1,10 +1,16 @@
 import { useQuery } from '@tanstack/react-query';
 import { ApiError, VisualizationsService } from '@dhis2-chap/ui';
 
+export type IsolatedPlotsRequestBody = {
+    location?: string;
+    split_period?: string;
+    horizon_period?: string;
+};
+
 type UseIsolatedPlotsParams = {
     visualizationName?: string;
     backtestId?: number;
-    requestBody?: Record<string, any>;
+    requestBody?: IsolatedPlotsRequestBody;
 };
 
 export const useIsolatedPlots = ({
@@ -17,7 +23,7 @@ export const useIsolatedPlots = ({
             'isolated-plots',
             backtestId,
             visualizationName,
-            requestBody, // Included in queryKey so changes trigger a refetch
+            requestBody,
         ],
         queryFn: () =>
             VisualizationsService.generateIsolatedPlotsV1VisualizationBacktestPlotsVisualizationNameBacktestIdSubplotPost(
@@ -25,15 +31,12 @@ export const useIsolatedPlots = ({
                 Number(backtestId),
                 requestBody || {},
             ),
-        // Ensures the API isn't called with missing or invalid parameters
         enabled:
             typeof backtestId === 'number' &&
             backtestId > 0 &&
             !!visualizationName &&
             !!requestBody,
         staleTime: 5 * 60 * 1000,
-        // Note: In TanStack Query v5+, cacheTime is renamed to gcTime.
-        // Keeping cacheTime here to match your existing implementation template.
         cacheTime: 5 * 60 * 1000,
         retry: 0,
         refetchOnWindowFocus: false,

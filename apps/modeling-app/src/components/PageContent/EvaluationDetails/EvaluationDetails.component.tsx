@@ -61,7 +61,6 @@ export const EvaluationDetailsComponent = ({ evaluationId }: Props) => {
                         evaluationId={evaluationId}
                     />
                 )}
-
             </div>
             <div className={styles.rightColumn}>
                 <QuickActionsWidget

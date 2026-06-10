@@ -1,6 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
 import { ApiError, VisualizationsService } from '@dhis2-chap/ui';
 
+export type FacetCoordinates = {
+    split_period?: string[];
+    location?: string[];
+    horizon_distance?: number[];
+};
+
 type UseFacetCoordinatesParams = {
     backtestId?: number;
     visualizationName?: string;
@@ -10,7 +16,7 @@ export const useFacetCoordinates = ({
     backtestId,
     visualizationName,
 }: UseFacetCoordinatesParams) => {
-    const { data, isLoading, isFetching, error } = useQuery<unknown, ApiError>({
+    const { data, isLoading, isFetching, error } = useQuery<FacetCoordinates, ApiError>({
         queryKey: [
             'facet-coordinates',
             backtestId,
@@ -21,7 +27,6 @@ export const useFacetCoordinates = ({
                 visualizationName!,
                 Number(backtestId),
             ),
-        // Ensures the API isn't called with undefined/invalid values
         enabled:
             typeof backtestId === 'number' &&
             backtestId > 0 &&

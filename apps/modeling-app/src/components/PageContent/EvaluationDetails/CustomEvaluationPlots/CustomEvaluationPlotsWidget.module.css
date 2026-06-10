@@ -31,16 +31,11 @@
     min-block-size: 440px;
 }
 
-/* The plot is sized to the container by autosize fit, so any overflow
-   is sub-pixel rounding (zoom/retina) — clip it instead of scrolling */
 .card {
     inline-size: 100%;
     overflow: hidden;
 }
 
-/* vega-embed renders inline elements (the embed div itself and the
-   svg/canvas chart), whose baseline gaps overflow the 100%-height
-   chain and trigger a scrollbar on .card — force them to block */
 .visualizationContainer .vegaEmbed {
     display: block;
     inline-size: 100%;

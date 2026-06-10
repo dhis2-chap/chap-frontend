@@ -3,15 +3,10 @@ import { MenuItem, SingleSelect } from '@dhis2/ui';
 import { useMemo } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import styles from './CustomEvaluationPlotsWidget.module.css';
-
-type FacetCoords = {
-    split_period?: string[];
-    location?: string[];
-    horizon_distance?: number[];
-};
+import { FacetCoordinates } from '@/components/BacktestsTable/hooks/useFacetCoordinates';
 
 type Props = {
-    facetCoords?: FacetCoords;
+    facetCoords?: FacetCoordinates;
     filterLocation?: string;
     filterSplitPeriod?: string;
     filterHorizonPeriod?: string;

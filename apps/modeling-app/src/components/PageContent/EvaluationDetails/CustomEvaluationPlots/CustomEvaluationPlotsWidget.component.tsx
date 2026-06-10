@@ -1,10 +1,12 @@
 import { useEffect, useMemo } from 'react';
 import { CircularLoader, IconWarning24 } from '@dhis2/ui';
 import { VegaEmbed } from 'react-vega';
+import { VisualizationSpec } from 'vega-embed';
 import i18n from '@dhis2/d2-i18n';
 import { ApiError } from '@dhis2-chap/ui';
 import styles from './CustomEvaluationPlotsWidget.module.css';
 import { useIsolatedPlots } from '@/components/BacktestsTable/hooks/useIsolatedPlots';
+import { useOrgUnitsById } from '@/hooks/useOrgUnitsById';
 
 type Props = {
     evaluationId: number;
@@ -32,14 +34,45 @@ const MutedPlotError = () => (
     </div>
 );
 
-// The backend returns compiled Vega specs where `width: 'container'` became a
-// containerSize() signal, but the height is a fixed number. Mirror the same
-// signal for the height so the plot fills the widget's container vertically.
-const withContainerHeight = (spec: any) => {
-    if (!spec || typeof spec !== 'object') return spec;
-    const { height, signals, ...rest } = spec as Record<string, any>;
+type UnknownRecord = Record<string, unknown>;
+
+const isRecord = (value: unknown): value is UnknownRecord =>
+    typeof value === 'object' && value !== null && !Array.isArray(value);
+
+const collectLocationIds = (node: unknown, acc: Set<string>): void => {
+    if (Array.isArray(node)) {
+        node.forEach(child => collectLocationIds(child, acc));
+        return;
+    }
+    if (!isRecord(node)) return;
+    Object.entries(node).forEach(([key, value]) => {
+        if (key === 'location' && typeof value === 'string') {
+            acc.add(value);
+        } else {
+            collectLocationIds(value, acc);
+        }
+    });
+};
+
+const withLocationNames = (node: unknown, names: Map<string, string>): unknown => {
+    if (Array.isArray(node)) {
+        return node.map(child => withLocationNames(child, names));
+    }
+    if (!isRecord(node)) return node;
+    return Object.fromEntries(
+        Object.entries(node).map(([key, value]) => {
+            if (key === 'location' && typeof value === 'string' && names.has(value)) {
+                return [key, names.get(value)];
+            }
+            return [key, withLocationNames(value, names)];
+        }),
+    );
+};
+
+const withContainerHeight = (spec: UnknownRecord): UnknownRecord => {
+    const { height, signals, ...rest } = spec;
     const existingSignals = Array.isArray(signals) ? signals : [];
-    if (existingSignals.some(signal => signal?.name === 'height')) return spec;
+    if (existingSignals.some(signal => isRecord(signal) && signal.name === 'height')) return spec;
 
     const fallbackHeight = typeof height === 'number' ? height : 300;
     const containerHeight = `isFinite(containerSize()[1]) ? containerSize()[1] : ${fallbackHeight}`;
@@ -113,7 +146,25 @@ export const CustomEvaluationPlotsWidgetComponent = ({
         requestBody,
     });
 
-    const plotSpec = useMemo(() => withContainerHeight(isolatedPlotsData), [isolatedPlotsData]);
+    const locationIds = useMemo(() => {
+        const ids = new Set<string>();
+        collectLocationIds(isolatedPlotsData, ids);
+        return Array.from(ids).sort();
+    }, [isolatedPlotsData]);
+
+    const { data: orgUnitsData } = useOrgUnitsById(locationIds);
+
+    const locationNames = useMemo(() => new Map(
+        (orgUnitsData?.organisationUnits ?? []).map(ou => [ou.id, ou.displayName]),
+    ), [orgUnitsData?.organisationUnits]);
+
+    const plotSpec = useMemo(() => {
+        if (!isRecord(isolatedPlotsData)) return undefined;
+        const spec = withContainerHeight(isolatedPlotsData);
+        return locationNames.size > 0
+            ? withLocationNames(spec, locationNames) as UnknownRecord
+            : spec;
+    }, [isolatedPlotsData, locationNames]);
 
     const visualizationContainerClass = isolatedPlotsData
         ? `${styles.visualizationContainer} ${styles.singleIsolatedPlot}`
@@ -176,7 +227,7 @@ export const CustomEvaluationPlotsWidgetComponent = ({
         return <MutedPlotError />;
     }
 
-    if (!isolatedPlotsData) {
+    if (!plotSpec) {
         return (
             <div className={styles.errorContainer}>
                 {i18n.t('No visualization found')}
@@ -188,7 +239,7 @@ export const CustomEvaluationPlotsWidgetComponent = ({
         <div className={styles.card}>
             <div className={visualizationContainerClass}>
                 <VegaEmbed
-                    spec={plotSpec}
+                    spec={plotSpec as VisualizationSpec}
                     className={styles.vegaEmbed}
                     options={vegaOptions}
                 />
