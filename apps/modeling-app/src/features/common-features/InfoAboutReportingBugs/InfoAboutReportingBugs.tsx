@@ -31,8 +31,8 @@ const InfoAboutReportingBugs = () => {
 
     return (
         <>
-            <div className={styles.infoAboutReportingBugs}>
-                {!isWarningDismissed && (
+            {!isWarningDismissed && (
+                <div className={styles.infoAboutReportingBugs}>
                     <div className={styles.infoAboutReportingBugsInner}>
                         <div className={styles.message}>
                             <span className={styles.infoIcon}>
@@ -62,8 +62,8 @@ const InfoAboutReportingBugs = () => {
                             />
                         </div>
                     </div>
-                )}
-            </div>
+                </div>
+            )}
             {isReportBugDialogOpen && (
                 <ReportBugDialog
                     onClose={() => setIsReportBugDialogOpen(false)}
