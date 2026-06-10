@@ -2,6 +2,7 @@ import { useEffect, useMemo } from 'react';
 import { CircularLoader, IconWarning24 } from '@dhis2/ui';
 import { VegaEmbed } from 'react-vega';
 import i18n from '@dhis2/d2-i18n';
+import { ApiError } from '@dhis2-chap/ui';
 import styles from './CustomEvaluationPlotsWidget.module.css';
 import { useIsolatedPlots } from '@/components/BacktestsTable/hooks/useIsolatedPlots';
 
@@ -11,6 +12,49 @@ type Props = {
     filterLocation?: string;
     filterSplitPeriod?: string;
     filterHorizonPeriod?: string;
+    isFacetCoordsLoading?: boolean;
+    facetCoordsError?: ApiError | null;
+};
+
+const MutedPlotError = () => (
+    <div className={styles.mutedErrorContainer}>
+        <div className={styles.mutedErrorContent}>
+            <IconWarning24 />
+            <div className={styles.mutedErrorText}>
+                <p className={styles.mutedErrorPrimary}>
+                    {i18n.t('This plot has encountered an unexpected error and could not be displayed.')}
+                </p>
+                <p className={styles.mutedErrorSecondary}>
+                    {i18n.t('This visualization is provided by external contributors and may occasionally fail due to issues in the contributed plot definition. Please contact your system administrator if you experience issues with this visualization.')}
+                </p>
+            </div>
+        </div>
+    </div>
+);
+
+// The backend returns compiled Vega specs where `width: 'container'` became a
+// containerSize() signal, but the height is a fixed number. Mirror the same
+// signal for the height so the plot fills the widget's container vertically.
+const withContainerHeight = (spec: any) => {
+    if (!spec || typeof spec !== 'object') return spec;
+    const { height, signals, ...rest } = spec as Record<string, any>;
+    const existingSignals = Array.isArray(signals) ? signals : [];
+    if (existingSignals.some(signal => signal?.name === 'height')) return spec;
+
+    const fallbackHeight = typeof height === 'number' ? height : 300;
+    const containerHeight = `isFinite(containerSize()[1]) ? containerSize()[1] : ${fallbackHeight}`;
+    return {
+        ...rest,
+        autosize: { type: 'fit', contains: 'padding' },
+        signals: [
+            ...existingSignals,
+            {
+                name: 'height',
+                init: containerHeight,
+                on: [{ events: 'window:resize', update: containerHeight }],
+            },
+        ],
+    };
 };
 
 export const CustomEvaluationPlotsWidgetComponent = ({
@@ -19,6 +63,8 @@ export const CustomEvaluationPlotsWidgetComponent = ({
     filterLocation,
     filterSplitPeriod,
     filterHorizonPeriod,
+    isFacetCoordsLoading,
+    facetCoordsError,
 }: Props) => {
     const vegaOptions = useMemo(() => ({
         actions: {
@@ -67,23 +113,24 @@ export const CustomEvaluationPlotsWidgetComponent = ({
         requestBody,
     });
 
+    const plotSpec = useMemo(() => withContainerHeight(isolatedPlotsData), [isolatedPlotsData]);
+
     const visualizationContainerClass = isolatedPlotsData
         ? `${styles.visualizationContainer} ${styles.singleIsolatedPlot}`
         : styles.visualizationContainer;
 
-    const showError = isolatedPlotsError;
-
     useEffect(() => {
-        if (!selectionComplete || !isolatedPlotsError) return;
+        const error = isolatedPlotsError || facetCoordsError;
+        if (!selectionComplete || !error) return;
 
-        console.error('CustomEvaluationPlotsWidget: isolated plots load error', {
-            error: isolatedPlotsError,
+        console.error('CustomEvaluationPlotsWidget: plot load error', {
+            error,
             evaluationId,
             selectedVisualizationId,
             filterLocation,
             filterSplitPeriod,
         });
-    }, [isolatedPlotsError, evaluationId, selectedVisualizationId, filterLocation, filterSplitPeriod, selectionComplete]);
+    }, [isolatedPlotsError, facetCoordsError, evaluationId, selectedVisualizationId, filterLocation, filterSplitPeriod, selectionComplete]);
 
     if (!selectionComplete) {
         return (
@@ -91,6 +138,18 @@ export const CustomEvaluationPlotsWidgetComponent = ({
                 <p>{i18n.t('Please select a visualization.')}</p>
             </div>
         );
+    }
+
+    if (isFacetCoordsLoading) {
+        return (
+            <div className={styles.loadingContainer}>
+                <CircularLoader />
+            </div>
+        );
+    }
+
+    if (facetCoordsError) {
+        return <MutedPlotError />;
     }
 
     if (!hasFilters) {
@@ -113,22 +172,8 @@ export const CustomEvaluationPlotsWidgetComponent = ({
         );
     }
 
-    if (showError) {
-        return (
-            <div className={styles.mutedErrorContainer}>
-                <div className={styles.mutedErrorContent}>
-                    <IconWarning24 />
-                    <div className={styles.mutedErrorText}>
-                        <p className={styles.mutedErrorPrimary}>
-                            {i18n.t('This plot has encountered an unexpected error and could not be displayed.')}
-                        </p>
-                        <p className={styles.mutedErrorSecondary}>
-                            {i18n.t('This visualization is provided by external contributors and may occasionally fail due to issues in the contributed plot definition. Please contact your system administrator if you experience issues with this visualization.')}
-                        </p>
-                    </div>
-                </div>
-            </div>
-        );
+    if (isolatedPlotsError) {
+        return <MutedPlotError />;
     }
 
     if (!isolatedPlotsData) {
@@ -143,7 +188,7 @@ export const CustomEvaluationPlotsWidgetComponent = ({
         <div className={styles.card}>
             <div className={visualizationContainerClass}>
                 <VegaEmbed
-                    spec={isolatedPlotsData}
+                    spec={plotSpec}
                     className={styles.vegaEmbed}
                     options={vegaOptions}
                 />

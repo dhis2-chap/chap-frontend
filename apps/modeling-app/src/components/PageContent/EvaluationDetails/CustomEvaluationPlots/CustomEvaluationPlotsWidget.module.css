@@ -24,33 +24,45 @@
 
 .visualizationContainer {
     inline-size: 100%;
-    max-block-size: 60vh;
 }
 
 .singleIsolatedPlot {
-    block-size: auto;
+    block-size: 60vh;
     min-block-size: 440px;
 }
 
+/* The plot is sized to the container by autosize fit, so any overflow
+   is sub-pixel rounding (zoom/retina) — clip it instead of scrolling */
 .card {
-    width: fit-content;
-    overflow: auto;
+    inline-size: 100%;
+    overflow: hidden;
 }
 
-.vegaEmbed {
+/* vega-embed renders inline elements (the embed div itself and the
+   svg/canvas chart), whose baseline gaps overflow the 100%-height
+   chain and trigger a scrollbar on .card — force them to block */
+.visualizationContainer .vegaEmbed {
+    display: block;
     inline-size: 100%;
     block-size: 100%;
 }
 
-.singleIsolatedPlot .vegaEmbed {
-    block-size: auto;
-    min-block-size: 440px;
+.vegaEmbed :global(.chart-wrapper) svg,
+.vegaEmbed :global(.chart-wrapper) canvas {
+    display: block;
 }
+
 .controlsRow {
     display: flex;
-    gap: 12px;
+    gap: 8px;
     align-items: center;
     margin-block-end: 16px;
+}
+
+.filtersRow {
+    display: flex;
+    gap: 8px;
+    align-items: center;
 }
 
 .singleSelectContainer {

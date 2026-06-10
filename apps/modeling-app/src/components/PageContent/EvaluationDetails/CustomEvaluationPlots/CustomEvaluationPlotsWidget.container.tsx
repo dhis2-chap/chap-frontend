@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
     CircularLoader,
     IconInfo16,
@@ -60,7 +60,7 @@ const WidgetWrapper = ({
 };
 
 export const CustomEvaluationPlotsWidget = ({ evaluationId }: Props) => {
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(true);
     const [filterLocation, setFilterLocation] = useState<string | undefined>(undefined);
     const [filterSplitPeriod, setFilterSplitPeriod] = useState<string | undefined>(undefined);
     const [filterHorizonPeriod, setFilterHorizonPeriod] = useState<string | undefined>(undefined);
@@ -74,14 +74,14 @@ export const CustomEvaluationPlotsWidget = ({ evaluationId }: Props) => {
         string | undefined
     >(undefined);
 
-    const { facetCoordinates } = useFacetCoordinates({
+    const {
+        facetCoordinates,
+        isLoading: isFacetCoordsLoading,
+        error: facetCoordsError,
+    } = useFacetCoordinates({
         backtestId: evaluationId,
         visualizationName: selectedVisualizationId,
     });
-
-    useEffect(() => {
-        console.log('Facet coordinates updated:', facetCoordinates);
-    }, [facetCoordinates]);
 
     const handleOnChangeVisualization = (visualizationId: string) => {
         setVisualizationId(visualizationId);
@@ -172,6 +172,8 @@ export const CustomEvaluationPlotsWidget = ({ evaluationId }: Props) => {
                     filterLocation={filterLocation}
                     filterSplitPeriod={filterSplitPeriod}
                     filterHorizonPeriod={filterHorizonPeriod}
+                    isFacetCoordsLoading={isFacetCoordsLoading}
+                    facetCoordsError={facetCoordsError}
                 />
             </WidgetWrapper>
         </div>

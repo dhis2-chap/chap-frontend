@@ -1,6 +1,6 @@
 import { useOrgUnitsById } from '@/hooks/useOrgUnitsById';
-import { Button, MenuItem, SingleSelect } from '@dhis2/ui';
-import { useMemo, useCallback, useEffect } from 'react';
+import { MenuItem, SingleSelect } from '@dhis2/ui';
+import { useMemo } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import styles from './CustomEvaluationPlotsWidget.module.css';
 
@@ -47,32 +47,24 @@ export const BackTestFilter = ({
     [organisationUnits.data?.organisationUnits],
     );
 
-    const handleClearFilters = useCallback(() => {
-        setFilterLocation(undefined);
-        setFilterSplitPeriod(undefined);
-        setFilterHorizonPeriod(undefined);
-    }, [setFilterLocation, setFilterSplitPeriod, setFilterHorizonPeriod]);
-
     const showLocation = facetCoords?.location && facetCoords.location.length > 0;
     const showSplitPeriod = facetCoords?.split_period && facetCoords.split_period.length > 0;
     const showHorizon = facetCoords?.horizon_distance && facetCoords.horizon_distance.length > 0;
 
-    useEffect(() => {
-        console.log('Facet coords updated:', facetCoords);
-    }, [facetCoords]);
-
     return (
-        <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+        <div className={styles.filtersRow}>
 
             {showLocation && (
                 <SingleSelect
                     className={styles.singleSelectContainer}
                     dense
+                    clearable
+                    clearText={i18n.t('Clear')}
                     placeholder={i18n.t('Select organisation unit')}
                     selected={filterLocation}
                     loading={isOrgUnitsLoading}
                     disabled={isOrgUnitsLoading}
-                    onChange={e => setFilterLocation(e.selected)}
+                    onChange={e => setFilterLocation(e.selected || undefined)}
                 >
                     {orgUnitOptions.map(({ value, label }) => (
                         <MenuItem key={value} value={value} label={label} />
@@ -84,9 +76,11 @@ export const BackTestFilter = ({
                 <SingleSelect
                     className={styles.singleSelectContainer}
                     dense
+                    clearable
+                    clearText={i18n.t('Clear')}
                     placeholder={i18n.t('Select split period')}
                     selected={filterSplitPeriod}
-                    onChange={e => setFilterSplitPeriod(e.selected)}
+                    onChange={e => setFilterSplitPeriod(e.selected || undefined)}
                 >
                     {splitPeriodOptions.map(({ value, label }) => (
                         <MenuItem key={value} value={value} label={label} />
@@ -98,19 +92,17 @@ export const BackTestFilter = ({
                 <SingleSelect
                     className={styles.singleSelectContainer}
                     dense
+                    clearable
+                    clearText={i18n.t('Clear')}
                     placeholder={i18n.t('Select horizon period')}
                     selected={filterHorizonPeriod}
-                    onChange={e => setFilterHorizonPeriod(e.selected)}
+                    onChange={e => setFilterHorizonPeriod(e.selected || undefined)}
                 >
                     {horizonOptions.map(({ value, label }) => (
                         <MenuItem key={value} value={value} label={label} />
                     ))}
                 </SingleSelect>
             )}
-
-            <Button onClick={handleClearFilters}>
-                {i18n.t('Clear filters')}
-            </Button>
         </div>
     );
 };
