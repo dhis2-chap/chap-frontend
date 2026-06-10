@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-06-09T11:28:01.084Z\n"
-"PO-Revision-Date: 2026-06-09T11:28:01.084Z\n"
+"POT-Creation-Date: 2026-06-10T14:40:03.521Z\n"
+"PO-Revision-Date: 2026-06-10T14:40:03.521Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -1594,11 +1594,52 @@ msgstr "Overview"
 msgid "Models"
 msgstr "Models"
 
+msgid "Report a bug"
+msgstr "Report a bug"
+
 msgid "Guides"
 msgstr "Guides"
 
 msgid "Settings"
 msgstr "Settings"
+
+msgid ""
+"This is an alpha version of the Modeling App. Some features may change or "
+"contain bugs."
+msgstr ""
+"This is an alpha version of the Modeling App. Some features may change or "
+"contain bugs."
+
+msgid "Dismiss"
+msgstr "Dismiss"
+
+msgid "Failed to copy report details"
+msgstr "Failed to copy report details"
+
+msgid ""
+"Copy the template and email it to the CHAP team. It includes this page and "
+"time so we can find the problem faster."
+msgstr ""
+"Copy the template and email it to the CHAP team. It includes this page and "
+"time so we can find the problem faster."
+
+msgid "Send to"
+msgstr "Send to"
+
+msgid "Copied email address"
+msgstr "Copied email address"
+
+msgid "Copy email address"
+msgstr "Copy email address"
+
+msgid "Bug report template"
+msgstr "Bug report template"
+
+msgid "Copied"
+msgstr "Copied"
+
+msgid "Copy template"
+msgstr "Copy template"
 
 msgid ""
 "The version of the Modeling App is not compatible with the backend (Chap "

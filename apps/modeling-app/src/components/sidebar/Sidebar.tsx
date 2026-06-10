@@ -1,16 +1,19 @@
 import i18n from '@dhis2/d2-i18n';
 import { IconChevronLeft24 } from '@dhis2/ui';
+import { IconMessages16 } from '@dhis2/ui-icons';
 import cx from 'classnames';
 import { useEffect, useRef, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import styles from './Sidebar.module.css';
 import {
     Sidenav,
+    SidenavButton,
     SidenavFooter,
     SidenavItems,
     SidenavLink,
     SidenavParent,
 } from './sidenav';
+import { ReportBugDialog } from '../../features/common-features/ReportBugDialog/ReportBugDialog';
 
 type LinkItem = {
     to: string;
@@ -74,6 +77,7 @@ export const Sidebar = ({
 }) => {
     const collapsedExternally = useRef<boolean>(false);
     const [collapsed, setCollapsed] = useState(false);
+    const [isReportBugDialogOpen, setIsReportBugDialogOpen] = useState(false);
 
     useEffect(() => {
         // only react if explicitly defined
@@ -86,52 +90,65 @@ export const Sidebar = ({
     }, [hideSidebar]);
 
     return (
-        <aside
-            className={cx(styles.asideWrapper, className, {
-                [styles.collapsed]: collapsed,
-            })}
-        >
-            <Sidenav>
-                <SidenavItems>
-                    <SidebarNavLink to="/dashboard" label={i18n.t('Dashboard')} />
-                    <SidebarParent
-                        label={i18n.t('Evaluate')}
-                        links={[
-                            {
-                                label: i18n.t('Overview'),
-                                to: '/evaluate',
-                            },
-                            {
-                                label: i18n.t('Compare'),
-                                to: '/evaluate/compare',
-                            },
-                        ]}
-                    />
-                    <SidebarNavLink to="/predictions" label={i18n.t('Predict')} />
-                    <SidebarNavLink to="/models" label={i18n.t('Models')} />
-                    <SidebarNavLink to="/jobs" label={i18n.t('Jobs')} />
-                </SidenavItems>
-                <SidenavFooter>
-                    <SidenavItems>
-                        <SidebarNavLink to="/guides" label={i18n.t('Guides')} />
-                        <SidebarNavLink to="/settings" label={i18n.t('Settings')} />
-                    </SidenavItems>
-                </SidenavFooter>
-            </Sidenav>
-            <button
-                className={styles.collapseButton}
-                type="button"
-                onClick={() => setCollapsed(!collapsed)}
+        <>
+            <aside
+                className={cx(styles.asideWrapper, className, {
+                    [styles.collapsed]: collapsed,
+                })}
             >
-                <div
-                    className={cx(styles.iconWrapper, {
-                        [styles.collapsed]: collapsed,
-                    })}
+                <Sidenav>
+                    <SidenavItems>
+                        <SidebarNavLink to="/dashboard" label={i18n.t('Dashboard')} />
+                        <SidebarParent
+                            label={i18n.t('Evaluate')}
+                            links={[
+                                {
+                                    label: i18n.t('Overview'),
+                                    to: '/evaluate',
+                                },
+                                {
+                                    label: i18n.t('Compare'),
+                                    to: '/evaluate/compare',
+                                },
+                            ]}
+                        />
+                        <SidebarNavLink to="/predictions" label={i18n.t('Predict')} />
+                        <SidebarNavLink to="/models" label={i18n.t('Models')} />
+                        <SidebarNavLink to="/jobs" label={i18n.t('Jobs')} />
+                    </SidenavItems>
+                    <SidenavFooter>
+                        <SidenavItems>
+                            <SidenavButton
+                                icon={<IconMessages16 />}
+                                label={i18n.t('Report a bug')}
+                                dataTest="sidebar-report-bug-button"
+                                onClick={() => setIsReportBugDialogOpen(true)}
+                            />
+                            <SidebarNavLink to="/guides" label={i18n.t('Guides')} />
+                            <SidebarNavLink to="/settings" label={i18n.t('Settings')} />
+                        </SidenavItems>
+                    </SidenavFooter>
+                </Sidenav>
+                <button
+                    className={styles.collapseButton}
+                    type="button"
+                    onClick={() => setCollapsed(!collapsed)}
                 >
-                    <IconChevronLeft24 />
-                </div>
-            </button>
-        </aside>
+                    <div
+                        className={cx(styles.iconWrapper, {
+                            [styles.collapsed]: collapsed,
+                        })}
+                    >
+                        <IconChevronLeft24 />
+                    </div>
+                </button>
+            </aside>
+            {isReportBugDialogOpen && (
+                <ReportBugDialog
+                    onClose={() => setIsReportBugDialogOpen(false)}
+                />
+            )}
+        </>
     );
 };
 
