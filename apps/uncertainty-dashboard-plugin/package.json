@@ -32,7 +32,7 @@
         "zod": "^3.23.8"
     },
     "devDependencies": {
-        "@dhis2/cli-app-scripts": "12.11.0",
+        "@dhis2/cli-app-scripts": "12.11.1",
         "@types/node": "^22.18.0",
         "typescript": "^5.7.2",
         "vite": "5.4.21"
