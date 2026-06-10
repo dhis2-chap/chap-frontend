@@ -205,6 +205,64 @@ importers:
         specifier: 5.4.21
         version: 5.4.21(@types/node@22.18.0)(terser@5.44.1)
 
+  apps/uncertainty-dashboard-plugin:
+    dependencies:
+      '@dhis2-chap/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@dhis2-chap/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
+      '@dhis2/app-runtime':
+        specifier: 3.14.6
+        version: 3.14.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@dhis2/d2-i18n':
+        specifier: 1.2.0
+        version: 1.2.0
+      '@dhis2/ui':
+        specifier: ^10.13.0
+        version: 10.13.0(@dhis2/app-runtime@3.14.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@dhis2/d2-i18n@1.2.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(styled-jsx@4.0.1(@babel/core@7.28.5)(react@18.3.1))
+      '@hookform/resolvers':
+        specifier: ^5.0.1
+        version: 5.2.1(react-hook-form@7.62.0(react@18.3.1))
+      '@tanstack/react-query':
+        specifier: '4'
+        version: 4.42.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      classnames:
+        specifier: ^2.5.1
+        version: 2.5.1
+      highcharts:
+        specifier: 11.4.8
+        version: 11.4.8
+      highcharts-react-official:
+        specifier: ^3.2.1
+        version: 3.2.2(highcharts@11.4.8)(react@18.3.1)
+      react:
+        specifier: ^18.3.1
+        version: 18.3.1
+      react-dom:
+        specifier: ^18.3.1
+        version: 18.3.1(react@18.3.1)
+      react-hook-form:
+        specifier: ^7.51.5
+        version: 7.62.0(react@18.3.1)
+      zod:
+        specifier: ^3.23.8
+        version: 3.25.76
+    devDependencies:
+      '@dhis2/cli-app-scripts':
+        specifier: 12.11.0
+        version: 12.11.0(@types/babel__core@7.20.5)(@types/node@22.18.0)(react@18.3.1)(terser@5.44.1)(type-fest@0.21.3)
+      '@types/node':
+        specifier: ^22.18.0
+        version: 22.18.0
+      typescript:
+        specifier: ^5.7.2
+        version: 5.9.2
+      vite:
+        specifier: 5.4.21
+        version: 5.4.21(@types/node@22.18.0)(terser@5.44.1)
+
   packages/core:
     dependencies:
       '@dhis2/multi-calendar-dates':
@@ -17638,7 +17696,7 @@ snapshots:
       '@apideck/better-ajv-errors': 0.3.6(ajv@8.17.1)
       '@babel/core': 7.28.5
       '@babel/preset-env': 7.28.5(@babel/core@7.28.5)
-      '@babel/runtime': 7.28.4
+      '@babel/runtime': 7.29.2
       '@rollup/plugin-babel': 5.3.1(@babel/core@7.28.5)(@types/babel__core@7.20.5)(rollup@2.79.2)
       '@rollup/plugin-node-resolve': 15.3.1(rollup@2.79.2)
       '@rollup/plugin-replace': 2.4.2(rollup@2.79.2)
