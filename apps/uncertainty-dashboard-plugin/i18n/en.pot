@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-06-09T10:36:53.591Z\n"
-"PO-Revision-Date: 2026-06-09T10:36:53.592Z\n"
+"POT-Creation-Date: 2026-06-10T18:26:39.480Z\n"
+"PO-Revision-Date: 2026-06-10T18:26:39.481Z\n"
 
 msgid "Configure uncertainty chart"
 msgstr "Configure uncertainty chart"
@@ -130,11 +130,3 @@ msgstr "Chart configuration saved"
 
 msgid "Failed to save chart configuration"
 msgstr "Failed to save chart configuration"
-
-msgctxt "Application title"
-msgid "__MANIFEST_APP_TITLE"
-msgstr "CHAP Uncertainty Chart"
-
-msgctxt "Application description"
-msgid "__MANIFEST_APP_DESCRIPTION"
-msgstr "DHIS2 dashboard plugin for CHAP uncertainty charts"

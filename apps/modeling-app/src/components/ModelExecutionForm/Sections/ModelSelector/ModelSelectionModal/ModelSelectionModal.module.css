@@ -67,20 +67,13 @@
     gap: 8px;
     inline-size: 100%;
     min-inline-size: 0;
-    min-block-size: 36px;
+    min-block-size: 50px;
     padding: 8px 14px;
-    border: none;
     background: transparent;
-    cursor: pointer;
-    text-align: start;
 }
 
 .listItem:hover {
     background: var(--colors-grey200);
-}
-
-.listItem:focus {
-    outline: none;
 }
 
 .listItemFocused {
@@ -91,23 +84,69 @@
     background: #e7f1fb;
 }
 
-.dot {
-    inline-size: 8px;
-    block-size: 8px;
-    border-radius: 50%;
+.listItem svg {
     flex-shrink: 0;
 }
 
-.listName {
+.listButton {
+    display: flex;
+    align-items: center;
     flex: 1;
     min-inline-size: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    text-align: start;
+}
+
+.listButton:focus {
+    outline: none;
+}
+
+.listText {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 1px;
+    min-inline-size: 0;
+}
+
+.listName {
     font-size: 14px;
     font-weight: 500;
-    line-height: 20px;
+    line-height: 18px;
     color: #212934;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+.listSubtitle {
+    color: var(--colors-grey600);
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 16px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.listMeta {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+    min-inline-size: 0;
+}
+
+.listStatusDot {
+    display: inline-block;
+    inline-size: 8px;
+    block-size: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    cursor: help;
 }
 
 .noResults {
@@ -142,13 +181,23 @@
 .detailHeader {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
     gap: 12px;
     min-inline-size: 0;
 }
 
 .detailHeader > div {
     min-inline-size: 0;
+}
+
+.detailImage {
+    inline-size: 48px;
+    block-size: 48px;
+    border: none;
+    background: transparent;
+    box-shadow: none;
+    object-fit: contain;
+    flex-shrink: 0;
 }
 
 .detailName {
@@ -246,6 +295,8 @@
     margin: auto;
     color: var(--colors-grey600);
     font-size: 14px;
+    line-height: 20px;
+    text-align: center;
 }
 
 .detailActions {

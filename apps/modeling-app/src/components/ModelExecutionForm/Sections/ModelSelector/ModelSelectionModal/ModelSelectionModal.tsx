@@ -39,6 +39,11 @@ type ReadinessConfig = {
     rank: number;
 };
 
+type CovariateFilterOption = {
+    label: string;
+    value: string;
+};
+
 const READINESS_BY_STATUS: Record<AuthorAssessedStatus, ReadinessConfig> = {
     [AuthorAssessedStatus.GREEN]: {
         label: i18n.t('Production'),
@@ -115,6 +120,14 @@ const getPeriodLabel = (model: ModelSpecRead): string => {
 const getModelName = (model: ModelSpecRead): string =>
     model.displayName || model.name;
 
+const getModelOrganisation = (model: ModelSpecRead): string =>
+    model.organization || i18n.t('Unknown organisation');
+
+const DEFAULT_MODEL_LOGO_URL = '/default-model-logo.png';
+
+const getModelLogoUrl = (model: ModelSpecRead): string =>
+    model.organizationLogoUrl || DEFAULT_MODEL_LOGO_URL;
+
 const sortByReadiness = (models: ModelSpecRead[]): ModelSpecRead[] =>
     [...models].sort((a, b) => {
         const rankA = getReadiness(a)?.rank ?? Number.MAX_SAFE_INTEGER;
@@ -127,6 +140,32 @@ const sortByReadiness = (models: ModelSpecRead[]): ModelSpecRead[] =>
         return getModelName(a).localeCompare(getModelName(b));
     });
 
+const getCovariateFilterOptions = (models: ModelSpecRead[]): CovariateFilterOption[] => {
+    const covariates = new Map<string, string>();
+
+    models.forEach((model) => {
+        model.covariates.forEach((covariate) => {
+            if (!covariates.has(covariate.name)) {
+                covariates.set(covariate.name, covariate.displayName);
+            }
+        });
+    });
+
+    return [...covariates.entries()]
+        .map(([value, label]) => ({ label, value }))
+        .sort((a, b) => a.label.localeCompare(b.label));
+};
+
+const modelSupportsAllCovariates = (model: ModelSpecRead, covariateFilters: string[]): boolean => {
+    if (covariateFilters.length === 0) {
+        return true;
+    }
+
+    const supportedCovariates = new Set(model.covariates.map(covariate => covariate.name));
+
+    return covariateFilters.every(covariate => supportedCovariates.has(covariate));
+};
+
 export const ModelSelectionModal = ({
     models,
     selectedModel: initialSelectedModel,
@@ -135,8 +174,9 @@ export const ModelSelectionModal = ({
 }: Props) => {
     const [search, setSearch] = useState('');
     const [periodTypeFilter, setPeriodTypeFilter] = useState<string>();
+    const [covariateFilters, setCovariateFilters] = useState<string[]>([]);
     const [statusFilters, setStatusFilters] = useState<string[]>([]);
-    const [focusedId, setFocusedId] = useState<number | undefined>(undefined);
+    const [focusedId, setFocusedId] = useState<number | undefined>(() => initialSelectedModel?.id);
 
     const handleModalClose = () => {
         onClose();
@@ -150,6 +190,11 @@ export const ModelSelectionModal = ({
     const sortedModels = useMemo(
         () => sortByReadiness(models ?? []),
         [models],
+    );
+
+    const covariateFilterOptions = useMemo(
+        () => getCovariateFilterOptions(sortedModels),
+        [sortedModels],
     );
 
     const filteredModels = useMemo(() => {
@@ -173,17 +218,18 @@ export const ModelSelectionModal = ({
                 || normalizedPeriodType === periodTypeFilter
                 || normalizedPeriodType === PERIOD_TYPES.ANY
             );
+            const matchesCovariates = modelSupportsAllCovariates(model, covariateFilters);
             const matchesStatus = (
                 statusFilters.length === 0
                 || (model.authorAssessedStatus && statusFilters.includes(model.authorAssessedStatus))
             );
 
-            return matchesSearch && matchesPeriodType && matchesStatus;
+            return matchesSearch && matchesPeriodType && matchesCovariates && matchesStatus;
         });
-    }, [periodTypeFilter, search, sortedModels, statusFilters]);
+    }, [covariateFilters, periodTypeFilter, search, sortedModels, statusFilters]);
 
     const focusedModel = useMemo(
-        () => filteredModels.find(model => model.id === focusedId) ?? filteredModels[0],
+        () => filteredModels.find(model => model.id === focusedId),
         [filteredModels, focusedId],
     );
 
@@ -212,6 +258,7 @@ export const ModelSelectionModal = ({
                                         clearable
                                         clearText={i18n.t('Clear')}
                                         selected={periodTypeFilter ?? ''}
+                                        prefix={i18n.t('Period type')}
                                         placeholder={i18n.t('Period type')}
                                         onChange={({ selected }) => setPeriodTypeFilter(selected || undefined)}
                                         dataTest="model-period-type-filter"
@@ -227,12 +274,32 @@ export const ModelSelectionModal = ({
                                     </SingleSelect>
                                     <MultiSelect
                                         dense
+                                        selected={covariateFilters}
+                                        placeholder={i18n.t('Covariates')}
+                                        prefix={i18n.t('Covariates')}
+                                        clearable
+                                        clearText={i18n.t('Clear covariates')}
+                                        collapseSelectionAfter={0}
+                                        inputMaxHeight="26px"
+                                        onChange={({ selected }) => setCovariateFilters(selected)}
+                                        dataTest="model-covariates-filter"
+                                    >
+                                        {covariateFilterOptions.map(covariate => (
+                                            <MultiSelectOption
+                                                key={covariate.value}
+                                                label={covariate.label}
+                                                value={covariate.value}
+                                            />
+                                        ))}
+                                    </MultiSelect>
+                                    <MultiSelect
+                                        dense
                                         selected={statusFilters}
                                         placeholder={i18n.t('Status')}
                                         prefix={i18n.t('Status')}
                                         clearable
                                         clearText={i18n.t('Clear statuses')}
-                                        collapseSelectionAfter={1}
+                                        collapseSelectionAfter={0}
                                         inputMaxHeight="26px"
                                         onChange={({ selected }) => setStatusFilters(selected)}
                                         dataTest="model-status-filter"
@@ -256,23 +323,37 @@ export const ModelSelectionModal = ({
                                     const modelStableId = model.name || String(model.id);
 
                                     return (
-                                        <li key={model.id}>
+                                        <li
+                                            key={model.id}
+                                            className={cn(styles.listItem, {
+                                                [styles.listItemFocused]: isFocused,
+                                            })}
+                                        >
                                             <button
                                                 type="button"
-                                                className={cn(styles.listItem, {
-                                                    [styles.listItemFocused]: isFocused,
-                                                })}
+                                                className={styles.listButton}
                                                 onClick={() => setFocusedId(model.id)}
                                                 data-test={`model-inspect-${toDataTestKey(modelStableId)}`}
                                                 aria-current={isFocused ? 'true' : undefined}
                                             >
-                                                <span
-                                                    className={styles.dot}
-                                                    style={{ backgroundColor: readiness?.color ?? '#b0b0b0' }}
-                                                />
-                                                <span className={styles.listName}>{getModelName(model)}</span>
-                                                {isSelected && <IconCheckmark16 color="#1565c0" />}
+                                                <span className={styles.listText}>
+                                                    <span className={styles.listName}>{getModelName(model)}</span>
+                                                    <span className={styles.listSubtitle}>{getModelOrganisation(model)}</span>
+                                                </span>
                                             </button>
+                                            <span className={styles.listMeta}>
+                                                {readiness && (
+                                                    <Tooltip content={readiness.description}>
+                                                        <span
+                                                            className={styles.listStatusDot}
+                                                            style={{ backgroundColor: readiness.color }}
+                                                            title={`${readiness.label}: ${readiness.description}`}
+                                                            aria-label={`${i18n.t('Status')}: ${readiness.label}`}
+                                                        />
+                                                    </Tooltip>
+                                                )}
+                                                {isSelected && <IconCheckmark16 color="#1565c0" />}
+                                            </span>
                                         </li>
                                     );
                                 })}
@@ -287,6 +368,17 @@ export const ModelSelectionModal = ({
                                 <>
                                     <div className={styles.detailBody}>
                                         <header className={styles.detailHeader}>
+                                            <img
+                                                className={styles.detailImage}
+                                                src={getModelLogoUrl(focusedModel)}
+                                                alt=""
+                                                aria-hidden="true"
+                                                onError={({ currentTarget }) => {
+                                                    if (!currentTarget.src.endsWith(DEFAULT_MODEL_LOGO_URL)) {
+                                                        currentTarget.src = DEFAULT_MODEL_LOGO_URL;
+                                                    }
+                                                }}
+                                            />
                                             <div>
                                                 <h3 className={styles.detailName}>{getModelName(focusedModel)}</h3>
                                             </div>
@@ -376,7 +468,7 @@ export const ModelSelectionModal = ({
                                     </div>
                                 </>
                             ) : (
-                                <div className={styles.detailEmpty}>{i18n.t('Select a model to see details')}</div>
+                                <div className={styles.detailEmpty}>{i18n.t('Select a model from the left hand side')}</div>
                             )}
                         </section>
                     </div>
