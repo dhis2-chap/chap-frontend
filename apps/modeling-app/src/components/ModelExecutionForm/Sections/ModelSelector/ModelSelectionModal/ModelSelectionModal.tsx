@@ -340,20 +340,20 @@ export const ModelSelectionModal = ({
                                                     <span className={styles.listName}>{getModelName(model)}</span>
                                                     <span className={styles.listSubtitle}>{getModelOrganisation(model)}</span>
                                                 </span>
+                                                <span className={styles.listMeta}>
+                                                    {readiness && (
+                                                        <Tooltip content={readiness.description}>
+                                                            <span
+                                                                className={styles.listStatusDot}
+                                                                style={{ backgroundColor: readiness.color }}
+                                                                title={`${readiness.label}: ${readiness.description}`}
+                                                                aria-label={`${i18n.t('Status')}: ${readiness.label}`}
+                                                            />
+                                                        </Tooltip>
+                                                    )}
+                                                    {isSelected && <IconCheckmark16 color="#1565c0" />}
+                                                </span>
                                             </button>
-                                            <span className={styles.listMeta}>
-                                                {readiness && (
-                                                    <Tooltip content={readiness.description}>
-                                                        <span
-                                                            className={styles.listStatusDot}
-                                                            style={{ backgroundColor: readiness.color }}
-                                                            title={`${readiness.label}: ${readiness.description}`}
-                                                            aria-label={`${i18n.t('Status')}: ${readiness.label}`}
-                                                        />
-                                                    </Tooltip>
-                                                )}
-                                                {isSelected && <IconCheckmark16 color="#1565c0" />}
-                                            </span>
                                         </li>
                                     );
                                 })}
