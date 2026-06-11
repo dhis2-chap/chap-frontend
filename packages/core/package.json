@@ -26,7 +26,7 @@
         "date-fns": "^4.1.0"
     },
     "devDependencies": {
-        "@dhis2/cli-app-scripts": "12.11.0",
+        "@dhis2/cli-app-scripts": "12.11.1",
         "@types/node": "^22.10.1",
         "typescript": "^5.7.2"
     }
