@@ -77,6 +77,7 @@ export const useCreateNewBacktest = ({
         onMutate: () => {
             setImportSummary(null);
             setSummaryModalOpen(false);
+            queryClient.removeQueries({ queryKey: ['new-backtest-data'] });
         },
         mutationFn: async (formData: ModelExecutionFormValues) => {
             const { backtestRequest, hash } = await buildBacktestRequest(formData);
@@ -136,7 +137,7 @@ export const useCreateNewBacktest = ({
         onSuccess: (data: ImportSummaryCorrected) => {
             if (data.id) {
                 queryClient.invalidateQueries({ queryKey: ['jobs'] });
-                queryClient.invalidateQueries({ queryKey: ['new-backtest-data'] });
+                queryClient.removeQueries({ queryKey: ['new-backtest-data'] });
                 onSuccess?.();
                 navigate('/jobs');
             }

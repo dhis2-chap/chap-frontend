@@ -39,6 +39,7 @@ export const fetchAnalytics = async (
         params: {
             paging: false,
             dimension: `dx:${dataElements.join(';')},ou:${orgUnits.join(';')},pe:${periods.join(';')}`,
+            cacheBust: Date.now(),
         },
     }),
 });
@@ -53,6 +54,7 @@ export const fetchOrgUnits = async (
             filter: `id:in:[${orgUnitIds.join(',')}]`,
             fields: 'id,geometry,parent[id],level,displayName,code',
             paging: false,
+            cacheBust: Date.now(),
         },
     }),
 });
