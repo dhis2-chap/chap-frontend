@@ -2,7 +2,7 @@
     "name": "@dhis2-chap/core",
     "packageManager": "pnpm@10.14.0",
     "type": "commonjs",
-    "version": "6.0.0",
+    "version": "6.1.0",
     "private": true,
     "module": "./build/es/index.js",
     "types": "./build/types/index.d.ts",

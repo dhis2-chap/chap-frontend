@@ -1,5 +1,15 @@
 # @dhis2-chap/ui
 
+## 6.1.0
+
+### Minor Changes
+
+-   9b029ac: Add organisation unit, split period, and horizon filters to the custom evaluation plots widget, deriving the available filters from each visualization's facet coordinates and fetching filtered plots on demand. Supports grid layout plots and removes the metric plots experimental setting. Regenerates the API client with the new `maxHorizonDistance` backtest field.
+
+### Patch Changes
+
+-   @dhis2-chap/core@6.1.0
+
 ## 6.0.0
 
 ### Major Changes
