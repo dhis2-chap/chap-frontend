@@ -254,14 +254,24 @@ export const PeriodPicker = ({
     const anchorRef = useRef<HTMLDivElement>(null);
     const triggerRef = useRef<HTMLButtonElement>(null);
     const [open, setOpen] = useState(false);
-    const [visibleYear, setVisibleYear] = useState(() => getInitialVisibleYear({
+
+    // The visible year is derived from the current anchor inputs so it follows
+    // async calendar/selection changes; manual navigation overrides it until an
+    // anchor input changes again.
+    const anchorKey = [calendar, locale, value ?? '', referencePeriodId ?? ''].join('|');
+    const [visibleYearOverride, setVisibleYearOverride] = useState<{ anchorKey: string; year: number } | null>(null);
+    const initialVisibleYear = useMemo(() => getInitialVisibleYear({
         value,
         referencePeriodId,
         minPeriodId,
         maxPeriodId,
         calendar,
         locale,
-    }));
+    }), [value, referencePeriodId, minPeriodId, maxPeriodId, calendar, locale]);
+    const visibleYear = visibleYearOverride?.anchorKey === anchorKey
+        ? visibleYearOverride.year
+        : initialVisibleYear;
+    const setVisibleYear = (year: number) => setVisibleYearOverride({ anchorKey, year });
 
     const selectedPeriod = useMemo(() => (
         value
@@ -294,17 +304,6 @@ export const PeriodPicker = ({
         maxYear: getYearFromPeriod(maxPeriod),
         calendar,
     }), [calendar, maxPeriod, minPeriod, visibleYear]);
-
-    useEffect(() => {
-        const periodId = value || referencePeriodId;
-        if (!periodId) {
-            return;
-        }
-
-        setVisibleYear(currentVisibleYear => (
-            getPeriodYear(periodId, calendar, locale) ?? currentVisibleYear
-        ));
-    }, [calendar, locale, referencePeriodId, value]);
 
     useEffect(() => {
         if (!open) {
@@ -387,7 +386,7 @@ export const PeriodPicker = ({
                                             className={styles.iconButton}
                                             aria-label={i18n.t('Previous year')}
                                             data-test={dataTest ? `${dataTest}-previous-year` : undefined}
-                                            onClick={() => setVisibleYear(year => year - 1)}
+                                            onClick={() => setVisibleYear(visibleYear - 1)}
                                         >
                                             <IconChevronLeft16 />
                                         </button>
@@ -431,7 +430,7 @@ export const PeriodPicker = ({
                                             className={styles.iconButton}
                                             aria-label={i18n.t('Next year')}
                                             data-test={dataTest ? `${dataTest}-next-year` : undefined}
-                                            onClick={() => setVisibleYear(year => year + 1)}
+                                            onClick={() => setVisibleYear(visibleYear + 1)}
                                         >
                                             <IconChevronRight16 />
                                         </button>

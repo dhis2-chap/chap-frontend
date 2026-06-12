@@ -73,6 +73,7 @@ export const PeriodRangeField = ({
                 locale={locale}
                 minPeriodId={minPeriodId}
                 maxPeriodId={maxPeriodId}
+                referencePeriodId={fromValue}
                 disabled={disabled}
                 dataTest={toDataTest}
                 ariaLabel={toLabel}

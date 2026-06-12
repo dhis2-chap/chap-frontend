@@ -9,9 +9,10 @@ import {
     Layer,
     Popper,
 } from '@dhis2/ui';
-import { useDatePicker } from '@dhis2/multi-calendar-dates';
+import { convertFromIso8601, convertToIso8601, useDatePicker } from '@dhis2/multi-calendar-dates';
 import { addMonths, format, isAfter, isBefore, isSameDay, startOfDay } from 'date-fns';
 import cx from 'classnames';
+import { type Dhis2Calendar } from '@dhis2-chap/core';
 import {
     formatDateRangeParam,
     getDateRangeBounds,
@@ -24,34 +25,74 @@ import styles from './DateRangePicker.module.css';
 type Props = {
     className?: string;
     placeholder?: string;
+    calendar?: Dhis2Calendar;
     value: DateRangeValue;
     onChange: (value: DateRangeValue) => void;
 };
 
 type CalendarMonth = ReturnType<typeof useDatePicker>;
 
-const CALENDAR_OPTIONS = {
-    calendar: 'gregory' as const,
-    weekDayFormat: 'short' as const,
-};
-
-const getInitialVisibleDate = (value: DateRangeValue) => (
-    value.fromDate ?? value.toDate ?? formatDateRangeParam(new Date())
+const isNonGregorianCalendar = (calendar?: Dhis2Calendar) => (
+    !!calendar && calendar !== 'gregory' && calendar !== 'iso8601'
 );
 
-const shiftVisibleMonth = (dateString: string, amount: number) => {
+const padWithZeroes = (n: number) => String(n).padStart(2, '0');
+
+const formatDateParts = ({ year, month, day }: { year: number; month: number; day: number }): string => (
+    `${year}-${padWithZeroes(month)}-${padWithZeroes(day)}`
+);
+
+const calendarDateToIso = (calendarDateString: string, calendar: Dhis2Calendar): string => (
+    formatDateParts(convertToIso8601(calendarDateString, calendar))
+);
+
+const isoToCalendarDate = (isoDateString: string, calendar: Dhis2Calendar): string => {
+    const { eraYear, year, month, day } = convertFromIso8601(isoDateString, calendar);
+    return formatDateParts({ year: eraYear ?? year, month, day });
+};
+
+const getInitialVisibleDate = (value: DateRangeValue, calendar?: Dhis2Calendar) => {
+    const isoDate = value.fromDate ?? value.toDate ?? formatDateRangeParam(new Date());
+    return isNonGregorianCalendar(calendar)
+        ? isoToCalendarDate(isoDate, calendar!)
+        : isoDate;
+};
+
+// Ethiopic and coptic years have a 13th month (Pagume); the other supported calendars have 12.
+const MONTHS_IN_YEAR: Partial<Record<Dhis2Calendar, number>> = {
+    ethiopic: 13,
+    coptic: 13,
+};
+
+const shiftVisibleMonth = (dateString: string, amount: number, calendar?: Dhis2Calendar) => {
+    if (isNonGregorianCalendar(calendar)) {
+        const [yearStr, monthStr] = dateString.split('-');
+        const monthsInYear = MONTHS_IN_YEAR[calendar!] ?? 12;
+        const monthIndex = (Number(yearStr) * monthsInYear) + (Number(monthStr) - 1) + amount;
+        return formatDateParts({
+            year: Math.floor(monthIndex / monthsInYear),
+            month: (monthIndex % monthsInYear) + 1,
+            day: 1,
+        });
+    }
     const date = parseDateRangeParam(dateString) ?? new Date();
     return formatDateRangeParam(addMonths(date, amount));
 };
 
-const formatDisplayDate = (dateString?: string) => {
+const formatDisplayDate = (dateString?: string, calendar?: Dhis2Calendar) => {
     const date = parseDateRangeParam(dateString);
-    return date ? format(date, 'MMM d, yyyy') : undefined;
+    if (!date) {
+        return undefined;
+    }
+    if (isNonGregorianCalendar(calendar) && dateString) {
+        return isoToCalendarDate(dateString, calendar!);
+    }
+    return format(date, 'MMM d, yyyy');
 };
 
-const getDisplayValue = (value: DateRangeValue, placeholder: string) => {
-    const from = formatDisplayDate(value.fromDate);
-    const to = formatDisplayDate(value.toDate);
+const getDisplayValue = (value: DateRangeValue, placeholder: string, calendar?: Dhis2Calendar) => {
+    const from = formatDisplayDate(value.fromDate, calendar);
+    const to = formatDisplayDate(value.toDate, calendar);
 
     if (from && to) {
         return from === to ? from : `${from} - ${to}`;
@@ -69,6 +110,7 @@ const getDisplayValue = (value: DateRangeValue, placeholder: string) => {
 };
 
 type DateRangePickerPopoverProps = {
+    calendar?: Dhis2Calendar;
     hasValue: boolean;
     onChange: (value: DateRangeValue) => void;
     onClose: () => void;
@@ -76,33 +118,47 @@ type DateRangePickerPopoverProps = {
 };
 
 const DateRangePickerPopover = ({
+    calendar,
     hasValue,
     onChange,
     onClose,
     value,
 }: DateRangePickerPopoverProps) => {
-    const [firstMonthDate] = useState(() => getInitialVisibleDate(value));
-    const [secondMonthDate] = useState(() => shiftVisibleMonth(firstMonthDate, 1));
+    const calendarOptions = {
+        calendar: (calendar ?? 'gregory') as 'gregory',
+        weekDayFormat: 'short' as const,
+    };
+    const nonGregorian = isNonGregorianCalendar(calendar);
+    const [firstMonthDate] = useState(() => getInitialVisibleDate(value, calendar));
+    const [secondMonthDate] = useState(() => shiftVisibleMonth(firstMonthDate, 1, calendar));
     const from = parseDateRangeParam(value.fromDate);
     const to = parseDateRangeParam(value.toDate);
     const bounds = getDateRangeBounds(value);
     const today = startOfDay(new Date());
 
-    const handleDateSelect = (dateString?: string) => {
-        const selectedDate = parseDateRangeParam(dateString);
+    const handleDateSelect = (calendarDateString?: string) => {
+        if (!calendarDateString) {
+            return;
+        }
 
-        if (!selectedDate || !dateString || isAfter(selectedDate, today)) {
+        const isoDateString = nonGregorian
+            ? calendarDateToIso(calendarDateString, calendar!)
+            : calendarDateString;
+
+        const selectedDate = parseDateRangeParam(isoDateString);
+
+        if (!selectedDate || isAfter(selectedDate, today)) {
             return;
         }
 
         if (!from || to) {
-            onChange({ fromDate: dateString });
+            onChange({ fromDate: isoDateString });
             return;
         }
 
         if (isBefore(selectedDate, from)) {
             onChange({
-                fromDate: dateString,
+                fromDate: isoDateString,
                 toDate: value.fromDate,
             });
             onClose();
@@ -111,19 +167,19 @@ const DateRangePickerPopover = ({
 
         onChange({
             fromDate: value.fromDate,
-            toDate: dateString,
+            toDate: isoDateString,
         });
         onClose();
     };
 
     const firstMonth = useDatePicker({
         date: firstMonthDate,
-        options: CALENDAR_OPTIONS,
+        options: calendarOptions,
         onDateSelect: payload => handleDateSelect(payload?.calendarDateString),
     });
     const secondMonth = useDatePicker({
         date: secondMonthDate,
-        options: CALENDAR_OPTIONS,
+        options: calendarOptions,
         onDateSelect: payload => handleDateSelect(payload?.calendarDateString),
     });
 
@@ -184,7 +240,10 @@ const DateRangePickerPopover = ({
             </div>
             <div className={styles.days}>
                 {month.calendarWeekDays.flat().map((day) => {
-                    const date = parseDateRangeParam(day.dateValue);
+                    const isoDateValue = nonGregorian
+                        ? calendarDateToIso(day.dateValue, calendar!)
+                        : day.dateValue;
+                    const date = parseDateRangeParam(isoDateValue);
                     const isRangeStart = !!date && !!from && isSameDay(date, from);
                     const isRangeEnd = !!date && !!to && isSameDay(date, to);
                     const isSingleDay = isRangeStart && (!to || isSameDay(from as Date, to));
@@ -252,6 +311,7 @@ const DateRangePickerPopover = ({
 };
 
 export const DateRangePicker = ({
+    calendar,
     className,
     placeholder = i18n.t('Date'),
     value,
@@ -260,7 +320,7 @@ export const DateRangePicker = ({
     const anchorRef = useRef<HTMLDivElement>(null);
     const [isOpen, setIsOpen] = useState(false);
     const hasValue = hasDateRangeValue(value);
-    const displayValue = getDisplayValue(value, placeholder);
+    const displayValue = getDisplayValue(value, placeholder, calendar);
 
     const handleClear = () => {
         onChange({});
@@ -306,6 +366,7 @@ export const DateRangePicker = ({
                 <Layer onBackdropClick={() => setIsOpen(false)}>
                     <Popper reference={anchorRef} placement="bottom-start">
                         <DateRangePickerPopover
+                            calendar={calendar}
                             hasValue={hasValue}
                             value={value}
                             onChange={onChange}
