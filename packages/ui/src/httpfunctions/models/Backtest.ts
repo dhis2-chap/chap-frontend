@@ -39,6 +39,10 @@ export type Backtest = {
      */
     splitPeriods?: Array<string>;
     /**
+     * Largest 1-based horizon distance scored in this backtest; horizon coordinates run 1..max_horizon_distance.
+     */
+    maxHorizonDistance?: (number | null);
+    /**
      * Map of metric id to aggregated score across all splits / org units.
      */
     aggregateMetrics?: Record<string, number>;

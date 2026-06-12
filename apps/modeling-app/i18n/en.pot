@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-06-10T18:37:20.950Z\n"
-"PO-Revision-Date: 2026-06-10T18:37:20.951Z\n"
+"POT-Creation-Date: 2026-06-12T00:56:52.304Z\n"
+"PO-Revision-Date: 2026-06-12T00:56:52.305Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -871,8 +871,14 @@ msgstr "source"
 msgid "sources"
 msgstr "sources"
 
-msgid "Please select a visualization."
-msgstr "Please select a visualization."
+msgid "Select organisation unit"
+msgstr "Select organisation unit"
+
+msgid "Select split period"
+msgstr "Select split period"
+
+msgid "Select horizon period"
+msgstr "Select horizon period"
 
 msgid "This plot has encountered an unexpected error and could not be displayed."
 msgstr "This plot has encountered an unexpected error and could not be displayed."
@@ -887,9 +893,6 @@ msgstr ""
 "occasionally fail due to issues in the contributed plot definition. Please "
 "contact your system administrator if you experience issues with this "
 "visualization."
-
-msgid "No visualization found"
-msgstr "No visualization found"
 
 msgid "Click to view actions"
 msgstr "Click to view actions"
@@ -908,6 +911,27 @@ msgstr "View Source"
 
 msgid "Save as SVG"
 msgstr "Save as SVG"
+
+msgid "an organisation unit"
+msgstr "an organisation unit"
+
+msgid "a split period"
+msgstr "a split period"
+
+msgid "a horizon period"
+msgstr "a horizon period"
+
+msgid "Please select a visualization."
+msgstr "Please select a visualization."
+
+msgid "Please select {{filters}} to view this visualization."
+msgstr "Please select {{filters}} to view this visualization."
+
+msgid " and "
+msgstr " and "
+
+msgid "No visualization found"
+msgstr "No visualization found"
 
 msgid "Evaluation plots"
 msgstr "Evaluation plots"
@@ -1872,12 +1896,6 @@ msgstr "Turn on to access experimental features in the app"
 msgid "Available features"
 msgstr "Available features"
 
-msgid "Metric plots"
-msgstr "Metric plots"
-
-msgid "Show metric visualization plots in the evaluation dashboard"
-msgstr "Show metric visualization plots in the evaluation dashboard"
-
 msgid "Show evaluation visualization plots in the evaluation dashboard"
 msgstr "Show evaluation visualization plots in the evaluation dashboard"
 
@@ -2157,11 +2175,3 @@ msgstr ""
 msgctxt ") instead."
 msgid "Spaces are not allowed. Use dashes (-) or underscores ("
 msgstr "Spaces are not allowed. Use dashes (-) or underscores (_) instead."
-
-msgctxt "Application title"
-msgid "__MANIFEST_APP_TITLE"
-msgstr "Modeling"
-
-msgctxt "Application description"
-msgid "__MANIFEST_APP_DESCRIPTION"
-msgstr ""

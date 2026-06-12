@@ -24,23 +24,44 @@
 
 .visualizationContainer {
     inline-size: 100%;
-    block-size: 60vh;
 }
 
-.card {
+.singleIsolatedPlot {
+    block-size: 60vh;
+    min-block-size: 440px;
+}
+
+.naturalSizePlot {
     overflow: auto;
 }
 
-.vegaEmbed {
+.card {
+    inline-size: 100%;
+    overflow: hidden;
+}
+
+.visualizationContainer .vegaEmbed {
+    display: block;
     inline-size: 100%;
     block-size: 100%;
 }
 
+.vegaEmbed :global(.chart-wrapper) svg,
+.vegaEmbed :global(.chart-wrapper) canvas {
+    display: block;
+}
+
 .controlsRow {
     display: flex;
-    gap: 12px;
+    gap: 8px;
     align-items: center;
     margin-block-end: 16px;
+}
+
+.filtersRow {
+    display: flex;
+    gap: 8px;
+    align-items: center;
 }
 
 .singleSelectContainer {

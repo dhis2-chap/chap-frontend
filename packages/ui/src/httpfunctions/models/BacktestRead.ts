@@ -41,6 +41,10 @@ export type BacktestRead = {
      */
     splitPeriods?: Array<string>;
     /**
+     * Largest 1-based horizon distance scored in this backtest; horizon coordinates run 1..max_horizon_distance.
+     */
+    maxHorizonDistance?: (number | null);
+    /**
      * Slim dataset summary the backtest evaluated against.
      */
     dataset: DataSetMeta;

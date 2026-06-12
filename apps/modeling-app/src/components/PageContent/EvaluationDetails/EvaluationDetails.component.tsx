@@ -1,5 +1,4 @@
 import i18n from '@dhis2/d2-i18n';
-import { MetricPlotWidget } from './MetricPlot';
 import { CustomEvaluationPlotsWidget } from './CustomEvaluationPlots';
 import { QuickActionsWidget } from './QuickActionsWidget';
 import { ModelExecutionResultWidget } from './ModelExecutionResultWidget';
@@ -15,7 +14,6 @@ type Props = {
 
 export const EvaluationDetailsComponent = ({ evaluationId }: Props) => {
     const { backtest, isLoading: isBacktestLoading, error: backtestError } = useBacktestById(evaluationId);
-    const { enabled: isMetricPlotsEnabled } = useExperimentalFeature(FEATURES.METRIC_PLOTS);
     const { enabled: isEvaluationPlotsEnabled } = useExperimentalFeature(FEATURES.EVALUATION_PLOTS);
     const predictionSetupId = backtest?.predictionSetupId ?? undefined;
 
@@ -60,11 +58,6 @@ export const EvaluationDetailsComponent = ({ evaluationId }: Props) => {
                 />
                 {isEvaluationPlotsEnabled && (
                     <CustomEvaluationPlotsWidget
-                        evaluationId={evaluationId}
-                    />
-                )}
-                {isMetricPlotsEnabled && (
-                    <MetricPlotWidget
                         evaluationId={evaluationId}
                     />
                 )}
