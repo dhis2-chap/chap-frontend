@@ -7,10 +7,12 @@ import { ApiError } from '@dhis2-chap/ui';
 import styles from './CustomEvaluationPlotsWidget.module.css';
 import { useIsolatedPlots } from '@/components/BacktestsTable/hooks/useIsolatedPlots';
 import { useOrgUnitsById } from '@/hooks/useOrgUnitsById';
+import { FacetCoordinates } from '@/components/BacktestsTable/hooks/useFacetCoordinates';
 
 type Props = {
     evaluationId: number;
     selectedVisualizationId?: string;
+    facetCoords?: FacetCoordinates;
     filterLocation?: string;
     filterSplitPeriod?: string;
     filterHorizonPeriod?: string;
@@ -70,6 +72,7 @@ const withLocationNames = (node: unknown, names: Map<string, string>): unknown =
 };
 
 const withContainerHeight = (spec: UnknownRecord): UnknownRecord => {
+    if ('layout' in spec) return spec;
     const { height, signals, ...rest } = spec;
     const existingSignals = Array.isArray(signals) ? signals : [];
     if (existingSignals.some(signal => isRecord(signal) && signal.name === 'height')) return spec;
@@ -93,6 +96,7 @@ const withContainerHeight = (spec: UnknownRecord): UnknownRecord => {
 export const CustomEvaluationPlotsWidgetComponent = ({
     evaluationId,
     selectedVisualizationId,
+    facetCoords,
     filterLocation,
     filterSplitPeriod,
     filterHorizonPeriod,
@@ -117,23 +121,33 @@ export const CustomEvaluationPlotsWidgetComponent = ({
     }), []);
     const selectionComplete = !!selectedVisualizationId;
 
-    const hasFilters = useMemo(() => {
-        if (selectedVisualizationId === 'evaluation_plot') {
-            return !!filterLocation && !!filterSplitPeriod;
+    const missingFilters = useMemo(() => {
+        if (!facetCoords) return [];
+        const missing: string[] = [];
+        if (facetCoords.location?.length && !filterLocation) {
+            missing.push(i18n.t('an organisation unit'));
         }
-        return !!filterHorizonPeriod;
-    }, [filterLocation, filterSplitPeriod, filterHorizonPeriod, selectedVisualizationId]);
+        if (facetCoords.split_period?.length && !filterSplitPeriod) {
+            missing.push(i18n.t('a split period'));
+        }
+        if (facetCoords.horizon_distance?.length && !filterHorizonPeriod) {
+            missing.push(i18n.t('a horizon period'));
+        }
+        return missing;
+    }, [facetCoords, filterLocation, filterSplitPeriod, filterHorizonPeriod]);
+
+    const hasFilters = !!facetCoords && missingFilters.length === 0;
 
     const requestBody = useMemo(
         () =>
             hasFilters
                 ? {
-                        location: filterLocation,
-                        split_period: filterSplitPeriod,
-                        ...(selectedVisualizationId !== 'evaluation_plot' && { horizon_period: filterHorizonPeriod }),
+                        ...(filterLocation && { location: filterLocation }),
+                        ...(filterSplitPeriod && { split_period: filterSplitPeriod }),
+                        ...(filterHorizonPeriod && { horizon_period: filterHorizonPeriod }),
                     }
                 : undefined,
-        [hasFilters, filterLocation, filterSplitPeriod, filterHorizonPeriod, selectedVisualizationId],
+        [hasFilters, filterLocation, filterSplitPeriod, filterHorizonPeriod],
     );
 
     const {
@@ -166,8 +180,10 @@ export const CustomEvaluationPlotsWidgetComponent = ({
             : spec;
     }, [isolatedPlotsData, locationNames]);
 
+    const isGridLayoutSpec = isRecord(isolatedPlotsData) && 'layout' in isolatedPlotsData;
+
     const visualizationContainerClass = isolatedPlotsData
-        ? `${styles.visualizationContainer} ${styles.singleIsolatedPlot}`
+        ? `${styles.visualizationContainer} ${isGridLayoutSpec ? styles.naturalSizePlot : styles.singleIsolatedPlot}`
         : styles.visualizationContainer;
 
     useEffect(() => {
@@ -207,9 +223,9 @@ export const CustomEvaluationPlotsWidgetComponent = ({
         return (
             <div className={styles.emptyState}>
                 <p>
-                    {selectedVisualizationId === 'evaluation_plot'
-                        ? i18n.t('Please select an organisation unit and split period to view this visualization.')
-                        : i18n.t('Please select a horizon period to view this visualization.')}
+                    {i18n.t('Please select {{filters}} to view this visualization.', {
+                        filters: missingFilters.join(i18n.t(' and ')),
+                    })}
                 </p>
             </div>
         );

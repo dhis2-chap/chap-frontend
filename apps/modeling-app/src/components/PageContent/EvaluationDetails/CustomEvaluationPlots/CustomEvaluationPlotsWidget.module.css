@@ -31,6 +31,10 @@
     min-block-size: 440px;
 }
 
+.naturalSizePlot {
+    overflow: auto;
+}
+
 .card {
     inline-size: 100%;
     overflow: hidden;

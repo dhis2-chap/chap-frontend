@@ -154,7 +154,6 @@ export const CustomEvaluationPlotsWidget = ({ evaluationId }: Props) => {
                     </div>
                     {!!facetCoordinates && (
                         <BackTestFilter
-                            visualizationId={selectedVisualizationId!}
                             facetCoords={facetCoordinates}
                             filterLocation={filterLocation}
                             filterSplitPeriod={filterSplitPeriod}
@@ -169,6 +168,7 @@ export const CustomEvaluationPlotsWidget = ({ evaluationId }: Props) => {
                 <CustomEvaluationPlotsWidgetComponent
                     evaluationId={evaluationId}
                     selectedVisualizationId={selectedVisualizationId}
+                    facetCoords={facetCoordinates}
                     filterLocation={filterLocation}
                     filterSplitPeriod={filterSplitPeriod}
                     filterHorizonPeriod={filterHorizonPeriod}

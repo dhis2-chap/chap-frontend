@@ -10,7 +10,6 @@ type Props = {
     filterLocation?: string;
     filterSplitPeriod?: string;
     filterHorizonPeriod?: string;
-    visualizationId: string;
     setFilterLocation: (val: string | undefined) => void;
     setFilterSplitPeriod: (val: string | undefined) => void;
     setFilterHorizonPeriod: (val: string | undefined) => void;
