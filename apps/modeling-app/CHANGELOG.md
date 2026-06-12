@@ -1,5 +1,19 @@
 # @dhis2-chap/modeling-app
 
+## 6.1.0
+
+### Minor Changes
+
+-   9b029ac: Add organisation unit, split period, and horizon filters to the custom evaluation plots widget, deriving the available filters from each visualization's facet coordinates and fetching filtered plots on demand. Supports grid layout plots and removes the metric plots experimental setting. Regenerates the API client with the new `maxHorizonDistance` backtest field.
+-   8c080d6: Add a reusable bug report dialog with report templates and app diagnostics context.
+
+### Patch Changes
+
+-   df66ef3: Prevent stale browser-cached analytics responses from producing empty evaluation data.
+-   Updated dependencies [9b029ac]
+    -   @dhis2-chap/ui@6.1.0
+    -   @dhis2-chap/core@6.1.0
+
 ## 6.0.0
 
 ### Major Changes
