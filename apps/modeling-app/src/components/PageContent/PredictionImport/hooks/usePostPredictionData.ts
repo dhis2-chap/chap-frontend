@@ -1,163 +1,276 @@
+import { useState } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { useAlert, useDataEngine } from '@dhis2/app-runtime';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
-    ApiError,
     OutbreakIndicator,
     PredictionEntry,
+    PredictionInfo,
     PredictionsService,
-    QuantileKey,
 } from '@dhis2-chap/ui';
-
-const STANDARD_QUANTILES = [0.1, 0.25, 0.5, 0.75, 0.9];
-
-type QuantileMapping = {
-    quantileLowId: string;
-    quantileMedianId: string;
-    quantileHighId: string;
-    quantileMidLowId: string;
-    quantileMidHighId: string;
-    outbreakIndicatorId: string;
-};
+import { getPredictionPeriodIds } from '@/utils/predictionRunMetadata';
+import {
+    buildClearDataValues,
+    deduplicateIds,
+    getSelectedOutputDataElementIds,
+    STANDARD_QUANTILES,
+    transformOutbreakIndicatorsToDataValues,
+    transformPredictionEntriesToDataValues,
+    type PredictionClearDataValue,
+    type PredictionDataValue,
+    type QuantileMapping,
+} from '../utils/predictionImportDataValues';
+import { assertDataValueSetImportAccepted } from '../utils/dataValueSetImportSummary';
+import { useDhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
 
 type PostPredictionDataVariables = {
-    predictionId: number;
+    prediction: PredictionInfo;
     quantileMapping: QuantileMapping;
     outbreakIndicators: OutbreakIndicator[];
+    clearPreviousValues: boolean;
+    fallbackOrgUnitIds: string[];
 };
 
 type UsePostPredictionDataOptions = {
     onSuccess?: () => void;
-    onError?: (error: ApiError) => void;
+    onError?: (error: Error) => void;
 };
 
-const QUANTILE_STRINGS = {
-    QUANTILE_LOW: 'quantile_low',
-    MEDIAN: 'median',
-    QUANTILE_HIGH: 'quantile_high',
-    QUANTILE_MID_LOW: 'quantile_mid_low',
-    QUANTILE_MID_HIGH: 'quantile_mid_high',
-} as const;
+export type PredictionImportProgressStep =
+    | 'prepareData'
+    | 'validateImport'
+    | 'validateClear'
+    | 'clearPreviousValues'
+    | 'importData';
 
-const QUANTILE_MAP: Record<number, QuantileKey> = {
-    0.1: QUANTILE_STRINGS.QUANTILE_LOW,
-    0.25: QUANTILE_STRINGS.QUANTILE_MID_LOW,
-    0.5: QUANTILE_STRINGS.MEDIAN,
-    0.75: QUANTILE_STRINGS.QUANTILE_MID_HIGH,
-    0.9: QUANTILE_STRINGS.QUANTILE_HIGH,
+export type PredictionImportProgress = {
+    currentStep: PredictionImportProgressStep | null;
+    completedSteps: PredictionImportProgressStep[];
+    failedStep: PredictionImportProgressStep | null;
 };
 
-const mapQuantileToKey = (quantile: number): QuantileKey | null => QUANTILE_MAP[quantile] ?? null;
+const initialImportProgress: PredictionImportProgress = {
+    currentStep: null,
+    completedSteps: [],
+    failedStep: null,
+};
 
-/**
- * Maps quantile key to data element ID
- */
-const mapQuantileKeyToDataElement = (
-    quantileKey: QuantileKey,
-    quantileMapping: QuantileMapping,
-): string => {
-    switch (quantileKey) {
-        case QUANTILE_STRINGS.QUANTILE_LOW:
-            return quantileMapping.quantileLowId;
-        case QUANTILE_STRINGS.MEDIAN:
-            return quantileMapping.quantileMedianId;
-        case QUANTILE_STRINGS.QUANTILE_HIGH:
-            return quantileMapping.quantileHighId;
-        case QUANTILE_STRINGS.QUANTILE_MID_LOW:
-            return quantileMapping.quantileMidLowId;
-        case QUANTILE_STRINGS.QUANTILE_MID_HIGH:
-            return quantileMapping.quantileMidHighId;
-        default:
-            throw new Error(`Unknown quantile key: ${quantileKey}`);
+class ImportAfterClearError extends Error {
+    readonly importCause: unknown;
+
+    constructor(cause: unknown) {
+        super('Prediction values were cleared, but the new import did not complete.');
+        this.name = 'ImportAfterClearError';
+        this.importCause = cause;
     }
-};
+}
 
-/**
- * Transforms PredictionEntry array to dataValueSets format
- */
-const transformPredictionEntriesToDataValues = (
+const getOrgUnitIdsForClear = (
+    prediction: PredictionInfo,
+    fallbackOrgUnitIds: string[],
     predictionEntries: PredictionEntry[],
-    quantileMapping: QuantileMapping,
-) => {
-    return predictionEntries
-        .map((entry) => {
-            const quantileKey = mapQuantileToKey(entry.quantile);
-            if (!quantileKey) {
-                // Skip entries with non-standard quantiles
-                return null;
-            }
-
-            const dataElementId = mapQuantileKeyToDataElement(quantileKey, quantileMapping);
-
-            return {
-                dataElement: dataElementId,
-                period: entry.period,
-                orgUnit: entry.orgUnit,
-                value: entry.value.toString(),
-            };
-        })
-        .filter((value): value is NonNullable<typeof value> => value !== null);
-};
-
-const transformOutbreakIndicatorsToDataValues = (
-    outbreakIndicators: OutbreakIndicator[],
-    outbreakIndicatorId: string,
-) => {
-    if (!outbreakIndicatorId) {
-        return [];
+): string[] => {
+    if (prediction.orgUnits?.length) {
+        return deduplicateIds(prediction.orgUnits);
     }
 
-    return outbreakIndicators.map(indicator => ({
-        dataElement: outbreakIndicatorId,
-        period: indicator.period,
-        orgUnit: indicator.orgUnitId,
-        value: indicator.value,
-    }));
+    if (fallbackOrgUnitIds.length) {
+        return deduplicateIds(fallbackOrgUnitIds);
+    }
+
+    return deduplicateIds(predictionEntries.map(entry => entry.orgUnit));
+};
+
+const getForecastPeriodIds = (
+    prediction: PredictionInfo,
+    predictionEntries: PredictionEntry[],
+): string[] => {
+    const entryPeriodIds = deduplicateIds(predictionEntries.map(entry => entry.period));
+    return entryPeriodIds.length ? entryPeriodIds : getPredictionPeriodIds(prediction);
 };
 
 export const usePostPredictionData = ({ onSuccess, onError }: UsePostPredictionDataOptions = {}) => {
     const dataEngine = useDataEngine();
     const queryClient = useQueryClient();
+    const [progress, setProgress] = useState<PredictionImportProgress>(initialImportProgress);
+    const { settings: periodSettings } = useDhis2PeriodSettings();
     const { show: showErrorAlert } = useAlert(i18n.t('Failed to post prediction data'), { critical: true });
+    const { show: showImportAfterClearErrorAlert } = useAlert(
+        i18n.t('Previous values may have been cleared, but the new import did not complete'),
+        { critical: true },
+    );
     const { show: showSuccessAlert } = useAlert(i18n.t('Prediction data posted successfully'), { success: true });
 
-    const mutation = useMutation<unknown, ApiError, PostPredictionDataVariables>({
+    const mutateDataValueSet = async (
+        dataValues: Array<PredictionDataValue | PredictionClearDataValue>,
+        params?: Record<string, string | boolean>,
+    ) => dataEngine.mutate({
+        resource: 'dataValueSets',
+        type: 'create' as const,
+        params,
+        data: {
+            dataValues,
+        },
+    });
+
+    const runProgressStep = async <T>(
+        step: PredictionImportProgressStep,
+        action: () => Promise<T>,
+    ): Promise<T> => {
+        setProgress(current => ({
+            ...current,
+            currentStep: step,
+            failedStep: null,
+            completedSteps: current.completedSteps.filter(completedStep => completedStep !== step),
+        }));
+
+        try {
+            const result = await action();
+            setProgress(current => ({
+                ...current,
+                currentStep: current.currentStep === step ? null : current.currentStep,
+                completedSteps: current.completedSteps.includes(step)
+                    ? current.completedSteps
+                    : [...current.completedSteps, step],
+            }));
+            return result;
+        } catch (error) {
+            setProgress(current => ({
+                ...current,
+                currentStep: current.currentStep === step ? null : current.currentStep,
+                failedStep: step,
+            }));
+            throw error;
+        }
+    };
+
+    const completeProgressStep = (step: PredictionImportProgressStep) => {
+        setProgress(current => ({
+            ...current,
+            completedSteps: current.completedSteps.includes(step)
+                ? current.completedSteps
+                : [...current.completedSteps, step],
+        }));
+    };
+
+    const mutation = useMutation<unknown, Error, PostPredictionDataVariables>({
         mutationFn: async (variables: PostPredictionDataVariables) => {
-            const { predictionId, quantileMapping, outbreakIndicators } = variables;
+            setProgress(initialImportProgress);
 
-            const queryKey = ['predictionEntries', predictionId, STANDARD_QUANTILES];
-            const cachedPredictionEntries = queryClient.getQueryData<PredictionEntry[]>(queryKey);
+            const {
+                prediction,
+                quantileMapping,
+                outbreakIndicators,
+                clearPreviousValues,
+                fallbackOrgUnitIds,
+            } = variables;
 
-            const predictionEntries = cachedPredictionEntries
-                ?? await PredictionsService.getPredictionEntriesV1AnalyticsPredictionEntryPredictionIdGet(
-                    predictionId,
-                    STANDARD_QUANTILES,
+            const { dataValues, predictionEntries } = await runProgressStep(
+                'prepareData',
+                async () => {
+                    const queryKey = ['predictionEntries', prediction.id, STANDARD_QUANTILES];
+                    const cachedPredictionEntries = queryClient.getQueryData<PredictionEntry[]>(queryKey);
+
+                    const predictionEntries = cachedPredictionEntries
+                        ?? await PredictionsService.getPredictionEntriesV1AnalyticsPredictionEntryPredictionIdGet(
+                            prediction.id,
+                            STANDARD_QUANTILES,
+                        );
+
+                    return {
+                        predictionEntries,
+                        dataValues: [
+                            ...transformPredictionEntriesToDataValues(predictionEntries, quantileMapping),
+                            ...transformOutbreakIndicatorsToDataValues(
+                                outbreakIndicators,
+                                quantileMapping.outbreakIndicatorId,
+                            ),
+                        ],
+                    };
+                },
+            );
+
+            await runProgressStep(
+                'validateImport',
+                async () => assertDataValueSetImportAccepted(
+                    await mutateDataValueSet(dataValues, { dryRun: true }),
+                    { allowIgnored: false },
+                ),
+            );
+
+            if (clearPreviousValues) {
+                const clearDataValues = await runProgressStep(
+                    'validateClear',
+                    async () => {
+                        const clearDataValues = buildClearDataValues({
+                            dataElementIds: getSelectedOutputDataElementIds(quantileMapping),
+                            orgUnitIds: getOrgUnitIdsForClear(
+                                prediction,
+                                fallbackOrgUnitIds,
+                                predictionEntries,
+                            ),
+                            forecastPeriodIds: getForecastPeriodIds(prediction, predictionEntries),
+                            periodType: prediction.dataset?.periodType,
+                            calendar: periodSettings.calendar,
+                            locale: periodSettings.locale,
+                        });
+
+                        if (clearDataValues.length) {
+                            assertDataValueSetImportAccepted(
+                                await mutateDataValueSet(clearDataValues, {
+                                    importStrategy: 'DELETE',
+                                    dryRun: true,
+                                }),
+                                { allowIgnored: true },
+                            );
+                        }
+
+                        return clearDataValues;
+                    },
                 );
 
-            const dataValues = [
-                ...transformPredictionEntriesToDataValues(predictionEntries, quantileMapping),
-                ...transformOutbreakIndicatorsToDataValues(
-                    outbreakIndicators,
-                    quantileMapping.outbreakIndicatorId,
-                ),
-            ];
+                if (clearDataValues.length) {
+                    await runProgressStep(
+                        'clearPreviousValues',
+                        async () => assertDataValueSetImportAccepted(
+                            await mutateDataValueSet(clearDataValues, {
+                                importStrategy: 'DELETE',
+                            }),
+                            { allowIgnored: true },
+                        ),
+                    );
+                } else {
+                    completeProgressStep('clearPreviousValues');
+                }
+            }
 
-            const mutationRequest = {
-                resource: 'dataValueSets',
-                type: 'create' as const,
-                data: {
-                    dataValues,
-                },
-            };
+            try {
+                return await runProgressStep(
+                    'importData',
+                    async () => {
+                        const result = await mutateDataValueSet(dataValues);
+                        assertDataValueSetImportAccepted(result, { allowIgnored: false });
+                        return result;
+                    },
+                );
+            } catch (error) {
+                if (clearPreviousValues) {
+                    throw new ImportAfterClearError(error);
+                }
 
-            return dataEngine.mutate(mutationRequest);
+                throw error;
+            }
         },
         onSuccess: () => {
             showSuccessAlert();
             onSuccess?.();
         },
-        onError: (error: ApiError) => {
-            showErrorAlert();
+        onError: (error: Error) => {
+            if (error instanceof ImportAfterClearError) {
+                showImportAfterClearErrorAlert();
+            } else {
+                showErrorAlert();
+            }
             console.error('Failed to post prediction data', error);
             onError?.(error);
         },
@@ -168,6 +281,10 @@ export const usePostPredictionData = ({ onSuccess, onError }: UsePostPredictionD
         mutateAsync: mutation.mutateAsync,
         isPending: mutation.isPending,
         error: mutation.error,
-        reset: mutation.reset,
+        reset: () => {
+            mutation.reset();
+            setProgress(initialImportProgress);
+        },
+        progress,
     };
 };

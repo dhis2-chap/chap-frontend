@@ -1,5 +1,36 @@
 # @dhis2-chap/modeling-app
 
+## 6.0.0
+
+### Major Changes
+
+-   c063516: rework the end-to-end prediction flow around prediction setups, with a per-setup dashboard, follow-up forecasting, persisted import mappings, and outbreak alerts
+
+### Minor Changes
+
+-   dadb379: Add an optional clear-and-import flow for prediction run imports so previous DHIS2 values can be deleted before importing replacement prediction values.
+-   5b57e6c: Add a Recent activity bar chart for summarizing system job activity, with chart-driven drilldown and date range filtering across activity and jobs tables.
+-   7f26cb9: Replace native monthly and weekly period inputs with DHIS2-aware period picker components backed by multi-calendar period generation.
+-   af3ba9b: Add an experimental scheduling status widget to the prediction setup dashboard.
+-   6384d83: Redesign model selection as a searchable split view with readiness, period, author, target, and covariate details.
+-   8d5557e: Suggest matching DHIS2 data elements when configuring quantile import mappings for prediction setup creation, editing, and prediction run imports.
+-   d360aab: Unify dataset and metrics downloads on the evaluations table into a single Download modal. The new Metrics (CSV) download is gated to chap-core 1.4.1+.
+
+### Patch Changes
+
+-   81d3867: Add e2e coverage for showing archived models when Include archived is enabled.
+-   6f83436: Remove the mock endemic threshold fallback and route completed evaluation jobs to their result dashboard.
+-   964a33c: Add user guides for viewing evaluation results, comparing evaluations, and configuring modeling app settings.
+-   bf5dc44: Refine concept guide wording and interactive examples for covariates and prediction intervals.
+-   875bad7: Use query aliases for long evaluation data requests on older DHIS2 versions.
+-   Updated dependencies [6f83436]
+-   Updated dependencies [c063516]
+-   Updated dependencies [6f83436]
+-   Updated dependencies [7f26cb9]
+-   Updated dependencies [4e396b2]
+    -   @dhis2-chap/ui@6.0.0
+    -   @dhis2-chap/core@6.0.0
+
 ## 5.1.0
 
 ### Minor Changes

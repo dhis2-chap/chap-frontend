@@ -12,7 +12,8 @@
         "linter:check": "turbo linter:check --parallel",
         "tsc:check": "turbo tsc:check --parallel",
         "format": "d2-style apply",
-        "start": "turbo start",
+        "start": "turbo start --filter=@dhis2-chap/modeling-app...",
+        "start:uncertainty-dashboard-plugin": "turbo start --filter=@dhis2-chap/uncertainty-dashboard-plugin...",
         "docker:e2e": "./docker/scripts/e2e-stack.sh",
         "build": "turbo build",
         "test": "vitest run",
@@ -24,7 +25,7 @@
     },
     "dependencies": {
         "@dhis2/app-runtime": "3.14.6",
-        "@dhis2/cli-app-scripts": "12.11.0",
+        "@dhis2/cli-app-scripts": "12.11.1",
         "clsx": "^2.1.1"
     },
     "devDependencies": {
@@ -51,6 +52,6 @@
     "resolutions": {
         "i18next": "20.5.0",
         "@dhis2/app-runtime": "3.14.6",
-        "@dhis2/cli-app-scripts": "12.11.0"
+        "@dhis2/cli-app-scripts": "12.11.1"
     }
 }

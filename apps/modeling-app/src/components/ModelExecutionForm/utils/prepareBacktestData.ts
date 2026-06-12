@@ -4,7 +4,7 @@ import { ModelExecutionFormValues } from '../hooks/useModelExecutionFormState';
 import { getPeriodsInRange, PERIOD_TYPES, toDhis2FixedPeriodType } from '@dhis2-chap/core';
 import { DataSource, ModelSpecRead, ObservationBase } from '@dhis2-chap/ui';
 import { useDataEngine } from '@dhis2/app-runtime';
-import { AnalyticsResponse, OrgUnitResponse, fetchAnalytics, ORG_UNITS_QUERY } from './queryUtils';
+import { AnalyticsResponse, OrgUnitResponse, fetchAnalytics, fetchOrgUnits } from './queryUtils';
 import { generateBacktestDataHash } from './hashUtils';
 import { type Dhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
 
@@ -93,9 +93,10 @@ export const prepareBacktestData = async (
 
     const cachedOrgUnitResponse = queryClient.getQueryData(['new-backtest-data', 'org-units', hash]) as OrgUnitResponse | undefined;
 
-    const orgUnitResponse = cachedOrgUnitResponse || await dataEngine.query(
-        ORG_UNITS_QUERY(orgUnitIds),
-    ) as OrgUnitResponse;
+    const orgUnitResponse = cachedOrgUnitResponse || await fetchOrgUnits(
+        orgUnitIds,
+        dataEngine,
+    );
 
     if (!cachedOrgUnitResponse) {
         queryClient.setQueryData(['new-backtest-data', 'org-units', hash], orgUnitResponse);

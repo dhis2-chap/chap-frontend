@@ -1,0 +1,140 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: i18next-conv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"POT-Creation-Date: 2026-06-09T10:36:53.591Z\n"
+"PO-Revision-Date: 2026-06-09T10:36:53.592Z\n"
+
+msgid "Configure uncertainty chart"
+msgstr "Configure uncertainty chart"
+
+msgid "Choose the actual data item and the five forecast quantile data elements."
+msgstr "Choose the actual data item and the five forecast quantile data elements."
+
+msgid "Display"
+msgstr "Display"
+
+msgid "Chart title"
+msgstr "Chart title"
+
+msgid "Use target data item name"
+msgstr "Use target data item name"
+
+msgid "Actual values"
+msgstr "Actual values"
+
+msgid "Actual / target data item"
+msgstr "Actual / target data item"
+
+msgid "Forecast quantiles"
+msgstr "Forecast quantiles"
+
+msgid "Save configuration"
+msgstr "Save configuration"
+
+msgid "Program data element"
+msgstr "Program data element"
+
+msgid "Indicator"
+msgstr "Indicator"
+
+msgid "Program indicator"
+msgstr "Program indicator"
+
+msgid "Data element"
+msgstr "Data element"
+
+msgid "Loading"
+msgstr "Loading"
+
+msgid "No matches found"
+msgstr "No matches found"
+
+msgid "Start typing to search for data items"
+msgstr "Start typing to search for data items"
+
+msgid "Select a data item"
+msgstr "Select a data item"
+
+msgid "Clear selection"
+msgstr "Clear selection"
+
+msgid "Search data items"
+msgstr "Search data items"
+
+msgid "Could not load organisation units"
+msgstr "Could not load organisation units"
+
+msgid "No organisation units available"
+msgstr "No organisation units available"
+
+msgid "Select organisation unit"
+msgstr "Select organisation unit"
+
+msgid "CHAP uncertainty chart"
+msgstr "CHAP uncertainty chart"
+
+msgid "Could not load chart data"
+msgstr "Could not load chart data"
+
+msgid "There was a problem loading analytics data for this chart."
+msgstr "There was a problem loading analytics data for this chart."
+
+msgid "Select an organisation unit to show the chart."
+msgstr "Select an organisation unit to show the chart."
+
+msgid "Missing dashboard item"
+msgstr "Missing dashboard item"
+
+msgid "This plugin needs a dashboard item id to store configuration."
+msgstr "This plugin needs a dashboard item id to store configuration."
+
+msgid "Could not load configuration"
+msgstr "Could not load configuration"
+
+msgid "There was a problem loading this chart configuration."
+msgstr "There was a problem loading this chart configuration."
+
+msgid "Chart not configured"
+msgstr "Chart not configured"
+
+msgid "Configure this chart while editing the dashboard."
+msgstr "Configure this chart while editing the dashboard."
+
+msgid "Quantile 0.1"
+msgstr "Quantile 0.1"
+
+msgid "Quantile 0.25"
+msgstr "Quantile 0.25"
+
+msgid "Median"
+msgstr "Median"
+
+msgid "Quantile 0.75"
+msgstr "Quantile 0.75"
+
+msgid "Quantile 0.9"
+msgstr "Quantile 0.9"
+
+msgid "Missing organisation unit filter"
+msgstr "Missing organisation unit filter"
+
+msgid "Select an organisation unit to show this chart."
+msgstr "Select an organisation unit to show this chart."
+
+msgid "Chart configuration saved"
+msgstr "Chart configuration saved"
+
+msgid "Failed to save chart configuration"
+msgstr "Failed to save chart configuration"
+
+msgctxt "Application title"
+msgid "__MANIFEST_APP_TITLE"
+msgstr "CHAP Uncertainty Chart"
+
+msgctxt "Application description"
+msgid "__MANIFEST_APP_DESCRIPTION"
+msgstr "DHIS2 dashboard plugin for CHAP uncertainty charts"

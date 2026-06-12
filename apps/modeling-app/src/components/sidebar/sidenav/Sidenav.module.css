@@ -94,7 +94,8 @@ html {
 .sidenav-link-wrapper {
     display: flex;
 }
-.sidenav-link a {
+.sidenav-link a,
+.sidenav-button {
     display: block;
     min-height: 32px;
     padding: 8px 8px 8px 12px;
@@ -105,14 +106,22 @@ html {
     display: flex;
     align-items: center;
 }
+.sidenav-button {
+    width: 100%;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+}
 .sidenav-link:hover,
-.sidenav-link a:hover {
+.sidenav-link a:hover,
+.sidenav-button:hover {
 
     text-decoration: underline;
     background: var(--sidenav-dark-bg-hover);
 }
 .sidenav-link:focus,
-.sidenav-link a:focus {
+.sidenav-link a:focus,
+.sidenav-button:focus {
     outline: 2px solid white;
     background: var(--sidenav-dark-bg-hover);
     outline-offset: -2px;
@@ -141,8 +150,17 @@ html {
     outline: none;
     background: var(--sidenav-dark-bg-selected);
 }
+.sidenav-button:focus:not(:focus-visible) {
+    outline: none;
+    background: var(--sidenav-dark-bg);
+}
 .sidenav-item-icon {
     margin-right: 8px;
+    width: 16px;
+    height: 16px;
+}
+.sidenav-button-trailing-icon {
+    margin-left: 8px;
     width: 16px;
     height: 16px;
 }

@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-06-10T10:46:56.620Z\n"
-"PO-Revision-Date: 2026-06-10T10:46:56.620Z\n"
+"POT-Creation-Date: 2026-06-12T00:56:52.304Z\n"
+"PO-Revision-Date: 2026-06-12T00:56:52.305Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -839,6 +839,18 @@ msgstr "Prediction setup updated"
 msgid "Failed to update prediction setup"
 msgstr "Failed to update prediction setup"
 
+msgid "Scheduling"
+msgstr "Scheduling"
+
+msgid "No prediction setup found"
+msgstr "No prediction setup found"
+
+msgid "Enabled"
+msgstr "Enabled"
+
+msgid "Disabled"
+msgstr "Disabled"
+
 msgid "{{count}} {{label}}"
 msgid_plural "{{count}} {{label}}"
 msgstr[0] "{{count}} {{label}}"
@@ -846,9 +858,6 @@ msgstr[1] "{{count}} {{label}}"
 
 msgid "Configuration"
 msgstr "Configuration"
-
-msgid "No prediction setup found"
-msgstr "No prediction setup found"
 
 msgid "location"
 msgstr "location"
@@ -871,8 +880,19 @@ msgstr "Select split period"
 msgid "Select horizon period"
 msgstr "Select horizon period"
 
-msgid "Clear filters"
-msgstr "Clear filters"
+msgid "This plot has encountered an unexpected error and could not be displayed."
+msgstr "This plot has encountered an unexpected error and could not be displayed."
+
+msgid ""
+"This visualization is provided by external contributors and may "
+"occasionally fail due to issues in the contributed plot definition. Please "
+"contact your system administrator if you experience issues with this "
+"visualization."
+msgstr ""
+"This visualization is provided by external contributors and may "
+"occasionally fail due to issues in the contributed plot definition. Please "
+"contact your system administrator if you experience issues with this "
+"visualization."
 
 msgid "Click to view actions"
 msgstr "Click to view actions"
@@ -892,32 +912,23 @@ msgstr "View Source"
 msgid "Save as SVG"
 msgstr "Save as SVG"
 
+msgid "an organisation unit"
+msgstr "an organisation unit"
+
+msgid "a split period"
+msgstr "a split period"
+
+msgid "a horizon period"
+msgstr "a horizon period"
+
 msgid "Please select a visualization."
 msgstr "Please select a visualization."
 
-msgid ""
-"Please select an organisation unit and split period to view this "
-"visualization."
-msgstr ""
-"Please select an organisation unit and split period to view this "
-"visualization."
+msgid "Please select {{filters}} to view this visualization."
+msgstr "Please select {{filters}} to view this visualization."
 
-msgid "Please select a horizon period to view this visualization."
-msgstr "Please select a horizon period to view this visualization."
-
-msgid "This plot has encountered an unexpected error and could not be displayed."
-msgstr "This plot has encountered an unexpected error and could not be displayed."
-
-msgid ""
-"This visualization is provided by external contributors and may "
-"occasionally fail due to issues in the contributed plot definition. Please "
-"contact your system administrator if you experience issues with this "
-"visualization."
-msgstr ""
-"This visualization is provided by external contributors and may "
-"occasionally fail due to issues in the contributed plot definition. Please "
-"contact your system administrator if you experience issues with this "
-"visualization."
+msgid " and "
+msgstr " and "
 
 msgid "No visualization found"
 msgstr "No visualization found"
@@ -1339,77 +1350,6 @@ msgstr "Map"
 msgid "No prediction data found."
 msgstr "No prediction data found."
 
-msgid "Loading"
-msgstr "Loading"
-
-msgid "Suggested"
-msgstr "Suggested"
-
-msgid "Data elements"
-msgstr "Data elements"
-
-msgid "Data items"
-msgstr "Data items"
-
-msgid "Start typing to search for data items"
-msgstr "Start typing to search for data items"
-
-msgid "No matches found"
-msgstr "No matches found"
-
-msgid "Select a data item..."
-msgstr "Select a data item..."
-
-msgid "Clear selection"
-msgstr "Clear selection"
-
-msgid "Search for data elements"
-msgstr "Search for data elements"
-
-msgid "Search for indicators, data elements, or program indicators"
-msgstr "Search for indicators, data elements, or program indicators"
-
-msgid "Alert probability is required"
-msgstr "Alert probability is required"
-
-msgid "Outbreak indicator is required"
-msgstr "Outbreak indicator is required"
-
-msgid "Unable to load alert data"
-msgstr "Unable to load alert data"
-
-msgid ""
-"There was a problem loading the prediction data required for outbreak "
-"indicator import."
-msgstr ""
-"There was a problem loading the prediction data required for outbreak "
-"indicator import."
-
-msgid "Import forecasted values"
-msgstr "Import forecasted values"
-
-msgid ""
-"Importing forecasted values into DHIS2 requires you to set up five data "
-"elements for the quantiles outputted by the model."
-msgstr ""
-"Importing forecasted values into DHIS2 requires you to set up five data "
-"elements for the quantiles outputted by the model."
-
-msgid "Quantile high"
-msgstr "Quantile high"
-
-msgid "Quantile mid high"
-msgstr "Quantile mid high"
-
-msgid "Median"
-msgstr "Median"
-
-msgid "Quantile mid low"
-msgstr "Quantile mid low"
-
-msgid "Quantile low"
-msgstr "Quantile low"
-
 msgid "Alert output"
 msgstr "Alert output"
 
@@ -1444,14 +1384,132 @@ msgstr "Adjust"
 msgid "Outbreak indicator"
 msgstr "Outbreak indicator"
 
+msgid "Requires data value delete authority."
+msgstr "Requires data value delete authority."
+
+msgid "Clear previous values"
+msgstr "Clear previous values"
+
+msgid "Loading"
+msgstr "Loading"
+
+msgid "Suggested"
+msgstr "Suggested"
+
+msgid "Data elements"
+msgstr "Data elements"
+
+msgid "Data items"
+msgstr "Data items"
+
+msgid "Start typing to search for data items"
+msgstr "Start typing to search for data items"
+
+msgid "No matches found"
+msgstr "No matches found"
+
+msgid "Select a data item..."
+msgstr "Select a data item..."
+
+msgid "Clear selection"
+msgstr "Clear selection"
+
+msgid "Search for data elements"
+msgstr "Search for data elements"
+
+msgid "Search for indicators, data elements, or program indicators"
+msgstr "Search for indicators, data elements, or program indicators"
+
+msgid "Checking import with DHIS2"
+msgstr "Checking import with DHIS2"
+
+msgid "Checking values to clear"
+msgstr "Checking values to clear"
+
+msgid "Clearing previous values"
+msgstr "Clearing previous values"
+
+msgid "Importing prediction values"
+msgstr "Importing prediction values"
+
+msgid "Clear and import"
+msgstr "Clear and import"
+
+msgid ""
+"This will clear existing values for the selected output data elements, then "
+"import this prediction into DHIS2."
+msgstr ""
+"This will clear existing values for the selected output data elements, then "
+"import this prediction into DHIS2."
+
+msgid ""
+"This will import this prediction into DHIS2 without clearing existing "
+"values first."
+msgstr ""
+"This will import this prediction into DHIS2 without clearing existing "
+"values first."
+
+msgid "Clear and import prediction"
+msgstr "Clear and import prediction"
+
+msgid "Import prediction"
+msgstr "Import prediction"
+
+msgid "Import progress"
+msgstr "Import progress"
+
+msgid "Quantile high"
+msgstr "Quantile high"
+
+msgid "Quantile mid high"
+msgstr "Quantile mid high"
+
+msgid "Median"
+msgstr "Median"
+
+msgid "Quantile mid low"
+msgstr "Quantile mid low"
+
+msgid "Quantile low"
+msgstr "Quantile low"
+
+msgid "Unable to load alert data"
+msgstr "Unable to load alert data"
+
+msgid ""
+"There was a problem loading the prediction data required for outbreak "
+"indicator import."
+msgstr ""
+"There was a problem loading the prediction data required for outbreak "
+"indicator import."
+
 msgid "Cannot import prediction"
 msgstr "Cannot import prediction"
 
 msgid "Missing or invalid prediction setup id."
 msgstr "Missing or invalid prediction setup id."
 
+msgid "Import forecasted values"
+msgstr "Import forecasted values"
+
+msgid ""
+"Importing forecasted values into DHIS2 requires you to set up five data "
+"elements for the quantiles outputted by the model."
+msgstr ""
+"Importing forecasted values into DHIS2 requires you to set up five data "
+"elements for the quantiles outputted by the model."
+
+msgid "Alert probability is required"
+msgstr "Alert probability is required"
+
+msgid "Outbreak indicator is required"
+msgstr "Outbreak indicator is required"
+
 msgid "Failed to post prediction data"
 msgstr "Failed to post prediction data"
+
+msgid "Previous values may have been cleared, but the new import did not complete"
+msgstr "Previous values may have been cleared, but the new import did not complete"
 
 msgid "Prediction data posted successfully"
 msgstr "Prediction data posted successfully"
@@ -1560,11 +1618,52 @@ msgstr "Overview"
 msgid "Models"
 msgstr "Models"
 
+msgid "Report a bug"
+msgstr "Report a bug"
+
 msgid "Guides"
 msgstr "Guides"
 
 msgid "Settings"
 msgstr "Settings"
+
+msgid ""
+"This is an alpha version of the Modeling App. Some features may change or "
+"contain bugs."
+msgstr ""
+"This is an alpha version of the Modeling App. Some features may change or "
+"contain bugs."
+
+msgid "Dismiss"
+msgstr "Dismiss"
+
+msgid "Failed to copy report details"
+msgstr "Failed to copy report details"
+
+msgid ""
+"Copy the template and email it to the CHAP team. It includes this page and "
+"time so we can find the problem faster."
+msgstr ""
+"Copy the template and email it to the CHAP team. It includes this page and "
+"time so we can find the problem faster."
+
+msgid "Send to"
+msgstr "Send to"
+
+msgid "Copied email address"
+msgstr "Copied email address"
+
+msgid "Copy email address"
+msgstr "Copy email address"
+
+msgid "Bug report template"
+msgstr "Bug report template"
+
+msgid "Copied"
+msgstr "Copied"
+
+msgid "Copy template"
+msgstr "Copy template"
 
 msgid ""
 "The version of the Modeling App is not compatible with the backend (Chap "
@@ -1799,6 +1898,9 @@ msgstr "Available features"
 
 msgid "Show evaluation visualization plots in the evaluation dashboard"
 msgstr "Show evaluation visualization plots in the evaluation dashboard"
+
+msgid "Show scheduling information in the prediction setup dashboard"
+msgstr "Show scheduling information in the prediction setup dashboard"
 
 msgid "Settings saved successfully"
 msgstr "Settings saved successfully"
@@ -2050,9 +2152,6 @@ msgstr ""
 
 msgid "The model for this prediction could not be loaded."
 msgstr "The model for this prediction could not be loaded."
-
-msgid "Import prediction"
-msgstr "Import prediction"
 
 msgid "Import the forecasted values of this prediction into DHIS2."
 msgstr "Import the forecasted values of this prediction into DHIS2."
