@@ -354,7 +354,7 @@ export const ActivityWidget = ({
     jobs,
     predictionSetupId,
 }: Props) => {
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(true);
     const [activityView, setActivityView] = useState<ActivityView>('chart');
     const [selectedPeriod, setSelectedPeriod] = usePersistedActivityPeriod();
     const [statusFilter, setStatusFilter] = useState<string | undefined>();
