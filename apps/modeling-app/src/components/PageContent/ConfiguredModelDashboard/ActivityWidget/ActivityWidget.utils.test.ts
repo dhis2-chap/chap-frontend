@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { buildJobActivityDays } from './ActivityWidget.utils';
+import { buildJobActivityDays, isJobInActivityDateRange } from './ActivityWidget.utils';
 
 const timestamp = (
     year: number,
@@ -18,12 +18,13 @@ describe('buildJobActivityDays', () => {
             '2026-05-29',
         ]);
         expect(days.map(day => ({
+            activeCount: day.activeCount,
             failedCount: day.failedCount,
             successCount: day.successCount,
         }))).toEqual([
-            { failedCount: 0, successCount: 0 },
-            { failedCount: 0, successCount: 0 },
-            { failedCount: 0, successCount: 0 },
+            { activeCount: 0, failedCount: 0, successCount: 0 },
+            { activeCount: 0, failedCount: 0, successCount: 0 },
+            { activeCount: 0, failedCount: 0, successCount: 0 },
         ]);
     });
 
@@ -55,6 +56,55 @@ describe('buildJobActivityDays', () => {
         expect(days).toHaveLength(1);
         expect(days[0].failedCount).toBe(1);
         expect(days[0].successCount).toBe(0);
+    });
+
+    it('counts pending and running jobs as active on the current day', () => {
+        const days = buildJobActivityDays([
+            { start_time: null, end_time: null, status: 'PENDING' },
+            { start_time: timestamp(2026, 4, 27, 9), end_time: null, status: 'STARTED' },
+            { start_time: timestamp(2026, 4, 29, 10), end_time: null, status: 'SUCCESS' },
+        ], 3, new Date(2026, 4, 29, 12));
+
+        expect(days.map(day => ({
+            key: day.key,
+            activeCount: day.activeCount,
+            successCount: day.successCount,
+        }))).toEqual([
+            { key: '2026-05-27', activeCount: 0, successCount: 0 },
+            { key: '2026-05-28', activeCount: 0, successCount: 0 },
+            { key: '2026-05-29', activeCount: 2, successCount: 1 },
+        ]);
+    });
+
+    it('filters active jobs by the current activity date', () => {
+        const now = new Date(2026, 4, 29, 12);
+
+        expect(isJobInActivityDateRange({
+            start_time: null,
+            end_time: null,
+            status: 'PENDING',
+        }, {
+            fromDate: '2026-05-29',
+            toDate: '2026-05-29',
+        }, now)).toBe(true);
+
+        expect(isJobInActivityDateRange({
+            start_time: timestamp(2026, 4, 27, 9),
+            end_time: null,
+            status: 'STARTED',
+        }, {
+            fromDate: '2026-05-29',
+            toDate: '2026-05-29',
+        }, now)).toBe(true);
+
+        expect(isJobInActivityDateRange({
+            start_time: null,
+            end_time: null,
+            status: 'PENDING',
+        }, {
+            fromDate: '2026-05-28',
+            toDate: '2026-05-28',
+        }, now)).toBe(false);
     });
 
     it('ignores invalid timestamps and jobs after now', () => {
