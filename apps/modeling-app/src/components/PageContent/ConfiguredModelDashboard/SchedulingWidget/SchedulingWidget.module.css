@@ -1,6 +1,9 @@
 .content {
     padding: 16px;
     padding-block-start: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
 .row {
