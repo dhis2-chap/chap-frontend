@@ -34,10 +34,14 @@ export const EditScheduleModal = ({
     };
 
     const handleSave = async () => {
-        await updatePredictionSetup({
-            predictionSetupId,
-            data: { scheduleEnabled: enabled },
-        });
+        try {
+            await updatePredictionSetup({
+                predictionSetupId,
+                data: { scheduleEnabled: enabled },
+            });
+        } catch {
+            // Error alert is shown by useUpdatePredictionSetup's onError
+        }
     };
 
     const isDirty = enabled !== scheduleEnabled;
