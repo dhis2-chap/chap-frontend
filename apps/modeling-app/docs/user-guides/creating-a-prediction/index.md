@@ -11,8 +11,8 @@ A prediction uses a trained model to forecast future disease cases based on your
 
 Predictions in CHAP follow a two-phase workflow:
 
-1. **Create a prediction setup** — a saved configuration that captures the model, organisation units, data mappings, and period type from a completed evaluation.
-2. **Run predictions** from that setup — a lightweight step where you name the run and select the last training period.
+1. **Create a prediction setup** - a saved configuration that captures the model, organisation units, data mappings, and period type from a completed evaluation.
+2. **Run predictions** from that setup - a lightweight step where you name the run and select the last training period.
 
 Before creating a prediction, you must first run an [evaluation](/guides/creating-an-evaluation) to validate that your chosen model performs well on your data.
 
@@ -81,7 +81,7 @@ From the prediction setup dashboard, click **Run prediction** in the Quick actio
 The form shows a summary of the inherited configuration (model, period type, and training start) and provides two fields:
 
 - **Prediction run name** (required): A name for this specific run (e.g., "May 2025 forecast"). A default name based on the setup name is pre-filled.
-- **Training period**: The training start is fixed from the setup. Select the **last training period** — this is the end of the data window the model uses for training. The model will forecast from this point forward.
+- **Training period**: The training start is fixed from the setup. Select the **last training period** - this is the end of the data window the model uses for training. The model will forecast from this point forward.
 
 ![New prediction run form with name and period selection](images/pred-step-5-run-form.png)
 
