@@ -84,7 +84,7 @@ export const EditScheduleModal = ({
                         </span>
                     </div>
                     <NoticeBox title={i18n.t('About scheduling')}>
-                        {i18n.t('The external CHAP scheduler must be running for scheduled predictions to execute. Contact your system administrator to set up the scheduler.')}
+                        {i18n.t('The external CHAP scheduler must be running for scheduled predictions to execute. Contact your system administrator to set up the scheduler if you haven\'t yet.')}
                     </NoticeBox>
                 </div>
             </ModalContent>
