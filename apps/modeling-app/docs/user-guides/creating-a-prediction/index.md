@@ -1,6 +1,6 @@
 ---
 title: Creating a prediction
-description: Step-by-step guide on how to create a model prediction
+description: Step-by-step guide on how to create a prediction setup and run predictions
 order: 2
 category: User Guides
 ---
@@ -9,93 +9,96 @@ category: User Guides
 
 A prediction uses a trained model to forecast future disease cases based on your current data. Unlike an evaluation (which tests model accuracy on historical data), a prediction generates forecasts that can be imported into DHIS2 to support decision-making in the field.
 
-Before creating a prediction, it's recommended to first run an [evaluation](/guides/creating-an-evaluation) to validate that your chosen model performs well on your data.
+Predictions in CHAP follow a two-phase workflow:
+
+1. **Create a prediction setup** — a saved configuration that captures the model, organisation units, data mappings, and period type from a completed evaluation.
+2. **Run predictions** from that setup — a lightweight step where you name the run and select the last training period.
+
+Before creating a prediction, you must first run an [evaluation](/guides/creating-an-evaluation) to validate that your chosen model performs well on your data.
 
 ---
 
-### Step 1: Navigate to the Predictions Page
+## Phase 1: Create a Prediction Setup
 
-From the main navigation, click on **Predict** in the sidebar to access the predictions page. Here you can see all existing predictions and create new ones.
+A prediction setup is created from a completed evaluation. It inherits the model, organisation units, training start period, and data source mappings, so you don't need to reconfigure them each time you want to predict.
 
-Click the **New prediction** button to start creating a new prediction.
+### Step 1: Open a Completed Evaluation
 
-![Predictions page with New prediction button](images/pred-step-1-navigate.png)
+Navigate to **Evaluate** in the sidebar and click on a completed evaluation to open its details page.
 
----
+In the **Quick actions** widget on the right, you will see a **Create prediction setup** button (if no setup exists yet for this evaluation).
 
-### Step 2: Enter a Prediction Name
-
-Give your prediction a descriptive name that helps you identify it later. For example: "EWARS Prediction Jan-Mar 25" or "Dengue Forecast Q1 2025".
-
-![Name input field](images/pred-step-2-name.png)
+![Evaluation details page with Create prediction setup button](images/pred-step-1-evaluation.png)
 
 ---
 
-### Step 3: Configure the Time Period
+### Step 2: Configure the Prediction Setup
 
-Select the time period settings for your prediction:
+Clicking **Create prediction setup** opens a modal with the following fields:
 
-- **Period Type**: Choose between Weekly or Monthly depending on how your data is aggregated
-- **From period**: The start of your training data period
-- **To period**: The end of your training data period (should be the most recent complete period)
+- **Setup name** (required): A descriptive name for this prediction configuration (e.g., "Malaria Weekly Forecast" or "Dengue Prediction - Coast Region").
+- **Import mapping** (optional): Toggle this on to pre-configure which DHIS2 data elements the prediction quantiles (high, mid-high, median, mid-low, low) and outbreak indicator should be imported into. This can also be configured later.
 
-The model will use data within this range to generate forecasts for future periods.
+Click **Save** to create the prediction setup.
 
-![Period configuration with type and date range](images/pred-step-3-period.png)
-
----
-
-### Step 4: Select Organization Units
-
-Click on **Select organisation units** to open the organization unit tree. Select one or more locations where you want to generate predictions.
-
-You can select individual facilities, districts, or higher-level units depending on your needs. At least one organization unit must be selected, and all selected units should be at the same level.
-
-![Organization unit selection modal](images/pred-step-4-orgunits.png)
+![Create prediction setup modal with name and import mapping fields](images/pred-step-2-setup-modal.png)
 
 ---
 
-### Step 5: Select a Model
+### Step 3: View the Prediction Setup Dashboard
 
-Click on **Select model** to choose which predictive model to use. The modal displays available models with their descriptions and requirements.
+After creating the setup, you are redirected to the **prediction setup dashboard**. This page shows:
 
-Select the model you want to use for forecasting. Only one model can be selected per prediction.
+- **Prediction runs**: A list of all prediction runs for this setup
+- **Recent activity**: Job history and status
+- **Quick actions**: Buttons to run a new prediction, view the last run, or edit the setup
+- **Configuration**: Summary of the inherited settings (model, period type, training start, organisation units, data sources)
 
-![Model selection modal](images/pred-step-5-model.png)
+You can also reach this page at any time by clicking **Predict** in the sidebar and selecting a setup from the table.
 
----
-
-### Step 6: Configure Data Mapping
-
-After selecting a model, you need to map the model's variables to your DHIS2 data sources:
-
-1. Click **Configure sources** to open the data mapping modal
-2. **Target Variable**: Map the outcome variable (e.g., disease cases) to a data element, indicator, or program indicator in DHIS2
-3. **Covariates**: Map each covariate the model requires (e.g., climate data, population) to corresponding data sources
-
-You can click **Inspect dataset** to preview the actual data that will be used before submitting.
-
-![Data mapping configuration modal](images/pred-step-6-mapping.png)
+![Prediction setup dashboard with widgets](images/pred-step-3-dashboard.png)
 
 ---
 
-### Step 7: Review and Submit
+## Phase 2: Run a Prediction
 
-Once all fields are configured:
+Once a prediction setup exists, running predictions is a streamlined process.
 
-1. Review your selections in the form summary
-2. Optionally click **Start dry run** to validate your configuration and check for missing data
-3. Click **Start import** to submit the prediction
+### Step 4: Navigate to the Predict Page
 
-The prediction will be queued as a background job. You can monitor its progress on the Jobs page.
+Click **Predict** in the sidebar to see the **Ready to predict** page. This table lists all saved prediction setups with their name, creation date, and model.
 
-![Form summary and submit buttons](images/pred-step-7-submit.png)
+Click on a prediction setup to open its dashboard.
+
+![Ready to predict page showing prediction setups table](images/pred-step-4-navigate.png)
+
+---
+
+### Step 5: Start a New Prediction Run
+
+From the prediction setup dashboard, click **Run prediction** in the Quick actions widget. This opens the prediction run form.
+
+The form shows a summary of the inherited configuration (model, period type, and training start) and provides two fields:
+
+- **Prediction run name** (required): A name for this specific run (e.g., "May 2025 forecast"). A default name based on the setup name is pre-filled.
+- **Training period**: The training start is fixed from the setup. Select the **last training period** — this is the end of the data window the model uses for training. The model will forecast from this point forward.
+
+![New prediction run form with name and period selection](images/pred-step-5-run-form.png)
+
+---
+
+### Step 6: Submit the Prediction
+
+Click **Run prediction** to submit. The prediction is queued as a background job. You are redirected back to the prediction setup dashboard where you can monitor its progress in the Recent activity widget.
+
+![Run prediction button](images/pred-step-6-submit.png)
 
 ---
 
 ### Next Steps
 
 After the prediction completes, you can:
-- View forecast results and visualizations on the prediction details page
+- View forecast results and visualizations by clicking on the run in the Prediction runs widget
 - Import the forecasted values into DHIS2 for use in dashboards and reports
-- Compare predictions with actual outcomes as they become available
+- Run additional predictions with updated training periods as new data becomes available
+- Edit the prediction setup (name and import mapping) via the **Edit setup** button in Quick actions
