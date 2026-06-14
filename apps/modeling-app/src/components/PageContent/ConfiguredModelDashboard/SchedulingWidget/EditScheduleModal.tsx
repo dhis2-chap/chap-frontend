@@ -58,7 +58,6 @@ export const EditScheduleModal = ({
     return (
         <Modal
             onClose={onClose}
-            small
             dataTest="edit-schedule-modal"
         >
             <ModalTitle>
@@ -72,7 +71,7 @@ export const EditScheduleModal = ({
                                 {i18n.t('Scheduled predictions')}
                             </span>
                             <span className={styles.toggleDescription}>
-                                {i18n.t('When enabled, the external CHAP scheduler will automatically run predictions for this setup at its configured interval.')}
+                                {i18n.t('Enable to include this setup in scheduled prediction runs.')}
                             </span>
                         </div>
                         <span onClick={handleSwitchClick}>
@@ -85,7 +84,7 @@ export const EditScheduleModal = ({
                         </span>
                     </div>
                     <NoticeBox title={i18n.t('About scheduling')}>
-                        {i18n.t('Scheduling requires the external CHAP scheduler to be running. The scheduler executes predictions for all enabled setups at its pre-configured time. Contact your system administrator to set up or adjust the scheduler.')}
+                        {i18n.t('The external CHAP scheduler must be running for scheduled predictions to execute. Contact your system administrator to set up the scheduler.')}
                     </NoticeBox>
                 </div>
             </ModalContent>
