@@ -69,7 +69,7 @@ export const ViewModelInfoModal = ({ id, onClose }: Props) => {
         >
             <ModalTitle>
                 {info
-                    ? i18n.t('Model details{{colon}} {{name}}', { colon: ':', name: info.displayName || info.name })
+                    ? i18n.t('Model details{{colon}} {{name}}', { colon: ':', name: info.displayName || info.name, interpolation: { escapeValue: false } })
                     : i18n.t('Model details')}
             </ModalTitle>
             <ModalContent>
