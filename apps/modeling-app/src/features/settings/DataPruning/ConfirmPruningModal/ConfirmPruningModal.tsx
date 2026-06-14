@@ -66,12 +66,12 @@ export const ConfirmPruningModal = ({
 
                 <div className={styles.confirmationSection}>
                     <p className={styles.confirmationPrompt}>
-                        {i18n.t('To confirm, type {{quote}}delete{{quote}} in the field below{{colon}}', { quote: '"', colon: ':' })}
+                        To confirm, type &quot;delete&quot; in the field below:
                     </p>
                     <Input
                         value={confirmationText}
                         onChange={handleConfirmationChange}
-                        placeholder={i18n.t('Type {{quote}}delete{{quote}} to confirm', { quote: '"' })}
+                        placeholder={'Type "delete" to confirm'}
                         dataTest="confirmation-input"
                         disabled={isPending}
                     />
