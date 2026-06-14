@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-06-12T00:56:52.304Z\n"
-"PO-Revision-Date: 2026-06-12T00:56:52.305Z\n"
+"POT-Creation-Date: 2026-06-13T21:29:43.647Z\n"
+"PO-Revision-Date: 2026-06-13T21:29:43.648Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -727,6 +727,9 @@ msgstr "Day"
 msgid "Jobs"
 msgstr "Jobs"
 
+msgid "Active"
+msgstr "Active"
+
 msgid "Started"
 msgstr "Started"
 
@@ -1114,9 +1117,6 @@ msgstr "Contact"
 
 msgid "Archived"
 msgstr "Archived"
-
-msgid "Active"
-msgstr "Active"
 
 msgid "Description"
 msgstr "Description"
@@ -2175,3 +2175,11 @@ msgstr ""
 msgctxt ") instead."
 msgid "Spaces are not allowed. Use dashes (-) or underscores ("
 msgstr "Spaces are not allowed. Use dashes (-) or underscores (_) instead."
+
+msgctxt "Application title"
+msgid "__MANIFEST_APP_TITLE"
+msgstr "Modeling"
+
+msgctxt "Application description"
+msgid "__MANIFEST_APP_DESCRIPTION"
+msgstr ""

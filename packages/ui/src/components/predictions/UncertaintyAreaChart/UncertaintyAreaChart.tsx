@@ -304,6 +304,15 @@ export const UncertaintyAreaChart = ({
     registerHighchartsModules();
 
     const chartRef = useRef<HighchartsReact.RefObject | null>(null);
+    const chartDataKey = useMemo(() => [
+        series.orgUnitId,
+        series.points.map(point => point.period).join(','),
+        series.actualCases?.map(actualCase => actualCase.period).join(',') ?? '',
+        endemicThreshold ?? '',
+        endemicThresholds
+            ?.map(threshold => `${threshold.period}:${threshold.value ?? 'null'}`)
+            .join(',') ?? '',
+    ].join('|'), [series, endemicThreshold, endemicThresholds]);
 
     const handleAfterSetExtremes = useCallback(
         function (
@@ -371,6 +380,7 @@ export const UncertaintyAreaChart = ({
 
     return (
         <HighchartsReact
+            key={chartDataKey}
             ref={chartRef}
             highcharts={Highcharts}
             constructorType="chart"
