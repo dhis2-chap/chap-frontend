@@ -43,12 +43,29 @@ describe('predictionSetupImportMapping', () => {
             median: 'median-id',
             quantile_mid_low: 'mid-low-id',
             quantile_low: 'low-id',
+            outbreak_indicator: '',
         })).toEqual([
             { quantile: 'quantile_high', dataElementId: 'high-id' },
             { quantile: 'quantile_mid_high', dataElementId: 'mid-high-id' },
             { quantile: 'median', dataElementId: 'median-id' },
             { quantile: 'quantile_mid_low', dataElementId: 'mid-low-id' },
             { quantile: 'quantile_low', dataElementId: 'low-id' },
+        ]);
+    });
+
+    it('includes outbreak_indicator in quantile targets when set', () => {
+        expect(buildQuantileTargetsFromForm({
+            use_import_mapping: true,
+            quantile_high: 'high-id',
+            quantile_mid_high: '',
+            median: 'median-id',
+            quantile_mid_low: '',
+            quantile_low: '',
+            outbreak_indicator: 'alert-id',
+        })).toEqual([
+            { quantile: 'quantile_high', dataElementId: 'high-id' },
+            { quantile: 'median', dataElementId: 'median-id' },
+            { quantile: 'outbreak_indicator', dataElementId: 'alert-id' },
         ]);
     });
 
@@ -60,6 +77,7 @@ describe('predictionSetupImportMapping', () => {
             median: '',
             quantile_mid_low: '',
             quantile_low: '',
+            outbreak_indicator: '',
         })).toEqual([]);
     });
 
@@ -72,6 +90,24 @@ describe('predictionSetupImportMapping', () => {
             median: 'median-id',
             quantile_mid_low: '',
             quantile_low: '',
+            outbreak_indicator: '',
+        });
+    });
+
+    it('includes outbreak_indicator when present in quantile targets', () => {
+        const targets = [
+            ...quantileTargets,
+            { quantile: 'outbreak_indicator', dataElementId: 'alert-id' },
+        ];
+        expect(formValuesFromQuantileTargets('Setup B', targets)).toEqual({
+            name: 'Setup B',
+            use_import_mapping: true,
+            quantile_high: 'high-id',
+            quantile_mid_high: '',
+            median: 'median-id',
+            quantile_mid_low: '',
+            quantile_low: '',
+            outbreak_indicator: 'alert-id',
         });
     });
 });

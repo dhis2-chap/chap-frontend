@@ -1,5 +1,8 @@
 import type { PredictionSetupReadWithPredictions } from '@dhis2-chap/ui';
-import { getPredictionSetupQuantileTargets } from '@/utils/predictionSetupImportMapping';
+import {
+    ALERT_KEY,
+    getPredictionSetupQuantileTargets,
+} from '@/utils/predictionSetupImportMapping';
 import {
     quantileMappingFields,
     type QuantileMappingField,
@@ -27,4 +30,11 @@ export const getDefaultQuantileMappingFields = (
     });
 
     return defaults;
+};
+
+export const getDefaultOutbreakIndicator = (
+    predictionSetup: PredictionSetupReadWithPredictions,
+): string => {
+    const targets = getPredictionSetupQuantileTargets(predictionSetup);
+    return targets.find(t => t.quantile === ALERT_KEY)?.dataElementId ?? '';
 };

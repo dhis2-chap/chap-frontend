@@ -21,7 +21,10 @@ import { AlertOutputSection } from './AlertOutputSection';
 import { ClearPreviousValuesControl } from './ClearPreviousValuesControl';
 import { ImportConfirmationModal } from './ImportConfirmationModal';
 import { QuantileMappingFields } from './QuantileMappingFields';
-import { getDefaultQuantileMappingFields } from './quantileMappingFormDefaults';
+import {
+    getDefaultQuantileMappingFields,
+    getDefaultOutbreakIndicator,
+} from './quantileMappingFormDefaults';
 import {
     importLocationStateSchema,
     quantileMappingSchema,
@@ -52,14 +55,18 @@ export const QuantileMappingFormContent = ({
         () => getDefaultQuantileMappingFields(predictionSetup),
         [predictionSetup],
     );
+    const defaultOutbreakIndicator = useMemo(
+        () => getDefaultOutbreakIndicator(predictionSetup),
+        [predictionSetup],
+    );
     const defaultUseAlertOutputs = locationState?.useAlertOutputs ?? true;
     const defaultAlertProbability = locationState?.alertProbability ?? DEFAULT_OUTBREAK_PROBABILITY;
     const formValues = useMemo<QuantileMappingFormValues>(() => ({
         ...defaultQuantileMappingFields,
         use_alert_outputs: defaultUseAlertOutputs,
         alert_probability: defaultAlertProbability,
-        outbreak_indicator: '',
-    }), [defaultAlertProbability, defaultQuantileMappingFields, defaultUseAlertOutputs]);
+        outbreak_indicator: defaultOutbreakIndicator,
+    }), [defaultAlertProbability, defaultOutbreakIndicator, defaultQuantileMappingFields, defaultUseAlertOutputs]);
     const {
         handleSubmit,
         formState: { errors, isDirty },
