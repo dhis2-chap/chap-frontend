@@ -1,0 +1,31 @@
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.toggleRow {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.toggleText {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.toggleLabel {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+    color: var(--colors-grey900);
+}
+
+.toggleDescription {
+    font-size: 13px;
+    line-height: 18px;
+    color: var(--colors-grey700);
+}
