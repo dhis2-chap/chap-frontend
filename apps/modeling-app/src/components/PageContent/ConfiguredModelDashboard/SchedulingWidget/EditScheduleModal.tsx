@@ -13,15 +13,19 @@ import i18n from '@dhis2/d2-i18n';
 import { useUpdatePredictionSetup } from '../QuickActionsWidget/hooks/useUpdatePredictionSetup';
 import styles from './EditScheduleModal.module.css';
 
+const DEFAULT_CRON_EXPRESSION = '0 0 * * *';
+
 type Props = {
     predictionSetupId: number;
     scheduleEnabled: boolean;
+    scheduleCronExpression: string | null;
     onClose: () => void;
 };
 
 export const EditScheduleModal = ({
     predictionSetupId,
     scheduleEnabled,
+    scheduleCronExpression,
     onClose,
 }: Props) => {
     const [enabled, setEnabled] = useState(scheduleEnabled);
@@ -37,7 +41,12 @@ export const EditScheduleModal = ({
         try {
             await updatePredictionSetup({
                 predictionSetupId,
-                data: { scheduleEnabled: enabled },
+                data: {
+                    scheduleEnabled: enabled,
+                    ...(enabled && !scheduleCronExpression
+                        ? { scheduleCronExpression: DEFAULT_CRON_EXPRESSION }
+                        : {}),
+                },
             });
         } catch {
             // Error alert is shown by useUpdatePredictionSetup's onError

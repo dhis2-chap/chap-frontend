@@ -61,6 +61,7 @@ export const SchedulingWidget = ({
                 <EditScheduleModal
                     predictionSetupId={predictionSetup.id}
                     scheduleEnabled={isScheduled}
+                    scheduleCronExpression={predictionSetup.scheduleCronExpression}
                     onClose={() => setEditModalIsOpen(false)}
                 />
             )}
