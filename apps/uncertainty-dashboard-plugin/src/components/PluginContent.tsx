@@ -209,7 +209,7 @@ const ChartContent = ({
         chartHeight,
         chartSurfaceRef,
     } = useDashboardChartHeight();
-    const parsedFilters = parseDashboardFilters(dashboardItemFilters);
+    const parsedFilters = parseDashboardFilters(dashboardItemFilters, config.periodType);
     const dashboardOrgUnit = getDashboardOrgUnit(parsedFilters.orgUnit);
     const selectorOptions = getSelectorOptions(parsedFilters.orgUnit);
     const storedFallbackOrgUnit = getFilterMatchedOrgUnit(

@@ -4,10 +4,12 @@ import {
     getLastCompletedPeriodId,
     getLastNPeriodIds,
     PERIOD_TYPES,
+    toDhis2FixedPeriodType,
 } from '@dhis2-chap/core';
-import { FALLBACK_MONTH_COUNT } from '@/constants';
+import { FALLBACK_PERIOD_COUNTS } from '@/constants';
+import type { ChartPeriodType } from '@/types';
 
-type SupportedChartPeriodType = typeof PERIOD_TYPES.MONTH | typeof PERIOD_TYPES.WEEK;
+export type SupportedChartPeriodType = typeof PERIOD_TYPES.MONTH | typeof PERIOD_TYPES.WEEK;
 
 type PeriodTypeResult =
     | { status: 'valid'; periodType: SupportedChartPeriodType }
@@ -15,7 +17,7 @@ type PeriodTypeResult =
     | { status: 'unsupported' };
 
 const isMonthlyPeriodId = (periodId: string) => /^\d{4}(0[1-9]|1[0-2])$/.test(periodId);
-const isWeeklyPeriodId = (periodId: string) => /^\d{4}W(0[1-9]|[1-4]\d|5[0-3])$/.test(periodId);
+const isWeeklyPeriodId = (periodId: string) => /^\d{4}W(0?[1-9]|[1-4]\d|5[0-3])$/.test(periodId);
 
 export const inferChartPeriodType = (periodIds: string[]): PeriodTypeResult => {
     const periodTypes = new Set<SupportedChartPeriodType>();
@@ -42,20 +44,29 @@ export const inferChartPeriodType = (periodIds: string[]): PeriodTypeResult => {
     return { status: 'valid', periodType };
 };
 
-export const getFallbackMonthlyPeriods = (): string[] => {
-    const lastCompletedMonthlyPeriod = getLastCompletedPeriodId({
-        periodType: 'MONTHLY',
+export const getFallbackPeriods = (periodType: ChartPeriodType): string[] => {
+    const dhis2PeriodType = toDhis2FixedPeriodType(periodType);
+
+    if (!dhis2PeriodType) {
+        return [];
+    }
+
+    const lastCompletedPeriod = getLastCompletedPeriodId({
+        periodType: dhis2PeriodType,
         calendar: DEFAULT_DHIS2_CALENDAR,
         locale: DEFAULT_DHIS2_LOCALE,
     });
 
-    return getFallbackMonthlyPeriodsEndingAt(lastCompletedMonthlyPeriod);
+    return getFallbackPeriodsEndingAt(lastCompletedPeriod, periodType);
 };
 
-export const getFallbackMonthlyPeriodsEndingAt = (periodId: string): string[] => {
+export const getFallbackPeriodsEndingAt = (
+    periodId: string,
+    periodType: ChartPeriodType,
+): string[] => {
     return getLastNPeriodIds({
         periodId,
-        count: FALLBACK_MONTH_COUNT,
+        count: FALLBACK_PERIOD_COUNTS[periodType],
         calendar: DEFAULT_DHIS2_CALENDAR,
         locale: DEFAULT_DHIS2_LOCALE,
     });

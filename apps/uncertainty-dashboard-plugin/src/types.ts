@@ -1,5 +1,7 @@
 import { z } from 'zod';
+import { PERIOD_TYPES } from '@dhis2-chap/core';
 import type { QuantileKey } from '@dhis2-chap/ui';
+import { DEFAULT_CHART_PERIOD_TYPE } from '@/constants';
 
 export const TargetDimensionItemTypeSchema = z.enum([
     'PROGRAM_DATA_ELEMENT',
@@ -24,9 +26,15 @@ export const QuantileDataItemSchema = DataItemSchema.extend({
     dimensionItemType: z.literal('DATA_ELEMENT'),
 });
 
+export const ChartPeriodTypeSchema = z.enum([
+    PERIOD_TYPES.MONTH,
+    PERIOD_TYPES.WEEK,
+]);
+
 export const PluginConfigSchema = z.object({
     version: z.literal(1),
     title: z.string().optional(),
+    periodType: ChartPeriodTypeSchema.default(DEFAULT_CHART_PERIOD_TYPE),
     targetDataItem: DataItemSchema,
     quantiles: z.object({
         quantile_low: QuantileDataItemSchema,
@@ -41,6 +49,7 @@ export const PluginConfigSchema = z.object({
 export type TargetDimensionItemType = z.infer<typeof TargetDimensionItemTypeSchema>;
 export type DataItemOption = z.infer<typeof DataItemSchema>;
 export type OrgUnitOption = z.infer<typeof OrgUnitSchema>;
+export type ChartPeriodType = z.infer<typeof ChartPeriodTypeSchema>;
 export type PluginConfig = z.infer<typeof PluginConfigSchema>;
 
 export type DashboardFilterItem = {

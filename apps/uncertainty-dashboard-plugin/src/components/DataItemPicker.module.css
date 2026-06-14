@@ -7,7 +7,9 @@
 
 .label {
     color: var(--colors-grey900);
+    font-size: 14px;
     font-weight: 500;
+    line-height: 20px;
 }
 
 .selectContainer {
@@ -23,10 +25,11 @@
     cursor: pointer;
     display: flex;
     font: inherit;
+    font-size: 14px;
     gap: var(--spacers-dp8);
     justify-content: space-between;
-    min-height: 40px;
-    padding: 0 var(--spacers-dp8) 0 var(--spacers-dp12);
+    min-height: 30px;
+    padding: 0 var(--spacers-dp8);
     text-align: left;
     width: 100%;
 }
@@ -64,10 +67,10 @@
     color: var(--colors-grey700);
     cursor: pointer;
     display: inline-flex;
-    height: 24px;
+    height: 20px;
     justify-content: center;
     padding: 0;
-    width: 24px;
+    width: 20px;
 }
 
 .dropdown {
@@ -76,11 +79,11 @@
     border-radius: 3px;
     box-shadow: var(--elevations-e400);
     min-width: min(420px, calc(100vw - 32px));
-    padding: var(--spacers-dp8);
+    padding: var(--spacers-dp4);
 }
 
 .search {
-    margin-block-end: var(--spacers-dp8);
+    margin-block-end: var(--spacers-dp4);
 }
 
 .resultsList {
@@ -98,8 +101,8 @@
     display: flex;
     gap: var(--spacers-dp8);
     justify-content: space-between;
-    min-height: 36px;
-    padding: var(--spacers-dp8);
+    min-height: 28px;
+    padding: var(--spacers-dp4);
 }
 
 .resultItem:hover {
@@ -107,6 +110,8 @@
 }
 
 .resultName {
+    font-size: 14px;
+    line-height: 20px;
     min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -116,16 +121,19 @@
 .resultType {
     color: var(--colors-grey700);
     flex-shrink: 0;
-    font-size: 12px;
+    font-size: 14px;
+    line-height: 20px;
 }
 
 .infoItem {
     color: var(--colors-grey700);
-    padding: var(--spacers-dp12) var(--spacers-dp8);
+    font-size: 14px;
+    line-height: 20px;
+    padding: var(--spacers-dp8) var(--spacers-dp4);
 }
 
 .errorText {
     color: var(--colors-red600);
-    font-size: 12px;
-    line-height: 16px;
+    font-size: 14px;
+    line-height: 20px;
 }

@@ -8,7 +8,7 @@ import {
     getLatestCompleteQuantilePeriodId,
 } from '@/api/analytics';
 import { parseDashboardFilters } from '@/utils/dashboardFilters';
-import { getFallbackMonthlyPeriodsEndingAt } from '@/utils/periods';
+import { getFallbackPeriodsEndingAt } from '@/utils/periods';
 import type {
     DashboardItemFilters,
     OrgUnitOption,
@@ -27,7 +27,7 @@ export const useAnalyticsSeries = ({
     dashboardItemFilters,
 }: UseAnalyticsSeriesOptions) => {
     const engine = useDataEngine();
-    const parsedFilters = parseDashboardFilters(dashboardItemFilters);
+    const parsedFilters = parseDashboardFilters(dashboardItemFilters, config.periodType);
     const dataItemIds = [
         config.targetDataItem.id,
         ...QUANTILE_FIELDS.map(field => config.quantiles[field.key].id),
@@ -66,7 +66,10 @@ export const useAnalyticsSeries = ({
                 return response;
             }
 
-            const anchoredFallbackPeriods = getFallbackMonthlyPeriodsEndingAt(latestCompleteQuantilePeriodId);
+            const anchoredFallbackPeriods = getFallbackPeriodsEndingAt(
+                latestCompleteQuantilePeriodId,
+                config.periodType,
+            );
 
             if (anchoredFallbackPeriods.join(';') === parsedFilters.periods.periodIds.join(';')) {
                 return response;

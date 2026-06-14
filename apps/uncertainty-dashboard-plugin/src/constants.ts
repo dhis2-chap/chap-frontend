@@ -1,9 +1,14 @@
 import i18n from '@dhis2/d2-i18n';
+import { PERIOD_TYPES } from '@dhis2-chap/core';
 import type { QuantileKey } from '@dhis2-chap/ui';
 
 export const DATASTORE_NAMESPACE = 'chap-dashboard-plugin';
 export const CONFIG_VERSION = 1;
-export const FALLBACK_MONTH_COUNT = 24;
+export const DEFAULT_CHART_PERIOD_TYPE = PERIOD_TYPES.MONTH;
+export const FALLBACK_PERIOD_COUNTS = {
+    [PERIOD_TYPES.MONTH]: 24,
+    [PERIOD_TYPES.WEEK]: 104,
+} as const;
 
 export const QUANTILE_FIELDS: Array<{
     key: QuantileKey;

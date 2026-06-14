@@ -89,6 +89,7 @@ The app uses TanStack Query for server state. API calls go through the generated
 - TypeScript strict mode
 - Conventional Commits for PR titles (feat:, fix:, chore:, refactor:, docs:)
 - PRs should always be created as drafts
+- Include a changeset when creating PRs unless the user explicitly asks not to.
 
 ## DHIS2 Integration
 

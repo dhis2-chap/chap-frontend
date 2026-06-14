@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-06-09T10:36:53.591Z\n"
-"PO-Revision-Date: 2026-06-09T10:36:53.592Z\n"
+"POT-Creation-Date: 2026-06-14T22:15:01.258Z\n"
+"PO-Revision-Date: 2026-06-14T22:15:01.259Z\n"
 
 msgid "Configure uncertainty chart"
 msgstr "Configure uncertainty chart"
@@ -22,6 +22,15 @@ msgstr "Chart title"
 
 msgid "Use target data item name"
 msgstr "Use target data item name"
+
+msgid "Period type"
+msgstr "Period type"
+
+msgid "Monthly"
+msgstr "Monthly"
+
+msgid "Weekly"
+msgstr "Weekly"
 
 msgid "Actual values"
 msgstr "Actual values"

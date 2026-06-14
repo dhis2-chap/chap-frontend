@@ -1,10 +1,17 @@
 .form {
     display: flex;
     flex-direction: column;
-    gap: var(--spacers-dp16);
+    font-size: 14px;
+    gap: var(--spacers-dp12);
     height: 100%;
     overflow: auto;
-    padding: var(--spacers-dp16);
+    padding: var(--spacers-dp12);
+}
+
+.form :global(input),
+.form :global(button),
+.form :global(label) {
+    font-size: 14px;
 }
 
 .header {
@@ -15,37 +22,37 @@
 
 .title {
     color: var(--colors-grey900);
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 600;
-    line-height: 22px;
+    line-height: 20px;
     margin: 0;
 }
 
 .description {
     color: var(--colors-grey700);
-    font-size: 13px;
-    line-height: 18px;
+    font-size: 14px;
+    line-height: 20px;
     margin: 0;
 }
 
 .section {
     display: flex;
     flex-direction: column;
-    gap: var(--spacers-dp12);
+    gap: var(--spacers-dp8);
 }
 
 .sectionTitle {
     color: var(--colors-grey900);
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 600;
-    line-height: 18px;
+    line-height: 20px;
     margin: 0;
 }
 
 .grid {
     display: grid;
-    gap: var(--spacers-dp12);
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--spacers-dp8);
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 }
 
 .actions {
