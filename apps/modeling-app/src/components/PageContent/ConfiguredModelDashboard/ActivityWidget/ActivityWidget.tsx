@@ -34,15 +34,19 @@ import { JobActionsMenu } from '../../../JobsTable/JobActionsMenu/JobActionsMenu
 import { StatusCell } from '../../../JobsTable/TableCells/StatusCell';
 import {
     hasDateRangeValue,
-    isJobInDateRange,
     type DateRangeValue,
 } from '../../../../utils/jobDateRange';
-import { buildJobActivityDays, type JobActivityDay } from './ActivityWidget.utils';
+import {
+    buildJobActivityDays,
+    isJobInActivityDateRange,
+    type JobActivityDay,
+} from './ActivityWidget.utils';
 import styles from './ActivityWidget.module.css';
 
 const EMPTY_VALUE = '-';
 const MAX_VISIBLE_ROWS = 5;
 const STORAGE_KEY = 'chap-modeling-app:prediction-activity-period';
+const ACTIVE_COLOR = '#f59e0b';
 const SUCCESS_COLOR = '#147cd7';
 const FAILED_COLOR = '#d32f2f';
 const columnHelper = createColumnHelper<JobDescription>();
@@ -257,6 +261,7 @@ const getChartOptions = (
             }
 
             const rows = [
+                `<span style="color:${ACTIVE_COLOR}">●</span> ${i18n.t('Active')}: <strong>${formatJobCount(day.activeCount)}</strong><br/>`,
                 `<span style="color:${SUCCESS_COLOR}">●</span> ${i18n.t('Success')}: <strong>${formatJobCount(day.successCount)}</strong><br/>`,
                 `<span style="color:${FAILED_COLOR}">●</span> ${i18n.t('Failed')}: <strong>${formatJobCount(day.failedCount)}</strong><br/>`,
             ];
@@ -289,6 +294,12 @@ const getChartOptions = (
         },
     },
     series: [
+        {
+            type: 'column',
+            name: i18n.t('Active'),
+            color: ACTIVE_COLOR,
+            data: days.map(day => day.activeCount),
+        },
         {
             type: 'column',
             name: i18n.t('Success'),
@@ -343,7 +354,7 @@ export const ActivityWidget = ({
     jobs,
     predictionSetupId,
 }: Props) => {
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(true);
     const [activityView, setActivityView] = useState<ActivityView>('chart');
     const [selectedPeriod, setSelectedPeriod] = usePersistedActivityPeriod();
     const [statusFilter, setStatusFilter] = useState<string | undefined>();
@@ -416,7 +427,7 @@ export const ActivityWidget = ({
         columnHelper.accessor('start_time', {
             header: () => i18n.t('Started'),
             filterFn: (row, _columnId, filterValue) => (
-                isJobInDateRange(row.original, filterValue as DateRangeValue)
+                isJobInActivityDateRange(row.original, filterValue as DateRangeValue)
             ),
             cell: info => formatDateTime(info.getValue()),
         }),
