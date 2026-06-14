@@ -18,6 +18,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { DataItemSelect } from '../../PageContent/PredictionImport/QuantileMappingForm/DataItemSelect';
 import {
+    ALERT_KEY,
     QUANTILE_KEYS,
     QUANTILE_SUGGESTED_KEYWORDS,
     type PredictionSetupFormValues,
@@ -36,20 +37,7 @@ const markReadyForForecastingSchema = z.object({
     median: quantileFieldSchema,
     quantile_mid_low: quantileFieldSchema,
     quantile_low: quantileFieldSchema,
-}).superRefine((values, context) => {
-    if (!values.use_import_mapping) {
-        return;
-    }
-
-    QUANTILE_KEYS.forEach((field) => {
-        if (!values[field]) {
-            context.addIssue({
-                code: z.ZodIssueCode.custom,
-                path: [field],
-                message: i18n.t('Data element is required'),
-            });
-        }
-    });
+    outbreak_indicator: quantileFieldSchema,
 });
 
 export type MarkReadyForForecastingFormValues = PredictionSetupFormValues;
@@ -100,6 +88,7 @@ export const MarkReadyForForecastingModal = ({
             median: '',
             quantile_mid_low: '',
             quantile_low: '',
+            outbreak_indicator: '',
             ...defaultValues,
         },
     });
@@ -110,7 +99,7 @@ export const MarkReadyForForecastingModal = ({
         setValue('use_import_mapping', nextIsEnabled, { shouldDirty: true });
 
         if (!nextIsEnabled) {
-            clearErrors(QUANTILE_KEYS);
+            clearErrors([...QUANTILE_KEYS, ALERT_KEY]);
         }
     };
 
@@ -202,6 +191,19 @@ export const MarkReadyForForecastingModal = ({
                                                 )}
                                             />
                                         ))}
+                                        <Controller
+                                            name="outbreak_indicator"
+                                            control={control}
+                                            render={({ field }) => (
+                                                <DataItemSelect
+                                                    label={i18n.t('Outbreak indicator')}
+                                                    value={field.value}
+                                                    onChange={field.onChange}
+                                                    error={errors.outbreak_indicator?.message}
+                                                    dataElementsOnly
+                                                />
+                                            )}
+                                        />
                                     </motion.div>
                                 )}
                             </AnimatePresence>
