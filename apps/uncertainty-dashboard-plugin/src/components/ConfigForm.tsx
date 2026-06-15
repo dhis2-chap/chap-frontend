@@ -5,6 +5,8 @@ import i18n from '@dhis2/d2-i18n';
 import {
     Button,
     InputField,
+    SingleSelectField,
+    SingleSelectOption,
 } from '@dhis2/ui';
 import {
     Controller,
@@ -14,9 +16,12 @@ import {
 } from 'react-hook-form';
 import {
     CONFIG_VERSION,
+    DEFAULT_CHART_PERIOD_TYPE,
     QUANTILE_FIELDS,
 } from '@/constants';
 import {
+    ChartPeriodType,
+    ChartPeriodTypeSchema,
     DataItemOption,
     PluginConfig,
     DataItemSchema,
@@ -28,6 +33,7 @@ import styles from './ConfigForm.module.css';
 
 const ConfigFormSchema = z.object({
     title: z.string().optional(),
+    periodType: ChartPeriodTypeSchema,
     targetDataItem: DataItemSchema,
     quantiles: z.object({
         quantile_low: QuantileDataItemSchema,
@@ -40,6 +46,7 @@ const ConfigFormSchema = z.object({
 
 type ConfigFormValues = {
     title: string;
+    periodType: ChartPeriodType;
     targetDataItem: DataItemOption | null;
     quantiles: Record<QuantileKey, DataItemOption | null>;
 };
@@ -52,6 +59,7 @@ type ConfigFormProps = {
 
 const getDefaultValues = (config: PluginConfig | null): ConfigFormValues => ({
     title: config?.title ?? '',
+    periodType: config?.periodType ?? DEFAULT_CHART_PERIOD_TYPE,
     targetDataItem: config?.targetDataItem ?? null,
     quantiles: {
         quantile_low: config?.quantiles.quantile_low ?? null,
@@ -119,6 +127,28 @@ export const ConfigForm = ({
                                 field.onChange(value ?? '');
                             }}
                         />
+                    )}
+                />
+                <Controller
+                    control={control}
+                    name="periodType"
+                    render={({ field }) => (
+                        <SingleSelectField
+                            label={i18n.t('Period type')}
+                            selected={field.value}
+                            onChange={({ selected }: { selected: string }) => {
+                                field.onChange(ChartPeriodTypeSchema.parse(selected));
+                            }}
+                        >
+                            <SingleSelectOption
+                                value="MONTH"
+                                label={i18n.t('Monthly')}
+                            />
+                            <SingleSelectOption
+                                value="WEEK"
+                                label={i18n.t('Weekly')}
+                            />
+                        </SingleSelectField>
                     )}
                 />
             </section>

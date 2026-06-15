@@ -1,9 +1,11 @@
 import { useDataEngine } from '@dhis2/app-runtime';
 import {
     PERIOD_TYPES,
-    comparePeriods,
+    DEFAULT_DHIS2_CALENDAR,
+    DEFAULT_DHIS2_LOCALE,
+    comparePeriodIds,
     convertServerToClientPeriod,
-    sortPeriods,
+    sortPeriodIds,
 } from '@dhis2-chap/core';
 import type {
     PredictionOrgUnitSeries,
@@ -180,6 +182,22 @@ const hasCompleteQuantiles = (
     QUANTILE_FIELDS.every(field => quantiles?.[field.key] !== undefined)
 );
 
+const compareChartPeriodIds = (a: string, b: string): number => (
+    comparePeriodIds({
+        a,
+        b,
+        calendar: DEFAULT_DHIS2_CALENDAR,
+        locale: DEFAULT_DHIS2_LOCALE,
+    })
+);
+
+const sortChartPeriodIds = (periodIds: string[]): string[] => (
+    sortPeriodIds(periodIds, {
+        calendar: DEFAULT_DHIS2_CALENDAR,
+        locale: DEFAULT_DHIS2_LOCALE,
+    })
+);
+
 export const getLatestCompleteQuantilePeriodId = (
     config: PluginConfig,
     response: AnalyticsResponse,
@@ -199,7 +217,7 @@ export const getLatestCompleteQuantilePeriodId = (
         return null;
     }
 
-    return sortPeriods(completePeriodIds, periodTypeResult.periodType).at(-1) ?? null;
+    return sortChartPeriodIds(completePeriodIds).at(-1) ?? null;
 };
 
 export const buildAnalyticsSeries = ({
@@ -247,7 +265,7 @@ export const buildAnalyticsSeries = ({
 
     const orgUnitId = orgUnitIds[0];
     const periodType = periodTypeResult.periodType;
-    const sortedPeriods = sortPeriods(periodIds, periodType);
+    const sortedPeriods = sortChartPeriodIds(periodIds);
     const actualCasesByPeriod = new Map<string, number | null>();
     const quantilesByPeriod = buildQuantilesByPeriod(config, response);
 
@@ -305,7 +323,7 @@ export const buildAnalyticsSeries = ({
             points,
             actualCases: Array.from(actualCasesByPeriod.entries())
                 .map(([period, value]) => ({ period, value }))
-                .sort((a, b) => comparePeriods(a.period, b.period, periodType)),
+                .sort((a, b) => compareChartPeriodIds(a.period, b.period)),
         },
     };
 };

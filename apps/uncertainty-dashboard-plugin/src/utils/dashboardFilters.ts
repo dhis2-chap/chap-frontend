@@ -1,5 +1,7 @@
-import { getFallbackMonthlyPeriods } from './periods';
+import { DEFAULT_CHART_PERIOD_TYPE } from '@/constants';
+import { getFallbackPeriods } from './periods';
 import type {
+    ChartPeriodType,
     DashboardFilterItem,
     DashboardItemFilters,
     OrgUnitOption,
@@ -95,7 +97,10 @@ const parseOrgUnitFilter = (filters: DashboardItemFilters): OrgUnitFilterState =
     };
 };
 
-const parsePeriodFilter = (filters: DashboardItemFilters): PeriodFilterState => {
+const parsePeriodFilter = (
+    filters: DashboardItemFilters,
+    fallbackPeriodType: ChartPeriodType,
+): PeriodFilterState => {
     const periodIds = (filters.pe ?? [])
         .map(filterItem => filterItem.id)
         .filter((periodId): periodId is string => !!periodId);
@@ -108,18 +113,19 @@ const parsePeriodFilter = (filters: DashboardItemFilters): PeriodFilterState => 
     }
 
     return {
-        periodIds: getFallbackMonthlyPeriods(),
+        periodIds: getFallbackPeriods(fallbackPeriodType),
         source: 'fallback',
     };
 };
 
 export const parseDashboardFilters = (
     filters: DashboardItemFilters | undefined,
+    fallbackPeriodType: ChartPeriodType = DEFAULT_CHART_PERIOD_TYPE,
 ): ParsedDashboardFilters => {
     const safeFilters = filters ?? {};
 
     return {
         orgUnit: parseOrgUnitFilter(safeFilters),
-        periods: parsePeriodFilter(safeFilters),
+        periods: parsePeriodFilter(safeFilters, fallbackPeriodType),
     };
 };
