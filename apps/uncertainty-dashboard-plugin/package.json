@@ -1,6 +1,6 @@
 {
     "name": "@dhis2-chap/uncertainty-dashboard-plugin",
-    "version": "0.2.1",
+    "version": "0.3.0",
     "description": "DHIS2 dashboard plugin for CHAP uncertainty charts",
     "license": "BSD-3-Clause",
     "private": true,
