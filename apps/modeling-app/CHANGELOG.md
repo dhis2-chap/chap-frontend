@@ -1,5 +1,21 @@
 # @dhis2-chap/modeling-app
 
+## 6.2.0
+
+### Minor Changes
+
+-   c25cee8: Add edit schedule dialog to toggle scheduling on prediction setups.
+-   eefd45f: Add outbreak indicator data element field to prediction setup create and edit forms. All data element mapping fields are now optional.
+
+### Patch Changes
+
+-   c60ed44: Show active prediction setup jobs in the recent activity widget and open the widget by default.
+-   f578a4f: Fix HTML entity escaping of quotes in prune confirmation dialog.
+-   b9cb565: Update creating-a-prediction user guide with real screenshots and remove em dashes.
+-   Updated dependencies [9e57d36]
+    -   @dhis2-chap/ui@6.2.0
+    -   @dhis2-chap/core@6.2.0
+
 ## 6.1.0
 
 ### Minor Changes

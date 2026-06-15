@@ -1,5 +1,12 @@
 # @dhis2-chap/ui
 
+## 6.2.0
+
+### Patch Changes
+
+-   9e57d36: Remount uncertainty charts when their backing data changes to avoid stale Highcharts series points.
+    -   @dhis2-chap/core@6.2.0
+
 ## 6.1.0
 
 ### Minor Changes
