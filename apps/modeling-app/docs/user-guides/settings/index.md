@@ -84,8 +84,8 @@ Click **Experimental features** in the settings sidebar. Toggle the main **Enabl
 
 Once enabled, you can toggle individual features:
 
-- **Metric plots**: Adds a metric visualization widget to the evaluation details page, showing statistical accuracy indicators such as CRPS
 - **Evaluation plots**: Adds a custom evaluation visualization widget to the evaluation details page with alternative chart types
+- **Scheduling**: Shows scheduling information in the prediction setup dashboard
 
 These features are experimental and may change or be removed in future releases.
 
