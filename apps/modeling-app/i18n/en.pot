@@ -998,29 +998,6 @@ msgid_plural "{{count}} locations"
 msgstr[0] "{{count}} location"
 msgstr[1] "{{count}} locations"
 
-msgid "Please select a visualization and metric."
-msgstr "Please select a visualization and metric."
-
-msgid ""
-"Keep in mind that this is advanced functionality and may not be suitable "
-"for all users."
-msgstr ""
-"Keep in mind that this is advanced functionality and may not be suitable "
-"for all users."
-
-msgid "Metric plot"
-msgstr "Metric plot"
-
-msgid ""
-"Metric plots are advanced functionality and may be misinterpreted. Use with "
-"caution."
-msgstr ""
-"Metric plots are advanced functionality and may be misinterpreted. Use with "
-"caution."
-
-msgid "Select metric"
-msgstr "Select metric"
-
 msgid "Evaluation result"
 msgstr "Evaluation result"
 

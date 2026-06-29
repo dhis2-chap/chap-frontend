@@ -47,7 +47,6 @@ export type { LineString } from './models/LineString';
 export type { MakeBacktestRequest } from './models/MakeBacktestRequest';
 export type { MakeBacktestWithDataRequest } from './models/MakeBacktestWithDataRequest';
 export type { MakePredictionRequest } from './models/MakePredictionRequest';
-export type { MetricInfo } from './models/MetricInfo';
 export type { MLServiceInfo_Input } from './models/MLServiceInfo_Input';
 export type { MLServiceInfo_Output } from './models/MLServiceInfo_Output';
 export type { ModelConfigurationCreate } from './models/ModelConfigurationCreate';
@@ -83,7 +82,6 @@ export type { ThresholdEntry } from './models/ThresholdEntry';
 export type { ThresholdRequest } from './models/ThresholdRequest';
 export type { ThresholdStrategyInfo } from './models/ThresholdStrategyInfo';
 export type { ValidationError } from './models/ValidationError';
-export type { VisualizationInfo } from './models/VisualizationInfo';
 
 export { BacktestsService } from './services/BacktestsService';
 export { DatasetsService } from './services/DatasetsService';

@@ -4,93 +4,10 @@
 /* eslint-disable */
 import type { BacktestPlotType } from '../models/BacktestPlotType';
 import type { DatasetPlotType } from '../models/DatasetPlotType';
-import type { MetricInfo } from '../models/MetricInfo';
-import type { VisualizationInfo } from '../models/VisualizationInfo';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 export class VisualizationsService {
-    /**
-     * Discover which metric plots are available
-     * List the metric-plot styles you can render against a backtest's forecasts (line chart of CRPS over time, choropleth of MAE, ...).
-     *
-     * Use this to populate a plot picker in a UI or to find out which
-     * ``/metric-plots/{name}/...`` URLs are valid. The result is the same regardless of
-     * ``backtest_id`` — the path takes it for symmetry with the render endpoint.
-     * @param backtestId
-     * @returns VisualizationInfo Successful Response
-     * @throws ApiError
-     */
-    public static getAvilableMetricPlotsV1VisualizationMetricPlotsBacktestIdGet(
-        backtestId: number,
-    ): CancelablePromise<Array<VisualizationInfo>> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/v1/visualization/metric-plots/{backtest_id}',
-            path: {
-                'backtest_id': backtestId,
-            },
-            errors: {
-                422: `Validation Error`,
-            },
-        });
-    }
-    /**
-     * Discover which scoring metrics are available
-     * List the metrics you can score a backtest with (CRPS, MAE, ...), with a human-friendly name and description for each.
-     *
-     * Use this to populate a metric picker in a UI before requesting a specific plot. The
-     * result is the same regardless of ``backtest_id`` — the path takes it for symmetry
-     * with the render endpoint.
-     * @param backtestId
-     * @returns MetricInfo Successful Response
-     * @throws ApiError
-     */
-    public static getAvailableMetricsV1VisualizationMetricsBacktestIdGet(
-        backtestId: number,
-    ): CancelablePromise<Array<MetricInfo>> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/v1/visualization/metrics/{backtest_id}',
-            path: {
-                'backtest_id': backtestId,
-            },
-            errors: {
-                422: `Validation Error`,
-            },
-        });
-    }
-    /**
-     * Render a metric plot for a backtest
-     * Score a backtest with the chosen metric (CRPS, MAE, ...) and render the result as the chosen plot style.
-     *
-     * The response is a Vega/Vega-Lite spec you can hand straight to a frontend renderer.
-     * 404 if the backtest or plot style is unknown; 400 if the metric id is not one of the
-     * registered metrics.
-     * @param visualizationName
-     * @param backtestId
-     * @param metricId
-     * @returns any Successful Response
-     * @throws ApiError
-     */
-    public static generateVisualizationV1VisualizationMetricPlotsVisualizationNameBacktestIdMetricIdGet(
-        visualizationName: string,
-        backtestId: number,
-        metricId: string,
-    ): CancelablePromise<any> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/v1/visualization/metric-plots/{visualization_name}/{backtest_id}/{metric_id}',
-            path: {
-                'visualization_name': visualizationName,
-                'backtest_id': backtestId,
-                'metric_id': metricId,
-            },
-            errors: {
-                422: `Validation Error`,
-            },
-        });
-    }
     /**
      * Discover which dataset plots are available
      * List the visualizations you can render against an imported dataset (observation time-series per region, polygon overlays, ...).
