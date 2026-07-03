@@ -1,5 +1,7 @@
 import { Card, CircularLoader, NoticeBox } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
+import { useAuthority } from '@/hooks/useAuthority';
+import { CHAP_MODELING_APP_AUTHORITY } from '@/utils/global-authorities';
 import { useExperimentalSettings, FEATURES } from './hooks/useExperimentalSettings';
 import { ChoiceCard } from './ChoiceCard';
 import styles from './ExperimentalSettings.module.css';
@@ -12,8 +14,13 @@ export const ExperimentalSettings = () => {
         toggleEnabled,
         toggleFeature,
     } = useExperimentalSettings();
+    const { hasAuthority, isLoading: isAuthorityLoading } = useAuthority({
+        authority: CHAP_MODELING_APP_AUTHORITY,
+    });
 
-    if (isLoading) {
+    const canEdit = hasAuthority === true;
+
+    if (isLoading || isAuthorityLoading) {
         return (
             <div className={styles.container}>
                 <Card>
@@ -39,13 +46,22 @@ export const ExperimentalSettings = () => {
                         </NoticeBox>
                     </div>
 
+                    {!canEdit && (
+                        <NoticeBox title={i18n.t('Missing authority')}>
+                            {i18n.t(
+                                'You need the {{authority}} authority to change these settings. Contact your system administrator to get access.',
+                                { authority: CHAP_MODELING_APP_AUTHORITY },
+                            )}
+                        </NoticeBox>
+                    )}
+
                     <div className={styles.toggleList}>
                         <ChoiceCard
                             title={i18n.t('Enable experimental features')}
                             description={i18n.t('Turn on to access experimental features in the app')}
                             checked={settings.enabled}
                             onChange={toggleEnabled}
-                            disabled={isSaving}
+                            disabled={isSaving || !canEdit}
                         />
                     </div>
 
@@ -60,14 +76,14 @@ export const ExperimentalSettings = () => {
                                     description={i18n.t('Show evaluation visualization plots in the evaluation dashboard')}
                                     checked={settings.features[FEATURES.EVALUATION_PLOTS] ?? false}
                                     onChange={() => toggleFeature(FEATURES.EVALUATION_PLOTS)}
-                                    disabled={isSaving}
+                                    disabled={isSaving || !canEdit}
                                 />
                                 <ChoiceCard
                                     title={i18n.t('Scheduling')}
                                     description={i18n.t('Show scheduling information in the prediction setup dashboard')}
                                     checked={settings.features[FEATURES.SCHEDULING] ?? false}
                                     onChange={() => toggleFeature(FEATURES.SCHEDULING)}
-                                    disabled={isSaving}
+                                    disabled={isSaving || !canEdit}
                                 />
                             </div>
                         </div>

@@ -82,6 +82,8 @@ If you do not have superuser authority, a message will inform you that you lack 
 
 Click **Experimental features** in the settings sidebar. Toggle the main **Enable experimental features** switch to turn on access to experimental functionality.
 
+> **Required permissions**: You need the `F_CHAP_MODELING_APP` authority in DHIS2 to change experimental feature settings. If you do not have this authority, the toggles will be disabled and a notice will explain the required permission. Contact your system administrator to get access.
+
 Once enabled, you can toggle individual features:
 
 - **Evaluation plots**: Adds a custom evaluation visualization widget to the evaluation details page with alternative chart types
