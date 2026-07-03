@@ -44,16 +44,16 @@ export const ExperimentalSettings = () => {
                         <NoticeBox warning title={i18n.t('Warning')}>
                             {i18n.t('These features are experimental and may be unstable or change without notice.')}
                         </NoticeBox>
-                    </div>
 
-                    {!canEdit && (
-                        <NoticeBox title={i18n.t('Missing authority')}>
-                            {i18n.t(
-                                'You need the {{authority}} authority to change these settings. Contact your system administrator to get access.',
-                                { authority: CHAP_MODELING_APP_AUTHORITY },
-                            )}
-                        </NoticeBox>
-                    )}
+                        {!canEdit && (
+                            <NoticeBox title={i18n.t('Missing authority')}>
+                                {i18n.t(
+                                    'You need the {{authority}} authority to change these settings. Contact your system administrator to get access.',
+                                    { authority: CHAP_MODELING_APP_AUTHORITY },
+                                )}
+                            </NoticeBox>
+                        )}
+                    </div>
 
                     <div className={styles.toggleList}>
                         <ChoiceCard
