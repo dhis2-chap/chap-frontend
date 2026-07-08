@@ -143,3 +143,20 @@
     padding: var(--spacers-dp4);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
+
+@media (max-width: 640px) {
+    .selectorRow {
+        flex-direction: column;
+    }
+
+    .selectorRow > * {
+        flex: 1 1 auto;
+        inline-size: 100%;
+    }
+
+    .zoomButtons {
+        flex: 1 1 auto;
+        justify-content: flex-start;
+        inline-size: 100%;
+    }
+}
