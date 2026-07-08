@@ -35,9 +35,6 @@
 .evaluationOption span {
     font-size: 14px;
     color: var(--colors-grey600);
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
 }
 
 :global(.active) .evaluationOption span {
