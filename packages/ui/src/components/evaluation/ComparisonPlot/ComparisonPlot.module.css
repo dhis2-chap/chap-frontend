@@ -24,3 +24,10 @@
     min-inline-size: 0;
     inline-size: 100%;
 }
+
+@media (max-width: 900px) {
+    .comparionBoxSideBySide {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}
