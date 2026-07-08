@@ -154,6 +154,7 @@ export const EvaluationSelectorBase = ({
                         key={evaluation.id}
                         value={evaluation.id.toString()}
                         label={evaluation.name ?? evaluation.id.toString()}
+                        className={css.evaluationOption}
                     >
                     </SingleSelectOption>
                 ))}

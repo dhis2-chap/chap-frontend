@@ -12,10 +12,32 @@
     font-size: 14px;
 }
 
+/* prevent long selected evaluation names from wrapping and expanding the selector */
+.selector :global(.root-children) {
+    min-inline-size: 0;
+}
+
+.selector :global(.root-children > .root .root-input) {
+    min-inline-size: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.selector :global(.root-children > .root .root-input .root) {
+    max-inline-size: 100%;
+    min-inline-size: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
 .evaluationOption span {
     font-size: 14px;
-    color: var(--colors-grey600); 
-
+    color: var(--colors-grey600);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 :global(.active) .evaluationOption span {
