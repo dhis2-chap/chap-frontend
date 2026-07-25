@@ -34,6 +34,7 @@ discovered 10 tests in 5 files: 1 authentication setup and 9 application tests.
 | Authentication and evaluations entry point | Auth setup plus evaluations table smoke test |
 | New evaluation | Period validation, unsaved-change guard, and a live import that reaches a successful job |
 | Evaluation details | A completed live evaluation opens and creates a prediction setup |
+| Evaluation comparison | Not covered |
 | Prediction setup | A live prediction starts and appears in scoped activity |
 | Models | Archived-model filtering uses a model created and archived through the live API |
 | Evaluation lifecycle management | Not covered |
@@ -42,11 +43,13 @@ The two focused client-side validation tests in `new-evaluation-form.spec.ts`
 stub only the create-backtest response so they do not create data; they count as
 form behavior coverage, not live integration coverage. The evaluation-management
 spec closes the lifecycle gap with live rename-persistence and delete journeys,
-bringing the discovered inventory to 12 tests: 1 setup and 11 application tests.
+and the evaluation-comparison spec covers live compatible selection, chart data,
+and URL restoration. Together they bring the discovered inventory to 13 tests:
+1 setup and 12 application tests.
 
-Important remaining gaps include evaluation comparison, configured-model
-creation, prediction result/import, and environment-changing settings. Add
-coverage there only when the live-data setup and assertions can be reliable.
+Important remaining gaps include configured-model creation, prediction
+result/import, and environment-changing settings. Add coverage there only when
+the live-data setup and assertions can be reliable.
 
 ## Run locally
 From repo root:
