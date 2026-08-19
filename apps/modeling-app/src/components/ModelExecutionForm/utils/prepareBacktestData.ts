@@ -73,8 +73,8 @@ export const prepareBacktestData = async (
         },
     ];
 
-    // Create a unique hash of the data elements, periods, and org units for caching
-    const hash = await generateBacktestDataHash(dataItems, periods, formData.orgUnits.map(ou => ou.id));
+    // Create a unique key of the data elements, periods, and org units for caching
+    const hash = generateBacktestDataHash(dataItems, periods, formData.orgUnits.map(ou => ou.id));
 
     const cachedAnalyticsResponse = queryClient.getQueryData(['new-backtest-data', 'analytics', hash]) as AnalyticsResponse | undefined;
 
