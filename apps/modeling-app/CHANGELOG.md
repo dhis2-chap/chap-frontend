@@ -1,5 +1,16 @@
 # @dhis2-chap/modeling-app
 
+## 6.2.1
+
+### Patch Changes
+
+-   4a23853: Disable experimental feature toggles and show a notice when the user lacks the F_CHAP_MODELING_APP authority.
+-   89edc9a: Fix "Cannot read properties of undefined (reading 'digest')" when starting a dry run or import from a non-HTTPS, non-localhost origin, by replacing the SHA-256 cache key with a plain concatenated string key that doesn't depend on crypto.subtle.
+-   6d1ec81: Remove dead metric plot widget and generated metric plot client code now superseded by evaluation visualisations.
+-   Updated dependencies [6d1ec81]
+    -   @dhis2-chap/ui@6.2.1
+    -   @dhis2-chap/core@6.2.1
+
 ## 6.2.0
 
 ### Minor Changes
