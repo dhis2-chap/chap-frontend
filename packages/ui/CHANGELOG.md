@@ -1,5 +1,12 @@
 # @dhis2-chap/ui
 
+## 6.2.1
+
+### Patch Changes
+
+-   6d1ec81: Remove dead metric plot widget and generated metric plot client code now superseded by evaluation visualisations.
+    -   @dhis2-chap/core@6.2.1
+
 ## 6.2.0
 
 ### Patch Changes
