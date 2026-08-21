@@ -75,7 +75,7 @@ const getChartOptions = (
     const actualCasesByCanonicalId = new Map(
         series.actualCases?.map(ac => [canonicalizePeriodId(ac.period), ac.value]) ?? [],
     );
-    const actualCases: Highcharts.PointOptionsObject[] | undefined = series.actualCases
+    const actualCases: Highcharts.PointOptionsObject[] | undefined = series.actualCases?.length
         ? periods.map(period => ({
                 name: period,
                 x: getPeriodIndex(period),
