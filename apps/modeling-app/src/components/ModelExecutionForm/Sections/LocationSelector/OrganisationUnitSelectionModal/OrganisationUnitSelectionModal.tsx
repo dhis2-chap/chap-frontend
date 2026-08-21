@@ -13,7 +13,9 @@ import {
     OrganisationUnit,
     OrganisationUnitSelector as OrgUnitSelector,
     SelectionChangeEvent,
+    ouIdHelper,
 } from '../../../../OrganisationUnitSelector';
+import { useOrgUnitGroupLevels } from './hooks/useOrgUnitGroupLevels';
 import styles from '../LocationSelector.module.css';
 
 type Props = {
@@ -39,26 +41,35 @@ export const OrganisationUnitSelectionModal = ({
         onConfirm(pendingOrgUnits);
     };
 
-    const isSameLevel = useMemo(() => {
-        if (pendingOrgUnits.length <= 1) {
-            return true;
-        }
+    const selectedGroupIds = useMemo(() => pendingOrgUnits
+        .filter(ou => ouIdHelper.hasGroupPrefix(ou.id))
+        .map(ou => ouIdHelper.removePrefix(ou.id)), [pendingOrgUnits]);
 
+    const { groups, isLoading: isLoadingGroupLevels, error: groupLevelsError } = useOrgUnitGroupLevels(selectedGroupIds);
+    const hasGroupLevelsError = selectedGroupIds.length > 0 && !!groupLevelsError;
+
+    const isSameLevel = useMemo(() => {
         // Only consider org units that have paths
         const orgUnitsWithPath = pendingOrgUnits.filter(ou => ou.path);
-
-        if (orgUnitsWithPath.length === 0) {
-            return true;
-        }
 
         const orgUnitLevels = orgUnitsWithPath.map((ou) => {
             const pathSegments = ou.path!.split('/');
             return pathSegments.filter(segment => segment.length > 0).length;
         });
 
-        const firstLevel = orgUnitLevels[0];
-        return orgUnitLevels.every(level => level === firstLevel);
-    }, [pendingOrgUnits]);
+        const groupMemberLevels = groups
+            .filter(group => selectedGroupIds.includes(group.id))
+            .flatMap(group => group.organisationUnits.map(ou => ou.level));
+
+        const allLevels = [...orgUnitLevels, ...groupMemberLevels];
+
+        if (allLevels.length <= 1) {
+            return true;
+        }
+
+        const firstLevel = allLevels[0];
+        return allLevels.every(level => level === firstLevel);
+    }, [pendingOrgUnits, groups, selectedGroupIds]);
 
     return (
         <Modal onClose={onClose} large>
@@ -73,10 +84,16 @@ export const OrganisationUnitSelectionModal = ({
                     roots={orgUnitRoots}
                     selected={pendingOrgUnits}
                     onSelect={handleOrgUnitSelect}
-                    hideGroupSelect={true}
+                    hideGroupSelect={false}
                     hideLevelSelect={false}
                     hideUserOrgUnits={true}
-                    warning={!isSameLevel ? i18n.t('All org units must be at the same level') : undefined}
+                    warning={
+                        hasGroupLevelsError
+                            ? i18n.t('Could not verify the levels of the org units in the selected groups')
+                            : !isSameLevel
+                                    ? i18n.t('All org units must be at the same level')
+                                    : undefined
+                    }
                 />
             </ModalContent>
             <ModalActions>
@@ -87,7 +104,7 @@ export const OrganisationUnitSelectionModal = ({
                     <Button
                         primary
                         onClick={handleConfirm}
-                        disabled={!isSameLevel}
+                        disabled={!isSameLevel || isLoadingGroupLevels || hasGroupLevelsError}
                     >
                         {i18n.t('Confirm Selection')}
                     </Button>
