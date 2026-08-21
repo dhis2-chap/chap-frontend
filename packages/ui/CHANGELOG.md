@@ -1,5 +1,12 @@
 # @dhis2-chap/ui
 
+## 6.3.0
+
+### Patch Changes
+
+-   f1dba36: Fix uncertainty area chart x-axis ordering for weekly data: padded (2025W03) and unpadded (2025W3) week ids are now canonicalized and merged into a single chronologically sorted axis, and gaps in actual data no longer connect across missing weeks.
+    -   @dhis2-chap/core@6.3.0
+
 ## 6.2.1
 
 ### Patch Changes

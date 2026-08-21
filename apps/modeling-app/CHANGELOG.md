@@ -1,5 +1,17 @@
 # @dhis2-chap/modeling-app
 
+## 6.3.0
+
+### Minor Changes
+
+-   66bf2bf: Add organisation unit group selector next to the level selector in the org unit selection modal, with validation that all org units within selected groups are on the same level
+
+### Patch Changes
+
+-   Updated dependencies [f1dba36]
+    -   @dhis2-chap/ui@6.3.0
+    -   @dhis2-chap/core@6.3.0
+
 ## 6.2.1
 
 ### Patch Changes
