@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import i18n from '@dhis2/d2-i18n';
+import { canonicalizePeriodId } from '@dhis2-chap/core';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import { PredictionOrgUnitSeries } from '../../../interfaces/Prediction';
 import { registerHighchartsModules } from '../../../utils/registerHighchartsModules';
+import { buildChartPeriods, buildPeriodIndexLookup } from '../../../utils/chartPeriods';
 import type { EndemicThresholdPoint, SupportedOutbreakProbabilityBucket } from '../../../utils/outbreakAlerts';
 import type { ZoomRange } from '../../evaluation/ResultPlot/ResultPlot';
 
@@ -43,21 +45,21 @@ const getChartOptions = (
 ): Highcharts.Options => {
     const isTile = variant === 'tile';
     const disabledAnimationOptions = getDisabledAnimationOptions();
-    const periods = [
+    const periods = buildChartPeriods([
         ...(series.actualCases?.map(actualCase => actualCase.period) ?? []),
         ...series.points.map(point => point.period),
-    ].filter((period, index, allPeriods) => allPeriods.indexOf(period) === index);
-    const periodIndexById = new Map(periods.map((period, index) => [period, index]));
+    ]);
+    const getPeriodIndex = buildPeriodIndexLookup(periods);
     const outbreakInfoByPeriod = new Map(
         outbreakPeriods.map(outbreakPeriod => [outbreakPeriod.period, outbreakPeriod]),
     );
     const median: Highcharts.PointOptionsObject[] = series.points
-        .map(p => ({ name: p.period, x: periodIndexById.get(p.period), y: p.quantiles.median }));
+        .map(p => ({ name: p.period, x: getPeriodIndex(p.period), y: p.quantiles.median }));
 
     const outerRange: Highcharts.PointOptionsObject[] = series.points
         .map(p => ({
             name: p.period,
-            x: periodIndexById.get(p.period),
+            x: getPeriodIndex(p.period),
             low: p.quantiles.quantile_low,
             high: p.quantiles.quantile_high,
         }));
@@ -65,13 +67,21 @@ const getChartOptions = (
     const midRange: Highcharts.PointOptionsObject[] = series.points
         .map(p => ({
             name: p.period,
-            x: periodIndexById.get(p.period),
+            x: getPeriodIndex(p.period),
             low: p.quantiles.quantile_mid_low,
             high: p.quantiles.quantile_mid_high,
         }));
 
-    const actualCases: Highcharts.PointOptionsObject[] | undefined = series.actualCases
-        ?.map(ac => ({ name: ac.period, x: periodIndexById.get(ac.period), y: ac.value }));
+    const actualCasesByCanonicalId = new Map(
+        series.actualCases?.map(ac => [canonicalizePeriodId(ac.period), ac.value]) ?? [],
+    );
+    const actualCases: Highcharts.PointOptionsObject[] | undefined = series.actualCases?.length
+        ? periods.map(period => ({
+                name: period,
+                x: getPeriodIndex(period),
+                y: actualCasesByCanonicalId.get(canonicalizePeriodId(period)) ?? null,
+            }))
+        : undefined;
 
     const chartSeries: Highcharts.SeriesOptionsType[] = [
         // median
@@ -122,13 +132,13 @@ const getChartOptions = (
 
     if (endemicThresholds && endemicThresholds.length > 0) {
         const thresholdByPeriod = new Map(
-            endemicThresholds.map(t => [t.period, t.value]),
+            endemicThresholds.map(t => [canonicalizePeriodId(t.period), t.value]),
         );
         const thresholdData = periods
             .map(period => ({
                 name: period,
-                x: periodIndexById.get(period),
-                y: thresholdByPeriod.get(period) ?? null,
+                x: getPeriodIndex(period),
+                y: thresholdByPeriod.get(canonicalizePeriodId(period)) ?? null,
             }))
             .filter(point => point.y !== null);
 
@@ -152,7 +162,7 @@ const getChartOptions = (
             type: 'line',
             data: periods.map(period => ({
                 name: period,
-                x: periodIndexById.get(period),
+                x: getPeriodIndex(period),
                 y: endemicThreshold,
             })),
             name: i18n.t('Endemic threshold'),
@@ -218,7 +228,7 @@ const getChartOptions = (
             plotBands: outbreakPeriods
                 .filter(outbreakPeriod => outbreakPeriod.outbreak)
                 .map((outbreakPeriod) => {
-                    const index = periodIndexById.get(outbreakPeriod.period);
+                    const index = getPeriodIndex(outbreakPeriod.period);
 
                     return {
                         from: (index ?? 0) - 0.5,
