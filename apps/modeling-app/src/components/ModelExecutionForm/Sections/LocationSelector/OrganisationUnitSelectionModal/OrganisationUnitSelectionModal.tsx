@@ -45,7 +45,8 @@ export const OrganisationUnitSelectionModal = ({
         .filter(ou => ouIdHelper.hasGroupPrefix(ou.id))
         .map(ou => ouIdHelper.removePrefix(ou.id)), [pendingOrgUnits]);
 
-    const { groups, isLoading: isLoadingGroupLevels } = useOrgUnitGroupLevels(selectedGroupIds);
+    const { groups, isLoading: isLoadingGroupLevels, error: groupLevelsError } = useOrgUnitGroupLevels(selectedGroupIds);
+    const hasGroupLevelsError = selectedGroupIds.length > 0 && !!groupLevelsError;
 
     const isSameLevel = useMemo(() => {
         // Only consider org units that have paths
@@ -86,7 +87,13 @@ export const OrganisationUnitSelectionModal = ({
                     hideGroupSelect={false}
                     hideLevelSelect={false}
                     hideUserOrgUnits={true}
-                    warning={!isSameLevel ? i18n.t('All org units must be at the same level') : undefined}
+                    warning={
+                        hasGroupLevelsError
+                            ? i18n.t('Could not verify the levels of the org units in the selected groups')
+                            : !isSameLevel
+                                    ? i18n.t('All org units must be at the same level')
+                                    : undefined
+                    }
                 />
             </ModalContent>
             <ModalActions>
@@ -97,7 +104,7 @@ export const OrganisationUnitSelectionModal = ({
                     <Button
                         primary
                         onClick={handleConfirm}
-                        disabled={!isSameLevel || isLoadingGroupLevels}
+                        disabled={!isSameLevel || isLoadingGroupLevels || hasGroupLevelsError}
                     >
                         {i18n.t('Confirm Selection')}
                     </Button>
