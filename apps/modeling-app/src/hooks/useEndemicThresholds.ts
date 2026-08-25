@@ -4,26 +4,31 @@ import {
     ApiError,
     DatasetsService,
     type EndemicThresholdPoint,
+    type PredictionOrgUnitSeries,
     type ThresholdEntry,
 } from '@dhis2-chap/ui';
 
-const DEFAULT_STRATEGY = 'seasonal';
+export const DEFAULT_THRESHOLD_STRATEGY = 'seasonal';
 
 type Props = {
     datasetId: number | undefined;
-    periodIds: string[];
-    locations?: string[];
+    series: PredictionOrgUnitSeries[];
     strategy?: string;
     enabled?: boolean;
 };
 
 export const useEndemicThresholds = ({
     datasetId,
-    periodIds,
-    locations,
-    strategy = DEFAULT_STRATEGY,
+    series,
+    strategy = DEFAULT_THRESHOLD_STRATEGY,
     enabled = true,
 }: Props) => {
+    const periodIds = useMemo(() => Array.from(new Set(
+        series.flatMap(orgUnitSeries => orgUnitSeries.points.map(point => point.period)),
+    )), [series]);
+    const locations = useMemo(() => (
+        series.map(orgUnitSeries => orgUnitSeries.orgUnitId)
+    ), [series]);
     const isQueryEnabled = enabled && !!datasetId && periodIds.length > 0;
 
     const { data, isLoading, error } = useQuery<ThresholdEntry[], ApiError>({
@@ -39,8 +44,8 @@ export const useEndemicThresholds = ({
             });
         },
         enabled: isQueryEnabled,
-        staleTime: 300000,
-        cacheTime: 300000,
+        staleTime: Infinity,
+        cacheTime: Infinity,
         retry: 0,
     });
 

@@ -4,3 +4,4 @@ export {
     ThresholdTilesExplorer,
     type StatusFilterValue,
 } from './ThresholdTilesExplorer';
+export { ThresholdCalculationStatus } from './ThresholdCalculationStatus';

@@ -25,6 +25,7 @@ import styles from './PredictionAlerts.module.css';
 type Props = {
     prediction: PredictionInfo;
     model: ModelSpecRead;
+    thresholdStrategy: string;
     selectedProbability: OutbreakProbability;
     onSelectProbability: (probability: OutbreakProbability) => void;
 };
@@ -32,6 +33,7 @@ type Props = {
 export const AlertPreviewPanel = ({
     prediction,
     model,
+    thresholdStrategy,
     selectedProbability,
     onSelectProbability,
 }: Props) => {
@@ -43,28 +45,14 @@ export const AlertPreviewPanel = ({
         error: seriesError,
     } = usePredictionSeries({ prediction, model });
 
-    const allPeriods = useMemo(() => {
-        const periodSet = new Set<string>();
-        for (const s of series) {
-            s.actualCases?.forEach(ac => periodSet.add(ac.period));
-            s.points.forEach(p => periodSet.add(p.period));
-        }
-        return Array.from(periodSet);
-    }, [series]);
-
-    const orgUnitIds = useMemo(() => (
-        series.map(s => s.orgUnitId)
-    ), [series]);
-
     const {
         thresholdMap,
         isLoading: isThresholdsLoading,
         error: thresholdsError,
     } = useEndemicThresholds({
         datasetId: prediction.datasetId,
-        periodIds: allPeriods,
-        locations: orgUnitIds,
-        enabled: series.length > 0,
+        series,
+        strategy: thresholdStrategy,
     });
 
     const isLoading = isSeriesLoading || isThresholdsLoading;

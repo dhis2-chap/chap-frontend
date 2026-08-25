@@ -40,6 +40,7 @@ export const PredictionRunDetailsPage: React.FC = () => {
         navigate(`/predictions/${predictionSetupId}/runs/${prediction.id}/import`, {
             state: {
                 alertProbability: settings.alertProbability,
+                thresholdStrategy: settings.thresholdStrategy,
                 useAlertOutputs: settings.thresholdsEnabled,
             },
         });

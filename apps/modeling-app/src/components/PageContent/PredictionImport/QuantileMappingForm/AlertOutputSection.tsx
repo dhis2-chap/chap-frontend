@@ -2,6 +2,7 @@ import i18n from '@dhis2/d2-i18n';
 import { NoticeBox, Switch } from '@dhis2/ui';
 import type { OutbreakProbability } from '@dhis2-chap/ui';
 import type { KeyboardEvent, MouseEvent } from 'react';
+import { ThresholdCalculationStatus } from '../../../ThresholdTilesExplorer';
 import { DataItemSelect } from './DataItemSelect';
 import styles from './QuantileMappingForm.module.css';
 
@@ -9,6 +10,8 @@ type Props = {
     useAlertOutputs: boolean;
     selectedProbability: OutbreakProbability;
     unavailableThresholdCount: number;
+    isThresholdsLoading: boolean;
+    thresholdsError: boolean;
     outbreakIndicator?: string;
     outbreakIndicatorError?: string;
     onToggleAlertOutputs: () => void;
@@ -20,6 +23,8 @@ export const AlertOutputSection = ({
     useAlertOutputs,
     selectedProbability,
     unavailableThresholdCount,
+    isThresholdsLoading,
+    thresholdsError,
     outbreakIndicator,
     outbreakIndicatorError,
     onToggleAlertOutputs,
@@ -64,7 +69,11 @@ export const AlertOutputSection = ({
             </div>
             {useAlertOutputs && (
                 <>
-                    {unavailableThresholdCount > 0 && (
+                    <ThresholdCalculationStatus
+                        isLoading={isThresholdsLoading}
+                        error={thresholdsError}
+                    />
+                    {!isThresholdsLoading && !thresholdsError && unavailableThresholdCount > 0 && (
                         <NoticeBox warning title={i18n.t('Some outbreak indicators will be skipped')}>
                             {i18n.t('Outbreak indicators will be skipped for one region due to insufficient disease data.', {
                                 count: unavailableThresholdCount,

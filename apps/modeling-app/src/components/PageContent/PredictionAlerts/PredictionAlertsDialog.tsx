@@ -15,6 +15,7 @@ import styles from './PredictionAlerts.module.css';
 type Props = {
     prediction: PredictionInfo;
     model: ModelSpecRead;
+    thresholdStrategy: string;
     selectedProbability: OutbreakProbability;
     onApply: (probability: OutbreakProbability) => void;
     onClose: () => void;
@@ -23,6 +24,7 @@ type Props = {
 export const PredictionAlertsDialog = ({
     prediction,
     model,
+    thresholdStrategy,
     selectedProbability,
     onApply,
     onClose,
@@ -46,6 +48,7 @@ export const PredictionAlertsDialog = ({
                 <AlertPreviewPanel
                     prediction={prediction}
                     model={model}
+                    thresholdStrategy={thresholdStrategy}
                     selectedProbability={draftProbability}
                     onSelectProbability={setDraftProbability}
                 />

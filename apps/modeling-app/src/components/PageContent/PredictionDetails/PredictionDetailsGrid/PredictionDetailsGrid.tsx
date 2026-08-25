@@ -7,6 +7,8 @@ import {
     IconChevronRight16,
     IconImportItems24,
     NoticeBox,
+    SingleSelectField,
+    SingleSelectOption,
     Switch,
 } from '@dhis2/ui';
 import { convertServerToClientPeriod, PERIOD_TYPES } from '@dhis2-chap/core';
@@ -17,10 +19,15 @@ import type {
     PredictionInfo,
 } from '@dhis2-chap/ui';
 import { useMemo } from 'react';
-import { useEndemicThresholds } from '@/hooks/useEndemicThresholds';
+import {
+    DEFAULT_THRESHOLD_STRATEGY,
+    useEndemicThresholds,
+} from '@/hooks/useEndemicThresholds';
+import { useThresholdStrategies } from '@/hooks/useThresholdStrategies';
 import {
     OutbreakProbabilityControl,
     SummaryRow,
+    ThresholdCalculationStatus,
     ThresholdTilesExplorer,
 } from '../../../ThresholdTilesExplorer';
 import { usePredictionSeries } from '../hooks/usePredictionSeries';
@@ -28,6 +35,7 @@ import styles from './PredictionDetailsGrid.module.css';
 
 export type PredictionRunAlertSettings = {
     alertProbability: OutbreakProbability;
+    thresholdStrategy: string;
     thresholdsEnabled: boolean;
 };
 
@@ -41,6 +49,7 @@ type Props = {
 
 const DEFAULT_SETTINGS: PredictionRunAlertSettings = {
     alertProbability: DEFAULT_OUTBREAK_PROBABILITY,
+    thresholdStrategy: DEFAULT_THRESHOLD_STRATEGY,
     thresholdsEnabled: false,
 };
 
@@ -59,20 +68,11 @@ export const PredictionDetailsGrid = ({
         isLoading: isSeriesLoading,
         error: seriesError,
     } = usePredictionSeries({ prediction, model });
+    const {
+        thresholdStrategies,
+        isLoading: isThresholdStrategiesLoading,
+    } = useThresholdStrategies();
     const showThresholds = settings.thresholdsEnabled;
-
-    const allPeriods = useMemo(() => {
-        const periodSet = new Set<string>();
-        for (const s of series) {
-            s.actualCases?.forEach(ac => periodSet.add(ac.period));
-            s.points.forEach(p => periodSet.add(p.period));
-        }
-        return Array.from(periodSet);
-    }, [series]);
-
-    const orgUnitIds = useMemo(() => (
-        series.map(s => s.orgUnitId)
-    ), [series]);
 
     const {
         thresholdMap,
@@ -80,13 +80,15 @@ export const PredictionDetailsGrid = ({
         error: thresholdsError,
     } = useEndemicThresholds({
         datasetId: prediction.datasetId,
-        periodIds: allPeriods,
-        locations: orgUnitIds,
-        enabled: series.length > 0,
+        series,
+        strategy: settings.thresholdStrategy,
+        enabled: showThresholds,
     });
 
-    const isLoading = isSeriesLoading || isThresholdsLoading;
-    const error = seriesError || thresholdsError;
+    const thresholdsVisible = showThresholds && !isThresholdsLoading && !thresholdsError;
+    const selectedThresholdStrategy = thresholdStrategies?.find(
+        strategy => strategy.id === settings.thresholdStrategy,
+    );
 
     const {
         summary,
@@ -196,12 +198,35 @@ export const PredictionDetailsGrid = ({
                 </span>
             </div>
             {showThresholds && (
-                <OutbreakProbabilityControl
-                    selectedProbability={settings.alertProbability}
-                    onSelectProbability={probability => updateSettings({ alertProbability: probability })}
-                />
+                <>
+                    <SingleSelectField
+                        dense
+                        disabled={isThresholdsLoading}
+                        loading={isThresholdStrategiesLoading}
+                        label={i18n.t('Threshold strategy')}
+                        helpText={selectedThresholdStrategy?.description}
+                        selected={settings.thresholdStrategy}
+                        onChange={({ selected }) => updateSettings({ thresholdStrategy: selected })}
+                    >
+                        {thresholdStrategies?.map(strategy => (
+                            <SingleSelectOption
+                                key={strategy.id}
+                                value={strategy.id}
+                                label={strategy.displayName}
+                            />
+                        ))}
+                    </SingleSelectField>
+                    <ThresholdCalculationStatus
+                        isLoading={isThresholdsLoading}
+                        error={!!thresholdsError}
+                    />
+                    <OutbreakProbabilityControl
+                        selectedProbability={settings.alertProbability}
+                        onSelectProbability={probability => updateSettings({ alertProbability: probability })}
+                    />
+                    {thresholdsVisible && summaryList}
+                </>
             )}
-            {showThresholds && summaryList}
             <ButtonStrip end>
                 <Button
                     small
@@ -215,7 +240,7 @@ export const PredictionDetailsGrid = ({
         </>
     );
 
-    if (isLoading) {
+    if (isSeriesLoading) {
         return (
             <div className={styles.loadingContainer}>
                 <CircularLoader />
@@ -223,7 +248,7 @@ export const PredictionDetailsGrid = ({
         );
     }
 
-    if (error) {
+    if (seriesError) {
         return (
             <NoticeBox error title={i18n.t('Unable to load prediction data')}>
                 {i18n.t('There was a problem loading the prediction data required for this prediction run.')}
@@ -243,11 +268,11 @@ export const PredictionDetailsGrid = ({
         <ThresholdTilesExplorer
             predictionTargetName={predictionTargetName}
             tiles={tiles}
-            showThresholds={showThresholds}
+            showThresholds={thresholdsVisible}
             panel={panelContent}
             panelHeader={i18n.t('Prediction settings')}
             gridResetKey={String(prediction.id)}
-            zoomResetDeps={[prediction.id, settings.alertProbability, settings.thresholdsEnabled]}
+            zoomResetDeps={[prediction.id, settings]}
         />
     );
 };

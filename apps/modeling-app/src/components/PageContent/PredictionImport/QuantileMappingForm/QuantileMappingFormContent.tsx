@@ -14,6 +14,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, useWatch } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { NavigationConfirmModal } from '@/components/NavigationConfirmModal';
+import {
+    DEFAULT_THRESHOLD_STRATEGY,
+    useEndemicThresholds,
+} from '@/hooks/useEndemicThresholds';
 import { useNavigationBlocker } from '@/hooks/useNavigationBlocker';
 import { PredictionAlertsDialog } from '../../PredictionAlerts';
 import { usePostPredictionData } from '../hooks/usePostPredictionData';
@@ -40,8 +44,6 @@ export const QuantileMappingFormContent = ({
     predictionSetupId,
     predictionSetup,
     series,
-    thresholdMap,
-    unavailableThresholdCount,
     canDeleteDataValues,
     isDeleteAuthorityLoading,
 }: LoadedQuantileMappingFormProps) => {
@@ -61,6 +63,7 @@ export const QuantileMappingFormContent = ({
     );
     const defaultUseAlertOutputs = locationState?.useAlertOutputs ?? true;
     const defaultAlertProbability = locationState?.alertProbability ?? DEFAULT_OUTBREAK_PROBABILITY;
+    const thresholdStrategy = locationState?.thresholdStrategy ?? DEFAULT_THRESHOLD_STRATEGY;
     const formValues = useMemo<QuantileMappingFormValues>(() => ({
         ...defaultQuantileMappingFields,
         use_alert_outputs: defaultUseAlertOutputs,
@@ -117,6 +120,22 @@ export const QuantileMappingFormContent = ({
     } = useWatch({ control });
     const useAlertOutputs = use_alert_outputs ?? defaultUseAlertOutputs;
     const selectedProbability = alert_probability ?? defaultAlertProbability;
+    const {
+        thresholdMap,
+        isLoading: isThresholdsLoading,
+        error: thresholdsError,
+    } = useEndemicThresholds({
+        datasetId: prediction.datasetId,
+        series,
+        strategy: thresholdStrategy,
+        enabled: useAlertOutputs,
+    });
+    const unavailableThresholdCount = useMemo(() => (
+        series.filter((orgUnitSeries) => {
+            const thresholds = thresholdMap?.get(orgUnitSeries.orgUnitId);
+            return !thresholds?.some(threshold => threshold.value !== null);
+        }).length
+    ), [series, thresholdMap]);
     const quantileValues = {
         quantile_low,
         quantile_high,
@@ -205,6 +224,8 @@ export const QuantileMappingFormContent = ({
                         useAlertOutputs={useAlertOutputs}
                         selectedProbability={selectedProbability}
                         unavailableThresholdCount={unavailableThresholdCount}
+                        isThresholdsLoading={isThresholdsLoading}
+                        thresholdsError={!!thresholdsError}
                         outbreakIndicator={outbreak_indicator}
                         outbreakIndicatorError={errors.outbreak_indicator?.message}
                         onToggleAlertOutputs={toggleAlertOutputs}
@@ -228,7 +249,7 @@ export const QuantileMappingFormContent = ({
                         </Button>
                         <Button
                             type="submit"
-                            disabled={isPending}
+                            disabled={isPending || (useAlertOutputs && (isThresholdsLoading || !!thresholdsError))}
                             primary
                         >
                             {importButtonLabel}
@@ -258,6 +279,7 @@ export const QuantileMappingFormContent = ({
                 <PredictionAlertsDialog
                     prediction={prediction}
                     model={model}
+                    thresholdStrategy={thresholdStrategy}
                     selectedProbability={selectedProbability}
                     onApply={handleApplyAlertProbability}
                     onClose={() => setIsAlertsDialogOpen(false)}

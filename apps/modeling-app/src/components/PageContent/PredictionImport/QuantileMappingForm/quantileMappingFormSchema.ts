@@ -13,6 +13,7 @@ const outbreakProbabilitySchema = z.custom<OutbreakProbability>(
 export const importLocationStateSchema = z
     .object({
         alertProbability: outbreakProbabilitySchema.optional(),
+        thresholdStrategy: z.string().optional(),
         useAlertOutputs: z.boolean().optional(),
     })
     .passthrough()
