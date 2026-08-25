@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-08-25T05:00:07.730Z\n"
-"PO-Revision-Date: 2026-08-25T05:00:07.730Z\n"
+"POT-Creation-Date: 2026-08-25T06:25:25.901Z\n"
+"PO-Revision-Date: 2026-08-25T06:25:25.901Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -1308,6 +1308,9 @@ msgstr ""
 msgid "Adjust alert output"
 msgstr "Adjust alert output"
 
+msgid "Threshold strategy"
+msgstr "Threshold strategy"
+
 msgid "Apply"
 msgstr "Apply"
 
@@ -1328,9 +1331,6 @@ msgstr "Outbreak thresholds"
 
 msgid "Show outbreak status and threshold overlays for this run."
 msgstr "Show outbreak status and threshold overlays for this run."
-
-msgid "Threshold strategy"
-msgstr "Threshold strategy"
 
 msgid ""
 "There was a problem loading the prediction data required for this "

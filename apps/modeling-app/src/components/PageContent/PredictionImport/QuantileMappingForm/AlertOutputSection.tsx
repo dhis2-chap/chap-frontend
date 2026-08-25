@@ -9,6 +9,7 @@ import styles from './QuantileMappingForm.module.css';
 type Props = {
     useAlertOutputs: boolean;
     selectedProbability: OutbreakProbability;
+    thresholdStrategyName?: string;
     unavailableThresholdCount: number;
     isThresholdsLoading: boolean;
     thresholdsError: boolean;
@@ -22,6 +23,7 @@ type Props = {
 export const AlertOutputSection = ({
     useAlertOutputs,
     selectedProbability,
+    thresholdStrategyName,
     unavailableThresholdCount,
     isThresholdsLoading,
     thresholdsError,
@@ -90,6 +92,16 @@ export const AlertOutputSection = ({
                                 {`${selectedProbability}%`}
                             </span>
                         </div>
+                        {thresholdStrategyName && (
+                            <div>
+                                <span className={styles.summaryLabel}>
+                                    {i18n.t('Threshold strategy')}
+                                </span>
+                                <span className={styles.summaryValue}>
+                                    {thresholdStrategyName}
+                                </span>
+                            </div>
+                        )}
                         <button
                             type="button"
                             className={styles.tertiaryActionButton}

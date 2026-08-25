@@ -19,6 +19,7 @@ import {
     useEndemicThresholds,
 } from '@/hooks/useEndemicThresholds';
 import { useNavigationBlocker } from '@/hooks/useNavigationBlocker';
+import { useThresholdStrategies } from '@/hooks/useThresholdStrategies';
 import { PredictionAlertsDialog } from '../../PredictionAlerts';
 import { usePostPredictionData } from '../hooks/usePostPredictionData';
 import { AlertOutputSection } from './AlertOutputSection';
@@ -63,7 +64,13 @@ export const QuantileMappingFormContent = ({
     );
     const defaultUseAlertOutputs = locationState?.useAlertOutputs ?? true;
     const defaultAlertProbability = locationState?.alertProbability ?? DEFAULT_OUTBREAK_PROBABILITY;
-    const thresholdStrategy = locationState?.thresholdStrategy ?? DEFAULT_THRESHOLD_STRATEGY;
+    const [thresholdStrategy, setThresholdStrategy] = useState(
+        locationState?.thresholdStrategy ?? DEFAULT_THRESHOLD_STRATEGY,
+    );
+    const { thresholdStrategies } = useThresholdStrategies();
+    const thresholdStrategyName = thresholdStrategies?.find(
+        strategy => strategy.id === thresholdStrategy,
+    )?.displayName;
     const formValues = useMemo<QuantileMappingFormValues>(() => ({
         ...defaultQuantileMappingFields,
         use_alert_outputs: defaultUseAlertOutputs,
@@ -156,8 +163,9 @@ export const QuantileMappingFormContent = ({
         clearErrors('outbreak_indicator');
     };
 
-    const handleApplyAlertProbability = (probability: OutbreakProbability) => {
+    const handleApplyAlertSettings = (probability: OutbreakProbability, strategy: string) => {
         setValue('alert_probability', probability, { shouldDirty: true });
+        setThresholdStrategy(strategy);
     };
 
     const handleSubmitImport = () => {
@@ -223,6 +231,7 @@ export const QuantileMappingFormContent = ({
                     <AlertOutputSection
                         useAlertOutputs={useAlertOutputs}
                         selectedProbability={selectedProbability}
+                        thresholdStrategyName={thresholdStrategyName}
                         unavailableThresholdCount={unavailableThresholdCount}
                         isThresholdsLoading={isThresholdsLoading}
                         thresholdsError={!!thresholdsError}
@@ -281,7 +290,7 @@ export const QuantileMappingFormContent = ({
                     model={model}
                     thresholdStrategy={thresholdStrategy}
                     selectedProbability={selectedProbability}
-                    onApply={handleApplyAlertProbability}
+                    onApply={handleApplyAlertSettings}
                     onClose={() => setIsAlertsDialogOpen(false)}
                 />
             )}
