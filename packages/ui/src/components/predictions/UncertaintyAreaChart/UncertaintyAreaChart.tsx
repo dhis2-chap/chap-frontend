@@ -48,6 +48,7 @@ const getChartOptions = (
     const periods = buildChartPeriods([
         ...(series.actualCases?.map(actualCase => actualCase.period) ?? []),
         ...series.points.map(point => point.period),
+        ...(endemicThresholds?.map(threshold => threshold.period) ?? []),
     ]);
     const getPeriodIndex = buildPeriodIndexLookup(periods);
     const outbreakInfoByPeriod = new Map(

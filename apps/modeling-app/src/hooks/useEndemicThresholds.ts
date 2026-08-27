@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { getLastNPeriods, PERIOD_TYPES } from '@dhis2-chap/core';
 import {
     ApiError,
     DatasetsService,
@@ -23,9 +24,32 @@ export const useEndemicThresholds = ({
     strategy = DEFAULT_THRESHOLD_STRATEGY,
     enabled = true,
 }: Props) => {
-    const periodIds = useMemo(() => Array.from(new Set(
-        series.flatMap(orgUnitSeries => orgUnitSeries.points.map(point => point.period)),
-    )), [series]);
+    const periodIds = useMemo(() => {
+        const predictionPeriodIds = Array.from(new Set(
+            series.flatMap(orgUnitSeries => orgUnitSeries.points.map(point => point.period)),
+        ));
+
+        if (predictionPeriodIds.length === 0 || !predictionPeriodIds.every(period => /^\d{6}$/.test(period))) {
+            return predictionPeriodIds;
+        }
+
+        const currentYear = new Date().getFullYear();
+        const rangeBounds = [
+            ...predictionPeriodIds,
+            `${currentYear}01`,
+            `${currentYear}12`,
+        ].sort();
+        const firstPeriod = rangeBounds[0];
+        const lastPeriod = rangeBounds[rangeBounds.length - 1];
+        const firstMonthIndex = Number(firstPeriod.slice(0, 4)) * 12 + Number(firstPeriod.slice(4, 6));
+        const lastMonthIndex = Number(lastPeriod.slice(0, 4)) * 12 + Number(lastPeriod.slice(4, 6));
+
+        return getLastNPeriods(
+            lastPeriod,
+            PERIOD_TYPES.MONTH,
+            lastMonthIndex - firstMonthIndex + 1,
+        );
+    }, [series]);
     const locations = useMemo(() => (
         series.map(orgUnitSeries => orgUnitSeries.orgUnitId)
     ), [series]);
