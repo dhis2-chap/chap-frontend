@@ -27,6 +27,7 @@ export const quantileMappingSchema = z.object({
     use_alert_outputs: z.boolean(),
     alert_probability: outbreakProbabilitySchema,
     outbreak_indicator: z.string(),
+    endemic_threshold: z.string(),
 }).superRefine((values, context) => {
     if (values.use_alert_outputs && !values.outbreak_indicator) {
         context.addIssue({

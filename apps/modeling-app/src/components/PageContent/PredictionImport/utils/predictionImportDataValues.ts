@@ -9,6 +9,7 @@ import {
 } from '@dhis2-chap/core';
 import type { Dhis2Calendar } from '@dhis2-chap/core';
 import type {
+    EndemicThresholdPoint,
     OutbreakIndicator,
     PredictionEntry,
     QuantileKey,
@@ -44,6 +45,7 @@ export type QuantileMapping = {
     quantileMidLowId: string;
     quantileMidHighId: string;
     outbreakIndicatorId: string;
+    endemicThresholdId: string;
 };
 
 export type PredictionDataValue = {
@@ -107,6 +109,7 @@ export const getSelectedOutputDataElementIds = (
         quantileMapping.quantileMidLowId,
         quantileMapping.quantileLowId,
         quantileMapping.outbreakIndicatorId,
+        quantileMapping.endemicThresholdId,
     ])
 );
 
@@ -145,6 +148,26 @@ export const transformOutbreakIndicatorsToDataValues = (
         orgUnit: indicator.orgUnitId,
         value: indicator.value,
     }));
+};
+
+export const transformEndemicThresholdsToDataValues = (
+    thresholdMap: Map<string, EndemicThresholdPoint[]> | undefined,
+    endemicThresholdId: string,
+): PredictionDataValue[] => {
+    if (!endemicThresholdId || !thresholdMap) {
+        return [];
+    }
+
+    return Array.from(thresholdMap.entries()).flatMap(([orgUnit, points]) => (
+        points
+            .filter(point => point.value !== null)
+            .map(point => ({
+                dataElement: endemicThresholdId,
+                period: point.period,
+                orgUnit,
+                value: String(point.value),
+            }))
+    ));
 };
 
 export const buildClearPeriodIds = ({

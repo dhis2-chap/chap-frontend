@@ -66,6 +66,7 @@ export const QuantileMappingFormContent = ({
         use_alert_outputs: defaultUseAlertOutputs,
         alert_probability: defaultAlertProbability,
         outbreak_indicator: defaultOutbreakIndicator,
+        endemic_threshold: '',
     }), [defaultAlertProbability, defaultOutbreakIndicator, defaultQuantileMappingFields, defaultUseAlertOutputs]);
     const {
         handleSubmit,
@@ -114,6 +115,7 @@ export const QuantileMappingFormContent = ({
         use_alert_outputs,
         alert_probability,
         outbreak_indicator,
+        endemic_threshold,
     } = useWatch({ control });
     const useAlertOutputs = use_alert_outputs ?? defaultUseAlertOutputs;
     const selectedProbability = alert_probability ?? defaultAlertProbability;
@@ -160,10 +162,14 @@ export const QuantileMappingFormContent = ({
                     outbreakIndicatorId: data.use_alert_outputs
                         ? data.outbreak_indicator
                         : '',
+                    endemicThresholdId: data.use_alert_outputs
+                        ? data.endemic_threshold
+                        : '',
                 },
                 outbreakIndicators: data.use_alert_outputs
                     ? buildOutbreakIndicators(series, data.alert_probability, thresholdMap)
                     : [],
+                thresholdMap,
             });
         } catch {
             // Alerts are handled by the mutation hook; keep the modal open so the user can retry or cancel.
@@ -207,9 +213,11 @@ export const QuantileMappingFormContent = ({
                         unavailableThresholdCount={unavailableThresholdCount}
                         outbreakIndicator={outbreak_indicator}
                         outbreakIndicatorError={errors.outbreak_indicator?.message}
+                        endemicThreshold={endemic_threshold}
                         onToggleAlertOutputs={toggleAlertOutputs}
                         onAdjustAlertProbability={() => setIsAlertsDialogOpen(true)}
                         onChangeOutbreakIndicator={id => updateQuantile('outbreak_indicator', id)}
+                        onChangeEndemicThreshold={id => updateQuantile('endemic_threshold', id)}
                     />
 
                     <ClearPreviousValuesControl

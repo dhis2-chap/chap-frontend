@@ -11,9 +11,11 @@ type Props = {
     unavailableThresholdCount: number;
     outbreakIndicator?: string;
     outbreakIndicatorError?: string;
+    endemicThreshold?: string;
     onToggleAlertOutputs: () => void;
     onAdjustAlertProbability: () => void;
     onChangeOutbreakIndicator: (id: string | null) => void;
+    onChangeEndemicThreshold: (id: string | null) => void;
 };
 
 export const AlertOutputSection = ({
@@ -22,9 +24,11 @@ export const AlertOutputSection = ({
     unavailableThresholdCount,
     outbreakIndicator,
     outbreakIndicatorError,
+    endemicThreshold,
     onToggleAlertOutputs,
     onAdjustAlertProbability,
     onChangeOutbreakIndicator,
+    onChangeEndemicThreshold,
 }: Props) => {
     const handleAlertOutputKeyDown = (event: KeyboardEvent) => {
         if (event.key === 'Enter' || event.key === ' ') {
@@ -95,6 +99,13 @@ export const AlertOutputSection = ({
                             value={outbreakIndicator}
                             onChange={onChangeOutbreakIndicator}
                             error={outbreakIndicatorError}
+                        />
+                    </div>
+                    <div className={styles.outbreakIndicatorField}>
+                        <DataItemSelect
+                            label={i18n.t('Endemic threshold (optional)')}
+                            value={endemicThreshold}
+                            onChange={onChangeEndemicThreshold}
                         />
                     </div>
                 </>

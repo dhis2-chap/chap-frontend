@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-06-13T21:29:43.647Z\n"
-"PO-Revision-Date: 2026-06-13T21:29:43.648Z\n"
+"POT-Creation-Date: 2026-08-27T10:33:26.268Z\n"
+"PO-Revision-Date: 2026-08-27T10:33:26.269Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -357,6 +357,9 @@ msgid ""
 msgstr ""
 "Some models require you to only select organisation units from the same "
 "level."
+
+msgid "Could not verify the levels of the org units in the selected groups"
+msgstr "Could not verify the levels of the org units in the selected groups"
 
 msgid "All org units must be at the same level"
 msgstr "All org units must be at the same level"
@@ -841,6 +844,27 @@ msgstr "Prediction setup updated"
 
 msgid "Failed to update prediction setup"
 msgstr "Failed to update prediction setup"
+
+msgid "Edit schedule"
+msgstr "Edit schedule"
+
+msgid "Scheduled predictions"
+msgstr "Scheduled predictions"
+
+msgid "Enable to include this setup in scheduled prediction runs."
+msgstr "Enable to include this setup in scheduled prediction runs."
+
+msgid "About scheduling"
+msgstr "About scheduling"
+
+msgid ""
+"The external CHAP scheduler must be running for scheduled predictions to "
+"execute. Contact your system administrator to set up the scheduler if you "
+"haven't yet."
+msgstr ""
+"The external CHAP scheduler must be running for scheduled predictions to "
+"execute. Contact your system administrator to set up the scheduler if you "
+"haven't yet."
 
 msgid "Scheduling"
 msgstr "Scheduling"
@@ -1361,6 +1385,9 @@ msgstr "Adjust"
 msgid "Outbreak indicator"
 msgstr "Outbreak indicator"
 
+msgid "Endemic threshold (optional)"
+msgstr "Endemic threshold (optional)"
+
 msgid "Requires data value delete authority."
 msgstr "Requires data value delete authority."
 
@@ -1515,9 +1542,6 @@ msgstr "Prediction setup deleted"
 
 msgid "Failed to delete prediction setup"
 msgstr "Failed to delete prediction setup"
-
-msgid "Data element is required"
-msgstr "Data element is required"
 
 msgid "Setup name"
 msgstr "Setup name"
@@ -1864,6 +1888,13 @@ msgstr ""
 "These features are experimental and may be unstable or change without "
 "notice."
 
+msgid ""
+"You need the {{authority}} authority to change these settings. Contact your "
+"system administrator to get access."
+msgstr ""
+"You need the {{authority}} authority to change these settings. Contact your "
+"system administrator to get access."
+
 msgid "Enable experimental features"
 msgstr "Enable experimental features"
 
@@ -2152,11 +2183,3 @@ msgstr ""
 msgctxt ") instead."
 msgid "Spaces are not allowed. Use dashes (-) or underscores ("
 msgstr "Spaces are not allowed. Use dashes (-) or underscores (_) instead."
-
-msgctxt "Application title"
-msgid "__MANIFEST_APP_TITLE"
-msgstr "Modeling"
-
-msgctxt "Application description"
-msgid "__MANIFEST_APP_DESCRIPTION"
-msgstr ""
