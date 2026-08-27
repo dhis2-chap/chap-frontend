@@ -71,6 +71,8 @@ type BuildClearPeriodIdsOptions = {
 type BuildClearDataValuesOptions = BuildClearPeriodIdsOptions & {
     dataElementIds: string[];
     orgUnitIds: string[];
+    endemicThresholdId?: string;
+    endemicThresholdPeriodIds?: string[];
 };
 
 const mapQuantileToKey = (quantile: number): QuantileKey | null => QUANTILE_MAP[quantile] ?? null;
@@ -170,6 +172,18 @@ export const transformEndemicThresholdsToDataValues = (
     ));
 };
 
+export const getEndemicThresholdPeriodIds = (
+    thresholdMap: Map<string, EndemicThresholdPoint[]> | undefined,
+): string[] => {
+    if (!thresholdMap) {
+        return [];
+    }
+
+    return deduplicateIds(
+        Array.from(thresholdMap.values()).flatMap(points => points.map(point => point.period)),
+    );
+};
+
 export const buildClearPeriodIds = ({
     forecastPeriodIds,
     periodType,
@@ -213,6 +227,8 @@ export const buildClearDataValues = ({
     dataElementIds,
     orgUnitIds,
     forecastPeriodIds,
+    endemicThresholdId,
+    endemicThresholdPeriodIds,
     periodType,
     calendar,
     locale,
@@ -223,16 +239,30 @@ export const buildClearDataValues = ({
         calendar,
         locale,
     });
+    // The endemic threshold is imported for the plotted historical periods as
+    // well, so its clear window must span those in addition to the forecast.
+    const thresholdClearPeriodIds = endemicThresholdId && endemicThresholdPeriodIds?.length
+        ? buildClearPeriodIds({
+                forecastPeriodIds: [...forecastPeriodIds, ...endemicThresholdPeriodIds],
+                periodType,
+                calendar,
+                locale,
+            })
+        : clearPeriodIds;
     const selectedDataElementIds = deduplicateIds(dataElementIds);
     const selectedOrgUnitIds = deduplicateIds(orgUnitIds);
 
-    return selectedDataElementIds.flatMap(dataElement => (
-        selectedOrgUnitIds.flatMap(orgUnit => (
-            clearPeriodIds.map(period => ({
+    return selectedDataElementIds.flatMap((dataElement) => {
+        const periodIds = dataElement === endemicThresholdId
+            ? thresholdClearPeriodIds
+            : clearPeriodIds;
+
+        return selectedOrgUnitIds.flatMap(orgUnit => (
+            periodIds.map(period => ({
                 dataElement,
                 period,
                 orgUnit,
             }))
-        ))
-    ));
+        ));
+    });
 };

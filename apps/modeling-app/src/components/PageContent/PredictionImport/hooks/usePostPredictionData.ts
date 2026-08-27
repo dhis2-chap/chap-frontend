@@ -13,6 +13,7 @@ import { getPredictionPeriodIds } from '@/utils/predictionRunMetadata';
 import {
     buildClearDataValues,
     deduplicateIds,
+    getEndemicThresholdPeriodIds,
     getSelectedOutputDataElementIds,
     STANDARD_QUANTILES,
     transformEndemicThresholdsToDataValues,
@@ -218,6 +219,8 @@ export const usePostPredictionData = ({ onSuccess, onError }: UsePostPredictionD
                                 predictionEntries,
                             ),
                             forecastPeriodIds: getForecastPeriodIds(prediction, predictionEntries),
+                            endemicThresholdId: quantileMapping.endemicThresholdId,
+                            endemicThresholdPeriodIds: getEndemicThresholdPeriodIds(thresholdMap),
                             periodType: prediction.dataset?.periodType,
                             calendar: periodSettings.calendar,
                             locale: periodSettings.locale,
