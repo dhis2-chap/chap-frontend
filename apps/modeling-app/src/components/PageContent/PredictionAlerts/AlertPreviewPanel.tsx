@@ -18,13 +18,18 @@ import type {
     PredictionInfo,
 } from '@dhis2-chap/ui';
 import { useEndemicThresholds } from '@/hooks/useEndemicThresholds';
-import { OutbreakProbabilityControl } from '../../ThresholdTilesExplorer';
+import type { ThresholdParams } from '@/utils/thresholdStrategyParams';
+import {
+    OutbreakProbabilityControl,
+    ThresholdCalculationStatus,
+} from '../../ThresholdTilesExplorer';
 import { usePredictionSeries } from '../PredictionDetails/hooks/usePredictionSeries';
 import styles from './PredictionAlerts.module.css';
 
 type Props = {
     prediction: PredictionInfo;
     model: ModelSpecRead;
+    thresholdParams: ThresholdParams;
     selectedProbability: OutbreakProbability;
     onSelectProbability: (probability: OutbreakProbability) => void;
 };
@@ -32,6 +37,7 @@ type Props = {
 export const AlertPreviewPanel = ({
     prediction,
     model,
+    thresholdParams,
     selectedProbability,
     onSelectProbability,
 }: Props) => {
@@ -43,32 +49,18 @@ export const AlertPreviewPanel = ({
         error: seriesError,
     } = usePredictionSeries({ prediction, model });
 
-    const allPeriods = useMemo(() => {
-        const periodSet = new Set<string>();
-        for (const s of series) {
-            s.actualCases?.forEach(ac => periodSet.add(ac.period));
-            s.points.forEach(p => periodSet.add(p.period));
-        }
-        return Array.from(periodSet);
-    }, [series]);
-
-    const orgUnitIds = useMemo(() => (
-        series.map(s => s.orgUnitId)
-    ), [series]);
-
     const {
         thresholdMap,
         isLoading: isThresholdsLoading,
         error: thresholdsError,
+        refetch: refetchThresholds,
     } = useEndemicThresholds({
         datasetId: prediction.datasetId,
-        periodIds: allPeriods,
-        locations: orgUnitIds,
-        enabled: series.length > 0,
+        series,
+        params: thresholdParams,
     });
 
     const isLoading = isSeriesLoading || isThresholdsLoading;
-    const error = seriesError || thresholdsError;
 
     const selectedSeries = series.find(s => s.orgUnitId === selectedOrgUnitId) ?? series[0];
     const selectedThresholds: EndemicThresholdPoint[] = useMemo(() => (
@@ -105,11 +97,21 @@ export const AlertPreviewPanel = ({
         );
     }
 
-    if (error) {
+    if (seriesError) {
         return (
             <NoticeBox error title={i18n.t('Unable to load prediction data')}>
                 {i18n.t('There was a problem loading the prediction data required for alert configuration.')}
             </NoticeBox>
+        );
+    }
+
+    if (thresholdsError) {
+        return (
+            <ThresholdCalculationStatus
+                isLoading={false}
+                error
+                onRetry={refetchThresholds}
+            />
         );
     }
 

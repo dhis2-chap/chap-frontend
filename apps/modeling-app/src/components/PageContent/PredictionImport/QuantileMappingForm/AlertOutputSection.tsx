@@ -2,13 +2,18 @@ import i18n from '@dhis2/d2-i18n';
 import { NoticeBox, Switch } from '@dhis2/ui';
 import type { OutbreakProbability } from '@dhis2-chap/ui';
 import type { KeyboardEvent, MouseEvent } from 'react';
+import { ThresholdCalculationStatus } from '../../../ThresholdTilesExplorer';
 import { DataItemSelect } from './DataItemSelect';
 import styles from './QuantileMappingForm.module.css';
 
 type Props = {
     useAlertOutputs: boolean;
     selectedProbability: OutbreakProbability;
+    thresholdStrategyName?: string;
+    thresholdParamsSummary?: string;
     unavailableThresholdCount: number;
+    isThresholdsLoading: boolean;
+    thresholdsError: boolean;
     outbreakIndicator?: string;
     outbreakIndicatorError?: string;
     endemicThreshold?: string;
@@ -16,12 +21,17 @@ type Props = {
     onAdjustAlertProbability: () => void;
     onChangeOutbreakIndicator: (id: string | null) => void;
     onChangeEndemicThreshold: (id: string | null) => void;
+    onRetryThresholds?: () => void;
 };
 
 export const AlertOutputSection = ({
     useAlertOutputs,
     selectedProbability,
+    thresholdStrategyName,
+    thresholdParamsSummary,
     unavailableThresholdCount,
+    isThresholdsLoading,
+    thresholdsError,
     outbreakIndicator,
     outbreakIndicatorError,
     endemicThreshold,
@@ -29,6 +39,7 @@ export const AlertOutputSection = ({
     onAdjustAlertProbability,
     onChangeOutbreakIndicator,
     onChangeEndemicThreshold,
+    onRetryThresholds,
 }: Props) => {
     const handleAlertOutputKeyDown = (event: KeyboardEvent) => {
         if (event.key === 'Enter' || event.key === ' ') {
@@ -68,7 +79,12 @@ export const AlertOutputSection = ({
             </div>
             {useAlertOutputs && (
                 <>
-                    {unavailableThresholdCount > 0 && (
+                    <ThresholdCalculationStatus
+                        isLoading={isThresholdsLoading}
+                        error={thresholdsError}
+                        onRetry={onRetryThresholds}
+                    />
+                    {!isThresholdsLoading && !thresholdsError && unavailableThresholdCount > 0 && (
                         <NoticeBox warning title={i18n.t('Some outbreak indicators will be skipped')}>
                             {i18n.t('Outbreak indicators will be skipped for one region due to insufficient disease data.', {
                                 count: unavailableThresholdCount,
@@ -85,6 +101,26 @@ export const AlertOutputSection = ({
                                 {`${selectedProbability}%`}
                             </span>
                         </div>
+                        {thresholdStrategyName && (
+                            <div>
+                                <span className={styles.summaryLabel}>
+                                    {i18n.t('Threshold strategy')}
+                                </span>
+                                <span className={styles.summaryValue}>
+                                    {thresholdStrategyName}
+                                </span>
+                            </div>
+                        )}
+                        {thresholdParamsSummary && (
+                            <div>
+                                <span className={styles.summaryLabel}>
+                                    {i18n.t('Threshold parameters')}
+                                </span>
+                                <span className={styles.summaryValue}>
+                                    {thresholdParamsSummary}
+                                </span>
+                            </div>
+                        )}
                         <button
                             type="button"
                             className={styles.tertiaryActionButton}

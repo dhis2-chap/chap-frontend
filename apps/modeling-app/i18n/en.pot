@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-08-27T10:33:26.268Z\n"
-"PO-Revision-Date: 2026-08-27T10:33:26.269Z\n"
+"POT-Creation-Date: 2026-09-02T14:41:47.300Z\n"
+"PO-Revision-Date: 2026-09-02T14:41:47.300Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -1379,6 +1379,12 @@ msgstr[1] ""
 msgid "Minimum outbreak probability"
 msgstr "Minimum outbreak probability"
 
+msgid "Threshold strategy"
+msgstr "Threshold strategy"
+
+msgid "Threshold parameters"
+msgstr "Threshold parameters"
+
 msgid "Adjust"
 msgstr "Adjust"
 
@@ -1564,6 +1570,33 @@ msgstr "There are running jobs in the background"
 
 msgid "Running jobs"
 msgstr "Running jobs"
+
+msgid "Calculating thresholds..."
+msgstr "Calculating thresholds..."
+
+msgid "Unable to calculate thresholds"
+msgstr "Unable to calculate thresholds"
+
+msgid "There was a problem calculating thresholds for this prediction run."
+msgstr "There was a problem calculating thresholds for this prediction run."
+
+msgid "Retry"
+msgstr "Retry"
+
+msgid "Standard deviations above mean"
+msgstr "Standard deviations above mean"
+
+msgid "Lower percentile (%)"
+msgstr "Lower percentile (%)"
+
+msgid "Upper percentile (%)"
+msgstr "Upper percentile (%)"
+
+msgid "Baseline years"
+msgstr "Baseline years"
+
+msgid "Leave empty to use all available history"
+msgstr "Leave empty to use all available history"
 
 msgid "Outbreak"
 msgstr "Outbreak"
@@ -2179,6 +2212,29 @@ msgid ""
 msgstr ""
 "Saved model configurations that are ready to be used to generate "
 "predictions."
+
+msgid "{{stdMultiplier}} standard deviations above seasonal mean"
+msgstr "{{stdMultiplier}} standard deviations above seasonal mean"
+
+msgid "{{lower}}-{{upper}} percentile, all-history baseline"
+msgstr "{{lower}}-{{upper}} percentile, all-history baseline"
+
+msgid "{{lower}}-{{upper}} percentile, {{count}}-year baseline"
+msgid_plural "{{lower}}-{{upper}} percentile, {{count}}-year baseline"
+msgstr[0] "{{lower}}-{{upper}} percentile, {{count}}-year baseline"
+msgstr[1] "{{lower}}-{{upper}} percentile, {{count}}-year baseline"
+
+msgid "Enter a percentage between 0 and 100"
+msgstr "Enter a percentage between 0 and 100"
+
+msgid "Enter a number of 0 or more"
+msgstr "Enter a number of 0 or more"
+
+msgid "Must be lower than the upper percentile"
+msgstr "Must be lower than the upper percentile"
+
+msgid "Enter a whole number of 1 or more, or leave empty to use all history"
+msgstr "Enter a whole number of 1 or more, or leave empty to use all history"
 
 msgctxt ") instead."
 msgid "Spaces are not allowed. Use dashes (-) or underscores ("

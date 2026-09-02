@@ -48,6 +48,7 @@ const getChartOptions = (
     const periods = buildChartPeriods([
         ...(series.actualCases?.map(actualCase => actualCase.period) ?? []),
         ...series.points.map(point => point.period),
+        ...(endemicThresholds?.map(threshold => threshold.period) ?? []),
     ]);
     const getPeriodIndex = buildPeriodIndexLookup(periods);
     const outbreakInfoByPeriod = new Map(
@@ -132,17 +133,48 @@ const getChartOptions = (
 
     if (endemicThresholds && endemicThresholds.length > 0) {
         const thresholdByPeriod = new Map(
-            endemicThresholds.map(t => [canonicalizePeriodId(t.period), t.value]),
+            endemicThresholds.map(t => [canonicalizePeriodId(t.period), t]),
         );
-        const thresholdData = periods
-            .map(period => ({
+        // Keep unavailable periods as explicit null points; omitting them
+        // would make Highcharts interpolate across the gap despite
+        // connectNulls being false.
+        const thresholdData = periods.map(period => ({
+            name: period,
+            x: getPeriodIndex(period),
+            y: thresholdByPeriod.get(canonicalizePeriodId(period))?.value ?? null,
+        }));
+        const bandData = periods.map((period) => {
+            const threshold = thresholdByPeriod.get(canonicalizePeriodId(period));
+            const low = threshold?.lowerValue;
+            const high = threshold?.value;
+            const hasBand = low !== null && low !== undefined &&
+                high !== null && high !== undefined;
+
+            return {
                 name: period,
                 x: getPeriodIndex(period),
-                y: thresholdByPeriod.get(canonicalizePeriodId(period)) ?? null,
-            }))
-            .filter(point => point.y !== null);
+                low: hasBand ? low : undefined,
+                high: hasBand ? high : undefined,
+            };
+        });
 
-        if (thresholdData.length > 0) {
+        if (bandData.some(point => point.high !== undefined)) {
+            chartSeries.push({
+                type: 'arearange',
+                name: i18n.t('Endemic channel'),
+                data: bandData,
+                zIndex: 3,
+                lineWidth: 0,
+                color: '#212934',
+                fillOpacity: 0.08,
+                connectNulls: false,
+                marker: {
+                    enabled: false,
+                },
+            });
+        }
+
+        if (thresholdData.some(point => point.y !== null)) {
             chartSeries.push({
                 type: 'line',
                 data: thresholdData,
@@ -320,7 +352,7 @@ export const UncertaintyAreaChart = ({
         series.actualCases?.map(actualCase => actualCase.period).join(',') ?? '',
         endemicThreshold ?? '',
         endemicThresholds
-            ?.map(threshold => `${threshold.period}:${threshold.value ?? 'null'}`)
+            ?.map(threshold => `${threshold.period}:${threshold.value ?? 'null'}:${threshold.lowerValue ?? 'null'}`)
             .join(',') ?? '',
     ].join('|'), [series, endemicThreshold, endemicThresholds]);
 

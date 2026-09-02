@@ -1,3 +1,4 @@
+import type { ThresholdEntry } from '../httpfunctions';
 import type {
     PredictionOrgUnitSeries,
     PredictionPointVM,
@@ -13,6 +14,33 @@ export type SupportedOutbreakProbabilityBucket = OutbreakProbability | '<10';
 export type EndemicThresholdPoint = {
     period: string;
     value: number | null;
+    lowerValue?: number | null;
+};
+
+export type ThresholdLineRoles = {
+    upperIndex: number;
+    lowerIndex?: number;
+};
+
+export const buildEndemicThresholdMap = (
+    entries: ThresholdEntry[],
+    { upperIndex, lowerIndex }: ThresholdLineRoles,
+): Map<string, EndemicThresholdPoint[]> => {
+    const map = new Map<string, EndemicThresholdPoint[]>();
+
+    for (const entry of entries) {
+        const existing = map.get(entry.location) ?? [];
+        existing.push({
+            period: entry.period,
+            value: entry.values[upperIndex] ?? null,
+            ...(lowerIndex !== undefined && {
+                lowerValue: entry.values[lowerIndex] ?? null,
+            }),
+        });
+        map.set(entry.location, existing);
+    }
+
+    return map;
 };
 
 export type OutbreakIndicator = {

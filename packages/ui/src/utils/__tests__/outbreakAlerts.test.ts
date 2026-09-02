@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
+import type { ThresholdEntry } from '../../httpfunctions';
 import type { PredictionOrgUnitSeries, PredictionPointVM } from '../../interfaces/Prediction';
 import {
+    buildEndemicThresholdMap,
     buildOutbreakIndicatorsForSeries,
     getSupportedOutbreakProbabilityBucket,
     isOutbreakAtProbability,
@@ -99,5 +101,55 @@ describe('outbreak alert utilities', () => {
         expect(buildOutbreakIndicatorsForSeries(series, 75, [
             { period: '202401', value: null },
         ])).toEqual([]);
+    });
+});
+
+describe('buildEndemicThresholdMap', () => {
+    const entry = (
+        location: string,
+        period: string,
+        values: (number | null)[],
+    ): ThresholdEntry => ({ location, period, values });
+
+    it('groups single-line entries by location using the only line as the alert value', () => {
+        const map = buildEndemicThresholdMap([
+            entry('ou-a', '202401', [12]),
+            entry('ou-a', '202402', [15]),
+            entry('ou-b', '202401', [null]),
+        ], { upperIndex: 0 });
+
+        expect(map.get('ou-a')).toEqual([
+            { period: '202401', value: 12 },
+            { period: '202402', value: 15 },
+        ]);
+        expect(map.get('ou-b')).toEqual([
+            { period: '202401', value: null },
+        ]);
+    });
+
+    it('maps band lines to value and lowerValue by requested line index', () => {
+        const map = buildEndemicThresholdMap([
+            entry('ou-a', '202401', [3, 9]),
+        ], { upperIndex: 1, lowerIndex: 0 });
+
+        expect(map.get('ou-a')).toEqual([
+            { period: '202401', value: 9, lowerValue: 3 },
+        ]);
+    });
+
+    it('treats missing or null line values as unavailable', () => {
+        const map = buildEndemicThresholdMap([
+            entry('ou-a', '202401', [null, 7]),
+            entry('ou-a', '202402', [4]),
+        ], { upperIndex: 1, lowerIndex: 0 });
+
+        expect(map.get('ou-a')).toEqual([
+            { period: '202401', value: 7, lowerValue: null },
+            { period: '202402', value: null, lowerValue: 4 },
+        ]);
+    });
+
+    it('returns an empty map for no entries', () => {
+        expect(buildEndemicThresholdMap([], { upperIndex: 0 }).size).toBe(0);
     });
 });

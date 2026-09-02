@@ -10,9 +10,22 @@ const outbreakProbabilitySchema = z.custom<OutbreakProbability>(
     { message: i18n.t('Alert probability is required') },
 );
 
+const thresholdParamsSchema = z.discriminatedUnion('type', [
+    z.object({
+        type: z.literal('seasonal'),
+        stdMultiplier: z.number(),
+    }),
+    z.object({
+        type: z.literal('percentile'),
+        quantile: z.tuple([z.number(), z.number()]),
+        baselineYears: z.number().int().min(1).nullable(),
+    }),
+]);
+
 export const importLocationStateSchema = z
     .object({
         alertProbability: outbreakProbabilitySchema.optional(),
+        thresholdParams: thresholdParamsSchema.optional(),
         useAlertOutputs: z.boolean().optional(),
     })
     .passthrough()

@@ -59,6 +59,7 @@ export { buildPredictionSeries } from './utils/PredictionViewModel';
 export {
     OUTBREAK_PROBABILITY_OPTIONS,
     DEFAULT_OUTBREAK_PROBABILITY,
+    buildEndemicThresholdMap,
     buildOutbreakIndicators,
     buildOutbreakIndicatorsForSeries,
     getHighestSupportedOutbreakProbability,
@@ -70,6 +71,7 @@ export {
     type OutbreakIndicator,
     type OutbreakProbability,
     type SupportedOutbreakProbabilityBucket,
+    type ThresholdLineRoles,
 } from './utils/outbreakAlerts';
 export {
     getStableMaxYForThresholdChart,

@@ -2,65 +2,85 @@ import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import {
     ApiError,
+    buildEndemicThresholdMap,
     DatasetsService,
-    type EndemicThresholdPoint,
-    type ThresholdEntry,
+    type PredictionOrgUnitSeries,
+    type ThresholdResponse,
 } from '@dhis2-chap/ui';
-
-const DEFAULT_STRATEGY = 'seasonal';
+import {
+    getThresholdLineRoles,
+    isKnownThresholdStrategy,
+    type ThresholdParams,
+} from '@/utils/thresholdStrategyParams';
 
 type Props = {
     datasetId: number | undefined;
-    periodIds: string[];
-    locations?: string[];
-    strategy?: string;
+    series: PredictionOrgUnitSeries[];
+    params: ThresholdParams;
     enabled?: boolean;
 };
 
+// Fresh forever while cached, but garbage-collect unused responses so a
+// session of param experimentation cannot grow the query cache unboundedly.
+const THRESHOLDS_CACHE_TIME = 30 * 60 * 1000;
+
 export const useEndemicThresholds = ({
     datasetId,
-    periodIds,
-    locations,
-    strategy = DEFAULT_STRATEGY,
+    series,
+    params,
     enabled = true,
 }: Props) => {
+    // Request thresholds for exactly the periods the charts display:
+    // historical actual cases plus the forecast points.
+    const periodIds = useMemo(() => Array.from(new Set(
+        series.flatMap(orgUnitSeries => [
+            ...(orgUnitSeries.actualCases?.map(actualCase => actualCase.period) ?? []),
+            ...orgUnitSeries.points.map(point => point.period),
+        ]),
+    )), [series]);
+    const locations = useMemo(() => (
+        series.map(orgUnitSeries => orgUnitSeries.orgUnitId)
+    ), [series]);
     const isQueryEnabled = enabled && !!datasetId && periodIds.length > 0;
 
-    const { data, isLoading, error } = useQuery<ThresholdEntry[], ApiError>({
-        queryKey: ['endemic-thresholds', datasetId, periodIds, locations, strategy],
+    const { data, isFetching, error, refetch } = useQuery<ThresholdResponse, ApiError>({
+        queryKey: ['endemic-thresholds', datasetId, periodIds, locations, params],
         queryFn: async () => {
             if (!datasetId) throw new Error('datasetId is required');
 
             return await DatasetsService.computeThresholdsV1AnalyticsThresholdsPost({
                 datasetId,
                 periodIds,
-                strategy,
                 locations,
+                params,
             });
         },
         enabled: isQueryEnabled,
-        staleTime: 300000,
-        cacheTime: 300000,
+        keepPreviousData: true,
+        staleTime: Infinity,
+        cacheTime: THRESHOLDS_CACHE_TIME,
         retry: 0,
     });
 
     const thresholdMap = useMemo(() => {
         if (!data) return undefined;
 
-        const map = new Map<string, EndemicThresholdPoint[]>();
+        // Derive the line roles from the params echoed in the response: with
+        // keepPreviousData the visible data can belong to the previous request.
+        const responseStrategy = data.params.type;
+        const lineRoles = isKnownThresholdStrategy(responseStrategy)
+            ? getThresholdLineRoles(responseStrategy)
+            : { upperIndex: 0 };
 
-        for (const entry of data) {
-            const existing = map.get(entry.location) ?? [];
-            existing.push({ period: entry.period, value: entry.value });
-            map.set(entry.location, existing);
-        }
-
-        return map;
+        return buildEndemicThresholdMap(data.entries, lineRoles);
     }, [data]);
 
     return {
         thresholdMap,
-        isLoading: isQueryEnabled && isLoading,
+        // isFetching also covers refetches after an error and background
+        // recalculations over kept previous data, unlike isLoading.
+        isLoading: isQueryEnabled && isFetching,
         error: isQueryEnabled ? error : null,
+        refetch,
     };
 };
