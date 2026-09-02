@@ -26,5 +26,9 @@ export type SystemInfoResponse = {
      * Git revision the running image was built from (empty if unknown).
      */
     revision: string;
+    /**
+     * Whether this server requires an API token. When `true`, every endpoint except `/health`, `/health/ready` and `/system/info` needs an `Authorization: Bearer <token>` header.
+     */
+    auth_required: boolean;
 };
 

@@ -11,8 +11,8 @@ import type { DatasetMakeRequest } from '../models/DatasetMakeRequest';
 import type { DataSetWithObservations } from '../models/DataSetWithObservations';
 import type { ImportSummaryResponse } from '../models/ImportSummaryResponse';
 import type { JobResponse } from '../models/JobResponse';
-import type { ThresholdEntry } from '../models/ThresholdEntry';
 import type { ThresholdRequest } from '../models/ThresholdRequest';
+import type { ThresholdResponse } from '../models/ThresholdResponse';
 import type { ThresholdStrategyInfo } from '../models/ThresholdStrategyInfo';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -234,17 +234,20 @@ export class DatasetsService {
     }
     /**
      * Compute thresholds (endemic channel) for a dataset
-     * Compute one outbreak threshold per (period, org unit) from a dataset's historical disease_cases, using the chosen strategy.
+     * Compute outbreak threshold lines per (period, org unit) from a dataset's historical disease_cases.
      *
-     * 404 if the strategy id is not registered or the dataset has no `disease_cases`
-     * observations.
+     * The `type` field of `params` selects the strategy; the strategy's line parameter
+     * (`quantile`, `stdMultiplier`, ...) accepts a scalar or a list, and each entry's `values`
+     * array holds one threshold per requested line, in request order. 404 if the dataset has
+     * no `disease_cases` observations. 400 if the requested periods fall outside the
+     * available data.
      * @param requestBody
-     * @returns ThresholdEntry Successful Response
+     * @returns ThresholdResponse Successful Response
      * @throws ApiError
      */
     public static computeThresholdsV1AnalyticsThresholdsPost(
         requestBody: ThresholdRequest,
-    ): CancelablePromise<Array<ThresholdEntry>> {
+    ): CancelablePromise<ThresholdResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/v1/analytics/thresholds',

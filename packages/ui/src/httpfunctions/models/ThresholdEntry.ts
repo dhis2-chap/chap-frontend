@@ -3,20 +3,20 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * One computed threshold for a single (period, location).
+ * Computed threshold lines for a single (period, location).
  */
 export type ThresholdEntry = {
     /**
-     * Period the threshold applies to.
+     * Period the thresholds apply to.
      */
     period: string;
     /**
-     * Location the threshold applies to.
+     * Location the thresholds apply to.
      */
     location: string;
     /**
-     * Computed threshold value, or `None` if it could not be computed.
+     * One threshold per requested line, in the order of the request's line parameter list (`quantile`, `stdMultiplier`, ...). A scalar or default request yields one element. An element is `null` when that line could not be computed.
      */
-    value: (number | null);
+    values: Array<(number | null)>;
 };
 
