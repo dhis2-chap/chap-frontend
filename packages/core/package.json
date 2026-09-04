@@ -9,6 +9,7 @@
     "license": "MIT",
     "scripts": {
         "build": "d2-app-scripts build && tsc --emitDeclarationOnly --outDir ./build/types",
+        "dev": "concurrently -n build,types --hide types \"d2-app-scripts build --watch\" \"tsc --emitDeclarationOnly --outDir ./build/types --watch\"",
         "start": "concurrently -n build,types --hide types \"d2-app-scripts build --watch\" \"tsc --emitDeclarationOnly --outDir ./build/types --watch\"",
         "linter:check": "eslint . --config ../../eslint.config.mts",
         "tsc:check": "tsc --noEmit"

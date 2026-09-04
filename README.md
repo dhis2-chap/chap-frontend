@@ -30,6 +30,9 @@ pnpm install
 pnpm build
 
 # Start development server
+pnpm dev
+
+# Build and preview the production app locally
 pnpm start
 ```
 

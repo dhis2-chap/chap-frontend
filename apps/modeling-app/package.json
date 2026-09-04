@@ -6,7 +6,9 @@
     "private": true,
     "scripts": {
         "build": "d2-app-scripts build",
-        "start": "d2-app-scripts start",
+        "build:standalone": "d2-app-scripts build --standalone --no-pack",
+        "dev": "d2-app-scripts start",
+        "start": "pnpm --workspace-root turbo build --filter=@dhis2-chap/modeling-app^... && pnpm run build:standalone && pnpm exec vite preview --port 3000 --outDir build/app",
         "deploy": "d2-app-scripts deploy",
         "tsc:check": "tsc --noEmit",
         "linter:check": "eslint . --config ../../eslint.config.mts"
