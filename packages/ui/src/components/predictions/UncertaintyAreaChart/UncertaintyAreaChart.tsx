@@ -5,7 +5,7 @@ import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import { PredictionOrgUnitSeries } from '../../../interfaces/Prediction';
 import { registerHighchartsModules } from '../../../utils/registerHighchartsModules';
-import { buildChartPeriods, buildPeriodIndexLookup } from '../../../utils/chartPeriods';
+import { buildChartPeriods, buildPeriodIndexLookup, getSeriesPeriods } from '../../../utils/chartPeriods';
 import type { EndemicThresholdPoint, SupportedOutbreakProbabilityBucket } from '../../../utils/outbreakAlerts';
 import type { ZoomRange } from '../../evaluation/ResultPlot/ResultPlot';
 
@@ -45,11 +45,9 @@ const getChartOptions = (
 ): Highcharts.Options => {
     const isTile = variant === 'tile';
     const disabledAnimationOptions = getDisabledAnimationOptions();
-    const periods = buildChartPeriods([
-        ...(series.actualCases?.map(actualCase => actualCase.period) ?? []),
-        ...series.points.map(point => point.period),
-        ...(endemicThresholds?.map(threshold => threshold.period) ?? []),
-    ]);
+    // The axis holds only this org unit's own periods; thresholds are looked
+    // up per period, so entries for periods outside them are simply unused.
+    const periods = buildChartPeriods(getSeriesPeriods(series));
     const getPeriodIndex = buildPeriodIndexLookup(periods);
     const outbreakInfoByPeriod = new Map(
         outbreakPeriods.map(outbreakPeriod => [outbreakPeriod.period, outbreakPeriod]),
@@ -143,22 +141,27 @@ const getChartOptions = (
             x: getPeriodIndex(period),
             y: thresholdByPeriod.get(canonicalizePeriodId(period))?.value ?? null,
         }));
-        const bandData = periods.map((period) => {
-            const threshold = thresholdByPeriod.get(canonicalizePeriodId(period));
-            const low = threshold?.lowerValue;
-            const high = threshold?.value;
-            const hasBand = low !== null && low !== undefined &&
-                high !== null && high !== undefined;
+        const hasBandValues = endemicThresholds.some(threshold => (
+            threshold.lowerValue !== null && threshold.lowerValue !== undefined &&
+            threshold.value !== null && threshold.value !== undefined
+        ));
 
-            return {
-                name: period,
-                x: getPeriodIndex(period),
-                low: hasBand ? low : undefined,
-                high: hasBand ? high : undefined,
-            };
-        });
+        if (hasBandValues) {
+            const bandData = periods.map((period) => {
+                const threshold = thresholdByPeriod.get(canonicalizePeriodId(period));
+                const low = threshold?.lowerValue;
+                const high = threshold?.value;
+                const hasBand = low !== null && low !== undefined &&
+                    high !== null && high !== undefined;
 
-        if (bandData.some(point => point.high !== undefined)) {
+                return {
+                    name: period,
+                    x: getPeriodIndex(period),
+                    low: hasBand ? low : undefined,
+                    high: hasBand ? high : undefined,
+                };
+            });
+
             chartSeries.push({
                 type: 'arearange',
                 name: i18n.t('Endemic channel'),
@@ -227,9 +230,16 @@ const getChartOptions = (
             valueDecimals: 2,
             formatter: function () {
                 const points = this.points ?? [];
-                const lines = points.map(point => (
-                    `<span style="color:${point.color}">\u25CF</span> ${point.series.name}: <b>${point.y?.toFixed(2)}</b>`
-                ));
+                const lines = points.map((point) => {
+                    // Range points report their LOW bound as y (arearange
+                    // sets pointValKey to 'low'), so render both bounds.
+                    const { low, high } = point.point as { low?: number | null; high?: number | null };
+                    const value = low !== null && low !== undefined && high !== null && high !== undefined
+                        ? `${low.toFixed(2)} - ${high.toFixed(2)}`
+                        : point.y?.toFixed(2);
+
+                    return `<span style="color:${point.color}">\u25CF</span> ${point.series.name}: <b>${value}</b>`;
+                });
                 const period = String(points[0]?.point.name ?? this.x);
                 const outbreakInfo = outbreakInfoByPeriod.get(period);
 

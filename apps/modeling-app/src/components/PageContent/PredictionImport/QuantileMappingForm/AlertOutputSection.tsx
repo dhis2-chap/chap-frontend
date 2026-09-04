@@ -24,6 +24,17 @@ type Props = {
     onRetryThresholds?: () => void;
 };
 
+const SummaryItem = ({ label, value }: { label: string; value: string }) => (
+    <div>
+        <span className={styles.summaryLabel}>
+            {label}
+        </span>
+        <span className={styles.summaryValue}>
+            {value}
+        </span>
+    </div>
+);
+
 export const AlertOutputSection = ({
     useAlertOutputs,
     selectedProbability,
@@ -93,33 +104,21 @@ export const AlertOutputSection = ({
                         </NoticeBox>
                     )}
                     <div className={styles.alertSummary}>
-                        <div>
-                            <span className={styles.summaryLabel}>
-                                {i18n.t('Minimum outbreak probability')}
-                            </span>
-                            <span className={styles.summaryValue}>
-                                {`${selectedProbability}%`}
-                            </span>
-                        </div>
+                        <SummaryItem
+                            label={i18n.t('Minimum outbreak probability')}
+                            value={`${selectedProbability}%`}
+                        />
                         {thresholdStrategyName && (
-                            <div>
-                                <span className={styles.summaryLabel}>
-                                    {i18n.t('Threshold strategy')}
-                                </span>
-                                <span className={styles.summaryValue}>
-                                    {thresholdStrategyName}
-                                </span>
-                            </div>
+                            <SummaryItem
+                                label={i18n.t('Threshold strategy')}
+                                value={thresholdStrategyName}
+                            />
                         )}
                         {thresholdParamsSummary && (
-                            <div>
-                                <span className={styles.summaryLabel}>
-                                    {i18n.t('Threshold parameters')}
-                                </span>
-                                <span className={styles.summaryValue}>
-                                    {thresholdParamsSummary}
-                                </span>
-                            </div>
+                            <SummaryItem
+                                label={i18n.t('Threshold parameters')}
+                                value={thresholdParamsSummary}
+                            />
                         )}
                         <button
                             type="button"

@@ -8,6 +8,7 @@ import {
 import {
     buildOutbreakIndicatorsForSeries,
     getStableMaxYForThresholdChart,
+    hasAvailableThreshold,
     UncertaintyAreaChart,
     Widget,
 } from '@dhis2-chap/ui';
@@ -60,13 +61,16 @@ export const AlertPreviewPanel = ({
         params: thresholdParams,
     });
 
-    const isLoading = isSeriesLoading || isThresholdsLoading;
+    // Only replace the panel with a spinner while nothing can be shown yet;
+    // during a recalculation the previous thresholds stay visible
+    // (keepPreviousData) with an inline calculating indicator instead.
+    const isLoading = isSeriesLoading || (isThresholdsLoading && !thresholdMap);
 
     const selectedSeries = series.find(s => s.orgUnitId === selectedOrgUnitId) ?? series[0];
     const selectedThresholds: EndemicThresholdPoint[] = useMemo(() => (
         thresholdMap?.get(selectedSeries?.orgUnitId) ?? []
     ), [thresholdMap, selectedSeries?.orgUnitId]);
-    const hasThreshold = selectedThresholds.some(t => t.value !== null);
+    const hasThreshold = hasAvailableThreshold(selectedThresholds);
     const selectedMaxY = useMemo(() => (
         selectedSeries
             ? getStableMaxYForThresholdChart(
@@ -125,6 +129,10 @@ export const AlertPreviewPanel = ({
 
     return (
         <div className={[styles.container, styles.dialogContainer].join(' ')}>
+            <ThresholdCalculationStatus
+                isLoading={isThresholdsLoading}
+                error={false}
+            />
             <div className={styles.dialogProbabilityControl}>
                 <OutbreakProbabilityControl
                     selectedProbability={selectedProbability}
@@ -138,7 +146,7 @@ export const AlertPreviewPanel = ({
                         <div className={styles.orgUnitList}>
                             {series.map((orgUnitSeries) => {
                                 const orgThresholds = thresholdMap?.get(orgUnitSeries.orgUnitId) ?? [];
-                                const orgHasThreshold = orgThresholds.some(t => t.value !== null);
+                                const orgHasThreshold = hasAvailableThreshold(orgThresholds);
                                 const indicators = buildOutbreakIndicatorsForSeries(
                                     orgUnitSeries,
                                     selectedProbability,

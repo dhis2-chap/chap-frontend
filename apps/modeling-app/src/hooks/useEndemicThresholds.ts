@@ -4,12 +4,12 @@ import {
     ApiError,
     buildEndemicThresholdMap,
     DatasetsService,
+    getSeriesPeriods,
     type PredictionOrgUnitSeries,
     type ThresholdResponse,
 } from '@dhis2-chap/ui';
 import {
     getThresholdLineRoles,
-    isKnownThresholdStrategy,
     type ThresholdParams,
 } from '@/utils/thresholdStrategyParams';
 
@@ -30,13 +30,9 @@ export const useEndemicThresholds = ({
     params,
     enabled = true,
 }: Props) => {
-    // Request thresholds for exactly the periods the charts display:
-    // historical actual cases plus the forecast points.
+    // Request thresholds for exactly the periods the charts display.
     const periodIds = useMemo(() => Array.from(new Set(
-        series.flatMap(orgUnitSeries => [
-            ...(orgUnitSeries.actualCases?.map(actualCase => actualCase.period) ?? []),
-            ...orgUnitSeries.points.map(point => point.period),
-        ]),
+        series.flatMap(getSeriesPeriods),
     )), [series]);
     const locations = useMemo(() => (
         series.map(orgUnitSeries => orgUnitSeries.orgUnitId)
@@ -67,12 +63,7 @@ export const useEndemicThresholds = ({
 
         // Derive the line roles from the params echoed in the response: with
         // keepPreviousData the visible data can belong to the previous request.
-        const responseStrategy = data.params.type;
-        const lineRoles = isKnownThresholdStrategy(responseStrategy)
-            ? getThresholdLineRoles(responseStrategy)
-            : { upperIndex: 0 };
-
-        return buildEndemicThresholdMap(data.entries, lineRoles);
+        return buildEndemicThresholdMap(data.entries, getThresholdLineRoles(data.params));
     }, [data]);
 
     return {

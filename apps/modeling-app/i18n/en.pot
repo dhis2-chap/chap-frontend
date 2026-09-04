@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-09-02T14:41:47.300Z\n"
-"PO-Revision-Date: 2026-09-02T14:41:47.300Z\n"
+"POT-Creation-Date: 2026-09-04T10:57:58.460Z\n"
+"PO-Revision-Date: 2026-09-04T10:57:58.460Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -1512,6 +1512,9 @@ msgstr ""
 msgid "Alert probability is required"
 msgstr "Alert probability is required"
 
+msgid "Must be lower than the upper percentile"
+msgstr "Must be lower than the upper percentile"
+
 msgid "Outbreak indicator is required"
 msgstr "Outbreak indicator is required"
 
@@ -1582,6 +1585,12 @@ msgstr "There was a problem calculating thresholds for this prediction run."
 
 msgid "Retry"
 msgstr "Retry"
+
+msgid "Unable to load threshold strategies"
+msgstr "Unable to load threshold strategies"
+
+msgid "The strategy options could not be loaded, so the strategy cannot be changed."
+msgstr "The strategy options could not be loaded, so the strategy cannot be changed."
 
 msgid "Standard deviations above mean"
 msgstr "Standard deviations above mean"
@@ -2229,9 +2238,6 @@ msgstr "Enter a percentage between 0 and 100"
 
 msgid "Enter a number of 0 or more"
 msgstr "Enter a number of 0 or more"
-
-msgid "Must be lower than the upper percentile"
-msgstr "Must be lower than the upper percentile"
 
 msgid "Enter a whole number of 1 or more, or leave empty to use all history"
 msgstr "Enter a whole number of 1 or more, or leave empty to use all history"

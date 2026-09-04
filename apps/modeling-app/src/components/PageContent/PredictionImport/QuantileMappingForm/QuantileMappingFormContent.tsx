@@ -3,6 +3,7 @@ import i18n from '@dhis2/d2-i18n';
 import {
     buildOutbreakIndicators,
     DEFAULT_OUTBREAK_PROBABILITY,
+    hasAvailableThreshold,
     type OutbreakProbability,
 } from '@dhis2-chap/ui';
 import {
@@ -150,10 +151,9 @@ export const QuantileMappingFormContent = ({
         enabled: useAlertOutputs,
     });
     const unavailableThresholdCount = useMemo(() => (
-        series.filter((orgUnitSeries) => {
-            const thresholds = thresholdMap?.get(orgUnitSeries.orgUnitId);
-            return !thresholds?.some(threshold => threshold.value !== null);
-        }).length
+        series.filter(orgUnitSeries => (
+            !hasAvailableThreshold(thresholdMap?.get(orgUnitSeries.orgUnitId))
+        )).length
     ), [series, thresholdMap]);
     const quantileValues = {
         quantile_low,

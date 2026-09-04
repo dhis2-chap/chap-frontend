@@ -1,6 +1,7 @@
 import type { PredictionOrgUnitSeries } from '../interfaces/Prediction';
 import {
     buildOutbreakIndicatorsForSeries,
+    hasAvailableThreshold,
     type EndemicThresholdPoint,
     type OutbreakIndicator,
     type OutbreakProbability,
@@ -81,7 +82,7 @@ export const getThresholdTileViewModels = (
         const apiThresholds = thresholdMap?.get(orgUnitSeries.orgUnitId);
 
         if (apiThresholds) {
-            const hasAnyValue = apiThresholds.some(t => t.value !== null);
+            const hasAnyValue = hasAvailableThreshold(apiThresholds);
             const indicators = buildOutbreakIndicatorsForSeries(
                 orgUnitSeries, selectedProbability, apiThresholds,
             );

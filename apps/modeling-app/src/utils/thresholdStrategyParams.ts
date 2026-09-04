@@ -71,13 +71,44 @@ export const areThresholdParamsEqual = (
     return false;
 };
 
+// Compile-time exhaustiveness: adding a strategy to ThresholdParams makes
+// every dispatch that forgot to handle it fail to build instead of silently
+// falling through to another strategy's branch.
+const assertUnhandledStrategy = (strategy: never): never => {
+    throw new Error(`Unhandled threshold strategy: ${JSON.stringify(strategy)}`);
+};
+
 export const getThresholdLineRoles = (
-    strategy: ThresholdStrategyId,
-): ThresholdLineRoles => (
-    strategy === 'percentile'
-        ? { upperIndex: 1, lowerIndex: 0 }
-        : { upperIndex: 0 }
-);
+    responseParams: SeasonalParams | PercentileParams,
+): ThresholdLineRoles => {
+    // The response echoes the resolved params, and their line parameter list
+    // states the ordering of each entry's values — so derive the roles from
+    // that list rather than trusting the request params or the type label.
+    const lineParameter = 'quantile' in responseParams && responseParams.quantile !== undefined
+        ? responseParams.quantile
+        : 'stdMultiplier' in responseParams
+            ? responseParams.stdMultiplier
+            : undefined;
+
+    if (!Array.isArray(lineParameter) || lineParameter.length < 2) {
+        return { upperIndex: 0 };
+    }
+
+    let lowerIndex = 0;
+    let upperIndex = 0;
+    lineParameter.forEach((value, index) => {
+        if (value < lineParameter[lowerIndex]) {
+            lowerIndex = index;
+        }
+        if (value > lineParameter[upperIndex]) {
+            upperIndex = index;
+        }
+    });
+
+    return lowerIndex === upperIndex
+        ? { upperIndex }
+        : { lowerIndex, upperIndex };
+};
 
 const fractionToPercentString = (fraction: number): string => {
     const percent = fraction * 100;
@@ -95,24 +126,28 @@ const fractionToPercentString = (fraction: number): string => {
 };
 
 export const describeThresholdParams = (params: ThresholdParams): string => {
-    if (params.type === 'seasonal') {
-        return i18n.t('{{stdMultiplier}} standard deviations above seasonal mean', {
-            stdMultiplier: params.stdMultiplier,
-        });
+    switch (params.type) {
+        case 'seasonal':
+            return i18n.t('{{stdMultiplier}} standard deviations above seasonal mean', {
+                stdMultiplier: params.stdMultiplier,
+            });
+        case 'percentile': {
+            const lower = fractionToPercentString(params.quantile[0]);
+            const upper = fractionToPercentString(params.quantile[1]);
+
+            if (params.baselineYears === null) {
+                return i18n.t('{{lower}}-{{upper}} percentile, all-history baseline', { lower, upper });
+            }
+
+            return i18n.t('{{lower}}-{{upper}} percentile, {{count}}-year baseline', {
+                lower,
+                upper,
+                count: params.baselineYears,
+            });
+        }
+        default:
+            return assertUnhandledStrategy(params);
     }
-
-    const lower = fractionToPercentString(params.quantile[0]);
-    const upper = fractionToPercentString(params.quantile[1]);
-
-    if (params.baselineYears === null) {
-        return i18n.t('{{lower}}-{{upper}} percentile, all-history baseline', { lower, upper });
-    }
-
-    return i18n.t('{{lower}}-{{upper}} percentile, {{count}}-year baseline', {
-        lower,
-        upper,
-        count: params.baselineYears,
-    });
 };
 
 export type ThresholdParamsFormValues = {
@@ -162,29 +197,26 @@ const parsePercentileField = (raw: string): { value?: number; error?: string } =
     return { value };
 };
 
-export const parseThresholdParams = (
-    strategy: ThresholdStrategyId,
-    formValues: ThresholdParamsFormValues,
-): ParsedThresholdParams => {
-    if (strategy === 'seasonal') {
-        const stdMultiplier = parseNumericField(formValues.stdMultiplier);
+const parseSeasonalFormValues = (formValues: ThresholdParamsFormValues): ParsedThresholdParams => {
+    const stdMultiplier = parseNumericField(formValues.stdMultiplier);
 
-        if (stdMultiplier === undefined || stdMultiplier < 0) {
-            return {
-                errors: {
-                    stdMultiplier: i18n.t('Enter a number of 0 or more'),
-                },
-            };
-        }
-
+    if (stdMultiplier === undefined || stdMultiplier < 0) {
         return {
-            params: {
-                type: 'seasonal',
-                stdMultiplier,
+            errors: {
+                stdMultiplier: i18n.t('Enter a number of 0 or more'),
             },
         };
     }
 
+    return {
+        params: {
+            type: 'seasonal',
+            stdMultiplier,
+        },
+    };
+};
+
+const parsePercentileFormValues = (formValues: ThresholdParamsFormValues): ParsedThresholdParams => {
     const errors: ThresholdParamsFormErrors = {};
     const lower = parsePercentileField(formValues.lowerPercentile);
     const upper = parsePercentileField(formValues.upperPercentile);
@@ -223,4 +255,18 @@ export const parseThresholdParams = (
             baselineYears,
         },
     };
+};
+
+export const parseThresholdParams = (
+    strategy: ThresholdStrategyId,
+    formValues: ThresholdParamsFormValues,
+): ParsedThresholdParams => {
+    switch (strategy) {
+        case 'seasonal':
+            return parseSeasonalFormValues(formValues);
+        case 'percentile':
+            return parsePercentileFormValues(formValues);
+        default:
+            return assertUnhandledStrategy(strategy);
+    }
 };

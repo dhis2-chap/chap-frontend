@@ -22,6 +22,12 @@ export type ThresholdLineRoles = {
     lowerIndex?: number;
 };
 
+// The single definition of "this location has a usable threshold"; alert
+// logic keys on the upper line, so a lone lowerValue does not count.
+export const hasAvailableThreshold = (
+    thresholds?: EndemicThresholdPoint[],
+): boolean => !!thresholds?.some(threshold => threshold.value !== null);
+
 export const buildEndemicThresholdMap = (
     entries: ThresholdEntry[],
     { upperIndex, lowerIndex }: ThresholdLineRoles,

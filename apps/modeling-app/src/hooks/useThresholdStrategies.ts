@@ -8,7 +8,7 @@ import {
 import { isKnownThresholdStrategy } from '@/utils/thresholdStrategyParams';
 
 export const useThresholdStrategies = () => {
-    const { data, error, isLoading } = useQuery<ThresholdStrategyInfo[], ApiError>({
+    const { data, error, isLoading, refetch } = useQuery<ThresholdStrategyInfo[], ApiError>({
         queryKey: ['threshold-strategies'],
         queryFn: () => DatasetsService.listThresholdStrategyTypesV1AnalyticsThresholdsStrategiesGet(),
         staleTime: Infinity,
@@ -26,5 +26,6 @@ export const useThresholdStrategies = () => {
         thresholdStrategies,
         error,
         isLoading,
+        refetch,
     };
 };

@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { buildChartPeriods, buildPeriodIndexLookup } from '../chartPeriods';
+import type { PredictionOrgUnitSeries } from '../../interfaces/Prediction';
+import { buildChartPeriods, buildPeriodIndexLookup, getSeriesPeriods } from '../chartPeriods';
 
 describe('buildChartPeriods', () => {
     it('merges padded and unpadded weekly period ids into one category', () => {
@@ -21,6 +22,36 @@ describe('buildChartPeriods', () => {
         const periods = buildChartPeriods(['2021W1', '2020W53', '2020W9', '2020W10']);
 
         expect(periods).toEqual(['2020W9', '2020W10', '2020W53', '2021W1']);
+    });
+});
+
+describe('getSeriesPeriods', () => {
+    const quantiles = {
+        quantile_low: 1,
+        quantile_mid_low: 2,
+        median: 3,
+        quantile_mid_high: 4,
+        quantile_high: 5,
+    };
+    const series: PredictionOrgUnitSeries = {
+        targetId: 'target-a',
+        orgUnitId: 'ou-a',
+        orgUnitName: 'A',
+        actualCases: [
+            { period: '202401', value: 10 },
+            { period: '202402', value: 12 },
+        ],
+        points: [
+            { period: '202403', periodLabel: '202403', quantiles },
+        ],
+    };
+
+    it('returns the actual case periods followed by the forecast periods', () => {
+        expect(getSeriesPeriods(series)).toEqual(['202401', '202402', '202403']);
+    });
+
+    it('handles a series without actual cases', () => {
+        expect(getSeriesPeriods({ ...series, actualCases: undefined })).toEqual(['202403']);
     });
 });
 

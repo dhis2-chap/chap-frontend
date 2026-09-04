@@ -3,12 +3,14 @@ import i18n from '@dhis2/d2-i18n';
 import {
     Button,
     InputField,
+    NoticeBox,
     SingleSelectField,
     SingleSelectOption,
 } from '@dhis2/ui';
 import { useThresholdStrategies } from '@/hooks/useThresholdStrategies';
 import {
     areThresholdParamsEqual,
+    getDefaultThresholdParams,
     isKnownThresholdStrategy,
     paramsToFormValues,
     parseThresholdParams,
@@ -40,6 +42,8 @@ export const ThresholdStrategyControl = ({
     const {
         thresholdStrategies,
         isLoading: isStrategiesLoading,
+        error: strategiesError,
+        refetch: refetchStrategies,
     } = useThresholdStrategies();
     const selectedStrategyInfo = thresholdStrategies?.find(
         strategyInfo => strategyInfo.id === strategy,
@@ -68,7 +72,31 @@ export const ThresholdStrategyControl = ({
             return;
         }
         setStrategy(selected);
-        applyParams(selected);
+
+        const result = parseThresholdParams(selected, formValues);
+        if (result.params) {
+            setErrors({});
+            onApply(result.params);
+            return;
+        }
+
+        // Stale invalid edits for the selected strategy: reset its fields to
+        // the defaults and apply those, so the select never shows a strategy
+        // while another one's params stay applied.
+        const defaults = getDefaultThresholdParams(selected);
+        const defaultFormValues = paramsToFormValues(defaults);
+        setFormValues(previous => (
+            selected === 'seasonal'
+                ? { ...previous, stdMultiplier: defaultFormValues.stdMultiplier }
+                : {
+                        ...previous,
+                        lowerPercentile: defaultFormValues.lowerPercentile,
+                        upperPercentile: defaultFormValues.upperPercentile,
+                        baselineYears: defaultFormValues.baselineYears,
+                    }
+        ));
+        setErrors({});
+        onApply(defaults);
     };
 
     const handleFieldChange = (field: keyof ThresholdParamsFormValues) => (
@@ -100,6 +128,16 @@ export const ThresholdStrategyControl = ({
                     />
                 ))}
             </SingleSelectField>
+            {!!strategiesError && !thresholdStrategies && (
+                <NoticeBox error title={i18n.t('Unable to load threshold strategies')}>
+                    <div className={styles.strategiesErrorContent}>
+                        {i18n.t('The strategy options could not be loaded, so the strategy cannot be changed.')}
+                        <Button small onClick={() => refetchStrategies()}>
+                            {i18n.t('Retry')}
+                        </Button>
+                    </div>
+                </NoticeBox>
+            )}
             {strategy === 'seasonal' && (
                 <InputField
                     dense

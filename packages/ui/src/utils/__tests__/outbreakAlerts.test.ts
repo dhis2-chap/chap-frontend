@@ -5,6 +5,7 @@ import {
     buildEndemicThresholdMap,
     buildOutbreakIndicatorsForSeries,
     getSupportedOutbreakProbabilityBucket,
+    hasAvailableThreshold,
     isOutbreakAtProbability,
     parseOutbreakProbability,
 } from '../outbreakAlerts';
@@ -101,6 +102,26 @@ describe('outbreak alert utilities', () => {
         expect(buildOutbreakIndicatorsForSeries(series, 75, [
             { period: '202401', value: null },
         ])).toEqual([]);
+    });
+});
+
+describe('hasAvailableThreshold', () => {
+    it('requires at least one non-null upper value', () => {
+        expect(hasAvailableThreshold([
+            { period: '202401', value: null },
+            { period: '202402', value: 12 },
+        ])).toBe(true);
+        expect(hasAvailableThreshold([
+            { period: '202401', value: null },
+        ])).toBe(false);
+        expect(hasAvailableThreshold([])).toBe(false);
+        expect(hasAvailableThreshold(undefined)).toBe(false);
+    });
+
+    it('does not count a lone lower band value as available', () => {
+        expect(hasAvailableThreshold([
+            { period: '202401', value: null, lowerValue: 3 },
+        ])).toBe(false);
     });
 });
 
