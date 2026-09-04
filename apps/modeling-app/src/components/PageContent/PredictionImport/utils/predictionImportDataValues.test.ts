@@ -1,8 +1,11 @@
 import { describe, expect, it } from 'vitest';
+import type { EndemicThresholdPoint } from '@dhis2-chap/ui';
 import {
     buildClearDataValues,
     buildClearPeriodIds,
+    getEndemicThresholdPeriodIds,
     getSelectedOutputDataElementIds,
+    transformEndemicThresholdsToDataValues,
     transformPredictionEntriesToDataValues,
 } from './predictionImportDataValues';
 
@@ -90,6 +93,76 @@ describe('predictionImportDataValues', () => {
         expect(dataValues.some(({ period }) => period.includes('W'))).toBe(false);
     });
 
+    it('clears the endemic threshold data element across the imported threshold periods', () => {
+        const dataValues = buildClearDataValues({
+            dataElementIds: ['de-a', 'threshold-id'],
+            orgUnitIds: ['ou-a'],
+            forecastPeriodIds: ['202605'],
+            endemicThresholdId: 'threshold-id',
+            endemicThresholdPeriodIds: ['202405', '202605'],
+            periodType: 'MONTH',
+        });
+
+        expect(dataValues).toContainEqual({
+            dataElement: 'threshold-id',
+            orgUnit: 'ou-a',
+            period: '202405',
+        });
+        expect(dataValues).toContainEqual({
+            dataElement: 'threshold-id',
+            orgUnit: 'ou-a',
+            period: '202305',
+        });
+        expect(dataValues).toContainEqual({
+            dataElement: 'threshold-id',
+            orgUnit: 'ou-a',
+            period: '202705',
+        });
+        expect(dataValues).not.toContainEqual({
+            dataElement: 'de-a',
+            orgUnit: 'ou-a',
+            period: '202405',
+        });
+        expect(dataValues).toContainEqual({
+            dataElement: 'de-a',
+            orgUnit: 'ou-a',
+            period: '202505',
+        });
+    });
+
+    it('keeps the forecast clear window for the endemic threshold data element when no threshold periods are provided', () => {
+        const dataValues = buildClearDataValues({
+            dataElementIds: ['threshold-id'],
+            orgUnitIds: ['ou-a'],
+            forecastPeriodIds: ['202605'],
+            endemicThresholdId: 'threshold-id',
+            endemicThresholdPeriodIds: [],
+            periodType: 'MONTH',
+        });
+
+        expect(dataValues).toHaveLength(25);
+        expect(dataValues).toContainEqual({
+            dataElement: 'threshold-id',
+            orgUnit: 'ou-a',
+            period: '202505',
+        });
+    });
+
+    it('collects deduplicated endemic threshold period ids including periods without values', () => {
+        const thresholdMap = new Map<string, EndemicThresholdPoint[]>([
+            ['ou-a', [
+                { period: '202405', value: 10 },
+                { period: '202406', value: null },
+            ]],
+            ['ou-b', [
+                { period: '202405', value: 14 },
+            ]],
+        ]);
+
+        expect(getEndemicThresholdPeriodIds(thresholdMap)).toEqual(['202405', '202406']);
+        expect(getEndemicThresholdPeriodIds(undefined)).toEqual([]);
+    });
+
     it('maps standard quantiles to selected data elements and skips non-standard quantiles', () => {
         expect(transformPredictionEntriesToDataValues([
             {
@@ -111,6 +184,7 @@ describe('predictionImportDataValues', () => {
             quantileMidLowId: 'mid-low-id',
             quantileMidHighId: 'mid-high-id',
             outbreakIndicatorId: '',
+            endemicThresholdId: '',
         })).toEqual([
             {
                 dataElement: 'median-id',
@@ -129,11 +203,56 @@ describe('predictionImportDataValues', () => {
             quantileMidLowId: 'median-id',
             quantileMidHighId: 'mid-high-id',
             outbreakIndicatorId: '',
+            endemicThresholdId: 'threshold-id',
         })).toEqual([
             'high-id',
             'mid-high-id',
             'median-id',
             'low-id',
+            'threshold-id',
         ]);
+    });
+
+    it('maps endemic threshold values to data values for all periods and skips missing values', () => {
+        const thresholdMap = new Map<string, EndemicThresholdPoint[]>([
+            ['ou-a', [
+                { period: '202601', value: 10 },
+                { period: '202605', value: 12.5 },
+                { period: '202606', value: null },
+            ]],
+            ['ou-b', [
+                { period: '202605', value: 14 },
+            ]],
+        ]);
+
+        expect(transformEndemicThresholdsToDataValues(thresholdMap, 'threshold-id')).toEqual([
+            {
+                dataElement: 'threshold-id',
+                orgUnit: 'ou-a',
+                period: '202601',
+                value: '10',
+            },
+            {
+                dataElement: 'threshold-id',
+                orgUnit: 'ou-a',
+                period: '202605',
+                value: '12.5',
+            },
+            {
+                dataElement: 'threshold-id',
+                orgUnit: 'ou-b',
+                period: '202605',
+                value: '14',
+            },
+        ]);
+    });
+
+    it('skips endemic threshold values when no data element is selected', () => {
+        const thresholdMap = new Map<string, EndemicThresholdPoint[]>([
+            ['ou-a', [{ period: '202605', value: 12.5 }]],
+        ]);
+
+        expect(transformEndemicThresholdsToDataValues(thresholdMap, '')).toEqual([]);
+        expect(transformEndemicThresholdsToDataValues(undefined, 'threshold-id')).toEqual([]);
     });
 });

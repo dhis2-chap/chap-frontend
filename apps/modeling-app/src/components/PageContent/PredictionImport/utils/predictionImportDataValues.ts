@@ -9,6 +9,7 @@ import {
 } from '@dhis2-chap/core';
 import type { Dhis2Calendar } from '@dhis2-chap/core';
 import type {
+    EndemicThresholdPoint,
     OutbreakIndicator,
     PredictionEntry,
     QuantileKey,
@@ -44,6 +45,7 @@ export type QuantileMapping = {
     quantileMidLowId: string;
     quantileMidHighId: string;
     outbreakIndicatorId: string;
+    endemicThresholdId: string;
 };
 
 export type PredictionDataValue = {
@@ -69,6 +71,8 @@ type BuildClearPeriodIdsOptions = {
 type BuildClearDataValuesOptions = BuildClearPeriodIdsOptions & {
     dataElementIds: string[];
     orgUnitIds: string[];
+    endemicThresholdId?: string;
+    endemicThresholdPeriodIds?: string[];
 };
 
 const mapQuantileToKey = (quantile: number): QuantileKey | null => QUANTILE_MAP[quantile] ?? null;
@@ -107,6 +111,7 @@ export const getSelectedOutputDataElementIds = (
         quantileMapping.quantileMidLowId,
         quantileMapping.quantileLowId,
         quantileMapping.outbreakIndicatorId,
+        quantileMapping.endemicThresholdId,
     ])
 );
 
@@ -145,6 +150,38 @@ export const transformOutbreakIndicatorsToDataValues = (
         orgUnit: indicator.orgUnitId,
         value: indicator.value,
     }));
+};
+
+export const transformEndemicThresholdsToDataValues = (
+    thresholdMap: Map<string, EndemicThresholdPoint[]> | undefined,
+    endemicThresholdId: string,
+): PredictionDataValue[] => {
+    if (!endemicThresholdId || !thresholdMap) {
+        return [];
+    }
+
+    return Array.from(thresholdMap.entries()).flatMap(([orgUnit, points]) => (
+        points
+            .filter(point => point.value !== null)
+            .map(point => ({
+                dataElement: endemicThresholdId,
+                period: point.period,
+                orgUnit,
+                value: String(point.value),
+            }))
+    ));
+};
+
+export const getEndemicThresholdPeriodIds = (
+    thresholdMap: Map<string, EndemicThresholdPoint[]> | undefined,
+): string[] => {
+    if (!thresholdMap) {
+        return [];
+    }
+
+    return deduplicateIds(
+        Array.from(thresholdMap.values()).flatMap(points => points.map(point => point.period)),
+    );
 };
 
 export const buildClearPeriodIds = ({
@@ -190,6 +227,8 @@ export const buildClearDataValues = ({
     dataElementIds,
     orgUnitIds,
     forecastPeriodIds,
+    endemicThresholdId,
+    endemicThresholdPeriodIds,
     periodType,
     calendar,
     locale,
@@ -200,16 +239,30 @@ export const buildClearDataValues = ({
         calendar,
         locale,
     });
+    // The endemic threshold is imported for the plotted historical periods as
+    // well, so its clear window must span those in addition to the forecast.
+    const thresholdClearPeriodIds = endemicThresholdId && endemicThresholdPeriodIds?.length
+        ? buildClearPeriodIds({
+                forecastPeriodIds: [...forecastPeriodIds, ...endemicThresholdPeriodIds],
+                periodType,
+                calendar,
+                locale,
+            })
+        : clearPeriodIds;
     const selectedDataElementIds = deduplicateIds(dataElementIds);
     const selectedOrgUnitIds = deduplicateIds(orgUnitIds);
 
-    return selectedDataElementIds.flatMap(dataElement => (
-        selectedOrgUnitIds.flatMap(orgUnit => (
-            clearPeriodIds.map(period => ({
+    return selectedDataElementIds.flatMap((dataElement) => {
+        const periodIds = dataElement === endemicThresholdId
+            ? thresholdClearPeriodIds
+            : clearPeriodIds;
+
+        return selectedOrgUnitIds.flatMap(orgUnit => (
+            periodIds.map(period => ({
                 dataElement,
                 period,
                 orgUnit,
             }))
-        ))
-    ));
+        ));
+    });
 };

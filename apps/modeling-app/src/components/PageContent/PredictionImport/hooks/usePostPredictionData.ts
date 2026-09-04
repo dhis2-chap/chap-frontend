@@ -3,6 +3,7 @@ import i18n from '@dhis2/d2-i18n';
 import { useAlert, useDataEngine } from '@dhis2/app-runtime';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
+    EndemicThresholdPoint,
     OutbreakIndicator,
     PredictionEntry,
     PredictionInfo,
@@ -12,8 +13,10 @@ import { getPredictionPeriodIds } from '@/utils/predictionRunMetadata';
 import {
     buildClearDataValues,
     deduplicateIds,
+    getEndemicThresholdPeriodIds,
     getSelectedOutputDataElementIds,
     STANDARD_QUANTILES,
+    transformEndemicThresholdsToDataValues,
     transformOutbreakIndicatorsToDataValues,
     transformPredictionEntriesToDataValues,
     type PredictionClearDataValue,
@@ -27,6 +30,7 @@ type PostPredictionDataVariables = {
     prediction: PredictionInfo;
     quantileMapping: QuantileMapping;
     outbreakIndicators: OutbreakIndicator[];
+    thresholdMap: Map<string, EndemicThresholdPoint[]> | undefined;
     clearPreviousValues: boolean;
     fallbackOrgUnitIds: string[];
 };
@@ -161,6 +165,7 @@ export const usePostPredictionData = ({ onSuccess, onError }: UsePostPredictionD
                 prediction,
                 quantileMapping,
                 outbreakIndicators,
+                thresholdMap,
                 clearPreviousValues,
                 fallbackOrgUnitIds,
             } = variables;
@@ -184,6 +189,10 @@ export const usePostPredictionData = ({ onSuccess, onError }: UsePostPredictionD
                             ...transformOutbreakIndicatorsToDataValues(
                                 outbreakIndicators,
                                 quantileMapping.outbreakIndicatorId,
+                            ),
+                            ...transformEndemicThresholdsToDataValues(
+                                thresholdMap,
+                                quantileMapping.endemicThresholdId,
                             ),
                         ],
                     };
@@ -210,6 +219,8 @@ export const usePostPredictionData = ({ onSuccess, onError }: UsePostPredictionD
                                 predictionEntries,
                             ),
                             forecastPeriodIds: getForecastPeriodIds(prediction, predictionEntries),
+                            endemicThresholdId: quantileMapping.endemicThresholdId,
+                            endemicThresholdPeriodIds: getEndemicThresholdPeriodIds(thresholdMap),
                             periodType: prediction.dataset?.periodType,
                             calendar: periodSettings.calendar,
                             locale: periodSettings.locale,
