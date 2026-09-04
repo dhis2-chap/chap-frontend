@@ -79,9 +79,20 @@ export const getThresholdLineRoles = (
         : { upperIndex: 0 }
 );
 
-const fractionToPercentString = (fraction: number): string => (
-    String(Math.round(fraction * 1000) / 10)
-);
+const fractionToPercentString = (fraction: number): string => {
+    const percent = fraction * 100;
+
+    // Use the shortest percentage that converts back to the same fraction.
+    // This hides multiplication noise without discarding configured precision.
+    for (let significantDigits = 1; significantDigits <= 17; significantDigits++) {
+        const candidate = Number(percent.toPrecision(significantDigits));
+        if (candidate / 100 === fraction) {
+            return String(candidate);
+        }
+    }
+
+    return String(percent);
+};
 
 export const describeThresholdParams = (params: ThresholdParams): string => {
     if (params.type === 'seasonal') {

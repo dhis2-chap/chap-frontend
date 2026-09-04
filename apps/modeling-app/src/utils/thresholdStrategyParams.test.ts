@@ -130,6 +130,32 @@ describe('paramsToFormValues', () => {
         });
     });
 
+    it('round-trips percentile params without losing decimal precision', () => {
+        const params = {
+            type: 'percentile' as const,
+            quantile: [0.2555, 0.7445] as [number, number],
+            baselineYears: 5,
+        };
+        const formValues = paramsToFormValues(params);
+
+        expect(formValues).toMatchObject({
+            lowerPercentile: '25.55',
+            upperPercentile: '74.45',
+        });
+        expect(parseThresholdParams('percentile', formValues)).toEqual({ params });
+    });
+
+    it('does not expose floating-point multiplication noise', () => {
+        expect(paramsToFormValues({
+            type: 'percentile',
+            quantile: [0.145, 0.855],
+            baselineYears: 5,
+        })).toMatchObject({
+            lowerPercentile: '14.5',
+            upperPercentile: '85.5',
+        });
+    });
+
     it('renders seasonal params with percentile fields at defaults', () => {
         expect(paramsToFormValues({
             type: 'seasonal',
