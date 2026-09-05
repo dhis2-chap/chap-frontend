@@ -85,6 +85,7 @@ const getChartOptions = (
     const chartSeries: Highcharts.SeriesOptionsType[] = [
         // median
         {
+            id: 'prediction-median',
             type: 'line',
             data: median,
             name: i18n.t('Median prediction'),
@@ -93,6 +94,7 @@ const getChartOptions = (
             connectNulls: false,
         },
         {
+            id: 'prediction-outer-range',
             type: 'arearange',
             name: i18n.t('80% prediction interval'),
             data: outerRange,
@@ -103,6 +105,7 @@ const getChartOptions = (
             connectNulls: false,
         },
         {
+            id: 'prediction-mid-range',
             type: 'arearange',
             name: i18n.t('50% prediction interval'),
             data: midRange,
@@ -116,6 +119,7 @@ const getChartOptions = (
 
     if (actualCases && actualCases.length > 0) {
         chartSeries.unshift({
+            id: 'actual-cases',
             type: 'line',
             data: actualCases,
             name: i18n.t('Actual Cases'),
@@ -163,6 +167,7 @@ const getChartOptions = (
             });
 
             chartSeries.push({
+                id: 'endemic-channel',
                 type: 'arearange',
                 name: i18n.t('Endemic channel'),
                 data: bandData,
@@ -179,6 +184,7 @@ const getChartOptions = (
 
         if (thresholdData.some(point => point.y !== null)) {
             chartSeries.push({
+                id: 'endemic-threshold',
                 type: 'line',
                 data: thresholdData,
                 name: i18n.t('Endemic threshold'),
@@ -194,6 +200,7 @@ const getChartOptions = (
         }
     } else if (endemicThreshold !== undefined && endemicThreshold !== null) {
         chartSeries.push({
+            id: 'endemic-threshold',
             type: 'line',
             data: periods.map(period => ({
                 name: period,
@@ -356,15 +363,14 @@ export const UncertaintyAreaChart = ({
     registerHighchartsModules();
 
     const chartRef = useRef<HighchartsReact.RefObject | null>(null);
+    // Keep the chart alive when threshold values or strategy change. Stable
+    // series IDs let the wrapper's one-to-one updates add/remove the band.
+    // A different region or period axis still gets a fresh chart.
     const chartDataKey = useMemo(() => [
         series.orgUnitId,
         series.points.map(point => point.period).join(','),
         series.actualCases?.map(actualCase => actualCase.period).join(',') ?? '',
-        endemicThreshold ?? '',
-        endemicThresholds
-            ?.map(threshold => `${threshold.period}:${threshold.value ?? 'null'}:${threshold.lowerValue ?? 'null'}`)
-            .join(',') ?? '',
-    ].join('|'), [series, endemicThreshold, endemicThresholds]);
+    ].join('|'), [series]);
 
     const handleAfterSetExtremes = useCallback(
         function (
@@ -400,7 +406,7 @@ export const UncertaintyAreaChart = ({
         } else {
             axis.setExtremes(undefined, undefined, true, false);
         }
-    }, [zoomRange]);
+    }, [zoomRange, chartDataKey]);
 
     const hasExternalZoomControls = onZoomChange !== undefined;
     const options: Highcharts.Options | undefined = useMemo(() => {

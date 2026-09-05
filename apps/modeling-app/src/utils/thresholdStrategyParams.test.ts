@@ -10,7 +10,7 @@ import {
 } from './thresholdStrategyParams';
 
 describe('getDefaultThresholdParams', () => {
-    it('returns the backend defaults per strategy', () => {
+    it('returns the UI presets per strategy', () => {
         expect(getDefaultThresholdParams('seasonal')).toEqual({
             type: 'seasonal',
             stdMultiplier: 2,

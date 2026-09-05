@@ -1,6 +1,6 @@
 import i18n from '@dhis2/d2-i18n';
 import { NoticeBox, Switch } from '@dhis2/ui';
-import type { OutbreakProbability } from '@dhis2-chap/ui';
+import type { ApiError, OutbreakProbability } from '@dhis2-chap/ui';
 import type { KeyboardEvent, MouseEvent } from 'react';
 import { ThresholdCalculationStatus } from '../../../ThresholdTilesExplorer';
 import { DataItemSelect } from './DataItemSelect';
@@ -13,7 +13,8 @@ type Props = {
     thresholdParamsSummary?: string;
     unavailableThresholdCount: number;
     isThresholdsLoading: boolean;
-    thresholdsError: boolean;
+    areThresholdsPaused: boolean;
+    thresholdsError: ApiError | null;
     outbreakIndicator?: string;
     outbreakIndicatorError?: string;
     endemicThreshold?: string;
@@ -42,6 +43,7 @@ export const AlertOutputSection = ({
     thresholdParamsSummary,
     unavailableThresholdCount,
     isThresholdsLoading,
+    areThresholdsPaused,
     thresholdsError,
     outbreakIndicator,
     outbreakIndicatorError,
@@ -92,6 +94,7 @@ export const AlertOutputSection = ({
                 <>
                     <ThresholdCalculationStatus
                         isLoading={isThresholdsLoading}
+                        isPaused={areThresholdsPaused}
                         error={thresholdsError}
                         onRetry={onRetryThresholds}
                     />

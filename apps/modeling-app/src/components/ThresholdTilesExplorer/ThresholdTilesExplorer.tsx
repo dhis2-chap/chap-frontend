@@ -1,4 +1,4 @@
-import { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { forwardRef, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { HTMLAttributes, ReactNode } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import {
@@ -86,7 +86,7 @@ const gridComponents = {
     List: GridList,
 };
 
-const ThresholdTile = ({
+const ThresholdTile = memo(function ThresholdTile({
     predictionTargetName,
     showThresholds,
     tile,
@@ -98,7 +98,7 @@ const ThresholdTile = ({
     tile: ThresholdTileViewModel;
     zoomRange?: ZoomRange | null;
     onZoomChange?: (range: ZoomRange | null) => void;
-}) => {
+}) {
     const thresholdForMaxY = tile.endemicThresholds.length > 0
         ? tile.endemicThresholds
         : tile.endemicThreshold;
@@ -109,6 +109,18 @@ const ThresholdTile = ({
             showThresholds ? thresholdForMaxY : null,
         )
     ), [showThresholds, thresholdForMaxY, tile.series]);
+    // Zoom-only renders should update the axis, without rebuilding all of the
+    // Highcharts options because this array acquired a new identity.
+    const outbreakPeriods = useMemo(() => (
+        showThresholds
+            ? tile.indicators.map(indicator => ({
+                    period: indicator.period,
+                    outbreak: indicator.outbreak,
+                    supportedProbability: indicator.supportedProbability,
+                    value: indicator.value,
+                }))
+            : []
+    ), [showThresholds, tile.indicators]);
 
     return (
         <article className={styles.tile}>
@@ -134,14 +146,7 @@ const ThresholdTile = ({
                     series={tile.series}
                     endemicThreshold={showThresholds ? tile.endemicThreshold : undefined}
                     endemicThresholds={showThresholds ? tile.endemicThresholds : undefined}
-                    outbreakPeriods={showThresholds
-                        ? tile.indicators.map(indicator => ({
-                                period: indicator.period,
-                                outbreak: indicator.outbreak,
-                                supportedProbability: indicator.supportedProbability,
-                                value: indicator.value,
-                            }))
-                        : []}
+                    outbreakPeriods={outbreakPeriods}
                     variant="tile"
                     zoomRange={zoomRange}
                     onZoomChange={onZoomChange}
@@ -150,7 +155,7 @@ const ThresholdTile = ({
             </div>
         </article>
     );
-};
+});
 
 type Props = {
     predictionTargetName: string;
@@ -390,7 +395,7 @@ export const ThresholdTilesExplorer = ({
                 {filteredTiles.length > 0
                     ? (
                             <VirtuosoGrid
-                                key={`${gridResetKey}-${activeStatusFilter ?? 'all'}-${normalizedRegionSearch}-${showThresholds}`}
+                                key={`${gridResetKey}-${activeStatusFilter ?? 'all'}-${normalizedRegionSearch}`}
                                 components={gridComponents}
                                 computeItemKey={(index: number) => filteredTiles[index]?.orgUnitId ?? index}
                                 customScrollParent={scrollParent ?? undefined}

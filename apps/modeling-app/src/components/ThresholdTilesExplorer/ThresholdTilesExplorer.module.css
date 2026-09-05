@@ -92,6 +92,8 @@
     align-self: start;
     position: sticky;
     inset-block-start: 64px;
+    max-block-size: calc(100dvh - 128px);
+    overflow-y: auto;
 }
 
 .grid {
@@ -259,6 +261,8 @@
     .panelColumn {
         order: -1;
         position: static;
+        max-block-size: none;
+        overflow-y: visible;
     }
 
     .panelContent {

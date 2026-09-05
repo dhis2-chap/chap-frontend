@@ -8,7 +8,7 @@ import {
 import {
     buildOutbreakIndicatorsForSeries,
     getStableMaxYForThresholdChart,
-    hasAvailableThreshold,
+    getForecastThresholdCoverage,
     UncertaintyAreaChart,
     Widget,
 } from '@dhis2-chap/ui';
@@ -53,6 +53,7 @@ export const AlertPreviewPanel = ({
     const {
         thresholdMap,
         isLoading: isThresholdsLoading,
+        isPaused: areThresholdsPaused,
         error: thresholdsError,
         refetch: refetchThresholds,
     } = useEndemicThresholds({
@@ -64,13 +65,14 @@ export const AlertPreviewPanel = ({
     // Only replace the panel with a spinner while nothing can be shown yet;
     // during a recalculation the previous thresholds stay visible
     // (keepPreviousData) with an inline calculating indicator instead.
-    const isLoading = isSeriesLoading || (isThresholdsLoading && !thresholdMap);
+    const isLoading = isSeriesLoading || (isThresholdsLoading && !areThresholdsPaused && !thresholdMap);
 
     const selectedSeries = series.find(s => s.orgUnitId === selectedOrgUnitId) ?? series[0];
     const selectedThresholds: EndemicThresholdPoint[] = useMemo(() => (
         thresholdMap?.get(selectedSeries?.orgUnitId) ?? []
     ), [thresholdMap, selectedSeries?.orgUnitId]);
-    const hasThreshold = hasAvailableThreshold(selectedThresholds);
+    const hasThreshold = !!selectedSeries &&
+        getForecastThresholdCoverage(selectedSeries, selectedThresholds).missing === 0;
     const selectedMaxY = useMemo(() => (
         selectedSeries
             ? getStableMaxYForThresholdChart(
@@ -112,8 +114,9 @@ export const AlertPreviewPanel = ({
     if (thresholdsError) {
         return (
             <ThresholdCalculationStatus
-                isLoading={false}
-                error
+                isLoading={isThresholdsLoading}
+                isPaused={areThresholdsPaused}
+                error={thresholdsError}
                 onRetry={refetchThresholds}
             />
         );
@@ -131,7 +134,7 @@ export const AlertPreviewPanel = ({
         <div className={[styles.container, styles.dialogContainer].join(' ')}>
             <ThresholdCalculationStatus
                 isLoading={isThresholdsLoading}
-                error={false}
+                isPaused={areThresholdsPaused}
             />
             <div className={styles.dialogProbabilityControl}>
                 <OutbreakProbabilityControl
@@ -146,14 +149,15 @@ export const AlertPreviewPanel = ({
                         <div className={styles.orgUnitList}>
                             {series.map((orgUnitSeries) => {
                                 const orgThresholds = thresholdMap?.get(orgUnitSeries.orgUnitId) ?? [];
-                                const orgHasThreshold = hasAvailableThreshold(orgThresholds);
+                                const orgHasThreshold = getForecastThresholdCoverage(
+                                    orgUnitSeries, orgThresholds,
+                                ).available > 0;
                                 const indicators = buildOutbreakIndicatorsForSeries(
                                     orgUnitSeries,
                                     selectedProbability,
                                     orgThresholds.length > 0 ? orgThresholds : undefined,
                                 );
-                                const hasOutbreak = orgHasThreshold &&
-                                    indicators.some(indicator => indicator.outbreak);
+                                const hasOutbreak = indicators.some(indicator => indicator.outbreak);
                                 const tooltipLabel = !orgHasThreshold
                                     ? i18n.t('Threshold unavailable')
                                     : hasOutbreak

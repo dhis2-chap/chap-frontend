@@ -3,7 +3,7 @@ import i18n from '@dhis2/d2-i18n';
 import {
     buildOutbreakIndicators,
     DEFAULT_OUTBREAK_PROBABILITY,
-    hasAvailableThreshold,
+    getForecastThresholdCoverage,
     type OutbreakProbability,
 } from '@dhis2-chap/ui';
 import {
@@ -142,6 +142,8 @@ export const QuantileMappingFormContent = ({
     const {
         thresholdMap,
         isLoading: isThresholdsLoading,
+        isReady: areThresholdsReady,
+        isPaused: areThresholdsPaused,
         error: thresholdsError,
         refetch: refetchThresholds,
     } = useEndemicThresholds({
@@ -152,7 +154,9 @@ export const QuantileMappingFormContent = ({
     });
     const unavailableThresholdCount = useMemo(() => (
         series.filter(orgUnitSeries => (
-            !hasAvailableThreshold(thresholdMap?.get(orgUnitSeries.orgUnitId))
+            getForecastThresholdCoverage(
+                orgUnitSeries, thresholdMap?.get(orgUnitSeries.orgUnitId),
+            ).missing > 0
         )).length
     ), [series, thresholdMap]);
     const quantileValues = {
@@ -181,10 +185,14 @@ export const QuantileMappingFormContent = ({
     };
 
     const handleSubmitImport = () => {
+        if (useAlertOutputs && !areThresholdsReady) return;
         setIsImportConfirmationOpen(true);
     };
 
     const handleConfirmImport = async (data: QuantileMappingFormValues) => {
+        // Recheck at the mutation boundary: the connection/query may have
+        // changed since the confirmation dialog was opened.
+        if (data.use_alert_outputs && !areThresholdsReady) return;
         try {
             await mutateAsync({
                 prediction,
@@ -251,7 +259,8 @@ export const QuantileMappingFormContent = ({
                         thresholdParamsSummary={describeThresholdParams(thresholdParams)}
                         unavailableThresholdCount={unavailableThresholdCount}
                         isThresholdsLoading={isThresholdsLoading}
-                        thresholdsError={!!thresholdsError}
+                        areThresholdsPaused={areThresholdsPaused}
+                        thresholdsError={thresholdsError}
                         outbreakIndicator={outbreak_indicator}
                         outbreakIndicatorError={errors.outbreak_indicator?.message}
                         endemicThreshold={endemic_threshold}
@@ -278,7 +287,7 @@ export const QuantileMappingFormContent = ({
                         </Button>
                         <Button
                             type="submit"
-                            disabled={isPending || (useAlertOutputs && (isThresholdsLoading || !!thresholdsError))}
+                            disabled={isPending || (useAlertOutputs && !areThresholdsReady)}
                             primary
                         >
                             {importButtonLabel}
@@ -298,6 +307,7 @@ export const QuantileMappingFormContent = ({
                 <ImportConfirmationModal
                     clearPreviousValues={clearPreviousValues}
                     isPending={isPending}
+                    isReady={!useAlertOutputs || areThresholdsReady}
                     progress={importProgress}
                     onCancel={handleCancelImport}
                     onConfirm={handleSubmit(handleConfirmImport)}

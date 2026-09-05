@@ -28,6 +28,26 @@ export const hasAvailableThreshold = (
     thresholds?: EndemicThresholdPoint[],
 ): boolean => !!thresholds?.some(threshold => threshold.value !== null);
 
+// Historical chart thresholds do not establish whether forecast alerts can be
+// calculated. Count forecast coverage explicitly, including omitted API rows.
+export const getForecastThresholdCoverage = (
+    series: PredictionOrgUnitSeries,
+    thresholds?: EndemicThresholdPoint[],
+): { available: number; missing: number } => {
+    const thresholdByPeriod = new Map(thresholds?.map(threshold => [
+        threshold.period, threshold.value,
+    ]));
+    const forecastPeriods = new Set(series.points.map(point => point.period));
+    let available = 0;
+    for (const period of forecastPeriods) {
+        const value = thresholdByPeriod.get(period);
+        if (typeof value === 'number' && Number.isFinite(value)) {
+            available++;
+        }
+    }
+    return { available, missing: forecastPeriods.size - available };
+};
+
 export const buildEndemicThresholdMap = (
     entries: ThresholdEntry[],
     { upperIndex, lowerIndex }: ThresholdLineRoles,

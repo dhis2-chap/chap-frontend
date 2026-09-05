@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-09-04T10:57:58.460Z\n"
-"PO-Revision-Date: 2026-09-04T10:57:58.460Z\n"
+"POT-Creation-Date: 2026-09-05T08:05:08.254Z\n"
+"PO-Revision-Date: 2026-09-05T08:05:08.255Z\n"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -1574,6 +1574,12 @@ msgstr "There are running jobs in the background"
 msgid "Running jobs"
 msgstr "Running jobs"
 
+msgid "Waiting for connection"
+msgstr "Waiting for connection"
+
+msgid "Threshold calculation will resume when your connection returns."
+msgstr "Threshold calculation will resume when your connection returns."
+
 msgid "Calculating thresholds..."
 msgstr "Calculating thresholds..."
 
@@ -1582,6 +1588,9 @@ msgstr "Unable to calculate thresholds"
 
 msgid "There was a problem calculating thresholds for this prediction run."
 msgstr "There was a problem calculating thresholds for this prediction run."
+
+msgid "Review the threshold parameters and apply your changes."
+msgstr "Review the threshold parameters and apply your changes."
 
 msgid "Retry"
 msgstr "Retry"

@@ -5,6 +5,7 @@ import {
     buildEndemicThresholdMap,
     buildOutbreakIndicatorsForSeries,
     getSupportedOutbreakProbabilityBucket,
+    getForecastThresholdCoverage,
     hasAvailableThreshold,
     isOutbreakAtProbability,
     parseOutbreakProbability,
@@ -122,6 +123,40 @@ describe('hasAvailableThreshold', () => {
         expect(hasAvailableThreshold([
             { period: '202401', value: null, lowerValue: 3 },
         ])).toBe(false);
+    });
+});
+
+describe('getForecastThresholdCoverage', () => {
+    const series: PredictionOrgUnitSeries = {
+        targetId: 'cases',
+        orgUnitId: 'ou-a',
+        orgUnitName: 'Region A',
+        actualCases: [{ period: '202301', value: 10 }],
+        points: [basePoint, { ...basePoint, period: '202402' }],
+    };
+
+    it('does not use historical thresholds to hide missing forecast coverage', () => {
+        expect(getForecastThresholdCoverage(series, [
+            { period: '202301', value: 12 },
+        ])).toEqual({ available: 0, missing: 2 });
+    });
+
+    it('counts omitted and null forecast lines as missing despite a lower band', () => {
+        expect(getForecastThresholdCoverage(series, [
+            { period: '202401', value: 0 },
+        ])).toEqual({ available: 1, missing: 1 });
+        expect(getForecastThresholdCoverage(series, [
+            { period: '202401', value: 0 },
+            { period: '202402', value: null, lowerValue: 3 },
+        ])).toEqual({ available: 1, missing: 1 });
+    });
+
+    it('recognizes complete coverage and handles absent responses', () => {
+        expect(getForecastThresholdCoverage(series, [
+            { period: '202401', value: 0 },
+            { period: '202402', value: 12 },
+        ])).toEqual({ available: 2, missing: 0 });
+        expect(getForecastThresholdCoverage(series)).toEqual({ available: 0, missing: 2 });
     });
 });
 

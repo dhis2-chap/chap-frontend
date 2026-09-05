@@ -73,6 +73,7 @@ export const PredictionDetailsGrid = ({
     const {
         thresholdMap,
         isLoading: isThresholdsLoading,
+        isPaused: areThresholdsPaused,
         error: thresholdsError,
         refetch: refetchThresholds,
     } = useEndemicThresholds({
@@ -203,7 +204,8 @@ export const PredictionDetailsGrid = ({
                     />
                     <ThresholdCalculationStatus
                         isLoading={isThresholdsLoading}
-                        error={!!thresholdsError}
+                        isPaused={areThresholdsPaused}
+                        error={thresholdsError}
                         onRetry={refetchThresholds}
                     />
                     <OutbreakProbabilityControl

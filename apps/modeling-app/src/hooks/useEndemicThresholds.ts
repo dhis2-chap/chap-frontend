@@ -12,6 +12,7 @@ import {
     getThresholdLineRoles,
     type ThresholdParams,
 } from '@/utils/thresholdStrategyParams';
+import { getThresholdQueryState } from '@/utils/thresholdQueryState';
 
 type Props = {
     datasetId: number | undefined;
@@ -39,7 +40,7 @@ export const useEndemicThresholds = ({
     ), [series]);
     const isQueryEnabled = enabled && !!datasetId && periodIds.length > 0;
 
-    const { data, isFetching, error, refetch } = useQuery<ThresholdResponse, ApiError>({
+    const query = useQuery<ThresholdResponse, ApiError>({
         queryKey: ['endemic-thresholds', datasetId, periodIds, locations, params],
         queryFn: async () => {
             if (!datasetId) throw new Error('datasetId is required');
@@ -57,6 +58,7 @@ export const useEndemicThresholds = ({
         cacheTime: THRESHOLDS_CACHE_TIME,
         retry: 0,
     });
+    const { data, error, refetch } = query;
 
     const thresholdMap = useMemo(() => {
         if (!data) return undefined;
@@ -68,9 +70,7 @@ export const useEndemicThresholds = ({
 
     return {
         thresholdMap,
-        // isFetching also covers refetches after an error and background
-        // recalculations over kept previous data, unlike isLoading.
-        isLoading: isQueryEnabled && isFetching,
+        ...getThresholdQueryState(isQueryEnabled, query),
         error: isQueryEnabled ? error : null,
         refetch,
     };

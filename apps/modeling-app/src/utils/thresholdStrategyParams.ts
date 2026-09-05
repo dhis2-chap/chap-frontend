@@ -22,9 +22,9 @@ export type ThresholdStrategyId = ThresholdParams['type'];
 
 export const DEFAULT_THRESHOLD_STRATEGY: ThresholdStrategyId = 'seasonal';
 
-// These defaults duplicate the backend's (chap-core assessment/thresholds/params.py)
-// because GET /thresholds/strategies carries no param metadata; ask Morten about
-// exposing defaultParams on the catalogue endpoint so the two cannot drift.
+// UI presets are maintained here because the strategy catalogue has no parameter
+// metadata. Percentile intentionally requests a 25th–75th band, while the backend
+// default produces only the 75th-percentile line.
 const DEFAULT_PARAMS: Record<ThresholdStrategyId, ThresholdParams> = {
     seasonal: {
         type: 'seasonal',

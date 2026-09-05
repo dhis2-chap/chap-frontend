@@ -18,6 +18,7 @@ import styles from './QuantileMappingForm.module.css';
 type Props = {
     clearPreviousValues: boolean;
     isPending: boolean;
+    isReady: boolean;
     progress: PredictionImportProgress;
     onCancel: () => void;
     onConfirm: () => void;
@@ -101,6 +102,7 @@ const ImportProgressIcon = ({
 export const ImportConfirmationModal = ({
     clearPreviousValues,
     isPending,
+    isReady,
     progress,
     onCancel,
     onConfirm,
@@ -151,7 +153,7 @@ export const ImportConfirmationModal = ({
                     </Button>
                     <Button
                         onClick={onConfirm}
-                        disabled={isPending}
+                        disabled={isPending || !isReady}
                         primary={!clearPreviousValues}
                         destructive={clearPreviousValues}
                     >
