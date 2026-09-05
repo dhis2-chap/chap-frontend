@@ -50,17 +50,36 @@ export const generateFixedPeriods = ({
     });
 };
 
+// The library resolves a period id by generating every period of its year,
+// including localized labels through the Temporal polyfill, which costs
+// about a millisecond per call. Sort comparators and chart builders resolve
+// the same handful of ids thousands of times, so memoize per canonical id.
+// Fixed periods are immutable value objects, so sharing instances is safe,
+// and the cache stays bounded by the distinct periods a session touches.
+const fixedPeriodCache = new Map<string, Dhis2FixedPeriod>();
+
 export const createFixedPeriodFromPeriodId = ({
     periodId,
     calendar,
     locale = DEFAULT_DHIS2_LOCALE,
-}: PeriodIdOptions): Dhis2FixedPeriod => (
-    createFixedPeriodFromPeriodIdFromLibrary({
-        periodId: canonicalizePeriodId(periodId),
+}: PeriodIdOptions): Dhis2FixedPeriod => {
+    const canonicalPeriodId = canonicalizePeriodId(periodId);
+    const cacheKey = `${calendar}|${locale}|${canonicalPeriodId}`;
+    const cachedPeriod = fixedPeriodCache.get(cacheKey);
+
+    if (cachedPeriod) {
+        return cachedPeriod;
+    }
+
+    const period = createFixedPeriodFromPeriodIdFromLibrary({
+        periodId: canonicalPeriodId,
         calendar,
         locale,
-    })
-);
+    });
+    fixedPeriodCache.set(cacheKey, period);
+
+    return period;
+};
 
 export const getFixedPeriodByDate = ({
     periodType,
