@@ -4,27 +4,12 @@ import {
     type OutbreakProbability,
 } from '@dhis2-chap/ui';
 import * as z from 'zod';
+import { thresholdParamsSchema } from '@/utils/thresholdStrategyParams';
 
 const outbreakProbabilitySchema = z.custom<OutbreakProbability>(
     value => OUTBREAK_PROBABILITY_OPTIONS.includes(value as OutbreakProbability),
     { message: i18n.t('Alert probability is required') },
 );
-
-const percentileFractionSchema = z.number().min(0).max(1);
-
-const thresholdParamsSchema = z.discriminatedUnion('type', [
-    z.object({
-        type: z.literal('seasonal'),
-        stdMultiplier: z.number().min(0),
-    }),
-    z.object({
-        type: z.literal('percentile'),
-        quantile: z.tuple([percentileFractionSchema, percentileFractionSchema]),
-        baselineYears: z.number().int().min(1).nullable(),
-    }),
-]).refine(params => (
-    params.type !== 'percentile' || params.quantile[0] < params.quantile[1]
-), { message: i18n.t('Must be lower than the upper percentile') });
 
 // Each field falls back to undefined on its own, so one stale or invalid
 // entry in the history state cannot discard the other, valid ones.

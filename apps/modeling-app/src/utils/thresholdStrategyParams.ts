@@ -4,6 +4,7 @@ import type {
     SeasonalParams,
     ThresholdLineRoles,
 } from '@dhis2-chap/ui';
+import * as z from 'zod';
 
 export type SeasonalThresholdParams = SeasonalParams & {
     type: 'seasonal';
@@ -22,10 +23,29 @@ export type ThresholdStrategyId = ThresholdParams['type'];
 
 export const DEFAULT_THRESHOLD_STRATEGY: ThresholdStrategyId = 'seasonal';
 
+// The single definition of a valid ThresholdParams value. The form parser below
+// reports per-field messages, and the import page uses this schema to validate
+// params restored from router history state.
+const percentileFractionSchema = z.number().min(0).max(1);
+
+export const thresholdParamsSchema: z.ZodType<ThresholdParams> = z.discriminatedUnion('type', [
+    z.object({
+        type: z.literal('seasonal'),
+        stdMultiplier: z.number().min(0),
+    }),
+    z.object({
+        type: z.literal('percentile'),
+        quantile: z.tuple([percentileFractionSchema, percentileFractionSchema]),
+        baselineYears: z.number().int().min(1).nullable(),
+    }),
+]).refine(params => (
+    params.type !== 'percentile' || params.quantile[0] < params.quantile[1]
+), { message: i18n.t('Must be lower than the upper percentile') });
+
 // UI presets are maintained here because the strategy catalogue has no parameter
 // metadata. Percentile intentionally requests a 25th–75th band, while the backend
 // default produces only the 75th-percentile line.
-const DEFAULT_PARAMS: Record<ThresholdStrategyId, ThresholdParams> = {
+const DEFAULT_PARAMS: { [K in ThresholdStrategyId]: Extract<ThresholdParams, { type: K }> } = {
     seasonal: {
         type: 'seasonal',
         stdMultiplier: 2,
@@ -174,10 +194,8 @@ const parseNumericField = (raw: string): number | undefined => {
 };
 
 export const paramsToFormValues = (params: ThresholdParams): ThresholdParamsFormValues => {
-    const seasonalDefaults = DEFAULT_PARAMS.seasonal as SeasonalThresholdParams;
-    const percentileDefaults = DEFAULT_PARAMS.percentile as PercentileThresholdParams;
-    const seasonal = params.type === 'seasonal' ? params : seasonalDefaults;
-    const percentile = params.type === 'percentile' ? params : percentileDefaults;
+    const seasonal = params.type === 'seasonal' ? params : DEFAULT_PARAMS.seasonal;
+    const percentile = params.type === 'percentile' ? params : DEFAULT_PARAMS.percentile;
 
     return {
         stdMultiplier: String(seasonal.stdMultiplier),
@@ -185,6 +203,27 @@ export const paramsToFormValues = (params: ThresholdParams): ThresholdParamsForm
         upperPercentile: fractionToPercentString(percentile.quantile[1]),
         baselineYears: percentile.baselineYears === null ? '' : String(percentile.baselineYears),
     };
+};
+
+const STRATEGY_FORM_FIELDS: Record<ThresholdStrategyId, (keyof ThresholdParamsFormValues)[]> = {
+    seasonal: ['stdMultiplier'],
+    percentile: ['lowerPercentile', 'upperPercentile', 'baselineYears'],
+};
+
+// Overwrites only the fields of the params' own strategy, so edits typed for
+// another strategy survive a strategy switch.
+export const withStrategyFormValues = (
+    formValues: ThresholdParamsFormValues,
+    params: ThresholdParams,
+): ThresholdParamsFormValues => {
+    const nextValues = paramsToFormValues(params);
+    const merged = { ...formValues };
+
+    for (const field of STRATEGY_FORM_FIELDS[params.type]) {
+        merged[field] = nextValues[field];
+    }
+
+    return merged;
 };
 
 const parsePercentileField = (raw: string): { value?: number; error?: string } => {

@@ -152,6 +152,7 @@ export const QuantileMappingFormContent = ({
         params: thresholdParams,
         enabled: useAlertOutputs,
     });
+    const canImport = !useAlertOutputs || areThresholdsReady;
     const unavailableThresholdCount = useMemo(() => (
         series.filter(orgUnitSeries => (
             getForecastThresholdCoverage(
@@ -185,14 +186,14 @@ export const QuantileMappingFormContent = ({
     };
 
     const handleSubmitImport = () => {
-        if (useAlertOutputs && !areThresholdsReady) return;
+        if (!canImport) return;
         setIsImportConfirmationOpen(true);
     };
 
     const handleConfirmImport = async (data: QuantileMappingFormValues) => {
         // Recheck at the mutation boundary: the connection/query may have
         // changed since the confirmation dialog was opened.
-        if (data.use_alert_outputs && !areThresholdsReady) return;
+        if (!canImport) return;
         try {
             await mutateAsync({
                 prediction,
@@ -287,7 +288,7 @@ export const QuantileMappingFormContent = ({
                         </Button>
                         <Button
                             type="submit"
-                            disabled={isPending || (useAlertOutputs && !areThresholdsReady)}
+                            disabled={isPending || !canImport}
                             primary
                         >
                             {importButtonLabel}
@@ -307,7 +308,7 @@ export const QuantileMappingFormContent = ({
                 <ImportConfirmationModal
                     clearPreviousValues={clearPreviousValues}
                     isPending={isPending}
-                    isReady={!useAlertOutputs || areThresholdsReady}
+                    isReady={canImport}
                     progress={importProgress}
                     onCancel={handleCancelImport}
                     onConfirm={handleSubmit(handleConfirmImport)}

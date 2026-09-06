@@ -1,7 +1,8 @@
 import i18n from '@dhis2/d2-i18n';
-import { Button, CircularLoader, NoticeBox } from '@dhis2/ui';
+import { CircularLoader, NoticeBox } from '@dhis2/ui';
 import type { ApiError } from '@dhis2-chap/ui';
 import { getThresholdCalculationErrorDetail } from '@/utils/thresholdCalculationError';
+import { ErrorNoticeWithRetry } from './ErrorNoticeWithRetry';
 import styles from './ThresholdCalculationStatus.module.css';
 
 type Props = {
@@ -31,19 +32,12 @@ export const ThresholdCalculationStatus = ({ isLoading, isPaused, error, onRetry
     if (error) {
         const detail = getThresholdCalculationErrorDetail(error);
         return (
-            <NoticeBox error title={i18n.t('Unable to calculate thresholds')}>
-                <div className={styles.errorContent}>
-                    <div>{detail ?? i18n.t('There was a problem calculating thresholds for this prediction run.')}</div>
-                    {(error.status === 400 || error.status === 422) && (
-                        <div>{i18n.t('Review the threshold parameters and apply your changes.')}</div>
-                    )}
-                    {onRetry && (
-                        <Button small onClick={onRetry}>
-                            {i18n.t('Retry')}
-                        </Button>
-                    )}
-                </div>
-            </NoticeBox>
+            <ErrorNoticeWithRetry title={i18n.t('Unable to calculate thresholds')} onRetry={onRetry}>
+                <div>{detail ?? i18n.t('There was a problem calculating thresholds for this prediction run.')}</div>
+                {(error.status === 400 || error.status === 422) && (
+                    <div>{i18n.t('Review the threshold parameters and apply your changes.')}</div>
+                )}
+            </ErrorNoticeWithRetry>
         );
     }
 

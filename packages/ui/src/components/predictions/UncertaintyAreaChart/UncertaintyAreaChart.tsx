@@ -6,7 +6,11 @@ import HighchartsReact from 'highcharts-react-official';
 import { PredictionOrgUnitSeries } from '../../../interfaces/Prediction';
 import { registerHighchartsModules } from '../../../utils/registerHighchartsModules';
 import { buildChartPeriods, buildPeriodIndexLookup, getSeriesPeriods } from '../../../utils/chartPeriods';
-import type { EndemicThresholdPoint, SupportedOutbreakProbabilityBucket } from '../../../utils/outbreakAlerts';
+import {
+    isFiniteNumber,
+    type EndemicThresholdPoint,
+    type SupportedOutbreakProbabilityBucket,
+} from '../../../utils/outbreakAlerts';
 import type { ZoomRange } from '../../evaluation/ResultPlot/ResultPlot';
 
 type DisabledAnimationOptions = {
@@ -140,32 +144,20 @@ const getChartOptions = (
         // Keep unavailable periods as explicit null points; omitting them
         // would make Highcharts interpolate across the gap despite
         // connectNulls being false.
-        const thresholdData = periods.map(period => ({
-            name: period,
-            x: getPeriodIndex(period),
-            y: thresholdByPeriod.get(canonicalizePeriodId(period))?.value ?? null,
-        }));
-        const hasBandValues = endemicThresholds.some(threshold => (
-            threshold.lowerValue !== null && threshold.lowerValue !== undefined &&
-            threshold.value !== null && threshold.value !== undefined
-        ));
+        const thresholdData: { name: string; x: number | undefined; y: number | null }[] = [];
+        const bandData: { name: string; x: number | undefined; low?: number; high?: number }[] = [];
+        for (const period of periods) {
+            const threshold = thresholdByPeriod.get(canonicalizePeriodId(period));
+            const x = getPeriodIndex(period);
+            const low = threshold?.lowerValue;
+            const high = threshold?.value;
+            thresholdData.push({ name: period, x, y: high ?? null });
+            bandData.push(isFiniteNumber(low) && isFiniteNumber(high)
+                ? { name: period, x, low, high }
+                : { name: period, x });
+        }
 
-        if (hasBandValues) {
-            const bandData = periods.map((period) => {
-                const threshold = thresholdByPeriod.get(canonicalizePeriodId(period));
-                const low = threshold?.lowerValue;
-                const high = threshold?.value;
-                const hasBand = low !== null && low !== undefined &&
-                    high !== null && high !== undefined;
-
-                return {
-                    name: period,
-                    x: getPeriodIndex(period),
-                    low: hasBand ? low : undefined,
-                    high: hasBand ? high : undefined,
-                };
-            });
-
+        if (bandData.some(point => point.low !== undefined)) {
             chartSeries.push({
                 id: 'endemic-channel',
                 type: 'arearange',
@@ -241,7 +233,7 @@ const getChartOptions = (
                     // Range points report their LOW bound as y (arearange
                     // sets pointValKey to 'low'), so render both bounds.
                     const { low, high } = point.point as { low?: number | null; high?: number | null };
-                    const value = low !== null && low !== undefined && high !== null && high !== undefined
+                    const value = isFiniteNumber(low) && isFiniteNumber(high)
                         ? `${low.toFixed(2)} - ${high.toFixed(2)}`
                         : point.y?.toFixed(2);
 
@@ -365,12 +357,10 @@ export const UncertaintyAreaChart = ({
     const chartRef = useRef<HighchartsReact.RefObject | null>(null);
     // Keep the chart alive when threshold values or strategy change. Stable
     // series IDs let the wrapper's one-to-one updates add/remove the band.
-    // A different region or period axis still gets a fresh chart.
-    const chartDataKey = useMemo(() => [
-        series.orgUnitId,
-        series.points.map(point => point.period).join(','),
-        series.actualCases?.map(actualCase => actualCase.period).join(',') ?? '',
-    ].join('|'), [series]);
+    // A different region or displayed period set still gets a fresh chart.
+    const chartDataKey = useMemo(() => (
+        [series.orgUnitId, ...getSeriesPeriods(series)].join('|')
+    ), [series]);
 
     const handleAfterSetExtremes = useCallback(
         function (

@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { canonicalizePeriodId } from '@dhis2-chap/core';
 import {
     ApiError,
     buildEndemicThresholdMap,
@@ -31,10 +32,19 @@ export const useEndemicThresholds = ({
     params,
     enabled = true,
 }: Props) => {
-    // Request thresholds for exactly the periods the charts display.
-    const periodIds = useMemo(() => Array.from(new Set(
-        series.flatMap(getSeriesPeriods),
-    )), [series]);
+    // Request thresholds for exactly the periods the charts display. Actual
+    // cases and predictions can spell the same week differently (2025W3 vs
+    // 2025W03), so deduplicate by canonical id while keeping the first spelling.
+    const periodIds = useMemo(() => {
+        const periodIdByCanonicalId = new Map<string, string>();
+        for (const periodId of series.flatMap(getSeriesPeriods)) {
+            const canonicalId = canonicalizePeriodId(periodId);
+            if (!periodIdByCanonicalId.has(canonicalId)) {
+                periodIdByCanonicalId.set(canonicalId, periodId);
+            }
+        }
+        return Array.from(periodIdByCanonicalId.values());
+    }, [series]);
     const locations = useMemo(() => (
         series.map(orgUnitSeries => orgUnitSeries.orgUnitId)
     ), [series]);

@@ -60,7 +60,6 @@ export {
     OUTBREAK_PROBABILITY_OPTIONS,
     DEFAULT_OUTBREAK_PROBABILITY,
     buildEndemicThresholdMap,
-    hasAvailableThreshold,
     getForecastThresholdCoverage,
     buildOutbreakIndicators,
     buildOutbreakIndicatorsForSeries,

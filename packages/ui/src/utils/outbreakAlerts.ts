@@ -23,11 +23,17 @@ export type ThresholdLineRoles = {
     lowerIndex?: number;
 };
 
-// The single definition of "this location has a usable threshold"; alert
-// logic keys on the upper line, so a lone lowerValue does not count.
-export const hasAvailableThreshold = (
-    thresholds?: EndemicThresholdPoint[],
-): boolean => !!thresholds?.some(threshold => isFiniteNumber(threshold.value));
+export const isFiniteNumber = (value: unknown): value is number => (
+    typeof value === 'number' && Number.isFinite(value)
+);
+
+// Alert logic keys on the upper line; periods are matched by canonical id so
+// differently spelled week ids (2025W3 vs 2025W03) still line up.
+const buildThresholdValueByPeriod = (
+    thresholds: EndemicThresholdPoint[] = [],
+): Map<string, number | null> => new Map(
+    thresholds.map(threshold => [canonicalizePeriodId(threshold.period), threshold.value]),
+);
 
 // Historical chart thresholds do not establish whether forecast alerts can be
 // calculated. Count forecast coverage explicitly, including omitted API rows.
@@ -35,14 +41,11 @@ export const getForecastThresholdCoverage = (
     series: PredictionOrgUnitSeries,
     thresholds?: EndemicThresholdPoint[],
 ): { available: number; missing: number } => {
-    const thresholdByPeriod = new Map(thresholds?.map(threshold => [
-        canonicalizePeriodId(threshold.period), threshold.value,
-    ]));
+    const thresholdByPeriod = buildThresholdValueByPeriod(thresholds);
     const forecastPeriods = new Set(series.points.map(point => canonicalizePeriodId(point.period)));
     let available = 0;
     for (const period of forecastPeriods) {
-        const value = thresholdByPeriod.get(period);
-        if (typeof value === 'number' && Number.isFinite(value)) {
+        if (isFiniteNumber(thresholdByPeriod.get(period))) {
             available++;
         }
     }
@@ -89,10 +92,6 @@ const PROBABILITY_TO_QUANTILE_KEY: Record<OutbreakProbability, QuantileKey> = {
 };
 
 const PROBABILITIES_DESCENDING: OutbreakProbability[] = [90, 75, 50, 25, 10];
-
-const isFiniteNumber = (value: unknown): value is number => (
-    typeof value === 'number' && Number.isFinite(value)
-);
 
 export const getQuantileKeyForOutbreakProbability = (
     probability: OutbreakProbability,
@@ -142,38 +141,26 @@ export const buildOutbreakIndicatorsForSeries = (
         return [];
     }
 
-    const thresholdByPeriod = new Map(
-        thresholds.map(t => [canonicalizePeriodId(t.period), t.value]),
-    );
+    const thresholdByPeriod = buildThresholdValueByPeriod(thresholds);
 
-    return series.points
-        .filter((point) => {
-            const value = thresholdByPeriod.get(canonicalizePeriodId(point.period));
-            return isFiniteNumber(value);
-        })
-        .map((point) => {
-            const threshold = thresholdByPeriod.get(canonicalizePeriodId(point.period)) as number;
-            return {
-                orgUnitId: series.orgUnitId,
-                orgUnitName: series.orgUnitName,
-                period: point.period,
-                threshold,
-                supportedProbability: getSupportedOutbreakProbabilityBucket(
-                    point,
-                    threshold,
-                ),
-                outbreak: isOutbreakAtProbability(
-                    point,
-                    threshold,
-                    selectedProbability,
-                ),
-                value: isOutbreakAtProbability(
-                    point,
-                    threshold,
-                    selectedProbability,
-                ) ? '1' : '0',
-            };
-        });
+    return series.points.flatMap((point) => {
+        const threshold = thresholdByPeriod.get(canonicalizePeriodId(point.period));
+        if (!isFiniteNumber(threshold)) {
+            return [];
+        }
+
+        const outbreak = isOutbreakAtProbability(point, threshold, selectedProbability);
+
+        return [{
+            orgUnitId: series.orgUnitId,
+            orgUnitName: series.orgUnitName,
+            period: point.period,
+            threshold,
+            supportedProbability: getSupportedOutbreakProbabilityBucket(point, threshold),
+            outbreak,
+            value: outbreak ? '1' : '0',
+        }];
+    });
 };
 
 export const buildOutbreakIndicators = (

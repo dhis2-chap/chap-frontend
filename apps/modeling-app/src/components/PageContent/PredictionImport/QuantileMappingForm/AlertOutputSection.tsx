@@ -10,7 +10,7 @@ type Props = {
     useAlertOutputs: boolean;
     selectedProbability: OutbreakProbability;
     thresholdStrategyName?: string;
-    thresholdParamsSummary?: string;
+    thresholdParamsSummary: string;
     unavailableThresholdCount: number;
     isThresholdsLoading: boolean;
     areThresholdsPaused: boolean;
@@ -117,12 +117,10 @@ export const AlertOutputSection = ({
                                 value={thresholdStrategyName}
                             />
                         )}
-                        {thresholdParamsSummary && (
-                            <SummaryItem
-                                label={i18n.t('Threshold parameters')}
-                                value={thresholdParamsSummary}
-                            />
-                        )}
+                        <SummaryItem
+                            label={i18n.t('Threshold parameters')}
+                            value={thresholdParamsSummary}
+                        />
                         <button
                             type="button"
                             className={styles.tertiaryActionButton}

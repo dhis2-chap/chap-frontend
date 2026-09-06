@@ -1,9 +1,8 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import {
     Button,
     InputField,
-    NoticeBox,
     SingleSelectField,
     SingleSelectOption,
 } from '@dhis2/ui';
@@ -14,14 +13,19 @@ import {
     isKnownThresholdStrategy,
     paramsToFormValues,
     parseThresholdParams,
+    withStrategyFormValues,
     type ThresholdParams,
     type ThresholdParamsFormErrors,
     type ThresholdParamsFormValues,
     type ThresholdStrategyId,
 } from '@/utils/thresholdStrategyParams';
+import { ErrorNoticeWithRetry } from './ErrorNoticeWithRetry';
 import styles from './ThresholdStrategyControl.module.css';
 
 type Props = {
+    // The currently applied params. Edits stay local until Apply (or a
+    // strategy switch) commits them through onApply; a value changed by the
+    // parent from elsewhere replaces the local edits for its strategy.
     value: ThresholdParams;
     onApply: (params: ThresholdParams) => void;
     onDirtyChange?: (isDirty: boolean) => void;
@@ -39,6 +43,10 @@ export const ThresholdStrategyControl = ({
         () => paramsToFormValues(value),
     );
     const [errors, setErrors] = useState<ThresholdParamsFormErrors>({});
+    const lastAppliedRef = useRef(value);
+    const appliedByStrategyRef = useRef<Partial<Record<ThresholdStrategyId, ThresholdParams>>>({
+        [value.type]: value,
+    });
     const {
         thresholdStrategies,
         isLoading: isStrategiesLoading,
@@ -59,11 +67,30 @@ export const ThresholdStrategyControl = ({
         onDirtyChange?.(isDirty);
     }, [isDirty, onDirtyChange]);
 
-    const applyParams = (nextStrategy: ThresholdStrategyId) => {
-        const result = parseThresholdParams(nextStrategy, formValues);
+    useEffect(() => {
+        appliedByStrategyRef.current[value.type] = value;
+        if (areThresholdParamsEqual(value, lastAppliedRef.current)) {
+            return;
+        }
+
+        // The parent changed the params outside this control: mirror them.
+        lastAppliedRef.current = value;
+        setStrategy(value.type);
+        setFormValues(previous => withStrategyFormValues(previous, value));
+        setErrors({});
+    }, [value]);
+
+    const commitParams = (params: ThresholdParams) => {
+        lastAppliedRef.current = params;
+        appliedByStrategyRef.current[params.type] = params;
+        onApply(params);
+    };
+
+    const applyParams = () => {
+        const result = parseThresholdParams(strategy, formValues);
         setErrors(result.errors ?? {});
         if (result.params) {
-            onApply(result.params);
+            commitParams(result.params);
         }
     };
 
@@ -71,32 +98,16 @@ export const ThresholdStrategyControl = ({
         if (!isKnownThresholdStrategy(selected)) {
             return;
         }
+
+        // Switching commits the params last applied for the selected strategy
+        // (or its defaults), never edits that were typed but not applied, so
+        // the select never shows a strategy while another one's params stay
+        // applied and no unreviewed values are committed.
+        const nextParams = appliedByStrategyRef.current[selected] ?? getDefaultThresholdParams(selected);
         setStrategy(selected);
-
-        const result = parseThresholdParams(selected, formValues);
-        if (result.params) {
-            setErrors({});
-            onApply(result.params);
-            return;
-        }
-
-        // Stale invalid edits for the selected strategy: reset its fields to
-        // the defaults and apply those, so the select never shows a strategy
-        // while another one's params stay applied.
-        const defaults = getDefaultThresholdParams(selected);
-        const defaultFormValues = paramsToFormValues(defaults);
-        setFormValues(previous => (
-            selected === 'seasonal'
-                ? { ...previous, stdMultiplier: defaultFormValues.stdMultiplier }
-                : {
-                        ...previous,
-                        lowerPercentile: defaultFormValues.lowerPercentile,
-                        upperPercentile: defaultFormValues.upperPercentile,
-                        baselineYears: defaultFormValues.baselineYears,
-                    }
-        ));
+        setFormValues(previous => withStrategyFormValues(previous, nextParams));
         setErrors({});
-        onApply(defaults);
+        commitParams(nextParams);
     };
 
     const handleFieldChange = (field: keyof ThresholdParamsFormValues) => (
@@ -129,14 +140,12 @@ export const ThresholdStrategyControl = ({
                 ))}
             </SingleSelectField>
             {!!strategiesError && !thresholdStrategies && (
-                <NoticeBox error title={i18n.t('Unable to load threshold strategies')}>
-                    <div className={styles.strategiesErrorContent}>
-                        {i18n.t('The strategy options could not be loaded, so the strategy cannot be changed.')}
-                        <Button small onClick={() => refetchStrategies()}>
-                            {i18n.t('Retry')}
-                        </Button>
-                    </div>
-                </NoticeBox>
+                <ErrorNoticeWithRetry
+                    title={i18n.t('Unable to load threshold strategies')}
+                    onRetry={() => refetchStrategies()}
+                >
+                    {i18n.t('The strategy options could not be loaded, so the strategy cannot be changed.')}
+                </ErrorNoticeWithRetry>
             )}
             {strategy === 'seasonal' && (
                 <InputField
@@ -196,7 +205,7 @@ export const ThresholdStrategyControl = ({
                     <Button
                         small
                         disabled={disabled}
-                        onClick={() => applyParams(strategy)}
+                        onClick={applyParams}
                         dataTest="threshold-params-apply-button"
                     >
                         {i18n.t('Apply')}

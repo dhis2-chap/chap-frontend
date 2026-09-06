@@ -7,6 +7,7 @@ import {
     isKnownThresholdStrategy,
     paramsToFormValues,
     parseThresholdParams,
+    withStrategyFormValues,
 } from './thresholdStrategyParams';
 
 describe('getDefaultThresholdParams', () => {
@@ -199,6 +200,32 @@ describe('paramsToFormValues', () => {
             lowerPercentile: '25',
             upperPercentile: '75',
             baselineYears: '5',
+        });
+    });
+});
+
+describe('withStrategyFormValues', () => {
+    it('overwrites only the fields of the params\' own strategy', () => {
+        const formValues = {
+            stdMultiplier: '3',
+            lowerPercentile: '10',
+            upperPercentile: '90',
+            baselineYears: '2',
+        };
+
+        expect(withStrategyFormValues(formValues, { type: 'seasonal', stdMultiplier: 1.5 })).toEqual({
+            ...formValues,
+            stdMultiplier: '1.5',
+        });
+        expect(withStrategyFormValues(formValues, {
+            type: 'percentile',
+            quantile: [0.25, 0.75],
+            baselineYears: null,
+        })).toEqual({
+            stdMultiplier: '3',
+            lowerPercentile: '25',
+            upperPercentile: '75',
+            baselineYears: '',
         });
     });
 });

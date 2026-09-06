@@ -8,7 +8,6 @@ import {
 import {
     buildOutbreakIndicatorsForSeries,
     getStableMaxYForThresholdChart,
-    getForecastThresholdCoverage,
     UncertaintyAreaChart,
     Widget,
 } from '@dhis2-chap/ui';
@@ -71,8 +70,21 @@ export const AlertPreviewPanel = ({
     const selectedThresholds: EndemicThresholdPoint[] = useMemo(() => (
         thresholdMap?.get(selectedSeries?.orgUnitId) ?? []
     ), [thresholdMap, selectedSeries?.orgUnitId]);
-    const hasThreshold = !!selectedSeries &&
-        getForecastThresholdCoverage(selectedSeries, selectedThresholds).missing === 0;
+    // One definition of "has a threshold" for the list and the selected chart,
+    // matching the tile status: at least one forecast period can be evaluated.
+    const orgUnitStatuses = useMemo(() => new Map(series.map((orgUnitSeries) => {
+        const indicators = buildOutbreakIndicatorsForSeries(
+            orgUnitSeries,
+            selectedProbability,
+            thresholdMap?.get(orgUnitSeries.orgUnitId),
+        );
+
+        return [orgUnitSeries.orgUnitId, {
+            hasThreshold: indicators.length > 0,
+            hasOutbreak: indicators.some(indicator => indicator.outbreak),
+        }];
+    })), [series, selectedProbability, thresholdMap]);
+    const hasThreshold = !!selectedSeries && !!orgUnitStatuses.get(selectedSeries.orgUnitId)?.hasThreshold;
     const selectedMaxY = useMemo(() => (
         selectedSeries
             ? getStableMaxYForThresholdChart(
@@ -90,6 +102,12 @@ export const AlertPreviewPanel = ({
                 )
             : []
     ), [selectedSeries, selectedProbability, selectedThresholds]);
+    const outbreakPeriods = useMemo(() => selectedIndicators.map(indicator => ({
+        period: indicator.period,
+        outbreak: indicator.outbreak,
+        supportedProbability: indicator.supportedProbability,
+        value: indicator.value,
+    })), [selectedIndicators]);
 
     useEffect(() => {
         setSelectedOrgUnitId(undefined);
@@ -111,17 +129,6 @@ export const AlertPreviewPanel = ({
         );
     }
 
-    if (thresholdsError) {
-        return (
-            <ThresholdCalculationStatus
-                isLoading={isThresholdsLoading}
-                isPaused={areThresholdsPaused}
-                error={thresholdsError}
-                onRetry={refetchThresholds}
-            />
-        );
-    }
-
     if (!selectedSeries || series.length === 0) {
         return (
             <NoticeBox warning title={i18n.t('No prediction data found')}>
@@ -135,6 +142,8 @@ export const AlertPreviewPanel = ({
             <ThresholdCalculationStatus
                 isLoading={isThresholdsLoading}
                 isPaused={areThresholdsPaused}
+                error={thresholdsError}
+                onRetry={refetchThresholds}
             />
             <div className={styles.dialogProbabilityControl}>
                 <OutbreakProbabilityControl
@@ -148,16 +157,10 @@ export const AlertPreviewPanel = ({
                     <div className={[styles.previewLayout, styles.dialogPreviewLayout].join(' ')}>
                         <div className={styles.orgUnitList}>
                             {series.map((orgUnitSeries) => {
-                                const orgThresholds = thresholdMap?.get(orgUnitSeries.orgUnitId) ?? [];
-                                const orgHasThreshold = getForecastThresholdCoverage(
-                                    orgUnitSeries, orgThresholds,
-                                ).available > 0;
-                                const indicators = buildOutbreakIndicatorsForSeries(
-                                    orgUnitSeries,
-                                    selectedProbability,
-                                    orgThresholds.length > 0 ? orgThresholds : undefined,
-                                );
-                                const hasOutbreak = indicators.some(indicator => indicator.outbreak);
+                                const {
+                                    hasThreshold: orgHasThreshold = false,
+                                    hasOutbreak = false,
+                                } = orgUnitStatuses.get(orgUnitSeries.orgUnitId) ?? {};
                                 const tooltipLabel = !orgHasThreshold
                                     ? i18n.t('Threshold unavailable')
                                     : hasOutbreak
@@ -215,12 +218,7 @@ export const AlertPreviewPanel = ({
                                 predictionTargetName={predictionTargetName}
                                 series={selectedSeries}
                                 endemicThresholds={selectedThresholds.length > 0 ? selectedThresholds : undefined}
-                                outbreakPeriods={selectedIndicators.map(indicator => ({
-                                    period: indicator.period,
-                                    outbreak: indicator.outbreak,
-                                    supportedProbability: indicator.supportedProbability,
-                                    value: indicator.value,
-                                }))}
+                                outbreakPeriods={outbreakPeriods}
                                 maxY={selectedMaxY}
                             />
                         </div>

@@ -6,7 +6,6 @@ import {
     buildOutbreakIndicatorsForSeries,
     getSupportedOutbreakProbabilityBucket,
     getForecastThresholdCoverage,
-    hasAvailableThreshold,
     isOutbreakAtProbability,
     parseOutbreakProbability,
 } from '../outbreakAlerts';
@@ -106,26 +105,6 @@ describe('outbreak alert utilities', () => {
     });
 });
 
-describe('hasAvailableThreshold', () => {
-    it('requires at least one non-null upper value', () => {
-        expect(hasAvailableThreshold([
-            { period: '202401', value: null },
-            { period: '202402', value: 12 },
-        ])).toBe(true);
-        expect(hasAvailableThreshold([
-            { period: '202401', value: null },
-        ])).toBe(false);
-        expect(hasAvailableThreshold([])).toBe(false);
-        expect(hasAvailableThreshold(undefined)).toBe(false);
-    });
-
-    it('does not count a lone lower band value as available', () => {
-        expect(hasAvailableThreshold([
-            { period: '202401', value: null, lowerValue: 3 },
-        ])).toBe(false);
-    });
-});
-
 describe('getForecastThresholdCoverage', () => {
     const series: PredictionOrgUnitSeries = {
         targetId: 'cases',
@@ -154,7 +133,6 @@ describe('getForecastThresholdCoverage', () => {
             { period: '202402', value: Infinity },
         ];
 
-        expect(hasAvailableThreshold(thresholds)).toBe(false);
         expect(getForecastThresholdCoverage(series, thresholds)).toEqual({ available: 0, missing: 2 });
         expect(buildOutbreakIndicatorsForSeries(series, 75, thresholds)).toEqual([]);
     });
