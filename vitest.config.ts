@@ -17,6 +17,11 @@ export default defineConfig({
             '@dhis2-chap/core': fileURLToPath(
                 new URL('./packages/core/src/index.ts', import.meta.url),
             ),
+            // Resolve the UI barrel before mocks are applied, including in
+            // clean checkouts where the package build output does not exist.
+            '@dhis2-chap/ui': fileURLToPath(
+                new URL('./packages/ui/src/index.ts', import.meta.url),
+            ),
         },
     },
 });

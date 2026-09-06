@@ -1,3 +1,4 @@
+import { canonicalizePeriodId } from '@dhis2-chap/core';
 import type { ThresholdEntry } from '../httpfunctions';
 import type {
     PredictionOrgUnitSeries,
@@ -26,7 +27,7 @@ export type ThresholdLineRoles = {
 // logic keys on the upper line, so a lone lowerValue does not count.
 export const hasAvailableThreshold = (
     thresholds?: EndemicThresholdPoint[],
-): boolean => !!thresholds?.some(threshold => threshold.value !== null);
+): boolean => !!thresholds?.some(threshold => isFiniteNumber(threshold.value));
 
 // Historical chart thresholds do not establish whether forecast alerts can be
 // calculated. Count forecast coverage explicitly, including omitted API rows.
@@ -35,9 +36,9 @@ export const getForecastThresholdCoverage = (
     thresholds?: EndemicThresholdPoint[],
 ): { available: number; missing: number } => {
     const thresholdByPeriod = new Map(thresholds?.map(threshold => [
-        threshold.period, threshold.value,
+        canonicalizePeriodId(threshold.period), threshold.value,
     ]));
-    const forecastPeriods = new Set(series.points.map(point => point.period));
+    const forecastPeriods = new Set(series.points.map(point => canonicalizePeriodId(point.period)));
     let available = 0;
     for (const period of forecastPeriods) {
         const value = thresholdByPeriod.get(period);
@@ -142,16 +143,16 @@ export const buildOutbreakIndicatorsForSeries = (
     }
 
     const thresholdByPeriod = new Map(
-        thresholds.map(t => [t.period, t.value]),
+        thresholds.map(t => [canonicalizePeriodId(t.period), t.value]),
     );
 
     return series.points
         .filter((point) => {
-            const value = thresholdByPeriod.get(point.period);
-            return value !== undefined && value !== null;
+            const value = thresholdByPeriod.get(canonicalizePeriodId(point.period));
+            return isFiniteNumber(value);
         })
         .map((point) => {
-            const threshold = thresholdByPeriod.get(point.period) as number;
+            const threshold = thresholdByPeriod.get(canonicalizePeriodId(point.period)) as number;
             return {
                 orgUnitId: series.orgUnitId,
                 orgUnitName: series.orgUnitName,

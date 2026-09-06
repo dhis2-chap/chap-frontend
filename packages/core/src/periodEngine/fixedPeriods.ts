@@ -54,8 +54,9 @@ export const generateFixedPeriods = ({
 // including localized labels through the Temporal polyfill, which costs
 // about a millisecond per call. Sort comparators and chart builders resolve
 // the same handful of ids thousands of times, so memoize per canonical id.
-// Fixed periods are immutable value objects, so sharing instances is safe,
-// and the cache stays bounded by the distinct periods a session touches.
+// Retain the most recently used periods, with a cap for long-lived sessions
+// that browse many datasets, calendars, or locales.
+const MAX_CACHED_FIXED_PERIODS = 4096;
 const fixedPeriodCache = new Map<string, Dhis2FixedPeriod>();
 
 export const createFixedPeriodFromPeriodId = ({
@@ -68,6 +69,8 @@ export const createFixedPeriodFromPeriodId = ({
     const cachedPeriod = fixedPeriodCache.get(cacheKey);
 
     if (cachedPeriod) {
+        fixedPeriodCache.delete(cacheKey);
+        fixedPeriodCache.set(cacheKey, cachedPeriod);
         return cachedPeriod;
     }
 
@@ -77,6 +80,10 @@ export const createFixedPeriodFromPeriodId = ({
         locale,
     });
     fixedPeriodCache.set(cacheKey, period);
+    if (fixedPeriodCache.size > MAX_CACHED_FIXED_PERIODS) {
+        const oldestKey = fixedPeriodCache.keys().next().value;
+        if (oldestKey !== undefined) fixedPeriodCache.delete(oldestKey);
+    }
 
     return period;
 };

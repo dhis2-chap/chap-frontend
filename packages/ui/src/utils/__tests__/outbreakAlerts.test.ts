@@ -135,6 +135,30 @@ describe('getForecastThresholdCoverage', () => {
         points: [basePoint, { ...basePoint, period: '202402' }],
     };
 
+    it('matches weekly thresholds using the same period normalization as charts', () => {
+        const weeklySeries = {
+            ...series,
+            points: [{ ...basePoint, period: '2024W01' }],
+        };
+        const thresholds = [{ period: '2024W1', value: 0 }];
+
+        expect(getForecastThresholdCoverage(weeklySeries, thresholds)).toEqual({ available: 1, missing: 0 });
+        expect(buildOutbreakIndicatorsForSeries(weeklySeries, 75, thresholds)).toMatchObject([
+            { period: '2024W01', threshold: 0, outbreak: true, value: '1' },
+        ]);
+    });
+
+    it('skips non-finite upper thresholds consistently in availability and alerts', () => {
+        const thresholds = [
+            { period: '202401', value: NaN },
+            { period: '202402', value: Infinity },
+        ];
+
+        expect(hasAvailableThreshold(thresholds)).toBe(false);
+        expect(getForecastThresholdCoverage(series, thresholds)).toEqual({ available: 0, missing: 2 });
+        expect(buildOutbreakIndicatorsForSeries(series, 75, thresholds)).toEqual([]);
+    });
+
     it('does not use historical thresholds to hide missing forecast coverage', () => {
         expect(getForecastThresholdCoverage(series, [
             { period: '202301', value: 12 },

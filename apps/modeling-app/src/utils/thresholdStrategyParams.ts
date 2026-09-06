@@ -40,7 +40,7 @@ const DEFAULT_PARAMS: Record<ThresholdStrategyId, ThresholdParams> = {
 export const isKnownThresholdStrategy = (
     id: string | undefined,
 ): id is ThresholdStrategyId => (
-    id !== undefined && id in DEFAULT_PARAMS
+    id !== undefined && Object.prototype.hasOwnProperty.call(DEFAULT_PARAMS, id)
 );
 
 export const getDefaultThresholdParams = (

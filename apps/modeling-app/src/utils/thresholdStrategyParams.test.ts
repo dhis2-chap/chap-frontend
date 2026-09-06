@@ -86,6 +86,9 @@ describe('isKnownThresholdStrategy', () => {
         expect(isKnownThresholdStrategy('seasonal')).toBe(true);
         expect(isKnownThresholdStrategy('percentile')).toBe(true);
         expect(isKnownThresholdStrategy('bogus')).toBe(false);
+        expect(isKnownThresholdStrategy('constructor')).toBe(false);
+        expect(isKnownThresholdStrategy('__proto__')).toBe(false);
+        expect(isKnownThresholdStrategy('toString')).toBe(false);
     });
 });
 
