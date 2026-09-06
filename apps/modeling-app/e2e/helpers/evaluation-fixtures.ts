@@ -1,4 +1,4 @@
-import type { Page } from '@playwright/test';
+import type { APIResponse, Page } from '@playwright/test';
 import type {
     BacktestRead,
     DataBaseResponse,
@@ -99,14 +99,26 @@ const getOrgUnitGeoJson = async (page: Page, orgUnitIds: string[]) => {
     };
 };
 
+const getEvaluationJobStatus = async (page: Page, jobId: string) => {
+    let response: APIResponse;
+
+    try {
+        response = await page.request.get(chapUrl(`/v1/jobs/${jobId}`));
+    } catch (error) {
+        // The DHIS2 route proxy occasionally relays a response that Node's HTTP
+        // parser rejects ("Invalid header token"); treat it as a missed poll.
+        console.warn(`Polling evaluation job ${jobId} failed, retrying: ${String(error)}`);
+        return undefined;
+    }
+
+    return await readJson<string>(response, 'Poll evaluation job status');
+};
+
 const pollEvaluationJob = async (page: Page, jobId: string) => {
     const deadline = Date.now() + EVALUATION_TIMEOUT_MS;
 
     while (Date.now() < deadline) {
-        const status = await readJson<string>(
-            await page.request.get(chapUrl(`/v1/jobs/${jobId}`)),
-            'Poll evaluation job status',
-        );
+        const status = await getEvaluationJobStatus(page, jobId);
 
         if (status === 'SUCCESS') {
             return;

@@ -147,7 +147,7 @@ wait_for_stack_ready() {
 
     wait_url "CHAP health" "http://localhost:${chap_port}/health" 900
     wait_url "DHIS2 login page" "http://localhost:${dhis2_port}/dhis-web-login" 1800
-    wait_for_analytics_job 300
+    wait_for_analytics_job 600
 }
 
 command="${1:-up}"
