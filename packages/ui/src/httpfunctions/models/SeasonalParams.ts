@@ -6,7 +6,7 @@
  * Parameters for the seasonal mean + k*std strategy.
  */
 export type SeasonalParams = {
-    type?: string;
+    type: string;
     /**
      * Number of standard deviations above the seasonal mean. A list produces one threshold line per entry.
      */

@@ -15,7 +15,7 @@ export type ThresholdEntry = {
      */
     location: string;
     /**
-     * One threshold per requested line, in the order of the request's line parameter list (`quantile`, `stdMultiplier`, ...). A scalar or default request yields one element. An element is `null` when that line could not be computed.
+     * One threshold per line, in the same order as the response's `lines`. An element is `null` when that line could not be computed for this (period, location).
      */
     values: Array<(number | null)>;
 };

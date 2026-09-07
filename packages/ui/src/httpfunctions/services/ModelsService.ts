@@ -13,7 +13,7 @@ import { request as __request } from '../core/request';
 export class ModelsService {
     /**
      * Browse available model templates
-     * List every model template that can be configured into a runnable model — including archived ones, so historical references stay resolvable.
+     * List every live model template that can be configured into a runnable model — one per template name; superseded versions keep their rows but are not listed.
      *
      * Acts as the discovery endpoint: it is also where the CHAPKit v2 service registry
      * gets pulled in, so a template's ``health_status = "live"`` reflects whether the

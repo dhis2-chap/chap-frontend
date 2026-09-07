@@ -10,11 +10,15 @@ import type { ThresholdEntry } from './ThresholdEntry';
  */
 export type ThresholdResponse = {
     /**
-     * The resolved parameters the thresholds were computed with, defaults applied. Its line parameter list states the ordering of each entry's `values`.
+     * The resolved parameters the thresholds were computed with, defaults applied.
      */
     params: (SeasonalParams | PercentileParams);
     /**
-     * One entry per (period, location).
+     * The line parameter value each threshold was computed from (a quantile, a std multiplier, ...), one per line, in the order of every entry's `values`. A scalar or default request yields one element.
+     */
+    lines: Array<number>;
+    /**
+     * One entry per requested (period, location), including combinations no threshold could be computed for, whose `values` are then `null`.
      */
     entries: Array<ThresholdEntry>;
 };
