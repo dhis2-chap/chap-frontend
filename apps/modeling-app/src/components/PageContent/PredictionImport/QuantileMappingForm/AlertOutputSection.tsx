@@ -100,9 +100,9 @@ export const AlertOutputSection = ({
                     />
                     {!isThresholdsLoading && !thresholdsError && unavailableThresholdCount > 0 && (
                         <NoticeBox warning title={i18n.t('Some outbreak indicators will be skipped')}>
-                            {i18n.t('Outbreak indicators will be skipped for one region due to insufficient disease data.', {
+                            {i18n.t('One region has forecast periods without thresholds. Only outbreak indicators for those periods will be skipped; indicators for periods with thresholds will still be imported.', {
                                 count: unavailableThresholdCount,
-                                defaultValue_plural: 'Outbreak indicators will be skipped for {{count}} regions due to insufficient disease data.',
+                                defaultValue_plural: '{{count}} regions have forecast periods without thresholds. Only outbreak indicators for those periods will be skipped; indicators for periods with thresholds will still be imported.',
                             })}
                         </NoticeBox>
                     )}
