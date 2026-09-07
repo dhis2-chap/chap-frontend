@@ -6,6 +6,7 @@ import {
     buildOutbreakIndicatorsForSeries,
     getSupportedOutbreakProbabilityBucket,
     getForecastThresholdCoverage,
+    getThresholdLineRoles,
     isOutbreakAtProbability,
     parseOutbreakProbability,
 } from '../outbreakAlerts';
@@ -143,7 +144,7 @@ describe('getForecastThresholdCoverage', () => {
         ])).toEqual({ available: 0, missing: 2 });
     });
 
-    it('counts omitted and null forecast lines as missing despite a lower band', () => {
+    it('counts unmatched and null forecast lines as missing despite a lower band', () => {
         expect(getForecastThresholdCoverage(series, [
             { period: '202401', value: 0 },
         ])).toEqual({ available: 1, missing: 1 });
@@ -159,6 +160,22 @@ describe('getForecastThresholdCoverage', () => {
             { period: '202402', value: 12 },
         ])).toEqual({ available: 2, missing: 0 });
         expect(getForecastThresholdCoverage(series)).toEqual({ available: 0, missing: 2 });
+    });
+});
+
+describe('getThresholdLineRoles', () => {
+    it('uses the only line as upper for a scalar line parameter', () => {
+        expect(getThresholdLineRoles([2])).toEqual({ upperIndex: 0 });
+    });
+
+    it('maps the smallest and largest echoed lines to lower and upper', () => {
+        expect(getThresholdLineRoles([0.25, 0.75])).toEqual({ lowerIndex: 0, upperIndex: 1 });
+        expect(getThresholdLineRoles([0.75, 0.25])).toEqual({ lowerIndex: 1, upperIndex: 0 });
+    });
+
+    it('falls back to a single upper line when the lines cannot form a band', () => {
+        expect(getThresholdLineRoles([])).toEqual({ upperIndex: 0 });
+        expect(getThresholdLineRoles([0.75, 0.75])).toEqual({ upperIndex: 0 });
     });
 });
 

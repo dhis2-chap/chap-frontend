@@ -6,13 +6,11 @@ import {
     buildEndemicThresholdMap,
     DatasetsService,
     getSeriesPeriods,
+    getThresholdLineRoles,
     type PredictionOrgUnitSeries,
     type ThresholdResponse,
 } from '@dhis2-chap/ui';
-import {
-    getThresholdLineRoles,
-    type ThresholdParams,
-} from '@/utils/thresholdStrategyParams';
+import type { ThresholdParams } from '@/utils/thresholdStrategyParams';
 import { getThresholdQueryState } from '@/utils/thresholdQueryState';
 
 type Props = {
@@ -73,9 +71,9 @@ export const useEndemicThresholds = ({
     const thresholdMap = useMemo(() => {
         if (!data) return undefined;
 
-        // Derive the line roles from the params echoed in the response: with
+        // Derive the line roles from the lines echoed in the response: with
         // keepPreviousData the visible data can belong to the previous request.
-        return buildEndemicThresholdMap(data.entries, getThresholdLineRoles(data.params));
+        return buildEndemicThresholdMap(data.entries, getThresholdLineRoles(data.lines));
     }, [data]);
 
     return {

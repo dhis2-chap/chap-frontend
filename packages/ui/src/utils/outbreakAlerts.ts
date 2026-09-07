@@ -36,7 +36,8 @@ const buildThresholdValueByPeriod = (
 );
 
 // Historical chart thresholds do not establish whether forecast alerts can be
-// calculated. Count forecast coverage explicitly, including omitted API rows.
+// calculated. Count forecast coverage explicitly: the API returns every
+// requested (period, location) and marks lines it could not compute as null.
 export const getForecastThresholdCoverage = (
     series: PredictionOrgUnitSeries,
     thresholds?: EndemicThresholdPoint[],
@@ -50,6 +51,31 @@ export const getForecastThresholdCoverage = (
         }
     }
     return { available, missing: forecastPeriods.size - available };
+};
+
+// The response echoes `lines`, the line parameter value (quantile, std
+// multiplier, ...) each threshold was computed from, in the order of every
+// entry's values. Whatever the strategy, the largest line is the alert
+// threshold and the smallest the lower edge of the band.
+export const getThresholdLineRoles = (lines: readonly number[]): ThresholdLineRoles => {
+    if (lines.length < 2) {
+        return { upperIndex: 0 };
+    }
+
+    let lowerIndex = 0;
+    let upperIndex = 0;
+    lines.forEach((value, index) => {
+        if (value < lines[lowerIndex]) {
+            lowerIndex = index;
+        }
+        if (value > lines[upperIndex]) {
+            upperIndex = index;
+        }
+    });
+
+    return lowerIndex === upperIndex
+        ? { upperIndex }
+        : { lowerIndex, upperIndex };
 };
 
 export const buildEndemicThresholdMap = (

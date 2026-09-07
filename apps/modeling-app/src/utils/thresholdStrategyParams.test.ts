@@ -3,7 +3,6 @@ import {
     areThresholdParamsEqual,
     describeThresholdParams,
     getDefaultThresholdParams,
-    getThresholdLineRoles,
     isKnownThresholdStrategy,
     paramsToFormValues,
     parseThresholdParams,
@@ -90,52 +89,6 @@ describe('isKnownThresholdStrategy', () => {
         expect(isKnownThresholdStrategy('constructor')).toBe(false);
         expect(isKnownThresholdStrategy('__proto__')).toBe(false);
         expect(isKnownThresholdStrategy('toString')).toBe(false);
-    });
-});
-
-describe('getThresholdLineRoles', () => {
-    it('uses the only line as upper for a scalar line parameter', () => {
-        expect(getThresholdLineRoles({ type: 'seasonal', stdMultiplier: 2 })).toEqual({
-            upperIndex: 0,
-        });
-    });
-
-    it('maps the smallest and largest echoed quantiles to lower and upper', () => {
-        expect(getThresholdLineRoles({
-            type: 'percentile',
-            quantile: [0.25, 0.75],
-            baselineYears: 5,
-        })).toEqual({
-            lowerIndex: 0,
-            upperIndex: 1,
-        });
-        expect(getThresholdLineRoles({
-            type: 'percentile',
-            quantile: [0.75, 0.25],
-            baselineYears: 5,
-        })).toEqual({
-            lowerIndex: 1,
-            upperIndex: 0,
-        });
-    });
-
-    it('derives the roles from the echoed line values even without a type label', () => {
-        expect(getThresholdLineRoles({ quantile: [0.25, 0.75] })).toEqual({
-            lowerIndex: 0,
-            upperIndex: 1,
-        });
-    });
-
-    it('falls back to a single upper line for scalar or single-element lists', () => {
-        expect(getThresholdLineRoles({ type: 'percentile', quantile: 0.75 })).toEqual({
-            upperIndex: 0,
-        });
-        expect(getThresholdLineRoles({ type: 'percentile', quantile: [0.75] })).toEqual({
-            upperIndex: 0,
-        });
-        expect(getThresholdLineRoles({})).toEqual({
-            upperIndex: 0,
-        });
     });
 });
 

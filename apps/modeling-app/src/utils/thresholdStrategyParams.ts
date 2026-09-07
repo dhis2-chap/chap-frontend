@@ -2,7 +2,6 @@ import i18n from '@dhis2/d2-i18n';
 import type {
     PercentileParams,
     SeasonalParams,
-    ThresholdLineRoles,
 } from '@dhis2-chap/ui';
 import * as z from 'zod';
 
@@ -96,38 +95,6 @@ export const areThresholdParamsEqual = (
 // falling through to another strategy's branch.
 const assertUnhandledStrategy = (strategy: never): never => {
     throw new Error(`Unhandled threshold strategy: ${JSON.stringify(strategy)}`);
-};
-
-export const getThresholdLineRoles = (
-    responseParams: SeasonalParams | PercentileParams,
-): ThresholdLineRoles => {
-    // The response echoes the resolved params, and their line parameter list
-    // states the ordering of each entry's values — so derive the roles from
-    // that list rather than trusting the request params or the type label.
-    const lineParameter = 'quantile' in responseParams && responseParams.quantile !== undefined
-        ? responseParams.quantile
-        : 'stdMultiplier' in responseParams
-            ? responseParams.stdMultiplier
-            : undefined;
-
-    if (!Array.isArray(lineParameter) || lineParameter.length < 2) {
-        return { upperIndex: 0 };
-    }
-
-    let lowerIndex = 0;
-    let upperIndex = 0;
-    lineParameter.forEach((value, index) => {
-        if (value < lineParameter[lowerIndex]) {
-            lowerIndex = index;
-        }
-        if (value > lineParameter[upperIndex]) {
-            upperIndex = index;
-        }
-    });
-
-    return lowerIndex === upperIndex
-        ? { upperIndex }
-        : { lowerIndex, upperIndex };
 };
 
 const fractionToPercentString = (fraction: number): string => {
