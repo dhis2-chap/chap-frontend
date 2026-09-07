@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
+import type { MakeBacktestWithDataRequest, ModelSpecRead } from '@dhis2-chap/ui';
 import { readJson } from './helpers/evaluation-fixtures';
 import { openPeriodPickerAtYear, selectPeriod } from './helpers/period-picker';
 
@@ -227,6 +228,51 @@ test('accepts valid values without client-side validation errors', async ({ page
     await page.getByRole('button', { name: 'Start dry run' }).click();
     await createBacktestRequest;
     await expect(backtestCreateRequestCount).toBe(1);
+});
+
+test('accepts a model without covariates with only its target mapped', async ({ page }) => {
+    // The test model normally has covariates; override its metadata to exercise
+    // client-side validation without installing another model in the backend.
+    await page.route('**/v1/crud/configured-models', async (route) => {
+        const response = await route.fetch();
+        const models = await response.json() as ModelSpecRead[];
+        await route.fulfill({
+            response,
+            json: models.map(model => model.name === 'naive_model'
+                ? { ...model, covariates: [] }
+                : model),
+        });
+    });
+    await stubCreateBacktestWithData(page);
+    await page.goto('/#/evaluate/new');
+    await page.locator('[data-test="evaluation-name-input"] input').fill('Target-only evaluation');
+    await selectPeriod(page, 'evaluation-from-period-input', '202001');
+    await selectPeriod(page, 'evaluation-to-period-input', '202412');
+    await selectOrgUnitLevel(page);
+    await selectKnownModel(page);
+    await page.getByRole('button', { name: 'Configure sources' }).click();
+
+    const saveButton = page.getByRole('button', { name: 'Save', exact: true });
+    await expect(saveButton).toBeDisabled();
+    const target = REQUIRED_DATA_MAPPINGS[0];
+    await mapFeatureToDataItem(page, target.fieldKey, target.searchTerm, target.optionMatcher);
+    await saveButton.click();
+    await expect(page.getByText('All data items mapped', { exact: true })).toBeVisible();
+    await expect(page.getByText('Please map all model covariates to valid data items')).not.toBeVisible();
+
+    const dryRunResponse = page.waitForResponse(response =>
+        isBacktestCreateRequest(response.url(), response.request().method()) &&
+        new URL(response.url()).searchParams.get('dryRun') === 'true',
+    );
+    await page.getByRole('button', { name: 'Start dry run' }).click();
+    const response = await dryRunResponse;
+    expect(response.ok()).toBe(true);
+    const request = response.request().postDataJSON() as MakeBacktestWithDataRequest;
+    expect(request.dataSources).toEqual([
+        { covariate: 'disease_cases', dataElementId: expect.any(String) },
+    ]);
+    expect(request.providedData.length).toBeGreaterThan(0);
+    expect(request.providedData.every(observation => observation.featureName === 'disease_cases')).toBe(true);
 });
 
 test('submits valid data, navigates to jobs, and auto-updates the created job to success', async ({ page }) => {
