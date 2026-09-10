@@ -83,10 +83,9 @@ export const PredictionDetailsGrid = ({
         enabled: showThresholds,
     });
 
-    // Keyed on data availability, not loading or errors: during a
-    // recalculation (or after a rejected one) the previous thresholds stay
-    // visible (keepPreviousData) with the status shown inline, so the tile
-    // grid is not remounted and the status filter survives a param change.
+    // During a recalculation the previous thresholds stay visible
+    // (keepPreviousData), so the grid is not remounted and the status filter
+    // survives a param change.
     const thresholdsVisible = showThresholds && !!thresholdMap;
 
     const {
@@ -201,9 +200,6 @@ export const PredictionDetailsGrid = ({
                     <ThresholdStrategyControl
                         value={settings.thresholdParams}
                         onApply={thresholdParams => updateSettings({ thresholdParams })}
-                        // Offline, a switch to already cached params renders
-                        // without a request, so only lock the form mid-fetch.
-                        disabled={isThresholdsLoading && !areThresholdsPaused}
                     />
                     <ThresholdCalculationStatus
                         isLoading={isThresholdsLoading}

@@ -209,7 +209,7 @@ export const AlertPreviewPanel = ({
                             })}
                         </div>
                         <div className={styles.chartArea}>
-                            {!hasThreshold && (
+                            {!!thresholdMap && !hasThreshold && (
                                 <NoticeBox warning title={i18n.t('Endemic threshold unavailable')}>
                                     {i18n.t('Insufficient historical data to compute the endemic threshold for this location.')}
                                 </NoticeBox>

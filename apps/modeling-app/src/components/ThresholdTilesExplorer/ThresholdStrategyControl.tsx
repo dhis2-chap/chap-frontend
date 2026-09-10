@@ -29,14 +29,12 @@ type Props = {
     value: ThresholdParams;
     onApply: (params: ThresholdParams) => void;
     onDirtyChange?: (isDirty: boolean) => void;
-    disabled?: boolean;
 };
 
 export const ThresholdStrategyControl = ({
     value,
     onApply,
     onDirtyChange,
-    disabled,
 }: Props) => {
     const [strategy, setStrategy] = useState<ThresholdStrategyId>(value.type);
     const [formValues, setFormValues] = useState<ThresholdParamsFormValues>(
@@ -121,7 +119,6 @@ export const ThresholdStrategyControl = ({
         <div className={styles.container}>
             <SingleSelectField
                 dense
-                disabled={disabled}
                 loading={isStrategiesLoading}
                 label={i18n.t('Threshold strategy')}
                 helpText={selectedStrategyInfo?.description}
@@ -150,7 +147,6 @@ export const ThresholdStrategyControl = ({
             {strategy === 'seasonal' && (
                 <InputField
                     dense
-                    disabled={disabled}
                     type="number"
                     label={i18n.t('Standard deviations above mean')}
                     value={formValues.stdMultiplier}
@@ -165,7 +161,6 @@ export const ThresholdStrategyControl = ({
                     <div className={styles.percentileRow}>
                         <InputField
                             dense
-                            disabled={disabled}
                             type="number"
                             label={i18n.t('Lower percentile (%)')}
                             value={formValues.lowerPercentile}
@@ -176,7 +171,6 @@ export const ThresholdStrategyControl = ({
                         />
                         <InputField
                             dense
-                            disabled={disabled}
                             type="number"
                             label={i18n.t('Upper percentile (%)')}
                             value={formValues.upperPercentile}
@@ -188,7 +182,6 @@ export const ThresholdStrategyControl = ({
                     </div>
                     <InputField
                         dense
-                        disabled={disabled}
                         type="number"
                         label={i18n.t('Baseline years')}
                         helpText={i18n.t('Most recent complete years in the dataset. Leave empty to use all available history.')}
@@ -204,7 +197,6 @@ export const ThresholdStrategyControl = ({
                 <div className={styles.applyRow}>
                     <Button
                         small
-                        disabled={disabled}
                         onClick={applyParams}
                         dataTest="threshold-params-apply-button"
                     >

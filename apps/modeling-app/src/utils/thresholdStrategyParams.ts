@@ -22,9 +22,8 @@ export type ThresholdStrategyId = ThresholdParams['type'];
 
 export const DEFAULT_THRESHOLD_STRATEGY: ThresholdStrategyId = 'seasonal';
 
-// The single definition of a valid ThresholdParams value. The form parser below
-// reports per-field messages, and the import page uses this schema to validate
-// params restored from router history state.
+// Validates params restored from router history state. The form parser below
+// does the same for typed input, but reports per-field messages.
 const percentileFractionSchema = z.number().min(0).max(1);
 
 export const thresholdParamsSchema: z.ZodType<ThresholdParams> = z.discriminatedUnion('type', [
@@ -39,7 +38,7 @@ export const thresholdParamsSchema: z.ZodType<ThresholdParams> = z.discriminated
     }),
 ]).refine(params => (
     params.type !== 'percentile' || params.quantile[0] < params.quantile[1]
-), { message: i18n.t('Must be lower than the upper percentile') });
+));
 
 // UI presets are maintained here because the strategy catalogue has no parameter
 // metadata. Percentile intentionally requests a 25th–75th band, while the backend
