@@ -19,10 +19,18 @@ export const ModelContent: React.FC = () => {
     }
 
     if (error) {
+        const isUnauthorized = error.status === 401;
         return (
             <div className={styles.errorContainer}>
-                <NoticeBox error title={i18n.t('Error loading models')}>
-                    {error.message || i18n.t('An unknown error occurred')}
+                <NoticeBox
+                    error
+                    title={isUnauthorized
+                        ? i18n.t('Not authorized to access the CHAP server')
+                        : i18n.t('Error loading models')}
+                >
+                    {isUnauthorized
+                        ? i18n.t('The CHAP server refused the request. An administrator can check the API token under Settings, in the route configuration.')
+                        : error.message || i18n.t('An unknown error occurred')}
                 </NoticeBox>
             </div>
         );
