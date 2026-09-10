@@ -1,6 +1,6 @@
 import { ApiError, ModelSpecRead, ModelsService } from '@dhis2-chap/ui';
 import { useQuery } from '@tanstack/react-query';
-import { isUnauthorizedError } from '../../../../utils/chapErrors';
+import { isUnauthorizedError } from '../utils/chapErrors';
 
 /**
  * `/system/info` is public, so a reachable server says nothing about whether the

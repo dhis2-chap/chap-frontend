@@ -4,7 +4,7 @@ import i18n from '@dhis2/d2-i18n';
 import styles from './ChapSettings.module.css';
 import { Route } from '../../../hooks/useRoute';
 import { useChapStatus } from './hooks/useChapStatus';
-import { useChapAuthStatus } from './hooks/useChapAuthStatus';
+import { useChapAuthStatus } from '../../../hooks/useChapAuthStatus';
 import { hasRouteToken } from '../../../components/ApiTokenField/routeToken';
 import { ServerSecurityNotices } from './ServerSecurityNotices';
 
