@@ -81,12 +81,11 @@ export const getThresholdTileViewModels = (
         const apiThresholds = thresholdMap?.get(orgUnitSeries.orgUnitId);
 
         if (apiThresholds) {
-            const hasAnyValue = apiThresholds.some(t => t.value !== null);
             const indicators = buildOutbreakIndicatorsForSeries(
                 orgUnitSeries, selectedProbability, apiThresholds,
             );
             const hasOutbreak = indicators.some(indicator => indicator.outbreak);
-            const status: ThresholdTileStatus = !hasAnyValue
+            const status: ThresholdTileStatus = indicators.length === 0
                 ? 'unavailable'
                 : hasOutbreak
                     ? 'outbreak'

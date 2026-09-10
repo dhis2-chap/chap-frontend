@@ -1,0 +1,16 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacers-dp8);
+}
+
+.percentileRow {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacers-dp8);
+}
+
+.applyRow {
+    display: flex;
+    justify-content: flex-end;
+}

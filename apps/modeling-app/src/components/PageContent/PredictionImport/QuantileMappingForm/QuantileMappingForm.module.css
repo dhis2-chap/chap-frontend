@@ -72,6 +72,7 @@
 
 .tertiaryActionButton {
     align-self: center;
+    margin-inline-start: auto;
     border: 0;
     border-radius: 3px;
     background: transparent;

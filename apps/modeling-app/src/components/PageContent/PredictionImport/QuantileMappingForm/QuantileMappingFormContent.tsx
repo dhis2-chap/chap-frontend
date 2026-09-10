@@ -1,8 +1,9 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import {
     buildOutbreakIndicators,
     DEFAULT_OUTBREAK_PROBABILITY,
+    getForecastThresholdCoverage,
     type OutbreakProbability,
 } from '@dhis2-chap/ui';
 import {
@@ -14,7 +15,16 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, useWatch } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { NavigationConfirmModal } from '@/components/NavigationConfirmModal';
+import { useEndemicThresholds } from '@/hooks/useEndemicThresholds';
 import { useNavigationBlocker } from '@/hooks/useNavigationBlocker';
+import { useThresholdStrategies } from '@/hooks/useThresholdStrategies';
+import {
+    areThresholdParamsEqual,
+    DEFAULT_THRESHOLD_STRATEGY,
+    describeThresholdParams,
+    getDefaultThresholdParams,
+    type ThresholdParams,
+} from '@/utils/thresholdStrategyParams';
 import { PredictionAlertsDialog } from '../../PredictionAlerts';
 import { usePostPredictionData } from '../hooks/usePostPredictionData';
 import { AlertOutputSection } from './AlertOutputSection';
@@ -40,8 +50,6 @@ export const QuantileMappingFormContent = ({
     predictionSetupId,
     predictionSetup,
     series,
-    thresholdMap,
-    unavailableThresholdCount,
     canDeleteDataValues,
     isDeleteAuthorityLoading,
 }: LoadedQuantileMappingFormProps) => {
@@ -61,6 +69,18 @@ export const QuantileMappingFormContent = ({
     );
     const defaultUseAlertOutputs = locationState?.useAlertOutputs ?? true;
     const defaultAlertProbability = locationState?.alertProbability ?? DEFAULT_OUTBREAK_PROBABILITY;
+    const [thresholdParams, setThresholdParams] = useState<ThresholdParams>(
+        locationState?.thresholdParams ?? getDefaultThresholdParams(DEFAULT_THRESHOLD_STRATEGY),
+    );
+    const initialThresholdParamsRef = useRef(thresholdParams);
+    const isThresholdParamsDirty = !areThresholdParamsEqual(
+        thresholdParams,
+        initialThresholdParamsRef.current,
+    );
+    const { thresholdStrategies } = useThresholdStrategies();
+    const thresholdStrategyName = thresholdStrategies?.find(
+        strategy => strategy.id === thresholdParams.type,
+    )?.displayName;
     const formValues = useMemo<QuantileMappingFormValues>(() => ({
         ...defaultQuantileMappingFields,
         use_alert_outputs: defaultUseAlertOutputs,
@@ -104,7 +124,7 @@ export const QuantileMappingFormContent = ({
         handleConfirmNavigation,
         handleCancelNavigation,
     } = useNavigationBlocker({
-        shouldBlock: !isPending && isDirty,
+        shouldBlock: !isPending && (isDirty || isThresholdParamsDirty),
     });
     const {
         quantile_low,
@@ -119,6 +139,27 @@ export const QuantileMappingFormContent = ({
     } = useWatch({ control });
     const useAlertOutputs = use_alert_outputs ?? defaultUseAlertOutputs;
     const selectedProbability = alert_probability ?? defaultAlertProbability;
+    const {
+        thresholdMap,
+        isLoading: isThresholdsLoading,
+        isReady: areThresholdsReady,
+        isPaused: areThresholdsPaused,
+        error: thresholdsError,
+        refetch: refetchThresholds,
+    } = useEndemicThresholds({
+        datasetId: prediction.datasetId,
+        series,
+        params: thresholdParams,
+        enabled: useAlertOutputs,
+    });
+    const canImport = !useAlertOutputs || areThresholdsReady;
+    const unavailableThresholdCount = useMemo(() => (
+        series.filter(orgUnitSeries => (
+            getForecastThresholdCoverage(
+                orgUnitSeries, thresholdMap?.get(orgUnitSeries.orgUnitId),
+            ).missing > 0
+        )).length
+    ), [series, thresholdMap]);
     const quantileValues = {
         quantile_low,
         quantile_high,
@@ -139,15 +180,20 @@ export const QuantileMappingFormContent = ({
         clearErrors('outbreak_indicator');
     };
 
-    const handleApplyAlertProbability = (probability: OutbreakProbability) => {
+    const handleApplyAlertSettings = (probability: OutbreakProbability, params: ThresholdParams) => {
         setValue('alert_probability', probability, { shouldDirty: true });
+        setThresholdParams(params);
     };
 
     const handleSubmitImport = () => {
+        if (!canImport) return;
         setIsImportConfirmationOpen(true);
     };
 
     const handleConfirmImport = async (data: QuantileMappingFormValues) => {
+        // Recheck at the mutation boundary: the connection/query may have
+        // changed since the confirmation dialog was opened.
+        if (!canImport) return;
         try {
             await mutateAsync({
                 prediction,
@@ -210,7 +256,12 @@ export const QuantileMappingFormContent = ({
                     <AlertOutputSection
                         useAlertOutputs={useAlertOutputs}
                         selectedProbability={selectedProbability}
+                        thresholdStrategyName={thresholdStrategyName}
+                        thresholdParamsSummary={describeThresholdParams(thresholdParams)}
                         unavailableThresholdCount={unavailableThresholdCount}
+                        isThresholdsLoading={isThresholdsLoading}
+                        areThresholdsPaused={areThresholdsPaused}
+                        thresholdsError={thresholdsError}
                         outbreakIndicator={outbreak_indicator}
                         outbreakIndicatorError={errors.outbreak_indicator?.message}
                         endemicThreshold={endemic_threshold}
@@ -218,6 +269,7 @@ export const QuantileMappingFormContent = ({
                         onAdjustAlertProbability={() => setIsAlertsDialogOpen(true)}
                         onChangeOutbreakIndicator={id => updateQuantile('outbreak_indicator', id)}
                         onChangeEndemicThreshold={id => updateQuantile('endemic_threshold', id)}
+                        onRetryThresholds={refetchThresholds}
                     />
 
                     <ClearPreviousValuesControl
@@ -236,7 +288,7 @@ export const QuantileMappingFormContent = ({
                         </Button>
                         <Button
                             type="submit"
-                            disabled={isPending}
+                            disabled={isPending || !canImport}
                             primary
                         >
                             {importButtonLabel}
@@ -256,6 +308,7 @@ export const QuantileMappingFormContent = ({
                 <ImportConfirmationModal
                     clearPreviousValues={clearPreviousValues}
                     isPending={isPending}
+                    isReady={canImport}
                     progress={importProgress}
                     onCancel={handleCancelImport}
                     onConfirm={handleSubmit(handleConfirmImport)}
@@ -266,8 +319,9 @@ export const QuantileMappingFormContent = ({
                 <PredictionAlertsDialog
                     prediction={prediction}
                     model={model}
+                    thresholdParams={thresholdParams}
                     selectedProbability={selectedProbability}
-                    onApply={handleApplyAlertProbability}
+                    onApply={handleApplyAlertSettings}
                     onClose={() => setIsAlertsDialogOpen(false)}
                 />
             )}

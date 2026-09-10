@@ -1,0 +1,7 @@
+.container {
+    display: flex;
+    align-items: center;
+    gap: var(--spacers-dp8);
+    color: var(--colors-grey700);
+    font-size: 14px;
+}

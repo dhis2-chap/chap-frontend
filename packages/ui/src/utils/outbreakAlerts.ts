@@ -1,3 +1,5 @@
+import { canonicalizePeriodId } from '@dhis2-chap/core';
+import type { ThresholdEntry } from '../httpfunctions';
 import type {
     PredictionOrgUnitSeries,
     PredictionPointVM,
@@ -13,6 +15,88 @@ export type SupportedOutbreakProbabilityBucket = OutbreakProbability | '<10';
 export type EndemicThresholdPoint = {
     period: string;
     value: number | null;
+    lowerValue?: number | null;
+};
+
+export type ThresholdLineRoles = {
+    upperIndex: number;
+    lowerIndex?: number;
+};
+
+export const isFiniteNumber = (value: unknown): value is number => (
+    typeof value === 'number' && Number.isFinite(value)
+);
+
+// Alert logic keys on the upper line; periods are matched by canonical id so
+// differently spelled week ids (2025W3 vs 2025W03) still line up.
+const buildThresholdValueByPeriod = (
+    thresholds: EndemicThresholdPoint[] = [],
+): Map<string, number | null> => new Map(
+    thresholds.map(threshold => [canonicalizePeriodId(threshold.period), threshold.value]),
+);
+
+// Historical chart thresholds do not establish whether forecast alerts can be
+// calculated. Count forecast coverage explicitly: the API returns every
+// requested (period, location) and marks lines it could not compute as null.
+export const getForecastThresholdCoverage = (
+    series: PredictionOrgUnitSeries,
+    thresholds?: EndemicThresholdPoint[],
+): { available: number; missing: number } => {
+    const thresholdByPeriod = buildThresholdValueByPeriod(thresholds);
+    const forecastPeriods = new Set(series.points.map(point => canonicalizePeriodId(point.period)));
+    let available = 0;
+    for (const period of forecastPeriods) {
+        if (isFiniteNumber(thresholdByPeriod.get(period))) {
+            available++;
+        }
+    }
+    return { available, missing: forecastPeriods.size - available };
+};
+
+// The response echoes `lines`, the line parameter value (quantile, std
+// multiplier, ...) each threshold was computed from, in the order of every
+// entry's values. Whatever the strategy, the largest line is the alert
+// threshold and the smallest the lower edge of the band.
+export const getThresholdLineRoles = (lines: readonly number[]): ThresholdLineRoles => {
+    if (lines.length < 2) {
+        return { upperIndex: 0 };
+    }
+
+    let lowerIndex = 0;
+    let upperIndex = 0;
+    lines.forEach((value, index) => {
+        if (value < lines[lowerIndex]) {
+            lowerIndex = index;
+        }
+        if (value > lines[upperIndex]) {
+            upperIndex = index;
+        }
+    });
+
+    return lowerIndex === upperIndex
+        ? { upperIndex }
+        : { lowerIndex, upperIndex };
+};
+
+export const buildEndemicThresholdMap = (
+    entries: ThresholdEntry[],
+    { upperIndex, lowerIndex }: ThresholdLineRoles,
+): Map<string, EndemicThresholdPoint[]> => {
+    const map = new Map<string, EndemicThresholdPoint[]>();
+
+    for (const entry of entries) {
+        const existing = map.get(entry.location) ?? [];
+        existing.push({
+            period: entry.period,
+            value: entry.values[upperIndex] ?? null,
+            ...(lowerIndex !== undefined && {
+                lowerValue: entry.values[lowerIndex] ?? null,
+            }),
+        });
+        map.set(entry.location, existing);
+    }
+
+    return map;
 };
 
 export type OutbreakIndicator = {
@@ -34,10 +118,6 @@ const PROBABILITY_TO_QUANTILE_KEY: Record<OutbreakProbability, QuantileKey> = {
 };
 
 const PROBABILITIES_DESCENDING: OutbreakProbability[] = [90, 75, 50, 25, 10];
-
-const isFiniteNumber = (value: unknown): value is number => (
-    typeof value === 'number' && Number.isFinite(value)
-);
 
 export const getQuantileKeyForOutbreakProbability = (
     probability: OutbreakProbability,
@@ -87,38 +167,26 @@ export const buildOutbreakIndicatorsForSeries = (
         return [];
     }
 
-    const thresholdByPeriod = new Map(
-        thresholds.map(t => [t.period, t.value]),
-    );
+    const thresholdByPeriod = buildThresholdValueByPeriod(thresholds);
 
-    return series.points
-        .filter((point) => {
-            const value = thresholdByPeriod.get(point.period);
-            return value !== undefined && value !== null;
-        })
-        .map((point) => {
-            const threshold = thresholdByPeriod.get(point.period) as number;
-            return {
-                orgUnitId: series.orgUnitId,
-                orgUnitName: series.orgUnitName,
-                period: point.period,
-                threshold,
-                supportedProbability: getSupportedOutbreakProbabilityBucket(
-                    point,
-                    threshold,
-                ),
-                outbreak: isOutbreakAtProbability(
-                    point,
-                    threshold,
-                    selectedProbability,
-                ),
-                value: isOutbreakAtProbability(
-                    point,
-                    threshold,
-                    selectedProbability,
-                ) ? '1' : '0',
-            };
-        });
+    return series.points.flatMap((point) => {
+        const threshold = thresholdByPeriod.get(canonicalizePeriodId(point.period));
+        if (!isFiniteNumber(threshold)) {
+            return [];
+        }
+
+        const outbreak = isOutbreakAtProbability(point, threshold, selectedProbability);
+
+        return [{
+            orgUnitId: series.orgUnitId,
+            orgUnitName: series.orgUnitName,
+            period: point.period,
+            threshold,
+            supportedProbability: getSupportedOutbreakProbabilityBucket(point, threshold),
+            outbreak,
+            value: outbreak ? '1' : '0',
+        }];
+    });
 };
 
 export const buildOutbreakIndicators = (
