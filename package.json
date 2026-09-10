@@ -19,6 +19,7 @@
         "test": "vitest run",
         "e2e": "playwright test --ui",
         "e2e:ci": "playwright test",
+        "e2e:chap-core": "./scripts/e2e-chap-core.sh",
         "changeset": "changeset",
         "release:publish": "node scripts/publish.js",
         "release:publish:dry": "node scripts/publish.js --dry-run"
