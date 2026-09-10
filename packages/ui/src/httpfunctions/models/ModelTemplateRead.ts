@@ -94,9 +94,17 @@ export type ModelTemplateRead = {
      */
     id: number;
     /**
-     * Template version string, typically a git tag or commit sha.
+     * Version label of this template.
      */
     version?: (string | null);
+    /**
+     * The revision that this template came from, for example a Git commit SHA.
+     */
+    sourceDigest?: (string | null);
+    /**
+     * True for the version that CHAP serves for this template name.
+     */
+    isLive?: boolean;
     /**
      * When True, the template is hidden from default pickers.
      */

@@ -69,6 +69,27 @@ const thresholdMap = (
 );
 
 describe('getThresholdTileViewModels', () => {
+    it('reports unavailable when only historical periods have thresholds', () => {
+        const candidate = series({ id: 'region-a', name: 'Region A' });
+        const { tiles, summary } = getThresholdTileViewModels([candidate], 75, new Map([
+            ['region-a', [{ period: '202301', value: 12 }]],
+        ]));
+
+        expect(tiles[0].status).toBe('unavailable');
+        expect(tiles[0].indicators).toEqual([]);
+        expect(tiles[0].endemicThresholds).toEqual([{ period: '202301', value: 12 }]);
+        expect(summary.unavailableThresholds).toBe(1);
+    });
+
+    it('preserves detected outbreaks when another forecast period has no threshold', () => {
+        const candidate = series({ id: 'region-a', name: 'Region A', highQuantile: 50 });
+        candidate.points.push(point('202402', noOutbreakQuantiles));
+        const { tiles } = getThresholdTileViewModels([candidate], 75, thresholdMap([['region-a', 17]]));
+
+        expect(tiles[0].status).toBe('outbreak');
+        expect(tiles[0].indicators.map(indicator => indicator.period)).toEqual(['202401']);
+    });
+
     it('preserves the incoming region order regardless of outbreak status', () => {
         const { tiles } = getThresholdTileViewModels([
             series({ id: 'no-outbreak', name: 'Beta', highQuantile: 5 }),
