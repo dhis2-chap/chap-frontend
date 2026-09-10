@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-09-10T18:18:03.105Z\n"
-"PO-Revision-Date: 2026-09-10T18:18:03.105Z\n"
+"POT-Creation-Date: 2026-09-10T18:29:20.720Z\n"
+"PO-Revision-Date: 2026-09-10T18:29:20.720Z\n"
 
 msgid "CHAP API token (optional)"
 msgstr "CHAP API token (optional)"
@@ -625,9 +625,6 @@ msgstr "There was an error"
 msgid "Error loading models"
 msgstr "Error loading models"
 
-msgid "An unknown error occurred"
-msgstr "An unknown error occurred"
-
 msgid "Cannot run prediction"
 msgstr "Cannot run prediction"
 
@@ -1084,16 +1081,6 @@ msgstr "Prediction setup created"
 
 msgid "Failed to create prediction setup"
 msgstr "Failed to create prediction setup"
-
-msgid "Not authorized to access the CHAP server"
-msgstr "Not authorized to access the CHAP server"
-
-msgid ""
-"The CHAP server rejected the API token. An administrator can check it under "
-"Settings, in the route configuration."
-msgstr ""
-"The CHAP server rejected the API token. An administrator can check it under "
-"Settings, in the route configuration."
 
 msgid "Are you sure you want to archive this model?"
 msgstr "Are you sure you want to archive this model?"
@@ -2079,6 +2066,15 @@ msgstr ""
 "expose sensitive data. If you want to restrict access, click the "
 "\"Sharing\" button and remove access for \"All users\"."
 
+msgid ""
+"A configured API token does not restrict this. The route sends the token on "
+"behalf of whoever calls it, so sharing is what decides who reaches your "
+"CHAP server."
+msgstr ""
+"A configured API token does not restrict this. The route sends the token on "
+"behalf of whoever calls it, so sharing is what decides who reaches your "
+"CHAP server."
+
 msgid "Sharing"
 msgstr "Sharing"
 
@@ -2324,6 +2320,22 @@ msgid ""
 msgstr ""
 "Saved model configurations that are ready to be used to generate "
 "predictions."
+
+msgid ""
+"The CHAP server refused the request. An administrator can check the API "
+"token under Settings, in the route configuration."
+msgstr ""
+"The CHAP server refused the request. An administrator can check the API "
+"token under Settings, in the route configuration."
+
+msgid "An unknown error occurred"
+msgstr "An unknown error occurred"
+
+msgid "Not authorized. Check the CHAP API token in settings."
+msgstr "Not authorized. Check the CHAP API token in settings."
+
+msgid "Not authorized to access the CHAP server"
+msgstr "Not authorized to access the CHAP server"
 
 msgid "{{stdMultiplier}} standard deviations above seasonal mean"
 msgstr "{{stdMultiplier}} standard deviations above seasonal mean"

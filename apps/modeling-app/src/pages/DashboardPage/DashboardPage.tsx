@@ -10,6 +10,7 @@ import { useBacktests } from '../../hooks/useBacktests';
 import { usePredictionSetups } from '../../hooks/usePredictionSetups';
 import { sortByCreatedDesc } from '../../utils/sortByCreated';
 import styles from './DashboardPage.module.css';
+import { getChapErrorLabel } from '../../utils/chapErrors';
 
 const MAX_WIDGET_ITEMS = 5;
 const EMPTY_VALUE = '-';
@@ -109,7 +110,7 @@ const RecentItemsWidget = <T extends { created?: string | null }>({
             )}
             {error && !isLoading && (
                 <div className={styles.errorState}>
-                    {errorMessage}
+                    {getChapErrorLabel(error, errorMessage)}
                 </div>
             )}
             {!isLoading && !error && latestItems.length === 0 && (
