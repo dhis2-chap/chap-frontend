@@ -6,6 +6,7 @@ import HighchartsReact from 'highcharts-react-official';
 import { PredictionOrgUnitSeries } from '../../../interfaces/Prediction';
 import { registerHighchartsModules } from '../../../utils/registerHighchartsModules';
 import { buildChartPeriods, buildPeriodIndexLookup } from '../../../utils/chartPeriods';
+import { getPeriodNameFromId } from '../../../utils/Time';
 import type { EndemicThresholdPoint, SupportedOutbreakProbabilityBucket } from '../../../utils/outbreakAlerts';
 import type { ZoomRange } from '../../evaluation/ResultPlot/ResultPlot';
 
@@ -219,7 +220,7 @@ const getChartOptions = (
             labels: {
                 enabled: true,
                 formatter: function () {
-                    return this.value.toString();
+                    return getPeriodNameFromId(this.value.toString(), 'short');
                 },
                 style: {
                     fontSize: '0.8rem',

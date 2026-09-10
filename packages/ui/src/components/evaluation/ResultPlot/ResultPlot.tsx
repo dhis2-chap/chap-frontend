@@ -129,7 +129,7 @@ const getOptions = ({
                 formatter: function (
                     this: Highcharts.AxisLabelsFormatterContextObject,
                 ): string {
-                    return getPeriodNameFromId(this.value.toString());
+                    return getPeriodNameFromId(this.value.toString(), 'short');
                 },
                 style: {
                     fontSize: '0.9rem',

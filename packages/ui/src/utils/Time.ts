@@ -1,4 +1,7 @@
-export const getPeriodNameFromId = (periodId: string | undefined) => {
+export const getPeriodNameFromId = (
+    periodId: string | undefined,
+    monthFormat: 'long' | 'short' = 'long',
+) => {
     // this should be moved to utils probably
     // or actually just use import { getPeriodNameFromId } from '@dhis2/multi-period-dimension'
     // console.log('periodId', periodId)
@@ -32,7 +35,7 @@ export const getPeriodNameFromId = (periodId: string | undefined) => {
             'December',
         ];
         const monthName = monthNames[parseInt(month) - 1];
-        return `${monthName} ${year}`;
+        return `${monthFormat === 'short' ? monthName?.slice(0, 3) : monthName} ${year}`;
     }
 
     return periodId;
