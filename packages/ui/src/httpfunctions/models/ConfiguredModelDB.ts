@@ -15,13 +15,21 @@ export type ConfiguredModelDB = {
      */
     additionalContinuousCovariates?: Array<string>;
     /**
-     * Canonical unique identifier; conventionally `<template_name>` or `<template_name>:<config_stub>`.
+     * Canonical identifier; conventionally `<template_name>` or `<template_name>:<config_stub>`. Unique per template version and configuration digest.
      */
     name: string;
     /**
      * Primary key.
      */
     id?: (number | null);
+    /**
+     * Digest of the configuration contents, see `compute_configuration_digest`.
+     */
+    configurationDigest?: string;
+    /**
+     * True for the configuration that CHAP serves for this name. Old ones stay available by id.
+     */
+    isLive?: boolean;
     /**
      * Foreign key to the parent `ModelTemplateDB`.
      */

@@ -1,5 +1,4 @@
 import type {
-    EndemicThresholdPoint,
     ModelSpecRead,
     PredictionInfo,
     PredictionOrgUnitSeries,
@@ -12,13 +11,9 @@ export type QuantileMappingFormProps = {
     predictionSetupId: number;
 };
 
-export type ThresholdMap = Map<string, EndemicThresholdPoint[]> | undefined;
-
 export type LoadedQuantileMappingFormProps = QuantileMappingFormProps & {
     predictionSetup: PredictionSetupReadWithPredictions;
     series: PredictionOrgUnitSeries[];
-    thresholdMap: ThresholdMap;
-    unavailableThresholdCount: number;
     canDeleteDataValues?: boolean;
     isDeleteAuthorityLoading: boolean;
 };
