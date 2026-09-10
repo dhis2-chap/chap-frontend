@@ -97,9 +97,7 @@ export const createModelExecutionFormSchema = (
             .min(1, { message: i18n.t('End period is required') }),
         orgUnits: z.array(orgUnitSchema).min(1, { message: i18n.t('At least one org unit is required') }),
         modelId: z.string().min(1, { message: i18n.t('Please select a model') }),
-        covariateMappings: z
-            .array(covariateMappingSchema)
-            .min(1, { message: i18n.t('Please map the covariates to valid data items') }),
+        covariateMappings: z.array(covariateMappingSchema),
         targetMapping: z.object(
             {
                 covariateName: z.string(),
