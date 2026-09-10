@@ -8,6 +8,8 @@ import { useModels } from '@/hooks/useModels';
 import { NewPredictionForm } from '@/components/NewPredictionForm';
 import { usePredictionSetup } from '@/hooks/usePredictionSetup';
 import { parseSupportedPeriodType } from '@/utils/periods';
+import { ChapErrorNotice } from '../../ChapErrorNotice';
+import { getChapErrorMessage, getChapErrorTitle } from '@/utils/chapErrors';
 
 type Props = {
     returnTo?: string;
@@ -72,9 +74,7 @@ export const NewPredictionContent = ({ returnTo }: Props) => {
     if (modelsError) {
         return (
             <div className={styles.errorContainer}>
-                <NoticeBox error title={i18n.t('Error loading models')}>
-                    {modelsError.message || i18n.t('An unknown error occurred')}
-                </NoticeBox>
+                <ChapErrorNotice error={modelsError} title={i18n.t('Error loading models')} />
             </div>
         );
     }
@@ -82,8 +82,10 @@ export const NewPredictionContent = ({ returnTo }: Props) => {
     if (setupError || !predictionSetup) {
         return (
             <div className={styles.errorContainer}>
-                <NoticeBox error title={i18n.t('Error loading prediction setup')}>
-                    {setupError?.message || i18n.t('Prediction setup not found.')}
+                <NoticeBox error title={getChapErrorTitle(setupError, i18n.t('Error loading prediction setup'))}>
+                    {setupError
+                        ? getChapErrorMessage(setupError)
+                        : i18n.t('Prediction setup not found.')}
                 </NoticeBox>
             </div>
         );

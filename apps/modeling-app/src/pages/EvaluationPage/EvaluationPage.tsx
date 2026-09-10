@@ -1,7 +1,4 @@
-import {
-    CircularLoader,
-    NoticeBox,
-} from '@dhis2/ui';
+import { CircularLoader } from '@dhis2/ui';
 import { Card } from '@dhis2-chap/ui';
 import i18n from '@dhis2/d2-i18n';
 import styles from './EvaluationPage.module.css';
@@ -9,6 +6,7 @@ import { useBacktests } from '../../hooks/useBacktests';
 import { BacktestsTable } from '../../components/BacktestsTable';
 import { PageHeader } from '../../features/common-features/PageHeader/PageHeader';
 import { useModels } from '../../hooks/useModels';
+import { ChapErrorNotice } from '../../components/ChapErrorNotice';
 
 export const EvaluationPage: React.FC = () => {
     const { backtests, error: backtestsError, isLoading: backtestsLoading } = useBacktests();
@@ -25,9 +23,10 @@ export const EvaluationPage: React.FC = () => {
     if (backtestsError || modelsError) {
         return (
             <div className={styles.errorContainer}>
-                <NoticeBox error title={i18n.t('Error loading evaluations')}>
-                    {backtestsError?.message || modelsError?.message || i18n.t('An unknown error occurred')}
-                </NoticeBox>
+                <ChapErrorNotice
+                    error={backtestsError ?? modelsError}
+                    title={i18n.t('Error loading evaluations')}
+                />
             </div>
         );
     }

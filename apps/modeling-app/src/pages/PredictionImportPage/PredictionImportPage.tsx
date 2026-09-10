@@ -10,6 +10,7 @@ import { usePredictionById } from '../../components/PageContent/PredictionDetail
 import { PageHeader } from '../../features/common-features/PageHeader/PageHeader';
 import { PredictionImport } from '../../components/PageContent/PredictionImport';
 import { useModels } from '../../hooks/useModels';
+import { ChapErrorNotice } from '../../components/ChapErrorNotice';
 
 export const PredictionImportPage: React.FC = () => {
     const { predictionId } = useParams();
@@ -32,9 +33,7 @@ export const PredictionImportPage: React.FC = () => {
     if (isError) {
         return (
             <div className={styles.errorContainer}>
-                <NoticeBox error title={i18n.t('Error loading prediction') as string}>
-                    {error?.message || (i18n.t('An unknown error occurred') as string)}
-                </NoticeBox>
+                <ChapErrorNotice error={error} title={i18n.t('Error loading prediction')} />
             </div>
         );
     }
