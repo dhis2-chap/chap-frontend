@@ -13,8 +13,13 @@ import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import styles from '../RouteSettings.module.css';
+import { ApiTokenField } from '../../../../components/ApiTokenField/ApiTokenField';
 
 const routeSchema = z.object({
+    apiToken: z.string().trim().refine(value => !/[\r\n]/.test(value), {
+        message: i18n.t('The token must not contain line breaks'),
+    }),
+    removeApiToken: z.boolean(),
     url: z.string()
         .url({ message: i18n.t('Invalid URL format') })
         .min(1, { message: i18n.t('URL is required') })
@@ -30,6 +35,7 @@ interface RouteFormProps {
     onSubmit: (data: RouteFormValues) => void;
     isLoading: boolean;
     initialUrl?: string;
+    tokenConfigured?: boolean;
     modalTitle: string;
     submitButtonText: string;
 }
@@ -39,25 +45,30 @@ export const RouteForm = ({
     onSubmit,
     isLoading,
     initialUrl = '',
+    tokenConfigured = false,
     modalTitle,
     submitButtonText,
 }: RouteFormProps) => {
     const {
         control,
         handleSubmit,
+        watch,
+        setValue,
         formState: { errors },
     } = useForm<RouteFormValues>({
         resolver: zodResolver(routeSchema),
         shouldFocusError: false,
         defaultValues: {
             url: initialUrl,
+            apiToken: '',
+            removeApiToken: false,
         },
     });
 
     const handleFormSubmit = (data: RouteFormValues) => onSubmit(data);
 
     return (
-        <Modal onClose={onClose} dataTest="route-form-modal">
+        <Modal onClose={isLoading ? undefined : onClose} dataTest="route-form-modal">
             <form onSubmit={handleSubmit(handleFormSubmit)}>
                 <ModalTitle>{modalTitle}</ModalTitle>
                 <ModalContent>
@@ -69,6 +80,7 @@ export const RouteForm = ({
                             <Input
                                 {...field}
                                 type="text"
+                                disabled={isLoading}
                                 error={!!errors.url}
                                 onChange={payload => field.onChange(payload.value)}
                                 dataTest="route-url-input"
@@ -76,6 +88,24 @@ export const RouteForm = ({
                         )}
                     />
                     {errors.url ? <p className={styles.mutedText}>{errors.url.message}</p> : null}
+                    <Controller
+                        name="apiToken"
+                        control={control}
+                        render={({ field }) => (
+                            <ApiTokenField
+                                value={field.value}
+                                onChange={field.onChange}
+                                configured={tokenConfigured}
+                                remove={watch('removeApiToken')}
+                                onRemoveChange={(remove) => {
+                                    setValue('removeApiToken', remove);
+                                    setValue('apiToken', '');
+                                }}
+                                disabled={isLoading}
+                                error={errors.apiToken?.message}
+                            />
+                        )}
+                    />
                 </ModalContent>
                 <ModalActions>
                     <ButtonStrip>

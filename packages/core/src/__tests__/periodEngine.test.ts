@@ -74,6 +74,75 @@ describe('periodEngine', () => {
         }).id).toBe('2024W1');
     });
 
+    it('reuses one fixed period instance for repeated lookups of the same id', () => {
+        const first = createFixedPeriodFromPeriodId({
+            ...gregoryOptions,
+            periodId: '202401',
+        });
+
+        expect(createFixedPeriodFromPeriodId({
+            ...gregoryOptions,
+            periodId: '202401',
+        })).toBe(first);
+    });
+
+    it('shares the cached instance between padded and unpadded week ids', () => {
+        const padded = createFixedPeriodFromPeriodId({
+            ...gregoryOptions,
+            periodId: '2024W01',
+        });
+
+        expect(createFixedPeriodFromPeriodId({
+            ...gregoryOptions,
+            periodId: '2024W1',
+        })).toBe(padded);
+    });
+
+    it('treats an omitted locale as the default locale when caching', () => {
+        const explicitLocale = createFixedPeriodFromPeriodId({
+            ...gregoryOptions,
+            periodId: '202402',
+        });
+
+        expect(createFixedPeriodFromPeriodId({
+            calendar: 'gregory',
+            periodId: '202402',
+        })).toBe(explicitLocale);
+    });
+
+    it('keeps separate fixed period instances per locale and calendar', () => {
+        const english = createFixedPeriodFromPeriodId({
+            ...gregoryOptions,
+            periodId: '202403',
+        });
+        const french = createFixedPeriodFromPeriodId({
+            calendar: 'gregory',
+            locale: 'fr',
+            periodId: '202403',
+        });
+        const iso = createFixedPeriodFromPeriodId({
+            calendar: 'iso8601',
+            locale: 'en',
+            periodId: '202403',
+        });
+
+        expect(french).not.toBe(english);
+        expect(french.displayName).not.toBe(english.displayName);
+        // Same dates as gregory, but a different calendar must not share
+        // the cached instance.
+        expect(iso).not.toBe(english);
+    });
+
+    it('does not cache failed lookups', () => {
+        const lookup = () => createFixedPeriodFromPeriodId({
+            ...gregoryOptions,
+            periodId: 'invalid',
+        });
+
+        expect(lookup).toThrow();
+        expect(lookup).toThrow();
+    });
+
     it('expands inclusive weekly ranges and emits canonical unpadded ids', () => {
         expect(getPeriodsInRange({
             ...gregoryOptions,

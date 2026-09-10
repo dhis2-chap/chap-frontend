@@ -2,12 +2,17 @@ import { useQuery } from '@tanstack/react-query';
 import { Route } from '../../../../hooks/useRoute';
 import { ApiError, SystemService } from '@dhis2-chap/ui';
 
+// Older CHAP versions omit this field. Keep the generated client unchanged.
+type ChapStatus = Awaited<ReturnType<typeof SystemService.systemInfoSystemInfoGet>> & {
+    auth_required?: boolean;
+};
+
 type Props = {
     route: Route | undefined;
 };
 
 export const useChapStatus = ({ route }: Props) => {
-    const { data: status, error, isLoading } = useQuery<Awaited<ReturnType<typeof SystemService.systemInfoSystemInfoGet>>, ApiError>({
+    const { data: status, error, isLoading } = useQuery<ChapStatus, ApiError>({
         queryKey: ['systemInfo', route?.url],
         queryFn: () => SystemService.systemInfoSystemInfoGet(),
         enabled: !!route,

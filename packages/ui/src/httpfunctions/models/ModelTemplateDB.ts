@@ -6,6 +6,8 @@ import type { AuthorAssessedStatus } from './AuthorAssessedStatus';
 import type { chap_core__model_spec__PeriodType } from './chap_core__model_spec__PeriodType';
 /**
  * Persisted model-template row. Flat composition of metadata + capability mixins.
+ *
+ * A version is immutable. A new version adds a row and the old row becomes not live.
  */
 export type ModelTemplateDB = {
     /**
@@ -85,7 +87,7 @@ export type ModelTemplateDB = {
      */
     documentationUrl?: (string | null);
     /**
-     * Canonical unique identifier of the template.
+     * Canonical identifier of the template, unique together with `version`.
      */
     name: string;
     /**
@@ -97,9 +99,17 @@ export type ModelTemplateDB = {
      */
     sourceUrl?: (string | null);
     /**
-     * Template version string, typically a git tag or commit sha.
+     * Template version label, typically a git tag or a seeding-config key.
      */
-    version?: (string | null);
+    version: string;
+    /**
+     * The revision that this version came from, for example a Git commit SHA. It cannot change.
+     */
+    sourceDigest?: (string | null);
+    /**
+     * True for the version that CHAP serves for this name. Old versions stay available by id.
+     */
+    isLive?: boolean;
     /**
      * When True, the template is hidden from default pickers but still resolvable.
      */
