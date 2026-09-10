@@ -22,23 +22,21 @@
 .row {
     padding-block: var(--spacers-dp8);
     border-block-end: 1px solid var(--colors-grey300);
-}
-
-.row:last-child {
-    border-block-end: none;
-}
-
-.rowMain {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
     gap: var(--spacers-dp12);
 }
 
+.row:last-child {
+    border-block-end: none;
+}
+
 .label {
     display: inline-flex;
     align-items: center;
     gap: var(--spacers-dp4);
+    line-height: 16px;
     font-size: 0.8rem;
     color: var(--colors-grey700);
     overflow-wrap: anywhere;
@@ -46,6 +44,9 @@
 
 .infoIcon {
     display: inline-flex;
+    align-items: center;
+    inline-size: 16px;
+    block-size: 16px;
 }
 
 .valueGroup {
@@ -70,11 +71,4 @@
     font-size: 0.7rem;
     color: var(--colors-grey600);
     font-variant-numeric: tabular-nums;
-}
-
-.description {
-    margin: var(--spacers-dp4) 0 0;
-    font-size: 0.75rem;
-    line-height: 1.5;
-    color: var(--colors-grey600);
 }

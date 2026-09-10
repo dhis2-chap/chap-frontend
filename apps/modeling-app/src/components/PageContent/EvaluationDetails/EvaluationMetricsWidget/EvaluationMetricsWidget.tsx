@@ -38,41 +38,35 @@ const sortMetricIds = (metricIds: string[]) =>
 type MetricRowProps = {
     metricId: string;
     score: number;
-    expanded: boolean;
 };
 
-const MetricRow = ({ metricId, score, expanded }: MetricRowProps) => {
+const MetricRow = ({ metricId, score }: MetricRowProps) => {
     const info = getMetricInfo(metricId);
     const label = info?.label ?? prettifyMetricId(metricId);
     const offTarget = info?.target !== undefined && Math.abs(score - info.target) > TARGET_TOLERANCE;
 
     return (
         <div className={styles.row}>
-            <div className={styles.rowMain}>
-                <span className={styles.label}>
-                    {label}
-                    {!expanded && info && (
-                        <Tooltip content={info.description}>
-                            <span className={styles.infoIcon}>
-                                <IconInfo16 color="var(--colors-grey600)" />
-                            </span>
-                        </Tooltip>
-                    )}
-                </span>
-                <span className={styles.valueGroup}>
-                    <span className={cx(styles.value, { [styles.offTarget]: offTarget })}>
-                        {Number.isFinite(score) ? formatScore(score, info?.unit) : i18n.t('Not available')}
-                    </span>
-                    {info?.target !== undefined && (
-                        <span className={styles.target}>
-                            {i18n.t('target {{target}}', { target: formatTarget(info.target) })}
+            <span className={styles.label}>
+                {label}
+                {info && (
+                    <Tooltip content={info.description}>
+                        <span className={styles.infoIcon}>
+                            <IconInfo16 color="var(--colors-grey600)" />
                         </span>
-                    )}
+                    </Tooltip>
+                )}
+            </span>
+            <span className={styles.valueGroup}>
+                <span className={cx(styles.value, { [styles.offTarget]: offTarget })}>
+                    {Number.isFinite(score) ? formatScore(score, info?.unit) : i18n.t('Not available')}
                 </span>
-            </div>
-            {expanded && info && (
-                <p className={styles.description}>{info.description}</p>
-            )}
+                {info?.target !== undefined && (
+                    <span className={styles.target}>
+                        {i18n.t('target {{target}}', { target: formatTarget(info.target) })}
+                    </span>
+                )}
+            </span>
         </div>
     );
 };
@@ -104,7 +98,6 @@ export const EvaluationMetricsWidget = ({ metrics }: Props) => {
                                     key={metricId}
                                     metricId={metricId}
                                     score={(metrics ?? {})[metricId]}
-                                    expanded={expanded}
                                 />
                             ))}
                         </div>
