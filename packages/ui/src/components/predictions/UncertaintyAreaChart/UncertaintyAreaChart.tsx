@@ -255,6 +255,9 @@ const getChartOptions = (
         xAxis: {
             type: 'category',
             categories: periods,
+            // A tile is too narrow for one label per period, so label a
+            // handful of evenly spaced periods instead.
+            tickInterval: isTile ? Math.ceil(periods.length / 4) : undefined,
             events: onAfterSetExtremes
                 ? { afterSetExtremes: onAfterSetExtremes }
                 : undefined,
@@ -263,6 +266,10 @@ const getChartOptions = (
                 formatter: function () {
                     return getPeriodNameFromId(this.value.toString(), 'short');
                 },
+                // Tiles keep their labels horizontal so they fit the small
+                // fixed bottom margin; auto-rotated labels are taller than
+                // the margin and get clipped.
+                rotation: isTile ? 0 : undefined,
                 style: {
                     fontSize: '0.8rem',
                 },
@@ -297,10 +304,7 @@ const getChartOptions = (
         chart: {
             ...disabledAnimationOptions.chart,
             height: chartHeight ?? (isTile ? 240 : (9 / 16 * 100) + '%'),
-            // Tiles let Highcharts reserve the bottom margin itself: the
-            // period labels are auto-rotated when they get too wide, and a
-            // fixed margin clips them.
-            marginBottom: isTile ? undefined : 125,
+            marginBottom: isTile ? 48 : 125,
             zooming: {
                 type: 'x',
                 ...(hideResetButton && {
