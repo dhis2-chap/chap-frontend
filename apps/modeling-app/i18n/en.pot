@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-09-10T18:35:40.667Z\n"
-"PO-Revision-Date: 2026-09-10T18:35:40.668Z\n"
+"POT-Creation-Date: 2026-09-10T18:51:20.329Z\n"
+"PO-Revision-Date: 2026-09-10T18:51:20.330Z\n"
 
 msgid "CHAP API token (optional)"
 msgstr "CHAP API token (optional)"
@@ -1843,6 +1843,9 @@ msgstr "Not required by this server"
 
 msgid "API token accepted"
 msgstr "API token accepted"
+
+msgid "Could not be verified"
+msgstr "Could not be verified"
 
 msgid "An error occurred while connecting to the CHAP server."
 msgstr "An error occurred while connecting to the CHAP server."

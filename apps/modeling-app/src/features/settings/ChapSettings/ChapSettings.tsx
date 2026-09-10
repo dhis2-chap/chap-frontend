@@ -28,12 +28,13 @@ const Wrapper = ({ children }: { children: React.ReactNode }) => {
 type AuthenticationSummary = {
     isAuthLoading: boolean;
     isUnauthorized: boolean;
+    isAuthenticated: boolean;
     authRequired: boolean;
     tokenConfigured: boolean;
 };
 
 /** The server being reachable says nothing about the API token, since `/system/info` is public. */
-const getAuthenticationSummary = ({ isAuthLoading, isUnauthorized, authRequired, tokenConfigured }: AuthenticationSummary) => {
+const getAuthenticationSummary = ({ isAuthLoading, isUnauthorized, isAuthenticated, authRequired, tokenConfigured }: AuthenticationSummary) => {
     if (isAuthLoading) {
         return { label: i18n.t('Checking...'), color: undefined };
     }
@@ -46,12 +47,16 @@ const getAuthenticationSummary = ({ isAuthLoading, isUnauthorized, authRequired,
     if (!authRequired) {
         return { label: i18n.t('Not required by this server'), color: undefined };
     }
-    return { label: i18n.t('API token accepted'), color: colors.green600 };
+    if (isAuthenticated) {
+        return { label: i18n.t('API token accepted'), color: colors.green600 };
+    }
+    /** The probe neither succeeded nor came back as 401, so the token is untested. */
+    return { label: i18n.t('Could not be verified'), color: undefined };
 };
 
 export const ChapSettings = ({ route }: Props) => {
     const { status, error, isLoading } = useChapStatus({ route });
-    const { isUnauthorized, isLoading: isAuthLoading } = useChapAuthStatus();
+    const { isUnauthorized, isAuthenticated, isLoading: isAuthLoading } = useChapAuthStatus();
 
     useEffect(() => {
         if (error) {
@@ -84,6 +89,7 @@ export const ChapSettings = ({ route }: Props) => {
     const authentication = getAuthenticationSummary({
         isAuthLoading,
         isUnauthorized,
+        isAuthenticated,
         authRequired: !!status.auth_required,
         tokenConfigured: hasRouteToken(route.headers),
     });
