@@ -5,8 +5,35 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-08-27T10:33:26.268Z\n"
-"PO-Revision-Date: 2026-08-27T10:33:26.269Z\n"
+"POT-Creation-Date: 2026-09-10T18:51:20.329Z\n"
+"PO-Revision-Date: 2026-09-10T18:51:20.330Z\n"
+
+msgid "CHAP API token (optional)"
+msgstr "CHAP API token (optional)"
+
+msgid ""
+"A token is configured. Leave blank to keep it, or enter a new token to "
+"replace it."
+msgstr ""
+"A token is configured. Leave blank to keep it, or enter a new token to "
+"replace it."
+
+msgid ""
+"Enter the token configured on your CHAP server. Leave blank if the server "
+"does not require one."
+msgstr ""
+"Enter the token configured on your CHAP server. Leave blank if the server "
+"does not require one."
+
+msgid ""
+"The token is saved in the DHIS2 route and sent to CHAP with each request. "
+"Users who can read the route configuration can access it."
+msgstr ""
+"The token is saved in the DHIS2 route and sent to CHAP with each request. "
+"Users who can read the route configuration can access it."
+
+msgid "Remove saved API token"
+msgstr "Remove saved API token"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -558,9 +585,6 @@ msgstr "At least one org unit is required"
 msgid "Please select a model"
 msgstr "Please select a model"
 
-msgid "Please map the covariates to valid data items"
-msgstr "Please map the covariates to valid data items"
-
 msgid "Please map the target to a valid data item"
 msgstr "Please map the target to a valid data item"
 
@@ -600,9 +624,6 @@ msgstr "There was an error"
 
 msgid "Error loading models"
 msgstr "Error loading models"
-
-msgid "An unknown error occurred"
-msgstr "An unknown error occurred"
 
 msgid "Cannot run prediction"
 msgstr "Cannot run prediction"
@@ -1364,20 +1385,30 @@ msgid "Some outbreak indicators will be skipped"
 msgstr "Some outbreak indicators will be skipped"
 
 msgid ""
-"Outbreak indicators will be skipped for one region due to insufficient "
-"disease data."
+"One region has forecast periods without thresholds. Only outbreak "
+"indicators for those periods will be skipped; indicators for periods with "
+"thresholds will still be imported."
 msgid_plural ""
-"Outbreak indicators will be skipped for one region due to insufficient "
-"disease data."
+"One region has forecast periods without thresholds. Only outbreak "
+"indicators for those periods will be skipped; indicators for periods with "
+"thresholds will still be imported."
 msgstr[0] ""
-"Outbreak indicators will be skipped for one region due to insufficient "
-"disease data."
+"One region has forecast periods without thresholds. Only outbreak "
+"indicators for those periods will be skipped; indicators for periods with "
+"thresholds will still be imported."
 msgstr[1] ""
-"Outbreak indicators will be skipped for {{count}} regions due to "
-"insufficient disease data."
+"{{count}} regions have forecast periods without thresholds. Only outbreak "
+"indicators for those periods will be skipped; indicators for periods with "
+"thresholds will still be imported."
 
 msgid "Minimum outbreak probability"
 msgstr "Minimum outbreak probability"
+
+msgid "Threshold strategy"
+msgstr "Threshold strategy"
+
+msgid "Threshold parameters"
+msgstr "Threshold parameters"
 
 msgid "Adjust"
 msgstr "Adjust"
@@ -1564,6 +1595,52 @@ msgstr "There are running jobs in the background"
 
 msgid "Running jobs"
 msgstr "Running jobs"
+
+msgid "Retry"
+msgstr "Retry"
+
+msgid "Waiting for connection"
+msgstr "Waiting for connection"
+
+msgid "Threshold calculation will resume when your connection returns."
+msgstr "Threshold calculation will resume when your connection returns."
+
+msgid "Calculating thresholds..."
+msgstr "Calculating thresholds..."
+
+msgid "Unable to calculate thresholds"
+msgstr "Unable to calculate thresholds"
+
+msgid "There was a problem calculating thresholds for this prediction run."
+msgstr "There was a problem calculating thresholds for this prediction run."
+
+msgid "Review the threshold parameters and apply your changes."
+msgstr "Review the threshold parameters and apply your changes."
+
+msgid "Unable to load threshold strategies"
+msgstr "Unable to load threshold strategies"
+
+msgid "The strategy options could not be loaded, so the strategy cannot be changed."
+msgstr "The strategy options could not be loaded, so the strategy cannot be changed."
+
+msgid "Standard deviations above mean"
+msgstr "Standard deviations above mean"
+
+msgid "Lower percentile (%)"
+msgstr "Lower percentile (%)"
+
+msgid "Upper percentile (%)"
+msgstr "Upper percentile (%)"
+
+msgid "Baseline years"
+msgstr "Baseline years"
+
+msgid ""
+"Most recent complete years in the dataset. Leave empty to use all available "
+"history."
+msgstr ""
+"Most recent complete years in the dataset. Leave empty to use all available "
+"history."
 
 msgid "Outbreak"
 msgstr "Outbreak"
@@ -1752,6 +1829,24 @@ msgstr "No evaluations found"
 msgid "CHAP settings"
 msgstr "CHAP settings"
 
+msgid "Checking..."
+msgstr "Checking..."
+
+msgid "API token rejected"
+msgstr "API token rejected"
+
+msgid "No API token configured"
+msgstr "No API token configured"
+
+msgid "Not required by this server"
+msgstr "Not required by this server"
+
+msgid "API token accepted"
+msgstr "API token accepted"
+
+msgid "Could not be verified"
+msgstr "Could not be verified"
+
 msgid "An error occurred while connecting to the CHAP server."
 msgstr "An error occurred while connecting to the CHAP server."
 
@@ -1774,18 +1869,46 @@ msgstr "Python Version"
 msgid "Connected"
 msgstr "Connected"
 
-msgid "Your server might not be secure"
-msgstr "Your server might not be secure"
+msgid "Authentication"
+msgstr "Authentication"
+
+msgid "The CHAP server rejected the API token"
+msgstr "The CHAP server rejected the API token"
 
 msgid ""
-"CHAP currently does not have it's own authentication service. Make sure to "
-"secure it by blocking public access on your server firewall."
+"The server is reachable, but requests are refused. Check the token for "
+"typos, then edit the route settings to enter the token configured on your "
+"CHAP server."
 msgstr ""
-"CHAP currently does not have it's own authentication service. Make sure to "
-"secure it by blocking public access on your server firewall."
+"The server is reachable, but requests are refused. Check the token for "
+"typos, then edit the route settings to enter the token configured on your "
+"CHAP server."
 
-msgid "Your server is not secure"
-msgstr "Your server is not secure"
+msgid "No API token is configured"
+msgstr "No API token is configured"
+
+msgid ""
+"The server is reachable, but it refuses requests without a token. Edit the "
+"route settings to add the token configured on your CHAP server."
+msgstr ""
+"The server is reachable, but it refuses requests without a token. Edit the "
+"route settings to add the token configured on your CHAP server."
+
+msgid "CHAP requires an API token"
+msgstr "CHAP requires an API token"
+
+msgid "Edit the route settings to add the token configured on your CHAP server."
+msgstr "Edit the route settings to add the token configured on your CHAP server."
+
+msgid "Restrict access to your CHAP server"
+msgstr "Restrict access to your CHAP server"
+
+msgid ""
+"This server does not report API token protection. Keep it on a private "
+"network or restrict access with a firewall."
+msgstr ""
+"This server does not report API token protection. Keep it on a private "
+"network or restrict access with a firewall."
 
 msgid "Confirm"
 msgstr "Confirm"
@@ -1952,6 +2075,9 @@ msgstr "Sharing"
 msgid "Edit"
 msgstr "Edit"
 
+msgid "The token must not contain line breaks"
+msgstr "The token must not contain line breaks"
+
 msgid "Invalid URL format"
 msgstr "Invalid URL format"
 
@@ -1988,6 +2114,15 @@ msgstr "Code"
 
 msgid "URL"
 msgstr "URL"
+
+msgid "API token"
+msgstr "API token"
+
+msgid "Configured"
+msgstr "Configured"
+
+msgid "Not configured"
+msgstr "Not configured"
 
 msgid "Authorities"
 msgstr "Authorities"
@@ -2180,6 +2315,53 @@ msgstr ""
 "Saved model configurations that are ready to be used to generate "
 "predictions."
 
+msgid ""
+"The CHAP server refused the request. An administrator can check the API "
+"token under Settings, in the route configuration."
+msgstr ""
+"The CHAP server refused the request. An administrator can check the API "
+"token under Settings, in the route configuration."
+
+msgid "An unknown error occurred"
+msgstr "An unknown error occurred"
+
+msgid "Not authorized. Check the CHAP API token in settings."
+msgstr "Not authorized. Check the CHAP API token in settings."
+
+msgid "Not authorized to access the CHAP server"
+msgstr "Not authorized to access the CHAP server"
+
+msgid "{{stdMultiplier}} standard deviations above seasonal mean"
+msgstr "{{stdMultiplier}} standard deviations above seasonal mean"
+
+msgid "{{lower}}-{{upper}} percentile, all-history baseline"
+msgstr "{{lower}}-{{upper}} percentile, all-history baseline"
+
+msgid "{{lower}}-{{upper}} percentile, {{count}}-year baseline"
+msgid_plural "{{lower}}-{{upper}} percentile, {{count}}-year baseline"
+msgstr[0] "{{lower}}-{{upper}} percentile, {{count}}-year baseline"
+msgstr[1] "{{lower}}-{{upper}} percentile, {{count}}-year baseline"
+
+msgid "Enter a percentage between 0 and 100"
+msgstr "Enter a percentage between 0 and 100"
+
+msgid "Enter a number of 0 or more"
+msgstr "Enter a number of 0 or more"
+
+msgid "Must be lower than the upper percentile"
+msgstr "Must be lower than the upper percentile"
+
+msgid "Enter a whole number of 1 or more, or leave empty to use all history"
+msgstr "Enter a whole number of 1 or more, or leave empty to use all history"
+
 msgctxt ") instead."
 msgid "Spaces are not allowed. Use dashes (-) or underscores ("
 msgstr "Spaces are not allowed. Use dashes (-) or underscores (_) instead."
+
+msgctxt "Application title"
+msgid "__MANIFEST_APP_TITLE"
+msgstr "Modeling"
+
+msgctxt "Application description"
+msgid "__MANIFEST_APP_DESCRIPTION"
+msgstr ""

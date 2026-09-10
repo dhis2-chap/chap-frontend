@@ -1,0 +1,9 @@
+.container {
+    margin-block-start: var(--spacers-dp16);
+}
+
+.help {
+    color: var(--colors-grey700);
+    font-size: 14px;
+    margin-block: var(--spacers-dp8) var(--spacers-dp16);
+}

@@ -4,11 +4,14 @@ import i18n from '@dhis2/d2-i18n';
 import { useAlert } from '@dhis2/app-service-alerts';
 import { CHAP_MODELING_APP_AUTHORITY } from '../../../../utils/global-authorities';
 import type { Route } from '../../../../hooks/useRoute';
+import { updateRouteToken } from '../../../../components/ApiTokenField/routeToken';
 import { RECOMMENDED_TIMEOUT_SECONDS } from '../constants';
 
 type SaveRouteVariables = {
     url: string;
     id?: string;
+    apiToken?: string;
+    removeApiToken?: boolean;
 };
 
 type UseSaveRouteOptions = {
@@ -31,7 +34,7 @@ export const useSaveRoute = ({ onSuccess, onError }: UseSaveRouteOptions = {}) =
 
     const mutation = useMutation<unknown, Error, SaveRouteVariables>(
         async (variables: SaveRouteVariables) => {
-            const { id, url } = variables;
+            const { id, url, apiToken, removeApiToken } = variables;
 
             if (id) {
                 const queryKey = ['routes', 'chap'];
@@ -54,6 +57,7 @@ export const useSaveRoute = ({ onSuccess, onError }: UseSaveRouteOptions = {}) =
                     data: {
                         ...(existingRoute || {}),
                         url: url,
+                        headers: updateRouteToken(existingRoute.headers, apiToken, removeApiToken),
                         responseTimeoutSeconds: existingRoute.responseTimeoutSeconds ?? RECOMMENDED_TIMEOUT_SECONDS,
                     },
                 };
@@ -67,9 +71,9 @@ export const useSaveRoute = ({ onSuccess, onError }: UseSaveRouteOptions = {}) =
                         code: 'chap',
                         url: url,
                         authorities: [CHAP_MODELING_APP_AUTHORITY],
-                        headers: {
+                        headers: updateRouteToken({
                             'Content-Type': 'application/json',
-                        },
+                        }, apiToken),
                         responseTimeoutSeconds: RECOMMENDED_TIMEOUT_SECONDS,
                     },
                 };
@@ -79,12 +83,11 @@ export const useSaveRoute = ({ onSuccess, onError }: UseSaveRouteOptions = {}) =
         {
             onSuccess: () => {
                 showSuccessAlert();
-                queryClient.invalidateQueries(['routes']);
+                queryClient.invalidateQueries();
                 onSuccess?.();
             },
             onError: (error: unknown) => {
                 showErrorAlert();
-                console.error('Error saving route:', error);
                 onError?.(error);
             },
         },

@@ -70,6 +70,14 @@ export type ModelSpecRead = {
      */
     id: number;
     /**
+     * Version label of the model template. It cannot change.
+     */
+    version?: (string | null);
+    /**
+     * The revision that the model template came from.
+     */
+    sourceDigest?: (string | null);
+    /**
      * Covariate feature types this model supports.
      */
     covariates: Array<FeatureType>;
