@@ -290,9 +290,6 @@ const getChartOptions = (
             enabled: !isTile,
             text: 'CHAP',
         },
-        exporting: {
-            enabled: !isTile,
-        },
         legend: {
             enabled: !isTile,
         },
