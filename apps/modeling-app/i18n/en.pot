@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-09-10T18:51:20.329Z\n"
-"PO-Revision-Date: 2026-09-10T18:51:20.330Z\n"
+"POT-Creation-Date: 2026-09-10T19:11:09.601Z\n"
+"PO-Revision-Date: 2026-09-10T19:11:09.601Z\n"
 
 msgid "CHAP API token (optional)"
 msgstr "CHAP API token (optional)"
@@ -34,6 +34,9 @@ msgstr ""
 
 msgid "Remove saved API token"
 msgstr "Remove saved API token"
+
+msgid "View"
+msgstr "View"
 
 msgid "Create new..."
 msgstr "Create new..."
@@ -799,9 +802,6 @@ msgid ""
 msgstr ""
 "This will permanently delete the prediction run from CHAP. It will not "
 "remove any values previously imported into DHIS2."
-
-msgid "View"
-msgstr "View"
 
 msgid "Import"
 msgstr "Import"
