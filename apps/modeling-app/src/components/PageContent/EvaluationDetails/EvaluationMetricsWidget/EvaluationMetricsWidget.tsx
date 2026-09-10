@@ -1,60 +1,120 @@
+import { useState } from 'react';
+import cx from 'classnames';
 import i18n from '@dhis2/d2-i18n';
 import { Widget } from '@dhis2-chap/ui';
+import { Button, IconInfo16, Tooltip } from '@dhis2/ui';
 import {
-    DataTable,
-    DataTableBody,
-    DataTableCell,
-    DataTableColumnHeader,
-    DataTableHead,
-    DataTableRow,
-} from '@dhis2/ui';
+    HEADLINE_METRIC_IDS,
+    HIDDEN_METRIC_IDS,
+    TARGET_TOLERANCE,
+    getMetricInfo,
+    prettifyMetricId,
+} from './metricCatalog';
 import styles from './EvaluationMetricsWidget.module.css';
 
 type Props = {
     metrics?: Record<string, number> | null;
 };
 
+const formatScore = (score: number, unit?: string) => {
+    const formatted = score.toLocaleString(undefined, {
+        maximumFractionDigits: Math.abs(score) >= 1 ? 2 : 3,
+    });
+    return unit ? `${formatted} ${unit}` : formatted;
+};
+
+const formatTarget = (target: number) => target.toLocaleString(undefined, { maximumFractionDigits: 2 });
+
+const sortMetricIds = (metricIds: string[]) =>
+    [...metricIds].sort((a, b) => {
+        const indexA = HEADLINE_METRIC_IDS.indexOf(a);
+        const indexB = HEADLINE_METRIC_IDS.indexOf(b);
+        if (indexA !== -1 || indexB !== -1) {
+            return (indexA === -1 ? Infinity : indexA) - (indexB === -1 ? Infinity : indexB);
+        }
+        return a.localeCompare(b);
+    });
+
+type MetricRowProps = {
+    metricId: string;
+    score: number;
+    expanded: boolean;
+};
+
+const MetricRow = ({ metricId, score, expanded }: MetricRowProps) => {
+    const info = getMetricInfo(metricId);
+    const label = info?.label ?? prettifyMetricId(metricId);
+    const offTarget = info?.target !== undefined && Math.abs(score - info.target) > TARGET_TOLERANCE;
+
+    return (
+        <div className={styles.row}>
+            <div className={styles.rowMain}>
+                <span className={styles.label}>
+                    {label}
+                    {!expanded && info && (
+                        <Tooltip content={info.description}>
+                            <span className={styles.infoIcon}>
+                                <IconInfo16 color="var(--colors-grey600)" />
+                            </span>
+                        </Tooltip>
+                    )}
+                </span>
+                <span className={styles.valueGroup}>
+                    <span className={cx(styles.value, { [styles.offTarget]: offTarget })}>
+                        {Number.isFinite(score) ? formatScore(score, info?.unit) : i18n.t('Not available')}
+                    </span>
+                    {info?.target !== undefined && (
+                        <span className={styles.target}>
+                            {i18n.t('target {{target}}', { target: formatTarget(info.target) })}
+                        </span>
+                    )}
+                </span>
+            </div>
+            {expanded && info && (
+                <p className={styles.description}>{info.description}</p>
+            )}
+        </div>
+    );
+};
+
 export const EvaluationMetricsWidget = ({ metrics }: Props) => {
-    const entries = Object.entries(metrics ?? {});
+    const [expanded, setExpanded] = useState(false);
+
+    const visibleIds = sortMetricIds(
+        Object.keys(metrics ?? {}).filter(metricId => !HIDDEN_METRIC_IDS.includes(metricId)),
+    );
+    const shownIds = expanded ? visibleIds : visibleIds.filter(metricId => HEADLINE_METRIC_IDS.includes(metricId));
+    const hiddenCount = visibleIds.length - shownIds.length;
 
     return (
         <Widget header={i18n.t('Evaluation metrics')} noncollapsible>
             <div className={styles.content}>
-                {entries.length === 0 ? (
-                    <p className={styles.description}>
+                {visibleIds.length === 0 ? (
+                    <p className={styles.intro}>
                         {i18n.t('No metrics available for this evaluation.')}
                     </p>
                 ) : (
                     <>
-                        <p className={styles.description}>
+                        <p className={styles.intro}>
                             {i18n.t('Scores aggregated across all evaluation splits and organisation units.')}
                         </p>
-                        <DataTable>
-                            <DataTableHead>
-                                <DataTableRow>
-                                    <DataTableColumnHeader scope="col">
-                                        {i18n.t('Metric')}
-                                    </DataTableColumnHeader>
-                                    <DataTableColumnHeader scope="col" align="right">
-                                        {i18n.t('Score')}
-                                    </DataTableColumnHeader>
-                                </DataTableRow>
-                            </DataTableHead>
-                            <DataTableBody>
-                                {entries.map(([metric, score]) => (
-                                    <DataTableRow key={metric}>
-                                        <DataTableCell tag="th" scope="row" className={styles.metric}>
-                                            {metric}
-                                        </DataTableCell>
-                                        <DataTableCell align="right">
-                                            {Number.isFinite(score)
-                                                ? score.toLocaleString(undefined, { maximumSignificantDigits: 4 })
-                                                : i18n.t('Not available')}
-                                        </DataTableCell>
-                                    </DataTableRow>
-                                ))}
-                            </DataTableBody>
-                        </DataTable>
+                        <div className={styles.rows}>
+                            {shownIds.map(metricId => (
+                                <MetricRow
+                                    key={metricId}
+                                    metricId={metricId}
+                                    score={(metrics ?? {})[metricId]}
+                                    expanded={expanded}
+                                />
+                            ))}
+                        </div>
+                        {(expanded || hiddenCount > 0) && (
+                            <Button small secondary onClick={() => setExpanded(!expanded)}>
+                                {expanded
+                                    ? i18n.t('Show fewer metrics')
+                                    : i18n.t('Show all {{count}} metrics', { count: visibleIds.length })}
+                            </Button>
+                        )}
                     </>
                 )}
             </div>
