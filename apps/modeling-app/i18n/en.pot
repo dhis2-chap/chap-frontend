@@ -1904,9 +1904,6 @@ msgstr "Turn on to access experimental features in the app"
 msgid "Available features"
 msgstr "Available features"
 
-msgid "Show evaluation visualization plots in the evaluation dashboard"
-msgstr "Show evaluation visualization plots in the evaluation dashboard"
-
 msgid "Show scheduling information in the prediction setup dashboard"
 msgstr "Show scheduling information in the prediction setup dashboard"
 

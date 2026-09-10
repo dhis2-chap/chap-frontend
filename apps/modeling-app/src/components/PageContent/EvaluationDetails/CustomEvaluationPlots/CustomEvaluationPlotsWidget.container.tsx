@@ -138,6 +138,7 @@ export const CustomEvaluationPlotsWidget = ({ evaluationId }: Props) => {
                 <div className={styles.controlsRow}>
                     <div className={styles.singleSelectContainer}>
                         <SingleSelect
+                            dataTest="evaluation-plot-select"
                             dense
                             selected={selectedVisualizationId}
                             placeholder={i18n.t('Select visualization')}

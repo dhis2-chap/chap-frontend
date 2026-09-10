@@ -144,7 +144,7 @@ export const CustomEvaluationPlotsWidgetComponent = ({
                 ? {
                         ...(filterLocation && { location: filterLocation }),
                         ...(filterSplitPeriod && { split_period: filterSplitPeriod }),
-                        ...(filterHorizonPeriod && { horizon_period: filterHorizonPeriod }),
+                        ...(filterHorizonPeriod && { horizon_distance: Number(filterHorizonPeriod) }),
                     }
                 : undefined,
         [hasFilters, filterLocation, filterSplitPeriod, filterHorizonPeriod],

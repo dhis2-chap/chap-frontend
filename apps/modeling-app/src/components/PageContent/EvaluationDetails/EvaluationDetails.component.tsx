@@ -6,7 +6,6 @@ import styles from './EvaluationDetails.module.css';
 import { useBacktestById } from '@/hooks/useBacktestById';
 import { CircularLoader, NoticeBox } from '@dhis2/ui';
 import { EvaluationSummaryWidget } from './EvaluationSummaryWidget';
-import { useExperimentalFeature, FEATURES } from '@/features/settings/Experimental';
 
 type Props = {
     evaluationId: number;
@@ -14,7 +13,6 @@ type Props = {
 
 export const EvaluationDetailsComponent = ({ evaluationId }: Props) => {
     const { backtest, isLoading: isBacktestLoading, error: backtestError } = useBacktestById(evaluationId);
-    const { enabled: isEvaluationPlotsEnabled } = useExperimentalFeature(FEATURES.EVALUATION_PLOTS);
     const predictionSetupId = backtest?.predictionSetupId ?? undefined;
 
     if (isBacktestLoading) {
@@ -56,11 +54,9 @@ export const EvaluationDetailsComponent = ({ evaluationId }: Props) => {
                 <ModelExecutionResultWidget
                     backtest={backtest}
                 />
-                {isEvaluationPlotsEnabled && (
-                    <CustomEvaluationPlotsWidget
-                        evaluationId={evaluationId}
-                    />
-                )}
+                <CustomEvaluationPlotsWidget
+                    evaluationId={evaluationId}
+                />
             </div>
             <div className={styles.rightColumn}>
                 <QuickActionsWidget

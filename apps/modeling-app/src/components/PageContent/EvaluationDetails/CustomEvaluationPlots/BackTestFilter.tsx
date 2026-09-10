@@ -88,6 +88,7 @@ export const BackTestFilter = ({
                     dense
                     clearable
                     clearText={i18n.t('Clear')}
+                    dataTest="evaluation-plot-horizon-select"
                     placeholder={i18n.t('Select horizon period')}
                     selected={filterHorizonPeriod}
                     onChange={e => setFilterHorizonPeriod(e.selected || undefined)}

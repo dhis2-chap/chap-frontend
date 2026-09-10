@@ -4,7 +4,7 @@ import { ApiError, VisualizationsService } from '@dhis2-chap/ui';
 export type IsolatedPlotsRequestBody = {
     location?: string;
     split_period?: string;
-    horizon_period?: string;
+    horizon_distance?: number;
 };
 
 type UseIsolatedPlotsParams = {

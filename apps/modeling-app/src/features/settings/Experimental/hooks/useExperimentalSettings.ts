@@ -22,7 +22,6 @@ export const QUERY_KEY = ['dataStore', 'modeling', 'experimental'];
 export const DATASTORE_RESOURCE = 'dataStore/modeling/experimental';
 
 export const FEATURES = {
-    EVALUATION_PLOTS: 'evaluationPlots',
     SCHEDULING: 'scheduling',
 } as const;
 
