@@ -17,9 +17,10 @@ type Props = {
 };
 
 const formatScore = (score: number, unit?: string) => {
-    const formatted = score.toLocaleString(undefined, {
-        maximumFractionDigits: Math.abs(score) >= 1 ? 2 : 3,
-    });
+    /* Scores below 1 keep significant digits so small errors stay distinguishable instead of rounding to zero. */
+    const formatted = Math.abs(score) >= 1
+        ? score.toLocaleString(undefined, { maximumFractionDigits: 2 })
+        : score.toLocaleString(undefined, { maximumSignificantDigits: 3 });
     return unit ? `${formatted} ${unit}` : formatted;
 };
 
