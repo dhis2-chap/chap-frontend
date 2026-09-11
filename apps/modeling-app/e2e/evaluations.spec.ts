@@ -59,9 +59,7 @@ test('renders predicted vs actual for the selected horizon without experimental 
         // The plot inner-joins forecasts with observations, so it holds exactly the
         // org unit / period pairs this horizon forecast that also have an actual value.
         // Comparing the whole set catches a dropped horizon filter, which mixes in pairs
-        // that only other horizons forecast. `horizon_distance` is deliberately not
-        // asserted per point: chap-core below 2.2.0 compiles specs through vegafusion,
-        // which prunes columns no encoding references.
+        // that only other horizons forecast.
         const expectedEntries = entries.filter(entry =>
             horizonOf(entry) === horizon && observed.has(`${entry.orgUnit} ${entry.period}`));
         const medians = new Map(expectedEntries.map(entry => [`${entry.orgUnit} ${entry.period}`, entry.value]));
