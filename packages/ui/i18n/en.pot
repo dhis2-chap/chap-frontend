@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-05-29T23:42:08.256Z\n"
-"PO-Revision-Date: 2026-05-29T23:42:08.257Z\n"
+"POT-Creation-Date: 2026-09-01T18:35:32.057Z\n"
+"PO-Revision-Date: 2026-09-01T18:35:32.058Z\n"
 
 msgid "Median prediction"
 msgstr "Median prediction"
@@ -40,6 +40,9 @@ msgstr "Quantile 0.9 (high)"
 
 msgid "Actual Cases"
 msgstr "Actual Cases"
+
+msgid "Endemic channel"
+msgstr "Endemic channel"
 
 msgid "Endemic threshold"
 msgstr "Endemic threshold"

@@ -1,9 +1,10 @@
 import i18n from '@dhis2/d2-i18n';
-import { CircularLoader, NoticeBox } from '@dhis2/ui';
+import { CircularLoader } from '@dhis2/ui';
 import { NewEvaluationFormComponent } from './NewEvaluationForm.component';
 import { useInitialFormState } from '../../pages/NewEvaluationPage/hooks/useInitialFormState';
 import styles from './NewEvaluationForm.module.css';
 import { useModels } from '../../hooks/useModels';
+import { ChapErrorNotice } from '../ChapErrorNotice';
 
 export const NewEvaluationForm = () => {
     const { models, isLoading: isModelsLoading, error: modelsError } = useModels();
@@ -20,9 +21,7 @@ export const NewEvaluationForm = () => {
     if (modelsError) {
         return (
             <div className={styles.errorContainer}>
-                <NoticeBox error title={i18n.t('Error loading models')}>
-                    {modelsError.message || i18n.t('An unknown error occurred')}
-                </NoticeBox>
+                <ChapErrorNotice error={modelsError} title={i18n.t('Error loading models')} />
             </div>
         );
     }

@@ -8,6 +8,7 @@ import {
     IconDuplicate16,
     IconVisualizationLineMulti16,
     IconDownload16,
+    IconView16,
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { OverflowButton } from '@dhis2-chap/ui';
@@ -57,6 +58,15 @@ export const BacktestActionsMenu = ({
                 component={(
                     <FlyoutMenu dense>
                         <MenuItem
+                            label={i18n.t('View')}
+                            dataTest="backtest-overflow-view"
+                            icon={<IconView16 />}
+                            onClick={() => {
+                                navigate(`/evaluate/${id}`);
+                                setFlyoutMenuIsOpen(false);
+                            }}
+                        />
+                        <MenuItem
                             label={i18n.t('Create new...')}
                             dataTest="backtest-overflow-copy"
                             icon={<IconDuplicate16 />}
@@ -67,7 +77,7 @@ export const BacktestActionsMenu = ({
                         />
                         <MenuItem
                             label={i18n.t('Compare')}
-                            dataTest="backtest-overflow-view"
+                            dataTest="backtest-overflow-compare"
                             icon={<IconVisualizationLineMulti16 />}
                             onClick={() => {
                                 handleCompare();

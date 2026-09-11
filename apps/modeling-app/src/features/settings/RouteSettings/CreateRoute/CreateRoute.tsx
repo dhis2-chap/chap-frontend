@@ -17,7 +17,7 @@ export const CreateRoute = () => {
     });
 
     const handleSubmit = (data: RouteFormValues) => {
-        saveRoute({ url: data.url });
+        saveRoute(data);
     };
 
     const handleOpenDialog = () => {

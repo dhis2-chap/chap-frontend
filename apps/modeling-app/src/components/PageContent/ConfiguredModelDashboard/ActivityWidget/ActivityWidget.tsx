@@ -42,6 +42,7 @@ import {
     type JobActivityDay,
 } from './ActivityWidget.utils';
 import styles from './ActivityWidget.module.css';
+import { getChapErrorLabel } from '../../../../utils/chapErrors';
 
 const EMPTY_VALUE = '-';
 const MAX_VISIBLE_ROWS = 5;
@@ -492,7 +493,7 @@ export const ActivityWidget = ({
                 )}
                 {hasError && !isLoading && (
                     <div className={styles.errorState}>
-                        {i18n.t('Error loading jobs')}
+                        {getChapErrorLabel(error, i18n.t('Error loading jobs'))}
                     </div>
                 )}
                 {!isLoading && !hasError && !hasValidPredictionSetupId && (

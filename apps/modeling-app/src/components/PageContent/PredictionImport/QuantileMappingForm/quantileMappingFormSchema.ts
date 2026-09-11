@@ -4,16 +4,20 @@ import {
     type OutbreakProbability,
 } from '@dhis2-chap/ui';
 import * as z from 'zod';
+import { thresholdParamsSchema } from '@/utils/thresholdStrategyParams';
 
 const outbreakProbabilitySchema = z.custom<OutbreakProbability>(
     value => OUTBREAK_PROBABILITY_OPTIONS.includes(value as OutbreakProbability),
     { message: i18n.t('Alert probability is required') },
 );
 
+// Each field falls back to undefined on its own, so one stale or invalid
+// entry in the history state cannot discard the other, valid ones.
 export const importLocationStateSchema = z
     .object({
-        alertProbability: outbreakProbabilitySchema.optional(),
-        useAlertOutputs: z.boolean().optional(),
+        alertProbability: outbreakProbabilitySchema.optional().catch(undefined),
+        thresholdParams: thresholdParamsSchema.optional().catch(undefined),
+        useAlertOutputs: z.boolean().optional().catch(undefined),
     })
     .passthrough()
     .optional();

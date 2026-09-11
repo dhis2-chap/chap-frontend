@@ -31,6 +31,7 @@ import {
 } from '../../../../utils/predictionRunMetadata';
 import { PredictionRunActionsMenu } from './PredictionRunActionsMenu';
 import styles from './PredictionRunsWidget.module.css';
+import { getChapErrorLabel } from '../../../../utils/chapErrors';
 
 const EMPTY_VALUE = '-';
 const columnHelper = createColumnHelper<PredictionInfo>();
@@ -217,7 +218,7 @@ export const PredictionRunsWidget = ({
                 )}
                 {hasError && !isLoading && (
                     <div className={styles.errorState}>
-                        {i18n.t('Error loading prediction runs')}
+                        {getChapErrorLabel(error, i18n.t('Error loading prediction runs'))}
                     </div>
                 )}
                 {!isLoading && !hasError && !hasValidPredictionSetupId && (
