@@ -50,7 +50,9 @@ export const EvaluationDetailsComponent = ({ evaluationId }: Props) => {
     }
 
     return (
-        <div className={styles.container}>
+        // Keyed so a cached navigation to another evaluation remounts the widgets
+        // instead of reusing the previous evaluation's plot filters and selections.
+        <div key={evaluationId} className={styles.container}>
             <div className={styles.leftColumn}>
                 <ModelExecutionResultWidget
                     backtest={backtest}
