@@ -57,6 +57,7 @@ export const EvaluationDetailsComponent = ({ evaluationId }: Props) => {
                 />
                 <CustomEvaluationPlotsWidget
                     evaluationId={evaluationId}
+                    periodType={backtest.dataset.periodType}
                 />
             </div>
             <div className={styles.rightColumn}>

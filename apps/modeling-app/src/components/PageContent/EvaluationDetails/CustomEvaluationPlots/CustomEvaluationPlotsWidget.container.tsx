@@ -17,6 +17,7 @@ import { BackTestFilter } from './BackTestFilter';
 
 type Props = {
     evaluationId: number;
+    periodType?: string | null;
 };
 
 type WidgetWrapperProps = {
@@ -59,7 +60,7 @@ const WidgetWrapper = ({
     );
 };
 
-export const CustomEvaluationPlotsWidget = ({ evaluationId }: Props) => {
+export const CustomEvaluationPlotsWidget = ({ evaluationId, periodType }: Props) => {
     const [open, setOpen] = useState(true);
     const [filterLocation, setFilterLocation] = useState<string | undefined>(undefined);
     const [filterSplitPeriod, setFilterSplitPeriod] = useState<string | undefined>(undefined);
@@ -156,6 +157,7 @@ export const CustomEvaluationPlotsWidget = ({ evaluationId }: Props) => {
                     {!!facetCoordinates && (
                         <BackTestFilter
                             facetCoords={facetCoordinates}
+                            periodType={periodType}
                             filterLocation={filterLocation}
                             filterSplitPeriod={filterSplitPeriod}
                             filterHorizonPeriod={filterHorizonPeriod}

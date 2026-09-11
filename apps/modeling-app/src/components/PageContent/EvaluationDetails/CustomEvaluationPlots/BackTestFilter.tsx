@@ -1,12 +1,21 @@
 import { useOrgUnitsById } from '@/hooks/useOrgUnitsById';
 import { MenuItem, SingleSelect } from '@dhis2/ui';
+import { getPeriodNameFromId } from '@dhis2-chap/ui';
 import { useMemo } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import styles from './CustomEvaluationPlotsWidget.module.css';
 import { FacetCoordinates } from '@/components/BacktestsTable/hooks/useFacetCoordinates';
+import { toSplitPeriodId } from './splitPeriodId';
+
+const formatHorizon = (distance: number) => i18n.t('{{count}} period ahead', {
+    count: distance,
+    defaultValue: '{{count}} period ahead',
+    defaultValue_plural: '{{count}} periods ahead',
+});
 
 type Props = {
     facetCoords?: FacetCoordinates;
+    periodType?: string | null;
     filterLocation?: string;
     filterSplitPeriod?: string;
     filterHorizonPeriod?: string;
@@ -16,16 +25,22 @@ type Props = {
 };
 
 export const BackTestFilter = ({
-    facetCoords, filterLocation, filterSplitPeriod, filterHorizonPeriod,
+    facetCoords, periodType, filterLocation, filterSplitPeriod, filterHorizonPeriod,
     setFilterLocation, setFilterSplitPeriod, setFilterHorizonPeriod,
 }: Props) => {
     const splitPeriodOptions = useMemo(() =>
-        (facetCoords?.split_period ?? []).map(val => ({ value: val, label: val })),
-    [facetCoords?.split_period],
+        (facetCoords?.split_period ?? []).map((val) => {
+            const periodId = toSplitPeriodId(val, periodType);
+            return { value: val, label: periodId ? getPeriodNameFromId(periodId) : val };
+        }),
+    [facetCoords?.split_period, periodType],
     );
 
     const horizonOptions = useMemo(() =>
-        (facetCoords?.horizon_distance ?? []).map(val => ({ value: String(val), label: String(val) })),
+        (facetCoords?.horizon_distance ?? []).map(val => ({
+            value: String(val),
+            label: formatHorizon(val),
+        })),
     [facetCoords?.horizon_distance],
     );
 
@@ -54,6 +69,7 @@ export const BackTestFilter = ({
                     dense
                     clearable
                     clearText={i18n.t('Clear')}
+                    dataTest="evaluation-plot-location-select"
                     placeholder={i18n.t('Select organisation unit')}
                     selected={filterLocation}
                     loading={isOrgUnitsLoading}
@@ -72,6 +88,7 @@ export const BackTestFilter = ({
                     dense
                     clearable
                     clearText={i18n.t('Clear')}
+                    dataTest="evaluation-plot-split-period-select"
                     placeholder={i18n.t('Select split period')}
                     selected={filterSplitPeriod}
                     onChange={e => setFilterSplitPeriod(e.selected || undefined)}
@@ -89,7 +106,7 @@ export const BackTestFilter = ({
                     clearable
                     clearText={i18n.t('Clear')}
                     dataTest="evaluation-plot-horizon-select"
-                    placeholder={i18n.t('Select horizon period')}
+                    placeholder={i18n.t('Select forecast horizon')}
                     selected={filterHorizonPeriod}
                     onChange={e => setFilterHorizonPeriod(e.selected || undefined)}
                 >

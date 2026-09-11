@@ -131,7 +131,7 @@ export const CustomEvaluationPlotsWidgetComponent = ({
             missing.push(i18n.t('a split period'));
         }
         if (facetCoords.horizon_distance?.length && !filterHorizonPeriod) {
-            missing.push(i18n.t('a horizon period'));
+            missing.push(i18n.t('a forecast horizon'));
         }
         return missing;
     }, [facetCoords, filterLocation, filterSplitPeriod, filterHorizonPeriod]);

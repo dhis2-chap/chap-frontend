@@ -39,7 +39,7 @@ test('renders predicted vs actual for the selected horizon without experimental 
 
     await page.locator('[data-test="evaluation-plot-select"]').click();
     await page.getByRole('menuitem', { name: 'Predicted vs Actual', exact: true }).click();
-    await expect(page.getByText('Please select a horizon period to view this visualization.')).toBeVisible();
+    await expect(page.getByText('Please select a forecast horizon to view this visualization.')).toBeVisible();
 
     for (const horizon of [1, 2]) {
         await page.locator('[data-test="evaluation-plot-horizon-select"]').click();
@@ -47,7 +47,7 @@ test('renders predicted vs actual for the selected horizon without experimental 
             response.url().endsWith(`/backtest-plots/predicted_vs_actual/${evaluation.id}/subplot`) &&
             response.request().method() === 'POST',
         );
-        await page.getByRole('menuitem', { name: String(horizon), exact: true }).click();
+        await page.getByRole('menuitem', { name: `${horizon} period${horizon === 1 ? '' : 's'} ahead`, exact: true }).click();
         const response = await plotResponse;
         expect(response.request().postDataJSON()).toEqual({ horizon_distance: horizon });
 
