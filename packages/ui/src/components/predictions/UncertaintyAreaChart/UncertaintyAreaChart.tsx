@@ -6,6 +6,7 @@ import HighchartsReact from 'highcharts-react-official';
 import { PredictionOrgUnitSeries } from '../../../interfaces/Prediction';
 import { registerHighchartsModules } from '../../../utils/registerHighchartsModules';
 import { buildChartPeriods, buildPeriodIndexLookup, getSeriesPeriods } from '../../../utils/chartPeriods';
+import { getPeriodNameFromId } from '../../../utils/Time';
 import {
     isFiniteNumber,
     type EndemicThresholdPoint,
@@ -248,7 +249,7 @@ const getChartOptions = (
                     );
                 }
 
-                return `<b>${period}</b><br/>${lines.join('<br/>')}`;
+                return `<b>${getPeriodNameFromId(period)}</b><br/>${lines.join('<br/>')}`;
             },
         },
         xAxis: {
@@ -260,7 +261,7 @@ const getChartOptions = (
             labels: {
                 enabled: true,
                 formatter: function () {
-                    return this.value.toString();
+                    return getPeriodNameFromId(this.value.toString(), 'short');
                 },
                 style: {
                     fontSize: '0.8rem',
@@ -296,7 +297,10 @@ const getChartOptions = (
         chart: {
             ...disabledAnimationOptions.chart,
             height: chartHeight ?? (isTile ? 240 : (9 / 16 * 100) + '%'),
-            marginBottom: isTile ? 48 : 125,
+            // Tiles reserve room for auto-rotated period labels: Highcharts
+            // rotates them 45 degrees once they no longer fit side by side,
+            // and the previous 48px clipped them.
+            marginBottom: isTile ? 72 : 125,
             zooming: {
                 type: 'x',
                 ...(hideResetButton && {

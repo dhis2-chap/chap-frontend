@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import css from './SplitPeriodSlider.module.css';
-import { getPeriodNameFromId } from '../utils/Time';
 import i18n from '@dhis2/d2-i18n';
+import { getPeriodNameFromId } from '@dhis2-chap/ui';
 import { Label } from '@dhis2/ui';
 import { Range } from 'react-range';
 import { clamp } from '../utils/clamp';

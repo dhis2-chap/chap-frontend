@@ -83,6 +83,7 @@ export {
     type ThresholdTileViewModel,
 } from './utils/outbreakThresholdTiles';
 export { getSeriesPeriods } from './utils/chartPeriods';
+export { getPeriodNameFromId } from './utils/Time';
 export {
     plotResultsToViewData,
     getStableMaxYByOrgUnitId,
