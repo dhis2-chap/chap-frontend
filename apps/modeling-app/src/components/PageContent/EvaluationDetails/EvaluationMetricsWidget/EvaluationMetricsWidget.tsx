@@ -83,7 +83,10 @@ export const EvaluationMetricsWidget = ({ metrics }: Props) => {
     const visibleIds = sortMetricIds(
         Object.keys(metrics ?? {}).filter(metricId => !HIDDEN_METRIC_IDS.includes(metricId)),
     );
-    const shownIds = expanded ? visibleIds : visibleIds.filter(metricId => HEADLINE_METRIC_IDS.includes(metricId));
+    const headlineIds = visibleIds.filter(metricId => HEADLINE_METRIC_IDS.includes(metricId));
+    /* An evaluation can report only metrics this catalog has no headline for, and the collapsed widget must still show rows. */
+    const collapsedIds = headlineIds.length > 0 ? headlineIds : visibleIds.slice(0, HEADLINE_METRIC_IDS.length);
+    const shownIds = expanded ? visibleIds : collapsedIds;
     const hiddenCount = visibleIds.length - shownIds.length;
 
     return (
