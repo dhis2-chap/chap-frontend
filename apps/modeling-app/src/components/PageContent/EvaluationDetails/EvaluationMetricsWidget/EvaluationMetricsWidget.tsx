@@ -26,6 +26,9 @@ const formatScore = (score: number, unit?: string) => {
 
 const formatTarget = (target: number) => target.toLocaleString(undefined, { maximumFractionDigits: 2 });
 
+/* Rounded before comparing, so floating point noise (0.8 - 0.65 = 0.15000000000000002) does not push a score exactly at the tolerance over it. */
+const distanceFromTarget = (score: number, target: number) => Math.round(Math.abs(score - target) * 1e6) / 1e6;
+
 const sortMetricIds = (metricIds: string[]) =>
     [...metricIds].sort((a, b) => {
         const indexA = HEADLINE_METRIC_IDS.indexOf(a);
@@ -46,7 +49,7 @@ const MetricRow = ({ metricId, score }: MetricRowProps) => {
     const label = info?.label ?? prettifyMetricId(metricId);
     const offTarget = Number.isFinite(score) &&
         info?.target !== undefined &&
-        Math.abs(score - info.target) > TARGET_TOLERANCE;
+        distanceFromTarget(score, info.target) > TARGET_TOLERANCE;
 
     return (
         <div className={styles.row}>
