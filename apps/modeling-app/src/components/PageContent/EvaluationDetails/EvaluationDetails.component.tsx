@@ -7,7 +7,6 @@ import { useBacktestById } from '@/hooks/useBacktestById';
 import { CircularLoader, NoticeBox } from '@dhis2/ui';
 import { EvaluationSummaryWidget } from './EvaluationSummaryWidget';
 import { EvaluationMetricsWidget } from './EvaluationMetricsWidget/EvaluationMetricsWidget';
-import { useExperimentalFeature, FEATURES } from '@/features/settings/Experimental';
 
 type Props = {
     evaluationId: number;
@@ -15,7 +14,6 @@ type Props = {
 
 export const EvaluationDetailsComponent = ({ evaluationId }: Props) => {
     const { backtest, isLoading: isBacktestLoading, error: backtestError } = useBacktestById(evaluationId);
-    const { enabled: isEvaluationPlotsEnabled } = useExperimentalFeature(FEATURES.EVALUATION_PLOTS);
     const predictionSetupId = backtest?.predictionSetupId ?? undefined;
 
     if (isBacktestLoading) {
@@ -52,16 +50,17 @@ export const EvaluationDetailsComponent = ({ evaluationId }: Props) => {
     }
 
     return (
-        <div className={styles.container}>
+        // Keyed so a cached navigation to another evaluation remounts the widgets
+        // instead of reusing the previous evaluation's plot filters and selections.
+        <div key={evaluationId} className={styles.container}>
             <div className={styles.leftColumn}>
                 <ModelExecutionResultWidget
                     backtest={backtest}
                 />
-                {isEvaluationPlotsEnabled && (
-                    <CustomEvaluationPlotsWidget
-                        evaluationId={evaluationId}
-                    />
-                )}
+                <CustomEvaluationPlotsWidget
+                    evaluationId={evaluationId}
+                    periodType={backtest.dataset.periodType}
+                />
             </div>
             <div className={styles.rightColumn}>
                 <QuickActionsWidget

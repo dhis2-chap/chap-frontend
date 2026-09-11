@@ -86,10 +86,9 @@ Click **Experimental features** in the settings sidebar. Toggle the main **Enabl
 
 Once enabled, you can toggle individual features:
 
-- **Evaluation plots**: Adds a custom evaluation visualization widget to the evaluation details page with alternative chart types
 - **Scheduling**: Shows scheduling information in the prediction setup dashboard
 
-These features are experimental and may change or be removed in future releases.
+Experimental features may change or be removed in future releases. Evaluation plots, including predicted vs actual, are available on the evaluation details page without enabling experimental features.
 
 ![Experimental features page with toggle switches](images/settings-step-6-experimental.png)
 
