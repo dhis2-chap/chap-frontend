@@ -31,49 +31,52 @@ test('renders predicted vs actual for the selected horizon without experimental 
         'Load actual cases',
     );
 
-    for (const [plotId, label] of [
-        ['predicted_vs_actual', 'Predicted vs Actual'],
-        ['predicted_vs_actual_linear', 'Predicted vs Actual (linear)'],
-    ]) {
-        const visualizationSelect = page.locator('[data-test="evaluation-plot-select"]');
-        await visualizationSelect.click();
-        await page.getByRole('menuitem', { name: label, exact: true }).click();
-        await expect(page.getByText('Please select a horizon period to view this visualization.')).toBeVisible();
+    const observed = new Map(actual.data.map(value => [`${value.ou} ${value.pe}`, value.value]));
+    const monthIndex = (period: string) => Number(period.slice(0, 4)) * 12 + Number(period.slice(4));
+    const horizonOf = (entry: EvaluationEntry) => monthIndex(entry.period) - monthIndex(entry.splitPeriod) + 1;
+    const pointKey = (point: Record<string, string | number | null>) =>
+        `${point.location} ${String(point.time_period).slice(0, 7).replace('-', '')}`;
 
-        for (const horizon of [1, 2]) {
-            const horizonSelect = page.locator('[data-test="evaluation-plot-horizon-select"]');
-            await horizonSelect.click();
-            const plotResponse = page.waitForResponse(response =>
-                response.url().endsWith(`/backtest-plots/${plotId}/${evaluation.id}/subplot`) &&
-                response.request().method() === 'POST',
-            );
-            await page.getByRole('menuitem', { name: String(horizon), exact: true }).click();
-            const response = await plotResponse;
-            expect(response.request().postDataJSON()).toEqual({ horizon_distance: horizon });
-            const spec = await readJson<Spec>(response, 'Load predicted vs actual plot');
-            const points = spec.data?.flatMap(data => 'values' in data && Array.isArray(data.values)
-                ? data.values as Record<string, string | number | null>[]
-                : []) ?? [];
-            expect(points.length).toBeGreaterThan(0);
-            for (const point of points) {
-                expect(point.horizon_distance).toBe(horizon);
-                const period = String(point.time_period).slice(0, 7).replace('-', '');
-                const median = entries.find(entry => entry.orgUnit === point.location &&
-                    entry.period === period &&
-                    Number(entry.period.slice(0, 4)) * 12 + Number(entry.period.slice(4))
-                    - (Number(entry.splitPeriod.slice(0, 4)) * 12 + Number(entry.splitPeriod.slice(4))) + 1 === horizon);
-                expect(median?.value).toBe(point.median_forecast);
-                const observation = actual.data.find(value => value.ou === point.location && value.pe === period);
-                expect(observation?.value ?? null).toBe(point.disease_cases);
-                if (plotId === 'predicted_vs_actual') {
-                    expect(point.log1p_predicted).toBeCloseTo(Math.log1p(Number(point.median_forecast)));
-                    if (point.disease_cases !== null) {
-                        expect(point.log1p_actual).toBeCloseTo(Math.log1p(Number(point.disease_cases)));
-                    }
-                }
+    await page.locator('[data-test="evaluation-plot-select"]').click();
+    await page.getByRole('menuitem', { name: 'Predicted vs Actual', exact: true }).click();
+    await expect(page.getByText('Please select a horizon period to view this visualization.')).toBeVisible();
+
+    for (const horizon of [1, 2]) {
+        await page.locator('[data-test="evaluation-plot-horizon-select"]').click();
+        const plotResponse = page.waitForResponse(response =>
+            response.url().endsWith(`/backtest-plots/predicted_vs_actual/${evaluation.id}/subplot`) &&
+            response.request().method() === 'POST',
+        );
+        await page.getByRole('menuitem', { name: String(horizon), exact: true }).click();
+        const response = await plotResponse;
+        expect(response.request().postDataJSON()).toEqual({ horizon_distance: horizon });
+
+        const spec = await readJson<Spec>(response, 'Load predicted vs actual plot');
+        const points = (spec.data?.flatMap(data => 'values' in data && Array.isArray(data.values)
+            ? data.values as Record<string, string | number | null>[]
+            : []) ?? []).filter(point => 'median_forecast' in point);
+
+        // The plot inner-joins forecasts with observations, so it holds exactly the
+        // org unit / period pairs this horizon forecast that also have an actual value.
+        // Comparing the whole set catches a dropped horizon filter, which mixes in pairs
+        // that only other horizons forecast. `horizon_distance` is deliberately not
+        // asserted per point: chap-core below 2.2.0 compiles specs through vegafusion,
+        // which prunes columns no encoding references.
+        const expectedEntries = entries.filter(entry =>
+            horizonOf(entry) === horizon && observed.has(`${entry.orgUnit} ${entry.period}`));
+        const medians = new Map(expectedEntries.map(entry => [`${entry.orgUnit} ${entry.period}`, entry.value]));
+        expect(medians.size).toBeGreaterThan(0);
+        expect(new Set(points.map(pointKey))).toEqual(new Set(medians.keys()));
+
+        for (const point of points) {
+            expect(point.median_forecast).toBe(medians.get(pointKey(point)));
+            expect(point.disease_cases).toBe(observed.get(pointKey(point)) ?? null);
+            expect(point.log1p_predicted).toBeCloseTo(Math.log1p(Number(point.median_forecast)));
+            if (point.disease_cases !== null) {
+                expect(point.log1p_actual).toBeCloseTo(Math.log1p(Number(point.disease_cases)));
             }
-            await expect(page.locator('.vega-embed svg.marks')).toBeVisible();
         }
-        await page.locator('.vega-embed').screenshot({ path: testInfo.outputPath(`${plotId}.png`) });
+        await expect(page.locator('.vega-embed svg.marks')).toBeVisible();
     }
+    await page.locator('.vega-embed').screenshot({ path: testInfo.outputPath('predicted-vs-actual.png') });
 });

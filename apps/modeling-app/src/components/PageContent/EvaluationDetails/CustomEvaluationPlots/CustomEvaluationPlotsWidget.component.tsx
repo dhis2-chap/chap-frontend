@@ -8,6 +8,7 @@ import styles from './CustomEvaluationPlotsWidget.module.css';
 import { useIsolatedPlots } from '@/components/BacktestsTable/hooks/useIsolatedPlots';
 import { useOrgUnitsById } from '@/hooks/useOrgUnitsById';
 import { FacetCoordinates } from '@/components/BacktestsTable/hooks/useFacetCoordinates';
+import { useCustomEvaluationPlotVisualization } from './hooks/useCustomEvaluationPlotVisualization';
 
 type Props = {
     evaluationId: number;
@@ -160,11 +161,29 @@ export const CustomEvaluationPlotsWidgetComponent = ({
         requestBody,
     });
 
+    // chap-core only implements faceting for every plot from 2.2.0 onwards; older
+    // supported backends answer 400 for the rest. Render those unfiltered rather than
+    // reporting a plot failure.
+    const facetsUnsupported = facetCoordsError?.status === 400;
+
+    const {
+        visualization: fullPlotData,
+        isLoading: isFullPlotLoading,
+        error: fullPlotError,
+    } = useCustomEvaluationPlotVisualization({
+        evaluationId,
+        visualizationId: facetsUnsupported ? selectedVisualizationId : undefined,
+    });
+
+    const plotData = facetsUnsupported ? fullPlotData : isolatedPlotsData;
+    const isPlotLoading = facetsUnsupported ? isFullPlotLoading : isIsolatedPlotsLoading;
+    const plotError = facetsUnsupported ? fullPlotError : isolatedPlotsError;
+
     const locationIds = useMemo(() => {
         const ids = new Set<string>();
-        collectLocationIds(isolatedPlotsData, ids);
+        collectLocationIds(plotData, ids);
         return Array.from(ids).sort();
-    }, [isolatedPlotsData]);
+    }, [plotData]);
 
     const { data: orgUnitsData } = useOrgUnitsById(locationIds);
 
@@ -173,21 +192,21 @@ export const CustomEvaluationPlotsWidgetComponent = ({
     ), [orgUnitsData?.organisationUnits]);
 
     const plotSpec = useMemo(() => {
-        if (!isRecord(isolatedPlotsData)) return undefined;
-        const spec = withContainerHeight(isolatedPlotsData);
+        if (!isRecord(plotData)) return undefined;
+        const spec = withContainerHeight(plotData);
         return locationNames.size > 0
             ? withLocationNames(spec, locationNames) as UnknownRecord
             : spec;
-    }, [isolatedPlotsData, locationNames]);
+    }, [plotData, locationNames]);
 
-    const isGridLayoutSpec = isRecord(isolatedPlotsData) && 'layout' in isolatedPlotsData;
+    const isGridLayoutSpec = isRecord(plotData) && 'layout' in plotData;
 
-    const visualizationContainerClass = isolatedPlotsData
+    const visualizationContainerClass = plotData
         ? `${styles.visualizationContainer} ${isGridLayoutSpec ? styles.naturalSizePlot : styles.singleIsolatedPlot}`
         : styles.visualizationContainer;
 
     useEffect(() => {
-        const error = isolatedPlotsError || facetCoordsError;
+        const error = plotError || (facetsUnsupported ? undefined : facetCoordsError);
         if (!selectionComplete || !error) return;
 
         console.error('CustomEvaluationPlotsWidget: plot load error', {
@@ -197,7 +216,7 @@ export const CustomEvaluationPlotsWidgetComponent = ({
             filterLocation,
             filterSplitPeriod,
         });
-    }, [isolatedPlotsError, facetCoordsError, evaluationId, selectedVisualizationId, filterLocation, filterSplitPeriod, selectionComplete]);
+    }, [plotError, facetCoordsError, facetsUnsupported, evaluationId, selectedVisualizationId, filterLocation, filterSplitPeriod, selectionComplete]);
 
     if (!selectionComplete) {
         return (
@@ -215,11 +234,11 @@ export const CustomEvaluationPlotsWidgetComponent = ({
         );
     }
 
-    if (facetCoordsError) {
+    if (facetCoordsError && !facetsUnsupported) {
         return <MutedPlotError />;
     }
 
-    if (!hasFilters) {
+    if (!facetsUnsupported && !hasFilters) {
         return (
             <div className={styles.emptyState}>
                 <p>
@@ -231,7 +250,7 @@ export const CustomEvaluationPlotsWidgetComponent = ({
         );
     }
 
-    if (isIsolatedPlotsLoading) {
+    if (isPlotLoading) {
         return (
             <div className={styles.loadingContainer}>
                 <CircularLoader />
@@ -239,7 +258,7 @@ export const CustomEvaluationPlotsWidgetComponent = ({
         );
     }
 
-    if (isolatedPlotsError) {
+    if (plotError) {
         return <MutedPlotError />;
     }
 
