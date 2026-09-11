@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-09-10T19:59:40.143Z\n"
-"PO-Revision-Date: 2026-09-10T19:59:40.144Z\n"
+"POT-Creation-Date: 2026-09-11T07:58:57.436Z\n"
+"PO-Revision-Date: 2026-09-11T07:58:57.437Z\n"
 
 msgid "CHAP API token (optional)"
 msgstr "CHAP API token (optional)"
@@ -1021,6 +1021,217 @@ msgstr "Invalid evaluation ID"
 
 msgid "The evaluation ID is invalid. Please try again."
 msgstr "The evaluation ID is invalid. Please try again."
+
+msgid "Not available"
+msgstr "Not available"
+
+msgid "target {{target}}"
+msgstr "target {{target}}"
+
+msgid "Evaluation metrics"
+msgstr "Evaluation metrics"
+
+msgid "No metrics available for this evaluation."
+msgstr "No metrics available for this evaluation."
+
+msgid "Scores aggregated across all evaluation splits and organisation units."
+msgstr "Scores aggregated across all evaluation splits and organisation units."
+
+msgid "Show fewer metrics"
+msgstr "Show fewer metrics"
+
+msgid "Show all {{count}} metrics"
+msgid_plural "Show all {{count}} metrics"
+msgstr[0] "Show all {{count}} metrics"
+msgstr[1] "Show all {{count}} metrics"
+
+msgid "CRPS"
+msgstr "CRPS"
+
+msgid ""
+"How well the whole forecast distribution matched what actually happened, "
+"not just the central estimate. Lower is better."
+msgstr ""
+"How well the whole forecast distribution matched what actually happened, "
+"not just the central estimate. Lower is better."
+
+msgid "CRPS (log scale)"
+msgstr "CRPS (log scale)"
+
+msgid ""
+"CRPS measured on a log scale, so regions with few cases count as much as "
+"regions with many. Lower is better."
+msgstr ""
+"CRPS measured on a log scale, so regions with few cases count as much as "
+"regions with many. Lower is better."
+
+msgid "CRPS (normalised)"
+msgstr "CRPS (normalised)"
+
+msgid ""
+"CRPS divided by the range of observed cases, so it can be compared across "
+"datasets of different size. Lower is better."
+msgstr ""
+"CRPS divided by the range of observed cases, so it can be compared across "
+"datasets of different size. Lower is better."
+
+msgid "MAE"
+msgstr "MAE"
+
+msgid ""
+"Average size of the miss, in cases. A miss of 10 cases counts the same "
+"whether the forecast was too high or too low. Lower is better."
+msgstr ""
+"Average size of the miss, in cases. A miss of 10 cases counts the same "
+"whether the forecast was too high or too low. Lower is better."
+
+msgid "MAPE"
+msgstr "MAPE"
+
+msgid ""
+"Average size of the miss as a share of the observed cases. Grows very large "
+"when observed cases are near zero. Lower is better."
+msgstr ""
+"Average size of the miss as a share of the observed cases. Grows very large "
+"when observed cases are near zero. Lower is better."
+
+msgid "RMSE"
+msgstr "RMSE"
+
+msgid ""
+"Like MAE, but penalises large misses much more heavily. An RMSE far above "
+"the MAE means a few periods were badly wrong. Lower is better."
+msgstr ""
+"Like MAE, but penalises large misses much more heavily. An RMSE far above "
+"the MAE means a few periods were badly wrong. Lower is better."
+
+msgid "Coverage 10-90"
+msgstr "Coverage 10-90"
+
+msgid ""
+"Share of observations that fell inside the 10th to 90th percentile band of "
+"the forecast. Should be close to 0.8. Much lower means the model is "
+"overconfident, much higher means it is too cautious."
+msgstr ""
+"Share of observations that fell inside the 10th to 90th percentile band of "
+"the forecast. Should be close to 0.8. Much lower means the model is "
+"overconfident, much higher means it is too cautious."
+
+msgid "Coverage 25-75"
+msgstr "Coverage 25-75"
+
+msgid ""
+"Share of observations that fell inside the 25th to 75th percentile band of "
+"the forecast. Should be close to 0.5."
+msgstr ""
+"Share of observations that fell inside the 25th to 75th percentile band of "
+"the forecast. Should be close to 0.5."
+
+msgid "Ratio above truth"
+msgstr "Ratio above truth"
+
+msgid ""
+"Share of forecast samples that landed above the observed value. Should be "
+"close to 0.5. Higher means the model forecasts too many cases, lower means "
+"too few."
+msgstr ""
+"Share of forecast samples that landed above the observed value. Should be "
+"close to 0.5. Higher means the model forecasts too many cases, lower means "
+"too few."
+
+msgid "Winkler score 10-90"
+msgstr "Winkler score 10-90"
+
+msgid ""
+"Rewards a narrow 10th to 90th percentile band, with a penalty each time the "
+"observed value falls outside it. Lower is better."
+msgstr ""
+"Rewards a narrow 10th to 90th percentile band, with a penalty each time the "
+"observed value falls outside it. Lower is better."
+
+msgid "Winkler score 25-75"
+msgstr "Winkler score 25-75"
+
+msgid ""
+"Rewards a narrow 25th to 75th percentile band, with a penalty each time the "
+"observed value falls outside it. Lower is better."
+msgstr ""
+"Rewards a narrow 25th to 75th percentile band, with a penalty each time the "
+"observed value falls outside it. Lower is better."
+
+msgid "Winkler score 10-90 (log scale)"
+msgstr "Winkler score 10-90 (log scale)"
+
+msgid ""
+"Winkler score for the 10th to 90th percentile band, measured on a log scale "
+"so regions with few cases count as much as regions with many. Lower is "
+"better."
+msgstr ""
+"Winkler score for the 10th to 90th percentile band, measured on a log scale "
+"so regions with few cases count as much as regions with many. Lower is "
+"better."
+
+msgid "Winkler score 25-75 (log scale)"
+msgstr "Winkler score 25-75 (log scale)"
+
+msgid ""
+"Winkler score for the 25th to 75th percentile band, measured on a log scale "
+"so regions with few cases count as much as regions with many. Lower is "
+"better."
+msgstr ""
+"Winkler score for the 25th to 75th percentile band, measured on a log scale "
+"so regions with few cases count as much as regions with many. Lower is "
+"better."
+
+msgid "Sensitivity"
+msgstr "Sensitivity"
+
+msgid ""
+"Share of real outbreaks the model raised an alert for. Higher is better, "
+"but it can be raised by alerting more often."
+msgstr ""
+"Share of real outbreaks the model raised an alert for. Higher is better, "
+"but it can be raised by alerting more often."
+
+msgid "Specificity"
+msgstr "Specificity"
+
+msgid ""
+"Share of calm periods the model correctly stayed quiet for. Higher is "
+"better, but it can be raised by alerting less often."
+msgstr ""
+"Share of calm periods the model correctly stayed quiet for. Higher is "
+"better, but it can be raised by alerting less often."
+
+msgid "Outbreak accuracy"
+msgstr "Outbreak accuracy"
+
+msgid ""
+"Share of periods correctly classified as outbreak or non-outbreak. Higher "
+"is better."
+msgstr ""
+"Share of periods correctly classified as outbreak or non-outbreak. Higher "
+"is better."
+
+msgid "Peak value difference"
+msgstr "Peak value difference"
+
+msgid ""
+"Observed peak minus forecast peak, in cases. Positive means the model "
+"underestimated the peak, negative means it overestimated it."
+msgstr ""
+"Observed peak minus forecast peak, in cases. Positive means the model "
+"underestimated the peak, negative means it overestimated it."
+
+msgid "Peak period lag"
+msgstr "Peak period lag"
+
+msgid ""
+"How many periods late the forecast peak was. Positive means the model "
+"predicted the peak too late, negative too early."
+msgstr ""
+"How many periods late the forecast peak was. Positive means the model "
+"predicted the peak too late, negative too early."
 
 msgid "Summary"
 msgstr "Summary"
