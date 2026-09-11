@@ -18,6 +18,7 @@ import { Layout } from './components/layout/Layout';
 import { RouteValidator } from './components/RouteValidator';
 import InfoAboutReportingBugs from './features/common-features/InfoAboutReportingBugs/InfoAboutReportingBugs';
 import WarnAboutIncompatibleVersion from './features/common-features/WarnAboutIncompatibleVersion/WarnAboutIncompatibleVersion';
+import { Dhis2VersionWarning } from './components/Dhis2VersionWarning/Dhis2VersionWarning';
 import { DashboardPage } from './pages/DashboardPage';
 import { EvaluationPage } from './pages/EvaluationPage';
 import { EvaluationDetailsPage } from './pages/EvaluationDetailsPage';
@@ -73,6 +74,7 @@ const router = createHashRouter([
                     <RouteValidator>
                         <ChapValidator>
                             <InfoAboutReportingBugs />
+                            <Dhis2VersionWarning />
                             <WarnAboutIncompatibleVersion />
                             <PageWrapper>
                                 <Outlet />
