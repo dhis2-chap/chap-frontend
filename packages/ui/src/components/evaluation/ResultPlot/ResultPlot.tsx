@@ -123,14 +123,13 @@ const getOptions = ({
             },
         },
         xAxis: {
-            categories: data.periods, // Use periods as categories
+            // Readable period names, so both the axis labels and the
+            // tooltip header show them instead of raw period ids
+            categories: data.periods.map(period =>
+                getPeriodNameFromId(period, 'short'),
+            ),
             labels: {
                 enabled: true,
-                formatter: function (
-                    this: Highcharts.AxisLabelsFormatterContextObject,
-                ): string {
-                    return getPeriodNameFromId(this.value.toString(), 'short');
-                },
                 style: {
                     fontSize: '0.9rem',
                 },

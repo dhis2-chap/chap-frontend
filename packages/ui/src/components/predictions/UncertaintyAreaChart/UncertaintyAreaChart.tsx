@@ -249,7 +249,7 @@ const getChartOptions = (
                     );
                 }
 
-                return `<b>${period}</b><br/>${lines.join('<br/>')}`;
+                return `<b>${getPeriodNameFromId(period)}</b><br/>${lines.join('<br/>')}`;
             },
         },
         xAxis: {
