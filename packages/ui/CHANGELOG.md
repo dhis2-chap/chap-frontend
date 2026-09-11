@@ -1,5 +1,18 @@
 # @dhis2-chap/ui
 
+## 7.0.0
+
+### Minor Changes
+
+-   d87d55e: Redesign threshold strategy selection for prediction runs against the typed thresholds API. Strategies are fetched from the backend and each strategy exposes its parameters (standard deviations, percentile band, baseline years) in the run details panel and the alert output dialog. The percentile strategy renders a WHO endemic channel band computed in a single request. Threshold calculation shows loading and error states with a retry action, and importing alert outputs is blocked while a calculation is in progress or failed.
+
+### Patch Changes
+
+-   169eb1a: Use readable abbreviated month labels on evaluation and prediction chart axes and tooltips instead of raw period ids, and format period labels in the active locale
+-   d259df4: Restore the chart menu on prediction tiles so predictions can be viewed in full screen.
+-   Updated dependencies [d87d55e]
+    -   @dhis2-chap/core@7.0.0
+
 ## 6.3.0
 
 ### Patch Changes
