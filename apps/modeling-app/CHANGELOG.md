@@ -1,5 +1,47 @@
 # @dhis2-chap/modeling-app
 
+## 7.0.0
+
+### Major Changes
+
+-   3d0de4f: Release v7 of the modeling app.
+
+    BREAKING CHANGES:
+
+    -   The modeling app now requires CHAP Core 2.3.0 or newer. The thresholds
+        API was redesigned in CHAP Core 2.3.0 and is not backwards compatible,
+        so prediction runs do not work against older backends. The app reports
+        an incompatible version instead of failing at runtime [CLIM-1092].
+    -   Evaluation plots now require the facet coordinate endpoints introduced
+        in CHAP Core 2.3.0 and no longer fall back to whole-plot rendering on
+        older backends [CLIM-1039].
+
+### Minor Changes
+
+-   8653b60: Add CHAP API token configuration to route settings, including replacement and removal. Settings now reports whether the server accepted, rejected or is missing the token, rather than only whether one is stored, and a refused request explains the token problem and where to fix it instead of showing a bare "Unauthorized" [CLIM-1044].
+-   ceeaff1: Add optional endemic threshold data element mapping to the prediction import, importing endemic threshold values by period across the full plotted range (historical and forecast periods) alongside predicted values [CLIM-942]
+-   cd48553: Make evaluation plots available without experimental features and fix predicted vs actual plots to show only the selected forecast horizon. Plot filters now name split periods the way the rest of the app does and label horizons as "1 period ahead". Opening another evaluation now resets the plot filters and result selections instead of carrying over the previous evaluation's choices [CLIM-1039].
+-   dafaa03: Require CHAP Core 2.3.0 or newer. The redesigned thresholds API in CHAP Core 2.3.0 is not backwards compatible, so prediction runs do not work against older backends. The app now reports an incompatible version instead of failing at runtime [CLIM-1092].
+-   33b491f: Show aggregate metrics on the evaluation details screen [CLIM-1037]. The widget
+    shows five headline metrics by default with the rest behind a toggle, explains
+    each metric in plain language, hides the backend's demonstration metrics, and
+    flags calibration metrics that sit far from their expected value.
+-   d87d55e: Redesign threshold strategy selection for prediction runs against the typed thresholds API. Strategies are fetched from the backend and each strategy exposes its parameters (standard deviations, percentile band, baseline years) in the run details panel and the alert output dialog. The percentile strategy renders a WHO endemic channel band computed in a single request. Threshold calculation shows loading and error states with a retry action, and importing alert outputs is blocked while a calculation is in progress or failed.
+
+### Patch Changes
+
+-   44aa78b: Allow evaluations for models without covariates to pass data validation with only their target mapped [CLIM-1048].
+-   169eb1a: Use readable abbreviated month labels on evaluation and prediction chart axes and tooltips instead of raw period ids, and format period labels in the active locale
+-   57cbb84: Show a dismissible red banner on DHIS2 2.40 stating that the version is no longer supported and should be upgraded to get the latest features.
+-   37eded4: Push release version commits through the GitHub API so they are GPG-signed and satisfy the repository's signed-commit rules
+-   bd4ba64: Add a View action to the evaluation menu to open evaluation details.
+-   Updated dependencies [d87d55e]
+-   Updated dependencies [169eb1a]
+-   Updated dependencies [d87d55e]
+-   Updated dependencies [d259df4]
+    -   @dhis2-chap/core@7.0.0
+    -   @dhis2-chap/ui@7.0.0
+
 ## 6.3.0
 
 ### Minor Changes
