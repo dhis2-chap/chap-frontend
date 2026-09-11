@@ -1,6 +1,13 @@
 name: test-and-release
 
-on: push
+on:
+  push:
+    branches-ignore:
+      # Changesets uses temporary branches when creating signed release commits.
+      - 'changesets-ghcommit-temp/**'
+    # Preserve the existing behavior for tag pushes.
+    tags:
+      - '**'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
