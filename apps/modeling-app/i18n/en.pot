@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-09-11T09:38:59.156Z\n"
-"PO-Revision-Date: 2026-09-11T09:38:59.156Z\n"
+"POT-Creation-Date: 2026-09-11T10:34:46.028Z\n"
+"PO-Revision-Date: 2026-09-11T10:34:46.029Z\n"
 
 msgid "CHAP API token (optional)"
 msgstr "CHAP API token (optional)"
@@ -929,14 +929,19 @@ msgstr "source"
 msgid "sources"
 msgstr "sources"
 
+msgid "{{count}} period ahead"
+msgid_plural "{{count}} period ahead"
+msgstr[0] "{{count}} period ahead"
+msgstr[1] "{{count}} periods ahead"
+
 msgid "Select organisation unit"
 msgstr "Select organisation unit"
 
 msgid "Select split period"
 msgstr "Select split period"
 
-msgid "Select horizon period"
-msgstr "Select horizon period"
+msgid "Select forecast horizon"
+msgstr "Select forecast horizon"
 
 msgid "This plot has encountered an unexpected error and could not be displayed."
 msgstr "This plot has encountered an unexpected error and could not be displayed."
@@ -976,8 +981,8 @@ msgstr "an organisation unit"
 msgid "a split period"
 msgstr "a split period"
 
-msgid "a horizon period"
-msgstr "a horizon period"
+msgid "a forecast horizon"
+msgstr "a forecast horizon"
 
 msgid "Please select a visualization."
 msgstr "Please select a visualization."
@@ -2244,9 +2249,6 @@ msgstr "Turn on to access experimental features in the app"
 
 msgid "Available features"
 msgstr "Available features"
-
-msgid "Show evaluation visualization plots in the evaluation dashboard"
-msgstr "Show evaluation visualization plots in the evaluation dashboard"
 
 msgid "Show scheduling information in the prediction setup dashboard"
 msgstr "Show scheduling information in the prediction setup dashboard"

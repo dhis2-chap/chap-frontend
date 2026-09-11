@@ -72,13 +72,6 @@ export const ExperimentalSettings = () => {
                             </div>
                             <div className={styles.toggleList}>
                                 <ChoiceCard
-                                    title={i18n.t('Evaluation plots')}
-                                    description={i18n.t('Show evaluation visualization plots in the evaluation dashboard')}
-                                    checked={settings.features[FEATURES.EVALUATION_PLOTS] ?? false}
-                                    onChange={() => toggleFeature(FEATURES.EVALUATION_PLOTS)}
-                                    disabled={isSaving || !canEdit}
-                                />
-                                <ChoiceCard
                                     title={i18n.t('Scheduling')}
                                     description={i18n.t('Show scheduling information in the prediction setup dashboard')}
                                     checked={settings.features[FEATURES.SCHEDULING] ?? false}
