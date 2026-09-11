@@ -1,14 +1,20 @@
 import i18n from '@dhis2/d2-i18n';
 import { NoticeBox, Switch } from '@dhis2/ui';
-import type { OutbreakProbability } from '@dhis2-chap/ui';
+import type { ApiError, OutbreakProbability } from '@dhis2-chap/ui';
 import type { KeyboardEvent, MouseEvent } from 'react';
+import { ThresholdCalculationStatus } from '../../../ThresholdTilesExplorer';
 import { DataItemSelect } from './DataItemSelect';
 import styles from './QuantileMappingForm.module.css';
 
 type Props = {
     useAlertOutputs: boolean;
     selectedProbability: OutbreakProbability;
+    thresholdStrategyName?: string;
+    thresholdParamsSummary: string;
     unavailableThresholdCount: number;
+    isThresholdsLoading: boolean;
+    areThresholdsPaused: boolean;
+    thresholdsError: ApiError | null;
     outbreakIndicator?: string;
     outbreakIndicatorError?: string;
     endemicThreshold?: string;
@@ -16,12 +22,29 @@ type Props = {
     onAdjustAlertProbability: () => void;
     onChangeOutbreakIndicator: (id: string | null) => void;
     onChangeEndemicThreshold: (id: string | null) => void;
+    onRetryThresholds?: () => void;
 };
+
+const SummaryItem = ({ label, value }: { label: string; value: string }) => (
+    <div>
+        <span className={styles.summaryLabel}>
+            {label}
+        </span>
+        <span className={styles.summaryValue}>
+            {value}
+        </span>
+    </div>
+);
 
 export const AlertOutputSection = ({
     useAlertOutputs,
     selectedProbability,
+    thresholdStrategyName,
+    thresholdParamsSummary,
     unavailableThresholdCount,
+    isThresholdsLoading,
+    areThresholdsPaused,
+    thresholdsError,
     outbreakIndicator,
     outbreakIndicatorError,
     endemicThreshold,
@@ -29,6 +52,7 @@ export const AlertOutputSection = ({
     onAdjustAlertProbability,
     onChangeOutbreakIndicator,
     onChangeEndemicThreshold,
+    onRetryThresholds,
 }: Props) => {
     const handleAlertOutputKeyDown = (event: KeyboardEvent) => {
         if (event.key === 'Enter' || event.key === ' ') {
@@ -68,23 +92,35 @@ export const AlertOutputSection = ({
             </div>
             {useAlertOutputs && (
                 <>
-                    {unavailableThresholdCount > 0 && (
+                    <ThresholdCalculationStatus
+                        isLoading={isThresholdsLoading}
+                        isPaused={areThresholdsPaused}
+                        error={thresholdsError}
+                        onRetry={onRetryThresholds}
+                    />
+                    {!isThresholdsLoading && !thresholdsError && unavailableThresholdCount > 0 && (
                         <NoticeBox warning title={i18n.t('Some outbreak indicators will be skipped')}>
-                            {i18n.t('Outbreak indicators will be skipped for one region due to insufficient disease data.', {
+                            {i18n.t('One region has forecast periods without thresholds. Only outbreak indicators for those periods will be skipped; indicators for periods with thresholds will still be imported.', {
                                 count: unavailableThresholdCount,
-                                defaultValue_plural: 'Outbreak indicators will be skipped for {{count}} regions due to insufficient disease data.',
+                                defaultValue_plural: '{{count}} regions have forecast periods without thresholds. Only outbreak indicators for those periods will be skipped; indicators for periods with thresholds will still be imported.',
                             })}
                         </NoticeBox>
                     )}
                     <div className={styles.alertSummary}>
-                        <div>
-                            <span className={styles.summaryLabel}>
-                                {i18n.t('Minimum outbreak probability')}
-                            </span>
-                            <span className={styles.summaryValue}>
-                                {`${selectedProbability}%`}
-                            </span>
-                        </div>
+                        <SummaryItem
+                            label={i18n.t('Minimum outbreak probability')}
+                            value={`${selectedProbability}%`}
+                        />
+                        {thresholdStrategyName && (
+                            <SummaryItem
+                                label={i18n.t('Threshold strategy')}
+                                value={thresholdStrategyName}
+                            />
+                        )}
+                        <SummaryItem
+                            label={i18n.t('Threshold parameters')}
+                            value={thresholdParamsSummary}
+                        />
                         <button
                             type="button"
                             className={styles.tertiaryActionButton}

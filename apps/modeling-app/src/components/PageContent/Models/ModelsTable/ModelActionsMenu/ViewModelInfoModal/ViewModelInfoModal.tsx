@@ -5,12 +5,12 @@ import {
     ModalActions,
     Button,
     CircularLoader,
-    NoticeBox,
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { Pill } from '@dhis2-chap/ui';
 import { useConfiguredModelInfo } from '../hooks/useConfiguredModelInfo';
 import styles from './ViewModelInfoModal.module.css';
+import { ChapErrorNotice } from '../../../../../ChapErrorNotice';
 
 type Props = {
     id: number;
@@ -79,9 +79,7 @@ export const ViewModelInfoModal = ({ id, onClose }: Props) => {
                     </div>
                 )}
                 {error && !isLoading && (
-                    <NoticeBox error title={i18n.t('Error loading model details')}>
-                        {error.message || i18n.t('An unknown error occurred')}
-                    </NoticeBox>
+                    <ChapErrorNotice error={error} title={i18n.t('Error loading model details')} />
                 )}
                 {info && template && !isLoading && (
                     <>

@@ -19,8 +19,15 @@ import type {
 import { useMemo } from 'react';
 import { useEndemicThresholds } from '@/hooks/useEndemicThresholds';
 import {
+    DEFAULT_THRESHOLD_STRATEGY,
+    getDefaultThresholdParams,
+    type ThresholdParams,
+} from '@/utils/thresholdStrategyParams';
+import {
     OutbreakProbabilityControl,
     SummaryRow,
+    ThresholdCalculationStatus,
+    ThresholdStrategyControl,
     ThresholdTilesExplorer,
 } from '../../../ThresholdTilesExplorer';
 import { usePredictionSeries } from '../hooks/usePredictionSeries';
@@ -28,6 +35,7 @@ import styles from './PredictionDetailsGrid.module.css';
 
 export type PredictionRunAlertSettings = {
     alertProbability: OutbreakProbability;
+    thresholdParams: ThresholdParams;
     thresholdsEnabled: boolean;
 };
 
@@ -41,6 +49,7 @@ type Props = {
 
 const DEFAULT_SETTINGS: PredictionRunAlertSettings = {
     alertProbability: DEFAULT_OUTBREAK_PROBABILITY,
+    thresholdParams: getDefaultThresholdParams(DEFAULT_THRESHOLD_STRATEGY),
     thresholdsEnabled: false,
 };
 
@@ -61,32 +70,23 @@ export const PredictionDetailsGrid = ({
     } = usePredictionSeries({ prediction, model });
     const showThresholds = settings.thresholdsEnabled;
 
-    const allPeriods = useMemo(() => {
-        const periodSet = new Set<string>();
-        for (const s of series) {
-            s.actualCases?.forEach(ac => periodSet.add(ac.period));
-            s.points.forEach(p => periodSet.add(p.period));
-        }
-        return Array.from(periodSet);
-    }, [series]);
-
-    const orgUnitIds = useMemo(() => (
-        series.map(s => s.orgUnitId)
-    ), [series]);
-
     const {
         thresholdMap,
         isLoading: isThresholdsLoading,
+        isPaused: areThresholdsPaused,
         error: thresholdsError,
+        refetch: refetchThresholds,
     } = useEndemicThresholds({
         datasetId: prediction.datasetId,
-        periodIds: allPeriods,
-        locations: orgUnitIds,
-        enabled: series.length > 0,
+        series,
+        params: settings.thresholdParams,
+        enabled: showThresholds,
     });
 
-    const isLoading = isSeriesLoading || isThresholdsLoading;
-    const error = seriesError || thresholdsError;
+    // During a recalculation the previous thresholds stay visible
+    // (keepPreviousData), so the grid is not remounted and the status filter
+    // survives a param change.
+    const thresholdsVisible = showThresholds && !!thresholdMap;
 
     const {
         summary,
@@ -196,12 +196,24 @@ export const PredictionDetailsGrid = ({
                 </span>
             </div>
             {showThresholds && (
-                <OutbreakProbabilityControl
-                    selectedProbability={settings.alertProbability}
-                    onSelectProbability={probability => updateSettings({ alertProbability: probability })}
-                />
+                <>
+                    <ThresholdStrategyControl
+                        value={settings.thresholdParams}
+                        onApply={thresholdParams => updateSettings({ thresholdParams })}
+                    />
+                    <ThresholdCalculationStatus
+                        isLoading={isThresholdsLoading}
+                        isPaused={areThresholdsPaused}
+                        error={thresholdsError}
+                        onRetry={refetchThresholds}
+                    />
+                    <OutbreakProbabilityControl
+                        selectedProbability={settings.alertProbability}
+                        onSelectProbability={probability => updateSettings({ alertProbability: probability })}
+                    />
+                    {thresholdsVisible && summaryList}
+                </>
             )}
-            {showThresholds && summaryList}
             <ButtonStrip end>
                 <Button
                     small
@@ -215,7 +227,7 @@ export const PredictionDetailsGrid = ({
         </>
     );
 
-    if (isLoading) {
+    if (isSeriesLoading) {
         return (
             <div className={styles.loadingContainer}>
                 <CircularLoader />
@@ -223,7 +235,7 @@ export const PredictionDetailsGrid = ({
         );
     }
 
-    if (error) {
+    if (seriesError) {
         return (
             <NoticeBox error title={i18n.t('Unable to load prediction data')}>
                 {i18n.t('There was a problem loading the prediction data required for this prediction run.')}
@@ -243,11 +255,16 @@ export const PredictionDetailsGrid = ({
         <ThresholdTilesExplorer
             predictionTargetName={predictionTargetName}
             tiles={tiles}
-            showThresholds={showThresholds}
+            showThresholds={thresholdsVisible}
             panel={panelContent}
             panelHeader={i18n.t('Prediction settings')}
             gridResetKey={String(prediction.id)}
-            zoomResetDeps={[prediction.id, settings.alertProbability, settings.thresholdsEnabled]}
+            zoomResetDeps={[
+                prediction.id,
+                settings.alertProbability,
+                settings.thresholdsEnabled,
+                settings.thresholdParams,
+            ]}
         />
     );
 };

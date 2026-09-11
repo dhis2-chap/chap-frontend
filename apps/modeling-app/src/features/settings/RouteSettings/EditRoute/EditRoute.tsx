@@ -1,6 +1,7 @@
 import i18n from '@dhis2/d2-i18n';
 import { useSaveRoute } from '../hooks/useSaveRoute';
 import { RouteForm, RouteFormValues } from '../RouteForm';
+import { hasRouteToken } from '../../../../components/ApiTokenField/routeToken';
 import type { Route } from '../../../../hooks/useRoute';
 
 interface EditRouteProps {
@@ -16,7 +17,7 @@ export const EditRoute = ({ route, onClose }: EditRouteProps) => {
     });
 
     const handleSubmit = (data: RouteFormValues) => {
-        saveRoute({ id: route.id, url: data.url });
+        saveRoute({ id: route.id, ...data });
     };
 
     return (
@@ -25,6 +26,7 @@ export const EditRoute = ({ route, onClose }: EditRouteProps) => {
             onSubmit={handleSubmit}
             isLoading={isSaving}
             initialUrl={route.url}
+            tokenConfigured={hasRouteToken(route.headers)}
             modalTitle={i18n.t('Edit route')}
             submitButtonText={i18n.t('Save')}
         />

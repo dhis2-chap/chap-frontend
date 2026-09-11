@@ -4,6 +4,14 @@ import {
     DEFAULT_DHIS2_CALENDAR,
     DEFAULT_DHIS2_LOCALE,
 } from '@dhis2-chap/core';
+import type { PredictionOrgUnitSeries } from '../interfaces/Prediction';
+
+// The periods a prediction chart displays for one org unit; threshold
+// requests must cover exactly this set, so both derive from here.
+export const getSeriesPeriods = (series: PredictionOrgUnitSeries): string[] => [
+    ...(series.actualCases?.map(actualCase => actualCase.period) ?? []),
+    ...series.points.map(point => point.period),
+];
 
 export const safeComparePeriodIds = (a: string, b: string): number => {
     try {

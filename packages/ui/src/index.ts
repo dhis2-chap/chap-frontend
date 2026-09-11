@@ -59,6 +59,9 @@ export { buildPredictionSeries } from './utils/PredictionViewModel';
 export {
     OUTBREAK_PROBABILITY_OPTIONS,
     DEFAULT_OUTBREAK_PROBABILITY,
+    buildEndemicThresholdMap,
+    getForecastThresholdCoverage,
+    getThresholdLineRoles,
     buildOutbreakIndicators,
     buildOutbreakIndicatorsForSeries,
     getHighestSupportedOutbreakProbability,
@@ -70,6 +73,7 @@ export {
     type OutbreakIndicator,
     type OutbreakProbability,
     type SupportedOutbreakProbabilityBucket,
+    type ThresholdLineRoles,
 } from './utils/outbreakAlerts';
 export {
     getStableMaxYForThresholdChart,
@@ -78,6 +82,8 @@ export {
     type ThresholdTileStatus,
     type ThresholdTileViewModel,
 } from './utils/outbreakThresholdTiles';
+export { getSeriesPeriods } from './utils/chartPeriods';
+export { getPeriodNameFromId } from './utils/Time';
 export {
     plotResultsToViewData,
     getStableMaxYByOrgUnitId,

@@ -3,6 +3,7 @@ import { NewModelForm } from './NewModelForm';
 import { useModelTemplates } from '@/hooks/useModelTemplates';
 import { CircularLoader, NoticeBox } from '@dhis2/ui';
 import styles from './NewConfiguredModelContent.module.css';
+import { ChapErrorNotice } from '../../ChapErrorNotice';
 
 export const NewConfiguredModelContent: React.FC = () => {
     const {
@@ -22,9 +23,7 @@ export const NewConfiguredModelContent: React.FC = () => {
     if (modelTemplatesError) {
         return (
             <div className={styles.errorContainer}>
-                <NoticeBox error title={i18n.t('Error loading model templates')}>
-                    {modelTemplatesError?.message || i18n.t('An unknown error occurred')}
-                </NoticeBox>
+                <ChapErrorNotice error={modelTemplatesError} title={i18n.t('Error loading model templates')} />
             </div>
         );
     }

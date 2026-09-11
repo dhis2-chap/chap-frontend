@@ -3,20 +3,20 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * One computed threshold for a single (period, location).
+ * Computed threshold lines for a single (period, location).
  */
 export type ThresholdEntry = {
     /**
-     * Period the threshold applies to.
+     * Period the thresholds apply to.
      */
     period: string;
     /**
-     * Location the threshold applies to.
+     * Location the thresholds apply to.
      */
     location: string;
     /**
-     * Computed threshold value, or `None` if it could not be computed.
+     * One threshold per line, in the same order as the response's `lines`. An element is `null` when that line could not be computed for this (period, location).
      */
-    value: (number | null);
+    values: Array<(number | null)>;
 };
 

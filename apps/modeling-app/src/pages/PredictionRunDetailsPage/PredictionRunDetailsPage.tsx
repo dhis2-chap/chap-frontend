@@ -16,6 +16,7 @@ import {
     PredictionDetailsGrid,
     type PredictionRunAlertSettings,
 } from '../../components/PageContent/PredictionDetails/PredictionDetailsGrid';
+import { ChapErrorNotice } from '../../components/ChapErrorNotice';
 
 export const PredictionRunDetailsPage: React.FC = () => {
     const navigate = useNavigate();
@@ -40,6 +41,7 @@ export const PredictionRunDetailsPage: React.FC = () => {
         navigate(`/predictions/${predictionSetupId}/runs/${prediction.id}/import`, {
             state: {
                 alertProbability: settings.alertProbability,
+                thresholdParams: settings.thresholdParams,
                 useAlertOutputs: settings.thresholdsEnabled,
             },
         });
@@ -56,9 +58,7 @@ export const PredictionRunDetailsPage: React.FC = () => {
     if (isError) {
         return (
             <div className={styles.errorContainer}>
-                <NoticeBox error title={i18n.t('Error loading prediction') as string}>
-                    {error?.message || (i18n.t('An unknown error occurred') as string)}
-                </NoticeBox>
+                <ChapErrorNotice error={error} title={i18n.t('Error loading prediction')} />
             </div>
         );
     }
