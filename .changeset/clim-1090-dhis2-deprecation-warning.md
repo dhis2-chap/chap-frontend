@@ -2,4 +2,4 @@
 '@dhis2-chap/modeling-app': patch
 ---
 
-Show a non-blocking warning on DHIS2 2.40 that it is no longer supported and a newer DHIS2 version will be required from the next CHAP release.
+Show a dismissible red banner on DHIS2 2.40 stating that the version is no longer supported and should be upgraded to get the latest features.

@@ -3,7 +3,6 @@ import { Sidebar } from '../sidebar';
 import css from './Layout.module.css';
 import { RouteHandle } from '../../App';
 import cx from 'classnames';
-import { Dhis2VersionWarning } from '../Dhis2VersionWarning/Dhis2VersionWarning';
 
 export const ID_MAIN_LAYOUT = 'main-layout';
 interface BaseLayoutProps {
@@ -49,7 +48,6 @@ export const Layout = () => {
     );
     return (
         <SidebarLayout collapseSidebar={collapseSidebar}>
-            <Dhis2VersionWarning />
             <Outlet />
         </SidebarLayout>
     );
