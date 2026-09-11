@@ -6,6 +6,7 @@ import styles from './EvaluationDetails.module.css';
 import { useBacktestById } from '@/hooks/useBacktestById';
 import { CircularLoader, NoticeBox } from '@dhis2/ui';
 import { EvaluationSummaryWidget } from './EvaluationSummaryWidget';
+import { EvaluationMetricsWidget } from './EvaluationMetricsWidget/EvaluationMetricsWidget';
 import { useExperimentalFeature, FEATURES } from '@/features/settings/Experimental';
 
 type Props = {
@@ -70,6 +71,7 @@ export const EvaluationDetailsComponent = ({ evaluationId }: Props) => {
                 <EvaluationSummaryWidget
                     evaluationId={evaluationId}
                 />
+                <EvaluationMetricsWidget metrics={backtest.aggregateMetrics} />
             </div>
         </div>
     );

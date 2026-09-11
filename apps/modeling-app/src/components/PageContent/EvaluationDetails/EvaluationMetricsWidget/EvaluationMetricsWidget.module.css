@@ -1,0 +1,74 @@
+.content {
+    padding: var(--spacers-dp8) var(--spacers-dp16) var(--spacers-dp16);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacers-dp12);
+    align-items: flex-start;
+}
+
+.intro {
+    margin: 0;
+    color: var(--colors-grey700);
+    font-size: 0.8rem;
+    line-height: 1.5;
+}
+
+.rows {
+    inline-size: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.row {
+    padding-block: var(--spacers-dp8);
+    border-block-end: 1px solid var(--colors-grey300);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--spacers-dp12);
+}
+
+.row:last-child {
+    border-block-end: none;
+}
+
+.label {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacers-dp4);
+    line-height: 16px;
+    font-size: 0.8rem;
+    color: var(--colors-grey700);
+    overflow-wrap: anywhere;
+}
+
+.infoIcon {
+    display: inline-flex;
+    align-items: center;
+    inline-size: 16px;
+    block-size: 16px;
+}
+
+.valueGroup {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: end;
+}
+
+.value {
+    font-size: 0.9rem;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    color: var(--colors-grey900);
+}
+
+.offTarget {
+    color: var(--colors-yellow800);
+}
+
+.target {
+    font-size: 0.7rem;
+    color: var(--colors-grey600);
+    font-variant-numeric: tabular-nums;
+}
