@@ -44,7 +44,9 @@ type MetricRowProps = {
 const MetricRow = ({ metricId, score }: MetricRowProps) => {
     const info = getMetricInfo(metricId);
     const label = info?.label ?? prettifyMetricId(metricId);
-    const offTarget = info?.target !== undefined && Math.abs(score - info.target) > TARGET_TOLERANCE;
+    const offTarget = Number.isFinite(score) &&
+        info?.target !== undefined &&
+        Math.abs(score - info.target) > TARGET_TOLERANCE;
 
     return (
         <div className={styles.row}>
