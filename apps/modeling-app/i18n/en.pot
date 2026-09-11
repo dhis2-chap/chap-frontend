@@ -5,12 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-<<<<<<< HEAD
-"POT-Creation-Date: 2026-09-10T13:33:36.046Z\n"
-"PO-Revision-Date: 2026-09-10T13:33:36.046Z\n"
-=======
-"POT-Creation-Date: 2026-09-10T19:59:40.143Z\n"
-"PO-Revision-Date: 2026-09-10T19:59:40.144Z\n"
+"POT-Creation-Date: 2026-09-11T07:58:57.436Z\n"
+"PO-Revision-Date: 2026-09-11T07:58:57.437Z\n"
 
 msgid "CHAP API token (optional)"
 msgstr "CHAP API token (optional)"
@@ -41,7 +37,6 @@ msgstr "Remove saved API token"
 
 msgid "View"
 msgstr "View"
->>>>>>> 169eb1a0d78072ab2553628fd60a3c36ba23a228
 
 msgid "Create new..."
 msgstr "Create new..."
