@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-09-11T07:58:57.436Z\n"
-"PO-Revision-Date: 2026-09-11T07:58:57.437Z\n"
+"POT-Creation-Date: 2026-09-11T09:38:59.156Z\n"
+"PO-Revision-Date: 2026-09-11T09:38:59.156Z\n"
 
 msgid "CHAP API token (optional)"
 msgstr "CHAP API token (optional)"
@@ -217,6 +217,16 @@ msgstr "Date"
 
 msgid "Clear date range"
 msgstr "Clear date range"
+
+msgid ""
+"DHIS2 2.40 is no longer supported. Some functionality may not work on this "
+"instance. Please upgrade DHIS2 to get the latest features."
+msgstr ""
+"DHIS2 2.40 is no longer supported. Some functionality may not work on this "
+"instance. Please upgrade DHIS2 to get the latest features."
+
+msgid "Dismiss"
+msgstr "Dismiss"
 
 msgid "Oops!"
 msgstr "Oops!"
@@ -1922,9 +1932,6 @@ msgid ""
 msgstr ""
 "This is an alpha version of the Modeling App. Some features may change or "
 "contain bugs."
-
-msgid "Dismiss"
-msgstr "Dismiss"
 
 msgid "Failed to copy report details"
 msgstr "Failed to copy report details"
