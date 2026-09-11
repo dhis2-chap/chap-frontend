@@ -14,7 +14,7 @@ export const Dhis2VersionWarning = () => {
         <div className={styles.container}>
             <NoticeBox warning title={i18n.t('DHIS2 2.40 is no longer supported')}>
                 {i18n.t(
-                    'Support for DHIS2 2.40 is deprecated. Some functionality may not work on this instance. From the next release of CHAP, a newer DHIS2 version will be required. Please contact your administrator to upgrade DHIS2.',
+                    'Support for DHIS2 2.40 is deprecated. Some functionality may not work on this instance. Please contact your administrator to upgrade DHIS2.',
                 )}
             </NoticeBox>
         </div>
