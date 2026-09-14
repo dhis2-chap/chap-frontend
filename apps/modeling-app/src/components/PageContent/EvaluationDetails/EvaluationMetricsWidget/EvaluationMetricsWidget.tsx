@@ -1,18 +1,20 @@
 import { useState } from 'react';
 import cx from 'classnames';
 import i18n from '@dhis2/d2-i18n';
-import { Widget } from '@dhis2-chap/ui';
+import { useQuery } from '@tanstack/react-query';
+import { MetricInfo, VisualizationsService, Widget } from '@dhis2-chap/ui';
 import { Button, IconInfo16, Tooltip } from '@dhis2/ui';
 import {
     HEADLINE_METRIC_IDS,
     HIDDEN_METRIC_IDS,
     TARGET_TOLERANCE,
-    getMetricInfo,
+    METRIC_PRESENTATION,
     prettifyMetricId,
 } from './metricCatalog';
 import styles from './EvaluationMetricsWidget.module.css';
 
 type Props = {
+    evaluationId: number;
     metrics?: Record<string, number> | null;
 };
 
@@ -42,20 +44,21 @@ const sortMetricIds = (metricIds: string[]) =>
 type MetricRowProps = {
     metricId: string;
     score: number;
+    info?: MetricInfo;
 };
 
-const MetricRow = ({ metricId, score }: MetricRowProps) => {
-    const info = getMetricInfo(metricId);
-    const label = info?.label ?? prettifyMetricId(metricId);
+const MetricRow = ({ metricId, score, info }: MetricRowProps) => {
+    const presentation = METRIC_PRESENTATION[metricId];
+    const label = info?.displayName?.trim() || prettifyMetricId(metricId);
     const offTarget = Number.isFinite(score) &&
-        info?.target !== undefined &&
-        distanceFromTarget(score, info.target) > TARGET_TOLERANCE;
+        presentation?.target !== undefined &&
+        distanceFromTarget(score, presentation.target) > TARGET_TOLERANCE;
 
     return (
         <div className={styles.row}>
             <span className={styles.label}>
                 {label}
-                {info && (
+                {info?.description?.trim() && (
                     <Tooltip content={info.description}>
                         <span className={styles.infoIcon}>
                             <IconInfo16 color="var(--colors-grey600)" />
@@ -65,11 +68,11 @@ const MetricRow = ({ metricId, score }: MetricRowProps) => {
             </span>
             <span className={styles.valueGroup}>
                 <span className={cx(styles.value, { [styles.offTarget]: offTarget })}>
-                    {Number.isFinite(score) ? formatScore(score, info?.unit) : i18n.t('Not available')}
+                    {Number.isFinite(score) ? formatScore(score, presentation?.unit) : i18n.t('Not available')}
                 </span>
-                {info?.target !== undefined && (
+                {presentation?.target !== undefined && (
                     <span className={styles.target}>
-                        {i18n.t('target {{target}}', { target: formatTarget(info.target) })}
+                        {i18n.t('target {{target}}', { target: formatTarget(presentation.target) })}
                     </span>
                 )}
             </span>
@@ -77,8 +80,17 @@ const MetricRow = ({ metricId, score }: MetricRowProps) => {
     );
 };
 
-export const EvaluationMetricsWidget = ({ metrics }: Props) => {
+export const EvaluationMetricsWidget = ({ evaluationId, metrics }: Props) => {
     const [expanded, setExpanded] = useState(false);
+    const { data: metricCatalog } = useQuery({
+        queryKey: ['evaluation-metric-catalog', evaluationId],
+        queryFn: () => VisualizationsService.getAvailableMetricsV1VisualizationMetricsBacktestIdGet(evaluationId),
+        enabled: Object.keys(metrics ?? {}).length > 0,
+        staleTime: 5 * 60 * 1000,
+        retry: 0,
+        refetchOnWindowFocus: false,
+    });
+    const metricInfoById = new Map(metricCatalog?.map(info => [info.id, info]));
 
     const visibleIds = sortMetricIds(
         Object.keys(metrics ?? {}).filter(metricId => !HIDDEN_METRIC_IDS.includes(metricId)),
@@ -106,6 +118,7 @@ export const EvaluationMetricsWidget = ({ metrics }: Props) => {
                                 <MetricRow
                                     key={metricId}
                                     metricId={metricId}
+                                    info={metricInfoById.get(metricId)}
                                     score={(metrics ?? {})[metricId]}
                                 />
                             ))}
