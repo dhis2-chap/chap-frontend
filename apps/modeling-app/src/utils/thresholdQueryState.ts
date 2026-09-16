@@ -9,7 +9,7 @@ export const isThresholdQueryEnabled = (
     enabled: boolean,
     datasetId: number | undefined,
     periodIds: string[],
-): boolean => enabled && datasetId !== undefined && periodIds.length > 0;
+): boolean => enabled && !!datasetId && periodIds.length > 0;
 
 export const getThresholdQueryState = (enabled: boolean, query: ThresholdQueryResult) => ({
     // A query that is not enabled has nothing pending, so consumers are not

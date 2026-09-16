@@ -15,6 +15,7 @@ describe('isThresholdQueryEnabled', () => {
 
     it('is disabled without a dataset id', () => {
         expect(isThresholdQueryEnabled(true, undefined, ['2025W1'])).toBe(false);
+        expect(isThresholdQueryEnabled(true, 0, ['2025W1'])).toBe(false);
     });
 
     it('is disabled when there are no periods to request', () => {
