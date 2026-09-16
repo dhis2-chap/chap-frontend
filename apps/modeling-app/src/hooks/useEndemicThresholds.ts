@@ -1,17 +1,17 @@
 import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { canonicalizePeriodId } from '@dhis2-chap/core';
 import {
     ApiError,
     buildEndemicThresholdMap,
     DatasetsService,
-    getSeriesPeriods,
+    dedupeSeriesPeriods,
+    getSeriesLocations,
     getThresholdLineRoles,
     type PredictionOrgUnitSeries,
     type ThresholdResponse,
 } from '@dhis2-chap/ui';
 import type { ThresholdParams } from '@/utils/thresholdStrategyParams';
-import { getThresholdQueryState } from '@/utils/thresholdQueryState';
+import { getThresholdQueryState, isThresholdQueryEnabled } from '@/utils/thresholdQueryState';
 
 type Props = {
     datasetId: number | undefined;
@@ -30,23 +30,10 @@ export const useEndemicThresholds = ({
     params,
     enabled = true,
 }: Props) => {
-    // Request thresholds for exactly the periods the charts display. Actual
-    // cases and predictions can spell the same week differently (2025W3 vs
-    // 2025W03), so deduplicate by canonical id while keeping the first spelling.
-    const periodIds = useMemo(() => {
-        const periodIdByCanonicalId = new Map<string, string>();
-        for (const periodId of series.flatMap(getSeriesPeriods)) {
-            const canonicalId = canonicalizePeriodId(periodId);
-            if (!periodIdByCanonicalId.has(canonicalId)) {
-                periodIdByCanonicalId.set(canonicalId, periodId);
-            }
-        }
-        return Array.from(periodIdByCanonicalId.values());
-    }, [series]);
-    const locations = useMemo(() => (
-        series.map(orgUnitSeries => orgUnitSeries.orgUnitId)
-    ), [series]);
-    const isQueryEnabled = enabled && !!datasetId && periodIds.length > 0;
+    // Request thresholds for exactly the periods the charts display.
+    const periodIds = useMemo(() => dedupeSeriesPeriods(series), [series]);
+    const locations = useMemo(() => getSeriesLocations(series), [series]);
+    const isQueryEnabled = isThresholdQueryEnabled(enabled, datasetId, periodIds);
 
     const query = useQuery<ThresholdResponse, ApiError>({
         queryKey: ['endemic-thresholds', datasetId, periodIds, locations, params],
