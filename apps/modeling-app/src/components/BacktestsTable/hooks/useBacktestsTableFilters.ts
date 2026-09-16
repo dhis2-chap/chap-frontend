@@ -1,5 +1,6 @@
 import { useCallback, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { buildColumnFilters } from './buildColumnFilters';
 
 const PARAM_KEYS = {
     modelId: 'modelId',
@@ -48,10 +49,7 @@ export const useBacktestsTableFilters = () => {
             setModelId,
             search,
             setSearch,
-            columnFilters: {
-                ...(modelId ? [{ id: 'configuredModel.id', value: modelId }] : []),
-                ...(search ? [{ id: 'name', value: search }] : []),
-            },
+            columnFilters: buildColumnFilters({ modelId, search }),
         }),
         [modelId, setModelId, search, setSearch],
     );
