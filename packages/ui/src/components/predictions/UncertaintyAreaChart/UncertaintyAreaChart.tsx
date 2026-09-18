@@ -267,6 +267,23 @@ const getChartOptions = (
                     fontSize: '0.8rem',
                 },
             },
+            plotLines: periods.flatMap((period, index) => {
+                const year = period.slice(0, 4);
+                if (index === 0 || year === periods[index - 1].slice(0, 4)) return [];
+
+                return [{
+                    value: index - 0.5,
+                    color: '#6c7787',
+                    width: 1,
+                    dashStyle: 'Dash',
+                    zIndex: 2,
+                    label: {
+                        text: year,
+                        rotation: 0,
+                        style: { color: '#6c7787' },
+                    },
+                }];
+            }),
             plotBands: outbreakPeriods
                 .filter(outbreakPeriod => outbreakPeriod.outbreak)
                 .map((outbreakPeriod) => {
