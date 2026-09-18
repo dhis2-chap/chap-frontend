@@ -1,5 +1,6 @@
 import { useCallback, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { PARAM_KEYS as PAGINATION_PARAM_KEYS } from '../../../hooks/useTablePaginationParams';
 import { buildColumnFilters } from './buildColumnFilters';
 
 const PARAM_KEYS = {
@@ -22,6 +23,7 @@ export const useBacktestsTableFilters = () => {
                 } else {
                     updatedParams.delete(PARAM_KEYS.modelId);
                 }
+                updatedParams.delete(PAGINATION_PARAM_KEYS.page);
                 return updatedParams;
             });
         },
@@ -37,6 +39,7 @@ export const useBacktestsTableFilters = () => {
                 } else {
                     updatedParams.delete(PARAM_KEYS.search);
                 }
+                updatedParams.delete(PAGINATION_PARAM_KEYS.page);
                 return updatedParams;
             });
         },
