@@ -1,11 +1,12 @@
+import { SavedDatasetEvaluation } from '@/components/NewEvaluationForm/SavedDatasetEvaluation';
 import i18n from '@dhis2/d2-i18n';
-import { Button, IconArrowLeft16 } from '@dhis2/ui';
+import { Button, ButtonStrip, IconArrowLeft16 } from '@dhis2/ui';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { PageHeader } from '../../features/common-features/PageHeader/PageHeader';
 import styles from './NewEvaluationPage.module.css';
 import { NewEvaluationForm } from '@/components/NewEvaluationForm';
 
-export const NewEvaluationPage = () => {
+export const NewEvaluationPage = ({ useSavedDataset = false }: { useSavedDataset?: boolean }) => {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const returnTo = searchParams.get('returnTo') || '/evaluate';
@@ -27,7 +28,11 @@ export const NewEvaluationPage = () => {
                 {i18n.t(isFromDetails ? 'Back to evaluation details' : 'Back to evaluations')}
             </Button>
 
-            <NewEvaluationForm />
+            <ButtonStrip>
+                <Button secondary={!useSavedDataset} onClick={() => navigate('/evaluate/new')}>{i18n.t('Import from DHIS2')}</Button>
+                <Button secondary={useSavedDataset} onClick={() => navigate('/evaluate/from-dataset')}>{i18n.t('Use saved dataset')}</Button>
+            </ButtonStrip>
+            {useSavedDataset ? <SavedDatasetEvaluation initialDatasetId={searchParams.get('datasetId') ?? undefined} /> : <NewEvaluationForm />}
         </div>
     );
 };

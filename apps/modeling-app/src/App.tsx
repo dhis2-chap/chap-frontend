@@ -4,6 +4,7 @@ import {
     Navigate,
     Outlet,
 } from 'react-router-dom';
+import { DatasetsPage, CreateDatasetPage } from './pages/DatasetsPage/DatasetsPage';
 import ErrorPage from './components/ErrorPage';
 import './locales';
 import './App.module.css';
@@ -110,6 +111,10 @@ const router = createHashRouter([
                                 } satisfies RouteHandle,
                             },
                             {
+                                path: 'from-dataset',
+                                element: <NewEvaluationPage useSavedDataset />,
+                            },
+                            {
                                 path: ':evaluationId',
                                 handle: {
                                     collapseSidebar: true,
@@ -118,6 +123,8 @@ const router = createHashRouter([
                             },
                         ],
                     },
+                    { path: '/datasets', element: <DatasetsPage /> },
+                    { path: '/datasets/new', element: <CreateDatasetPage /> },
                     {
                         path: '/jobs',
                         element: <JobsPage />,
