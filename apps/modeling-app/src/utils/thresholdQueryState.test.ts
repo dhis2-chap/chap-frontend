@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { getThresholdQueryState } from './thresholdQueryState';
+import { getThresholdQueryState, isThresholdQueryEnabled } from './thresholdQueryState';
 
 const freshResult = {
     data: { entries: [] },
@@ -7,6 +7,25 @@ const freshResult = {
     isPreviousData: false,
     fetchStatus: 'idle',
 } as const;
+
+describe('isThresholdQueryEnabled', () => {
+    it('is disabled when the caller disables the query', () => {
+        expect(isThresholdQueryEnabled(false, 1, ['2025W1'])).toBe(false);
+    });
+
+    it('is disabled without a dataset id', () => {
+        expect(isThresholdQueryEnabled(true, undefined, ['2025W1'])).toBe(false);
+        expect(isThresholdQueryEnabled(true, 0, ['2025W1'])).toBe(false);
+    });
+
+    it('is disabled when there are no periods to request', () => {
+        expect(isThresholdQueryEnabled(true, 1, [])).toBe(false);
+    });
+
+    it('is enabled when a dataset and at least one period are present', () => {
+        expect(isThresholdQueryEnabled(true, 1, ['2025W1'])).toBe(true);
+    });
+});
 
 describe('getThresholdQueryState', () => {
     it('is ready once a fresh calculation has settled', () => {

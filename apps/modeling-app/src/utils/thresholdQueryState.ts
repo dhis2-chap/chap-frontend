@@ -5,6 +5,12 @@ type ThresholdQueryResult = Pick<
     'data' | 'isSuccess' | 'isPreviousData' | 'fetchStatus'
 >;
 
+export const isThresholdQueryEnabled = (
+    enabled: boolean,
+    datasetId: number | undefined,
+    periodIds: string[],
+): boolean => enabled && !!datasetId && periodIds.length > 0;
+
 export const getThresholdQueryState = (enabled: boolean, query: ThresholdQueryResult) => ({
     // A query that is not enabled has nothing pending, so consumers are not
     // blocked on it (there are simply no thresholds). Once enabled, previous
