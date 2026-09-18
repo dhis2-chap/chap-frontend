@@ -1,5 +1,6 @@
 import { useMatches } from 'react-router-dom';
 import { RouteHandle } from '../App';
+import { Breadcrumbs } from './Breadcrumbs/Breadcrumbs';
 
 interface ComponentWrapperProps {
     children: React.ReactNode;
@@ -29,6 +30,7 @@ const ComponentWrapper = ({ children, maxWidth }: ComponentWrapperProps) => {
                 inlineSize: '100%',
             }}
         >
+            <Breadcrumbs />
             {children}
         </div>
     );
