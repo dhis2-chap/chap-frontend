@@ -99,12 +99,20 @@
 }
 
 .listName {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacers-dp4);
     flex: 1;
     min-inline-size: 0;
     font-size: 14px;
     font-weight: 500;
     line-height: 20px;
     color: #212934;
+}
+
+.listName > span {
+    max-inline-size: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
