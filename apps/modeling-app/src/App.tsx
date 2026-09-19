@@ -4,6 +4,7 @@ import {
     Navigate,
     Outlet,
 } from 'react-router-dom';
+import { DatasetsPage, CreateDatasetPage } from './pages/DatasetsPage/DatasetsPage';
 import ErrorPage from './components/ErrorPage';
 import i18n from '@dhis2/d2-i18n';
 import './locales';
@@ -115,6 +116,10 @@ const router = createHashRouter([
                                 } satisfies RouteHandle,
                             },
                             {
+                                path: 'from-dataset',
+                                element: <NewEvaluationPage useSavedDataset />,
+                            },
+                            {
                                 path: ':evaluationId',
                                 handle: {
                                     breadcrumb: () => i18n.t('Evaluation details'),
@@ -124,6 +129,8 @@ const router = createHashRouter([
                             },
                         ],
                     },
+                    { path: '/datasets', element: <DatasetsPage /> },
+                    { path: '/datasets/new', element: <CreateDatasetPage /> },
                     {
                         path: '/jobs',
                         element: <JobsPage />,
