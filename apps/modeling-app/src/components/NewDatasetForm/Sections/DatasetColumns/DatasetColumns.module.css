@@ -1,0 +1,42 @@
+.formField {
+  margin-block-start: 1rem;
+}
+
+.datasetColumns {
+  border: 1px solid var(--colors-grey400);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background-color: var(--colors-grey100);
+  margin-block-start: 2rem;
+}
+
+.mutedText {
+  color: var(--colors-grey700);
+  font-size: 0.875rem;
+  margin-block-end: 1rem;
+}
+
+.errorText {
+  color: red;
+  font-size: 0.875rem;
+  margin-block-start: 4px;
+}
+
+.column {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 0.75rem;
+  border-radius: 0.25rem;
+  background-color: var(--colors-white);
+  margin-block-end: 0.5rem;
+}
+
+.columnField {
+  flex: 1;
+  min-inline-size: 0;
+}
+
+.removeButton {
+  margin-block-start: 1.5rem;
+}

@@ -1,0 +1,21 @@
+.container {
+  margin: 16px 0;
+}
+
+.formWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  block-size: 200px;
+}

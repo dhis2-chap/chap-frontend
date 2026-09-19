@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-09-11T10:34:46.028Z\n"
-"PO-Revision-Date: 2026-09-11T10:34:46.029Z\n"
+"POT-Creation-Date: 2026-09-19T14:48:37.321Z\n"
+"PO-Revision-Date: 2026-09-19T14:48:37.321Z\n"
 
 msgid "CHAP API token (optional)"
 msgstr "CHAP API token (optional)"
@@ -623,6 +623,111 @@ msgstr ""
 msgid "Leave page"
 msgstr "Leave page"
 
+msgid "Dataset name"
+msgstr "Dataset name"
+
+msgid "EWARS data 22-24"
+msgstr "EWARS data 22-24"
+
+msgid "Could not create dataset"
+msgstr "Could not create dataset"
+
+msgid "Creating dataset"
+msgstr "Creating dataset"
+
+msgid "The import is running in the background."
+msgstr "The import is running in the background."
+
+msgid "View jobs"
+msgstr "View jobs"
+
+msgid "Dataset creation failed"
+msgstr "Dataset creation failed"
+
+msgid "Edit and retry"
+msgstr "Edit and retry"
+
+msgid "Dataset created"
+msgstr "Dataset created"
+
+msgid "View datasets"
+msgstr "View datasets"
+
+msgid "Data columns"
+msgstr "Data columns"
+
+msgid "From DHIS2"
+msgstr "From DHIS2"
+
+msgid "Covariate name"
+msgstr "Covariate name"
+
+msgid "Data item"
+msgstr "Data item"
+
+msgid "Select a data item"
+msgstr "Select a data item"
+
+msgid "Remove"
+msgstr "Remove"
+
+msgid "Add DHIS2 column"
+msgstr "Add DHIS2 column"
+
+msgid "Fetched by CHAP"
+msgstr "Fetched by CHAP"
+
+msgid "Data source"
+msgstr "Data source"
+
+msgid "Add climate column"
+msgstr "Add climate column"
+
+msgid "Could not load climate sources"
+msgstr "Could not load climate sources"
+
+msgid "Dataset import was rejected"
+msgstr "Dataset import was rejected"
+
+msgid "Covariate name is required"
+msgstr "Covariate name is required"
+
+msgid "Feature is required"
+msgstr "Feature is required"
+
+msgid "Data source is required"
+msgstr "Data source is required"
+
+msgid "Add at least one DHIS2 data column"
+msgstr "Add at least one DHIS2 data column"
+
+msgid "Covariate names must be unique"
+msgstr "Covariate names must be unique"
+
+msgid "{{covariate}} has no observations for these periods and organisation units"
+msgstr "{{covariate}} has no observations for these periods and organisation units"
+
+msgid "The selected organisation units must have geometry"
+msgstr "The selected organisation units must have geometry"
+
+msgid "Error loading datasets or models"
+msgstr "Error loading datasets or models"
+
+msgid "Dataset"
+msgstr "Dataset"
+
+msgid "No compatible model"
+msgstr "No compatible model"
+
+msgid "No configured model matches this dataset’s covariates and period type."
+msgstr "No configured model matches this dataset’s covariates and period type."
+
+msgid "Start evaluation"
+msgstr "Start evaluation"
+
+msgid "Could not create evaluation"
+msgstr "Could not create evaluation"
+
 msgid "Start dry run"
 msgstr "Start dry run"
 
@@ -928,6 +1033,12 @@ msgstr "source"
 
 msgid "sources"
 msgstr "sources"
+
+msgid "Error loading datasets"
+msgstr "Error loading datasets"
+
+msgid "No datasets yet. Create one to reuse the same data across evaluations."
+msgstr "No datasets yet. Create one to reuse the same data across evaluations."
 
 msgid "{{count}} period ahead"
 msgid_plural "{{count}} period ahead"
@@ -1472,9 +1583,6 @@ msgstr "Enter covariate name"
 msgid "Add"
 msgstr "Add"
 
-msgid "Remove"
-msgstr "Remove"
-
 msgid "Select the base model template"
 msgstr "Select the base model template"
 
@@ -1918,6 +2026,9 @@ msgstr "Evaluate"
 
 msgid "Overview"
 msgstr "Overview"
+
+msgid "Datasets"
+msgstr "Datasets"
 
 msgid "Models"
 msgstr "Models"
@@ -2419,6 +2530,9 @@ msgstr "No prediction setups yet"
 msgid "Error loading prediction setups"
 msgstr "Error loading prediction setups"
 
+msgid "Import data once and reuse it across evaluations."
+msgstr "Import data once and reuse it across evaluations."
+
 msgid "Evaluation details"
 msgstr "Evaluation details"
 
@@ -2482,8 +2596,23 @@ msgstr ""
 msgid "Back to models"
 msgstr "Back to models"
 
+msgid "New dataset"
+msgstr "New dataset"
+
+msgid "Choose the data to import and name its columns so models can use them."
+msgstr "Choose the data to import and name its columns so models can use them."
+
+msgid "Back to datasets"
+msgstr "Back to datasets"
+
 msgid "Create a new evaluation to assess the performance of a model"
 msgstr "Create a new evaluation to assess the performance of a model"
+
+msgid "Import from DHIS2"
+msgstr "Import from DHIS2"
+
+msgid "Use saved dataset"
+msgstr "Use saved dataset"
 
 msgid "Create a prediction run for this setup."
 msgstr "Create a prediction run for this setup."
@@ -2573,6 +2702,10 @@ msgstr "Must be lower than the upper percentile"
 
 msgid "Enter a whole number of 1 or more, or leave empty to use all history"
 msgstr "Enter a whole number of 1 or more, or leave empty to use all history"
+
+msgctxt "cases."
+msgid "Name each column the way your models expect it, for example disease"
+msgstr "Name each column the way your models expect it, for example disease_cases."
 
 msgctxt ") instead."
 msgid "Spaces are not allowed. Use dashes (-) or underscores ("

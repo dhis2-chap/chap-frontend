@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ModelExecutionFormValues } from '../../ModelExecutionForm/hooks/useModelExecutionFormState';
-import { PERIOD_TYPES } from '@dhis2-chap/core';
+import { getBacktestSplitting } from './backtestDefaults';
 import { BacktestsService, FeatureCollectionModel, MakeBacktestWithDataRequest, ApiError } from '@dhis2-chap/ui';
 import { useDataEngine } from '@dhis2/app-runtime';
 import { useNavigate } from 'react-router-dom';
@@ -10,18 +10,6 @@ import { ImportSummaryCorrected } from '../../ModelExecutionForm/types';
 import { getImportSummaryFromApiError } from '@/components/ModelExecutionForm/utils/importSummaryUtils';
 import { buildOrgUnitFeatureCollection } from '@/components/ModelExecutionForm/utils/orgUnitGeoJson';
 import { DEFAULT_PERIOD_SETTINGS, type Dhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
-
-const N_SPLITS = 10;
-
-const N_PERIODS = {
-    [PERIOD_TYPES.MONTH]: 3,
-    [PERIOD_TYPES.WEEK]: 12,
-};
-
-const N_STRIDES = {
-    [PERIOD_TYPES.MONTH]: 1,
-    [PERIOD_TYPES.WEEK]: 4,
-};
 
 type Props = {
     periodSettings?: Dhis2PeriodSettings;
@@ -60,9 +48,7 @@ export const useCreateNewBacktest = ({
             dataSources,
             dataToBeFetched: [],
             modelId: model.name,
-            nPeriods: N_PERIODS[formData.periodType.toUpperCase() as keyof typeof N_PERIODS],
-            nSplits: N_SPLITS,
-            stride: N_STRIDES[formData.periodType.toUpperCase() as keyof typeof N_STRIDES],
+            ...getBacktestSplitting(formData.periodType),
         };
 
         return { backtestRequest, hash };

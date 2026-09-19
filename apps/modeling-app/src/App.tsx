@@ -4,7 +4,6 @@ import {
     Navigate,
     Outlet,
 } from 'react-router-dom';
-import { DatasetsPage, CreateDatasetPage } from './pages/DatasetsPage/DatasetsPage';
 import ErrorPage from './components/ErrorPage';
 import './locales';
 import './App.module.css';
@@ -31,6 +30,8 @@ import { GetStartedPage } from './pages/GetStartedPage';
 import { ReadyToPredictPage } from './pages/ReadyToPredictPage';
 import { ConfiguredModelDashboardPage } from './pages/ConfiguredModelDashboardPage';
 import { ModelsPage } from './pages/ModelsPage';
+import { DatasetsPage } from './pages/DatasetsPage';
+import { NewDatasetPage } from './pages/NewDatasetPage';
 import { NewConfiguredModelPage } from './pages/NewConfiguredModelPage';
 import { SyncUrlWithGlobalShell } from './utils/syncUrlWithGlobalShell';
 import { NewPredictionPage } from './pages/NewPredictionPage';
@@ -123,8 +124,13 @@ const router = createHashRouter([
                             },
                         ],
                     },
-                    { path: '/datasets', element: <DatasetsPage /> },
-                    { path: '/datasets/new', element: <CreateDatasetPage /> },
+                    {
+                        path: '/datasets',
+                        children: [
+                            { index: true, element: <DatasetsPage /> },
+                            { path: 'new', element: <NewDatasetPage /> },
+                        ],
+                    },
                     {
                         path: '/jobs',
                         element: <JobsPage />,

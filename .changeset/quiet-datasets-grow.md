@@ -1,6 +1,5 @@
 ---
 "@dhis2-chap/modeling-app": minor
-"@dhis2-chap/ui": minor
 ---
 
-Create reusable datasets without selecting a model, with covariate name suggestions, compatibility previews, climate sources, and saved-dataset evaluation selection.
+Add a Datasets page where data can be imported once, named per covariate, and reused across evaluations (CLIM-1075).
