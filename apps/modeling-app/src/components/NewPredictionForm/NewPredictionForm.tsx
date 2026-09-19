@@ -20,6 +20,9 @@ import styles from './NewPredictionForm.module.css';
 import { useNavigationBlocker } from '../../hooks/useNavigationBlocker';
 import { NavigationConfirmModal } from '../NavigationConfirmModal';
 import { type Dhis2PeriodSettings, useDhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
+import { useModels } from '@/hooks/useModels';
+import { hasRevisionMismatch } from '@/utils/modelHealth';
+import { ModelHealthBadge, ModelHealthNotice } from '@/components/ModelHealth/ModelHealth';
 
 type NewPredictionFormProps = {
     predictionSetupId: number;
@@ -61,6 +64,9 @@ const NewPredictionFormFields = ({
         returnTo,
     });
 
+    const { models } = useModels({ refreshHealth: true });
+    const model = models?.find(model => String(model.id) === context.initialValues.modelId);
+
     const {
         showConfirmModal,
         handleConfirmNavigation,
@@ -80,6 +86,9 @@ const NewPredictionFormFields = ({
                                 periodType={periodType}
                                 fromPeriod={fromPeriod}
                             />
+
+                            <ModelHealthBadge model={model} />
+                            <ModelHealthNotice model={model} />
 
                             <div className={styles.formFields}>
                                 <Controller
@@ -110,6 +119,7 @@ const NewPredictionFormFields = ({
                                 <ButtonStrip end>
                                     <Button
                                         loading={isSubmitting}
+                                        disabled={isSubmitting || hasRevisionMismatch(model)}
                                         onClick={handleStartPrediction}
                                         icon={<IconArrowRightMulti16 />}
                                         primary
