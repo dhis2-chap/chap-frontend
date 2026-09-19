@@ -1,6 +1,6 @@
 import { QueryClient } from '@tanstack/react-query';
 import i18n from '@dhis2/d2-i18n';
-import { ModelExecutionFormValues } from '../hooks/useModelExecutionFormState';
+import { CovariateMapping, ModelExecutionFormValues } from '../hooks/useModelExecutionFormState';
 import { getPeriodsInRange, PERIOD_TYPES, toDhis2FixedPeriodType } from '@dhis2-chap/core';
 import { DataSource, ModelSpecRead, ObservationBase } from '@dhis2-chap/ui';
 import { useDataEngine } from '@dhis2/app-runtime';
@@ -8,7 +8,7 @@ import { AnalyticsResponse, OrgUnitResponse, fetchAnalytics, fetchOrgUnits } fro
 import { generateBacktestDataHash } from './hashUtils';
 import { type Dhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
 
-const calculatePeriods = (
+export const calculatePeriods = (
     periodType: keyof typeof PERIOD_TYPES,
     fromPeriodId: string,
     toPeriodId: string,
@@ -23,6 +23,55 @@ const calculatePeriods = (
         calendar: periodSettings.calendar,
         locale: periodSettings.locale,
     }).map(period => period.id);
+};
+
+export const buildDataItems = (
+    targetMapping: CovariateMapping,
+    covariateMappings: CovariateMapping[],
+): string[] => [
+    ...covariateMappings.map(mapping => mapping.dataItem.id),
+    targetMapping.dataItem.id,
+];
+
+export const buildDataSources = (
+    targetMapping: CovariateMapping,
+    covariateMappings: CovariateMapping[],
+): DataSource[] => [
+    ...covariateMappings.map(mapping => ({
+        covariate: mapping.covariateName,
+        dataElementId: mapping.dataItem.id,
+    })),
+    {
+        covariate: targetMapping.covariateName,
+        dataElementId: targetMapping.dataItem.id,
+    },
+];
+
+export const convertDhis2AnalyticsToChap = (
+    rows: [string, string, string, string][],
+    targetMapping: CovariateMapping,
+    covariateMappings: CovariateMapping[],
+): ObservationBase[] => {
+    return rows.map((row) => {
+        const dataItemId = row[0];
+        const dataLayer = targetMapping
+            .dataItem
+            .id === dataItemId ? targetMapping : covariateMappings.find(mapping => mapping.dataItem.id === dataItemId);
+
+        if (!dataLayer) {
+            throw new Error(i18n.t('Data layer not found for data item id{{escape}} {{dataItemId}}', {
+                dataItemId,
+                escape: ':',
+            }));
+        }
+
+        return {
+            featureName: dataLayer.covariateName,
+            orgUnit: row[1],
+            period: row[2],
+            value: parseFloat(row[3]),
+        };
+    });
 };
 
 export type PreparedBacktestData = {
@@ -57,21 +106,8 @@ export const prepareBacktestData = async (
         periodSettings,
     );
 
-    const dataItems = [
-        ...formData.covariateMappings.map(mapping => mapping.dataItem.id),
-        formData.targetMapping.dataItem.id,
-    ];
-
-    const dataSources: DataSource[] = [
-        ...formData.covariateMappings.map(mapping => ({
-            covariate: mapping.covariateName,
-            dataElementId: mapping.dataItem.id,
-        })),
-        {
-            covariate: formData.targetMapping.covariateName,
-            dataElementId: formData.targetMapping.dataItem.id,
-        },
-    ];
+    const dataItems = buildDataItems(formData.targetMapping, formData.covariateMappings);
+    const dataSources = buildDataSources(formData.targetMapping, formData.covariateMappings);
 
     // Create a unique key of the data elements, periods, and org units for caching
     const hash = generateBacktestDataHash(dataItems, periods, formData.orgUnits.map(ou => ou.id));
@@ -102,31 +138,11 @@ export const prepareBacktestData = async (
         queryClient.setQueryData(['new-backtest-data', 'org-units', hash], orgUnitResponse);
     }
 
-    const convertDhis2AnalyticsToChap = (data: [string, string, string, string][]): ObservationBase[] => {
-        return data.map((row) => {
-            const dataItemId = row[0];
-            const dataLayer = formData
-                .targetMapping
-                .dataItem
-                .id === dataItemId ? formData.targetMapping : formData.covariateMappings.find(mapping => mapping.dataItem.id === dataItemId);
-
-            if (!dataLayer) {
-                throw new Error(i18n.t('Data layer not found for data item id{{escape}} {{dataItemId}}', {
-                    dataItemId,
-                    escape: ':',
-                }));
-            }
-
-            return {
-                featureName: dataLayer.covariateName,
-                orgUnit: row[1],
-                period: row[2],
-                value: parseFloat(row[3]),
-            };
-        });
-    };
-
-    const observations = convertDhis2AnalyticsToChap(analyticsResponse.response.rows);
+    const observations = convertDhis2AnalyticsToChap(
+        analyticsResponse.response.rows,
+        formData.targetMapping,
+        formData.covariateMappings,
+    );
 
     return {
         model,
