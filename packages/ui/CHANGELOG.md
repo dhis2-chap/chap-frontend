@@ -1,5 +1,15 @@
 # @dhis2-chap/ui
 
+## 7.1.0
+
+### Minor Changes
+
+-   e025041: Add labelled year boundaries to prediction charts so users can compare peaks across years [CLIM-1082].
+
+### Patch Changes
+
+-   @dhis2-chap/core@7.1.0
+
 ## 7.0.0
 
 ### Minor Changes
