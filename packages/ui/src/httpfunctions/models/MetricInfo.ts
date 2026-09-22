@@ -18,5 +18,16 @@ export type MetricInfo = {
      * Short paragraph explaining what the metric measures.
      */
     description?: string;
+    /**
+     * Display suffix for the raw score; does not rescale the score.
+     */
+    unit?: string | null;
+    /**
+     * Ideal value in raw score units. Null when no fixed target applies.
+     */
+    target?: number | null;
+    /**
+     * Whether deviations in either direction are worse, or only scores below the target.
+     */
+    targetBehavior?: 'closest' | 'at_least';
 };
-

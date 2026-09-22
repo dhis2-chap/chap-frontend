@@ -8,7 +8,6 @@ import {
     HEADLINE_METRIC_IDS,
     HIDDEN_METRIC_IDS,
     TARGET_TOLERANCE,
-    METRIC_PRESENTATION,
     prettifyMetricId,
 } from './metricCatalog';
 import styles from './EvaluationMetricsWidget.module.css';
@@ -18,7 +17,7 @@ type Props = {
     metrics?: Record<string, number> | null;
 };
 
-const formatScore = (score: number, unit?: string) => {
+const formatScore = (score: number, unit?: string | null) => {
     /* Scores below 1 keep significant digits so small errors stay distinguishable instead of rounding to zero. */
     const formatted = Math.abs(score) >= 1
         ? score.toLocaleString(undefined, { maximumFractionDigits: 2 })
@@ -48,11 +47,12 @@ type MetricRowProps = {
 };
 
 const MetricRow = ({ metricId, score, info }: MetricRowProps) => {
-    const presentation = METRIC_PRESENTATION[metricId];
+    const target = info?.target;
     const label = info?.displayName?.trim() || prettifyMetricId(metricId);
     const offTarget = Number.isFinite(score) &&
-        presentation?.target !== undefined &&
-        distanceFromTarget(score, presentation.target) > TARGET_TOLERANCE;
+        target != null &&
+        (info?.targetBehavior !== 'at_least' || score < target) &&
+        distanceFromTarget(score, target) > TARGET_TOLERANCE;
 
     return (
         <div className={styles.row}>
@@ -68,11 +68,11 @@ const MetricRow = ({ metricId, score, info }: MetricRowProps) => {
             </span>
             <span className={styles.valueGroup}>
                 <span className={cx(styles.value, { [styles.offTarget]: offTarget })}>
-                    {Number.isFinite(score) ? formatScore(score, presentation?.unit) : i18n.t('Not available')}
+                    {Number.isFinite(score) ? formatScore(score, info?.unit) : i18n.t('Not available')}
                 </span>
-                {presentation?.target !== undefined && (
+                {target != null && (
                     <span className={styles.target}>
-                        {i18n.t('target {{target}}', { target: formatTarget(presentation.target) })}
+                        {i18n.t('target {{target}}', { target: formatTarget(target) })}
                     </span>
                 )}
             </span>

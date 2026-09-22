@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { describe, expect, it, vi } from 'vitest';
 import type { MetricInfo } from '@dhis2-chap/ui';
 import { EvaluationMetricsWidget } from './EvaluationMetricsWidget';
+import styles from './EvaluationMetricsWidget.module.css';
 
 vi.mock('@dhis2-chap/ui', () => ({
     Widget: ({ children }: { children: ReactNode }) => children,
@@ -63,10 +64,52 @@ describe('EvaluationMetricsWidget metadata', () => {
 
     it('preserves percentage units and coverage targets with backend metadata', () => {
         const html = renderMetrics({ mape: 12, coverage_10_90: 0.8 }, [
-            { id: 'mape', displayName: 'Percentage error' },
-            { id: 'coverage_10_90', displayName: 'Interval coverage' },
+            { id: 'mape', displayName: 'Percentage error', unit: '%' },
+            { id: 'coverage_10_90', displayName: 'Interval coverage', target: 0.8, targetBehavior: 'at_least' },
         ]);
         expect(html).toContain('12 %');
         expect(html).toContain('target 0.8');
+    });
+
+    it('uses backend units and zero targets for newly supported metrics', () => {
+        const html = renderMetrics({ peak_period_lag: -2 }, [
+            { id: 'peak_period_lag', displayName: 'Peak lag', unit: 'periods', target: 0, targetBehavior: 'closest' },
+        ]);
+        expect(html).toContain('-2 periods');
+        expect(html).toContain('target 0');
+        expect(html).toContain(styles.offTarget);
+    });
+
+    it.each([undefined, null])('omits units and targets when metadata fields are %s', (missing) => {
+        const html = renderMetrics({ mape: 12, coverage_10_90: 0.2 }, [
+            { id: 'mape', displayName: 'MAPE', unit: missing },
+            { id: 'coverage_10_90', displayName: 'Coverage', target: missing },
+        ]);
+        expect(html).not.toContain('%');
+        expect(html).not.toContain('target ');
+        expect(html).not.toContain(styles.offTarget);
+    });
+
+    it.each([
+        ['at_least', 0.6, true],
+        ['at_least', 0.65, false],
+        ['at_least', 0.8, false],
+        ['at_least', 1, false],
+        ['closest', 0.6, true],
+        ['closest', 0.65, false],
+        ['closest', 0.8, false],
+        ['closest', 0.95, false],
+        ['closest', 1, true],
+        [undefined, 1, true],
+        ['closest', NaN, false],
+        ['at_least', Infinity, false],
+    ] as const)('judges %s scores of %s against the backend target', (targetBehavior, score, offTarget) => {
+        const html = renderMetrics({ custom_metric: score }, [
+            { id: 'custom_metric', displayName: 'Custom metric', target: 0.8, targetBehavior },
+        ]);
+        expect(html.includes(styles.offTarget)).toBe(offTarget);
+        if (!Number.isFinite(score)) {
+            expect(html).toContain('Not available');
+        }
     });
 });

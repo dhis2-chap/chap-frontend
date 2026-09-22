@@ -10,11 +10,3 @@ export const TARGET_TOLERANCE = 0.15;
 /* Keep scores readable while metadata is loading or unavailable. */
 export const prettifyMetricId = (metricId: string) =>
     metricId.replace(/_/g, ' ').replace(/^./, char => char.toUpperCase());
-
-/* Presentation hints not currently supplied by the metric metadata endpoint. */
-export const METRIC_PRESENTATION: Record<string, { target?: number; unit?: string }> = {
-    mape: { unit: '%' },
-    coverage_10_90: { target: 0.8 },
-    coverage_25_75: { target: 0.5 },
-    ratio_above_truth: { target: 0.5 },
-};
