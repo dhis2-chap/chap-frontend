@@ -1,11 +1,11 @@
 {
     "name": "@dhis2-chap/modeling-app",
-    "version": "7.0.0",
+    "version": "7.1.0",
     "description": "",
     "license": "BSD-3-Clause",
     "private": true,
     "scripts": {
-        "build": "d2-app-scripts build",
+        "build": "cp CHANGELOG.md public/ && d2-app-scripts build",
         "start": "d2-app-scripts start",
         "deploy": "d2-app-scripts deploy",
         "tsc:check": "tsc --noEmit",

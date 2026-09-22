@@ -5,8 +5,44 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-09-11T10:34:46.028Z\n"
-"PO-Revision-Date: 2026-09-11T10:34:46.029Z\n"
+"POT-Creation-Date: 2026-09-18T14:44:40.937Z\n"
+"PO-Revision-Date: 2026-09-18T14:44:40.938Z\n"
+
+msgid "Evaluations"
+msgstr "Evaluations"
+
+msgid "Compare evaluations"
+msgstr "Compare evaluations"
+
+msgid "New evaluation"
+msgstr "New evaluation"
+
+msgid "Evaluation details"
+msgstr "Evaluation details"
+
+msgid "Prediction setups"
+msgstr "Prediction setups"
+
+msgid "Prediction setup"
+msgstr "Prediction setup"
+
+msgid "Run prediction"
+msgstr "Run prediction"
+
+msgid "Prediction details"
+msgstr "Prediction details"
+
+msgid "Import prediction"
+msgstr "Import prediction"
+
+msgid "Activity"
+msgstr "Activity"
+
+msgid "Models"
+msgstr "Models"
+
+msgid "New model"
+msgstr "New model"
 
 msgid "CHAP API token (optional)"
 msgstr "CHAP API token (optional)"
@@ -140,9 +176,6 @@ msgstr[1] "Evaluated on {{count}} locations"
 msgid "Actions"
 msgstr "Actions"
 
-msgid "New evaluation"
-msgstr "New evaluation"
-
 msgid "Sort by {{column}}"
 msgstr "Sort by {{column}}"
 
@@ -177,6 +210,9 @@ msgstr "Failed to delete evaluation"
 
 msgid "Error renaming evaluation"
 msgstr "Error renaming evaluation"
+
+msgid "Breadcrumbs"
+msgstr "Breadcrumbs"
 
 msgid "Could not connect to CHAP"
 msgstr "Could not connect to CHAP"
@@ -643,9 +679,6 @@ msgstr "Cannot run prediction"
 
 msgid "Prediction run name"
 msgstr "Prediction run name"
-
-msgid "Run prediction"
-msgstr "Run prediction"
 
 msgid "Loading period settings"
 msgstr "Loading period settings"
@@ -1438,9 +1471,6 @@ msgstr "Failed to archive model"
 msgid "No covariate names available"
 msgstr "No covariate names available"
 
-msgid "New model"
-msgstr "New model"
-
 msgid "No models available"
 msgstr "No models available"
 
@@ -1713,9 +1743,6 @@ msgstr ""
 msgid "Clear and import prediction"
 msgstr "Clear and import prediction"
 
-msgid "Import prediction"
-msgstr "Import prediction"
-
 msgid "Import progress"
 msgstr "Import progress"
 
@@ -1919,9 +1946,6 @@ msgstr "Evaluate"
 msgid "Overview"
 msgstr "Overview"
 
-msgid "Models"
-msgstr "Models"
-
 msgid "Report a bug"
 msgstr "Report a bug"
 
@@ -1979,9 +2003,6 @@ msgid ""
 msgstr ""
 "The Chap Core version {{chapVersion}} is too old. The Modeling App "
 "specifies minimum Chap core version{{escape}} {{chapMinVersion}}"
-
-msgid "Compare evaluations"
-msgstr "Compare evaluations"
 
 msgid "Compare evaluations to assess model, co-variates and data performance."
 msgstr "Compare evaluations to assess model, co-variates and data performance."
@@ -2386,9 +2407,6 @@ msgstr "Data Pruning"
 msgid "Requires superuser authority"
 msgstr "Requires superuser authority"
 
-msgid "Prediction setup"
-msgstr "Prediction setup"
-
 msgid "Run predictions, review activity, and manage this setup."
 msgstr "Run predictions, review activity, and manage this setup."
 
@@ -2419,9 +2437,6 @@ msgstr "No prediction setups yet"
 msgid "Error loading prediction setups"
 msgstr "Error loading prediction setups"
 
-msgid "Evaluation details"
-msgstr "Evaluation details"
-
 msgid ""
 "Deep dive into a specific evaluation run to assess its performance and "
 "reliability."
@@ -2431,9 +2446,6 @@ msgstr ""
 
 msgid "Back to evaluations"
 msgstr "Back to evaluations"
-
-msgid "Evaluations"
-msgstr "Evaluations"
 
 msgid ""
 "Evaluates the accuracy of a predictive model using historical data. "
@@ -2491,9 +2503,6 @@ msgstr "Create a prediction run for this setup."
 msgid "Back to prediction setup"
 msgstr "Back to prediction setup"
 
-msgid "Activity"
-msgstr "Activity"
-
 msgid "View and manage jobs for this prediction setup."
 msgstr "View and manage jobs for this prediction setup."
 
@@ -2518,9 +2527,6 @@ msgstr "The model for this prediction could not be loaded."
 
 msgid "Import the forecasted values of this prediction into DHIS2."
 msgstr "Import the forecasted values of this prediction into DHIS2."
-
-msgid "Prediction details"
-msgstr "Prediction details"
 
 msgid "Unnamed prediction"
 msgstr "Unnamed prediction"

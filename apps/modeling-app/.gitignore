@@ -1,0 +1,4 @@
+# This is copied in to public before builds so that it's included in app bundles
+# for version documentation on the App Hub
+# (Which is not picked up by default in monorepos)
+public/CHANGELOG.md
