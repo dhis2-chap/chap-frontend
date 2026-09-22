@@ -71,13 +71,13 @@ describe('EvaluationMetricsWidget metadata', () => {
         expect(html).toContain('target 0.8');
     });
 
-    it('uses backend units and zero targets for newly supported metrics', () => {
-        const html = renderMetrics({ peak_period_lag: -2 }, [
-            { id: 'peak_period_lag', displayName: 'Peak lag', unit: 'periods', target: 0, targetBehavior: 'closest' },
+    it('shows zero targets on raw-unit metrics without judging the score against them', () => {
+        const html = renderMetrics({ peak_value_diff: -2 }, [
+            { id: 'peak_value_diff', displayName: 'Peak difference', unit: 'cases', target: 0, targetBehavior: 'closest' },
         ]);
-        expect(html).toContain('-2 periods');
+        expect(html).toContain('-2 cases');
         expect(html).toContain('target 0');
-        expect(html).toContain(styles.offTarget);
+        expect(html).not.toContain(styles.offTarget);
     });
 
     it.each([undefined, null])('omits units and targets when metadata fields are %s', (missing) => {

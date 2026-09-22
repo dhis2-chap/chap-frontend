@@ -49,8 +49,9 @@ type MetricRowProps = {
 const MetricRow = ({ metricId, score, info }: MetricRowProps) => {
     const target = info?.target;
     const label = info?.displayName?.trim() || prettifyMetricId(metricId);
+    /* The tolerance is an absolute distance, so a zero target on a raw-unit metric like peak value difference would flag a miss of 0.15 cases. */
     const offTarget = Number.isFinite(score) &&
-        target != null &&
+        target != null && target !== 0 &&
         (info?.targetBehavior !== 'at_least' || score < target) &&
         distanceFromTarget(score, target) > TARGET_TOLERANCE;
 
