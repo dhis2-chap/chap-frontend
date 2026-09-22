@@ -22,7 +22,7 @@ import { NavigationConfirmModal } from '../NavigationConfirmModal';
 import { type Dhis2PeriodSettings, useDhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
 import { useModels } from '@/hooks/useModels';
 import { hasRevisionMismatch } from '@/utils/modelHealth';
-import { ModelHealthBadge, ModelHealthNotice } from '@/components/ModelHealth/ModelHealth';
+import { ModelHealthNotice } from '@/components/ModelHealth/ModelHealth';
 
 type NewPredictionFormProps = {
     predictionSetupId: number;
@@ -64,7 +64,7 @@ const NewPredictionFormFields = ({
         returnTo,
     });
 
-    const { models } = useModels({ refreshHealth: true });
+    const { models } = useModels();
     const model = models?.find(model => String(model.id) === context.initialValues.modelId);
 
     const {
@@ -87,7 +87,6 @@ const NewPredictionFormFields = ({
                                 fromPeriod={fromPeriod}
                             />
 
-                            <ModelHealthBadge model={model} />
                             <ModelHealthNotice model={model} />
 
                             <div className={styles.formFields}>

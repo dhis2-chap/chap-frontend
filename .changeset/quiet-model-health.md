@@ -2,4 +2,4 @@
 "@dhis2-chap/modeling-app": minor
 ---
 
-Show live and revision mismatch health for models in the picker, Models table, model details, and execution forms. Explain mismatches and prevent evaluations or predictions from running a known mismatched model, rechecking health before submission. Keep older servers usable when health fields or the optional template endpoint are unavailable.
+Flag models whose service revision no longer matches the stored version in the picker, Models table, model details and execution forms. Explain the mismatch, prevent evaluations and predictions from starting such a model, and recheck health before a job is submitted. Keep older servers usable when the optional model-template endpoint is unavailable.

@@ -1,9 +1,9 @@
 import { ModelsService } from '@dhis2-chap/ui';
-import { addTemplateHealth, needsTemplateHealth, type ModelWithHealth } from '../utils/modelHealth';
+import { addTemplateHealth, hasTemplateHealth, type ModelWithHealth } from '../utils/modelHealth';
 
 export const fetchModels = async (): Promise<ModelWithHealth[]> => {
-    const models: ModelWithHealth[] = await ModelsService.listConfiguredModelsV1CrudConfiguredModelsGet();
-    if (!models.some(needsTemplateHealth)) return models;
+    const models = await ModelsService.listConfiguredModelsV1CrudConfiguredModelsGet();
+    if (!models.some(hasTemplateHealth)) return models;
 
     try {
         const templates = await ModelsService.listModelTemplatesV1CrudModelTemplatesGet();
@@ -19,5 +19,6 @@ export const modelsQueryOptions = {
     queryKey: ['models'],
     queryFn: fetchModels,
     staleTime: 30_000,
+    cacheTime: Infinity,
     retry: 0,
 };

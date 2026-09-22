@@ -5,7 +5,7 @@ import type { useDataEngine } from '@dhis2/app-runtime';
 import type { ModelExecutionFormValues } from '../hooks/useModelExecutionFormState';
 import { prepareBacktestData } from './prepareBacktestData';
 import { fetchAnalytics, fetchOrgUnits } from './queryUtils';
-import type { ModelWithHealth } from '@/utils/modelHealth';
+import type { ModelSpecRead, ModelTemplateRead } from '@dhis2-chap/ui';
 
 vi.mock('@dhis2-chap/ui', () => ({
     ModelsService: {
@@ -15,12 +15,11 @@ vi.mock('@dhis2-chap/ui', () => ({
 }));
 vi.mock('./queryUtils', () => ({ fetchAnalytics: vi.fn(), fetchOrgUnits: vi.fn() }));
 
-const model: ModelWithHealth = {
+const model: ModelSpecRead = {
     id: 1,
     name: 'ewars',
     version: '1.0',
     usesChapkit: true,
-    healthStatus: 'live',
     covariates: [],
     target: { name: 'disease_cases', displayName: 'Cases', description: 'Cases' },
 };
@@ -37,6 +36,7 @@ const form: ModelExecutionFormValues = {
         dataItem: { id: 'cases', displayName: 'Cases', dimensionItemType: 'DATA_ELEMENT' },
     },
 };
+const template: ModelTemplateRead = { id: 20, name: 'ewars', version: '1.0', usesChapkit: true };
 const settings = { calendar: 'gregory', locale: 'en', timeZone: 'UTC' } as const;
 const dataEngine = {} as ReturnType<typeof useDataEngine>;
 
@@ -52,8 +52,9 @@ describe('shared evaluation and prediction preflight', () => {
     it('rejects a newly mismatched model before fetching data, despite a fresh live cache', async () => {
         const client = new QueryClient();
         client.setQueryData(['models'], [model]);
-        vi.mocked(ModelsService.listConfiguredModelsV1CrudConfiguredModelsGet)
-            .mockResolvedValue([{ ...model, healthStatus: 'revision_mismatch' } as ModelWithHealth]);
+        vi.mocked(ModelsService.listConfiguredModelsV1CrudConfiguredModelsGet).mockResolvedValue([model]);
+        vi.mocked(ModelsService.listModelTemplatesV1CrudModelTemplatesGet)
+            .mockResolvedValue([{ ...template, healthStatus: 'revision_mismatch' }]);
 
         await expect(prepareBacktestData(form, dataEngine, client, settings))
             .rejects.toThrow('The model developer must publish a new version');
@@ -62,16 +63,15 @@ describe('shared evaluation and prediction preflight', () => {
         client.clear();
     });
 
-    it.each(['live', undefined, null, 'future_status'])('allows health %s and recovers from a cached mismatch', async (healthStatus) => {
+    it('recovers from a cached mismatch once the model is healthy again', async () => {
         const client = new QueryClient();
         client.setQueryData(['models'], [{ ...model, healthStatus: 'revision_mismatch' }]);
-        const currentModel = { ...model, healthStatus };
-        vi.mocked(ModelsService.listConfiguredModelsV1CrudConfiguredModelsGet).mockResolvedValue([currentModel]);
+        vi.mocked(ModelsService.listConfiguredModelsV1CrudConfiguredModelsGet).mockResolvedValue([model]);
         // Simulate an older backend without the optional template URL.
         vi.mocked(ModelsService.listModelTemplatesV1CrudModelTemplatesGet).mockRejectedValue({ status: 404 });
 
         const result = await prepareBacktestData(form, dataEngine, client, settings);
-        expect(result.model).toEqual(currentModel);
+        expect(result.model).toEqual(model);
         expect(result.observations).toEqual([{ featureName: 'disease_cases', orgUnit: 'org-unit', period: '202401', value: 12 }]);
         client.clear();
     });

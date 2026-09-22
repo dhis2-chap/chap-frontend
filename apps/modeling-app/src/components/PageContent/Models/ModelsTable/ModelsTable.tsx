@@ -47,8 +47,8 @@ const columns = [
         header: i18n.t('Name'),
         filterFn: 'includesString',
         cell: info => (
-            <div>
-                <div>{info.getValue()}</div>
+            <div className={styles.nameCell}>
+                {info.getValue() || undefined}
                 <ModelHealthBadge model={info.row.original} />
             </div>
         ),

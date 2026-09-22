@@ -35,27 +35,10 @@ beforeEach(() => {
     listTemplates.mockResolvedValue([template]);
 });
 
-describe('model health compatibility', () => {
-    it.each(['live', 'revision_mismatch', null, 'future_status'])('prefers configured-model health %s without an extra request', async (healthStatus) => {
-        const directModel = { ...model, healthStatus };
-        listModels.mockResolvedValue([directModel]);
-        expect(await fetchModels()).toEqual([directModel]);
-        expect(listTemplates).not.toHaveBeenCalled();
-        expect(hasRevisionMismatch(directModel)).toBe(healthStatus === 'revision_mismatch');
-    });
-
+describe('model health', () => {
     it.each(['ewars', 'ewars:custom'])('resolves template health for %s on the same version', async (name) => {
         listModels.mockResolvedValue([{ ...model, name }]);
         expect(await fetchModels()).toEqual([{ ...model, name, healthStatus: 'revision_mismatch' }]);
-    });
-
-    it('preserves direct null status even when other models require the fallback', async () => {
-        const directModel = { ...model, id: 2, healthStatus: null };
-        listModels.mockResolvedValue([model, directModel]);
-        expect(await fetchModels()).toEqual([
-            { ...model, healthStatus: 'revision_mismatch' },
-            directModel,
-        ]);
     });
 
     it.each([

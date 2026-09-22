@@ -53,7 +53,7 @@ const formatValue = (value: unknown): string => {
 
 export const ViewModelInfoModal = ({ id, onClose }: Props) => {
     const { info, error, isLoading } = useConfiguredModelInfo({ id });
-    const { models } = useModels({ includeArchived: true, refreshHealth: true });
+    const { models } = useModels({ includeArchived: true });
     const model = models?.find(model => model.id === id);
 
     const template = info?.modelTemplate;

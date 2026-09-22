@@ -145,7 +145,6 @@ export const ModelSelectionModal = ({
     };
 
     const handleModelUse = (model: ModelSpecRead) => {
-        if (hasRevisionMismatch(model)) return;
         onConfirm(model);
         handleModalClose();
     };

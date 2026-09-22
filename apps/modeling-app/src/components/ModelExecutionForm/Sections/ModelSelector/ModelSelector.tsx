@@ -13,7 +13,6 @@ import { ModelSpecRead } from '@dhis2-chap/ui';
 import { ModelSelectionModal } from './ModelSelectionModal';
 import styles from './ModelSelector.module.css';
 import { ModelHealthBadge, ModelHealthNotice } from '@/components/ModelHealth/ModelHealth';
-import { hasRevisionMismatch } from '@/utils/modelHealth';
 
 type Props = {
     control: Control<ModelExecutionFormValues>;
@@ -22,13 +21,12 @@ type Props = {
 export const ModelSelector = ({
     control,
 }: Props) => {
-    const { models, isLoading } = useModels({ refreshHealth: true });
+    const { models, isLoading } = useModels();
     const [isModelModalOpen, setIsModelModalOpen] = useState(false);
     const methods = useFormContext<ModelExecutionFormValues>();
     const modelId = useWatch({ control, name: 'modelId' });
 
     const handleModalConfirm = (model: ModelSpecRead) => {
-        if (hasRevisionMismatch(model)) return;
         methods.setValue('modelId', model.id.toString(), { shouldValidate: true, shouldDirty: true });
         methods.resetField('covariateMappings');
         methods.resetField('targetMapping');

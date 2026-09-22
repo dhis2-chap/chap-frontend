@@ -42,6 +42,9 @@
 }
 
 .metaDefinition {
+  display: flex;
+  align-items: center;
+  gap: var(--spacers-dp8);
   margin: 0;
   font-size: 13px;
   color: var(--colors-grey900);
