@@ -7,11 +7,19 @@ import { buildOrgUnitFeatureCollection } from '../../ModelExecutionForm/utils/or
 import type { DatasetFormValues } from '../hooks/useDatasetFormState';
 import type { Dhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
 
+export type PreparedDataset = {
+    request: DatasetMakeRequest;
+    /** Every period in the chosen range, in order. */
+    periods: string[];
+    /** Every organisation unit the selection resolved to, with or without data. */
+    orgUnits: { id: string; displayName: string; hasGeometry: boolean }[];
+};
+
 export const prepareDataset = async (
     formData: DatasetFormValues,
     dataEngine: ReturnType<typeof useDataEngine>,
     periodSettings: Dhis2PeriodSettings,
-): Promise<DatasetMakeRequest> => {
+): Promise<PreparedDataset> => {
     const periods = getPeriodsInRange({
         startPeriodId: formData.fromPeriodId,
         endPeriodId: formData.toPeriodId,
@@ -46,19 +54,29 @@ export const prepareDataset = async (
     }
 
     const { geojson } = await fetchOrgUnits(response.metaData.dimensions.ou, dataEngine);
-    if (!geojson.organisationUnits.length || geojson.organisationUnits.some(orgUnit => !orgUnit.geometry)) {
+    // CHAP leaves out locations without a polygon, so only fail when that would be all of them.
+    const withGeometry = geojson.organisationUnits.filter(orgUnit => orgUnit.geometry);
+    if (!withGeometry.length) {
         throw new Error(i18n.t('The selected organisation units must have geometry'));
     }
 
     return {
-        name: formData.name,
-        type: 'evaluation',
-        geojson: buildOrgUnitFeatureCollection(geojson.organisationUnits),
-        providedData,
-        dataSources: formData.columns.map(column => ({
-            covariate: column.covariateName,
-            dataElementId: column.dataItem.id,
+        request: {
+            name: formData.name,
+            type: 'evaluation',
+            geojson: buildOrgUnitFeatureCollection(withGeometry),
+            providedData,
+            dataSources: formData.columns.map(column => ({
+                covariate: column.covariateName,
+                dataElementId: column.dataItem.id,
+            })),
+            dataToBeFetched: [],
+        },
+        periods,
+        orgUnits: geojson.organisationUnits.map(orgUnit => ({
+            id: orgUnit.id,
+            displayName: orgUnit.displayName,
+            hasGeometry: !!orgUnit.geometry,
         })),
-        dataToBeFetched: [],
     };
 };

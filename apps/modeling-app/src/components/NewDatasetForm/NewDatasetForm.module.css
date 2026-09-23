@@ -44,3 +44,7 @@
 .notice {
   margin-block-start: 1rem;
 }
+
+.noticeActions {
+  margin-block-start: 8px;
+}

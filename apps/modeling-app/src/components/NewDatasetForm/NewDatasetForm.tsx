@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { FormProvider, useFieldArray, useWatch } from 'react-hook-form';
 import { Link } from 'react-router-dom';
@@ -17,7 +17,9 @@ import { ModelSupport } from './Sections/ModelSupport';
 import { EMPTY_COLUMN, useDatasetFormState } from './hooks/useDatasetFormState';
 import { useCovariateSuggestions } from './hooks/useCovariateSuggestions';
 import { getModelSupport } from './utils/datasetModels';
-import { useCreateDataset } from './hooks/useCreateDataset';
+import { type DatasetImportSummary, useCreateDataset } from './hooks/useCreateDataset';
+import { useInspectDataset } from './hooks/useInspectDataset';
+import { SummaryModal } from '../ModelExecutionForm/SummaryModal';
 import { NavigationConfirmModal } from '../NavigationConfirmModal';
 import { ChapErrorNotice } from '../ChapErrorNotice';
 import { useNavigationBlocker } from '@/hooks/useNavigationBlocker';
@@ -38,7 +40,17 @@ export const NewDatasetForm = () => {
         hasFailed,
         hasSucceeded,
         retry,
+        summary,
     } = useCreateDataset(settings);
+    const inspection = useInspectDataset(settings);
+    const [shownSummary, setShownSummary] = useState<{ title: string; summary: DatasetImportSummary }>();
+    const leftOutCount = new Set(summary?.rejected.map(item => item.orgUnit)).size;
+    const allLeftOut = !!summary && leftOutCount > 0 && !summary.importedCount;
+    const isBusy = isSubmitting || isImporting || hasSucceeded || inspection.isLoading;
+    const checkData = methods.handleSubmit(data => inspection.mutate(data, {
+        onSuccess: result => setShownSummary({ title: i18n.t('Data check'), summary: result }),
+    }));
+
     const { models, isLoading: isModelsLoading, error: modelsError } = useModels();
     const { suggestions } = useCovariateSuggestions(models);
     const { data: datasets } = useDatasets();
@@ -73,7 +85,7 @@ export const NewDatasetForm = () => {
                     <Card className={styles.formCard}>
                         <div className={styles.formWrapper}>
                             <form onSubmit={methods.handleSubmit(data => createDataset(data))}>
-                                <fieldset className={styles.fields} disabled={isSubmitting || isImporting || hasSucceeded}>
+                                <fieldset className={styles.fields} disabled={isBusy}>
                                     <NameInput
                                         label={i18n.t('Dataset name')}
                                         placeholder={i18n.t('EWARS data 22-24')}
@@ -98,11 +110,20 @@ export const NewDatasetForm = () => {
                                 <div className={styles.buttons}>
                                     <ButtonStrip end>
                                         <Button
+                                            secondary
+                                            loading={inspection.isLoading}
+                                            disabled={isBusy || isSettingsLoading || !!settingsError}
+                                            onClick={() => checkData()}
+                                            dataTest="dataset-check-button"
+                                        >
+                                            {i18n.t('Check data')}
+                                        </Button>
+                                        <Button
                                             primary
                                             type="submit"
                                             icon={<IconArrowRightMulti16 />}
                                             loading={isSubmitting}
-                                            disabled={isSubmitting || isImporting || hasSucceeded || isSettingsLoading || !!settingsError}
+                                            disabled={isBusy || isSettingsLoading || !!settingsError}
                                             dataTest="dataset-create-button"
                                         >
                                             {i18n.t('Create dataset')}
@@ -111,12 +132,40 @@ export const NewDatasetForm = () => {
                                 </div>
                             </form>
 
-                            {!!error && (
+                            {!!inspection.error && (
+                                <ChapErrorNotice
+                                    error={inspection.error}
+                                    title={i18n.t('Could not check the data')}
+                                    className={styles.notice}
+                                />
+                            )}
+
+                            {!!error && !allLeftOut && (
                                 <ChapErrorNotice
                                     error={error}
                                     title={i18n.t('Could not create dataset')}
                                     className={styles.notice}
                                 />
+                            )}
+
+                            {!!summary && leftOutCount > 0 && (
+                                <NoticeBox
+                                    warning={!allLeftOut}
+                                    error={allLeftOut}
+                                    title={allLeftOut ? i18n.t('Could not create dataset') : i18n.t('Some locations were left out')}
+                                    className={styles.notice}
+                                >
+                                    {allLeftOut
+                                        ? i18n.t('Every location is missing data or a shape, so nothing was imported.')
+                                        : i18n.t('CHAP left out {{count}} locations because of missing data or shapes.', {
+                                                count: leftOutCount,
+                                                defaultValue: 'CHAP left out {{count}} location because of missing data or shapes.',
+                                                defaultValue_plural: 'CHAP left out {{count}} locations because of missing data or shapes.',
+                                            })}
+                                    <ButtonStrip className={styles.noticeActions}>
+                                        <Button small onClick={() => setShownSummary({ title: i18n.t('Import summary'), summary })}>{i18n.t('View details')}</Button>
+                                    </ButtonStrip>
+                                </NoticeBox>
                             )}
 
                             {isImporting && (
@@ -155,6 +204,15 @@ export const NewDatasetForm = () => {
                     </aside>
                 </div>
             </FormProvider>
+
+            {shownSummary && (
+                <SummaryModal
+                    title={shownSummary.title}
+                    importSummary={shownSummary.summary}
+                    orgUnitNames={shownSummary.summary.orgUnitNames}
+                    onClose={() => setShownSummary(undefined)}
+                />
+            )}
 
             {showConfirmModal && (
                 <NavigationConfirmModal

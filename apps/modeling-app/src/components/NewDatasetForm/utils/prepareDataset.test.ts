@@ -44,7 +44,7 @@ beforeEach(() => {
 
 describe('prepareDataset', () => {
     it('keeps every chosen covariate name, even when one data item is reused', async () => {
-        const request = await prepareDataset(formData, dataEngine, periodSettings);
+        const { request, periods, orgUnits } = await prepareDataset(formData, dataEngine, periodSettings);
 
         expect(request).not.toHaveProperty('modelId');
         expect(request.dataSources).toEqual([
@@ -60,6 +60,8 @@ describe('prepareDataset', () => {
         expect(fetchAnalytics).toHaveBeenCalledWith(['data1'], ['202401', '202402'], ['LEVEL-2'], dataEngine);
         expect(fetchOrgUnits).toHaveBeenCalledWith(['resolved-unit'], dataEngine);
         expect(request.geojson.features[0].id).toBe('resolved-unit');
+        expect(periods).toEqual(['202401', '202402']);
+        expect(orgUnits).toEqual([{ id: 'resolved-unit', displayName: 'District', hasGeometry: true }]);
     });
 
     it('does not silently create a dataset that is missing a chosen column', async () => {
@@ -70,18 +72,25 @@ describe('prepareDataset', () => {
         await expect(prepareDataset(formData, dataEngine, periodSettings)).rejects.toThrow('no observations');
     });
 
-    it('rejects organisation units without geometry', async () => {
+    it('leaves out organisation units without geometry, unless none have it', async () => {
+        const withoutGeometry = { level: 2, geometry: undefined as unknown as { type: string; coordinates: number[][] } };
+        const withGeometry = { level: 2, geometry: { type: 'Polygon', coordinates: [] } };
         vi.mocked(fetchOrgUnits).mockResolvedValue({
             geojson: {
-                organisationUnits: [{
-                    id: 'resolved-unit',
-                    displayName: 'District',
-                    level: 2,
-                    geometry: undefined as unknown as { type: string; coordinates: number[][] },
-                }],
+                organisationUnits: [
+                    { id: 'resolved-unit', displayName: 'District', ...withGeometry },
+                    { id: 'no-shape', displayName: 'No shape', ...withoutGeometry },
+                ],
             },
         });
 
+        const { request, orgUnits } = await prepareDataset(formData, dataEngine, periodSettings);
+        expect(request.geojson.features.map(feature => feature.id)).toEqual(['resolved-unit']);
+        expect(orgUnits.map(orgUnit => orgUnit.hasGeometry)).toEqual([true, false]);
+
+        vi.mocked(fetchOrgUnits).mockResolvedValue({
+            geojson: { organisationUnits: [{ id: 'no-shape', displayName: 'No shape', ...withoutGeometry }] },
+        });
         await expect(prepareDataset(formData, dataEngine, periodSettings)).rejects.toThrow('geometry');
     });
 });
