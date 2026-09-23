@@ -1,7 +1,14 @@
 .buttonContainer {
     display: flex;
     justify-content: flex-end;
+    align-items: center;
+    gap: var(--spacers-dp16);
     margin-block-end: var(--spacers-dp16);
+}
+
+.leftSection {
+    flex: 1;
+    display: flex;
 }
 
 .covariates {

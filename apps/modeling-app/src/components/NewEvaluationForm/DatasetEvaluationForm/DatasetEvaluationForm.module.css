@@ -19,3 +19,13 @@
   align-items: center;
   block-size: 200px;
 }
+
+.datasetRow {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--spacers-dp8);
+}
+
+.datasetField {
+  flex: 1;
+}

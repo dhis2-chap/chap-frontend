@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-09-23T10:56:31.051Z\n"
-"PO-Revision-Date: 2026-09-23T10:56:31.051Z\n"
+"POT-Creation-Date: 2026-09-23T14:23:47.831Z\n"
+"PO-Revision-Date: 2026-09-23T14:23:47.832Z\n"
 
 msgid "CHAP API token (optional)"
 msgstr "CHAP API token (optional)"
@@ -196,6 +196,15 @@ msgstr "Learn more about Modeling and CHAP"
 
 msgid "Configure settings"
 msgstr "Configure settings"
+
+msgid "Origin"
+msgstr "Origin"
+
+msgid "Created manually"
+msgstr "Created manually"
+
+msgid "Created by evaluations or predictions"
+msgstr "Created by evaluations or predictions"
 
 msgid "Until {{date}}"
 msgstr "Until {{date}}"
@@ -1015,6 +1024,12 @@ msgstr "sources"
 
 msgid "Error loading datasets"
 msgstr "Error loading datasets"
+
+msgid "Evaluate"
+msgstr "Evaluate"
+
+msgid "New dataset"
+msgstr "New dataset"
 
 msgid "No datasets yet. Create one to reuse the same data across evaluations."
 msgstr "No datasets yet. Create one to reuse the same data across evaluations."
@@ -2000,9 +2015,6 @@ msgstr "No regions match the selected filters."
 msgid "Dashboard"
 msgstr "Dashboard"
 
-msgid "Evaluate"
-msgstr "Evaluate"
-
 msgid "Overview"
 msgstr "Overview"
 
@@ -2574,9 +2586,6 @@ msgstr ""
 
 msgid "Back to models"
 msgstr "Back to models"
-
-msgid "New dataset"
-msgstr "New dataset"
 
 msgid "Choose the data to import and name its columns so models can use them."
 msgstr "Choose the data to import and name its columns so models can use them."

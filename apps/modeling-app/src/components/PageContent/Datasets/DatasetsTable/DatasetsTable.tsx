@@ -24,6 +24,7 @@ import { format } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 import { DataSetInfo, getPeriodNameFromId, Tag } from '@dhis2-chap/ui';
 import { useTablePaginationParams } from '../../../../hooks/useTablePaginationParams';
+import { DatasetOriginFilter, matchesOrigin, useDatasetOriginFilter } from '../../../DatasetOriginFilter';
 import styles from './DatasetsTable.module.css';
 
 const columnHelper = createColumnHelper<DataSetInfo>();
@@ -87,9 +88,10 @@ type Props = {
 export const DatasetsTable = ({ datasets }: Props) => {
     const navigate = useNavigate();
     const { pageIndex, pageSize, setPageIndex, setPageSize } = useTablePaginationParams();
+    const { origin } = useDatasetOriginFilter();
 
     const table = useReactTable({
-        data: datasets,
+        data: datasets.filter(dataset => matchesOrigin(dataset, origin)),
         columns,
         state: { pagination: { pageIndex, pageSize } },
         initialState: { sorting: [{ id: 'created', desc: true }] },
@@ -104,6 +106,9 @@ export const DatasetsTable = ({ datasets }: Props) => {
     return (
         <div>
             <div className={styles.buttonContainer}>
+                <div className={styles.leftSection}>
+                    <DatasetOriginFilter datasets={datasets} />
+                </div>
                 <Button primary small icon={<IconAdd16 />} onClick={() => navigate('/datasets/new')}>
                     {i18n.t('New dataset')}
                 </Button>

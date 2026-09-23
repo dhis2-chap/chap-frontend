@@ -18,6 +18,7 @@ import { NavigationConfirmModal } from '../../NavigationConfirmModal';
 import { ChapErrorNotice } from '../../ChapErrorNotice';
 import { useDatasets } from '@/hooks/useDatasets';
 import { useModels } from '@/hooks/useModels';
+import { DatasetOriginFilter, matchesOrigin, useDatasetOriginFilter } from '../../DatasetOriginFilter';
 import { datasetSupportsModel } from '../../NewDatasetForm/utils/datasetModels';
 import { getBacktestSplitting } from '../hooks/backtestDefaults';
 import styles from './DatasetEvaluationForm.module.css';
@@ -35,8 +36,11 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
     const [datasetId, setDatasetId] = useState(initialDatasetId);
     const [modelName, setModelName] = useState('');
     const [name, setName] = useState('');
+    const { origin } = useDatasetOriginFilter();
 
     const dataset = datasets.data?.find(item => String(item.id) === datasetId);
+    const savedDatasets = datasets.data?.filter(item => item.id != null) ?? [];
+    const datasetOptions = savedDatasets.filter(item => matchesOrigin(item, origin) || item === dataset);
     const splitting = getBacktestSplitting(dataset?.periodType);
     const compatibleModels = models?.filter(model => (
         dataset && datasetSupportsModel(dataset.covariates ?? [], dataset.periodType ?? '', model)
@@ -105,18 +109,22 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
                             required
                         />
 
-                        <SingleSelectField
-                            label={i18n.t('Dataset')}
-                            selected={datasetId}
-                            onChange={({ selected }) => {
-                                setDatasetId(selected);
-                                setModelName('');
-                            }}
-                        >
-                            {datasets.data?.filter(item => item.id != null).map(item => (
-                                <SingleSelectOption key={item.id} value={String(item.id)} label={item.name} />
-                            ))}
-                        </SingleSelectField>
+                        <div className={styles.datasetRow}>
+                            <SingleSelectField
+                                className={styles.datasetField}
+                                label={i18n.t('Dataset')}
+                                selected={datasetId}
+                                onChange={({ selected }) => {
+                                    setDatasetId(selected);
+                                    setModelName('');
+                                }}
+                            >
+                                {datasetOptions.map(item => (
+                                    <SingleSelectOption key={item.id} value={String(item.id)} label={item.name} />
+                                ))}
+                            </SingleSelectField>
+                            <DatasetOriginFilter datasets={savedDatasets} dense={false} />
+                        </div>
 
                         <SingleSelectField
                             label={i18n.t('Model')}
