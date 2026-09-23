@@ -117,7 +117,7 @@ export const getStableMaxYByOrgUnitId = (
     );
 };
 
-const createQuantileFunc = (quantiles: number[]) => {
+export const createQuantileFunc = (quantiles: number[]) => {
     const lowQuantile = quantiles[0];
     const midLowQuantile = quantiles[1];
     const midHighQuantile = quantiles[quantiles.length - 2];
