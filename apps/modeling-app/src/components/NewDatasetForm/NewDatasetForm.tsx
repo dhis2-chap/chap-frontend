@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { FormProvider, useFieldArray, useWatch } from 'react-hook-form';
 import { Link } from 'react-router-dom';
@@ -22,6 +23,8 @@ import { ChapErrorNotice } from '../ChapErrorNotice';
 import { useNavigationBlocker } from '@/hooks/useNavigationBlocker';
 import { useDhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
 import { useModels } from '@/hooks/useModels';
+import { useDatasets } from '@/hooks/useDatasets';
+import { getPreviousDataItems } from './utils/previousDataItems';
 import styles from './NewDatasetForm.module.css';
 
 export const NewDatasetForm = () => {
@@ -38,6 +41,8 @@ export const NewDatasetForm = () => {
     } = useCreateDataset(settings);
     const { models, isLoading: isModelsLoading, error: modelsError } = useModels();
     const { suggestions } = useCovariateSuggestions(models);
+    const { data: datasets } = useDatasets();
+    const previousDataItems = useMemo(() => getPreviousDataItems(datasets ?? []), [datasets]);
     const columns = useFieldArray({ control: methods.control, name: 'columns' });
     const [columnValues, periodType] = useWatch({ control: methods.control, name: ['columns', 'periodType'] });
     const covariateNames = columnValues.map(column => column.covariateName.trim());
@@ -86,6 +91,7 @@ export const NewDatasetForm = () => {
                                         columns={columns}
                                         suggestions={suggestions}
                                         onAddColumn={name => addColumns([name])}
+                                        previousDataItems={previousDataItems}
                                     />
                                 </fieldset>
 

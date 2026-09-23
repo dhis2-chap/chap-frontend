@@ -16,6 +16,8 @@ type Props = {
     columns: UseFieldArrayReturn<DatasetFormValues, 'columns'>;
     suggestions: CovariateSuggestion[];
     onAddColumn: (covariateName: string) => void;
+    /** Data item ids earlier datasets used for each column name, most used first. */
+    previousDataItems: Map<string, string[]>;
 };
 
 const ColumnHint = ({ name, suggestions }: { name: string; suggestions: CovariateSuggestion[] }) => {
@@ -44,7 +46,7 @@ const ColumnHint = ({ name, suggestions }: { name: string; suggestions: Covariat
     );
 };
 
-export const DatasetColumns = ({ columns, suggestions, onAddColumn }: Props) => {
+export const DatasetColumns = ({ columns, suggestions, onAddColumn, previousDataItems }: Props) => {
     const { control, setValue, formState: { errors } } = useFormContext<DatasetFormValues>();
     const values = useWatch({ control, name: 'columns' });
     const { fields, append, remove } = columns;
@@ -84,6 +86,7 @@ export const DatasetColumns = ({ columns, suggestions, onAddColumn }: Props) => 
                                 <SearchSelectField
                                     feature={{ id: field.id, name: '', displayName: i18n.t('DHIS2 data item'), description: '' }}
                                     defaultValue={field.dataItem}
+                                    suggestedItemIds={previousDataItems.get(usedNames[index])}
                                     onChangeSearchSelectField={(_, id, displayName, dimensionItemType) => {
                                         setValue(`columns.${index}.dataItem`, { id, displayName, dimensionItemType }, { shouldValidate: true, shouldDirty: true });
                                     }}
