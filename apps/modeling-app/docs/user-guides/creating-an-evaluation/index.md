@@ -1,7 +1,7 @@
 ---
 title: Creating an evaluation
 description: Step-by-step guide on how to create a model evaluation
-order: 1
+order: 2
 category: User Guides
 ---
 
@@ -9,19 +9,48 @@ category: User Guides
 
 An evaluation tests how accurately a predictive model performs using your historical data. It compares actual outcomes with predicted values across specified time periods and locations, giving you confidence in the model before using it for forecasting.
 
+There are two ways to create an evaluation, shown as tabs on the **New evaluation** page:
+
+- **Use saved dataset**: Evaluate a model on a dataset you have already imported. This is the quickest option, and it lets you compare several models on exactly the same data. See [Creating a dataset](/guides/creating-a-dataset).
+- **Import from DHIS2**: Pick the periods, locations, model and data items for this evaluation only. The data is imported from DHIS2 when the evaluation starts.
+
 ---
 
 ### Step 1: Navigate to the Evaluations Page
 
 From the main navigation, click on **Evaluate** in the sidebar to access the evaluations page. Here you can see all existing evaluations and create new ones.
 
-Click the **New evaluation** button to start creating a new evaluation.
+Click the **New evaluation** button to start creating a new evaluation. The page opens on the **Use saved dataset** tab.
 
 ![Evaluations page with New evaluation button](images/eval-step-1-navigate.png)
 
 ---
 
+## Option A: Use a Saved Dataset
+
+### Step 2: Choose a Dataset
+
+The **Use saved dataset** tab is selected by default. You can also go straight here from the **Datasets** page by clicking **New evaluation** in a dataset's row, which pre-selects that dataset.
+
+Enter a **Name** for the evaluation, then select a **Dataset**. A filter next to the dataset list works like the one on the Datasets page: by default only datasets created on the Datasets page are listed.
+
+If you have no saved datasets yet, the tab offers to create one or to import from DHIS2 instead.
+
+---
+
+### Step 3: Choose a Model and Start the Evaluation
+
+The **Model** dropdown only lists configured models that can use the selected dataset: the dataset must have a column for every covariate the model requires, and the same period type. If no model matches, a notice is shown instead.
+
+Select a model and click **Start evaluation**. The evaluation is queued as a background job and you are taken to the **Jobs** page, where you can monitor its progress.
+
+---
+
+## Option B: Import from DHIS2
+
 ### Step 2: Enter an Evaluation Name
+
+Click the **Import from DHIS2** tab.
 
 Give your evaluation a descriptive name that helps you identify it later. For example: "Malaria Model Evaluation 2023-2024" or "Weekly Cholera Backtest".
 
@@ -67,7 +96,7 @@ Select the model you want to test against your data. Only one model can be selec
 
 After selecting a model, you need to map the model's variables to your DHIS2 data sources:
 
-1. Click **Configure data** to open the data mapping modal
+1. Click **Configure sources** to open the data mapping modal
 2. **Target Variable**: Map the outcome variable (e.g., disease cases) to a data element, indicator, or program indicator in DHIS2
 3. **Covariates**: Map each covariate the model requires (e.g., climate data, population) to corresponding data sources
 
@@ -94,6 +123,6 @@ The evaluation will be queued as a background job. You can monitor its progress 
 ### Next Steps
 
 After the evaluation completes, you can:
-- View detailed results and metrics on the evaluation details page
-- Compare multiple evaluations to find the best model configuration
-- Use a validated model to generate predictions
+- [View detailed results](/guides/viewing-evaluation-results) and metrics on the evaluation details page
+- [Compare evaluations](/guides/comparing-evaluations) to find the best model configuration
+- [Create a prediction](/guides/creating-a-prediction) with a validated model
