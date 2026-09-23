@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import type { PredictionOrgUnitSeries } from '../../interfaces/Prediction';
-import { buildChartPeriods, buildPeriodIndexLookup, getSeriesPeriods } from '../chartPeriods';
+import {
+    buildChartPeriods,
+    buildPeriodIndexLookup,
+    dedupeSeriesPeriods,
+    getSeriesLocations,
+    getSeriesPeriods,
+} from '../chartPeriods';
 
 describe('buildChartPeriods', () => {
     it('merges padded and unpadded weekly period ids into one category', () => {
@@ -52,6 +58,69 @@ describe('getSeriesPeriods', () => {
 
     it('handles a series without actual cases', () => {
         expect(getSeriesPeriods({ ...series, actualCases: undefined })).toEqual(['202403']);
+    });
+});
+
+describe('dedupeSeriesPeriods', () => {
+    const quantiles = {
+        quantile_low: 1,
+        quantile_mid_low: 2,
+        median: 3,
+        quantile_mid_high: 4,
+        quantile_high: 5,
+    };
+    const makeSeries = (
+        orgUnitId: string,
+        actualPeriods: string[],
+        pointPeriods: string[],
+    ): PredictionOrgUnitSeries => ({
+        targetId: `target-${orgUnitId}`,
+        orgUnitId,
+        orgUnitName: orgUnitId,
+        actualCases: actualPeriods.map(period => ({ period, value: 1 })),
+        points: pointPeriods.map(period => ({ period, periodLabel: period, quantiles })),
+    });
+
+    it('collapses padded and unpadded weekly ids, keeping the first spelling', () => {
+        const series = [
+            makeSeries('ou-a', ['2025W1', '2025W2', '2025W3'], ['2025W03', '2025W04']),
+        ];
+
+        expect(dedupeSeriesPeriods(series)).toEqual(['2025W1', '2025W2', '2025W3', '2025W04']);
+    });
+
+    it('deduplicates across series while preserving first-seen order', () => {
+        const series = [
+            makeSeries('ou-a', ['2025W2'], ['2025W4']),
+            makeSeries('ou-b', ['2025W1', '2025W02'], ['2025W04', '2025W5']),
+        ];
+
+        expect(dedupeSeriesPeriods(series)).toEqual(['2025W2', '2025W4', '2025W1', '2025W5']);
+    });
+
+    it('returns an empty list for an empty series', () => {
+        expect(dedupeSeriesPeriods([])).toEqual([]);
+    });
+
+    it('returns an empty list when no series has periods', () => {
+        const series = [makeSeries('ou-a', [], [])];
+
+        expect(dedupeSeriesPeriods(series)).toEqual([]);
+    });
+});
+
+describe('getSeriesLocations', () => {
+    it('returns the org unit id of each series in order', () => {
+        const series = [
+            { orgUnitId: 'ou-a' },
+            { orgUnitId: 'ou-b' },
+        ] as PredictionOrgUnitSeries[];
+
+        expect(getSeriesLocations(series)).toEqual(['ou-a', 'ou-b']);
+    });
+
+    it('returns an empty list for an empty series', () => {
+        expect(getSeriesLocations([])).toEqual([]);
     });
 });
 

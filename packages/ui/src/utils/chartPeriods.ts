@@ -13,6 +13,25 @@ export const getSeriesPeriods = (series: PredictionOrgUnitSeries): string[] => [
     ...series.points.map(point => point.period),
 ];
 
+// Actual cases and predictions can spell the same week differently (2025W3 vs
+// 2025W03), so deduplicate by canonical id while keeping the first spelling.
+export const dedupeSeriesPeriods = (series: PredictionOrgUnitSeries[]): string[] => {
+    const periodIdByCanonicalId = new Map<string, string>();
+
+    for (const periodId of series.flatMap(getSeriesPeriods)) {
+        const canonicalId = canonicalizePeriodId(periodId);
+
+        if (!periodIdByCanonicalId.has(canonicalId)) {
+            periodIdByCanonicalId.set(canonicalId, periodId);
+        }
+    }
+
+    return Array.from(periodIdByCanonicalId.values());
+};
+
+export const getSeriesLocations = (series: PredictionOrgUnitSeries[]): string[] =>
+    series.map(orgUnitSeries => orgUnitSeries.orgUnitId);
+
 export const safeComparePeriodIds = (a: string, b: string): number => {
     try {
         return comparePeriodIds({
