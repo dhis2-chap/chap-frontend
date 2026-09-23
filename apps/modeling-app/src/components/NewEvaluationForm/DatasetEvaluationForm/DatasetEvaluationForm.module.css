@@ -20,6 +20,11 @@
   block-size: 200px;
 }
 
+.emptyActions {
+  margin-block-start: 12px;
+  align-items: center;
+}
+
 .datasetRow {
   display: flex;
   align-items: flex-end;

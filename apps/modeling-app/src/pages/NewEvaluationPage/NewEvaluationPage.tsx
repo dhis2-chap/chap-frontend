@@ -30,16 +30,16 @@ export const NewEvaluationPage = ({ useSavedDataset = false }: { useSavedDataset
 
             <TabBar>
                 <Tab
-                    selected={!useSavedDataset}
-                    onClick={() => navigate('/evaluate/new')}
-                >
-                    {i18n.t('Import from DHIS2')}
-                </Tab>
-                <Tab
                     selected={useSavedDataset}
                     onClick={() => navigate('/evaluate/from-dataset')}
                 >
                     {i18n.t('Use saved dataset')}
+                </Tab>
+                <Tab
+                    selected={!useSavedDataset}
+                    onClick={() => navigate('/evaluate/new')}
+                >
+                    {i18n.t('Import from DHIS2')}
                 </Tab>
             </TabBar>
 

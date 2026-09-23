@@ -88,6 +88,24 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
         );
     }
 
+    if (!savedDatasets.length) {
+        return (
+            <div className={styles.container}>
+                <NoticeBox title={i18n.t('No saved datasets yet')}>
+                    {i18n.t('Save a dataset once and reuse it across evaluations, or import data for this evaluation only.')}
+                    <ButtonStrip className={styles.emptyActions}>
+                        <Button small primary onClick={() => navigate('/datasets/new')}>
+                            {i18n.t('New dataset')}
+                        </Button>
+                        <Button small secondary onClick={() => navigate('/evaluate/new')}>
+                            {i18n.t('Import from DHIS2 instead')}
+                        </Button>
+                    </ButtonStrip>
+                </NoticeBox>
+            </div>
+        );
+    }
+
     return (
         <>
             <div className={styles.container}>

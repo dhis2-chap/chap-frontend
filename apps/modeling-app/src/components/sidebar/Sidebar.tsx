@@ -99,6 +99,7 @@ export const Sidebar = ({
                 <Sidenav>
                     <SidenavItems>
                         <SidebarNavLink to="/dashboard" label={i18n.t('Dashboard')} />
+                        <SidebarNavLink to="/datasets" label={i18n.t('Datasets')} />
                         <SidebarParent
                             label={i18n.t('Evaluate')}
                             links={[
@@ -113,7 +114,6 @@ export const Sidebar = ({
                             ]}
                         />
                         <SidebarNavLink to="/predictions" label={i18n.t('Predict')} />
-                        <SidebarNavLink to="/datasets" label={i18n.t('Datasets')} />
                         <SidebarNavLink to="/models" label={i18n.t('Models')} />
                         <SidebarNavLink to="/jobs" label={i18n.t('Jobs')} />
                     </SidenavItems>

@@ -74,7 +74,7 @@ const EvaluateButton = ({ datasetId }: { datasetId?: number | null }) => {
     if (datasetId == null) return null;
     return (
         <Button small secondary onClick={() => navigate(`/evaluate/from-dataset?datasetId=${datasetId}`)}>
-            {i18n.t('Evaluate')}
+            {i18n.t('New evaluation')}
         </Button>
     );
 };
