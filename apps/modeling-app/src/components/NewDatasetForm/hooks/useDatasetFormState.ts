@@ -47,7 +47,7 @@ export const useDatasetFormState = (periodSettings: Dhis2PeriodSettings) => useF
         fromPeriodId: '',
         toPeriodId: '',
         orgUnits: [],
-        columns: [{ ...EMPTY_COLUMN, covariateName: 'disease_cases' }],
+        columns: [],
     },
     shouldFocusError: false,
 });

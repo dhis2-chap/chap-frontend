@@ -65,6 +65,11 @@ export const DatasetColumns = ({ columns, suggestions, onAddColumn, previousData
             </div>
 
             <div className={styles.columns}>
+                {fields.length === 0 && (
+                    <p className={styles.empty}>
+                        {i18n.t('No columns yet. Add a suggested column or one from Model support.')}
+                    </p>
+                )}
                 {fields.map((field, index) => (
                     <div className={styles.column} key={field.id}>
                         <div className={styles.columnFields}>
@@ -101,7 +106,6 @@ export const DatasetColumns = ({ columns, suggestions, onAddColumn, previousData
                                     small
                                     secondary
                                     icon={<IconDelete16 />}
-                                    disabled={fields.length === 1}
                                     onClick={() => remove(index)}
                                     aria-label={i18n.t('Remove column')}
                                     title={i18n.t('Remove column')}

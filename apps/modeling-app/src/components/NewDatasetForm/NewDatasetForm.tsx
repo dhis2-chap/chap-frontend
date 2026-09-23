@@ -60,7 +60,7 @@ export const NewDatasetForm = () => {
     const covariateNames = columnValues.map(column => column.covariateName.trim());
     const support = getModelSupport(covariateNames, periodType, models ?? []);
 
-    // Fill unnamed columns before adding new ones, so a suggestion names the empty starter row.
+    // Fill unnamed columns before adding new ones, so a suggestion names a row added with "Add column".
     const addColumns = (names: string[]) => {
         const emptyIndexes = covariateNames.flatMap((name, index) => (name ? [] : [index]));
         const toAdd = names.filter(name => !covariateNames.includes(name));
