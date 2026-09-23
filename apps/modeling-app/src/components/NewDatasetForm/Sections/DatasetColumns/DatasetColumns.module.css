@@ -1,42 +1,101 @@
-.formField {
-  margin-block-start: 1rem;
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-block-start: 24px;
+  margin-block-start: 24px;
+  border-block-start: 1px solid var(--colors-grey300);
 }
 
-.datasetColumns {
-  border: 1px solid var(--colors-grey400);
-  padding: 1rem;
-  border-radius: 0.5rem;
-  background-color: var(--colors-grey100);
-  margin-block-start: 2rem;
+.title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--colors-grey900);
 }
 
-.mutedText {
+.description {
+  margin: 4px 0 0;
+  font-size: 14px;
   color: var(--colors-grey700);
-  font-size: 0.875rem;
-  margin-block-end: 1rem;
 }
 
-.errorText {
-  color: red;
-  font-size: 0.875rem;
-  margin-block-start: 4px;
+.columns {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .column {
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-  padding: 0.75rem;
-  border-radius: 0.25rem;
-  background-color: var(--colors-white);
-  margin-block-end: 0.5rem;
+  padding: 12px;
+  border: 1px solid var(--colors-grey300);
+  border-radius: 4px;
+  background-color: var(--colors-grey050);
 }
 
-.columnField {
-  flex: 1;
-  min-inline-size: 0;
+.columnFields {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: start;
 }
 
+/* SearchSelectField is shared, so align its label and spacing with InputField here. */
+.dataItemField > div {
+  margin-block-end: 0;
+}
+
+.dataItemField > div > div > button {
+  min-block-size: 40px;
+}
+
+.dataItemField label {
+  margin-block-end: 4px;
+  font-weight: 400;
+  color: var(--colors-grey900);
+}
+
+/* Line the button up with the inputs, below their labels. */
 .removeButton {
-  margin-block-start: 1.5rem;
+  padding-block-start: 32px;
+}
+
+.hint,
+.warningHint {
+  margin: 6px 0 0;
+  font-size: 13px;
+}
+
+.hint {
+  color: var(--colors-grey700);
+}
+
+.warningHint {
+  color: var(--colors-yellow800);
+}
+
+.errorText {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--colors-red700);
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+}
+
+.suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+}
+
+.suggestionsLabel {
+  font-size: 13px;
+  color: var(--colors-grey700);
+  margin-inline-end: 4px;
 }

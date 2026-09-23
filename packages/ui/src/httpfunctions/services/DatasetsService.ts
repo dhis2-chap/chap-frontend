@@ -5,6 +5,7 @@
 import type { Body_create_dataset_csv_v1_crud_datasets_csvFile_post } from '../models/Body_create_dataset_csv_v1_crud_datasets_csvFile_post';
 import type { chap_core__rest_api__data_models__DataBaseResponse } from '../models/chap_core__rest_api__data_models__DataBaseResponse';
 import type { ChapDataSource } from '../models/ChapDataSource';
+import type { CovariateNameSuggestion } from '../models/CovariateNameSuggestion';
 import type { DatasetCreate } from '../models/DatasetCreate';
 import type { DataSetInfo } from '../models/DataSetInfo';
 import type { DatasetMakeRequest } from '../models/DatasetMakeRequest';
@@ -215,6 +216,27 @@ export class DatasetsService {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/v1/analytics/data-sources',
+        });
+    }
+    /**
+     * Suggest covariate names for a model-independent dataset
+     * List covariate names to offer when naming the columns of a dataset that is not tied to a model.
+     *
+     * Models only run on a dataset whose covariate names match the names they ask for
+     * verbatim, so picking a suggested name is what makes a dataset reusable across models.
+     * The list is the union of three sources: CHAP's standard names; for every live model
+     * template, its required covariates plus the name of its target column (usually
+     * ``disease_cases``, but a template may call it something else); and for every live
+     * configured model, the extra continuous covariates its configuration adds on top of the
+     * template. ``requiredBy`` names the templates and configured models that need each
+     * name. Free-text names are still allowed when creating a dataset.
+     * @returns CovariateNameSuggestion Successful Response
+     * @throws ApiError
+     */
+    public static getCovariateNamesV1AnalyticsCovariateNamesGet(): CancelablePromise<Array<CovariateNameSuggestion>> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/v1/analytics/covariate-names',
         });
     }
     /**

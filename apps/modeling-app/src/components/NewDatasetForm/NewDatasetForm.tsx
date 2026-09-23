@@ -1,5 +1,5 @@
 import i18n from '@dhis2/d2-i18n';
-import { FormProvider } from 'react-hook-form';
+import { FormProvider, useFieldArray, useWatch } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import { Card } from '@dhis2-chap/ui';
 import {
@@ -12,12 +12,16 @@ import { NameInput } from '../ModelExecutionForm/Sections/NameInput';
 import { PeriodSelector } from '../ModelExecutionForm/Sections/PeriodSelector';
 import { LocationSelector } from '../ModelExecutionForm/Sections/LocationSelector';
 import { DatasetColumns } from './Sections/DatasetColumns';
-import { useDatasetFormState } from './hooks/useDatasetFormState';
+import { ModelSupport } from './Sections/ModelSupport';
+import { EMPTY_COLUMN, useDatasetFormState } from './hooks/useDatasetFormState';
+import { useCovariateSuggestions } from './hooks/useCovariateSuggestions';
+import { getModelSupport } from './utils/datasetModels';
 import { useCreateDataset } from './hooks/useCreateDataset';
 import { NavigationConfirmModal } from '../NavigationConfirmModal';
 import { ChapErrorNotice } from '../ChapErrorNotice';
 import { useNavigationBlocker } from '@/hooks/useNavigationBlocker';
 import { useDhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
+import { useModels } from '@/hooks/useModels';
 import styles from './NewDatasetForm.module.css';
 
 export const NewDatasetForm = () => {
@@ -32,6 +36,22 @@ export const NewDatasetForm = () => {
         hasSucceeded,
         retry,
     } = useCreateDataset(settings);
+    const { models, isLoading: isModelsLoading, error: modelsError } = useModels();
+    const { suggestions } = useCovariateSuggestions(models);
+    const columns = useFieldArray({ control: methods.control, name: 'columns' });
+    const [columnValues, periodType] = useWatch({ control: methods.control, name: ['columns', 'periodType'] });
+    const covariateNames = columnValues.map(column => column.covariateName.trim());
+    const support = getModelSupport(covariateNames, periodType, models ?? []);
+
+    // Fill unnamed columns before adding new ones, so a suggestion names the empty starter row.
+    const addColumns = (names: string[]) => {
+        const emptyIndexes = covariateNames.flatMap((name, index) => (name ? [] : [index]));
+        const toAdd = names.filter(name => !covariateNames.includes(name));
+        toAdd.slice(0, emptyIndexes.length).forEach((name, i) => {
+            methods.setValue(`columns.${emptyIndexes[i]}.covariateName`, name, { shouldDirty: true, shouldValidate: true });
+        });
+        columns.append(toAdd.slice(emptyIndexes.length).map(covariateName => ({ ...EMPTY_COLUMN, covariateName })));
+    };
 
     const {
         showConfirmModal,
@@ -45,7 +65,7 @@ export const NewDatasetForm = () => {
         <>
             <FormProvider {...methods}>
                 <div className={styles.container}>
-                    <Card>
+                    <Card className={styles.formCard}>
                         <div className={styles.formWrapper}>
                             <form onSubmit={methods.handleSubmit(data => createDataset(data))}>
                                 <fieldset className={styles.fields} disabled={isSubmitting || isImporting || hasSucceeded}>
@@ -62,7 +82,11 @@ export const NewDatasetForm = () => {
 
                                     <LocationSelector />
 
-                                    <DatasetColumns />
+                                    <DatasetColumns
+                                        columns={columns}
+                                        suggestions={suggestions}
+                                        onAddColumn={name => addColumns([name])}
+                                    />
                                 </fieldset>
 
                                 <div className={styles.buttons}>
@@ -112,6 +136,17 @@ export const NewDatasetForm = () => {
                             )}
                         </div>
                     </Card>
+
+                    <aside className={styles.sidePanel}>
+                        <Card>
+                            <ModelSupport
+                                support={support}
+                                isLoading={isModelsLoading}
+                                error={modelsError}
+                                onAddColumns={addColumns}
+                            />
+                        </Card>
+                    </aside>
                 </div>
             </FormProvider>
 

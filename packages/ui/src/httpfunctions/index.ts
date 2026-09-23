@@ -24,6 +24,7 @@ export type { ChapDataSource } from './models/ChapDataSource';
 export type { ConfiguredModelDB } from './models/ConfiguredModelDB';
 export type { ConfiguredModelInfoRead } from './models/ConfiguredModelInfoRead';
 export type { ConfiguredModelRead } from './models/ConfiguredModelRead';
+export type { CovariateNameSuggestion } from './models/CovariateNameSuggestion';
 export type { DataElement } from './models/DataElement';
 export type { DataList } from './models/DataList';
 export type { DatasetCreate } from './models/DatasetCreate';

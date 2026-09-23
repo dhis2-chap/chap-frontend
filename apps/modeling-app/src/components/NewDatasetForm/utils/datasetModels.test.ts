@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { ModelSpecRead } from '@dhis2-chap/ui';
-import { datasetSupportsModel } from './datasetModels';
+import { datasetSupportsModel, getModelSupport } from './datasetModels';
 
 const model: ModelSpecRead = {
     id: 1,
@@ -29,5 +29,36 @@ describe('datasetSupportsModel', () => {
         expect(datasetSupportsModel(names, 'WEEK', { ...model, supportedPeriodType: 'any' as ModelSpecRead['supportedPeriodType'] })).toBe(true);
         expect(datasetSupportsModel(names, 'MONTH', { ...model, archived: true })).toBe(false);
         expect(datasetSupportsModel(names, '', model)).toBe(false);
+    });
+});
+
+describe('getModelSupport', () => {
+    const weekly = { ...model, id: 2, name: 'weekly', supportedPeriodType: 'week' as ModelSpecRead['supportedPeriodType'] };
+    const casesOnly = { ...model, id: 3, name: 'cases-only', covariates: [], additionalContinuousCovariates: [] };
+    const needsTwo = { ...model, id: 4, name: 'needs-two', additionalContinuousCovariates: ['humidity', 'population'] };
+
+    it('splits models by why they can or cannot run', () => {
+        const support = getModelSupport(['disease_cases', 'rainfall'], 'MONTH', [model, weekly, casesOnly, needsTwo]);
+
+        expect(support.supported.map(m => m.name)).toEqual(['cases-only']);
+        expect(support.wrongPeriodType.map(m => m.name)).toEqual(['weekly']);
+        expect(support.missingColumns).toEqual([
+            { model, missing: ['humidity'] },
+            { model: needsTwo, missing: ['humidity', 'population'] },
+        ]);
+    });
+
+    it('suggests the column sets that make the most models runnable', () => {
+        const other = { ...model, id: 5, name: 'other' };
+        const support = getModelSupport(['disease_cases'], 'MONTH', [model, other, needsTwo, casesOnly]);
+
+        expect(support.nextColumns).toEqual([
+            { columns: ['rainfall', 'humidity', 'population'], models: [model, other, needsTwo] },
+            { columns: ['rainfall', 'humidity'], models: [model, other] },
+        ]);
+    });
+
+    it('ignores archived models', () => {
+        expect(getModelSupport(['disease_cases'], 'MONTH', [{ ...casesOnly, archived: true }]).supported).toEqual([]);
     });
 });
