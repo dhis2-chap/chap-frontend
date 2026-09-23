@@ -25,19 +25,9 @@ export const DatasetsContent = () => {
         );
     }
 
-    if (!datasets?.length) {
-        return (
-            <Card className={styles.container}>
-                <p className={styles.emptyState}>
-                    {i18n.t('No datasets yet. Create one to reuse the same data across evaluations.')}
-                </p>
-            </Card>
-        );
-    }
-
     return (
         <Card className={styles.container}>
-            <DatasetsTable datasets={datasets} />
+            <DatasetsTable datasets={datasets ?? []} />
         </Card>
     );
 };

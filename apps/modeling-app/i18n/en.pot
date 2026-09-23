@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-09-19T14:48:37.321Z\n"
-"PO-Revision-Date: 2026-09-19T14:48:37.321Z\n"
+"POT-Creation-Date: 2026-09-23T10:56:31.051Z\n"
+"PO-Revision-Date: 2026-09-23T10:56:31.051Z\n"
 
 msgid "CHAP API token (optional)"
 msgstr "CHAP API token (optional)"
@@ -656,9 +656,6 @@ msgstr "View datasets"
 msgid "Data columns"
 msgstr "Data columns"
 
-msgid "From DHIS2"
-msgstr "From DHIS2"
-
 msgid "Covariate name"
 msgstr "Covariate name"
 
@@ -671,20 +668,8 @@ msgstr "Select a data item"
 msgid "Remove"
 msgstr "Remove"
 
-msgid "Add DHIS2 column"
-msgstr "Add DHIS2 column"
-
-msgid "Fetched by CHAP"
-msgstr "Fetched by CHAP"
-
-msgid "Data source"
-msgstr "Data source"
-
-msgid "Add climate column"
-msgstr "Add climate column"
-
-msgid "Could not load climate sources"
-msgstr "Could not load climate sources"
+msgid "Add column"
+msgstr "Add column"
 
 msgid "Dataset import was rejected"
 msgstr "Dataset import was rejected"
@@ -692,14 +677,8 @@ msgstr "Dataset import was rejected"
 msgid "Covariate name is required"
 msgstr "Covariate name is required"
 
-msgid "Feature is required"
-msgstr "Feature is required"
-
-msgid "Data source is required"
-msgstr "Data source is required"
-
-msgid "Add at least one DHIS2 data column"
-msgstr "Add at least one DHIS2 data column"
+msgid "Add at least one data column"
+msgstr "Add at least one data column"
 
 msgid "Covariate names must be unique"
 msgstr "Covariate names must be unique"

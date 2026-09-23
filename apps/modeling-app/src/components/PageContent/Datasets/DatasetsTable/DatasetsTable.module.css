@@ -1,5 +1,11 @@
+.buttonContainer {
+    display: flex;
+    justify-content: flex-end;
+    margin-block-end: var(--spacers-dp16);
+}
+
 .covariates {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacers-dp4);
 }
