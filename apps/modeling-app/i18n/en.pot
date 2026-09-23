@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-09-23T14:23:47.831Z\n"
-"PO-Revision-Date: 2026-09-23T14:23:47.832Z\n"
+"POT-Creation-Date: 2026-09-23T14:34:49.069Z\n"
+"PO-Revision-Date: 2026-09-23T14:34:49.069Z\n"
 
 msgid "CHAP API token (optional)"
 msgstr "CHAP API token (optional)"
@@ -632,14 +632,40 @@ msgstr ""
 msgid "Leave page"
 msgstr "Leave page"
 
+msgid "Data check"
+msgstr "Data check"
+
 msgid "Dataset name"
 msgstr "Dataset name"
 
 msgid "EWARS data 22-24"
 msgstr "EWARS data 22-24"
 
+msgid "Check data"
+msgstr "Check data"
+
+msgid "Could not check the data"
+msgstr "Could not check the data"
+
 msgid "Could not create dataset"
 msgstr "Could not create dataset"
+
+msgid "Some locations were left out"
+msgstr "Some locations were left out"
+
+msgid "Every location is missing data or a shape, so nothing was imported."
+msgstr "Every location is missing data or a shape, so nothing was imported."
+
+msgid "CHAP left out {{count}} locations because of missing data or shapes."
+msgid_plural "CHAP left out {{count}} locations because of missing data or shapes."
+msgstr[0] "CHAP left out {{count}} location because of missing data or shapes."
+msgstr[1] "CHAP left out {{count}} locations because of missing data or shapes."
+
+msgid "Import summary"
+msgstr "Import summary"
+
+msgid "View details"
+msgstr "View details"
 
 msgid "Creating dataset"
 msgstr "Creating dataset"
@@ -662,23 +688,96 @@ msgstr "Dataset created"
 msgid "View datasets"
 msgstr "View datasets"
 
+msgid ""
+"No model reads a column with this name. Check the spelling or pick a "
+"suggested name."
+msgstr ""
+"No model reads a column with this name. Check the spelling or pick a "
+"suggested name."
+
+msgid "Read by {{count}} models"
+msgid_plural "Read by {{count}} models"
+msgstr[0] "Read by {{count}} model"
+msgstr[1] "Read by {{count}} models"
+
 msgid "Data columns"
 msgstr "Data columns"
 
-msgid "Covariate name"
-msgstr "Covariate name"
+msgid "Models find their data by column name, so use the names they expect."
+msgstr "Models find their data by column name, so use the names they expect."
 
-msgid "Data item"
-msgstr "Data item"
+msgid "No columns yet. Add a suggested column or one from Model support."
+msgstr "No columns yet. Add a suggested column or one from Model support."
+
+msgid "Column name"
+msgstr "Column name"
+
+msgid "DHIS2 data item"
+msgstr "DHIS2 data item"
 
 msgid "Select a data item"
 msgstr "Select a data item"
 
-msgid "Remove"
-msgstr "Remove"
+msgid "Remove column"
+msgstr "Remove column"
 
 msgid "Add column"
 msgstr "Add column"
+
+msgid "Suggested"
+msgstr "Suggested"
+
+msgid "Weekly data"
+msgstr "Weekly data"
+
+msgid "Monthly data"
+msgstr "Monthly data"
+
+msgid "Could not load models"
+msgstr "Could not load models"
+
+msgid ""
+"You can still create the dataset, but we cannot tell which models can use "
+"it."
+msgstr ""
+"You can still create the dataset, but we cannot tell which models can use "
+"it."
+
+msgid "Model support"
+msgstr "Model support"
+
+msgid "of {{total}} models can use this dataset"
+msgstr "of {{total}} models can use this dataset"
+
+msgid "Supported models"
+msgstr "Supported models"
+
+msgid "Add columns to support more models"
+msgstr "Add columns to support more models"
+
+msgid "+{{count}} models"
+msgid_plural "+{{count}} models"
+msgstr[0] "+{{count}} model"
+msgstr[1] "+{{count}} models"
+
+msgid "Add"
+msgstr "Add"
+
+msgid "Supported ({{count}})"
+msgid_plural "Supported ({{count}})"
+msgstr[0] "Supported ({{count}})"
+msgstr[1] "Supported ({{count}})"
+
+msgid "Not supported ({{count}})"
+msgid_plural "Not supported ({{count}})"
+msgstr[0] "Not supported ({{count}})"
+msgstr[1] "Not supported ({{count}})"
+
+msgid "Needs {{columns}}"
+msgstr "Needs {{columns}}"
+
+msgid "A different period type"
+msgstr "A different period type"
 
 msgid "Dataset import was rejected"
 msgstr "Dataset import was rejected"
@@ -692,6 +791,18 @@ msgstr "Add at least one data column"
 msgid "Covariate names must be unique"
 msgstr "Covariate names must be unique"
 
+msgid "No data for any column"
+msgstr "No data for any column"
+
+msgid "All columns"
+msgstr "All columns"
+
+msgid "Missing value for some/all time periods"
+msgstr "Missing value for some/all time periods"
+
+msgid "Missing polygon"
+msgstr "Missing polygon"
+
 msgid "{{covariate}} has no observations for these periods and organisation units"
 msgstr "{{covariate}} has no observations for these periods and organisation units"
 
@@ -700,6 +811,22 @@ msgstr "The selected organisation units must have geometry"
 
 msgid "Error loading datasets or models"
 msgstr "Error loading datasets or models"
+
+msgid "No saved datasets yet"
+msgstr "No saved datasets yet"
+
+msgid ""
+"Save a dataset once and reuse it across evaluations, or import data for "
+"this evaluation only."
+msgstr ""
+"Save a dataset once and reuse it across evaluations, or import data for "
+"this evaluation only."
+
+msgid "New dataset"
+msgstr "New dataset"
+
+msgid "Import from DHIS2 instead"
+msgstr "Import from DHIS2 instead"
 
 msgid "Dataset"
 msgstr "Dataset"
@@ -1024,12 +1151,6 @@ msgstr "sources"
 
 msgid "Error loading datasets"
 msgstr "Error loading datasets"
-
-msgid "Evaluate"
-msgstr "Evaluate"
-
-msgid "New dataset"
-msgstr "New dataset"
 
 msgid "No datasets yet. Create one to reuse the same data across evaluations."
 msgstr "No datasets yet. Create one to reuse the same data across evaluations."
@@ -1574,8 +1695,8 @@ msgstr "Additional continuous covariates"
 msgid "Enter covariate name"
 msgstr "Enter covariate name"
 
-msgid "Add"
-msgstr "Add"
+msgid "Remove"
+msgstr "Remove"
 
 msgid "Select the base model template"
 msgstr "Select the base model template"
@@ -1755,9 +1876,6 @@ msgstr "Clear previous values"
 
 msgid "Loading"
 msgstr "Loading"
-
-msgid "Suggested"
-msgstr "Suggested"
 
 msgid "Data elements"
 msgstr "Data elements"
@@ -2015,11 +2133,14 @@ msgstr "No regions match the selected filters."
 msgid "Dashboard"
 msgstr "Dashboard"
 
-msgid "Overview"
-msgstr "Overview"
-
 msgid "Datasets"
 msgstr "Datasets"
+
+msgid "Evaluate"
+msgstr "Evaluate"
+
+msgid "Overview"
+msgstr "Overview"
 
 msgid "Models"
 msgstr "Models"
@@ -2141,6 +2262,12 @@ msgstr "Indicator"
 
 msgid "Program Indicator"
 msgstr "Program Indicator"
+
+msgid "Used before"
+msgstr "Used before"
+
+msgid "All data items"
+msgstr "All data items"
 
 msgid "No compatible evaluations found"
 msgstr "No compatible evaluations found"
@@ -2596,11 +2723,11 @@ msgstr "Back to datasets"
 msgid "Create a new evaluation to assess the performance of a model"
 msgstr "Create a new evaluation to assess the performance of a model"
 
-msgid "Import from DHIS2"
-msgstr "Import from DHIS2"
-
 msgid "Use saved dataset"
 msgstr "Use saved dataset"
+
+msgid "Import from DHIS2"
+msgstr "Import from DHIS2"
 
 msgid "Create a prediction run for this setup."
 msgstr "Create a prediction run for this setup."
@@ -2690,10 +2817,6 @@ msgstr "Must be lower than the upper percentile"
 
 msgid "Enter a whole number of 1 or more, or leave empty to use all history"
 msgstr "Enter a whole number of 1 or more, or leave empty to use all history"
-
-msgctxt "cases."
-msgid "Name each column the way your models expect it, for example disease"
-msgstr "Name each column the way your models expect it, for example disease_cases."
 
 msgctxt ") instead."
 msgid "Spaces are not allowed. Use dashes (-) or underscores ("
