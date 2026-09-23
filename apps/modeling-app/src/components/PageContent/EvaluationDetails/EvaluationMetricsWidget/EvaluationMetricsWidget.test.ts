@@ -2,13 +2,14 @@ import { createElement, type ReactNode } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { describe, expect, it, vi } from 'vitest';
-import type { MetricInfo } from '@dhis2-chap/ui';
+import { TargetBehavior, type MetricInfo } from '@dhis2-chap/ui';
 import { EvaluationMetricsWidget } from './EvaluationMetricsWidget';
 import styles from './EvaluationMetricsWidget.module.css';
 
 vi.mock('@dhis2-chap/ui', () => ({
     Widget: ({ children }: { children: ReactNode }) => children,
     VisualizationsService: {},
+    TargetBehavior: { CLOSEST: 'closest', AT_LEAST: 'at_least' },
 }));
 vi.mock('@dhis2/ui', () => ({
     Button: ({ children }: { children: ReactNode }) => createElement('button', null, children),
@@ -65,7 +66,7 @@ describe('EvaluationMetricsWidget metadata', () => {
     it('preserves percentage units and coverage targets with backend metadata', () => {
         const html = renderMetrics({ mape: 12, coverage_10_90: 0.8 }, [
             { id: 'mape', displayName: 'Percentage error', unit: '%' },
-            { id: 'coverage_10_90', displayName: 'Interval coverage', target: 0.8, targetBehavior: 'at_least' },
+            { id: 'coverage_10_90', displayName: 'Interval coverage', target: 0.8, targetBehavior: TargetBehavior.AT_LEAST },
         ]);
         expect(html).toContain('12 %');
         expect(html).toContain('target 0.8');
@@ -73,7 +74,7 @@ describe('EvaluationMetricsWidget metadata', () => {
 
     it('shows zero targets on raw-unit metrics without judging the score against them', () => {
         const html = renderMetrics({ peak_value_diff: -2 }, [
-            { id: 'peak_value_diff', displayName: 'Peak difference', unit: 'cases', target: 0, targetBehavior: 'closest' },
+            { id: 'peak_value_diff', displayName: 'Peak difference', unit: 'cases', target: 0, targetBehavior: TargetBehavior.CLOSEST },
         ]);
         expect(html).toContain('-2 cases');
         expect(html).toContain('target 0');
@@ -91,18 +92,18 @@ describe('EvaluationMetricsWidget metadata', () => {
     });
 
     it.each([
-        ['at_least', 0.6, true],
-        ['at_least', 0.65, false],
-        ['at_least', 0.8, false],
-        ['at_least', 1, false],
-        ['closest', 0.6, true],
-        ['closest', 0.65, false],
-        ['closest', 0.8, false],
-        ['closest', 0.95, false],
-        ['closest', 1, true],
+        [TargetBehavior.AT_LEAST, 0.6, true],
+        [TargetBehavior.AT_LEAST, 0.65, false],
+        [TargetBehavior.AT_LEAST, 0.8, false],
+        [TargetBehavior.AT_LEAST, 1, false],
+        [TargetBehavior.CLOSEST, 0.6, true],
+        [TargetBehavior.CLOSEST, 0.65, false],
+        [TargetBehavior.CLOSEST, 0.8, false],
+        [TargetBehavior.CLOSEST, 0.95, false],
+        [TargetBehavior.CLOSEST, 1, true],
         [undefined, 1, true],
-        ['closest', NaN, false],
-        ['at_least', Infinity, false],
+        [TargetBehavior.CLOSEST, NaN, false],
+        [TargetBehavior.AT_LEAST, Infinity, false],
     ] as const)('judges %s scores of %s against the backend target', (targetBehavior, score, offTarget) => {
         const html = renderMetrics({ custom_metric: score }, [
             { id: 'custom_metric', displayName: 'Custom metric', target: 0.8, targetBehavior },

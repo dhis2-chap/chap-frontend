@@ -2,7 +2,7 @@ import { useState } from 'react';
 import cx from 'classnames';
 import i18n from '@dhis2/d2-i18n';
 import { useQuery } from '@tanstack/react-query';
-import { MetricInfo, VisualizationsService, Widget } from '@dhis2-chap/ui';
+import { MetricInfo, TargetBehavior, VisualizationsService, Widget } from '@dhis2-chap/ui';
 import { Button, IconInfo16, Tooltip } from '@dhis2/ui';
 import {
     HEADLINE_METRIC_IDS,
@@ -52,7 +52,7 @@ const MetricRow = ({ metricId, score, info }: MetricRowProps) => {
     /* The tolerance is an absolute distance, so a zero target on a raw-unit metric like peak value difference would flag a miss of 0.15 cases. */
     const offTarget = Number.isFinite(score) &&
         target != null && target !== 0 &&
-        (info?.targetBehavior !== 'at_least' || score < target) &&
+        (info?.targetBehavior !== TargetBehavior.AT_LEAST || score < target) &&
         distanceFromTarget(score, target) > TARGET_TOLERANCE;
 
     return (
