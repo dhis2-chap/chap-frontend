@@ -9,10 +9,8 @@ import type { Dhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
 
 export type PreparedDataset = {
     request: DatasetMakeRequest;
-    /** Every period in the chosen range, in order. */
-    periods: string[];
-    /** Every organisation unit the selection resolved to, with or without data. */
-    orgUnits: { id: string; displayName: string; hasGeometry: boolean }[];
+    /** Names of every organisation unit the selection resolved to, for CHAP's import summary. */
+    orgUnitNames: Map<string, string>;
 };
 
 export const prepareDataset = async (
@@ -72,11 +70,6 @@ export const prepareDataset = async (
             })),
             dataToBeFetched: [],
         },
-        periods,
-        orgUnits: geojson.organisationUnits.map(orgUnit => ({
-            id: orgUnit.id,
-            displayName: orgUnit.displayName,
-            hasGeometry: !!orgUnit.geometry,
-        })),
+        orgUnitNames: new Map(geojson.organisationUnits.map(orgUnit => [orgUnit.id, orgUnit.displayName])),
     };
 };

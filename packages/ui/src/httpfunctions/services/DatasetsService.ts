@@ -184,17 +184,23 @@ export class DatasetsService {
      * stored, so a single dataset can back multiple evaluations. Import happens in the
      * background — the response gives you a job id plus a per-location rejection summary
      * (validation runs synchronously, the harmonise-and-load step async). Poll
-     * ``/v1/jobs/{id}`` to know when the dataset is queryable.
+     * ``/v1/jobs/{id}`` to know when the dataset is queryable. Pass ``dryRun=true`` to run
+     * validation only and get the rejection summary without queuing an import.
      * @param requestBody
+     * @param dryRun If True, only run validation and do not import the dataset
      * @returns ImportSummaryResponse Successful Response
      * @throws ApiError
      */
     public static makeDatasetV1AnalyticsMakeDatasetPost(
         requestBody: DatasetMakeRequest,
+        dryRun: boolean = false,
     ): CancelablePromise<ImportSummaryResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/v1/analytics/make-dataset',
+            query: {
+                'dryRun': dryRun,
+            },
             body: requestBody,
             mediaType: 'application/json',
             errors: {

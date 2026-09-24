@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-09-24T07:50:22.947Z\n"
-"PO-Revision-Date: 2026-09-24T07:50:22.947Z\n"
+"POT-Creation-Date: 2026-09-24T12:27:54.756Z\n"
+"PO-Revision-Date: 2026-09-24T12:27:54.757Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -842,18 +842,6 @@ msgstr "Add at least one data column"
 
 msgid "Covariate names must be unique"
 msgstr "Covariate names must be unique"
-
-msgid "No data for any column"
-msgstr "No data for any column"
-
-msgid "All columns"
-msgstr "All columns"
-
-msgid "Missing value for some/all time periods"
-msgstr "Missing value for some/all time periods"
-
-msgid "Missing polygon"
-msgstr "Missing polygon"
 
 msgid "{{covariate}} has no observations for these periods and organisation units"
 msgstr "{{covariate}} has no observations for these periods and organisation units"

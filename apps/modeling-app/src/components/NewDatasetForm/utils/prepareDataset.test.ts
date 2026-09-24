@@ -44,7 +44,7 @@ beforeEach(() => {
 
 describe('prepareDataset', () => {
     it('keeps every chosen covariate name, even when one data item is reused', async () => {
-        const { request, periods, orgUnits } = await prepareDataset(formData, dataEngine, periodSettings);
+        const { request, orgUnitNames } = await prepareDataset(formData, dataEngine, periodSettings);
 
         expect(request).not.toHaveProperty('modelId');
         expect(request.dataSources).toEqual([
@@ -60,8 +60,7 @@ describe('prepareDataset', () => {
         expect(fetchAnalytics).toHaveBeenCalledWith(['data1'], ['202401', '202402'], ['LEVEL-2'], dataEngine);
         expect(fetchOrgUnits).toHaveBeenCalledWith(['resolved-unit'], dataEngine);
         expect(request.geojson.features[0].id).toBe('resolved-unit');
-        expect(periods).toEqual(['202401', '202402']);
-        expect(orgUnits).toEqual([{ id: 'resolved-unit', displayName: 'District', hasGeometry: true }]);
+        expect(orgUnitNames).toEqual(new Map([['resolved-unit', 'District']]));
     });
 
     it('does not silently create a dataset that is missing a chosen column', async () => {
@@ -84,9 +83,9 @@ describe('prepareDataset', () => {
             },
         });
 
-        const { request, orgUnits } = await prepareDataset(formData, dataEngine, periodSettings);
+        const { request, orgUnitNames } = await prepareDataset(formData, dataEngine, periodSettings);
         expect(request.geojson.features.map(feature => feature.id)).toEqual(['resolved-unit']);
-        expect(orgUnits.map(orgUnit => orgUnit.hasGeometry)).toEqual([true, false]);
+        expect([...orgUnitNames.keys()]).toEqual(['resolved-unit', 'no-shape']);
 
         vi.mocked(fetchOrgUnits).mockResolvedValue({
             geojson: { organisationUnits: [{ id: 'no-shape', displayName: 'No shape', ...withoutGeometry }] },

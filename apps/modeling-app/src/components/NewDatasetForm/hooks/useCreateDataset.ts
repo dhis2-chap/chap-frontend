@@ -26,8 +26,7 @@ export const useCreateDataset = (periodSettings: Dhis2PeriodSettings) => {
     const createDataset = useMutation<string, Error | ApiError, DatasetFormValues>({
         onMutate: () => setSummary(undefined),
         mutationFn: async (formData) => {
-            const { request, orgUnits } = await prepareDataset(formData, dataEngine, periodSettings);
-            const orgUnitNames = new Map(orgUnits.map(orgUnit => [orgUnit.id, orgUnit.displayName]));
+            const { request, orgUnitNames } = await prepareDataset(formData, dataEngine, periodSettings);
             try {
                 const response = await DatasetsService.makeDatasetV1AnalyticsMakeDatasetPost(request);
                 setSummary({ ...(response as unknown as ImportSummaryCorrected), orgUnitNames });
