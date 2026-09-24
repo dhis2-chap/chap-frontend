@@ -13,7 +13,8 @@ import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useNavigate } from 'react-router-dom';
-import { ApiError, BacktestsService, Card } from '@dhis2-chap/ui';
+import { ApiError, BacktestsService, Card, DataSetInfo } from '@dhis2-chap/ui';
+import { DEFAULT_DHIS2_CALENDAR, getPeriodsInRange } from '@dhis2-chap/core';
 import { useNavigationBlocker } from '@/hooks/useNavigationBlocker';
 import { NavigationConfirmModal } from '../../NavigationConfirmModal';
 import { NameInput } from '../../ModelExecutionForm/Sections/NameInput';
@@ -22,7 +23,7 @@ import { useDatasets } from '@/hooks/useDatasets';
 import { useModels } from '@/hooks/useModels';
 import { DatasetOriginFilter, matchesOrigin, useDatasetOriginFilter } from '../../DatasetOriginFilter';
 import { datasetSupportsModel } from '../../NewDatasetForm/utils/datasetModels';
-import { getBacktestSplitting } from '../hooks/backtestDefaults';
+import { getBacktestSplitting, getRequiredPeriodCount } from '../hooks/backtestDefaults';
 import styles from './DatasetEvaluationForm.module.css';
 
 const schema = z.object({
@@ -32,6 +33,21 @@ const schema = z.object({
 });
 
 type FormValues = z.infer<typeof schema>;
+
+const countPeriods = ({ firstPeriod, lastPeriod }: DataSetInfo) => {
+    if (!firstPeriod || !lastPeriod) {
+        return undefined;
+    }
+    try {
+        return getPeriodsInRange({
+            startPeriodId: firstPeriod,
+            endPeriodId: lastPeriod,
+            calendar: DEFAULT_DHIS2_CALENDAR,
+        }).length;
+    } catch {
+        return undefined;
+    }
+};
 
 type Props = {
     initialDatasetId?: string;
@@ -54,11 +70,14 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
     const savedDatasets = datasets.data?.filter(item => item.id != null) ?? [];
     const datasetOptions = savedDatasets.filter(item => matchesOrigin(item, origin) || item === dataset);
     const splitting = getBacktestSplitting(dataset?.periodType);
+    const periodCount = dataset && countPeriods(dataset);
+    const requiredPeriodCount = splitting && getRequiredPeriodCount(splitting);
+    const isTooShort = periodCount != null && !!requiredPeriodCount && periodCount < requiredPeriodCount;
     const compatibleModels = models?.filter(model => (
         dataset && datasetSupportsModel(dataset.covariates ?? [], dataset.periodType ?? '', model)
     )) ?? [];
     const selectedModel = compatibleModels.find(model => model.name === modelName);
-    const canSubmit = !!selectedModel && !!splitting && dataset?.id != null;
+    const canSubmit = !!selectedModel && !!splitting && !isTooShort && dataset?.id != null;
 
     const createEvaluation = useMutation<unknown, ApiError, string>({
         mutationFn: name => BacktestsService.createBacktestV1AnalyticsCreateBacktestPost({
@@ -167,6 +186,15 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
                         {dataset && !compatibleModels.length && (
                             <NoticeBox warning title={i18n.t('No compatible model')}>
                                 {i18n.t('No configured model matches this dataset’s covariates and period type.')}
+                            </NoticeBox>
+                        )}
+
+                        {isTooShort && (
+                            <NoticeBox warning title={i18n.t('Dataset too short')}>
+                                {i18n.t('This dataset has {{periodCount}} periods, but an evaluation needs at least {{requiredPeriodCount}}.', {
+                                    periodCount,
+                                    requiredPeriodCount,
+                                })}
                             </NoticeBox>
                         )}
 

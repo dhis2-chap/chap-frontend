@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-09-24T05:55:04.829Z\n"
-"PO-Revision-Date: 2026-09-24T05:55:04.830Z\n"
+"POT-Creation-Date: 2026-09-24T07:29:39.784Z\n"
+"PO-Revision-Date: 2026-09-24T07:29:39.784Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -875,6 +875,16 @@ msgstr "No compatible model"
 
 msgid "No configured model matches this dataset’s covariates and period type."
 msgstr "No configured model matches this dataset’s covariates and period type."
+
+msgid "Dataset too short"
+msgstr "Dataset too short"
+
+msgid ""
+"This dataset has {{periodCount}} periods, but an evaluation needs at least "
+"{{requiredPeriodCount}}."
+msgstr ""
+"This dataset has {{periodCount}} periods, but an evaluation needs at least "
+"{{requiredPeriodCount}}."
 
 msgid "Start evaluation"
 msgstr "Start evaluation"
