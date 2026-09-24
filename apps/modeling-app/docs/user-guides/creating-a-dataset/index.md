@@ -29,7 +29,7 @@ Fill in the basic settings:
 
 - **Dataset name**: A descriptive name, for example "EWARS data 22-24"
 - **Period type**: Weekly or Monthly, depending on how your data is aggregated
-- **From period** and **To period**: The date range to import (the end cannot be in the future)
+- **From period** and **To period**: The date range to import (the end cannot be in the future). To evaluate a model on the dataset, it needs at least 13 months or 49 weeks; a shorter range shows a warning
 - **Organisation units**: Click **Select organisation units** and choose the locations to include
 
 ![Dataset name, period and organisation unit fields](images/dataset-step-2-details.png)

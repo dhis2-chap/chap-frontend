@@ -1,9 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { getBacktestSplitting, getRequiredPeriodCount } from './backtestDefaults';
+import { getMinimumEvaluationPeriods } from './backtestDefaults';
 
-describe('getRequiredPeriodCount', () => {
+describe('getMinimumEvaluationPeriods', () => {
     it('covers every split plus one training period', () => {
-        expect(getRequiredPeriodCount(getBacktestSplitting('month')!)).toBe(13);
-        expect(getRequiredPeriodCount(getBacktestSplitting('week')!)).toBe(49);
+        expect(getMinimumEvaluationPeriods('month')).toBe(13);
+        expect(getMinimumEvaluationPeriods('WEEK')).toBe(49);
+        expect(getMinimumEvaluationPeriods('day')).toBeUndefined();
     });
 });

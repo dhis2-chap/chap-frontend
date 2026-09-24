@@ -8,6 +8,7 @@ import {
     parse,
     startOfISOWeek,
 } from 'date-fns';
+import { DEFAULT_DHIS2_CALENDAR, getPeriodsInRange, type Dhis2Calendar } from '@dhis2-chap/core';
 import {
     isSupportedPeriodType,
     parseSupportedPeriodType,
@@ -43,6 +44,22 @@ const parsePeriod = (
     const [, year, week] = weekMatch;
     const parsed = parse(`${year}-W${week.padStart(2, '0')}`, 'RRRR-\'W\'II', new Date());
     return isValid(parsed) ? parsed : null;
+};
+
+/** Number of periods from start to end inclusive, or undefined when the range cannot be resolved. */
+export const countPeriods = (
+    startPeriodId: string | undefined | null,
+    endPeriodId: string | undefined | null,
+    calendar: Dhis2Calendar = DEFAULT_DHIS2_CALENDAR,
+) => {
+    if (!startPeriodId || !endPeriodId) {
+        return undefined;
+    }
+    try {
+        return getPeriodsInRange({ startPeriodId, endPeriodId, calendar }).length;
+    } catch {
+        return undefined;
+    }
 };
 
 export const getNextPeriods = (

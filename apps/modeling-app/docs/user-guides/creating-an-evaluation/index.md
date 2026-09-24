@@ -40,7 +40,7 @@ If you have no saved datasets yet, the tab offers to create one or to import fro
 
 ### Step 3: Choose a Model and Start the Evaluation
 
-The **Model** dropdown only lists configured models that can use the selected dataset: the dataset must have a column for every covariate the model requires, and the same period type. If no model matches, a notice is shown instead.
+The **Model** dropdown only lists configured models that can use the selected dataset: the dataset must have a column for every covariate the model requires, and the same period type. If no model matches, a notice is shown instead. Datasets shorter than 13 months or 49 weeks cannot be evaluated, and a notice says so.
 
 Select a model and click **Start evaluation**. The evaluation is queued as a background job and you are taken to the **Jobs** page, where you can monitor its progress.
 

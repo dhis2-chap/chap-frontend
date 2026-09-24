@@ -27,6 +27,8 @@ import { useDhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
 import { useModels } from '@/hooks/useModels';
 import { useDatasets } from '@/hooks/useDatasets';
 import { getPreviousDataItems } from './utils/previousDataItems';
+import { getMinimumEvaluationPeriods } from '../NewEvaluationForm/hooks/backtestDefaults';
+import { countPeriods } from '@/utils/periods';
 import styles from './NewDatasetForm.module.css';
 
 export const NewDatasetForm = () => {
@@ -56,9 +58,15 @@ export const NewDatasetForm = () => {
     const { data: datasets } = useDatasets();
     const previousDataItems = useMemo(() => getPreviousDataItems(datasets ?? []), [datasets]);
     const columns = useFieldArray({ control: methods.control, name: 'columns' });
-    const [columnValues, periodType] = useWatch({ control: methods.control, name: ['columns', 'periodType'] });
+    const [columnValues, periodType, fromPeriodId, toPeriodId] = useWatch({
+        control: methods.control,
+        name: ['columns', 'periodType', 'fromPeriodId', 'toPeriodId'],
+    });
     const covariateNames = columnValues.map(column => column.covariateName.trim());
     const support = getModelSupport(covariateNames, periodType, models ?? []);
+    const periodCount = countPeriods(fromPeriodId, toPeriodId, settings.calendar);
+    const minimumEvaluationPeriods = getMinimumEvaluationPeriods(periodType);
+    const isTooShortToEvaluate = !!periodCount && !!minimumEvaluationPeriods && periodCount < minimumEvaluationPeriods;
 
     // Fill unnamed columns before adding new ones, so a suggestion names a row added with "Add column".
     const addColumns = (names: string[]) => {
@@ -106,6 +114,15 @@ export const NewDatasetForm = () => {
                                         previousDataItems={previousDataItems}
                                     />
                                 </fieldset>
+
+                                {isTooShortToEvaluate && (
+                                    <NoticeBox warning title={i18n.t('Too short to evaluate')} className={styles.notice}>
+                                        {i18n.t('This range has {{periodCount}} periods, but an evaluation needs at least {{minimumEvaluationPeriods}}. You can still create the dataset.', {
+                                            periodCount,
+                                            minimumEvaluationPeriods,
+                                        })}
+                                    </NoticeBox>
+                                )}
 
                                 <div className={styles.buttons}>
                                     <ButtonStrip end>

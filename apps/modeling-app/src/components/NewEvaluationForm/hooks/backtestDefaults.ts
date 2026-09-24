@@ -26,7 +26,8 @@ export const getBacktestSplitting = (periodType: string | null | undefined) => {
     };
 };
 
-/** Periods a dataset needs for these splits: chap-core keeps at least one period before the first split for training. */
-export const getRequiredPeriodCount = ({ nPeriods, nSplits, stride }: { nPeriods: number; nSplits: number; stride: number }) => (
-    nPeriods + (nSplits - 1) * stride + 1
-);
+/** Periods a dataset needs to be evaluated: every split, plus the training period chap-core keeps before the first. */
+export const getMinimumEvaluationPeriods = (periodType: string | null | undefined) => {
+    const splitting = getBacktestSplitting(periodType);
+    return splitting && splitting.nPeriods + (splitting.nSplits - 1) * splitting.stride + 1;
+};
