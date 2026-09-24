@@ -10,6 +10,7 @@ export const NewEvaluationPage = ({ useSavedDataset = false }: { useSavedDataset
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const returnTo = searchParams.get('returnTo') || '/evaluate';
+    const datasetId = searchParams.get('datasetId') ?? undefined;
     const isFromDetails = returnTo.startsWith('/evaluate/') && returnTo !== '/evaluate';
 
     return (
@@ -44,7 +45,8 @@ export const NewEvaluationPage = ({ useSavedDataset = false }: { useSavedDataset
             </TabBar>
 
             {useSavedDataset
-                ? <DatasetEvaluationForm initialDatasetId={searchParams.get('datasetId') ?? undefined} />
+                // Keyed so a link to another dataset starts a fresh form instead of keeping the old selection
+                ? <DatasetEvaluationForm key={datasetId} initialDatasetId={datasetId} />
                 : <NewEvaluationForm />}
         </div>
     );
