@@ -1,5 +1,20 @@
 # @dhis2-chap/modeling-app
 
+## 7.1.0
+
+### Minor Changes
+
+-   b1bbae4: Add breadcrumbs to nested evaluation, prediction, and model pages so users can see their location and return to parent pages.
+-   e025041: Add labelled year boundaries to prediction charts so users can compare peaks across years [CLIM-1082].
+
+### Patch Changes
+
+-   107bff9: Fix the evaluations table model filter being silently dropped when combined with text search, caused by columnFilters being assembled as a numeric-keyed object instead of an array.
+    Also reset the page parameter when the model or search filter changes, so filtering while on a later page no longer leaves the table empty.
+-   Updated dependencies [e025041]
+    -   @dhis2-chap/ui@7.1.0
+    -   @dhis2-chap/core@7.1.0
+
 ## 7.0.0
 
 ### Major Changes
