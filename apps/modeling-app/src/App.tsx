@@ -107,9 +107,6 @@ const router = createHashRouter([
                             {
                                 path: 'new',
                                 element: <NewEvaluationPage />,
-                                handle: {
-                                    collapseSidebar: true,
-                                } satisfies RouteHandle,
                             },
                             {
                                 path: 'from-dataset',
