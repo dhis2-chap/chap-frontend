@@ -1,8 +1,0 @@
-.singleSelectContainer {
-    min-inline-size: 250px;
-}
-
-/* Same clear-button spacing fix as the evaluations table filter */
-.singleSelectContainer [data-test="dhis2-uicore-singleselect-clear"] {
-    margin-inline-start: var(--spacers-dp4);
-}

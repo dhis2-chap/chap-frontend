@@ -2,7 +2,7 @@ import { MenuItem, SingleSelect } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { DataSetInfo } from '@dhis2-chap/ui';
 import { DatasetOrigin, useDatasetOriginFilter } from './useDatasetOriginFilter';
-import styles from './DatasetOriginFilter.module.css';
+import styles from '../BacktestsTable/BacktestsTableFilters/BacktestsTableFilters.module.css';
 
 type Props = {
     datasets: DataSetInfo[];
