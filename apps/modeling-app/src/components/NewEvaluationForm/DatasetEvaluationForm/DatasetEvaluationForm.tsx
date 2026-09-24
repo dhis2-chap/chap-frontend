@@ -1,20 +1,22 @@
-import { useState } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import {
     Button,
     ButtonStrip,
     CircularLoader,
     IconArrowRightMulti16,
-    InputField,
     NoticeBox,
     SingleSelectField,
     SingleSelectOption,
 } from '@dhis2/ui';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { FormProvider, useForm, useWatch } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import { useNavigate } from 'react-router-dom';
 import { ApiError, BacktestsService, Card } from '@dhis2-chap/ui';
 import { useNavigationBlocker } from '@/hooks/useNavigationBlocker';
 import { NavigationConfirmModal } from '../../NavigationConfirmModal';
+import { NameInput } from '../../ModelExecutionForm/Sections/NameInput';
 import { ChapErrorNotice } from '../../ChapErrorNotice';
 import { useDatasets } from '@/hooks/useDatasets';
 import { useModels } from '@/hooks/useModels';
@@ -22,6 +24,14 @@ import { DatasetOriginFilter, matchesOrigin, useDatasetOriginFilter } from '../.
 import { datasetSupportsModel } from '../../NewDatasetForm/utils/datasetModels';
 import { getBacktestSplitting } from '../hooks/backtestDefaults';
 import styles from './DatasetEvaluationForm.module.css';
+
+const schema = z.object({
+    name: z.string().trim().min(1, { message: i18n.t('Name is required') }),
+    datasetId: z.string(),
+    modelName: z.string(),
+});
+
+type FormValues = z.infer<typeof schema>;
 
 type Props = {
     initialDatasetId?: string;
@@ -33,9 +43,11 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
     const navigate = useNavigate();
     const queryClient = useQueryClient();
 
-    const [datasetId, setDatasetId] = useState(initialDatasetId);
-    const [modelName, setModelName] = useState('');
-    const [name, setName] = useState('');
+    const methods = useForm<FormValues>({
+        resolver: zodResolver(schema),
+        defaultValues: { name: '', datasetId: initialDatasetId, modelName: '' },
+    });
+    const [datasetId, modelName] = useWatch({ control: methods.control, name: ['datasetId', 'modelName'] });
     const { origin } = useDatasetOriginFilter();
 
     const dataset = datasets.data?.find(item => String(item.id) === datasetId);
@@ -46,11 +58,11 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
         dataset && datasetSupportsModel(dataset.covariates ?? [], dataset.periodType ?? '', model)
     )) ?? [];
     const selectedModel = compatibleModels.find(model => model.name === modelName);
-    const canSubmit = !!selectedModel && !!splitting && dataset?.id != null && !!name.trim();
+    const canSubmit = !!selectedModel && !!splitting && dataset?.id != null;
 
-    const createEvaluation = useMutation<unknown, ApiError>({
-        mutationFn: () => BacktestsService.createBacktestV1AnalyticsCreateBacktestPost({
-            name: name.trim(),
+    const createEvaluation = useMutation<unknown, ApiError, string>({
+        mutationFn: name => BacktestsService.createBacktestV1AnalyticsCreateBacktestPost({
+            name,
             datasetId: dataset!.id!,
             modelId: selectedModel!.name,
             ...splitting!,
@@ -66,7 +78,7 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
         handleConfirmNavigation,
         handleCancelNavigation,
     } = useNavigationBlocker({
-        shouldBlock: !createEvaluation.isLoading && !!(name || modelName || datasetId !== initialDatasetId),
+        shouldBlock: !createEvaluation.isLoading && !createEvaluation.isSuccess && methods.formState.isDirty,
     });
 
     if (datasets.isLoading || isModelsLoading) {
@@ -107,25 +119,18 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
     }
 
     return (
-        <>
+        <FormProvider {...methods}>
             <div className={styles.container}>
                 <Card>
                     <form
                         className={styles.formWrapper}
-                        onSubmit={(event) => {
-                            event.preventDefault();
+                        onSubmit={methods.handleSubmit(({ name }) => {
                             if (canSubmit) {
-                                createEvaluation.mutate();
+                                createEvaluation.mutate(name);
                             }
-                        }}
+                        })}
                     >
-                        <InputField
-                            label={i18n.t('Name')}
-                            value={name}
-                            onChange={({ value }) => setName(value ?? '')}
-                            placeholder={i18n.t('EWARS Evaluation 22-24')}
-                            required
-                        />
+                        <NameInput />
 
                         <div className={styles.datasetRow}>
                             <SingleSelectField
@@ -133,8 +138,8 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
                                 label={i18n.t('Dataset')}
                                 selected={datasetId}
                                 onChange={({ selected }) => {
-                                    setDatasetId(selected);
-                                    setModelName('');
+                                    methods.setValue('datasetId', selected, { shouldDirty: true });
+                                    methods.setValue('modelName', '', { shouldDirty: true });
                                 }}
                             >
                                 {datasetOptions.map(item => (
@@ -148,7 +153,7 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
                             label={i18n.t('Model')}
                             selected={modelName}
                             disabled={!compatibleModels.length}
-                            onChange={({ selected }) => setModelName(selected)}
+                            onChange={({ selected }) => methods.setValue('modelName', selected, { shouldDirty: true })}
                         >
                             {compatibleModels.map(model => (
                                 <SingleSelectOption
@@ -195,6 +200,6 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
                     onCancel={handleCancelNavigation}
                 />
             )}
-        </>
+        </FormProvider>
     );
 };
