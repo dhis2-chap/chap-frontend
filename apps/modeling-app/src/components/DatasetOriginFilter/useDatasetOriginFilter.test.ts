@@ -10,9 +10,9 @@ describe('matchesOrigin', () => {
         expect(matchesOrigin(dataset(false), 'generated')).toBe(true);
     });
 
-    it('treats datasets from backends without the flag as manual', () => {
+    it('matches every origin for datasets from backends without the flag', () => {
         expect(matchesOrigin(dataset(), 'manual')).toBe(true);
-        expect(matchesOrigin(dataset(), 'generated')).toBe(false);
+        expect(matchesOrigin(dataset(), 'generated')).toBe(true);
     });
 
     it('matches everything without an origin', () => {
