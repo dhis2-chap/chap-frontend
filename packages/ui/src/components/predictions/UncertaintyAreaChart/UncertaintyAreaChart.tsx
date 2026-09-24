@@ -98,7 +98,7 @@ const getChartOptions = (
             data: median,
             name: i18n.t('Median prediction'),
             color: '#004bbd',
-            lineWidth: outbreakProbability === undefined ? 5 : 2,
+            lineWidth: 5,
             zIndex: 3,
             connectNulls: false,
         },
@@ -126,12 +126,15 @@ const getChartOptions = (
         },
     ];
 
-    if (outbreakProbability !== undefined) {
-        const quantileKey = getQuantileKeyForOutbreakProbability(outbreakProbability);
-        const probabilityLine: Highcharts.SeriesLineOptions = {
+    const quantileKey = outbreakProbability === undefined
+        ? undefined
+        : getQuantileKeyForOutbreakProbability(outbreakProbability);
+
+    if (quantileKey && quantileKey !== 'median') {
+        chartSeries.push({
             id: 'prediction-probability',
             type: 'line',
-            name: i18n.t('Minimum outbreak probability {{probability}}%', {
+            name: i18n.t('Alert line ({{probability}}%)', {
                 probability: outbreakProbability,
             }),
             data: series.points.map(point => ({
@@ -139,18 +142,12 @@ const getChartOptions = (
                 x: getPeriodIndex(point.period),
                 y: point.quantiles[quantileKey] ?? null,
             })),
-            color: '#6f2da8',
-            lineWidth: 4,
+            color: '#002b6b',
+            lineWidth: 2,
             zIndex: 6,
             marker: { enabled: false },
             connectNulls: false,
-        };
-
-        if (quantileKey === 'median') {
-            chartSeries[0] = probabilityLine;
-        } else {
-            chartSeries.push(probabilityLine);
-        }
+        });
     }
 
     if (actualCases && actualCases.length > 0) {
