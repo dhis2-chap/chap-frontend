@@ -8,8 +8,10 @@ import { registerHighchartsModules } from '../../../utils/registerHighchartsModu
 import { buildChartPeriods, buildPeriodIndexLookup, getSeriesPeriods } from '../../../utils/chartPeriods';
 import { getPeriodNameFromId } from '../../../utils/Time';
 import {
+    getQuantileKeyForOutbreakProbability,
     isFiniteNumber,
     type EndemicThresholdPoint,
+    type OutbreakProbability,
     type SupportedOutbreakProbabilityBucket,
 } from '../../../utils/outbreakAlerts';
 import type { ZoomRange } from '../../evaluation/ResultPlot/ResultPlot';
@@ -47,6 +49,7 @@ const getChartOptions = (
     maxY?: number,
     chartHeight?: Highcharts.ChartOptions['height'],
     endemicThresholds?: EndemicThresholdPoint[],
+    outbreakProbability?: OutbreakProbability,
 ): Highcharts.Options => {
     const isTile = variant === 'tile';
     const disabledAnimationOptions = getDisabledAnimationOptions();
@@ -95,6 +98,7 @@ const getChartOptions = (
             data: median,
             name: i18n.t('Median prediction'),
             color: '#004bbd',
+            lineWidth: outbreakProbability === undefined ? 5 : 2,
             zIndex: 3,
             connectNulls: false,
         },
@@ -121,6 +125,33 @@ const getChartOptions = (
             connectNulls: false,
         },
     ];
+
+    if (outbreakProbability !== undefined) {
+        const quantileKey = getQuantileKeyForOutbreakProbability(outbreakProbability);
+        const probabilityLine: Highcharts.SeriesLineOptions = {
+            id: 'prediction-probability',
+            type: 'line',
+            name: i18n.t('Minimum outbreak probability {{probability}}%', {
+                probability: outbreakProbability,
+            }),
+            data: series.points.map(point => ({
+                name: point.period,
+                x: getPeriodIndex(point.period),
+                y: point.quantiles[quantileKey] ?? null,
+            })),
+            color: '#6f2da8',
+            lineWidth: 4,
+            zIndex: 6,
+            marker: { enabled: false },
+            connectNulls: false,
+        };
+
+        if (quantileKey === 'median') {
+            chartSeries[0] = probabilityLine;
+        } else {
+            chartSeries.push(probabilityLine);
+        }
+    }
 
     if (actualCases && actualCases.length > 0) {
         chartSeries.unshift({
@@ -342,6 +373,7 @@ interface PredicationChartProps {
     endemicThreshold?: number | null;
     endemicThresholds?: EndemicThresholdPoint[];
     outbreakPeriods?: OutbreakPeriodChartInfo[];
+    outbreakProbability?: OutbreakProbability;
     variant?: UncertaintyAreaChartVariant;
     zoomRange?: ZoomRange | null;
     onZoomChange?: (range: ZoomRange | null) => void;
@@ -364,6 +396,7 @@ export const UncertaintyAreaChart = ({
     endemicThreshold,
     endemicThresholds,
     outbreakPeriods = [],
+    outbreakProbability,
     variant = 'default',
     zoomRange,
     onZoomChange,
@@ -430,6 +463,7 @@ export const UncertaintyAreaChart = ({
             maxY,
             chartHeight,
             endemicThresholds,
+            outbreakProbability,
         );
     }, [
         series,
@@ -437,6 +471,7 @@ export const UncertaintyAreaChart = ({
         endemicThreshold,
         endemicThresholds,
         outbreakPeriods,
+        outbreakProbability,
         variant,
         handleAfterSetExtremes,
         hasExternalZoomControls,
