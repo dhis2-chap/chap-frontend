@@ -50,7 +50,6 @@ export type {
 export type { chap_core__rest_api__data_models__DataBaseResponse as DataBaseResponse } from './httpfunctions/index';
 
 // Services
-export { getJobRequest } from './api/jobRequest';
 export {
     enableQueue,
     disableQueue,

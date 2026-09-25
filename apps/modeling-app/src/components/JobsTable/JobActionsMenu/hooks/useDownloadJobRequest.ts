@@ -1,10 +1,10 @@
 import { useMutation } from '@tanstack/react-query';
 import { useAlert } from '@dhis2/app-runtime';
 import i18n from '@dhis2/d2-i18n';
-import { ApiError, getJobRequest } from '@dhis2-chap/ui';
+import { ApiError, JobsService } from '@dhis2-chap/ui';
 
 export const downloadJobRequest = async (jobId: string) => {
-    const request = await getJobRequest(jobId);
+    const request = await JobsService.getJobRequestV1JobsJobIdRequestGet(jobId);
     const blob = new Blob([JSON.stringify(request, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
