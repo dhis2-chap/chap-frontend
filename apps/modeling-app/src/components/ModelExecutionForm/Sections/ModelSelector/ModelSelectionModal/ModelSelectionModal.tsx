@@ -10,6 +10,7 @@ import {
     Input,
     MenuItem,
     Modal,
+    ModalActions,
     ModalContent,
     ModalTitle,
     MultiSelect,
@@ -28,10 +29,16 @@ import styles from './ModelSelectionModal.module.css';
 
 type Props = {
     models?: ModelSpecRead[];
-    selectedModel?: ModelSpecRead;
     onClose: () => void;
+} & ({
+    multiple?: false;
+    selectedModel?: ModelSpecRead;
     onConfirm: (model: ModelSpecRead) => void;
-};
+} | {
+    multiple: true;
+    selectedModels: ModelSpecRead[];
+    onConfirm: (models: ModelSpecRead[]) => void;
+});
 
 type ReadinessConfig = {
     label: string;
@@ -128,12 +135,11 @@ const sortByReadiness = (models: ModelSpecRead[]): ModelSpecRead[] =>
         return getModelName(a).localeCompare(getModelName(b));
     });
 
-export const ModelSelectionModal = ({
-    models,
-    selectedModel: initialSelectedModel,
-    onClose,
-    onConfirm,
-}: Props) => {
+export const ModelSelectionModal = (props: Props) => {
+    const { models, onClose, multiple } = props;
+    const [selectedIds, setSelectedIds] = useState<number[]>(() =>
+        props.multiple ? props.selectedModels.map(model => model.id) : [],
+    );
     const [search, setSearch] = useState('');
     const [periodTypeFilter, setPeriodTypeFilter] = useState<string>();
     const [statusFilters, setStatusFilters] = useState<string[]>([]);
@@ -144,8 +150,14 @@ export const ModelSelectionModal = ({
     };
 
     const handleModelUse = (model: ModelSpecRead) => {
-        onConfirm(model);
-        handleModalClose();
+        if (props.multiple) {
+            setSelectedIds(ids => ids.includes(model.id)
+                ? ids.filter(id => id !== model.id)
+                : [...ids, model.id]);
+        } else {
+            props.onConfirm(model);
+            handleModalClose();
+        }
     };
 
     const sortedModels = useMemo(
@@ -157,7 +169,8 @@ export const ModelSelectionModal = ({
         const query = search.trim().toLowerCase();
 
         return sortedModels.filter((model) => {
-            const normalizedPeriodType = normalizePeriodType(model.supportedPeriodType);
+            const normalizedPeriodType = normalizePeriodType(model.supportedPeriodType)
+                ?? (multiple ? PERIOD_TYPES.ANY : undefined);
             if (!normalizedPeriodType) {
                 return false;
             }
@@ -181,7 +194,7 @@ export const ModelSelectionModal = ({
 
             return matchesSearch && matchesPeriodType && matchesStatus;
         });
-    }, [periodTypeFilter, search, sortedModels, statusFilters]);
+    }, [multiple, periodTypeFilter, search, sortedModels, statusFilters]);
 
     const focusedModel = useMemo(
         () => filteredModels.find(model => model.id === focusedId) ?? filteredModels[0],
@@ -189,16 +202,18 @@ export const ModelSelectionModal = ({
     );
 
     const focusedReadiness = focusedModel ? getReadiness(focusedModel) : undefined;
-    const selectedModelId = initialSelectedModel?.id.toString();
-    const focusedModelId = focusedModel?.id.toString();
+    const isModelSelected = (model: ModelSpecRead) => props.multiple
+        ? selectedIds.includes(model.id)
+        : props.selectedModel?.id === model.id;
+    const isFocusedModelSelected = focusedModel ? isModelSelected(focusedModel) : false;
     const hasAuthorNote = focusedModel?.authorNote && focusedModel.authorNote !== 'No Author note yet';
 
     return (
         <Modal fluid onClose={handleModalClose}>
-            <ModalTitle>{i18n.t('Select Model')}</ModalTitle>
+            <ModalTitle>{multiple ? i18n.t('Select Models') : i18n.t('Select Model')}</ModalTitle>
             <ModalContent>
                 <div className={styles.stage}>
-                    <div className={styles.wrapper}>
+                    <div className={cn(styles.wrapper, { [styles.multiple]: multiple })}>
                         <aside className={styles.rail}>
                             <div className={styles.controls}>
                                 <Input
@@ -253,7 +268,7 @@ export const ModelSelectionModal = ({
                                 {filteredModels.map((model) => {
                                     const readiness = getReadiness(model);
                                     const isFocused = focusedModel?.id === model.id;
-                                    const isSelected = selectedModelId === model.id.toString();
+                                    const isSelected = isModelSelected(model);
                                     const modelStableId = model.name || String(model.id);
 
                                     return (
@@ -377,13 +392,13 @@ export const ModelSelectionModal = ({
                                         <ButtonStrip end>
                                             <Button
                                                 small
-                                                primary={selectedModelId !== focusedModelId}
+                                                primary={!isFocusedModelSelected}
                                                 onClick={() => handleModelUse(focusedModel)}
-                                                icon={selectedModelId === focusedModelId ? <IconCheckmark16 /> : undefined}
+                                                icon={isFocusedModelSelected ? <IconCheckmark16 /> : undefined}
                                                 dataTest={`model-select-${toDataTestKey(focusedModel.name || String(focusedModel.id))}`}
                                             >
-                                                {selectedModelId === focusedModelId
-                                                    ? i18n.t('Selected')
+                                                {isFocusedModelSelected
+                                                    ? (multiple ? i18n.t('Remove from selection') : i18n.t('Selected'))
                                                     : i18n.t('Use this model')}
                                             </Button>
                                         </ButtonStrip>
@@ -396,6 +411,23 @@ export const ModelSelectionModal = ({
                     </div>
                 </div>
             </ModalContent>
+            {props.multiple && (
+                <ModalActions>
+                    <ButtonStrip end>
+                        <Button onClick={onClose}>{i18n.t('Cancel')}</Button>
+                        <Button
+                            primary
+                            disabled={!selectedIds.length}
+                            onClick={() => {
+                                props.onConfirm((models ?? []).filter(model => selectedIds.includes(model.id)));
+                                onClose();
+                            }}
+                        >
+                            {i18n.t('Use selected models ({{count}})', { count: selectedIds.length })}
+                        </Button>
+                    </ButtonStrip>
+                </ModalActions>
+            )}
         </Modal>
     );
 };
