@@ -15,7 +15,6 @@ import {
     MultiSelect,
     MultiSelectOption,
     SingleSelect,
-    Tag,
     Tooltip,
 } from '@dhis2/ui';
 import { IconFlag16 } from '@dhis2/ui-icons';
@@ -273,9 +272,6 @@ export const ModelSelectionModal = ({
                                                     style={{ backgroundColor: readiness?.color ?? '#b0b0b0' }}
                                                 />
                                                 <span className={styles.listName}>{getModelName(model)}</span>
-                                                <Tag className={styles.versionTag} maxWidth="100px">
-                                                    {model.version || '—'}
-                                                </Tag>
                                                 {isSelected && <IconCheckmark16 color="#1565c0" />}
                                             </button>
                                         </li>
