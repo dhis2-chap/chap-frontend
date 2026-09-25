@@ -90,13 +90,19 @@ const getChartOptions = (
             }))
         : undefined;
 
+    const quantileKey = outbreakProbability === undefined
+        ? undefined
+        : getQuantileKeyForOutbreakProbability(outbreakProbability);
+
     const chartSeries: Highcharts.SeriesOptionsType[] = [
-        // median
+        // median; at 50% it doubles as the alert line
         {
             id: 'prediction-median',
             type: 'line',
             data: median,
-            name: i18n.t('Median prediction'),
+            name: quantileKey === 'median'
+                ? i18n.t('Median prediction (50% alert line)')
+                : i18n.t('Median prediction'),
             color: '#004bbd',
             lineWidth: 5,
             zIndex: 3,
@@ -125,10 +131,6 @@ const getChartOptions = (
             connectNulls: false,
         },
     ];
-
-    const quantileKey = outbreakProbability === undefined
-        ? undefined
-        : getQuantileKeyForOutbreakProbability(outbreakProbability);
 
     if (quantileKey && quantileKey !== 'median') {
         chartSeries.push({
