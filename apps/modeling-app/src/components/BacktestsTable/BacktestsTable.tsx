@@ -205,7 +205,7 @@ export const BacktestsTable = ({ backtests, models }: Props) => {
                             icon={<IconAdd16 />}
                             small
                             onClick={() => {
-                                navigate('/evaluate/new');
+                                navigate('/evaluate/from-dataset');
                             }}
                         >
                             {i18n.t('New evaluation')}

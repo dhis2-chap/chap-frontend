@@ -14,8 +14,9 @@ You probably already see patterns in your data. Cases rise after the rains. Cert
 
 Researchers and model developers build predictive models and upload them to your Chap instance. Your job is to figure out whether those models actually work for your context - and if they do, use them to plan ahead.
 
-The app supports four main workflows:
+The app supports five main workflows:
 
+- **Prepare data** – Import data from DHIS2 once as a dataset and reuse it across evaluations
 - **Evaluate** – Test a model against your historical data to see if its predictions are accurate
 - **Predict** – Generate forecasts for future time periods
 - **Configure** – Adjust model settings to better fit your context

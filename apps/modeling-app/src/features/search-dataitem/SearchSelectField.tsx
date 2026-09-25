@@ -3,6 +3,8 @@ import { z } from 'zod';
 import i18n from '@dhis2/d2-i18n';
 import styles from './SearchSelectField.module.css';
 import { Label, Layer, Popper, IconChevronDown16, IconCross16 } from '@dhis2/ui';
+import { useDataEngine } from '@dhis2/app-runtime';
+import { useQuery } from '@tanstack/react-query';
 import { useApiDataQuery } from '../../utils/useApiDataQuery';
 import { useDebounce } from '../../hooks/useDebounce';
 import { dimensionItemTypeSchema } from '../../components/ModelExecutionForm/hooks/useModelExecutionFormState';
@@ -39,6 +41,8 @@ interface SearchSelectFieldProps {
     };
     onResetField: () => void;
     dataTestKey?: string;
+    /** Data items to offer first, before searching, e.g. the ones used for this feature before. */
+    suggestedItemIds?: string[];
 }
 
 const DIMENSION_ITEM_TYPE_LABELS = {
@@ -54,7 +58,9 @@ export const SearchSelectField = ({
     defaultValue,
     onResetField,
     dataTestKey,
+    suggestedItemIds = [],
 }: SearchSelectFieldProps) => {
+    const dataEngine = useDataEngine();
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [selectedOption, setSelectedOption] = useState<Option | null>(() => {
         if (defaultValue && defaultValue.id && defaultValue.displayName) {
@@ -92,7 +98,23 @@ export const SearchSelectField = ({
         cacheTime: 10 * 60 * 1000,
     });
 
-    const dataItems = data?.dataItems || [];
+    // dataItems cannot filter on several ids at once, so look each one up in a single engine query.
+    const { data: suggestedItems = [] } = useQuery({
+        queryKey: ['dataItems', 'byId', suggestedItemIds],
+        queryFn: async () => {
+            const response = await dataEngine.query(Object.fromEntries(suggestedItemIds.map((id, index) => [
+                `item${index}`,
+                { resource: 'dataItems', params: { filter: `id:eq:${id}`, fields: 'id,displayName,dimensionItemType', paging: false } },
+            ])));
+            return suggestedItemIds.flatMap((_, index) => (response[`item${index}`] as DataItemsResponse).dataItems);
+        },
+        enabled: isDropdownOpen && suggestedItemIds.length > 0,
+        staleTime: 5 * 60 * 1000,
+    });
+    const showSuggestions = !searchQuery && suggestedItems.length > 0;
+    const dataItems = (data?.dataItems || []).filter(item => (
+        !showSuggestions || !suggestedItems.some(suggested => suggested.id === item.id)
+    ));
 
     const handleTriggerClick = () => {
         setIsDropdownOpen(!isDropdownOpen);
@@ -136,7 +158,7 @@ export const SearchSelectField = ({
         if (isLoading) {
             return <li className={styles.infoSearchItem}>{i18n.t('Loading')}</li>;
         }
-        if (dataItems.length === 0 && searchQuery.length === 0) {
+        if (dataItems.length === 0 && searchQuery.length === 0 && !showSuggestions) {
             return (
                 <li className={styles.infoSearchItem}>
                     {i18n.t('Start typing to search for data items')}
@@ -147,24 +169,33 @@ export const SearchSelectField = ({
             return <li className={styles.infoSearchItem}>{i18n.t('No matches found')}</li>;
         }
 
-        return (
-            <>
-                {dataItems.map(option => (
-                    <li
-                        key={option.id}
-                        onClick={() => handleOptionClick(option)}
-                        className={styles.dropDownItem}
-                        role="option"
-                        data-test={dataTestKey ? `${dataTestKey}-option-${option.id}` : undefined}
-                    >
-                        <div>{option.displayName}</div>
-                        <div className={styles.rightDropDownItem}>
-                            {DIMENSION_ITEM_TYPE_LABELS[option.dimensionItemType as keyof typeof DIMENSION_ITEM_TYPE_LABELS]}
-                        </div>
-                    </li>
-                ))}
-            </>
+        const renderOption = (option: Option) => (
+            <li
+                key={option.id}
+                onClick={() => handleOptionClick(option)}
+                className={styles.dropDownItem}
+                role="option"
+                data-test={dataTestKey ? `${dataTestKey}-option-${option.id}` : undefined}
+            >
+                <div>{option.displayName}</div>
+                <div className={styles.rightDropDownItem}>
+                    {DIMENSION_ITEM_TYPE_LABELS[option.dimensionItemType as keyof typeof DIMENSION_ITEM_TYPE_LABELS]}
+                </div>
+            </li>
         );
+
+        if (showSuggestions) {
+            return (
+                <>
+                    <li className={styles.groupLabel} role="presentation">{i18n.t('Used before')}</li>
+                    {suggestedItems.map(renderOption)}
+                    <li className={styles.groupLabel} role="presentation">{i18n.t('All data items')}</li>
+                    {dataItems.map(renderOption)}
+                </>
+            );
+        }
+
+        return <>{dataItems.map(renderOption)}</>;
     };
 
     return (
