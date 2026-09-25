@@ -8,7 +8,6 @@ import { RegionView } from './Sections/RegionView';
 import { ModelView } from './Sections/ModelView';
 import { ModelVersionWarningView } from './Sections/ModelVersionWarningView';
 import { useModels } from '@/hooks/useModels';
-
 type Props = {
     evaluationId: number;
 };
@@ -50,11 +49,13 @@ export const EvaluationSummaryWidget = ({ evaluationId }: Props) => {
         );
     }
 
+    const modelTemplate = backtest.configuredModel?.modelTemplate;
+
     return (
         <div className={styles.container}>
             <ModelVersionWarningView
                 modelTemplateVersion={backtest.modelTemplateVersion}
-                configuredModelTemplateVersion={backtest.configuredModel?.modelTemplate?.version}
+                configuredModelTemplateVersion={modelTemplate?.version}
             />
             <WidgetWrapper>
                 <div className={styles.content}>
@@ -70,6 +71,14 @@ export const EvaluationSummaryWidget = ({ evaluationId }: Props) => {
                         models={models}
                         configuredModelId={backtest.configuredModel?.id}
                     />
+                    <div className={styles.row}>
+                        <span className={styles.label}>
+                            {i18n.t('Version')}
+                        </span>
+                        <span className={styles.value}>
+                            {modelTemplate?.version || '—'}
+                        </span>
+                    </div>
                     <PeriodView
                         periodType={backtest.dataset.periodType}
                         firstPeriod={backtest.dataset.firstPeriod}
