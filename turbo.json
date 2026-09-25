@@ -16,6 +16,9 @@
       "build": {
         "dependsOn": ["^build"],
         "outputs": ["build/**"]
+      },
+      "test": {
+        "outputs": []
       }
     }
   }
