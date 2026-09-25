@@ -22,6 +22,7 @@ import { useInspectDataset } from './hooks/useInspectDataset';
 import { SummaryModal } from '../ModelExecutionForm/SummaryModal';
 import { NavigationConfirmModal } from '../NavigationConfirmModal';
 import { ChapErrorNotice } from '../ChapErrorNotice';
+import { ViewJobLogsModal } from '../JobsTable/JobActionsMenu/ViewJobLogsModal';
 import { useNavigationBlocker } from '@/hooks/useNavigationBlocker';
 import { useDhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
 import { useModels } from '@/hooks/useModels';
@@ -43,9 +44,12 @@ export const NewDatasetForm = () => {
         hasSucceeded,
         retry,
         summary,
+        jobId,
+        jobStatus,
     } = useCreateDataset(settings);
     const inspection = useInspectDataset(settings);
     const [shownSummary, setShownSummary] = useState<{ title: string; summary: DatasetImportSummary }>();
+    const [shownLogsJobId, setShownLogsJobId] = useState<string>();
     const leftOutCount = new Set(summary?.rejected.map(item => item.orgUnit)).size;
     const allLeftOut = !!summary && leftOutCount > 0 && !summary.importedCount;
     const isBusy = isSubmitting || isImporting || hasSucceeded || inspection.isLoading;
@@ -188,14 +192,20 @@ export const NewDatasetForm = () => {
                             {isImporting && (
                                 <NoticeBox title={i18n.t('Creating dataset')} className={styles.notice}>
                                     {i18n.t('The import is running in the background.')}
-                                    {' '}
-                                    <Link to="/jobs">{i18n.t('View jobs')}</Link>
+                                    {jobId && (
+                                        <ButtonStrip className={styles.noticeActions}>
+                                            <Button small onClick={() => setShownLogsJobId(jobId)}>{i18n.t('View logs')}</Button>
+                                        </ButtonStrip>
+                                    )}
                                 </NoticeBox>
                             )}
 
                             {hasFailed && (
                                 <NoticeBox error title={i18n.t('Dataset creation failed')} className={styles.notice}>
                                     <ButtonStrip>
+                                        {jobId && (
+                                            <Button small onClick={() => setShownLogsJobId(jobId)}>{i18n.t('View logs')}</Button>
+                                        )}
                                         <Button small onClick={retry}>{i18n.t('Edit and retry')}</Button>
                                     </ButtonStrip>
                                 </NoticeBox>
@@ -221,6 +231,14 @@ export const NewDatasetForm = () => {
                     </aside>
                 </div>
             </FormProvider>
+
+            {jobId && shownLogsJobId === jobId && (
+                <ViewJobLogsModal
+                    jobId={jobId}
+                    status={jobStatus}
+                    onClose={() => setShownLogsJobId(undefined)}
+                />
+            )}
 
             {shownSummary && (
                 <SummaryModal
