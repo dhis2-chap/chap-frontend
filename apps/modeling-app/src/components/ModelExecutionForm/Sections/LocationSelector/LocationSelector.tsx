@@ -6,8 +6,8 @@ import {
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import cn from 'classnames';
-import { Control, FieldErrors, useFormContext, useWatch } from 'react-hook-form';
-import { ModelExecutionFormValues } from '../../hooks/useModelExecutionFormState';
+import { useFormContext, useWatch } from 'react-hook-form';
+import { BaseFormValues } from '../../hooks/useModelExecutionFormState';
 import {
     getSelectionSummary,
     OrganisationUnit,
@@ -16,16 +16,8 @@ import { useDataViewRootOrgUnits } from '../../../../hooks/useDataViewRootOrgUni
 import { OrganisationUnitSelectionModal } from './OrganisationUnitSelectionModal';
 import styles from './LocationSelector.module.css';
 
-type Props = {
-    control: Control<ModelExecutionFormValues>;
-    errors: FieldErrors<ModelExecutionFormValues>;
-};
-
-export const LocationSelector = ({
-    control,
-    errors,
-}: Props) => {
-    const { setValue } = useFormContext<ModelExecutionFormValues>();
+export const LocationSelector = () => {
+    const { control, setValue, formState: { errors } } = useFormContext<BaseFormValues>();
     const selectedOrgUnits = useWatch({ control, name: 'orgUnits' });
     const [isOrgUnitModalOpen, setIsOrgUnitModalOpen] = useState(false);
     const { orgUnits: orgUnitRoots, isLoading: isLoadingOrgUnits } = useDataViewRootOrgUnits();

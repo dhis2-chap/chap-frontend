@@ -37,23 +37,15 @@ export const ModelExecutionFormFields = ({
     return (
         <div className={styles.formWrapper}>
             <form onSubmit={handleSubmit(onSubmit)}>
-                <NameInput
-                    control={control}
-                    errors={errors}
-                />
+                <NameInput />
 
                 <PeriodSelector
-                    control={control}
-                    errors={errors}
                     periodSettings={periodSettings}
                     periodSettingsError={periodSettingsError}
                     periodSettingsLoading={periodSettingsLoading}
                 />
 
-                <LocationSelector
-                    control={control}
-                    errors={errors}
-                />
+                <LocationSelector />
 
                 <ModelSelector
                     control={control}

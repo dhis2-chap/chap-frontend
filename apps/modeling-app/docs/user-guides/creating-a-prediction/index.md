@@ -1,7 +1,7 @@
 ---
 title: Creating a prediction
 description: Step-by-step guide on how to create a prediction setup and run predictions
-order: 2
+order: 3
 category: User Guides
 ---
 
