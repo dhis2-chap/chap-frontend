@@ -65,6 +65,8 @@ export const useCreateDataset = (periodSettings: Dhis2PeriodSettings) => {
         isSubmitting: createDataset.isLoading,
         error: createDataset.error,
         summary,
+        jobId,
+        jobStatus: job.data ?? 'PENDING',
         isImporting: !!jobId && !FINISHED_JOB_STATUSES.includes(job.data ?? ''),
         hasFailed: job.data === 'FAILURE' || job.data === 'REVOKED',
         hasSucceeded: job.data === 'SUCCESS',

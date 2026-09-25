@@ -725,8 +725,8 @@ msgstr "Creating dataset"
 msgid "The import is running in the background."
 msgstr "The import is running in the background."
 
-msgid "View jobs"
-msgstr "View jobs"
+msgid "View logs"
+msgstr "View logs"
 
 msgid "Dataset creation failed"
 msgstr "Dataset creation failed"
