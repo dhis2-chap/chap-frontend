@@ -116,6 +116,7 @@ const columns = [
             <ModelActionsMenu
                 id={info.row.original.id}
                 archived={info.row.original.archived ?? false}
+                sourceUrl={info.row.original.sourceUrl}
             />
         ),
     }),

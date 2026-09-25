@@ -219,6 +219,7 @@ export const AlertPreviewPanel = ({
                                 series={selectedSeries}
                                 endemicThresholds={selectedThresholds.length > 0 ? selectedThresholds : undefined}
                                 outbreakPeriods={outbreakPeriods}
+                                outbreakProbability={selectedProbability}
                                 maxY={selectedMaxY}
                             />
                         </div>

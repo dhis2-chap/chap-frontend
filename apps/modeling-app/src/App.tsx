@@ -31,6 +31,8 @@ import { GetStartedPage } from './pages/GetStartedPage';
 import { ReadyToPredictPage } from './pages/ReadyToPredictPage';
 import { ConfiguredModelDashboardPage } from './pages/ConfiguredModelDashboardPage';
 import { ModelsPage } from './pages/ModelsPage';
+import { DatasetsPage } from './pages/DatasetsPage';
+import { NewDatasetPage } from './pages/NewDatasetPage';
 import { NewConfiguredModelPage } from './pages/NewConfiguredModelPage';
 import { SyncUrlWithGlobalShell } from './utils/syncUrlWithGlobalShell';
 import { NewPredictionPage } from './pages/NewPredictionPage';
@@ -111,7 +113,13 @@ const router = createHashRouter([
                                 element: <NewEvaluationPage />,
                                 handle: {
                                     breadcrumb: () => i18n.t('New evaluation'),
-                                    collapseSidebar: true,
+                                } satisfies RouteHandle,
+                            },
+                            {
+                                path: 'from-dataset',
+                                element: <NewEvaluationPage useSavedDataset />,
+                                handle: {
+                                    breadcrumb: () => i18n.t('New evaluation'),
                                 } satisfies RouteHandle,
                             },
                             {
@@ -121,6 +129,18 @@ const router = createHashRouter([
                                     collapseSidebar: true,
                                 } satisfies RouteHandle,
                                 element: <EvaluationDetailsPage />,
+                            },
+                        ],
+                    },
+                    {
+                        path: '/datasets',
+                        handle: { breadcrumb: () => i18n.t('Datasets') } satisfies RouteHandle,
+                        children: [
+                            { index: true, element: <DatasetsPage /> },
+                            {
+                                path: 'new',
+                                element: <NewDatasetPage />,
+                                handle: { breadcrumb: () => i18n.t('New dataset') } satisfies RouteHandle,
                             },
                         ],
                     },

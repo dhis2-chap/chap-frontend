@@ -1,7 +1,7 @@
 ---
 title: Settings
 description: Guide to configuring routes, CHAP server connection, data pruning, and experimental features
-order: 6
+order: 7
 category: User Guides
 ---
 
