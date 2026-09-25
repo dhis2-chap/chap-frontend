@@ -7,6 +7,8 @@ import { useDataEngine } from '@dhis2/app-runtime';
 import { AnalyticsResponse, OrgUnitResponse, fetchAnalytics, fetchOrgUnits } from './queryUtils';
 import { generateBacktestDataHash } from './hashUtils';
 import { type Dhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
+import { modelsQueryOptions } from '@/hooks/modelsQuery';
+import { hasRevisionMismatch, revisionMismatchMessage } from '@/utils/modelHealth';
 
 const calculatePeriods = (
     periodType: keyof typeof PERIOD_TYPES,
@@ -41,13 +43,19 @@ export const prepareBacktestData = async (
     queryClient: QueryClient,
     periodSettings: Dhis2PeriodSettings,
 ): Promise<PreparedBacktestData> => {
-    const model = queryClient.getQueryData<ModelSpecRead[]>(['models'])
-        ?.find(model => model.id === Number(formData.modelId));
+    // Health can change after selection. Re-read before either evaluation or
+    // prediction submits a job, even when the form's model cache is still fresh.
+    const models = await queryClient.fetchQuery({ ...modelsQueryOptions, staleTime: 0 });
+    const model = models.find(model => model.id === Number(formData.modelId));
 
     if (!model) {
         throw new Error(
             i18n.t('Model not found'),
         );
+    }
+
+    if (hasRevisionMismatch(model)) {
+        throw new Error(revisionMismatchMessage());
     }
 
     const periods = calculatePeriods(

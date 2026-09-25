@@ -3,6 +3,7 @@ import i18n from '@dhis2/d2-i18n';
 import { IconCalendar24 } from '@dhis2/ui';
 import { PERIOD_TYPES } from '@dhis2-chap/core';
 import { useModels } from '@/hooks/useModels';
+import { ModelHealthBadge } from '@/components/ModelHealth/ModelHealth';
 import { formatPeriodId } from '../../../utils/predictionRunMetadata';
 import { SupportedPeriodType } from '../utils/predictionPeriods';
 import styles from './PredictionSetupNoticeBox.module.css';
@@ -21,10 +22,11 @@ type Props = {
 export const PredictionSetupNoticeBox = ({ modelId, periodType, fromPeriod }: Props) => {
     const { models } = useModels();
 
-    const modelName = useMemo(() => {
-        const model = models?.find(m => String(m.id) === modelId);
-        return model?.displayName || model?.name || i18n.t('Unknown model');
-    }, [models, modelId]);
+    const model = useMemo(
+        () => models?.find(m => String(m.id) === modelId),
+        [models, modelId],
+    );
+    const modelName = model?.displayName || model?.name || i18n.t('Unknown model');
 
     return (
         <div className={styles.noticeBox}>
@@ -39,7 +41,10 @@ export const PredictionSetupNoticeBox = ({ modelId, periodType, fromPeriod }: Pr
             <dl className={styles.metadata}>
                 <div className={styles.metaRow}>
                     <dt className={styles.metaTerm}>{i18n.t('Model')}</dt>
-                    <dd className={styles.metaDefinition}>{modelName}</dd>
+                    <dd className={styles.metaDefinition}>
+                        {modelName}
+                        <ModelHealthBadge model={model} />
+                    </dd>
                 </div>
                 <div className={styles.metaRow}>
                     <dt className={styles.metaTerm}>{i18n.t('Period type')}</dt>

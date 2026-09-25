@@ -17,6 +17,13 @@
     gap: var(--spacers-dp4);
 }
 
+.nameCell {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacers-dp4);
+}
+
 .featuresCell {
     display: inline-flex;
     align-items: center;

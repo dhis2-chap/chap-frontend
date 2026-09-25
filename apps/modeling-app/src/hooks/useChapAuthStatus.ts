@@ -7,8 +7,8 @@ import { isUnauthorizedError } from '../utils/chapErrors';
  * configured API token works. Probe an authenticated endpoint to tell
  * "reachable" apart from "authenticated".
  *
- * Deliberately not the shared `useModels` query: that one is cached for the whole
- * session, so a token rotated on the server since it resolved would still look
+ * Deliberately not the shared `useModels` query: that one can reuse cached data,
+ * so a token rotated on the server since it resolved would still look
  * accepted. Probe on every mount instead, and report anything that is neither a
  * success nor a 401 as unverified rather than as a working token.
  */
