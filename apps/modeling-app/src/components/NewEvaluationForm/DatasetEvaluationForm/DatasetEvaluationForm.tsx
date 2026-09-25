@@ -141,6 +141,7 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
                                 className={styles.datasetField}
                                 label={i18n.t('Dataset')}
                                 selected={datasetId}
+                                helpText={datasetOptions.length ? undefined : i18n.t('No datasets match the origin filter')}
                                 onChange={({ selected }) => {
                                     methods.setValue('datasetId', selected, { shouldDirty: true });
                                     methods.setValue('modelName', '', { shouldDirty: true });

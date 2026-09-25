@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-09-24T12:27:54.756Z\n"
-"PO-Revision-Date: 2026-09-24T12:27:54.757Z\n"
+"POT-Creation-Date: 2026-09-25T07:43:57.693Z\n"
+"PO-Revision-Date: 2026-09-25T07:43:57.693Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -867,6 +867,9 @@ msgstr "Import from DHIS2 instead"
 
 msgid "Dataset"
 msgstr "Dataset"
+
+msgid "No datasets match the origin filter"
+msgstr "No datasets match the origin filter"
 
 msgid "No compatible model"
 msgstr "No compatible model"

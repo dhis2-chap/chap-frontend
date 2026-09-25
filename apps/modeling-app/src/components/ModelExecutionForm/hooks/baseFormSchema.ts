@@ -8,7 +8,7 @@ import {
 } from '@dhis2-chap/core';
 import { type Dhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
 
-export const dimensionItemTypeSchema = z.enum(['DATA_ELEMENT', 'INDICATOR', 'PROGRAM_INDICATOR']);
+export const dimensionItemTypeSchema = z.enum(['DATA_ELEMENT', 'PROGRAM_DATA_ELEMENT', 'INDICATOR', 'PROGRAM_INDICATOR']);
 
 export const dataItemSchema = z.object({
     id: z.string(),

@@ -19,6 +19,14 @@ describe('datasetFormSchema', () => {
         expect(schema.safeParse(formData).success).toBe(true);
     });
 
+    it('accepts program data elements offered by the data item picker', () => {
+        const programDataElement = { ...dataItem, dimensionItemType: 'PROGRAM_DATA_ELEMENT' as const };
+        expect(schema.safeParse({
+            ...formData,
+            columns: [{ covariateName: 'disease_cases', dataItem: programDataElement }],
+        }).success).toBe(true);
+    });
+
     it('requires a data item and at least one column', () => {
         expect(schema.safeParse({ ...formData, columns: [{ covariateName: 'cases' }] }).success).toBe(false);
         expect(schema.safeParse({ ...formData, columns: [] }).success).toBe(false);

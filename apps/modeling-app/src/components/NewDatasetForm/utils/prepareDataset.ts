@@ -52,7 +52,7 @@ export const prepareDataset = async (
     }
 
     const { geojson } = await fetchOrgUnits(response.metaData.dimensions.ou, dataEngine);
-    // CHAP leaves out locations without a polygon, so only fail when that would be all of them.
+    // CHAP leaves out locations without a polygon and lists them as rejected, so only fail when that would be all of them.
     const withGeometry = geojson.organisationUnits.filter(orgUnit => orgUnit.geometry);
     if (!withGeometry.length) {
         throw new Error(i18n.t('The selected organisation units must have geometry'));
