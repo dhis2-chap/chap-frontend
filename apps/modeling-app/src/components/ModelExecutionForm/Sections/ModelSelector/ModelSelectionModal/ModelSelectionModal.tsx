@@ -15,6 +15,7 @@ import {
     MultiSelect,
     MultiSelectOption,
     SingleSelect,
+    Tag,
     Tooltip,
 } from '@dhis2/ui';
 import { IconFlag16 } from '@dhis2/ui-icons';
@@ -23,6 +24,7 @@ import { PERIOD_TYPES } from '@dhis2-chap/core';
 import cn from 'classnames';
 import { AuthorAssessedStatus, type ModelSpecRead } from '@dhis2-chap/ui';
 import { toDataTestKey } from '@/utils/dataTestKey';
+import { ModelCommit } from '@/components/ModelCommit';
 import styles from './ModelSelectionModal.module.css';
 
 type Props = {
@@ -271,6 +273,9 @@ export const ModelSelectionModal = ({
                                                     style={{ backgroundColor: readiness?.color ?? '#b0b0b0' }}
                                                 />
                                                 <span className={styles.listName}>{getModelName(model)}</span>
+                                                <Tag className={styles.versionTag} maxWidth="100px">
+                                                    {model.version || '—'}
+                                                </Tag>
                                                 {isSelected && <IconCheckmark16 color="#1565c0" />}
                                             </button>
                                         </li>
@@ -295,6 +300,19 @@ export const ModelSelectionModal = ({
                                         <p className={styles.detailDescription}>{focusedModel.description}</p>
 
                                         <dl className={styles.specs}>
+                                            <div className={styles.spec}>
+                                                <dt>{i18n.t('Version')}</dt>
+                                                <dd>{focusedModel.version || '—'}</dd>
+                                            </div>
+                                            <div className={styles.spec}>
+                                                <dt>{i18n.t('Commit')}</dt>
+                                                <dd>
+                                                    <ModelCommit
+                                                        sourceDigest={focusedModel.sourceDigest}
+                                                        sourceUrl={focusedModel.sourceUrl}
+                                                    />
+                                                </dd>
+                                            </div>
                                             <div className={styles.spec}>
                                                 <dt>
                                                     <IconCalendar16 color="#212934" />

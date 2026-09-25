@@ -117,6 +117,12 @@
     font-size: 12px;
 }
 
+.versionTag {
+    flex-shrink: 0;
+    color: var(--colors-grey700);
+    font-size: 12px;
+}
+
 .detail {
     padding: 0 0 0 24px;
     display: flex;

@@ -8,12 +8,14 @@ import {
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { Pill } from '@dhis2-chap/ui';
+import { ModelCommit } from '@/components/ModelCommit';
 import { useConfiguredModelInfo } from '../hooks/useConfiguredModelInfo';
 import styles from './ViewModelInfoModal.module.css';
 import { ChapErrorNotice } from '../../../../../ChapErrorNotice';
 
 type Props = {
     id: number;
+    sourceUrl?: string | null;
     onClose: () => void;
 };
 
@@ -49,7 +51,7 @@ const formatValue = (value: unknown): string => {
     return String(value);
 };
 
-export const ViewModelInfoModal = ({ id, onClose }: Props) => {
+export const ViewModelInfoModal = ({ id, sourceUrl, onClose }: Props) => {
     const { info, error, isLoading } = useConfiguredModelInfo({ id });
 
     const template = info?.modelTemplate;
@@ -135,6 +137,11 @@ export const ViewModelInfoModal = ({ id, onClose }: Props) => {
 
                                 <span className={styles.metaLabel}>{i18n.t('Version')}</span>
                                 <span className={styles.metaValue}>{template.version || '—'}</span>
+
+                                <span className={styles.metaLabel}>{i18n.t('Commit')}</span>
+                                <span className={styles.metaValue}>
+                                    <ModelCommit sourceDigest={template.sourceDigest} sourceUrl={sourceUrl} />
+                                </span>
 
                                 <span className={styles.metaLabel}>{i18n.t('Supported period')}</span>
                                 <span className={styles.metaValue}>
