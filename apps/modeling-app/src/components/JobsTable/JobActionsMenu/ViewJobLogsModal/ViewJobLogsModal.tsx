@@ -37,8 +37,10 @@ export const ViewJobLogsModal = ({ jobId, status, onClose }: ViewJobLogsModalPro
         error,
         isLoading,
     } = useQuery<string, ApiError | Error>({
-        queryKey: ['jobLogs', jobId],
+        // Fetch the final logs when the job finishes, before polling stops.
+        queryKey: ['jobLogs', jobId, status],
         queryFn: () => JobsService.getLogsV1JobsJobIdLogsGet(jobId),
+        keepPreviousData: true,
         refetchInterval: () => {
             if (status === JOB_STATUSES.PENDING || status === JOB_STATUSES.STARTED) {
                 return 10 * 1000;
