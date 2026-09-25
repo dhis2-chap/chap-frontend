@@ -34,3 +34,23 @@
 .datasetField {
   flex: 1;
 }
+
+.selectedModels {
+  list-style: none;
+  padding: 0;
+}
+
+.selectedModels li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacers-dp8);
+  margin-block: var(--spacers-dp8);
+}
+
+.results {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacers-dp8);
+  align-items: flex-start;
+}
