@@ -1,5 +1,25 @@
 # @dhis2-chap/modeling-app
 
+## 7.2.0
+
+### Minor Changes
+
+-   e5385a5: Show model versions and commit SHAs when selecting models, commit SHAs in model details, and model versions in evaluation details, with links to GitHub revisions where available [CLIM-1179].
+-   5313507: Add a Datasets page where data can be imported once, named per covariate, and reused across evaluations (CLIM-1075). While building a dataset, the app suggests column names from CHAP, shows how many models can use it and which columns to add to support more, and lists the DHIS2 data items each column used in earlier datasets first in the data item picker. A data check has CHAP validate the data in a dry run and previews which locations it would leave out before anything is saved (needs a CHAP Core version with `dryRun` on make-dataset), and the locations CHAP leaves out on import are shown afterwards. New evaluations can now start from a saved dataset, with importing from DHIS2 as the second option.
+
+    Datasets created by evaluations and predictions are hidden from the Datasets page and the saved-dataset evaluation form, with an Origin filter that can be cleared to show them. This needs a CHAP Core version that flags datasets created manually; older versions keep showing all datasets (CLIM-1163).
+
+### Patch Changes
+
+-   737fb20: Align the Compare evaluations header with the selector bar on wide screens.
+-   787a772: Highlight the forecast line corresponding to the selected minimum outbreak probability in prediction tiles and alert previews.
+-   80eb938: Use metric names, descriptions, units, targets, and target behavior from CHAP Core in the evaluation metrics widget.
+-   Updated dependencies [787a772]
+-   Updated dependencies [5313507]
+-   Updated dependencies [80eb938]
+    -   @dhis2-chap/ui@7.2.0
+    -   @dhis2-chap/core@7.2.0
+
 ## 7.1.0
 
 ### Minor Changes
