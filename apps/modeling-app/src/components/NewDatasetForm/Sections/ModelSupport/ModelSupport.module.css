@@ -108,6 +108,7 @@ summary.groupTitle {
   align-items: flex-start;
   gap: 8px;
   font-size: 13px;
+  line-height: 16px;
   color: var(--colors-grey900);
 }
 
@@ -116,7 +117,8 @@ summary.groupTitle {
   flex-shrink: 0;
   width: 8px;
   height: 8px;
-  margin-block-start: 5px;
+  /* Centred on the first 16px line */
+  margin-block-start: 4px;
   border-radius: 50%;
 }
 
