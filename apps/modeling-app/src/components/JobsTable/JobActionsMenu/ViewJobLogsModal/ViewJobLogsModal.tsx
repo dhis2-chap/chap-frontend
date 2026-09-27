@@ -40,6 +40,7 @@ export const ViewJobLogsModal = ({ jobId, status, onClose }: ViewJobLogsModalPro
         // Fetch again when the status changes so the final logs arrive before polling stops.
         queryKey: ['jobLogs', jobId, status],
         queryFn: () => JobsService.getLogsV1JobsJobIdLogsGet(jobId),
+        keepPreviousData: true,
         refetchInterval: () => {
             if (status === JOB_STATUSES.PENDING || status === JOB_STATUSES.STARTED) {
                 return 10 * 1000;
