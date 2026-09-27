@@ -57,7 +57,7 @@ describe('shared evaluation and prediction preflight', () => {
             .mockResolvedValue([{ ...template, healthStatus: 'revision_mismatch' }]);
 
         await expect(prepareBacktestData(form, dataEngine, client, settings))
-            .rejects.toThrow('The model developer must publish a new version');
+            .rejects.toThrow('its service changed after you selected it');
         expect(fetchAnalytics).not.toHaveBeenCalled();
         expect(fetchOrgUnits).not.toHaveBeenCalled();
         client.clear();

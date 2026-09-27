@@ -12,7 +12,7 @@ import { useConfiguredModelInfo } from '../hooks/useConfiguredModelInfo';
 import styles from './ViewModelInfoModal.module.css';
 import { ChapErrorNotice } from '../../../../../ChapErrorNotice';
 import { useModels } from '@/hooks/useModels';
-import { ModelHealthBadge, ModelHealthNotice } from '@/components/ModelHealth/ModelHealth';
+import { ModelHealthNotice } from '@/components/ModelHealth/ModelHealth';
 
 type Props = {
     id: number;
@@ -77,7 +77,6 @@ export const ViewModelInfoModal = ({ id, onClose }: Props) => {
                     : i18n.t('Model details')}
             </ModalTitle>
             <ModalContent>
-                <ModelHealthBadge model={model} />
                 <ModelHealthNotice model={model} />
                 {isLoading && (
                     <div className={styles.loading}>

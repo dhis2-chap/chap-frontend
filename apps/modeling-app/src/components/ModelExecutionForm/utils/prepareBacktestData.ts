@@ -8,7 +8,7 @@ import { AnalyticsResponse, OrgUnitResponse, fetchAnalytics, fetchOrgUnits } fro
 import { generateBacktestDataHash } from './hashUtils';
 import { type Dhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
 import { modelsQueryOptions } from '@/hooks/modelsQuery';
-import { hasRevisionMismatch, revisionMismatchMessage } from '@/utils/modelHealth';
+import { hasRevisionMismatch, revisionMismatchOnSubmitMessage } from '@/utils/modelHealth';
 
 const calculatePeriods = (
     periodType: keyof typeof PERIOD_TYPES,
@@ -55,7 +55,7 @@ export const prepareBacktestData = async (
     }
 
     if (hasRevisionMismatch(model)) {
-        throw new Error(revisionMismatchMessage());
+        throw new Error(revisionMismatchOnSubmitMessage(model));
     }
 
     const periods = calculatePeriods(

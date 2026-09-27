@@ -1,7 +1,7 @@
 import { NoticeBox, Tooltip } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { Pill, type ModelSpecRead } from '@dhis2-chap/ui';
-import { hasRevisionMismatch, revisionMismatchMessage } from '@/utils/modelHealth';
+import { hasRevisionMismatch, revisionMismatchMessage, revisionMismatchTooltip } from '@/utils/modelHealth';
 import styles from './ModelHealth.module.css';
 
 type Props = { model?: ModelSpecRead };
@@ -15,21 +15,21 @@ export const ModelHealthBadge = ({ model }: Props) => {
     if (!hasRevisionMismatch(model)) return null;
 
     return (
-        <Tooltip content={revisionMismatchMessage()}>
+        <Tooltip content={revisionMismatchTooltip()}>
             <span data-test="model-health-badge">
-                <Pill variant="destructive">{i18n.t('Revision mismatch')}</Pill>
+                <Pill variant="destructive">{i18n.t('Needs update')}</Pill>
             </span>
         </Tooltip>
     );
 };
 
 export const ModelHealthNotice = ({ model }: Props) => {
-    if (!hasRevisionMismatch(model)) return null;
+    if (!model || !hasRevisionMismatch(model)) return null;
 
     return (
         <div role="alert" className={styles.notice}>
-            <NoticeBox error title={i18n.t('Model unavailable')} dataTest="model-health-notice">
-                {revisionMismatchMessage()}
+            <NoticeBox error title={i18n.t('This model can\'t run right now')} dataTest="model-health-notice">
+                {revisionMismatchMessage(model)}
             </NoticeBox>
         </div>
     );

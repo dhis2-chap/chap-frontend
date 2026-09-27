@@ -8,8 +8,20 @@ export type ModelWithHealth = ModelSpecRead & { healthStatus?: string | null };
 export const hasRevisionMismatch = (model?: ModelSpecRead): boolean =>
     (model as ModelWithHealth | undefined)?.healthStatus === 'revision_mismatch';
 
-export const revisionMismatchMessage = () => i18n.t(
-    'This model cannot run because its service revision differs from the stored version. The model developer must publish a new version before it can run. Select another model or contact the model developer.',
+const modelName = (model: ModelSpecRead) => model.displayName || model.name;
+
+export const revisionMismatchTooltip = () => i18n.t(
+    'This model\'s service changed without a new version number, so it can\'t run.',
+);
+
+export const revisionMismatchMessage = (model: ModelSpecRead) => i18n.t(
+    'The service behind {{model}} version {{version}} now runs different code under the same version number. CHAP blocks it so results stay comparable with earlier runs. Choose another model, or ask your CHAP administrator to redeploy the original version or publish the update under a new version number.',
+    { model: modelName(model), version: model.version },
+);
+
+export const revisionMismatchOnSubmitMessage = (model: ModelSpecRead) => i18n.t(
+    '{{model}} can no longer run because its service changed after you selected it. Choose another model and try again.',
+    { model: modelName(model) },
 );
 
 export const hasTemplateHealth = (model: ModelSpecRead): boolean =>
