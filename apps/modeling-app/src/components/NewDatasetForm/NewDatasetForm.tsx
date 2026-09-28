@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { FormProvider, useFieldArray, useWatch } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Card } from '@dhis2-chap/ui';
 import {
     Button,
@@ -46,8 +46,10 @@ export const NewDatasetForm = () => {
         summary,
         jobId,
         jobStatus,
+        datasetId,
     } = useCreateDataset(settings);
     const inspection = useInspectDataset(settings);
+    const navigate = useNavigate();
     const [shownSummary, setShownSummary] = useState<{ title: string; summary: DatasetImportSummary }>();
     const [shownLogsJobId, setShownLogsJobId] = useState<string>();
     const leftOutCount = new Set(summary?.rejected.map(item => item.orgUnit)).size;
@@ -213,7 +215,19 @@ export const NewDatasetForm = () => {
 
                             {hasSucceeded && (
                                 <NoticeBox valid title={i18n.t('Dataset created')} className={styles.notice}>
-                                    <Link to="/datasets">{i18n.t('View datasets')}</Link>
+                                    <ButtonStrip>
+                                        {datasetId != null && (
+                                            <Button
+                                                small
+                                                primary
+                                                onClick={() => navigate(`/evaluate/from-dataset?datasetId=${datasetId}`)}
+                                                dataTest="dataset-new-evaluation-button"
+                                            >
+                                                {i18n.t('New evaluation')}
+                                            </Button>
+                                        )}
+                                        <Button small onClick={() => navigate('/datasets')}>{i18n.t('View datasets')}</Button>
+                                    </ButtonStrip>
                                 </NoticeBox>
                             )}
                         </div>

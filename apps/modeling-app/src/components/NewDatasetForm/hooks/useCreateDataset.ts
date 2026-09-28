@@ -60,6 +60,13 @@ export const useCreateDataset = (periodSettings: Dhis2PeriodSettings) => {
         },
     });
 
+    const datasetId = useQuery({
+        queryKey: ['datasetJobResult', jobId],
+        queryFn: () => JobsService.getDatabaseResultV1JobsJobIdDatabaseResultGet(jobId as string),
+        enabled: !!jobId && job.data === 'SUCCESS',
+        select: result => result.id,
+    });
+
     return {
         createDataset: createDataset.mutate,
         isSubmitting: createDataset.isLoading,
@@ -70,6 +77,7 @@ export const useCreateDataset = (periodSettings: Dhis2PeriodSettings) => {
         isImporting: !!jobId && !FINISHED_JOB_STATUSES.includes(job.data ?? ''),
         hasFailed: job.data === 'FAILURE' || job.data === 'REVOKED',
         hasSucceeded: job.data === 'SUCCESS',
+        datasetId: datasetId.data,
         retry: () => {
             setJobId(undefined);
             setSummary(undefined);

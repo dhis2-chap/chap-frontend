@@ -79,4 +79,7 @@ test('shows live dataset job logs, final failure logs, and preserves the form fo
     expect(retrySummary.id).not.toBe(jobId!);
     await expect(page.getByText('Dataset created', { exact: true })).toBeVisible();
     await expect(logsModal).not.toBeVisible();
+
+    await page.getByRole('button', { name: 'New evaluation', exact: true }).click();
+    await expect(page).toHaveURL(/\/#\/evaluate\/from-dataset\?datasetId=\d+$/);
 });
