@@ -12,6 +12,7 @@ import { useModels } from '../../../../hooks/useModels';
 import { ModelSpecRead } from '@dhis2-chap/ui';
 import { ModelSelectionModal } from './ModelSelectionModal';
 import styles from './ModelSelector.module.css';
+import { ModelHealthNotice } from '@/components/ModelHealth/ModelHealth';
 
 type Props = {
     control: Control<ModelExecutionFormValues>;
@@ -43,6 +44,8 @@ export const ModelSelector = ({
                 ) : (
                     <p className={styles.mutedText}>{i18n.t('No model selected')}</p>
                 )}
+
+                <ModelHealthNotice model={selectedFormModel} />
 
                 <Button
                     onClick={() => setIsModelModalOpen(true)}

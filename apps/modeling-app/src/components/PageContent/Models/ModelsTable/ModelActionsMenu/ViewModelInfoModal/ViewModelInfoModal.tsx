@@ -12,6 +12,8 @@ import { ModelCommit } from '@/components/ModelCommit';
 import { useConfiguredModelInfo } from '../hooks/useConfiguredModelInfo';
 import styles from './ViewModelInfoModal.module.css';
 import { ChapErrorNotice } from '../../../../../ChapErrorNotice';
+import { useModels } from '@/hooks/useModels';
+import { ModelHealthNotice } from '@/components/ModelHealth/ModelHealth';
 
 type Props = {
     id: number;
@@ -53,6 +55,8 @@ const formatValue = (value: unknown): string => {
 
 export const ViewModelInfoModal = ({ id, sourceUrl, onClose }: Props) => {
     const { info, error, isLoading } = useConfiguredModelInfo({ id });
+    const { models } = useModels({ includeArchived: true });
+    const model = models?.find(model => model.id === id);
 
     const template = info?.modelTemplate;
     const userOptions: Record<string, Record<string, unknown>> = (template?.userOptions as Record<string, Record<string, unknown>> | null | undefined) || {};
@@ -75,6 +79,7 @@ export const ViewModelInfoModal = ({ id, sourceUrl, onClose }: Props) => {
                     : i18n.t('Model details')}
             </ModalTitle>
             <ModalContent>
+                <ModelHealthNotice model={model} />
                 {isLoading && (
                     <div className={styles.loading}>
                         <CircularLoader />

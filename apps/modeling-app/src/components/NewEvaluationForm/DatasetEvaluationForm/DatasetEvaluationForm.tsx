@@ -26,6 +26,9 @@ import { datasetSupportsModel } from '../../NewDatasetForm/utils/datasetModels';
 import { getBacktestSplitting, getMinimumEvaluationPeriods } from '../hooks/backtestDefaults';
 import { countPeriods } from '@/utils/periods';
 import { ModelsSelector } from './ModelsSelector';
+import { fetchRunnableModel } from '@/hooks/modelsQuery';
+import { hasRevisionMismatch } from '@/utils/modelHealth';
+import { ModelHealthNotice } from '../../ModelHealth/ModelHealth';
 import styles from './DatasetEvaluationForm.module.css';
 
 const schema = z.object({
@@ -65,12 +68,16 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
         dataset && datasetSupportsModel(dataset.covariates ?? [], dataset.periodType ?? '', model)
     )) ?? [];
     const selectedModels = compatibleModels.filter(model => modelNames.includes(model.name));
-    const canSubmit = selectedModels.length > 0 && !!splitting && !isTooShort && dataset?.id != null;
+    const canSubmit = selectedModels.length > 0 && !selectedModels.some(hasRevisionMismatch) &&
+        !!splitting && !isTooShort && dataset?.id != null;
 
-    const createEvaluation = useMutation<void, ApiError, string>({
+    const createEvaluation = useMutation<void, ApiError | Error, string>({
         mutationFn: async (name: string) => {
+            const runnableModels = await Promise.all(
+                selectedModels.map(model => fetchRunnableModel(queryClient, model.id)),
+            );
             const request = { name, datasetId: dataset!.id!, ...splitting! };
-            const modelIds = selectedModels.map(model => model.name);
+            const modelIds = runnableModels.map(model => model.name);
             if (isMultiModelAvailable) {
                 await BacktestsService.createBacktestsV1AnalyticsCreateBacktestsPost({ ...request, modelIds });
                 return;
@@ -181,6 +188,10 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
                                 { shouldDirty: true },
                             )}
                         />
+
+                        {selectedModels.map(model => (
+                            <ModelHealthNotice key={model.id} model={model} />
+                        ))}
 
                         {dataset && !compatibleModels.length && (
                             <NoticeBox warning title={i18n.t('No compatible model')}>

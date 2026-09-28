@@ -29,6 +29,7 @@ import { ModelsTableFilters } from './ModelsTableFilters';
 import { useModelsTableFilters } from './hooks/useModelsTableFilters';
 import { useNavigate } from 'react-router-dom';
 import { useTablePaginationParams } from '../../../../hooks/useTablePaginationParams';
+import { ModelHealthBadge } from '@/components/ModelHealth/ModelHealth';
 
 const labelByPeriodType = {
     month: i18n.t('Monthly'),
@@ -45,7 +46,12 @@ const columns = [
         id: 'name',
         header: i18n.t('Name'),
         filterFn: 'includesString',
-        cell: info => info.getValue() || undefined,
+        cell: info => (
+            <div className={styles.nameCell}>
+                {info.getValue() || undefined}
+                <ModelHealthBadge model={info.row.original} />
+            </div>
+        ),
     }),
     columnHelper.accessor('author', {
         header: i18n.t('Author'),

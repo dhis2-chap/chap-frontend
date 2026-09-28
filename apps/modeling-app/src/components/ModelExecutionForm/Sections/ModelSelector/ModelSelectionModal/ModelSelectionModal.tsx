@@ -27,6 +27,8 @@ import { AuthorAssessedStatus, type ModelSpecRead } from '@dhis2-chap/ui';
 import { toDataTestKey } from '@/utils/dataTestKey';
 import { ModelCommit } from '@/components/ModelCommit';
 import styles from './ModelSelectionModal.module.css';
+import { ModelHealthBadge, ModelHealthNotice } from '@/components/ModelHealth/ModelHealth';
+import { hasRevisionMismatch } from '@/utils/modelHealth';
 
 type Props = {
     models?: ModelSpecRead[];
@@ -291,6 +293,7 @@ export const ModelSelectionModal = (props: Props) => {
                                                     dense
                                                     className={styles.listCheckbox}
                                                     checked={isSelected}
+                                                    disabled={hasRevisionMismatch(model) && !isSelected}
                                                     onChange={() => toggleSelected(model)}
                                                     label={<span className={styles.visuallyHidden}>{getModelName(model)}</span>}
                                                     dataTest={`model-toggle-${toDataTestKey(modelStableId)}`}
@@ -309,7 +312,10 @@ export const ModelSelectionModal = (props: Props) => {
                                                     className={styles.dot}
                                                     style={{ backgroundColor: readiness?.color ?? '#b0b0b0' }}
                                                 />
-                                                <span className={styles.listName}>{getModelName(model)}</span>
+                                                <div className={styles.listName}>
+                                                    <span className={styles.listNameText}>{getModelName(model)}</span>
+                                                    <ModelHealthBadge model={model} />
+                                                </div>
                                                 {!multiple && isSelected && <IconCheckmark16 color="#1565c0" />}
                                             </button>
                                         </li>
@@ -332,6 +338,8 @@ export const ModelSelectionModal = (props: Props) => {
                                         </header>
 
                                         <p className={styles.detailDescription}>{focusedModel.description}</p>
+
+                                        <ModelHealthNotice model={focusedModel} />
 
                                         <dl className={styles.specs}>
                                             <div className={styles.spec}>
@@ -415,6 +423,7 @@ export const ModelSelectionModal = (props: Props) => {
                                         <ButtonStrip end>
                                             <Button
                                                 small
+                                                disabled={hasRevisionMismatch(focusedModel) && !isFocusedModelSelected}
                                                 primary={!isFocusedModelSelected}
                                                 onClick={() => handleModelUse(focusedModel)}
                                                 icon={isFocusedModelSelected ? <IconCheckmark16 /> : undefined}

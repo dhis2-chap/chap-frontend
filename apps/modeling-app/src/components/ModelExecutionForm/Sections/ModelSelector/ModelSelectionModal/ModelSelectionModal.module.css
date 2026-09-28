@@ -119,12 +119,19 @@
 }
 
 .listName {
+    display: flex;
+    align-items: center;
+    gap: var(--spacers-dp8);
     flex: 1;
     min-inline-size: 0;
     font-size: 14px;
     font-weight: 500;
     line-height: 20px;
     color: #212934;
+}
+
+.listNameText {
+    min-inline-size: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
