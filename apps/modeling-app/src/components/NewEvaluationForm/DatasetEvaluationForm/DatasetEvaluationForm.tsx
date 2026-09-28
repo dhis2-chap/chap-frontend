@@ -13,8 +13,9 @@ import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useNavigate } from 'react-router-dom';
-import { ApiError, BacktestsService, Card, MakeBacktestsResponse } from '@dhis2-chap/ui';
+import { ApiError, BacktestsService, Card } from '@dhis2-chap/ui';
 import { useNavigationBlocker } from '@/hooks/useNavigationBlocker';
+import { Features, useIsFeatureAvailable } from '@/hooks/useIsFeatureAvailable';
 import { NavigationConfirmModal } from '../../NavigationConfirmModal';
 import { NameInput } from '../../ModelExecutionForm/Sections/NameInput';
 import { ChapErrorNotice } from '../../ChapErrorNotice';
@@ -44,6 +45,7 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
     const { models, isLoading: isModelsLoading, error: modelsError } = useModels();
     const navigate = useNavigate();
     const queryClient = useQueryClient();
+    const { isAvailable: isMultiModelAvailable } = useIsFeatureAvailable(Features.MULTI_MODEL_BACKTESTS);
 
     const methods = useForm<FormValues>({
         resolver: zodResolver(schema),
@@ -65,17 +67,27 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
     const selectedModels = compatibleModels.filter(model => modelNames.includes(model.name));
     const canSubmit = selectedModels.length > 0 && !!splitting && !isTooShort && dataset?.id != null;
 
-    const createEvaluation = useMutation<MakeBacktestsResponse, ApiError, string>({
-        mutationFn: (name: string) => BacktestsService.createBacktestsV1AnalyticsCreateBacktestsPost({
-            name,
-            datasetId: dataset!.id!,
-            modelIds: selectedModels.map(model => model.name),
-            ...splitting!,
-        }),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['jobs'] });
-            navigate('/jobs');
+    const createEvaluation = useMutation<void, ApiError, string>({
+        mutationFn: async (name: string) => {
+            const request = { name, datasetId: dataset!.id!, ...splitting! };
+            const modelIds = selectedModels.map(model => model.name);
+            if (isMultiModelAvailable) {
+                await BacktestsService.createBacktestsV1AnalyticsCreateBacktestsPost({ ...request, modelIds });
+                return;
+            }
+            // Chap Core < 2.4.0 has no multi-model endpoint: queue one backtest per model,
+            // named like the multi-model endpoint does, and keep failed models selected for retry.
+            const results = await Promise.allSettled(modelIds.map(modelId => (
+                BacktestsService.createBacktestV1AnalyticsCreateBacktestPost({ ...request, name: `${name}/${modelId}`, modelId })
+            )));
+            const failed = results.filter((result): result is PromiseRejectedResult => result.status === 'rejected');
+            if (failed.length) {
+                methods.setValue('modelNames', modelIds.filter((_, index) => results[index].status === 'rejected'));
+                throw failed[0].reason;
+            }
         },
+        onSettled: () => queryClient.invalidateQueries({ queryKey: ['jobs'] }),
+        onSuccess: () => navigate('/jobs'),
     });
 
     const {
