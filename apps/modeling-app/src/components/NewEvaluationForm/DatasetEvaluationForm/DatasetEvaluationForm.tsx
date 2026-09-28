@@ -24,6 +24,9 @@ import { DatasetOriginFilter, matchesOrigin, useDatasetOriginFilter } from '../.
 import { datasetSupportsModel } from '../../NewDatasetForm/utils/datasetModels';
 import { getBacktestSplitting, getMinimumEvaluationPeriods } from '../hooks/backtestDefaults';
 import { countPeriods } from '@/utils/periods';
+import { fetchRunnableModel } from '@/hooks/modelsQuery';
+import { hasRevisionMismatch } from '@/utils/modelHealth';
+import { ModelHealthNotice } from '../../ModelHealth/ModelHealth';
 import styles from './DatasetEvaluationForm.module.css';
 
 const schema = z.object({
@@ -62,15 +65,19 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
         dataset && datasetSupportsModel(dataset.covariates ?? [], dataset.periodType ?? '', model)
     )) ?? [];
     const selectedModel = compatibleModels.find(model => model.name === modelName);
-    const canSubmit = !!selectedModel && !!splitting && !isTooShort && dataset?.id != null;
+    const canSubmit = !!selectedModel && !hasRevisionMismatch(selectedModel) &&
+        !!splitting && !isTooShort && dataset?.id != null;
 
-    const createEvaluation = useMutation<unknown, ApiError, string>({
-        mutationFn: name => BacktestsService.createBacktestV1AnalyticsCreateBacktestPost({
-            name,
-            datasetId: dataset!.id!,
-            modelId: selectedModel!.name,
-            ...splitting!,
-        }),
+    const createEvaluation = useMutation<unknown, ApiError | Error, string>({
+        mutationFn: async (name) => {
+            const model = await fetchRunnableModel(queryClient, selectedModel!.id);
+            return BacktestsService.createBacktestV1AnalyticsCreateBacktestPost({
+                name,
+                datasetId: dataset!.id!,
+                modelId: model.name,
+                ...splitting!,
+            });
+        },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['jobs'] });
             navigate('/jobs');
@@ -164,10 +171,15 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
                                 <SingleSelectOption
                                     key={model.id}
                                     value={model.name}
-                                    label={model.displayName || model.name}
+                                    label={hasRevisionMismatch(model)
+                                        ? i18n.t('{{model}} (needs update)', { model: model.displayName || model.name })
+                                        : model.displayName || model.name}
+                                    disabled={hasRevisionMismatch(model)}
                                 />
                             ))}
                         </SingleSelectField>
+
+                        <ModelHealthNotice model={selectedModel} />
 
                         {dataset && !compatibleModels.length && (
                             <NoticeBox warning title={i18n.t('No compatible model')}>

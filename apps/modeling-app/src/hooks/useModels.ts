@@ -17,7 +17,10 @@ export const useModels = ({ includeArchived = false }: Props = {}) => {
 
     return {
         models,
-        error,
+        // A failed background refresh (remount or submit preflight) keeps the
+        // cached models. Only report errors when there is nothing to show, so
+        // open forms are not replaced by an error screen.
+        error: data ? null : error,
         isLoading,
     };
 };
