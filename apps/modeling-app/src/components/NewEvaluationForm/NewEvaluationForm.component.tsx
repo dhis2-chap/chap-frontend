@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import i18n from '@dhis2/d2-i18n';
-import { FormProvider } from 'react-hook-form';
+import { FormProvider, useWatch } from 'react-hook-form';
 import { Card } from '@dhis2-chap/ui';
 import { useEvaluationFormController } from './hooks/useEvaluationFormController';
 import { ModelExecutionFormValues } from '../ModelExecutionForm/hooks/useModelExecutionFormState';
@@ -19,6 +19,8 @@ import { ModelExecutionFormFields } from '../ModelExecutionForm/ModelExecutionFo
 import { useNavigationBlocker } from '../../hooks/useNavigationBlocker';
 import { NavigationConfirmModal } from '../NavigationConfirmModal';
 import { SummaryModal } from '../ModelExecutionForm/SummaryModal';
+import { useModels } from '@/hooks/useModels';
+import { hasRevisionMismatch } from '@/utils/modelHealth';
 
 type NewEvaluationFormProps = {
     initialValues?: Partial<ModelExecutionFormValues>;
@@ -43,6 +45,9 @@ export const NewEvaluationFormComponent = ({ initialValues }: NewEvaluationFormP
     } = useEvaluationFormController(initialValues);
 
     const [splitButtonOpen, setSplitButtonOpen] = useState(false);
+    const { models } = useModels();
+    const modelId = useWatch({ control: methods.control, name: 'modelId' });
+    const modelUnavailable = hasRevisionMismatch(models?.find(model => String(model.id) === modelId));
 
     const {
         showConfirmModal,
@@ -69,7 +74,7 @@ export const NewEvaluationFormComponent = ({ initialValues }: NewEvaluationFormP
                                         <Button
                                             onClick={handleDryRun}
                                             loading={isValidationLoading}
-                                            disabled={!!periodSettingsError || periodSettingsLoading}
+                                            disabled={modelUnavailable || !!periodSettingsError || periodSettingsLoading}
                                             primary
                                         >
                                             {i18n.t('Start dry run')}
@@ -78,7 +83,7 @@ export const NewEvaluationFormComponent = ({ initialValues }: NewEvaluationFormP
                                         <SplitButton
                                             onClick={handleStartJob}
                                             icon={<IconArrowRightMulti16 />}
-                                            disabled={isSubmitting || isValidationLoading || !!periodSettingsError || periodSettingsLoading}
+                                            disabled={modelUnavailable || isSubmitting || isValidationLoading || !!periodSettingsError || periodSettingsLoading}
                                             open={splitButtonOpen}
                                             onToggle={() => setSplitButtonOpen(prev => !prev)}
                                             component={(

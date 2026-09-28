@@ -36,6 +36,7 @@ export class ModelsService {
      * Use this to populate model pickers in backtest / prediction creation flows. Each
      * entry carries the configuration values along with template metadata so you can
      * surface "Model X (CRPS-tuned, 12 lags, ERA5)" or similar in a UI.
+     * Health is read from the service registry without syncing or archiving templates.
      * @returns ModelSpecRead Successful Response
      * @throws ApiError
      */

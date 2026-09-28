@@ -7,6 +7,7 @@ import { useDataEngine } from '@dhis2/app-runtime';
 import { AnalyticsResponse, OrgUnitResponse, fetchAnalytics, fetchOrgUnits } from './queryUtils';
 import { generateBacktestDataHash } from './hashUtils';
 import { type Dhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
+import { fetchRunnableModel } from '@/hooks/modelsQuery';
 
 const calculatePeriods = (
     periodType: keyof typeof PERIOD_TYPES,
@@ -41,14 +42,7 @@ export const prepareBacktestData = async (
     queryClient: QueryClient,
     periodSettings: Dhis2PeriodSettings,
 ): Promise<PreparedBacktestData> => {
-    const model = queryClient.getQueryData<ModelSpecRead[]>(['models'])
-        ?.find(model => model.id === Number(formData.modelId));
-
-    if (!model) {
-        throw new Error(
-            i18n.t('Model not found'),
-        );
-    }
+    const model = await fetchRunnableModel(queryClient, Number(formData.modelId));
 
     const periods = calculatePeriods(
         formData.periodType,

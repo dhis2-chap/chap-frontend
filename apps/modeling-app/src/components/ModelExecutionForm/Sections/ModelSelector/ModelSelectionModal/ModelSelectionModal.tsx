@@ -25,6 +25,8 @@ import { AuthorAssessedStatus, type ModelSpecRead } from '@dhis2-chap/ui';
 import { toDataTestKey } from '@/utils/dataTestKey';
 import { ModelCommit } from '@/components/ModelCommit';
 import styles from './ModelSelectionModal.module.css';
+import { ModelHealthBadge, ModelHealthNotice } from '@/components/ModelHealth/ModelHealth';
+import { hasRevisionMismatch } from '@/utils/modelHealth';
 
 type Props = {
     models?: ModelSpecRead[];
@@ -271,7 +273,10 @@ export const ModelSelectionModal = ({
                                                     className={styles.dot}
                                                     style={{ backgroundColor: readiness?.color ?? '#b0b0b0' }}
                                                 />
-                                                <span className={styles.listName}>{getModelName(model)}</span>
+                                                <div className={styles.listName}>
+                                                    <span className={styles.listNameText}>{getModelName(model)}</span>
+                                                    <ModelHealthBadge model={model} />
+                                                </div>
                                                 {isSelected && <IconCheckmark16 color="#1565c0" />}
                                             </button>
                                         </li>
@@ -294,6 +299,8 @@ export const ModelSelectionModal = ({
                                         </header>
 
                                         <p className={styles.detailDescription}>{focusedModel.description}</p>
+
+                                        <ModelHealthNotice model={focusedModel} />
 
                                         <dl className={styles.specs}>
                                             <div className={styles.spec}>
@@ -377,6 +384,7 @@ export const ModelSelectionModal = ({
                                         <ButtonStrip end>
                                             <Button
                                                 small
+                                                disabled={hasRevisionMismatch(focusedModel)}
                                                 primary={selectedModelId !== focusedModelId}
                                                 onClick={() => handleModelUse(focusedModel)}
                                                 icon={selectedModelId === focusedModelId ? <IconCheckmark16 /> : undefined}

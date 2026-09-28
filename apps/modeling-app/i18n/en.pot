@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-09-28T08:58:26.852Z\n"
-"PO-Revision-Date: 2026-09-28T08:58:26.852Z\n"
+"POT-Creation-Date: 2026-09-28T15:36:25.130Z\n"
+"PO-Revision-Date: 2026-09-28T15:36:25.131Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -390,9 +390,6 @@ msgstr "Create evaluation"
 msgid "Make prediction"
 msgstr "Make prediction"
 
-msgid "Create evaluation (Legacy)"
-msgstr "Create evaluation (Legacy)"
-
 msgid "Create dataset"
 msgstr "Create dataset"
 
@@ -673,11 +670,14 @@ msgstr "Please map the target to a valid data item"
 msgid "End period cannot be in the future"
 msgstr "End period cannot be in the future"
 
-msgid "Model not found"
-msgstr "Model not found"
-
 msgid "Data layer not found for data item id{{escape}} {{dataItemId}}"
 msgstr "Data layer not found for data item id{{escape}} {{dataItemId}}"
+
+msgid "Needs update"
+msgstr "Needs update"
+
+msgid "This model can't run right now"
+msgstr "This model can't run right now"
 
 msgid "Unsaved changes"
 msgstr "Unsaved changes"
@@ -888,6 +888,9 @@ msgstr "Dataset"
 
 msgid "No datasets match the origin filter"
 msgstr "No datasets match the origin filter"
+
+msgid "{{model}} (needs update)"
+msgstr "{{model}} (needs update)"
 
 msgid "No compatible model"
 msgstr "No compatible model"
@@ -2471,6 +2474,9 @@ msgstr "Data Pruning"
 msgid "Requires superuser authority"
 msgstr "Requires superuser authority"
 
+msgid "Model not found"
+msgstr "Model not found"
+
 msgid "Run predictions, review activity, and manage this setup."
 msgstr "Run predictions, review activity, and manage this setup."
 
@@ -2635,6 +2641,27 @@ msgstr "Not authorized. Check the CHAP API token in settings."
 
 msgid "Not authorized to access the CHAP server"
 msgstr "Not authorized to access the CHAP server"
+
+msgid "This model's service changed without a new version number, so it can't run."
+msgstr "This model's service changed without a new version number, so it can't run."
+
+msgid ""
+"This model's service now runs different code than version {{version}} was "
+"registered with, so CHAP won't run it. Choose another model, or ask your "
+"CHAP administrator to redeploy that version or release the change as a new "
+"version."
+msgstr ""
+"This model's service now runs different code than version {{version}} was "
+"registered with, so CHAP won't run it. Choose another model, or ask your "
+"CHAP administrator to redeploy that version or release the change as a new "
+"version."
+
+msgid ""
+"{{model}} can no longer run because its service changed after you selected "
+"it. Choose another model and try again."
+msgstr ""
+"{{model}} can no longer run because its service changed after you selected "
+"it. Choose another model and try again."
 
 msgid "{{stdMultiplier}} standard deviations above seasonal mean"
 msgstr "{{stdMultiplier}} standard deviations above seasonal mean"
