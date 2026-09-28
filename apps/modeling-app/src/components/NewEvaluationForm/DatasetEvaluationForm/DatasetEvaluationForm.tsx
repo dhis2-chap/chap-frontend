@@ -13,7 +13,7 @@ import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useNavigate } from 'react-router-dom';
-import { BacktestsService, Card } from '@dhis2-chap/ui';
+import { ApiError, BacktestsService, Card, MakeBacktestsResponse } from '@dhis2-chap/ui';
 import { useNavigationBlocker } from '@/hooks/useNavigationBlocker';
 import { NavigationConfirmModal } from '../../NavigationConfirmModal';
 import { NameInput } from '../../ModelExecutionForm/Sections/NameInput';
@@ -65,7 +65,7 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
     const selectedModels = compatibleModels.filter(model => modelNames.includes(model.name));
     const canSubmit = selectedModels.length > 0 && !!splitting && !isTooShort && dataset?.id != null;
 
-    const createEvaluation = useMutation({
+    const createEvaluation = useMutation<MakeBacktestsResponse, ApiError, string>({
         mutationFn: (name: string) => BacktestsService.createBacktestsV1AnalyticsCreateBacktestsPost({
             name,
             datasetId: dataset!.id!,
