@@ -7,6 +7,9 @@ const authFile = './playwright/.auth/user.json';
 
 export default defineConfig({
     testDir: './apps/modeling-app/e2e',
+    // The DHIS2 route proxy occasionally relays a response that Node's HTTP
+    // parser rejects ("Invalid header token"), failing any fixture request.
+    retries: isCI ? 1 : 0,
     expect: {
         timeout: isCI ? 30_000 : 10_000,
     },

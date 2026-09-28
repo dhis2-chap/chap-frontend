@@ -3,9 +3,9 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Request to backtest an already-imported dataset against a configured model.
+ * Request to run several configured models on one dataset under one set of evaluation parameters.
  */
-export type MakeBacktestRequest = {
+export type MakeBacktestsRequest = {
     /**
      * Number of periods to forecast at each split.
      */
@@ -27,15 +27,15 @@ export type MakeBacktestRequest = {
      */
     futureWeatherProvider?: string;
     /**
-     * Human-friendly name for the resulting backtest row.
+     * Name of the run; each backtest is named `<name>/<configured model name>`.
      */
     name: string;
     /**
-     * Configured model to backtest: either the integer primary key or the canonical string name.
+     * Configured models to backtest, each either the integer primary key or the canonical name.
      */
-    modelId: (number | string);
+    modelIds: Array<(number | string)>;
     /**
-     * Foreign key to the dataset the backtest evaluates against.
+     * Foreign key to the dataset the backtests evaluate against.
      */
     datasetId: number;
 };
