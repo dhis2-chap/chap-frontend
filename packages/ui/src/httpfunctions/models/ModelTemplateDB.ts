@@ -19,7 +19,7 @@ export type ModelTemplateDB = {
      */
     userOptions?: (Record<string, any> | null);
     /**
-     * Search space used by HPO when training this template in `hpo` mode.
+     * Search space used by HPO when tuning this template in `hpo` mode.
      */
     hpoSearchSpace?: (Record<string, any> | null);
     /**
@@ -29,11 +29,11 @@ export type ModelTemplateDB = {
     /**
      * Minimum forecast horizon (in periods) the template supports.
      */
-    minPredictionLength?: (number | null);
+    minPredictionPeriods?: (number | null);
     /**
      * Maximum forecast horizon (in periods) the template supports.
      */
-    maxPredictionLength?: (number | null);
+    maxPredictionPeriods?: (number | null);
     /**
      * Name of the variable the model predicts.
      */
