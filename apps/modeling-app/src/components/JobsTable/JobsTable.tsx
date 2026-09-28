@@ -28,7 +28,7 @@ import { JobsTableFilters, JobsTableFilterKey } from './JobsTableFilters';
 import { StatusCell } from './TableCells/StatusCell';
 import { JobTypeCell } from './TableCells/JobTypeCell';
 import { JobActionsMenu } from './JobActionsMenu/JobActionsMenu';
-import { JOB_STATUSES } from '../../hooks/useJobs';
+import { JOB_STATUSES, JOB_TYPES } from '../../hooks/useJobs';
 import { useJobsTableFilters } from './hooks/useJobsTableFilters';
 import { useTablePaginationParams } from '../../hooks/useTablePaginationParams';
 import {
@@ -61,6 +61,15 @@ const columns = [
     columnHelper.accessor('type', {
         header: i18n.t('Type'),
         enableSorting: false,
+        filterFn: (row, columnId, filterValue) => {
+            const jobType = row.getValue<string>(columnId);
+            // The evaluation filter keeps its existing URL value and includes both flows.
+            if (filterValue === JOB_TYPES.CREATE_BACKTEST_WITH_DATA) {
+                return jobType === JOB_TYPES.BACKTEST
+                    || jobType === JOB_TYPES.CREATE_BACKTEST_WITH_DATA;
+            }
+            return jobType === filterValue;
+        },
         cell: info => (
             <JobTypeCell
                 jobType={info.getValue()}
