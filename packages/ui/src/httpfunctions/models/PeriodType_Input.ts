@@ -3,9 +3,10 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Supported time period types for model predictions.
+ * Supported time period types for model predictions (`any` accepts both weekly and monthly).
  */
 export enum PeriodType_Input {
     WEEKLY = 'weekly',
     MONTHLY = 'monthly',
+    ANY = 'any',
 }

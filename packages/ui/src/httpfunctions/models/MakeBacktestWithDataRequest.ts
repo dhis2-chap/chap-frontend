@@ -27,6 +27,10 @@ export type MakeBacktestWithDataRequest = {
      */
     nRetrain?: number;
     /**
+     * Id of the registered future-weather provider supplying climate covariates for each forecast window. Use the same provider here and on the prediction so backtest scores reflect what the model will see in production. See GET /v1/analytics/weather-providers.
+     */
+    futureWeatherProvider?: string;
+    /**
      * Human-friendly name for the resulting backtest row.
      */
     name: string;

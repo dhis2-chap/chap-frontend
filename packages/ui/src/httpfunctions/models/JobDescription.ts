@@ -31,9 +31,13 @@ export type JobDescription = {
      */
     end_time: (string | null);
     /**
-     * Result blob produced by the job (JSON string) or error message on failure.
+     * Result blob produced by the job (JSON string); `None` unless it succeeded.
      */
     result: (string | null);
+    /**
+     * Why the job failed: the exception message, cut to 1000 characters. `None` unless it failed. `GET /v1/jobs/{id}/logs` has the full traceback.
+     */
+    error?: (string | null);
     /**
      * `PredictionSetup.id` this job belongs to, when applicable.
      */

@@ -37,7 +37,7 @@ export class VisualizationsService {
     }
     /**
      * Discover which scoring metrics are available
-     * List the metrics you can score a backtest with (CRPS, MAE, ...), with a human-friendly name and description for each.
+     * List the metrics you can score a backtest with (CRPS, MAE, ...), with a human-friendly name, description, optimization direction, unit and target for each.
      *
      * Use this to populate a metric picker in a UI before requesting a specific plot. The
      * result is the same regardless of ``backtest_id`` — the path takes it for symmetry
