@@ -9,8 +9,8 @@ export const fetchModels = async (): Promise<ModelWithHealth[]> => {
         const templates = await ModelsService.listModelTemplatesV1CrudModelTemplatesGet();
         return addTemplateHealth(models, templates);
     } catch {
-        // Health is optional: older servers may not expose this endpoint. A failed
-        // optional read must not hide the configured models or prevent their use.
+        // Health is extra information. If the template listing fails, still show
+        // the configured models; the backend rejects a mismatched run anyway.
         return models;
     }
 };

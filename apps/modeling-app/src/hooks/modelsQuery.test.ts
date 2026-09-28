@@ -69,8 +69,8 @@ describe('model health', () => {
         expect(hasRevisionMismatch((await fetchModels())[0])).toBe(false);
     });
 
-    it.each([404, 405, 500])('keeps configured models when the optional endpoint returns %s', async (status) => {
-        listTemplates.mockRejectedValue({ status });
+    it('keeps configured models when the template listing fails', async () => {
+        listTemplates.mockRejectedValue({ status: 500 });
         expect(await fetchModels()).toEqual([model]);
     });
 

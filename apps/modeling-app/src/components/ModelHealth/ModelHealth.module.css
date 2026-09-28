@@ -1,3 +1,8 @@
+.badge {
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
 .notice {
     margin-block: var(--spacers-dp12);
 }

@@ -5,23 +5,21 @@ import i18n from '@dhis2/d2-i18n';
 // their template, so the listing joins it in and the rest of the app reads it here.
 export type ModelWithHealth = ModelSpecRead & { healthStatus?: string | null };
 
-export const hasRevisionMismatch = (model?: ModelSpecRead): boolean =>
-    (model as ModelWithHealth | undefined)?.healthStatus === 'revision_mismatch';
-
-const modelName = (model: ModelSpecRead) => model.displayName || model.name;
+export const hasRevisionMismatch = (model?: ModelWithHealth): boolean =>
+    model?.healthStatus === 'revision_mismatch';
 
 export const revisionMismatchTooltip = () => i18n.t(
     'This model\'s service changed without a new version number, so it can\'t run.',
 );
 
 export const revisionMismatchMessage = (model: ModelSpecRead) => i18n.t(
-    'The service behind {{model}} version {{version}} now runs different code under the same version number. CHAP blocks it so results stay comparable with earlier runs. Choose another model, or ask your CHAP administrator to redeploy the original version or publish the update under a new version number.',
-    { model: modelName(model), version: model.version },
+    'This model\'s service now runs different code than version {{version}} was registered with, so CHAP won\'t run it. Choose another model, or ask your CHAP administrator to redeploy that version or release the change as a new version.',
+    { version: model.version },
 );
 
 export const revisionMismatchOnSubmitMessage = (model: ModelSpecRead) => i18n.t(
     '{{model}} can no longer run because its service changed after you selected it. Choose another model and try again.',
-    { model: modelName(model) },
+    { model: model.displayName || model.name },
 );
 
 export const hasTemplateHealth = (model: ModelSpecRead): boolean =>

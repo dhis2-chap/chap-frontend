@@ -67,8 +67,8 @@ describe('shared evaluation and prediction preflight', () => {
         const client = new QueryClient();
         client.setQueryData(['models'], [{ ...model, healthStatus: 'revision_mismatch' }]);
         vi.mocked(ModelsService.listConfiguredModelsV1CrudConfiguredModelsGet).mockResolvedValue([model]);
-        // Simulate an older backend without the optional template URL.
-        vi.mocked(ModelsService.listModelTemplatesV1CrudModelTemplatesGet).mockRejectedValue({ status: 404 });
+        // A failed template listing must not keep the model blocked.
+        vi.mocked(ModelsService.listModelTemplatesV1CrudModelTemplatesGet).mockRejectedValue({ status: 500 });
 
         const result = await prepareBacktestData(form, dataEngine, client, settings);
         expect(result.model).toEqual(model);

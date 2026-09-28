@@ -273,7 +273,7 @@ export const ModelSelectionModal = ({
                                                     style={{ backgroundColor: readiness?.color ?? '#b0b0b0' }}
                                                 />
                                                 <div className={styles.listName}>
-                                                    <span>{getModelName(model)}</span>
+                                                    <span className={styles.listNameText}>{getModelName(model)}</span>
                                                     <ModelHealthBadge model={model} />
                                                 </div>
                                                 {isSelected && <IconCheckmark16 color="#1565c0" />}

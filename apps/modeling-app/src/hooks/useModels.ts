@@ -12,7 +12,7 @@ export const useModels = ({ includeArchived = false }: Props = {}) => {
     const { data, error, isLoading } = useQuery<ModelWithHealth[], ApiError>(modelsQueryOptions);
 
     const models = useMemo(
-        () => (includeArchived ? data : data?.filter(model => !model.archived)),
+        () => includeArchived ? data : data?.filter(model => !model.archived),
         [data, includeArchived],
     );
 

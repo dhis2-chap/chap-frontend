@@ -1,10 +1,15 @@
 import { NoticeBox, Tooltip } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
-import { Pill, type ModelSpecRead } from '@dhis2-chap/ui';
-import { hasRevisionMismatch, revisionMismatchMessage, revisionMismatchTooltip } from '@/utils/modelHealth';
+import { Pill } from '@dhis2-chap/ui';
+import {
+    hasRevisionMismatch,
+    revisionMismatchMessage,
+    revisionMismatchTooltip,
+    type ModelWithHealth,
+} from '@/utils/modelHealth';
 import styles from './ModelHealth.module.css';
 
-type Props = { model?: ModelSpecRead };
+type Props = { model?: ModelWithHealth };
 
 /**
  * Only an unhealthy model is flagged. A healthy one looks the same as a model
@@ -16,9 +21,17 @@ export const ModelHealthBadge = ({ model }: Props) => {
 
     return (
         <Tooltip content={revisionMismatchTooltip()}>
-            <span data-test="model-health-badge">
-                <Pill variant="destructive">{i18n.t('Needs update')}</Pill>
-            </span>
+            {({ onMouseOver, onMouseOut, ref }) => (
+                <span
+                    ref={ref}
+                    onMouseOver={onMouseOver}
+                    onMouseOut={onMouseOut}
+                    className={styles.badge}
+                    data-test="model-health-badge"
+                >
+                    <Pill variant="destructive">{i18n.t('Needs update')}</Pill>
+                </span>
+            )}
         </Tooltip>
     );
 };
