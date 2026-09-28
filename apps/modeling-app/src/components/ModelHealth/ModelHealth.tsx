@@ -1,15 +1,14 @@
 import { NoticeBox, Tooltip } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
-import { Pill } from '@dhis2-chap/ui';
+import { Pill, type ModelSpecRead } from '@dhis2-chap/ui';
 import {
     hasRevisionMismatch,
     revisionMismatchMessage,
     revisionMismatchTooltip,
-    type ModelWithHealth,
 } from '@/utils/modelHealth';
 import styles from './ModelHealth.module.css';
 
-type Props = { model?: ModelWithHealth };
+type Props = { model?: ModelSpecRead };
 
 /**
  * Only an unhealthy model is flagged. A healthy one looks the same as a model

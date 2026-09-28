@@ -94,6 +94,10 @@ export type ModelSpecRead = {
      */
     usesChapkit?: boolean;
     /**
+     * Health of the chapkit service behind this model's template: 'live' when it is registered and runs the stored source revision, 'revision_mismatch' when it reports another revision (or none) under the same version. None for templates that are not chapkit-hosted or whose service is not registered.
+     */
+    healthStatus?: ('live' | 'revision_mismatch' | null);
+    /**
      * Configured user-option values, if any.
      */
     userOptionValues?: (Record<string, any> | null);

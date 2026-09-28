@@ -5,12 +5,11 @@ import type { useDataEngine } from '@dhis2/app-runtime';
 import type { ModelExecutionFormValues } from '../hooks/useModelExecutionFormState';
 import { prepareBacktestData } from './prepareBacktestData';
 import { fetchAnalytics, fetchOrgUnits } from './queryUtils';
-import type { ModelSpecRead, ModelTemplateRead } from '@dhis2-chap/ui';
+import type { ModelSpecRead } from '@dhis2-chap/ui';
 
 vi.mock('@dhis2-chap/ui', () => ({
     ModelsService: {
         listConfiguredModelsV1CrudConfiguredModelsGet: vi.fn(),
-        listModelTemplatesV1CrudModelTemplatesGet: vi.fn(),
     },
 }));
 vi.mock('./queryUtils', () => ({ fetchAnalytics: vi.fn(), fetchOrgUnits: vi.fn() }));
@@ -36,7 +35,6 @@ const form: ModelExecutionFormValues = {
         dataItem: { id: 'cases', displayName: 'Cases', dimensionItemType: 'DATA_ELEMENT' },
     },
 };
-const template: ModelTemplateRead = { id: 20, name: 'ewars', version: '1.0', usesChapkit: true };
 const settings = { calendar: 'gregory', locale: 'en', timeZone: 'UTC' } as const;
 const dataEngine = {} as ReturnType<typeof useDataEngine>;
 
@@ -52,9 +50,8 @@ describe('shared evaluation and prediction preflight', () => {
     it('rejects a newly mismatched model before fetching data, despite a fresh live cache', async () => {
         const client = new QueryClient();
         client.setQueryData(['models'], [model]);
-        vi.mocked(ModelsService.listConfiguredModelsV1CrudConfiguredModelsGet).mockResolvedValue([model]);
-        vi.mocked(ModelsService.listModelTemplatesV1CrudModelTemplatesGet)
-            .mockResolvedValue([{ ...template, healthStatus: 'revision_mismatch' }]);
+        vi.mocked(ModelsService.listConfiguredModelsV1CrudConfiguredModelsGet)
+            .mockResolvedValue([{ ...model, healthStatus: 'revision_mismatch' }]);
 
         await expect(prepareBacktestData(form, dataEngine, client, settings))
             .rejects.toThrow('its service changed after you selected it');
@@ -67,8 +64,6 @@ describe('shared evaluation and prediction preflight', () => {
         const client = new QueryClient();
         client.setQueryData(['models'], [{ ...model, healthStatus: 'revision_mismatch' }]);
         vi.mocked(ModelsService.listConfiguredModelsV1CrudConfiguredModelsGet).mockResolvedValue([model]);
-        // A failed template listing must not keep the model blocked.
-        vi.mocked(ModelsService.listModelTemplatesV1CrudModelTemplatesGet).mockRejectedValue({ status: 500 });
 
         const result = await prepareBacktestData(form, dataEngine, client, settings);
         expect(result.model).toEqual(model);
