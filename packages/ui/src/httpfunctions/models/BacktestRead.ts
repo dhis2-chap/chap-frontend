@@ -6,6 +6,10 @@ import type { ConfiguredModelRead } from './ConfiguredModelRead';
 import type { DataSetMeta } from './DataSetMeta';
 /**
  * API read shape for a `Backtest`. Same fields as the DB row plus the joined dataset / model / setup links.
+ *
+ * The `BacktestParams` fields are read off the linked `BacktestSpecification` through
+ * `Backtest`'s properties of the same name, so the wire shape is unchanged by the
+ * specification extraction. Callers must eager-load `Backtest.specification`.
  */
 export type BacktestRead = {
     /**
@@ -45,9 +49,37 @@ export type BacktestRead = {
      */
     maxHorizonDistance?: (number | null);
     /**
+     * Release version of chap-core that produced the backtest; null for dev checkouts and rows predating the column.
+     */
+    chapVersion?: (string | null);
+    /**
+     * Number of periods to forecast at each split.
+     */
+    nPeriods?: number;
+    /**
+     * Total number of rolling train/test splits.
+     */
+    nSplits?: number;
+    /**
+     * Number of periods to advance between successive splits.
+     */
+    stride?: number;
+    /**
+     * Number of times the model is retrained, evenly spaced across the splits. 1 means train once.
+     */
+    nRetrain?: number;
+    /**
+     * Id of the registered future-weather provider supplying climate covariates for each forecast window. Use the same provider here and on the prediction so backtest scores reflect what the model will see in production. See GET /v1/analytics/weather-providers.
+     */
+    futureWeatherProvider?: string;
+    /**
      * Slim dataset summary the backtest evaluated against.
      */
     dataset: DataSetMeta;
+    /**
+     * Id of the `BacktestSpecification` this backtest ran under; backtests sharing it are comparable.
+     */
+    specificationId: number;
     /**
      * Map of metric id to aggregated score across all splits / org units.
      */

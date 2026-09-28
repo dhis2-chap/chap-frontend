@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import {
     Button,
     ButtonStrip,
+    Checkbox,
     IconArrowRight16,
     IconCalendar16,
     IconCheckmark16,
@@ -106,8 +107,9 @@ const getReadiness = (model: ModelSpecRead): ReadinessConfig | undefined =>
         ? READINESS_BY_STATUS[model.authorAssessedStatus]
         : undefined;
 
-const normalizePeriodType = (periodType: unknown): string | undefined => (
-    typeof periodType === 'string' ? periodType.toUpperCase() : undefined
+// Models without a supported period type run on any period, matching getPeriodLabel.
+const normalizePeriodType = (periodType: unknown): string => (
+    typeof periodType === 'string' ? periodType.toUpperCase() : PERIOD_TYPES.ANY
 );
 
 const getPeriodLabel = (model: ModelSpecRead): string => {
@@ -135,6 +137,13 @@ const sortByReadiness = (models: ModelSpecRead[]): ModelSpecRead[] =>
         return getModelName(a).localeCompare(getModelName(b));
     });
 
+const getSelectButtonLabel = (multiple: boolean, isSelected: boolean): string => {
+    if (multiple) {
+        return isSelected ? i18n.t('Remove from selection') : i18n.t('Add to selection');
+    }
+    return isSelected ? i18n.t('Selected') : i18n.t('Use this model');
+};
+
 export const ModelSelectionModal = (props: Props) => {
     const { models, onClose, multiple } = props;
     const [selectedIds, setSelectedIds] = useState<number[]>(() =>
@@ -149,13 +158,22 @@ export const ModelSelectionModal = (props: Props) => {
         onClose();
     };
 
+    const toggleSelected = (model: ModelSpecRead) => setSelectedIds(ids => ids.includes(model.id)
+        ? ids.filter(id => id !== model.id)
+        : [...ids, model.id]);
+
     const handleModelUse = (model: ModelSpecRead) => {
         if (props.multiple) {
-            setSelectedIds(ids => ids.includes(model.id)
-                ? ids.filter(id => id !== model.id)
-                : [...ids, model.id]);
+            toggleSelected(model);
         } else {
             props.onConfirm(model);
+            handleModalClose();
+        }
+    };
+
+    const handleConfirmSelection = () => {
+        if (props.multiple) {
+            props.onConfirm(sortedModels.filter(model => selectedIds.includes(model.id)));
             handleModalClose();
         }
     };
@@ -169,12 +187,7 @@ export const ModelSelectionModal = (props: Props) => {
         const query = search.trim().toLowerCase();
 
         return sortedModels.filter((model) => {
-            const normalizedPeriodType = normalizePeriodType(model.supportedPeriodType)
-                ?? (multiple ? PERIOD_TYPES.ANY : undefined);
-            if (!normalizedPeriodType) {
-                return false;
-            }
-
+            const normalizedPeriodType = normalizePeriodType(model.supportedPeriodType);
             const matchesSearch = (
                 !query
                 || getModelName(model).toLowerCase().includes(query)
@@ -194,7 +207,7 @@ export const ModelSelectionModal = (props: Props) => {
 
             return matchesSearch && matchesPeriodType && matchesStatus;
         });
-    }, [multiple, periodTypeFilter, search, sortedModels, statusFilters]);
+    }, [periodTypeFilter, search, sortedModels, statusFilters]);
 
     const focusedModel = useMemo(
         () => filteredModels.find(model => model.id === focusedId) ?? filteredModels[0],
@@ -272,7 +285,17 @@ export const ModelSelectionModal = (props: Props) => {
                                     const modelStableId = model.name || String(model.id);
 
                                     return (
-                                        <li key={model.id}>
+                                        <li key={model.id} className={styles.listRow}>
+                                            {multiple && (
+                                                <Checkbox
+                                                    dense
+                                                    className={styles.listCheckbox}
+                                                    checked={isSelected}
+                                                    onChange={() => toggleSelected(model)}
+                                                    label={<span className={styles.visuallyHidden}>{getModelName(model)}</span>}
+                                                    dataTest={`model-toggle-${toDataTestKey(modelStableId)}`}
+                                                />
+                                            )}
                                             <button
                                                 type="button"
                                                 className={cn(styles.listItem, {
@@ -287,7 +310,7 @@ export const ModelSelectionModal = (props: Props) => {
                                                     style={{ backgroundColor: readiness?.color ?? '#b0b0b0' }}
                                                 />
                                                 <span className={styles.listName}>{getModelName(model)}</span>
-                                                {isSelected && <IconCheckmark16 color="#1565c0" />}
+                                                {!multiple && isSelected && <IconCheckmark16 color="#1565c0" />}
                                             </button>
                                         </li>
                                     );
@@ -397,9 +420,7 @@ export const ModelSelectionModal = (props: Props) => {
                                                 icon={isFocusedModelSelected ? <IconCheckmark16 /> : undefined}
                                                 dataTest={`model-select-${toDataTestKey(focusedModel.name || String(focusedModel.id))}`}
                                             >
-                                                {isFocusedModelSelected
-                                                    ? (multiple ? i18n.t('Remove from selection') : i18n.t('Selected'))
-                                                    : i18n.t('Use this model')}
+                                                {getSelectButtonLabel(!!multiple, isFocusedModelSelected)}
                                             </Button>
                                         </ButtonStrip>
                                     </div>
@@ -411,17 +432,14 @@ export const ModelSelectionModal = (props: Props) => {
                     </div>
                 </div>
             </ModalContent>
-            {props.multiple && (
+            {multiple && (
                 <ModalActions>
                     <ButtonStrip end>
-                        <Button onClick={onClose}>{i18n.t('Cancel')}</Button>
+                        <Button secondary onClick={handleModalClose}>{i18n.t('Cancel')}</Button>
                         <Button
                             primary
                             disabled={!selectedIds.length}
-                            onClick={() => {
-                                props.onConfirm((models ?? []).filter(model => selectedIds.includes(model.id)));
-                                onClose();
-                            }}
+                            onClick={handleConfirmSelection}
                         >
                             {i18n.t('Use selected models ({{count}})', { count: selectedIds.length })}
                         </Button>

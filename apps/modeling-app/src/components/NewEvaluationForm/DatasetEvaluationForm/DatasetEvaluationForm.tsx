@@ -1,12 +1,9 @@
-import { useState } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import {
     Button,
     ButtonStrip,
     CircularLoader,
     IconArrowRightMulti16,
-    IconSettings16,
-    Label,
     NoticeBox,
     SingleSelectField,
     SingleSelectOption,
@@ -27,9 +24,7 @@ import { DatasetOriginFilter, matchesOrigin, useDatasetOriginFilter } from '../.
 import { datasetSupportsModel } from '../../NewDatasetForm/utils/datasetModels';
 import { getBacktestSplitting, getMinimumEvaluationPeriods } from '../hooks/backtestDefaults';
 import { countPeriods } from '@/utils/periods';
-import { getChapErrorMessage } from '@/utils/chapErrors';
-import { ModelSelectionModal } from '../../ModelExecutionForm/Sections/ModelSelector/ModelSelectionModal';
-import selectorStyles from '../../ModelExecutionForm/Sections/ModelSelector/ModelSelector.module.css';
+import { ModelsSelector } from './ModelsSelector';
 import styles from './DatasetEvaluationForm.module.css';
 
 const schema = z.object({
@@ -49,7 +44,6 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
     const { models, isLoading: isModelsLoading, error: modelsError } = useModels();
     const navigate = useNavigate();
     const queryClient = useQueryClient();
-    const [isModelModalOpen, setIsModelModalOpen] = useState(false);
 
     const methods = useForm<FormValues>({
         resolver: zodResolver(schema),
@@ -72,28 +66,15 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
     const canSubmit = selectedModels.length > 0 && !!splitting && !isTooShort && dataset?.id != null;
 
     const createEvaluation = useMutation({
-        mutationFn: async (name: string) => {
-            const results = await Promise.allSettled(selectedModels.map(model =>
-                BacktestsService.createBacktestV1AnalyticsCreateBacktestPost({
-                    name,
-                    datasetId: dataset!.id!,
-                    modelId: model.name,
-                    ...splitting!,
-                }),
-            ));
-            return selectedModels.map((model, index) => ({ model, result: results[index] }));
-        },
-        onSuccess: (results) => {
+        mutationFn: (name: string) => BacktestsService.createBacktestsV1AnalyticsCreateBacktestsPost({
+            name,
+            datasetId: dataset!.id!,
+            modelIds: selectedModels.map(model => model.name),
+            ...splitting!,
+        }),
+        onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['jobs'] });
-            const failedModelNames = results
-                .filter(({ result }) => result.status === 'rejected')
-                .map(({ model }) => model.name);
-            // A retry must not start another job for a model that already succeeded.
-            if (failedModelNames.length) {
-                methods.setValue('modelNames', failedModelNames, { shouldDirty: true });
-            } else {
-                methods.reset({ ...methods.getValues(), modelNames: [] });
-            }
+            navigate('/jobs');
         },
     });
 
@@ -177,40 +158,16 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
                             <DatasetOriginFilter datasets={savedDatasets} dense={false} />
                         </div>
 
-                        <div className={selectorStyles.modelSelector}>
-                            <Label>{i18n.t('Models')}</Label>
-                            {selectedModels.length ? (
-                                <ul className={styles.selectedModels}>
-                                    {selectedModels.map(model => (
-                                        <li key={model.id}>
-                                            <span>{model.displayName || model.name}</span>
-                                            <Button
-                                                small
-                                                disabled={createEvaluation.isLoading}
-                                                onClick={() => methods.setValue(
-                                                    'modelNames',
-                                                    modelNames.filter(name => name !== model.name),
-                                                    { shouldDirty: true },
-                                                )}
-                                            >
-                                                {i18n.t('Remove')}
-                                            </Button>
-                                        </li>
-                                    ))}
-                                </ul>
-                            ) : (
-                                <p className={selectorStyles.mutedText}>{i18n.t('No models selected')}</p>
+                        <ModelsSelector
+                            models={compatibleModels}
+                            selectedModels={selectedModels}
+                            disabled={createEvaluation.isLoading}
+                            onChange={selected => methods.setValue(
+                                'modelNames',
+                                selected.map(model => model.name),
+                                { shouldDirty: true },
                             )}
-                            <Button
-                                small
-                                icon={<IconSettings16 />}
-                                disabled={!compatibleModels.length || createEvaluation.isLoading}
-                                onClick={() => setIsModelModalOpen(true)}
-                                dataTest="evaluation-model-select-button"
-                            >
-                                {i18n.t('Select models')}
-                            </Button>
-                        </div>
+                        />
 
                         {dataset && !compatibleModels.length && (
                             <NoticeBox warning title={i18n.t('No compatible model')}>
@@ -241,41 +198,15 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
                             </ButtonStrip>
                         </div>
 
-                        {createEvaluation.data && (
-                            <div className={styles.results} aria-live="polite">
-                                {createEvaluation.data.map(({ model, result }) => (
-                                    <NoticeBox
-                                        key={model.id}
-                                        error={result.status === 'rejected'}
-                                        title={model.displayName || model.name}
-                                    >
-                                        {result.status === 'fulfilled'
-                                            ? i18n.t('Evaluation job started')
-                                            : i18n.t('Could not start evaluation: {{error}}', {
-                                                    error: getChapErrorMessage(result.reason),
-                                                })}
-                                    </NoticeBox>
-                                ))}
-                                <Button onClick={() => navigate('/jobs')}>
-                                    {i18n.t('View jobs')}
-                                </Button>
-                            </div>
+                        {createEvaluation.error && (
+                            <ChapErrorNotice
+                                error={createEvaluation.error}
+                                title={i18n.t('Could not start evaluation')}
+                            />
                         )}
                     </form>
                 </Card>
             </div>
-
-            {isModelModalOpen && (
-                <ModelSelectionModal
-                    multiple
-                    models={compatibleModels}
-                    selectedModels={selectedModels}
-                    onClose={() => setIsModelModalOpen(false)}
-                    onConfirm={selected => methods.setValue('modelNames', selected.map(model => model.name), {
-                        shouldDirty: true,
-                    })}
-                />
-            )}
 
             {showConfirmModal && (
                 <NavigationConfirmModal

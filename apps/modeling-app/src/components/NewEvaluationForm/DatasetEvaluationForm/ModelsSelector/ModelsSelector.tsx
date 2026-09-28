@@ -1,0 +1,59 @@
+import { useState } from 'react';
+import i18n from '@dhis2/d2-i18n';
+import { Button, Chip, IconSettings16, Label } from '@dhis2/ui';
+import type { ModelSpecRead } from '@dhis2-chap/ui';
+import { toDataTestKey } from '@/utils/dataTestKey';
+import { ModelSelectionModal } from '../../../ModelExecutionForm/Sections/ModelSelector/ModelSelectionModal';
+import styles from './ModelsSelector.module.css';
+
+type Props = {
+    models: ModelSpecRead[];
+    selectedModels: ModelSpecRead[];
+    disabled?: boolean;
+    onChange: (models: ModelSpecRead[]) => void;
+};
+
+export const ModelsSelector = ({ models, selectedModels, disabled, onChange }: Props) => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    return (
+        <div className={styles.container}>
+            <Label>{i18n.t('Models')}</Label>
+            {selectedModels.length ? (
+                <div className={styles.chips}>
+                    {selectedModels.map(model => (
+                        <Chip
+                            key={model.id}
+                            disabled={disabled}
+                            onRemove={() => onChange(selectedModels.filter(({ id }) => id !== model.id))}
+                            dataTest={`selected-model-${toDataTestKey(model.name)}`}
+                        >
+                            {model.displayName || model.name}
+                        </Chip>
+                    ))}
+                </div>
+            ) : (
+                <p className={styles.mutedText}>{i18n.t('No models selected')}</p>
+            )}
+            <Button
+                small
+                icon={<IconSettings16 />}
+                disabled={!models.length || disabled}
+                onClick={() => setIsModalOpen(true)}
+                dataTest="evaluation-model-select-button"
+            >
+                {i18n.t('Select models')}
+            </Button>
+
+            {isModalOpen && (
+                <ModelSelectionModal
+                    multiple
+                    models={models}
+                    selectedModels={selectedModels}
+                    onClose={() => setIsModalOpen(false)}
+                    onConfirm={onChange}
+                />
+            )}
+        </div>
+    );
+};

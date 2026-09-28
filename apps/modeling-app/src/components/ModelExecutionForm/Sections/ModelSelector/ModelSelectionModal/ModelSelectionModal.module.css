@@ -66,11 +66,34 @@
     min-block-size: 0;
 }
 
-.listItem {
+.listRow {
     display: flex;
     align-items: center;
+}
+
+.listRow:has(.listItemFocused) {
+    background: #e7f1fb;
+}
+
+.listCheckbox {
+    flex-shrink: 0;
+    padding-inline-start: 14px;
+}
+
+.visuallyHidden {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+.listItem {
+    display: flex;
+    flex: 1;
+    align-items: center;
     gap: 8px;
-    inline-size: 100%;
     min-inline-size: 0;
     min-block-size: 36px;
     padding: 8px 14px;
