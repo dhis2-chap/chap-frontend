@@ -3,56 +3,49 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { Backtest } from '../models/Backtest';
-import type { BacktestCreate } from '../models/BacktestCreate';
 import type { BacktestDomain } from '../models/BacktestDomain';
 import type { BacktestRead } from '../models/BacktestRead';
+import type { BacktestSpecificationRead } from '../models/BacktestSpecificationRead';
+import type { BacktestSpecificationSummary } from '../models/BacktestSpecificationSummary';
 import type { BacktestUpdate } from '../models/BacktestUpdate';
 import type { DataList } from '../models/DataList';
 import type { EvaluationEntry } from '../models/EvaluationEntry';
 import type { ImportSummaryResponse } from '../models/ImportSummaryResponse';
 import type { JobResponse } from '../models/JobResponse';
 import type { MakeBacktestRequest } from '../models/MakeBacktestRequest';
+import type { MakeBacktestsRequest } from '../models/MakeBacktestsRequest';
+import type { MakeBacktestsResponse } from '../models/MakeBacktestsResponse';
 import type { MakeBacktestWithDataRequest } from '../models/MakeBacktestWithDataRequest';
+import type { WeatherProviderInfo } from '../models/WeatherProviderInfo';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 export class BacktestsService {
     /**
      * Browse stored evaluation runs
-     * List every stored backtest so you can pick one to view, compare against another, plot metrics from, or promote into a saved prediction setup.
+     * List stored backtests so you can pick one to view, compare against another, plot metrics from, or promote into a saved prediction setup.
      *
      * Each entry carries enough metadata to identify it at a glance (dataset, model,
      * periods, regions) but not the raw forecasts — fetch those via
-     * ``/backtests/{id}/full`` only when you actually need them.
+     * ``/backtests/{id}/full`` only when you actually need them. Filter by
+     * ``specificationId`` to get the backtests that are comparable with each other, or by
+     * ``datasetId`` for everything run against one dataset.
+     * @param specificationId
+     * @param datasetId
      * @returns BacktestRead Successful Response
      * @throws ApiError
      */
-    public static getBacktestsV1CrudBacktestsGet(): CancelablePromise<Array<BacktestRead>> {
+    public static getBacktestsV1CrudBacktestsGet(
+        specificationId?: (number | null),
+        datasetId?: (number | null),
+    ): CancelablePromise<Array<BacktestRead>> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/v1/crud/backtests',
-        });
-    }
-    /**
-     * Run a backtest against a stored dataset (legacy)
-     * Legacy entrypoint for queueing a backtest against an already-imported dataset; prefer ``POST /v1/analytics/create-backtest`` for new integrations.
-     *
-     * Accepts the model reference either as the configured-model name or its integer id —
-     * the worker resolves both. Backtest runs in the background; the response gives a job
-     * id, poll ``/v1/jobs/{id}`` (or ``/v1/jobs/{id}/evaluation_result``) for the
-     * finished result. 404 if the dataset does not exist.
-     * @param requestBody
-     * @returns JobResponse Successful Response
-     * @throws ApiError
-     */
-    public static createBacktestV1CrudBacktestsPost(
-        requestBody: BacktestCreate,
-    ): CancelablePromise<JobResponse> {
-        return __request(OpenAPI, {
-            method: 'POST',
-            url: '/v1/crud/backtests',
-            body: requestBody,
-            mediaType: 'application/json',
+            query: {
+                'specificationId': specificationId,
+                'datasetId': datasetId,
+            },
             errors: {
                 422: `Validation Error`,
             },
@@ -77,6 +70,74 @@ export class BacktestsService {
             url: '/v1/crud/backtests',
             query: {
                 'ids': ids,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
+     * List the evaluation setups backtests have run under
+     * List backtest specifications: a dataset plus the parameters that make backtests under it comparable.
+     *
+     * A specification with several backtests under it is a benchmark. Filter by
+     * ``datasetId`` and any of the ``BacktestParams`` fields; the full tuple identifies at
+     * most one specification, which is how an external system finds a benchmark again
+     * without storing the specification id. Rows carry counts only; fetch
+     * ``/backtest-specifications/{id}`` for the backtests themselves.
+     * @param datasetId Only specifications evaluating this dataset.
+     * @param nPeriods Number of periods to forecast at each split.
+     * @param nSplits Total number of rolling train/test splits.
+     * @param stride Number of periods to advance between successive splits.
+     * @param nRetrain Number of times the model is retrained, evenly spaced across the splits. 1 means train once.
+     * @param futureWeatherProvider Id of the registered future-weather provider supplying climate covariates for each forecast window. Use the same provider here and on the prediction so backtest scores reflect what the model will see in production. See GET /v1/analytics/weather-providers.
+     * @returns BacktestSpecificationSummary Successful Response
+     * @throws ApiError
+     */
+    public static getBacktestSpecificationsV1CrudBacktestSpecificationsGet(
+        datasetId?: (number | null),
+        nPeriods?: (number | null),
+        nSplits?: (number | null),
+        stride?: (number | null),
+        nRetrain?: (number | null),
+        futureWeatherProvider?: (string | null),
+    ): CancelablePromise<Array<BacktestSpecificationSummary>> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/v1/crud/backtest-specifications',
+            query: {
+                'datasetId': datasetId,
+                'nPeriods': nPeriods,
+                'nSplits': nSplits,
+                'stride': stride,
+                'nRetrain': nRetrain,
+                'futureWeatherProvider': futureWeatherProvider,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
+     * Fetch a specification with every backtest under it
+     * Read one specification together with every backtest that ran under it, newest first, in a single response.
+     *
+     * This is the benchmark leaderboard: each backtest row is the ``BacktestRead`` shape
+     * with aggregate metrics, the configured model and its template, so a client can rank
+     * models without a request per backtest. Forecasts and per-org-unit metrics are not
+     * included. 404 if the id is unknown.
+     * @param specificationId
+     * @returns BacktestSpecificationRead Successful Response
+     * @throws ApiError
+     */
+    public static getBacktestSpecificationV1CrudBacktestSpecificationsSpecificationIdGet(
+        specificationId: number,
+    ): CancelablePromise<BacktestSpecificationRead> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/v1/crud/backtest-specifications/{specificationId}',
+            path: {
+                'specificationId': specificationId,
             },
             errors: {
                 422: `Validation Error`,
@@ -324,6 +385,33 @@ export class BacktestsService {
         });
     }
     /**
+     * Run several configured models under one evaluation specification
+     * Evaluate a set of configured models on one stored dataset with one set of parameters, so the resulting backtests are comparable by construction.
+     *
+     * The specification is resolved up front and one job is queued per model; a model
+     * failing does not affect the others. The response carries the specification id, under
+     * which every backtest of the run files, so the results can be fetched from
+     * ``GET /v1/crud/backtest-specifications/{id}`` without a second lookup, plus one job id
+     * per model to poll via ``/v1/jobs/{id}``. 404 if the dataset or a model does not exist,
+     * 422 if no org unit has target data left to train on for these parameters.
+     * @param requestBody
+     * @returns MakeBacktestsResponse Successful Response
+     * @throws ApiError
+     */
+    public static createBacktestsV1AnalyticsCreateBacktestsPost(
+        requestBody: MakeBacktestsRequest,
+    ): CancelablePromise<MakeBacktestsResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/v1/analytics/create-backtests',
+            body: requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
      * @deprecated
      * Deprecated camelCase alias of /actual-cases/{backtestId}
      * Deprecated camelCase alias of ``GET /v1/analytics/actual-cases/{backtestId}``. Behaviour is identical; new integrations should call the kebab-case path, which matches the rest of the API's URL style.
@@ -416,6 +504,21 @@ export class BacktestsService {
             errors: {
                 422: `Validation Error`,
             },
+        });
+    }
+    /**
+     * Discover which future-weather providers are available
+     * List the registered future-weather providers, with a name, description and look-ahead flag for each.
+     *
+     * Use this to populate a picker before setting `future_weather_provider` on a backtest or
+     * prediction request.
+     * @returns WeatherProviderInfo Successful Response
+     * @throws ApiError
+     */
+    public static listFutureWeatherProvidersV1AnalyticsWeatherProvidersGet(): CancelablePromise<Array<WeatherProviderInfo>> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/v1/analytics/weather-providers',
         });
     }
 }

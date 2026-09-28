@@ -19,6 +19,10 @@ export type MakePredictionRequest = {
      */
     nPeriods?: number;
     /**
+     * Id of the registered future-weather provider supplying climate covariates for the forecast window. Should match the provider the model was backtested with. Providers that read the forecast window's own observations cannot be used here. See GET /v1/analytics/weather-providers.
+     */
+    futureWeatherProvider?: string;
+    /**
      * Name of dataset
      */
     name: string;

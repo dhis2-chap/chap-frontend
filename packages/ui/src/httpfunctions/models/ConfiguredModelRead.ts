@@ -24,6 +24,10 @@ export type ConfiguredModelRead = {
      */
     id: number;
     /**
+     * Digest of the configuration contents; backtests with the same template and digest ran the same configuration.
+     */
+    configurationDigest: string;
+    /**
      * Parent template the configuration extends.
      */
     modelTemplate: ModelTemplateDB;

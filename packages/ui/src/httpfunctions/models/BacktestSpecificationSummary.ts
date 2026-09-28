@@ -2,10 +2,11 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { DataSetMeta } from './DataSetMeta';
 /**
- * Request to backtest an already-imported dataset against a configured model.
+ * One row of the specification list: the setup plus how much has been run under it, without the backtests.
  */
-export type MakeBacktestRequest = {
+export type BacktestSpecificationSummary = {
     /**
      * Number of periods to forecast at each split.
      */
@@ -27,16 +28,20 @@ export type MakeBacktestRequest = {
      */
     futureWeatherProvider?: string;
     /**
-     * Human-friendly name for the resulting backtest row.
+     * Primary key of the specification.
      */
-    name: string;
+    id: number;
     /**
-     * Configured model to backtest: either the integer primary key or the canonical string name.
+     * Slim summary of the dataset the specification evaluates against.
      */
-    modelId: (number | string);
+    dataset: DataSetMeta;
     /**
-     * Foreign key to the dataset the backtest evaluates against.
+     * Number of org units the evaluation runs over.
      */
-    datasetId: number;
+    orgUnitCount: number;
+    /**
+     * Number of backtests that ran under this specification.
+     */
+    backtestCount: number;
 };
 

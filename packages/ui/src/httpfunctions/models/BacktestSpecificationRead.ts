@@ -2,10 +2,12 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { BacktestRead } from './BacktestRead';
+import type { DataSetMeta } from './DataSetMeta';
 /**
- * Request to backtest an already-imported dataset against a configured model.
+ * A specification with every backtest under it: the benchmark leaderboard in one response.
  */
-export type MakeBacktestRequest = {
+export type BacktestSpecificationRead = {
     /**
      * Number of periods to forecast at each split.
      */
@@ -27,16 +29,20 @@ export type MakeBacktestRequest = {
      */
     futureWeatherProvider?: string;
     /**
-     * Human-friendly name for the resulting backtest row.
+     * Primary key of the specification.
      */
-    name: string;
+    id: number;
     /**
-     * Configured model to backtest: either the integer primary key or the canonical string name.
+     * Slim summary of the dataset the specification evaluates against.
      */
-    modelId: (number | string);
+    dataset: DataSetMeta;
     /**
-     * Foreign key to the dataset the backtest evaluates against.
+     * Org units the evaluation runs over, resolved from the dataset.
      */
-    datasetId: number;
+    orgUnits: Array<string>;
+    /**
+     * Every backtest that ran under this specification, newest first. Comparable by construction.
+     */
+    backtests: Array<BacktestRead>;
 };
 
