@@ -71,6 +71,10 @@
     align-items: center;
 }
 
+.listRow:hover {
+    background: var(--colors-grey200);
+}
+
 .listRow:has(.listItemFocused) {
     background: #e7f1fb;
 }
@@ -103,20 +107,8 @@
     text-align: start;
 }
 
-.listItem:hover {
-    background: var(--colors-grey200);
-}
-
 .listItem:focus {
     outline: none;
-}
-
-.listItemFocused {
-    background: #e7f1fb;
-}
-
-.listItemFocused:hover {
-    background: #e7f1fb;
 }
 
 .dot {
