@@ -174,6 +174,7 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
                             models={compatibleModels}
                             selectedModels={selectedModels}
                             disabled={createEvaluation.isLoading}
+                            disabledReason={dataset ? undefined : i18n.t('Pick a dataset first')}
                             onChange={selected => methods.setValue(
                                 'modelNames',
                                 selected.map(model => model.name),
