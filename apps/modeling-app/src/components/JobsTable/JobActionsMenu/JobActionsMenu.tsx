@@ -9,6 +9,7 @@ import {
     IconCheckmark16,
     IconArrowRight16,
     IconUndo16,
+    IconDownload16,
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { OverflowButton } from '@dhis2-chap/ui';
@@ -19,6 +20,7 @@ import { JOB_STATUSES, JOB_TYPES } from '../../../hooks/useJobs';
 import { useCopyToClipboard } from '../../../hooks/useCopyToClipboard';
 import { useAlert } from '@dhis2/app-runtime';
 import { useNavigate } from 'react-router-dom';
+import { useDownloadJobRequest } from './hooks/useDownloadJobRequest';
 
 type Props = {
     jobId: string;
@@ -42,6 +44,7 @@ export const JobActionsMenu = ({
     const [viewLogsModalIsOpen, setViewLogsModalIsOpen] = useState(false);
     const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
     const [cancelModalIsOpen, setCancelModalIsOpen] = useState(false);
+    const { downloadRequest, isLoading: isDownloadingRequest } = useDownloadJobRequest();
 
     const { show: showErrorAlert } = useAlert(
         i18n.t('Failed to copy job ID'),
@@ -98,6 +101,16 @@ export const JobActionsMenu = ({
                                 dataTest="job-overflow-view-logs"
                                 icon={<IconView16 />}
                                 onClick={handleViewLogs}
+                            />
+                        )}
+
+                        {status === JOB_STATUSES.FAILED && (
+                            <MenuItem
+                                label={isDownloadingRequest ? i18n.t('Downloading request…') : i18n.t('Download request')}
+                                dataTest="job-overflow-download-request"
+                                icon={<IconDownload16 />}
+                                disabled={isDownloadingRequest}
+                                onClick={() => downloadRequest(jobId)}
                             />
                         )}
 

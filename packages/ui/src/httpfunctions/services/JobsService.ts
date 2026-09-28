@@ -96,6 +96,32 @@ export class JobsService {
         });
     }
     /**
+     * Download the original submitted job request
+     * Return the submitted JSON body, including after failure.
+     *
+     * Requests are kept for 7 days. Expired requests, older jobs without a
+     * captured request, and jobs removed from the tracker return 404. Jobs
+     * created by a multi-model request return the whole request as submitted.
+     * @param jobId
+     * @returns any Successful Response
+     * @throws ApiError
+     */
+    public static getJobRequestV1JobsJobIdRequestGet(
+        jobId: string,
+    ): CancelablePromise<Record<string, any>> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/v1/jobs/{job_id}/request',
+            path: {
+                'job_id': jobId,
+            },
+            errors: {
+                404: `Job or saved request not found`,
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
      * Stop a running job
      * Revoke a queued or in-flight job so the worker stops processing it — used when a user abandons a backtest creation flow or aborts a long-running prediction.
      *
@@ -123,8 +149,9 @@ export class JobsService {
      * Read a job's captured logs
      * Tail the log output the worker captured while running this job — useful for debugging a failure or watching progress.
      *
-     * The response is the captured log text, or an empty string if the worker has not
-     * written anything yet (for example because the job has not started). Returns 404
+     * The response is the tail of the complete per-task log, which includes everything
+     * the worker and the libraries it calls logged, or an empty string if the worker has
+     * not written anything yet (for example because the job has not started). Returns 404
      * if the job id is unknown.
      * @param jobId
      * @returns string Successful Response
