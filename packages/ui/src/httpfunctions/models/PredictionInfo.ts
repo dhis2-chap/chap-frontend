@@ -13,10 +13,6 @@ export type PredictionInfo = {
      */
     datasetId: number;
     /**
-     * Foreign key to the `PredictionSetup` that triggered the run, if any.
-     */
-    predictionSetupId?: (number | null);
-    /**
      * Name of the configured model that produced the prediction.
      */
     modelId: string;

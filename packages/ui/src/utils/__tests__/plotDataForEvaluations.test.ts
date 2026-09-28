@@ -52,7 +52,6 @@ const createBacktest = (periodType: string): BacktestRead => ({
     datasetId: 1,
     id: 1,
     modelId: 'model',
-    specificationId: 1,
 });
 
 const createEvaluationEntry = (

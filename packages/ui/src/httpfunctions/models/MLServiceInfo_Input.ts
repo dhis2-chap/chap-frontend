@@ -29,7 +29,7 @@ export type MLServiceInfo_Input = {
      */
     model_metadata: ModelMetadata;
     /**
-     * Period granularity the model accepts (`weekly`, `monthly`, or `any`).
+     * Period granularity the model accepts (`weekly` or `monthly`).
      */
     period_type: PeriodType_Input;
     /**
@@ -52,17 +52,5 @@ export type MLServiceInfo_Input = {
      * When True, the model needs a GeoJSON polygon set for spatial features.
      */
     requires_geo?: boolean;
-    /**
-     * Commit the service image was built from.
-     */
-    git_revision?: (string | null);
-    /**
-     * chapkit version installed in the service.
-     */
-    chapkit_version?: (string | null);
-    /**
-     * servicekit version installed in the service.
-     */
-    servicekit_version?: (string | null);
 };
 
