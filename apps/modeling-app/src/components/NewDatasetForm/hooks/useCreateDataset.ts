@@ -64,6 +64,8 @@ export const useCreateDataset = (periodSettings: Dhis2PeriodSettings) => {
         queryKey: ['datasetJobResult', jobId],
         queryFn: () => JobsService.getDatabaseResultV1JobsJobIdDatabaseResultGet(jobId as string),
         enabled: !!jobId && job.data === 'SUCCESS',
+        // Without the id there is no way to start an evaluation from the success notice
+        retry: 3,
         select: result => result.id,
     });
 

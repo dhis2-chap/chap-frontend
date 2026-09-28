@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-09-25T07:43:57.693Z\n"
-"PO-Revision-Date: 2026-09-25T07:43:57.693Z\n"
+"POT-Creation-Date: 2026-09-28T08:58:26.852Z\n"
+"PO-Revision-Date: 2026-09-28T08:58:26.852Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -315,6 +315,12 @@ msgstr "Go to result"
 msgid "View Logs"
 msgstr "View Logs"
 
+msgid "Downloading request…"
+msgstr "Downloading request…"
+
+msgid "Download request"
+msgstr "Download request"
+
 msgid "Copy Job ID"
 msgstr "Copy Job ID"
 
@@ -338,6 +344,12 @@ msgstr "Job deleted"
 
 msgid "Failed to delete job"
 msgstr "Failed to delete job"
+
+msgid "The original request is not available for this job."
+msgstr "The original request is not available for this job."
+
+msgid "Failed to download the job request. Please try again."
+msgstr "Failed to download the job request. Please try again."
 
 msgid "Status"
 msgstr "Status"
@@ -515,6 +527,12 @@ msgstr "Search models"
 
 msgid "Clear statuses"
 msgstr "Clear statuses"
+
+msgid "Version"
+msgstr "Version"
+
+msgid "Commit"
+msgstr "Commit"
 
 msgid "Period"
 msgstr "Period"
@@ -895,9 +913,6 @@ msgstr "Could not create evaluation"
 
 msgid "Start dry run"
 msgstr "Start dry run"
-
-msgid "Download request"
-msgstr "Download request"
 
 msgid "Start import"
 msgstr "Start import"
@@ -1459,9 +1474,6 @@ msgstr "Model template"
 
 msgid "Template name"
 msgstr "Template name"
-
-msgid "Version"
-msgstr "Version"
 
 msgid "Supported period"
 msgstr "Supported period"
