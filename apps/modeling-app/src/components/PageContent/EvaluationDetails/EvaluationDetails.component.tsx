@@ -70,7 +70,7 @@ export const EvaluationDetailsComponent = ({ evaluationId }: Props) => {
                 <EvaluationSummaryWidget
                     evaluationId={evaluationId}
                 />
-                <EvaluationMetricsWidget metrics={backtest.aggregateMetrics} />
+                <EvaluationMetricsWidget evaluationId={evaluationId} metrics={backtest.aggregateMetrics} />
             </div>
         </div>
     );

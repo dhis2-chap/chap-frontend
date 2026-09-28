@@ -5,8 +5,8 @@ import {
     SingleSelectOption,
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
-import { Controller, Control, FieldErrors, useWatch, useFormContext } from 'react-hook-form';
-import { ModelExecutionFormValues } from '../../hooks/useModelExecutionFormState';
+import { Controller, useWatch, useFormContext } from 'react-hook-form';
+import { BaseFormValues } from '../../hooks/useModelExecutionFormState';
 import {
     comparePeriodIds,
     getLastCompletedPeriodId,
@@ -18,24 +18,20 @@ import { type Dhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
 import styles from './PeriodSelector.module.css';
 
 type Props = {
-    control: Control<ModelExecutionFormValues>;
-    errors: FieldErrors<ModelExecutionFormValues>;
     periodSettings: Dhis2PeriodSettings;
     periodSettingsError?: Error | null;
     periodSettingsLoading?: boolean;
 };
 
 export const PeriodSelector = ({
-    control,
-    errors,
     periodSettings,
     periodSettingsError,
     periodSettingsLoading,
 }: Props) => {
+    const { control, setValue, formState: { errors } } = useFormContext<BaseFormValues>();
     const periodType = useWatch({ control, name: 'periodType' });
     const fromPeriodId = useWatch({ control, name: 'fromPeriodId' });
     const toPeriodId = useWatch({ control, name: 'toPeriodId' });
-    const methods = useFormContext<ModelExecutionFormValues>();
     const dhis2PeriodType = toDhis2FixedPeriodType(periodType);
     const rangeError = (() => {
         if (!fromPeriodId || !toPeriodId) {
@@ -70,12 +66,12 @@ export const PeriodSelector = ({
         if (selectedCastToPeriodType === PERIOD_TYPES.DAY) {
             // TODO: Implement day period type
         } else {
-            methods.setValue('periodType', selected as 'MONTH' | 'WEEK', { shouldValidate: true });
+            setValue('periodType', selected as 'MONTH' | 'WEEK', { shouldValidate: true });
         }
 
         if (selected !== periodType) {
-            methods.setValue('fromPeriodId', '', { shouldValidate: true, shouldDirty: true });
-            methods.setValue('toPeriodId', '', { shouldValidate: true, shouldDirty: true });
+            setValue('fromPeriodId', '', { shouldValidate: true, shouldDirty: true });
+            setValue('toPeriodId', '', { shouldValidate: true, shouldDirty: true });
         }
     };
 
@@ -133,8 +129,8 @@ export const PeriodSelector = ({
                     toError={errors.toPeriodId?.message || rangeError}
                     fromDataTest="evaluation-from-period-input"
                     toDataTest="evaluation-to-period-input"
-                    onFromChange={period => methods.setValue('fromPeriodId', period.id, { shouldValidate: true, shouldDirty: true })}
-                    onToChange={period => methods.setValue('toPeriodId', period.id, { shouldValidate: true, shouldDirty: true })}
+                    onFromChange={period => setValue('fromPeriodId', period.id, { shouldValidate: true, shouldDirty: true })}
+                    onToChange={period => setValue('toPeriodId', period.id, { shouldValidate: true, shouldDirty: true })}
                 />
             )}
         </>

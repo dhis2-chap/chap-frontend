@@ -47,5 +47,9 @@ export type DataSetInfo = {
      * Granularity of the periods (`month`, `week`, ...).
      */
     periodType?: (string | null);
+    /**
+     * True if a user created the dataset directly, false if it was created as part of an evaluation or prediction.
+     */
+    createdManually?: boolean;
 };
 

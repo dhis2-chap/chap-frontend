@@ -1,0 +1,135 @@
+.loading {
+  display: flex;
+  justify-content: center;
+  padding: 24px;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.title {
+  margin: 0 0 8px;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--colors-grey900);
+}
+
+.summary {
+  margin: 0 0 8px;
+  font-size: 14px;
+  color: var(--colors-grey700);
+}
+
+.count {
+  font-size: 28px;
+  font-weight: 500;
+  color: var(--colors-grey900);
+}
+
+.meter {
+  height: 6px;
+  border-radius: 3px;
+  background-color: var(--colors-grey200);
+  overflow: hidden;
+}
+
+.meterFill {
+  height: 100%;
+  background-color: var(--colors-green600);
+  transition: width 200ms ease-out;
+}
+
+.group {
+  padding-block-start: 12px;
+  border-block-start: 1px solid var(--colors-grey300);
+}
+
+.groupTitle {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--colors-grey800);
+}
+
+summary.groupTitle {
+  cursor: pointer;
+}
+
+.list {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.nextColumn {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 4px 8px;
+  padding: 8px;
+  border-radius: 4px;
+  background-color: var(--colors-grey050);
+}
+
+.columnNames {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.columnName {
+  padding: 1px 4px;
+  border-radius: 3px;
+  background-color: var(--colors-white);
+  border: 1px solid var(--colors-grey300);
+  font-size: 12px;
+  color: var(--colors-grey900);
+  overflow-wrap: anywhere;
+}
+
+.gain {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--colors-green700);
+  white-space: nowrap;
+}
+
+.model {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 13px;
+  line-height: 16px;
+  color: var(--colors-grey900);
+}
+
+.supportedDot,
+.unsupportedDot {
+  flex-shrink: 0;
+  width: 8px;
+  height: 8px;
+  /* Centred on the first 16px line */
+  margin-block-start: 4px;
+  border-radius: 50%;
+}
+
+.supportedDot {
+  background-color: var(--colors-green600);
+}
+
+.unsupportedDot {
+  background-color: var(--colors-grey400);
+}
+
+.reason {
+  color: var(--colors-grey700);
+}

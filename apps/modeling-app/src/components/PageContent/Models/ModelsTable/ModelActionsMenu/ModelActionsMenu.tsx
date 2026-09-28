@@ -16,9 +16,10 @@ import { useNavigate } from 'react-router-dom';
 type Props = {
     id: number;
     archived: boolean;
+    sourceUrl?: string | null;
 };
 
-export const ModelActionsMenu = ({ id, archived }: Props) => {
+export const ModelActionsMenu = ({ id, archived, sourceUrl }: Props) => {
     const [flyoutMenuIsOpen, setFlyoutMenuIsOpen] = useState(false);
     const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
     const [infoModalIsOpen, setInfoModalIsOpen] = useState(false);
@@ -71,6 +72,7 @@ export const ModelActionsMenu = ({ id, archived }: Props) => {
             {infoModalIsOpen && (
                 <ViewModelInfoModal
                     id={id}
+                    sourceUrl={sourceUrl}
                     onClose={() => setInfoModalIsOpen(false)}
                 />
             )}

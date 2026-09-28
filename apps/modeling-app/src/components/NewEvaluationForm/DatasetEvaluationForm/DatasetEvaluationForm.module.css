@@ -1,0 +1,36 @@
+.container {
+  margin-block-end: 16px;
+}
+
+.formWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  block-size: 200px;
+}
+
+.emptyActions {
+  margin-block-start: 12px;
+  align-items: center;
+}
+
+.datasetRow {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--spacers-dp8);
+}
+
+.datasetField {
+  flex: 1;
+}

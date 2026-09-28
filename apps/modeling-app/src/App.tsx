@@ -5,6 +5,7 @@ import {
     Outlet,
 } from 'react-router-dom';
 import ErrorPage from './components/ErrorPage';
+import i18n from '@dhis2/d2-i18n';
 import './locales';
 import './App.module.css';
 import PageWrapper from './components/PageWrapper';
@@ -30,6 +31,8 @@ import { GetStartedPage } from './pages/GetStartedPage';
 import { ReadyToPredictPage } from './pages/ReadyToPredictPage';
 import { ConfiguredModelDashboardPage } from './pages/ConfiguredModelDashboardPage';
 import { ModelsPage } from './pages/ModelsPage';
+import { DatasetsPage } from './pages/DatasetsPage';
+import { NewDatasetPage } from './pages/NewDatasetPage';
 import { NewConfiguredModelPage } from './pages/NewConfiguredModelPage';
 import { SyncUrlWithGlobalShell } from './utils/syncUrlWithGlobalShell';
 import { NewPredictionPage } from './pages/NewPredictionPage';
@@ -41,6 +44,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 export type RouteHandle = {
+    breadcrumb?: () => string;
     fullWidth?: boolean;
     /* whether to automatically collapse the sidebar when route is active */
     collapseSidebar?: boolean;
@@ -90,6 +94,7 @@ const router = createHashRouter([
                     },
                     {
                         path: '/evaluate',
+                        handle: { breadcrumb: () => i18n.t('Evaluations') } satisfies RouteHandle,
                         children: [
                             {
                                 index: true,
@@ -98,6 +103,7 @@ const router = createHashRouter([
                             {
                                 path: 'compare',
                                 handle: {
+                                    breadcrumb: () => i18n.t('Compare evaluations'),
                                     fullWidth: true,
                                 } satisfies RouteHandle,
                                 element: <EvaluationComparePage />,
@@ -106,15 +112,35 @@ const router = createHashRouter([
                                 path: 'new',
                                 element: <NewEvaluationPage />,
                                 handle: {
-                                    collapseSidebar: true,
+                                    breadcrumb: () => i18n.t('New evaluation'),
+                                } satisfies RouteHandle,
+                            },
+                            {
+                                path: 'from-dataset',
+                                element: <NewEvaluationPage useSavedDataset />,
+                                handle: {
+                                    breadcrumb: () => i18n.t('New evaluation'),
                                 } satisfies RouteHandle,
                             },
                             {
                                 path: ':evaluationId',
                                 handle: {
+                                    breadcrumb: () => i18n.t('Evaluation details'),
                                     collapseSidebar: true,
                                 } satisfies RouteHandle,
                                 element: <EvaluationDetailsPage />,
+                            },
+                        ],
+                    },
+                    {
+                        path: '/datasets',
+                        handle: { breadcrumb: () => i18n.t('Datasets') } satisfies RouteHandle,
+                        children: [
+                            { index: true, element: <DatasetsPage /> },
+                            {
+                                path: 'new',
+                                element: <NewDatasetPage />,
+                                handle: { breadcrumb: () => i18n.t('New dataset') } satisfies RouteHandle,
                             },
                         ],
                     },
@@ -124,6 +150,7 @@ const router = createHashRouter([
                     },
                     {
                         path: '/predictions',
+                        handle: { breadcrumb: () => i18n.t('Prediction setups') } satisfies RouteHandle,
                         children: [
                             {
                                 index: true,
@@ -131,6 +158,7 @@ const router = createHashRouter([
                             },
                             {
                                 path: ':predictionSetupId',
+                                handle: { breadcrumb: () => i18n.t('Prediction setup') } satisfies RouteHandle,
                                 children: [
                                     {
                                         index: true,
@@ -142,6 +170,7 @@ const router = createHashRouter([
                                     {
                                         path: 'new',
                                         handle: {
+                                            breadcrumb: () => i18n.t('Run prediction'),
                                             collapseSidebar: true,
                                         } satisfies RouteHandle,
                                         element: <NewPredictionPage />,
@@ -149,21 +178,30 @@ const router = createHashRouter([
                                     {
                                         path: 'runs/:predictionId',
                                         handle: {
-                                            collapseSidebar: true,
-                                            fullWidth: true,
-                                        } satisfies RouteHandle,
-                                        element: <PredictionRunDetailsPage />,
-                                    },
-                                    {
-                                        path: 'runs/:predictionId/import',
-                                        handle: {
+                                            breadcrumb: () => i18n.t('Prediction details'),
                                             collapseSidebar: true,
                                         } satisfies RouteHandle,
-                                        element: <PredictionImportPage />,
+                                        children: [
+                                            {
+                                                index: true,
+                                                handle: {
+                                                    fullWidth: true,
+                                                } satisfies RouteHandle,
+                                                element: <PredictionRunDetailsPage />,
+                                            },
+                                            {
+                                                path: 'import',
+                                                handle: {
+                                                    breadcrumb: () => i18n.t('Import prediction'),
+                                                } satisfies RouteHandle,
+                                                element: <PredictionImportPage />,
+                                            },
+                                        ],
                                     },
                                     {
                                         path: 'activity',
                                         handle: {
+                                            breadcrumb: () => i18n.t('Activity'),
                                             collapseSidebar: true,
                                         } satisfies RouteHandle,
                                         element: <PredictionActivityPage />,
@@ -174,6 +212,7 @@ const router = createHashRouter([
                     },
                     {
                         path: '/models',
+                        handle: { breadcrumb: () => i18n.t('Models') } satisfies RouteHandle,
                         children: [
                             {
                                 index: true,
@@ -183,6 +222,7 @@ const router = createHashRouter([
                                 path: 'new',
                                 element: <NewConfiguredModelPage />,
                                 handle: {
+                                    breadcrumb: () => i18n.t('New model'),
                                     collapseSidebar: true,
                                 } satisfies RouteHandle,
                             },

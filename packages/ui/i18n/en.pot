@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-09-01T18:35:32.057Z\n"
-"PO-Revision-Date: 2026-09-01T18:35:32.058Z\n"
+"POT-Creation-Date: 2026-09-28T09:00:32.060Z\n"
+"PO-Revision-Date: 2026-09-28T09:00:32.062Z\n"
 
 msgid "Median prediction"
 msgstr "Median prediction"
@@ -37,6 +37,12 @@ msgstr "Quantile 0.75"
 
 msgid "Quantile 0.9 (high)"
 msgstr "Quantile 0.9 (high)"
+
+msgid "Median prediction (50% alert line)"
+msgstr "Median prediction (50% alert line)"
+
+msgid "Alert line ({{probability}}%)"
+msgstr "Alert line ({{probability}}%)"
 
 msgid "Actual Cases"
 msgstr "Actual Cases"

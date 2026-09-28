@@ -36,7 +36,10 @@ import { OrgUnitResponse } from '../utils/queryUtils';
 
 interface SummaryModalProps {
     importSummary: ImportSummaryCorrected;
-    periodType: string;
+    periodType?: string;
+    /** Names to show for org units, when they are not in the backtest import cache. */
+    orgUnitNames?: Map<string, string>;
+    title?: string;
     onClose: () => void;
 }
 
@@ -55,6 +58,8 @@ const getSortDirection = (column: Column<RejectedItem>) => {
 
 export const SummaryModal: React.FC<SummaryModalProps> = ({
     importSummary,
+    orgUnitNames: providedOrgUnitNames,
+    title,
     onClose,
 }) => {
     const queryClient = useQueryClient();
@@ -74,6 +79,10 @@ export const SummaryModal: React.FC<SummaryModalProps> = ({
     const orgUnitNames: Map<string, string> = useMemo(() => {
         const defaultMap = new Map();
 
+        if (providedOrgUnitNames) {
+            return providedOrgUnitNames;
+        }
+
         if (!importSummary.hash) {
             return defaultMap;
         }
@@ -84,7 +93,7 @@ export const SummaryModal: React.FC<SummaryModalProps> = ({
             return defaultMap;
         }
         return new Map(cachedOrgUnitResponse.geojson.organisationUnits.map(ou => [ou.id, ou.displayName]));
-    }, [queryClient, importSummary.hash]);
+    }, [queryClient, importSummary.hash, providedOrgUnitNames]);
 
     const columns = [
         columnHelper.accessor('reason', {
@@ -150,7 +159,7 @@ export const SummaryModal: React.FC<SummaryModalProps> = ({
 
     return (
         <Modal large onClose={onClose}>
-            <ModalTitle>{i18n.t('Import Summary')}</ModalTitle>
+            <ModalTitle>{title ?? i18n.t('Import Summary')}</ModalTitle>
             <ModalContent>
                 <div className={styles.modalContent}>
                     {hasImportedItems && rejectedItems.length === 0 ? (

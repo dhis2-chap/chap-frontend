@@ -1,0 +1,110 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-block-start: 24px;
+  margin-block-start: 24px;
+  border-block-start: 1px solid var(--colors-grey300);
+}
+
+.title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--colors-grey900);
+}
+
+.description {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: var(--colors-grey700);
+}
+
+.columns {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.empty {
+  margin: 0;
+  padding: 12px;
+  border: 1px dashed var(--colors-grey400);
+  border-radius: 4px;
+  font-size: 14px;
+  color: var(--colors-grey700);
+}
+
+.column {
+  padding: 12px;
+  border: 1px solid var(--colors-grey300);
+  border-radius: 4px;
+  background-color: var(--colors-grey050);
+}
+
+.columnFields {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: start;
+}
+
+/* SearchSelectField is shared, so align its label and spacing with InputField here. */
+.dataItemField > div {
+  margin-block-end: 0;
+}
+
+.dataItemField > div > div > button {
+  min-block-size: 40px;
+}
+
+.dataItemField label {
+  margin-block-end: 4px;
+  font-weight: 400;
+  color: var(--colors-grey900);
+}
+
+/* Line the button up with the inputs, below their labels. */
+.removeButton {
+  padding-block-start: 32px;
+}
+
+.hint,
+.warningHint {
+  margin: 6px 0 0;
+  font-size: 13px;
+}
+
+.hint {
+  color: var(--colors-grey700);
+}
+
+.warningHint {
+  color: var(--colors-yellow800);
+}
+
+.errorText {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--colors-red700);
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+}
+
+.suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+}
+
+.suggestionsLabel {
+  font-size: 13px;
+  color: var(--colors-grey700);
+  margin-inline-end: 4px;
+}

@@ -13,6 +13,9 @@ import GettingStarted, {
 import ConfiguringAModel, {
     frontmatter as configuringAModelFrontmatter,
 } from './user-guides/configuring-a-model/index.md';
+import CreatingADataset, {
+    frontmatter as creatingADatasetFrontmatter,
+} from './user-guides/creating-a-dataset/index.md';
 import CreatingAnEvaluation, {
     frontmatter as creatingAnEvaluationFrontmatter,
 } from './user-guides/creating-an-evaluation/index.md';
@@ -70,6 +73,7 @@ export const guides: Guide[] = [
     createGuide('what-are-covariates', whatAreCovariatesFrontmatter, WhatAreCovariates),
     createGuide('what-is-a-prediction-interval', whatIsAPredictionIntervalFrontmatter, WhatIsAPredictionInterval),
     createGuide('configuring-a-model', configuringAModelFrontmatter, ConfiguringAModel),
+    createGuide('creating-a-dataset', creatingADatasetFrontmatter, CreatingADataset),
     createGuide('creating-an-evaluation', creatingAnEvaluationFrontmatter, CreatingAnEvaluation),
     createGuide('creating-a-prediction', creatingAPredictionFrontmatter, CreatingAPrediction),
     createGuide('viewing-evaluation-results', viewingEvaluationResultsFrontmatter, ViewingEvaluationResults),

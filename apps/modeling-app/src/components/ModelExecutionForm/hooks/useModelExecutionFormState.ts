@@ -2,100 +2,32 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import i18n from '@dhis2/d2-i18n';
+import { PERIOD_TYPES } from '@dhis2-chap/core';
 import {
-    comparePeriodIds,
-    getLastCompletedPeriodId,
-    PERIOD_TYPES,
-    toDhis2FixedPeriodType,
-} from '@dhis2-chap/core';
+    baseFormShape,
+    covariateMappingSchema,
+    dataItemSchema,
+    isCompletedPeriod,
+    isPeriodRangeValid,
+} from './baseFormSchema';
 import { DEFAULT_PERIOD_SETTINGS, type Dhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
 
-export const dimensionItemTypeSchema = z.enum(['DATA_ELEMENT', 'INDICATOR', 'PROGRAM_INDICATOR']);
-
-export const dataItemSchema = z.object({
-    id: z.string(),
-    displayName: z.string(),
-    dimensionItemType: dimensionItemTypeSchema,
-});
-
-const orgUnitSchema = z.object({
-    id: z.string().min(1, { message: i18n.t('Missing id for org unit') }),
-    displayName: z.string().optional(),
-    path: z.string().optional(),
-});
-
-export const covariateMappingSchema = z.object({
-    covariateName: z.string(),
-    dataItem: dataItemSchema,
-});
-
-export type ModelExecutionPeriodType = typeof PERIOD_TYPES.WEEK | typeof PERIOD_TYPES.MONTH;
-
-const isPeriodRangeValid = (
-    fromPeriodId: string,
-    toPeriodId: string,
-    settings: Dhis2PeriodSettings,
-) => {
-    if (!fromPeriodId || !toPeriodId) {
-        return true;
-    }
-
-    try {
-        return comparePeriodIds({
-            a: toPeriodId,
-            b: fromPeriodId,
-            calendar: settings.calendar,
-            locale: settings.locale,
-        }) >= 0;
-    } catch {
-        return false;
-    }
-};
-
-const isCompletedPeriod = (
-    toPeriodId: string,
-    periodType: ModelExecutionPeriodType,
-    settings: Dhis2PeriodSettings,
-) => {
-    if (!toPeriodId) {
-        return true;
-    }
-
-    const dhis2PeriodType = toDhis2FixedPeriodType(periodType);
-    if (!dhis2PeriodType) {
-        return false;
-    }
-
-    try {
-        const lastCompletedPeriodId = getLastCompletedPeriodId({
-            periodType: dhis2PeriodType,
-            calendar: settings.calendar,
-            locale: settings.locale,
-            timeZone: settings.timeZone,
-        });
-
-        return comparePeriodIds({
-            a: toPeriodId,
-            b: lastCompletedPeriodId,
-            calendar: settings.calendar,
-            locale: settings.locale,
-        }) <= 0;
-    } catch {
-        return false;
-    }
-};
+export {
+    baseFormShape,
+    covariateMappingSchema,
+    dataItemSchema,
+    dimensionItemTypeSchema,
+    orgUnitSchema,
+    isCompletedPeriod,
+    isPeriodRangeValid,
+} from './baseFormSchema';
+export type { BaseFormValues, ModelExecutionPeriodType } from './baseFormSchema';
 
 export const createModelExecutionFormSchema = (
     periodSettings: Dhis2PeriodSettings = DEFAULT_PERIOD_SETTINGS,
 ) => (
     z.object({
-        name: z.string().min(1, { message: i18n.t('Name is required') }),
-        periodType: z.enum(['WEEK', 'MONTH'], { message: i18n.t('Period type is required') }),
-        fromPeriodId: z.string().min(1, { message: i18n.t('Start period is required') }),
-        toPeriodId: z
-            .string()
-            .min(1, { message: i18n.t('End period is required') }),
-        orgUnits: z.array(orgUnitSchema).min(1, { message: i18n.t('At least one org unit is required') }),
+        ...baseFormShape,
         modelId: z.string().min(1, { message: i18n.t('Please select a model') }),
         covariateMappings: z.array(covariateMappingSchema),
         targetMapping: z.object(

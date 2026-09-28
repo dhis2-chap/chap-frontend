@@ -1,7 +1,7 @@
 ---
 title: Comparing evaluations
 description: Step-by-step guide on how to compare two evaluations side by side
-order: 5
+order: 6
 category: User Guides
 ---
 

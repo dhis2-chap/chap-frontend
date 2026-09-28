@@ -166,3 +166,13 @@
     text-align: center;
     font-size: 0.8125rem;
 }
+
+.groupLabel {
+    padding: 0.5rem 0.75rem 0.25rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: #6b7280;
+    background-color: #f9fafb;
+}

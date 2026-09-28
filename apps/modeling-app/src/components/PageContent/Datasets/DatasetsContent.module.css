@@ -1,0 +1,14 @@
+.container {
+    padding: var(--spacers-dp16);
+}
+
+.loadingContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-block-size: 300px;
+}
+
+.errorContainer {
+    padding: var(--spacers-dp16);
+}

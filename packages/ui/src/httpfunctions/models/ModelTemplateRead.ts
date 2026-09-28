@@ -58,7 +58,7 @@ export type ModelTemplateRead = {
      */
     userOptions?: (Record<string, any> | null);
     /**
-     * Search space used by HPO when training this template in `hpo` mode.
+     * Search space used by HPO when tuning this template in `hpo` mode.
      */
     hpoSearchSpace?: (Record<string, any> | null);
     /**
@@ -68,11 +68,11 @@ export type ModelTemplateRead = {
     /**
      * Minimum forecast horizon (in periods) the template supports.
      */
-    minPredictionLength?: (number | null);
+    minPredictionPeriods?: (number | null);
     /**
      * Maximum forecast horizon (in periods) the template supports.
      */
-    maxPredictionLength?: (number | null);
+    maxPredictionPeriods?: (number | null);
     /**
      * Name of the variable the model predicts.
      */
@@ -110,12 +110,22 @@ export type ModelTemplateRead = {
      */
     archived?: boolean;
     /**
-     * Reported health status of the template, used by chapkit-hosted models.
+     * Health of the chapkit service behind the template: 'live' when it is registered and runs the stored source revision, 'revision_mismatch' when it reports another revision (or none) under the same version, so the template cannot run until the service bumps its version. None for templates that are not chapkit-hosted or whose service is not registered.
      */
-    healthStatus?: (string | null);
+    healthStatus?: ('live' | 'revision_mismatch' | null);
     /**
      * When True, the template is served by a chapkit REST endpoint.
      */
     usesChapkit?: boolean;
+    /**
+     * Deprecated alias for `minPredictionPeriods`.
+     * @deprecated
+     */
+    readonly minPredictionLength: (number | null);
+    /**
+     * Deprecated alias for `maxPredictionPeriods`.
+     * @deprecated
+     */
+    readonly maxPredictionLength: (number | null);
 };
 

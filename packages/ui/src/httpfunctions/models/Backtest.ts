@@ -43,6 +43,14 @@ export type Backtest = {
      */
     maxHorizonDistance?: (number | null);
     /**
+     * Release version of chap-core that produced the backtest; null for dev checkouts and rows predating the column.
+     */
+    chapVersion?: (string | null);
+    /**
+     * Foreign key to the `BacktestSpecification` this backtest ran under.
+     */
+    specificationId: number;
+    /**
      * Map of metric id to aggregated score across all splits / org units.
      */
     aggregateMetrics?: Record<string, number>;
@@ -50,5 +58,25 @@ export type Backtest = {
      * Foreign key to the `ConfiguredModelDB` row used to run the backtest.
      */
     modelDbId: number;
+    /**
+     * Number of periods to forecast at each split.
+     */
+    readonly nPeriods: number;
+    /**
+     * Total number of rolling train/test splits.
+     */
+    readonly nSplits: number;
+    /**
+     * Number of periods to advance between successive splits.
+     */
+    readonly stride: number;
+    /**
+     * Number of times the model is retrained, evenly spaced across the splits. 1 means train once.
+     */
+    readonly nRetrain: number;
+    /**
+     * Id of the registered future-weather provider supplying climate covariates for each forecast window. Use the same provider here and on the prediction so backtest scores reflect what the model will see in production. See GET /v1/analytics/weather-providers.
+     */
+    readonly futureWeatherProvider: string;
 };
 

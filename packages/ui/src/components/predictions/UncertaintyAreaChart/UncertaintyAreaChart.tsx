@@ -8,8 +8,10 @@ import { registerHighchartsModules } from '../../../utils/registerHighchartsModu
 import { buildChartPeriods, buildPeriodIndexLookup, getSeriesPeriods } from '../../../utils/chartPeriods';
 import { getPeriodNameFromId } from '../../../utils/Time';
 import {
+    getQuantileKeyForOutbreakProbability,
     isFiniteNumber,
     type EndemicThresholdPoint,
+    type OutbreakProbability,
     type SupportedOutbreakProbabilityBucket,
 } from '../../../utils/outbreakAlerts';
 import type { ZoomRange } from '../../evaluation/ResultPlot/ResultPlot';
@@ -47,6 +49,7 @@ const getChartOptions = (
     maxY?: number,
     chartHeight?: Highcharts.ChartOptions['height'],
     endemicThresholds?: EndemicThresholdPoint[],
+    outbreakProbability?: OutbreakProbability,
 ): Highcharts.Options => {
     const isTile = variant === 'tile';
     const disabledAnimationOptions = getDisabledAnimationOptions();
@@ -87,14 +90,21 @@ const getChartOptions = (
             }))
         : undefined;
 
+    const quantileKey = outbreakProbability === undefined
+        ? undefined
+        : getQuantileKeyForOutbreakProbability(outbreakProbability);
+
     const chartSeries: Highcharts.SeriesOptionsType[] = [
-        // median
+        // median; at 50% it doubles as the alert line
         {
             id: 'prediction-median',
             type: 'line',
             data: median,
-            name: i18n.t('Median prediction'),
+            name: quantileKey === 'median'
+                ? i18n.t('Median prediction (50% alert line)')
+                : i18n.t('Median prediction'),
             color: '#004bbd',
+            lineWidth: 5,
             zIndex: 3,
             connectNulls: false,
         },
@@ -121,6 +131,26 @@ const getChartOptions = (
             connectNulls: false,
         },
     ];
+
+    if (quantileKey && quantileKey !== 'median') {
+        chartSeries.push({
+            id: 'prediction-probability',
+            type: 'line',
+            name: i18n.t('Alert line ({{probability}}%)', {
+                probability: outbreakProbability,
+            }),
+            data: series.points.map(point => ({
+                name: point.period,
+                x: getPeriodIndex(point.period),
+                y: point.quantiles[quantileKey] ?? null,
+            })),
+            color: '#002b6b',
+            lineWidth: 2,
+            zIndex: 6,
+            marker: { enabled: false },
+            connectNulls: false,
+        });
+    }
 
     if (actualCases && actualCases.length > 0) {
         chartSeries.unshift({
@@ -267,6 +297,23 @@ const getChartOptions = (
                     fontSize: '0.8rem',
                 },
             },
+            plotLines: periods.flatMap((period, index) => {
+                const year = period.slice(0, 4);
+                if (index === 0 || year === periods[index - 1].slice(0, 4)) return [];
+
+                return [{
+                    value: index - 0.5,
+                    color: '#6c7787',
+                    width: 1,
+                    dashStyle: 'Dash',
+                    zIndex: 2,
+                    label: {
+                        text: year,
+                        rotation: 0,
+                        style: { color: '#6c7787' },
+                    },
+                }];
+            }),
             plotBands: outbreakPeriods
                 .filter(outbreakPeriod => outbreakPeriod.outbreak)
                 .map((outbreakPeriod) => {
@@ -325,6 +372,7 @@ interface PredicationChartProps {
     endemicThreshold?: number | null;
     endemicThresholds?: EndemicThresholdPoint[];
     outbreakPeriods?: OutbreakPeriodChartInfo[];
+    outbreakProbability?: OutbreakProbability;
     variant?: UncertaintyAreaChartVariant;
     zoomRange?: ZoomRange | null;
     onZoomChange?: (range: ZoomRange | null) => void;
@@ -347,6 +395,7 @@ export const UncertaintyAreaChart = ({
     endemicThreshold,
     endemicThresholds,
     outbreakPeriods = [],
+    outbreakProbability,
     variant = 'default',
     zoomRange,
     onZoomChange,
@@ -413,6 +462,7 @@ export const UncertaintyAreaChart = ({
             maxY,
             chartHeight,
             endemicThresholds,
+            outbreakProbability,
         );
     }, [
         series,
@@ -420,6 +470,7 @@ export const UncertaintyAreaChart = ({
         endemicThreshold,
         endemicThresholds,
         outbreakPeriods,
+        outbreakProbability,
         variant,
         handleAfterSetExtremes,
         hasExternalZoomControls,

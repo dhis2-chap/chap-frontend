@@ -88,12 +88,14 @@ const gridComponents = {
 
 const ThresholdTile = memo(function ThresholdTile({
     predictionTargetName,
+    selectedProbability,
     showThresholds,
     tile,
     zoomRange,
     onZoomChange,
 }: {
     predictionTargetName: string;
+    selectedProbability: OutbreakProbability;
     showThresholds: boolean;
     tile: ThresholdTileViewModel;
     zoomRange?: ZoomRange | null;
@@ -147,6 +149,7 @@ const ThresholdTile = memo(function ThresholdTile({
                     endemicThreshold={showThresholds ? tile.endemicThreshold : undefined}
                     endemicThresholds={showThresholds ? tile.endemicThresholds : undefined}
                     outbreakPeriods={outbreakPeriods}
+                    outbreakProbability={showThresholds ? selectedProbability : undefined}
                     variant="tile"
                     zoomRange={zoomRange}
                     onZoomChange={onZoomChange}
@@ -159,6 +162,7 @@ const ThresholdTile = memo(function ThresholdTile({
 
 type Props = {
     predictionTargetName: string;
+    selectedProbability: OutbreakProbability;
     tiles: ThresholdTileViewModel[];
     showThresholds: boolean;
     showStatusFilter?: boolean;
@@ -171,6 +175,7 @@ type Props = {
 
 export const ThresholdTilesExplorer = ({
     predictionTargetName,
+    selectedProbability,
     tiles,
     showThresholds,
     showStatusFilter = true,
@@ -403,6 +408,7 @@ export const ThresholdTilesExplorer = ({
                                 itemContent={(index: number) => (
                                     <ThresholdTile
                                         predictionTargetName={predictionTargetName}
+                                        selectedProbability={selectedProbability}
                                         showThresholds={showThresholds}
                                         tile={filteredTiles[index]}
                                         zoomRange={zoomRange}

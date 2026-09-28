@@ -49,6 +49,10 @@ export type DataSetWithObservations = {
      */
     periodType?: (string | null);
     /**
+     * True if a user created the dataset directly, false if it was created as part of an evaluation or prediction.
+     */
+    createdManually?: boolean;
+    /**
      * GeoJSON `FeatureCollection` for the dataset's org units, stored as a string.
      */
     geojson?: (string | null);

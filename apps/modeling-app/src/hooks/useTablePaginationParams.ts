@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
-const PARAM_KEYS = {
+export const PARAM_KEYS = {
     page: 'page',
     pageSize: 'pageSize',
 };

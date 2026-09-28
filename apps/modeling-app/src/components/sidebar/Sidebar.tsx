@@ -99,6 +99,7 @@ export const Sidebar = ({
                 <Sidenav>
                     <SidenavItems>
                         <SidebarNavLink to="/dashboard" label={i18n.t('Dashboard')} />
+                        <SidebarNavLink to="/datasets" label={i18n.t('Datasets')} />
                         <SidebarParent
                             label={i18n.t('Evaluate')}
                             links={[

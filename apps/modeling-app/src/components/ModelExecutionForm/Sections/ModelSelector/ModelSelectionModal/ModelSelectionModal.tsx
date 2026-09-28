@@ -23,6 +23,7 @@ import { PERIOD_TYPES } from '@dhis2-chap/core';
 import cn from 'classnames';
 import { AuthorAssessedStatus, type ModelSpecRead } from '@dhis2-chap/ui';
 import { toDataTestKey } from '@/utils/dataTestKey';
+import { ModelCommit } from '@/components/ModelCommit';
 import styles from './ModelSelectionModal.module.css';
 import { ModelHealthBadge, ModelHealthNotice } from '@/components/ModelHealth/ModelHealth';
 import { hasRevisionMismatch } from '@/utils/modelHealth';
@@ -302,6 +303,19 @@ export const ModelSelectionModal = ({
                                         <ModelHealthNotice model={focusedModel} />
 
                                         <dl className={styles.specs}>
+                                            <div className={styles.spec}>
+                                                <dt>{i18n.t('Version')}</dt>
+                                                <dd>{focusedModel.version || '—'}</dd>
+                                            </div>
+                                            <div className={styles.spec}>
+                                                <dt>{i18n.t('Commit')}</dt>
+                                                <dd>
+                                                    <ModelCommit
+                                                        sourceDigest={focusedModel.sourceDigest}
+                                                        sourceUrl={focusedModel.sourceUrl}
+                                                    />
+                                                </dd>
+                                            </div>
                                             <div className={styles.spec}>
                                                 <dt>
                                                     <IconCalendar16 color="#212934" />

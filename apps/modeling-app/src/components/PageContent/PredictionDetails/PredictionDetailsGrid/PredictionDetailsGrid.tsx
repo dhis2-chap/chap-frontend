@@ -254,6 +254,7 @@ export const PredictionDetailsGrid = ({
     return (
         <ThresholdTilesExplorer
             predictionTargetName={predictionTargetName}
+            selectedProbability={settings.alertProbability}
             tiles={tiles}
             showThresholds={thresholdsVisible}
             panel={panelContent}
