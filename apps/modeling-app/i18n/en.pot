@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-09-28T16:25:40.171Z\n"
-"PO-Revision-Date: 2026-09-28T16:25:40.172Z\n"
+"POT-Creation-Date: 2026-09-29T08:24:44.073Z\n"
+"PO-Revision-Date: 2026-09-29T08:24:44.073Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -19,6 +19,12 @@ msgstr "New evaluation"
 
 msgid "Evaluation details"
 msgstr "Evaluation details"
+
+msgid "Benchmarks"
+msgstr "Benchmarks"
+
+msgid "Leaderboard"
+msgstr "Leaderboard"
 
 msgid "Datasets"
 msgstr "Datasets"
@@ -2496,6 +2502,157 @@ msgstr "Requires superuser authority"
 
 msgid "Model not found"
 msgstr "Model not found"
+
+msgid ""
+"The selected models are no longer compatible with this dataset. Choose "
+"models again."
+msgstr ""
+"The selected models are no longer compatible with this dataset. Choose "
+"models again."
+
+msgid "Benchmark {{id}}"
+msgstr "Benchmark {{id}}"
+
+msgid "Add models"
+msgstr "Add models"
+
+msgid ""
+"Run configured models using this benchmark’s dataset and saved backtest "
+"parameters."
+msgstr ""
+"Run configured models using this benchmark’s dataset and saved backtest "
+"parameters."
+
+msgid "No compatible models"
+msgstr "No compatible models"
+
+msgid "Could not start model runs"
+msgstr "Could not start model runs"
+
+msgid "Run models"
+msgstr "Run models"
+
+msgid "Invalid benchmark"
+msgstr "Invalid benchmark"
+
+msgid "Could not load benchmark"
+msgstr "Could not load benchmark"
+
+msgid "Benchmark {{id}} — {{dataset}}"
+msgstr "Benchmark {{id}} — {{dataset}}"
+
+msgid "Compare model runs with the same evaluation setup."
+msgstr "Compare model runs with the same evaluation setup."
+
+msgid "All benchmarks"
+msgstr "All benchmarks"
+
+msgid "Refresh"
+msgstr "Refresh"
+
+msgid "Organisation units ({{count}})"
+msgid_plural "Organisation units ({{count}})"
+msgstr[0] "Organisation units ({{count}})"
+msgstr[1] "Organisation units ({{count}})"
+
+msgid "Model runs queued"
+msgstr "Model runs queued"
+
+msgid ""
+"{{count}} model runs queued. Completed results will appear in the "
+"leaderboard."
+msgid_plural ""
+"{{count}} model runs queued. Completed results will appear in the "
+"leaderboard."
+msgstr[0] ""
+"{{count}} model runs queued. Completed results will appear in the "
+"leaderboard."
+msgstr[1] ""
+"{{count}} model runs queued. Completed results will appear in the "
+"leaderboard."
+
+msgid "View jobs and failures"
+msgstr "View jobs and failures"
+
+msgid "Open the benchmark returned by CHAP"
+msgstr "Open the benchmark returned by CHAP"
+
+msgid "Best score"
+msgstr "Best score"
+
+msgid "View evaluation"
+msgstr "View evaluation"
+
+msgid ""
+"Aggregate scores across all splits and organisation units. Best scores are "
+"highlighted, including ties."
+msgstr ""
+"Aggregate scores across all splits and organisation units. Best scores are "
+"highlighted, including ties."
+
+msgid "Download CSV"
+msgstr "Download CSV"
+
+msgid "Metric descriptions unavailable"
+msgstr "Metric descriptions unavailable"
+
+msgid ""
+"Scores are still available, but best values cannot be highlighted without "
+"metric definitions."
+msgstr ""
+"Scores are still available, but best values cannot be highlighted without "
+"metric definitions."
+
+msgid "No model runs yet"
+msgstr "No model runs yet"
+
+msgid ""
+"Add models to run them against this benchmark. Completed runs will appear "
+"here."
+msgstr ""
+"Add models to run them against this benchmark. Completed runs will appear "
+"here."
+
+msgid "Compare model runs evaluated on the same dataset and backtest parameters."
+msgstr "Compare model runs evaluated on the same dataset and backtest parameters."
+
+msgid "Each benchmark groups evaluations with an identical setup."
+msgstr "Each benchmark groups evaluations with an identical setup."
+
+msgid "Benchmarks unavailable"
+msgstr "Benchmarks unavailable"
+
+msgid ""
+"This CHAP server does not support backtest specifications. Update CHAP Core "
+"to use benchmarks."
+msgstr ""
+"This CHAP server does not support backtest specifications. Update CHAP Core "
+"to use benchmarks."
+
+msgid "Could not load benchmarks"
+msgstr "Could not load benchmarks"
+
+msgid "No benchmarks yet"
+msgstr "No benchmarks yet"
+
+msgid "Benchmarks appear when evaluations are run on a saved dataset."
+msgstr "Benchmarks appear when evaluations are run on a saved dataset."
+
+msgid "Benchmark"
+msgstr "Benchmark"
+
+msgid "Backtest parameters"
+msgstr "Backtest parameters"
+
+msgid "Model runs"
+msgstr "Model runs"
+
+msgid ""
+"Forecast periods {{periods}} · Splits {{splits}} · Stride {{stride}} · "
+"Retraining {{retrain}} · Future weather {{weather}}"
+msgstr ""
+"Forecast periods {{periods}} · Splits {{splits}} · Stride {{stride}} · "
+"Retraining {{retrain}} · Future weather {{weather}}"
 
 msgid "Run predictions, review activity, and manage this setup."
 msgstr "Run predictions, review activity, and manage this setup."

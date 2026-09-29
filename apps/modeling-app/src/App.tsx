@@ -21,6 +21,8 @@ import InfoAboutReportingBugs from './features/common-features/InfoAboutReportin
 import WarnAboutIncompatibleVersion from './features/common-features/WarnAboutIncompatibleVersion/WarnAboutIncompatibleVersion';
 import { Dhis2VersionWarning } from './components/Dhis2VersionWarning/Dhis2VersionWarning';
 import { DashboardPage } from './pages/DashboardPage';
+import { BenchmarksPage } from './pages/BenchmarksPage/BenchmarksPage';
+import { BenchmarkDetailsPage } from './pages/BenchmarksPage/BenchmarkDetailsPage';
 import { EvaluationPage } from './pages/EvaluationPage';
 import { EvaluationDetailsPage } from './pages/EvaluationDetailsPage';
 import { ChapValidator } from './components/ChapValidator';
@@ -129,6 +131,18 @@ const router = createHashRouter([
                                     collapseSidebar: true,
                                 } satisfies RouteHandle,
                                 element: <EvaluationDetailsPage />,
+                            },
+                        ],
+                    },
+                    {
+                        path: '/benchmarks',
+                        handle: { breadcrumb: () => i18n.t('Benchmarks'), fullWidth: true } satisfies RouteHandle,
+                        children: [
+                            { index: true, element: <BenchmarksPage /> },
+                            {
+                                path: ':specificationId',
+                                element: <BenchmarkDetailsPage />,
+                                handle: { breadcrumb: () => i18n.t('Leaderboard') } satisfies RouteHandle,
                             },
                         ],
                     },
