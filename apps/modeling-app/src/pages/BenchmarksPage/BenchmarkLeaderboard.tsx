@@ -5,7 +5,6 @@ import { BacktestRead, BacktestSpecificationRead, VisualizationsService } from '
 import { createColumnHelper, flexRender, getCoreRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import { format } from 'date-fns';
 import { saveAs } from 'file-saver';
 import { TableActionButton } from '../../components/TableActionButton';
 import { useModels } from '../../hooks/useModels';
@@ -76,27 +75,18 @@ export const BenchmarkLeaderboard = ({ specification, actions, children }: Props
             cell: info => info.getValue() ?? '—',
             sortUndefined: 'last',
         }),
-        columnHelper.accessor(run => run.created ?? undefined, {
-            id: 'created',
-            header: i18n.t('Created'),
-            cell: info => (
-                <span className={styles.nowrap}>
-                    {info.getValue() ? format(new Date(info.getValue()!), 'dd.MM.yyyy, HH:mm') : '—'}
-                </span>
-            ),
-            sortUndefined: 'last',
-        }),
         columnHelper.display({
             id: 'actions',
             header: i18n.t('Actions'),
             cell: ({ row }) => <ViewEvaluationButton evaluationId={row.original.id} />,
         }),
     ], [backtests, catalog.data, models]);
+    // Newest runs first until the user sorts by a column.
+    const runs = useMemo(() => [...backtests].sort((a, b) => (b.created ?? '').localeCompare(a.created ?? '')), [backtests]);
     const table = useReactTable({
-        data: backtests,
+        data: runs,
         columns,
         enableSortingRemoval: false,
-        initialState: { sorting: [{ id: 'created', desc: true }] },
         getRowId: run => String(run.id),
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),

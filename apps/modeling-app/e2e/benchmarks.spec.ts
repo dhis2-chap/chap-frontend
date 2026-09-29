@@ -57,8 +57,7 @@ test('compares runs, exports scores and adds a model to the same benchmark', asy
     await expect(page.getByRole('button', { name: 'View evaluation', exact: true })).toHaveCount(2, { timeout: 20_000 });
     await expect(page.getByRole('cell', { name: modelDisplayName, exact: true })).toHaveCount(2);
     await expect(page.locator('[title="Best score"]').first()).toBeVisible();
-    await page.getByTitle('Sort by created', { exact: true }).click();
-    await expect(page.getByRole('button', { name: 'View evaluation', exact: true }).first()).toHaveAttribute('data-test', `view-evaluation-${evaluation.id}`);
+    await expect(page.getByRole('button', { name: 'View evaluation', exact: true }).last()).toHaveAttribute('data-test', `view-evaluation-${evaluation.id}`);
 
     const downloadPromise = page.waitForEvent('download');
     await page.getByRole('button', { name: 'Download CSV', exact: true }).click();
