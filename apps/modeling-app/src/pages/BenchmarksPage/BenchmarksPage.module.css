@@ -63,8 +63,8 @@
 }
 
 .best {
-    color: var(--colors-green800);
-    background: var(--colors-green050);
+    color: var(--colors-grey900);
+    background: var(--colors-grey200);
     font-weight: 700;
     padding: 2px var(--spacers-dp4);
     border-radius: 3px;
@@ -133,4 +133,17 @@
     align-items: center;
     flex-wrap: wrap;
     gap: var(--spacers-dp8);
+}
+
+.metricHeader {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacers-dp4);
+}
+
+.infoIcon {
+    display: inline-flex;
+    align-items: center;
+    inline-size: 16px;
+    block-size: 16px;
 }

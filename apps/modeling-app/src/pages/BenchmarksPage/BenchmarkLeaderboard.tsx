@@ -1,6 +1,6 @@
 import { ReactNode, useMemo } from 'react';
 import i18n from '@dhis2/d2-i18n';
-import { Button, DataTable, DataTableBody, DataTableCell, DataTableColumnHeader, DataTableHead, DataTableRow, NoticeBox } from '@dhis2/ui';
+import { Button, DataTable, DataTableBody, DataTableCell, DataTableColumnHeader, DataTableHead, DataTableRow, IconInfo16, NoticeBox, Tooltip } from '@dhis2/ui';
 import { BacktestRead, BacktestSpecificationRead, VisualizationsService } from '@dhis2-chap/ui';
 import { createColumnHelper, flexRender, getCoreRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table';
 import { useQuery } from '@tanstack/react-query';
@@ -54,7 +54,18 @@ export const BenchmarkLeaderboard = ({ specification, actions, children }: Props
             const label = metric?.displayName || prettifyMetricId(metricId);
             return columnHelper.accessor(run => Number.isFinite(run.aggregateMetrics[metricId]) ? run.aggregateMetrics[metricId] : undefined, {
                 id: `metric:${metricId}`,
-                header: () => <span title={metric?.description}>{metric?.unit ? `${label} (${metric.unit})` : label}</span>,
+                header: () => (
+                    <span className={styles.metricHeader}>
+                        {metric?.unit ? `${label} (${metric.unit})` : label}
+                        {metric?.description?.trim() && (
+                            <Tooltip content={metric.description}>
+                                <span className={styles.infoIcon}>
+                                    <IconInfo16 color="var(--colors-grey600)" />
+                                </span>
+                            </Tooltip>
+                        )}
+                    </span>
+                ),
                 sortUndefined: 'last',
                 sortDescFirst: metric?.optimizationDirection === 'maximize',
                 cell: (info) => {
@@ -62,7 +73,7 @@ export const BenchmarkLeaderboard = ({ specification, actions, children }: Props
                     if (value === undefined) return '—';
                     const best = bestRunIds.has(info.row.original.id);
                     return (
-                        <span className={best ? styles.best : undefined} title={best ? i18n.t('Best score') : undefined}>
+                        <span className={best ? styles.best : undefined} title={best ? i18n.t('Best score among these runs') : undefined}>
                             {value.toLocaleString(undefined, { maximumSignificantDigits: 6 })}
                         </span>
                     );
@@ -98,7 +109,7 @@ export const BenchmarkLeaderboard = ({ specification, actions, children }: Props
                 <div>
                     <h2 className={styles.cardTitle}>{i18n.t('Leaderboard')}</h2>
                     <p className={styles.caption}>
-                        {i18n.t('Aggregate scores across all splits and organisation units. Best scores are highlighted, including ties.')}
+                        {i18n.t('Aggregate scores across all splits and organisation units. The best score in each column is highlighted, including ties. Best only means best among these runs, not necessarily a good score.')}
                     </p>
                 </div>
                 <div className={styles.actions}>
