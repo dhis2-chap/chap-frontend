@@ -13,16 +13,22 @@ test('compares runs, exports scores and adds a model to the same benchmark', asy
     );
     const model = evaluation.configuredModel!;
 
-    await page.goto('/#/benchmarks');
+    // Datasets created by an evaluation are hidden until the origin filter is widened.
+    await page.goto('/#/evaluate/benchmarks');
+    await expect(page.getByRole('columnheader', { name: 'Model runs', exact: true })).toBeVisible();
+    await expect(page.getByRole('link', { name: evaluation.dataset.name, exact: true })).toHaveCount(0);
+    await page.goto('/#/evaluate/benchmarks?origin=all');
     await page.getByRole('link', { name: evaluation.dataset.name, exact: true }).click();
-    await expect(page).toHaveURL(`/#/benchmarks/${specification.id}`);
-    await expect(page.getByRole('link', { name: `View evaluation #${evaluation.id}`, exact: true })).toBeVisible();
+    await expect(page).toHaveURL(`/#/evaluate/benchmarks/${specification.id}`);
+    await expect(page.getByRole('navigation', { name: 'Breadcrumbs' }).locator('[aria-current="page"]')).toHaveText(evaluation.dataset.name);
+    await expect(page.locator(`[data-test="view-evaluation-${evaluation.id}"]`)).toBeVisible();
     await page.getByRole('button', { name: 'Add models', exact: true }).click();
     await expect(page.getByRole('button', { name: 'Run models', exact: true })).toBeDisabled();
     await page.getByRole('button', { name: 'Select models', exact: true }).click();
     const modal = page.getByRole('dialog');
     await modal.locator(`[data-test="model-toggle-${toDataTestKey(model.name)}"]`).click();
     await modal.getByRole('button', { name: 'Use selected models (1)', exact: true }).click();
+    await expect(page.getByText('Already run with this version', { exact: true })).toBeVisible();
 
     const responsePromise = page.waitForResponse(response => response.url().endsWith('/v1/analytics/create-backtests') && response.request().method() === 'POST');
     await page.getByRole('button', { name: 'Run models', exact: true }).click();
@@ -46,11 +52,11 @@ test('compares runs, exports scores and adds a model to the same benchmark', asy
         return status;
     }, { timeout: 180_000, intervals: [3000] }).toBe('SUCCESS');
     // Job completion must refresh the leaderboard without a manual reload.
-    await expect(page.getByRole('link', { name: /View evaluation #/ })).toHaveCount(2, { timeout: 20_000 });
+    await expect(page.getByRole('button', { name: 'View evaluation', exact: true })).toHaveCount(2, { timeout: 20_000 });
     await expect(page.getByRole('cell', { name: model.name, exact: true })).toHaveCount(2);
     await expect(page.locator('[title="Best score"]').first()).toBeVisible();
     await page.getByTitle('Sort by created', { exact: true }).click();
-    await expect(page.getByRole('link', { name: /View evaluation #/ }).first()).toHaveText(`View evaluation #${evaluation.id}`);
+    await expect(page.getByRole('button', { name: 'View evaluation', exact: true }).first()).toHaveAttribute('data-test', `view-evaluation-${evaluation.id}`);
 
     const downloadPromise = page.waitForEvent('download');
     await page.getByRole('button', { name: 'Download CSV', exact: true }).click();
@@ -60,6 +66,6 @@ test('compares runs, exports scores and adds a model to the same benchmark', asy
     expect(csv).toContain('"mae"');
     expect(csv).toContain(`"${model.name}"`);
     expect(csv).toContain('"future_weather_provider"');
-    await page.getByRole('link', { name: `View evaluation #${evaluation.id}`, exact: true }).click();
+    await page.locator(`[data-test="view-evaluation-${evaluation.id}"]`).click();
     await expect(page).toHaveURL(`/#/evaluate/${evaluation.id}`);
 });

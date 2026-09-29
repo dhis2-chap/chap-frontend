@@ -10,7 +10,7 @@ import { ModelHealthNotice } from '../../components/ModelHealth/ModelHealth';
 import { ModelsSelector } from '../../components/NewEvaluationForm/DatasetEvaluationForm/ModelsSelector';
 import { datasetSupportsModel } from '../../components/NewDatasetForm/utils/datasetModels';
 import { ChapErrorNotice } from '../../components/ChapErrorNotice';
-import { makeBenchmarkRequest } from './benchmarkUtils';
+import { getModelsWithRun, makeBenchmarkRequest } from './benchmarkUtils';
 import styles from './BenchmarksPage.module.css';
 
 type Props = {
@@ -26,6 +26,7 @@ export const AddBenchmarkModels = ({ specification, onClose, onSuccess }: Props)
     const { dataset } = specification;
     const compatibleModels = models?.filter(model => datasetSupportsModel(dataset.covariates ?? [], dataset.periodType ?? '', model)) ?? [];
     const selectedModels = compatibleModels.filter(model => selectedIds.includes(model.id));
+    const modelsWithRun = getModelsWithRun(specification.backtests, selectedModels);
     const mutation = useMutation<MakeBacktestsResponse, ApiError | Error>({
         mutationFn: async () => {
             const runnable = await Promise.all(selectedModels.map(model => fetchRunnableModel(queryClient, model.id)));
@@ -46,8 +47,8 @@ export const AddBenchmarkModels = ({ specification, onClose, onSuccess }: Props)
     });
 
     return (
-        <div className={styles.content}>
-            <h3>{i18n.t('Add models')}</h3>
+        <div className={styles.addModels}>
+            <h3 className={styles.cardTitle}>{i18n.t('Add models')}</h3>
             <p>{i18n.t('Run configured models using this benchmark’s dataset and saved backtest parameters.')}</p>
             {isLoading ? <CircularLoader small /> : error ? (
                 <ChapErrorNotice error={error} title={i18n.t('Could not load models')} />
@@ -62,6 +63,16 @@ export const AddBenchmarkModels = ({ specification, onClose, onSuccess }: Props)
                     {!compatibleModels.length && (
                         <NoticeBox title={i18n.t('No compatible models')}>
                             {i18n.t('No configured model matches this dataset’s covariates and period type.')}
+                        </NoticeBox>
+                    )}
+                    {modelsWithRun.length > 0 && (
+                        <NoticeBox warning title={i18n.t('Already run with this version')}>
+                            {i18n.t('{{models}} already have a run in this benchmark with the same model version. Running again adds another row, which is useful for checking how much scores vary between runs.', {
+                                count: modelsWithRun.length,
+                                models: modelsWithRun.map(model => model.displayName || model.name).join(', '),
+                                defaultValue: '{{models}} already has a run in this benchmark with the same model version. Running again adds another row, which is useful for checking how much scores vary between runs.',
+                                defaultValue_plural: '{{models}} already have a run in this benchmark with the same model version. Running again adds another row, which is useful for checking how much scores vary between runs.',
+                            })}
                         </NoticeBox>
                     )}
                     {selectedModels.map(model => <ModelHealthNotice key={model.id} model={model} />)}

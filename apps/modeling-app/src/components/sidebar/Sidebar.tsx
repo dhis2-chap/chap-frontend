@@ -111,9 +111,12 @@ export const Sidebar = ({
                                     label: i18n.t('Compare'),
                                     to: '/evaluate/compare',
                                 },
+                                {
+                                    label: i18n.t('Benchmarks'),
+                                    to: '/evaluate/benchmarks',
+                                },
                             ]}
                         />
-                        <SidebarNavLink to="/benchmarks" label={i18n.t('Benchmarks')} />
                         <SidebarNavLink to="/predictions" label={i18n.t('Predict')} />
                         <SidebarNavLink to="/models" label={i18n.t('Models')} />
                         <SidebarNavLink to="/jobs" label={i18n.t('Jobs')} />

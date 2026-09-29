@@ -1,10 +1,10 @@
-import { useMemo } from 'react';
+import { ReactNode, useMemo } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { Button, DataTable, DataTableBody, DataTableCell, DataTableColumnHeader, DataTableHead, DataTableRow, NoticeBox } from '@dhis2/ui';
 import { BacktestRead, BacktestSpecificationRead, VisualizationsService } from '@dhis2-chap/ui';
 import { createColumnHelper, flexRender, getCoreRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table';
 import { useQuery } from '@tanstack/react-query';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import { saveAs } from 'file-saver';
 import { benchmarkCsv, getBestRunIds, getMetricIds } from './benchmarkUtils';
@@ -13,7 +13,24 @@ import styles from './BenchmarksPage.module.css';
 
 const columnHelper = createColumnHelper<BacktestRead>();
 
-export const BenchmarkLeaderboard = ({ specification }: { specification: BacktestSpecificationRead }) => {
+type Props = {
+    specification: BacktestSpecificationRead;
+    actions?: ReactNode;
+    children?: ReactNode;
+};
+
+const isMetricColumn = (id: string) => id.startsWith('metric:');
+
+const ViewEvaluationButton = ({ evaluationId }: { evaluationId: number }) => {
+    const navigate = useNavigate();
+    return (
+        <Button small secondary dataTest={`view-evaluation-${evaluationId}`} onClick={() => navigate(`/evaluate/${evaluationId}`)}>
+            {i18n.t('View evaluation')}
+        </Button>
+    );
+};
+
+export const BenchmarkLeaderboard = ({ specification, actions, children }: Props) => {
     const { backtests } = specification;
     const evaluationId = backtests[0]?.id;
     const catalog = useQuery({
@@ -26,6 +43,7 @@ export const BenchmarkLeaderboard = ({ specification }: { specification: Backtes
         columnHelper.accessor(run => run.configuredModel?.name ?? run.modelId, {
             id: 'model',
             header: i18n.t('Model'),
+            cell: info => <span className={styles.strong}>{info.getValue()}</span>,
         }),
         columnHelper.accessor(run => run.modelTemplateVersion ?? undefined, {
             id: 'version',
@@ -36,7 +54,11 @@ export const BenchmarkLeaderboard = ({ specification }: { specification: Backtes
         columnHelper.accessor(run => run.created ?? undefined, {
             id: 'created',
             header: i18n.t('Created'),
-            cell: info => info.getValue() ? format(new Date(info.getValue()!), 'dd.MM.yyyy, HH:mm') : '—',
+            cell: info => (
+                <span className={styles.nowrap}>
+                    {info.getValue() ? format(new Date(info.getValue()!), 'dd.MM.yyyy, HH:mm') : '—'}
+                </span>
+            ),
             sortUndefined: 'last',
         }),
         ...getMetricIds(backtests).map((metricId) => {
@@ -61,16 +83,9 @@ export const BenchmarkLeaderboard = ({ specification }: { specification: Backtes
             });
         }),
         columnHelper.display({
-            id: 'evaluation',
-            header: i18n.t('Evaluation'),
-            cell: ({ row }) => (
-                <Link to={`/evaluate/${row.original.id}`}>
-                    {i18n.t('View evaluation')}
-                    {' '}
-                    #
-                    {row.original.id}
-                </Link>
-            ),
+            id: 'actions',
+            header: i18n.t('Actions'),
+            cell: ({ row }) => <ViewEvaluationButton evaluationId={row.original.id} />,
         }),
     ], [backtests, catalog.data]);
     const table = useReactTable({
@@ -86,18 +101,27 @@ export const BenchmarkLeaderboard = ({ specification }: { specification: Backtes
     return (
         <>
             <div className={styles.toolbar}>
-                <span>{i18n.t('Aggregate scores across all splits and organisation units. Best scores are highlighted, including ties.')}</span>
-                <Button
-                    small
-                    disabled={!backtests.length}
-                    onClick={() => saveAs(
-                        new Blob([benchmarkCsv(specification, table.getRowModel().rows.map(row => row.original))], { type: 'text/csv;charset=utf-8' }),
-                        `benchmark-${specification.id}.csv`,
-                    )}
-                >
-                    {i18n.t('Download CSV')}
-                </Button>
+                <div>
+                    <h2 className={styles.cardTitle}>{i18n.t('Leaderboard')}</h2>
+                    <p className={styles.caption}>
+                        {i18n.t('Aggregate scores across all splits and organisation units. Best scores are highlighted, including ties.')}
+                    </p>
+                </div>
+                <div className={styles.actions}>
+                    {actions}
+                    <Button
+                        small
+                        disabled={!backtests.length}
+                        onClick={() => saveAs(
+                            new Blob([benchmarkCsv(specification, table.getRowModel().rows.map(row => row.original))], { type: 'text/csv;charset=utf-8' }),
+                            `benchmark-${specification.id}.csv`,
+                        )}
+                    >
+                        {i18n.t('Download CSV')}
+                    </Button>
+                </div>
             </div>
+            {children}
             {catalog.isError && (
                 <NoticeBox warning title={i18n.t('Metric descriptions unavailable')}>
                     {i18n.t('Scores are still available, but best values cannot be highlighted without metric definitions.')}
@@ -116,6 +140,7 @@ export const BenchmarkLeaderboard = ({ specification }: { specification: Backtes
                                     {group.headers.map(header => (
                                         <DataTableColumnHeader
                                             key={header.id}
+                                            align={isMetricColumn(header.column.id) ? 'right' : undefined}
                                             {...(header.column.getCanSort() ? {
                                                 sortDirection: header.column.getIsSorted() || 'default',
                                                 sortIconTitle: i18n.t('Sort by {{column}}', { column: header.column.id }),
@@ -132,7 +157,13 @@ export const BenchmarkLeaderboard = ({ specification }: { specification: Backtes
                             {table.getRowModel().rows.map(row => (
                                 <DataTableRow key={row.id}>
                                     {row.getVisibleCells().map(cell => (
-                                        <DataTableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</DataTableCell>
+                                        <DataTableCell
+                                            key={cell.id}
+                                            align={isMetricColumn(cell.column.id) ? 'right' : undefined}
+                                            className={isMetricColumn(cell.column.id) ? styles.number : undefined}
+                                        >
+                                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                        </DataTableCell>
                                     ))}
                                 </DataTableRow>
                             ))}

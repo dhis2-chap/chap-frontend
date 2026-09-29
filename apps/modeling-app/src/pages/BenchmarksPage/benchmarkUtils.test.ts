@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import type { BacktestRead, BacktestSpecificationRead, MetricInfo } from '@dhis2-chap/ui';
-import { benchmarkCsv, getBestRunIds, getMetricIds, makeBenchmarkRequest } from './benchmarkUtils';
+import type { BacktestRead, BacktestSpecificationRead, ConfiguredModelRead, MetricInfo, ModelSpecRead } from '@dhis2-chap/ui';
+import { benchmarkCsv, getBestRunIds, getMetricIds, getModelsWithRun, makeBenchmarkRequest } from './benchmarkUtils';
 
 const run = (id: number, aggregateMetrics: Record<string, number>): BacktestRead => ({
     id, aggregateMetrics, datasetId: 12, modelId: `model-${id}`, configuredModel: null,
@@ -53,4 +53,13 @@ it('exports all metrics in the supplied row order, with raw precision, blanks an
     expect(csv.split('\r\n')[2]).toContain('"","-2"');
     expect(csv).not.toContain('NaN');
     expect(csv).toContain('"future_weather_provider"');
+});
+
+it('flags models that already ran at their current template version', () => {
+    const model = (id: number, version: string) => ({ id, name: `model-${id}`, version }) as ModelSpecRead;
+    const ranWith = (modelId: number, version: string) => ({
+        ...run(modelId, {}), configuredModel: { id: modelId } as ConfiguredModelRead, modelTemplateVersion: version,
+    });
+    const runs = [ranWith(1, '1.0'), ranWith(2, '1.0')];
+    expect(getModelsWithRun(runs, [model(1, '1.0'), model(2, '2.0'), model(3, '1.0')]).map(m => m.id)).toEqual([1]);
 });

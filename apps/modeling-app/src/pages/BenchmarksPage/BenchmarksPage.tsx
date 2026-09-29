@@ -1,20 +1,36 @@
 import i18n from '@dhis2/d2-i18n';
 import { Button, CircularLoader, DataTable, DataTableBody, DataTableCell, DataTableColumnHeader, DataTableHead, DataTableRow, NoticeBox } from '@dhis2/ui';
-import { ApiError, BacktestsService, BacktestSpecificationSummary, Card, getPeriodNameFromId } from '@dhis2-chap/ui';
+import { ApiError, BacktestsService, BacktestSpecificationSummary, Card } from '@dhis2-chap/ui';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { PageHeader } from '../../features/common-features/PageHeader/PageHeader';
 import { ChapErrorNotice } from '../../components/ChapErrorNotice';
-import { SpecificationParameters } from './SpecificationParameters';
+import { CountPill } from '../../components/CountPill';
+import { DatasetOriginFilter, matchesOrigin, useDatasetOriginFilter } from '../../components/DatasetOriginFilter';
+import { SpecificationParameters, formatPeriodRange } from './SpecificationParameters';
 import styles from './BenchmarksPage.module.css';
 
+const COLUMNS = () => [
+    { label: i18n.t('Dataset') },
+    { label: i18n.t('Period range') },
+    { label: i18n.t('Backtest parameters') },
+    { label: i18n.t('Locations') },
+    { label: i18n.t('Model runs') },
+];
+
 export const BenchmarksPage = () => {
+    const { origin } = useDatasetOriginFilter();
     const query = useQuery<BacktestSpecificationSummary[], ApiError>({
         queryKey: ['backtest-specifications'],
         queryFn: () => BacktestsService.getBacktestSpecificationsV1CrudBacktestSpecificationsGet(),
         refetchOnMount: 'always',
         refetchOnWindowFocus: true,
     });
+    const specifications = query.data ?? [];
+    const visible = specifications
+        .filter(specification => matchesOrigin(specification.dataset, origin))
+        .sort((a, b) => b.id - a.id);
+    const columns = COLUMNS();
 
     return (
         <>
@@ -22,9 +38,9 @@ export const BenchmarksPage = () => {
                 pageTitle={i18n.t('Benchmarks')}
                 pageDescription={i18n.t('Compare model runs evaluated on the same dataset and backtest parameters.')}
             />
-            <Card className={styles.content}>
+            <Card className={styles.card}>
                 <div className={styles.toolbar}>
-                    <span>{i18n.t('Each benchmark groups evaluations with an identical setup.')}</span>
+                    <DatasetOriginFilter datasets={specifications.map(specification => specification.dataset)} />
                     <Button small disabled={query.isFetching} onClick={() => query.refetch()}>{i18n.t('Refresh')}</Button>
                 </div>
                 {query.isLoading ? <div className={styles.loading}><CircularLoader /></div> : query.error ? (
@@ -33,7 +49,7 @@ export const BenchmarksPage = () => {
                             {i18n.t('This CHAP server does not support backtest specifications. Update CHAP Core to use benchmarks.')}
                         </NoticeBox>
                     ) : <ChapErrorNotice error={query.error} title={i18n.t('Could not load benchmarks')} />
-                ) : !query.data?.length ? (
+                ) : !specifications.length ? (
                     <NoticeBox title={i18n.t('No benchmarks yet')}>
                         {i18n.t('Benchmarks appear when evaluations are run on a saved dataset.')}
                         {' '}
@@ -44,31 +60,36 @@ export const BenchmarksPage = () => {
                         <DataTable>
                             <DataTableHead>
                                 <DataTableRow>
-                                    {[i18n.t('Benchmark'), i18n.t('Dataset'), i18n.t('Period range'), i18n.t('Backtest parameters'), i18n.t('Organisation units'), i18n.t('Model runs')].map(label => (
+                                    {columns.map(({ label }) => (
                                         <DataTableColumnHeader key={label}>{label}</DataTableColumnHeader>
                                     ))}
                                 </DataTableRow>
                             </DataTableHead>
                             <DataTableBody>
-                                {query.data.map(specification => (
+                                {visible.length ? visible.map(specification => (
                                     <DataTableRow key={specification.id}>
                                         <DataTableCell>
-                                            <Link to={`/benchmarks/${specification.id}`}>
-                                                #
-                                                {specification.id}
+                                            <Link className={styles.strong} to={`/evaluate/benchmarks/${specification.id}`}>
+                                                {specification.dataset.name}
                                             </Link>
+                                            <span className={styles.muted}>{i18n.t('Benchmark {{id}}', { id: `#${specification.id}` })}</span>
                                         </DataTableCell>
-                                        <DataTableCell><Link to={`/benchmarks/${specification.id}`}>{specification.dataset.name}</Link></DataTableCell>
-                                        <DataTableCell>
-                                            {specification.dataset.firstPeriod && specification.dataset.lastPeriod
-                                                ? `${getPeriodNameFromId(specification.dataset.firstPeriod, 'short')} – ${getPeriodNameFromId(specification.dataset.lastPeriod, 'short')}`
-                                                : '—'}
-                                        </DataTableCell>
+                                        <DataTableCell className={styles.nowrap}>{formatPeriodRange(specification.dataset)}</DataTableCell>
                                         <DataTableCell><SpecificationParameters specification={specification} /></DataTableCell>
-                                        <DataTableCell>{specification.orgUnitCount}</DataTableCell>
-                                        <DataTableCell>{specification.backtestCount}</DataTableCell>
+                                        <DataTableCell>
+                                            <CountPill count={specification.orgUnitCount} tooltip={i18n.t('Evaluated on {{count}} locations', { count: specification.orgUnitCount })} />
+                                        </DataTableCell>
+                                        <DataTableCell>
+                                            <CountPill count={specification.backtestCount} tooltip={i18n.t('{{count}} model runs in this benchmark', { count: specification.backtestCount })} />
+                                        </DataTableCell>
                                     </DataTableRow>
-                                ))}
+                                )) : (
+                                    <DataTableRow>
+                                        <DataTableCell colSpan={String(columns.length)} align="center">
+                                            {i18n.t('No benchmarks match the selected dataset origin.')}
+                                        </DataTableCell>
+                                    </DataTableRow>
+                                )}
                             </DataTableBody>
                         </DataTable>
                     </div>

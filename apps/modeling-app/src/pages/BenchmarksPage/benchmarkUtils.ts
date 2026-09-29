@@ -1,4 +1,4 @@
-import type { BacktestRead, BacktestSpecificationRead, MakeBacktestsRequest, MetricInfo } from '@dhis2-chap/ui';
+import type { BacktestRead, BacktestSpecificationRead, MakeBacktestsRequest, MetricInfo, ModelSpecRead } from '@dhis2-chap/ui';
 
 export const getMetricIds = (backtests: BacktestRead[]) =>
     [...new Set(backtests.flatMap(run => Object.keys(run.aggregateMetrics)))].sort();
@@ -25,6 +25,10 @@ export const getBestRunIds = (backtests: BacktestRead[], metric?: MetricInfo): S
     const best = ranks.reduce((minimum, { rank }) => Math.min(minimum, rank), Infinity);
     return new Set(ranks.filter(({ rank }) => Math.abs(rank - best) <= 1e-12).map(({ id }) => id));
 };
+
+/** Models that already have a run in this benchmark at their current template version. */
+export const getModelsWithRun = (backtests: BacktestRead[], models: ModelSpecRead[]) => models.filter(model => backtests.some(run =>
+    run.configuredModel?.id === model.id && (run.modelTemplateVersion ?? null) === (model.version ?? null)));
 
 export const makeBenchmarkRequest = (
     specification: BacktestSpecificationRead,

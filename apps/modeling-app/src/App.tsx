@@ -3,7 +3,9 @@ import {
     RouterProvider,
     Navigate,
     Outlet,
+    type UIMatch,
 } from 'react-router-dom';
+import type { ReactNode } from 'react';
 import ErrorPage from './components/ErrorPage';
 import i18n from '@dhis2/d2-i18n';
 import './locales';
@@ -23,6 +25,7 @@ import { Dhis2VersionWarning } from './components/Dhis2VersionWarning/Dhis2Versi
 import { DashboardPage } from './pages/DashboardPage';
 import { BenchmarksPage } from './pages/BenchmarksPage/BenchmarksPage';
 import { BenchmarkDetailsPage } from './pages/BenchmarksPage/BenchmarkDetailsPage';
+import { BenchmarkBreadcrumb } from './pages/BenchmarksPage/BenchmarkBreadcrumb';
 import { EvaluationPage } from './pages/EvaluationPage';
 import { EvaluationDetailsPage } from './pages/EvaluationDetailsPage';
 import { ChapValidator } from './components/ChapValidator';
@@ -46,7 +49,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 export type RouteHandle = {
-    breadcrumb?: () => string;
+    breadcrumb?: (match: UIMatch) => ReactNode;
     fullWidth?: boolean;
     /* whether to automatically collapse the sidebar when route is active */
     collapseSidebar?: boolean;
@@ -111,6 +114,20 @@ const router = createHashRouter([
                                 element: <EvaluationComparePage />,
                             },
                             {
+                                path: 'benchmarks',
+                                handle: { breadcrumb: () => i18n.t('Benchmarks'), fullWidth: true } satisfies RouteHandle,
+                                children: [
+                                    { index: true, element: <BenchmarksPage /> },
+                                    {
+                                        path: ':specificationId',
+                                        element: <BenchmarkDetailsPage />,
+                                        handle: {
+                                            breadcrumb: match => <BenchmarkBreadcrumb specificationId={Number(match.params.specificationId)} />,
+                                        } satisfies RouteHandle,
+                                    },
+                                ],
+                            },
+                            {
                                 path: 'new',
                                 element: <NewEvaluationPage />,
                                 handle: {
@@ -131,18 +148,6 @@ const router = createHashRouter([
                                     collapseSidebar: true,
                                 } satisfies RouteHandle,
                                 element: <EvaluationDetailsPage />,
-                            },
-                        ],
-                    },
-                    {
-                        path: '/benchmarks',
-                        handle: { breadcrumb: () => i18n.t('Benchmarks'), fullWidth: true } satisfies RouteHandle,
-                        children: [
-                            { index: true, element: <BenchmarksPage /> },
-                            {
-                                path: ':specificationId',
-                                element: <BenchmarkDetailsPage />,
-                                handle: { breadcrumb: () => i18n.t('Leaderboard') } satisfies RouteHandle,
                             },
                         ],
                     },

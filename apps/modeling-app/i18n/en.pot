@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-09-29T08:24:44.073Z\n"
-"PO-Revision-Date: 2026-09-29T08:24:44.073Z\n"
+"POT-Creation-Date: 2026-09-29T14:50:33.475Z\n"
+"PO-Revision-Date: 2026-09-29T14:50:33.475Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -14,17 +14,14 @@ msgstr "Evaluations"
 msgid "Compare evaluations"
 msgstr "Compare evaluations"
 
+msgid "Benchmarks"
+msgstr "Benchmarks"
+
 msgid "New evaluation"
 msgstr "New evaluation"
 
 msgid "Evaluation details"
 msgstr "Evaluation details"
-
-msgid "Benchmarks"
-msgstr "Benchmarks"
-
-msgid "Leaderboard"
-msgstr "Leaderboard"
 
 msgid "Datasets"
 msgstr "Datasets"
@@ -2526,6 +2523,26 @@ msgstr ""
 msgid "No compatible models"
 msgstr "No compatible models"
 
+msgid "Already run with this version"
+msgstr "Already run with this version"
+
+msgid ""
+"{{models}} already have a run in this benchmark with the same model "
+"version. Running again adds another row, which is useful for checking how "
+"much scores vary between runs."
+msgid_plural ""
+"{{models}} already have a run in this benchmark with the same model "
+"version. Running again adds another row, which is useful for checking how "
+"much scores vary between runs."
+msgstr[0] ""
+"{{models}} already has a run in this benchmark with the same model version. "
+"Running again adds another row, which is useful for checking how much "
+"scores vary between runs."
+msgstr[1] ""
+"{{models}} already have a run in this benchmark with the same model "
+"version. Running again adds another row, which is useful for checking how "
+"much scores vary between runs."
+
 msgid "Could not start model runs"
 msgstr "Could not start model runs"
 
@@ -2538,22 +2555,12 @@ msgstr "Invalid benchmark"
 msgid "Could not load benchmark"
 msgstr "Could not load benchmark"
 
-msgid "Benchmark {{id}} — {{dataset}}"
-msgstr "Benchmark {{id}} — {{dataset}}"
-
-msgid "Compare model runs with the same evaluation setup."
-msgstr "Compare model runs with the same evaluation setup."
-
-msgid "All benchmarks"
-msgstr "All benchmarks"
-
-msgid "Refresh"
-msgstr "Refresh"
-
-msgid "Organisation units ({{count}})"
-msgid_plural "Organisation units ({{count}})"
-msgstr[0] "Organisation units ({{count}})"
-msgstr[1] "Organisation units ({{count}})"
+msgid ""
+"Benchmark {{id}}. Compare model runs that share this dataset and backtest "
+"setup."
+msgstr ""
+"Benchmark {{id}}. Compare model runs that share this dataset and backtest "
+"setup."
 
 msgid "Model runs queued"
 msgstr "Model runs queued"
@@ -2577,11 +2584,17 @@ msgstr "View jobs and failures"
 msgid "Open the benchmark returned by CHAP"
 msgstr "Open the benchmark returned by CHAP"
 
-msgid "Best score"
-msgstr "Best score"
+msgid "Refresh"
+msgstr "Refresh"
 
 msgid "View evaluation"
 msgstr "View evaluation"
+
+msgid "Best score"
+msgstr "Best score"
+
+msgid "Leaderboard"
+msgstr "Leaderboard"
 
 msgid ""
 "Aggregate scores across all splits and organisation units. Best scores are "
@@ -2613,11 +2626,19 @@ msgstr ""
 "Add models to run them against this benchmark. Completed runs will appear "
 "here."
 
+msgid "{{count}} model runs in progress"
+msgid_plural "{{count}} model runs in progress"
+msgstr[0] "{{count}} model run in progress"
+msgstr[1] "{{count}} model runs in progress"
+
+msgid "Backtest parameters"
+msgstr "Backtest parameters"
+
+msgid "Model runs"
+msgstr "Model runs"
+
 msgid "Compare model runs evaluated on the same dataset and backtest parameters."
 msgstr "Compare model runs evaluated on the same dataset and backtest parameters."
-
-msgid "Each benchmark groups evaluations with an identical setup."
-msgstr "Each benchmark groups evaluations with an identical setup."
 
 msgid "Benchmarks unavailable"
 msgstr "Benchmarks unavailable"
@@ -2638,21 +2659,28 @@ msgstr "No benchmarks yet"
 msgid "Benchmarks appear when evaluations are run on a saved dataset."
 msgstr "Benchmarks appear when evaluations are run on a saved dataset."
 
-msgid "Benchmark"
-msgstr "Benchmark"
+msgid "{{count}} model runs in this benchmark"
+msgid_plural "{{count}} model runs in this benchmark"
+msgstr[0] "{{count}} model runs in this benchmark"
+msgstr[1] "{{count}} model runs in this benchmark"
 
-msgid "Backtest parameters"
-msgstr "Backtest parameters"
+msgid "No benchmarks match the selected dataset origin."
+msgstr "No benchmarks match the selected dataset origin."
 
-msgid "Model runs"
-msgstr "Model runs"
+msgid "Forecast periods"
+msgstr "Forecast periods"
 
-msgid ""
-"Forecast periods {{periods}} · Splits {{splits}} · Stride {{stride}} · "
-"Retraining {{retrain}} · Future weather {{weather}}"
-msgstr ""
-"Forecast periods {{periods}} · Splits {{splits}} · Stride {{stride}} · "
-"Retraining {{retrain}} · Future weather {{weather}}"
+msgid "Splits"
+msgstr "Splits"
+
+msgid "Stride"
+msgstr "Stride"
+
+msgid "Retraining"
+msgstr "Retraining"
+
+msgid "Future weather"
+msgstr "Future weather"
 
 msgid "Run predictions, review activity, and manage this setup."
 msgstr "Run predictions, review activity, and manage this setup."
