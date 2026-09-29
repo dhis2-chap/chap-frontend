@@ -48,7 +48,7 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
     const { models, isLoading: isModelsLoading, error: modelsError } = useModels();
     const navigate = useNavigate();
     const queryClient = useQueryClient();
-    const { isAvailable: isMultiModelAvailable } = useIsFeatureAvailable(Features.MULTI_MODEL_BACKTESTS);
+    const { isAvailable: isMultiModelAvailable, isLoading: isVersionLoading } = useIsFeatureAvailable(Features.MULTI_MODEL_BACKTESTS);
 
     const methods = useForm<FormValues>({
         resolver: zodResolver(schema),
@@ -105,7 +105,7 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
         shouldBlock: !createEvaluation.isLoading && methods.formState.isDirty,
     });
 
-    if (datasets.isLoading || isModelsLoading) {
+    if (datasets.isLoading || isModelsLoading || isVersionLoading) {
         return (
             <div className={styles.loadingContainer}>
                 <CircularLoader />

@@ -173,17 +173,20 @@ export const ModelSelectionModal = (props: Props) => {
         }
     };
 
-    const handleConfirmSelection = () => {
-        if (props.multiple) {
-            props.onConfirm(sortedModels.filter(model => selectedIds.includes(model.id)));
-            handleModalClose();
-        }
-    };
-
     const sortedModels = useMemo(
         () => sortByReadiness(models ?? []),
         [models],
     );
+
+    // Ignore selected IDs whose model has since disappeared from the list.
+    const selectedModels = sortedModels.filter(model => selectedIds.includes(model.id));
+
+    const handleConfirmSelection = () => {
+        if (props.multiple) {
+            props.onConfirm(selectedModels);
+            handleModalClose();
+        }
+    };
 
     const filteredModels = useMemo(() => {
         const query = search.trim().toLowerCase();
@@ -447,10 +450,10 @@ export const ModelSelectionModal = (props: Props) => {
                         <Button secondary onClick={handleModalClose}>{i18n.t('Cancel')}</Button>
                         <Button
                             primary
-                            disabled={!selectedIds.length}
+                            disabled={!selectedModels.length}
                             onClick={handleConfirmSelection}
                         >
-                            {i18n.t('Use selected models ({{count}})', { count: selectedIds.length })}
+                            {i18n.t('Use selected models ({{count}})', { count: selectedModels.length })}
                         </Button>
                     </ButtonStrip>
                 </ModalActions>
