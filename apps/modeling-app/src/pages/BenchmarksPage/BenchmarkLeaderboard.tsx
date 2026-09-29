@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import { saveAs } from 'file-saver';
 import { TableActionButton } from '../../components/TableActionButton';
+import { useModels } from '../../hooks/useModels';
 import { benchmarkCsv, getBestRunIds, getMetricIds } from './benchmarkUtils';
 import { prettifyMetricId } from '../../components/PageContent/EvaluationDetails/EvaluationMetricsWidget/metricCatalog';
 import styles from './BenchmarksPage.module.css';
@@ -40,27 +41,13 @@ export const BenchmarkLeaderboard = ({ specification, actions, children }: Props
         enabled: evaluationId != null,
         staleTime: 5 * 60 * 1000,
     });
+    // Runs keep pointing at archived models, so resolve names against all of them.
+    const { models } = useModels({ includeArchived: true });
     const columns = useMemo(() => [
-        columnHelper.accessor(run => run.configuredModel?.name ?? run.modelId, {
+        columnHelper.accessor(run => models?.find(model => model.id === run.configuredModel?.id)?.displayName || run.configuredModel?.name || run.modelId, {
             id: 'model',
             header: i18n.t('Model'),
             cell: info => <span className={styles.strong}>{info.getValue()}</span>,
-        }),
-        columnHelper.accessor(run => run.modelTemplateVersion ?? undefined, {
-            id: 'version',
-            header: i18n.t('Version'),
-            cell: info => info.getValue() ?? '—',
-            sortUndefined: 'last',
-        }),
-        columnHelper.accessor(run => run.created ?? undefined, {
-            id: 'created',
-            header: i18n.t('Created'),
-            cell: info => (
-                <span className={styles.nowrap}>
-                    {info.getValue() ? format(new Date(info.getValue()!), 'dd.MM.yyyy, HH:mm') : '—'}
-                </span>
-            ),
-            sortUndefined: 'last',
         }),
         ...getMetricIds(backtests).map((metricId) => {
             const metric = catalog.data?.find(item => item.id === metricId);
@@ -83,12 +70,28 @@ export const BenchmarkLeaderboard = ({ specification, actions, children }: Props
                 },
             });
         }),
+        columnHelper.accessor(run => run.modelTemplateVersion ?? undefined, {
+            id: 'version',
+            header: i18n.t('Version'),
+            cell: info => info.getValue() ?? '—',
+            sortUndefined: 'last',
+        }),
+        columnHelper.accessor(run => run.created ?? undefined, {
+            id: 'created',
+            header: i18n.t('Created'),
+            cell: info => (
+                <span className={styles.nowrap}>
+                    {info.getValue() ? format(new Date(info.getValue()!), 'dd.MM.yyyy, HH:mm') : '—'}
+                </span>
+            ),
+            sortUndefined: 'last',
+        }),
         columnHelper.display({
             id: 'actions',
             header: i18n.t('Actions'),
             cell: ({ row }) => <ViewEvaluationButton evaluationId={row.original.id} />,
         }),
-    ], [backtests, catalog.data]);
+    ], [backtests, catalog.data, models]);
     const table = useReactTable({
         data: backtests,
         columns,

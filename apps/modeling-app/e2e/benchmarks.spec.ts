@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
-import type { BacktestSpecificationRead, MakeBacktestsRequest, MakeBacktestsResponse } from '@dhis2-chap/ui';
+import type { BacktestSpecificationRead, MakeBacktestsRequest, MakeBacktestsResponse, ModelSpecRead } from '@dhis2-chap/ui';
 import { chapUrl, createCompletedNaiveEvaluation, readJson } from './helpers/evaluation-fixtures';
 import { toDataTestKey } from '../src/utils/dataTestKey';
 
@@ -12,6 +12,8 @@ test('compares runs, exports scores and adds a model to the same benchmark', asy
         'Load benchmark',
     );
     const model = evaluation.configuredModel!;
+    const models = await readJson<ModelSpecRead[]>(await page.request.get(chapUrl('/v1/crud/configured-models')), 'Load configured models');
+    const modelDisplayName = models.find(({ id }) => id === model.id)?.displayName || model.name;
 
     // Datasets created by an evaluation are hidden until the origin filter is widened.
     await page.goto('/#/evaluate/benchmarks');
@@ -53,7 +55,7 @@ test('compares runs, exports scores and adds a model to the same benchmark', asy
     }, { timeout: 180_000, intervals: [3000] }).toBe('SUCCESS');
     // Job completion must refresh the leaderboard without a manual reload.
     await expect(page.getByRole('button', { name: 'View evaluation', exact: true })).toHaveCount(2, { timeout: 20_000 });
-    await expect(page.getByRole('cell', { name: model.name, exact: true })).toHaveCount(2);
+    await expect(page.getByRole('cell', { name: modelDisplayName, exact: true })).toHaveCount(2);
     await expect(page.locator('[title="Best score"]').first()).toBeVisible();
     await page.getByTitle('Sort by created', { exact: true }).click();
     await expect(page.getByRole('button', { name: 'View evaluation', exact: true }).first()).toHaveAttribute('data-test', `view-evaluation-${evaluation.id}`);
