@@ -127,3 +127,10 @@
     flex-wrap: wrap;
     gap: var(--spacers-dp8);
 }
+
+.runs {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--spacers-dp8);
+}

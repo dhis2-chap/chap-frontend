@@ -1,0 +1,6 @@
+/* Overrides the fixed height of @dhis2/ui small buttons so wrapped labels get vertical padding. */
+.wrapper :global(button.small) {
+    height: auto;
+    min-block-size: 28px;
+    padding-block: var(--spacers-dp4);
+}

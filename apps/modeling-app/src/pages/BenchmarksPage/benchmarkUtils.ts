@@ -1,4 +1,4 @@
-import type { BacktestRead, BacktestSpecificationRead, MakeBacktestsRequest, MetricInfo, ModelSpecRead } from '@dhis2-chap/ui';
+import type { BacktestRead, BacktestSpecificationRead, BacktestSpecificationSummary, MakeBacktestsRequest, MetricInfo, ModelSpecRead } from '@dhis2-chap/ui';
 
 export const getMetricIds = (backtests: BacktestRead[]) =>
     [...new Set(backtests.flatMap(run => Object.keys(run.aggregateMetrics)))].sort();
@@ -44,6 +44,25 @@ export const makeBenchmarkRequest = (
     nRetrain: specification.nRetrain,
     futureWeatherProvider: specification.futureWeatherProvider,
 });
+
+// CHAP Core fills in these defaults when a request leaves the parameter out (BacktestParams).
+const REQUEST_DEFAULTS = { nPeriods: 3, nSplits: 7, stride: 1, nRetrain: 1, futureWeatherProvider: 'climatology' };
+
+export type SpecificationParams = Pick<BacktestSpecificationSummary, 'dataset' | 'nPeriods' | 'nSplits' | 'stride' | 'nRetrain' | 'futureWeatherProvider'>;
+
+/** Whether an evaluation request files its backtests under this benchmark. */
+export const requestMatchesSpecification = (request: Partial<MakeBacktestsRequest>, specification: SpecificationParams) => {
+    const params = { ...REQUEST_DEFAULTS, ...request };
+    return request.datasetId === specification.dataset.id &&
+        params.nPeriods === specification.nPeriods &&
+        params.nSplits === specification.nSplits &&
+        params.stride === specification.stride &&
+        params.nRetrain === specification.nRetrain &&
+        params.futureWeatherProvider === specification.futureWeatherProvider;
+};
+
+/** CHAP Core names each job of a multi-model request `<request name>/<model name>`. */
+export const getJobModelName = (jobName: string) => jobName.slice(jobName.lastIndexOf('/') + 1);
 
 const csvCell = (value: string | number | null | undefined): string => {
     // Quote CSV delimiters and keep model/dataset names from becoming spreadsheet formulas.

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { BacktestRead, BacktestSpecificationRead, ConfiguredModelRead, MetricInfo, ModelSpecRead } from '@dhis2-chap/ui';
-import { benchmarkCsv, getBestRunIds, getMetricIds, getModelsWithRun, makeBenchmarkRequest } from './benchmarkUtils';
+import { benchmarkCsv, getBestRunIds, getJobModelName, getMetricIds, getModelsWithRun, makeBenchmarkRequest, requestMatchesSpecification } from './benchmarkUtils';
 
 const run = (id: number, aggregateMetrics: Record<string, number>): BacktestRead => ({
     id, aggregateMetrics, datasetId: 12, modelId: `model-${id}`, configuredModel: null,
@@ -62,4 +62,20 @@ it('flags models that already ran at their current template version', () => {
     });
     const runs = [ranWith(1, '1.0'), ranWith(2, '1.0')];
     expect(getModelsWithRun(runs, [model(1, '1.0'), model(2, '2.0'), model(3, '1.0')]).map(m => m.id)).toEqual([1]);
+});
+
+it('matches running evaluation requests to the benchmark they file under', () => {
+    const request = makeBenchmarkRequest(specification, [10], 'Benchmark 8');
+    expect(requestMatchesSpecification(request, specification)).toBe(true);
+    expect(requestMatchesSpecification({ ...request, datasetId: 13 }, specification)).toBe(false);
+    expect(requestMatchesSpecification({ ...request, stride: 1 }, specification)).toBe(false);
+    // Omitted parameters take CHAP Core's defaults, as in the saved-dataset evaluation form.
+    const defaults = { ...specification, nPeriods: 3, nSplits: 7, stride: 1, nRetrain: 1, futureWeatherProvider: 'climatology' };
+    expect(requestMatchesSpecification({ name: 'My evaluation', modelIds: [10], datasetId: 12 }, defaults)).toBe(true);
+    expect(requestMatchesSpecification({ name: 'My evaluation', modelIds: [10], datasetId: 12 }, specification)).toBe(false);
+});
+
+it('reads the model name from a multi-model job name', () => {
+    expect(getJobModelName('Benchmark 8/naive_model')).toBe('naive_model');
+    expect(getJobModelName('Rainfall / cases/ewars')).toBe('ewars');
 });

@@ -7,6 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import { saveAs } from 'file-saver';
+import { TableActionButton } from '../../components/TableActionButton';
 import { benchmarkCsv, getBestRunIds, getMetricIds } from './benchmarkUtils';
 import { prettifyMetricId } from '../../components/PageContent/EvaluationDetails/EvaluationMetricsWidget/metricCatalog';
 import styles from './BenchmarksPage.module.css';
@@ -24,9 +25,9 @@ const isMetricColumn = (id: string) => id.startsWith('metric:');
 const ViewEvaluationButton = ({ evaluationId }: { evaluationId: number }) => {
     const navigate = useNavigate();
     return (
-        <Button small secondary dataTest={`view-evaluation-${evaluationId}`} onClick={() => navigate(`/evaluate/${evaluationId}`)}>
+        <TableActionButton dataTest={`view-evaluation-${evaluationId}`} onClick={() => navigate(`/evaluate/${evaluationId}`)}>
             {i18n.t('View evaluation')}
-        </Button>
+        </TableActionButton>
     );
 };
 

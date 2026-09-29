@@ -1,19 +1,26 @@
 import i18n from '@dhis2/d2-i18n';
+import { Tooltip } from '@dhis2/ui';
 import { StatusIndicator } from '@dhis2-chap/ui';
-import { JOB_STATUSES, useJobs } from '../../hooks/useJobs';
+import { SpecificationParams, getJobModelName, requestMatchesSpecification } from './benchmarkUtils';
+import { RunningBenchmarkJob } from './useRunningBenchmarkJobs';
 
-/** Only counts runs queued from this page: jobs do not say which benchmark they belong to. */
-export const BenchmarkRunsIndicator = ({ jobIds }: { jobIds: string[] }) => {
-    const { jobs } = useJobs();
-    const count = jobs?.filter(job => jobIds.includes(job.id) &&
-        (job.status === JOB_STATUSES.PENDING || job.status === JOB_STATUSES.STARTED)).length ?? 0;
+type Props = {
+    specification: SpecificationParams;
+    runningJobs: RunningBenchmarkJob[];
+};
 
-    if (!count) return null;
+export const BenchmarkRunsIndicator = ({ specification, runningJobs }: Props) => {
+    const jobs = runningJobs.filter(({ request }) => requestMatchesSpecification(request, specification));
+    if (!jobs.length) return null;
+
+    const count = jobs.length;
     return (
-        <StatusIndicator
-            variant="info"
-            active
-            label={i18n.t('{{count}} model runs in progress', { count, defaultValue: '{{count}} model run in progress', defaultValue_plural: '{{count}} model runs in progress' })}
-        />
+        <Tooltip content={jobs.map(({ job }) => getJobModelName(job.name)).join(', ')}>
+            <StatusIndicator
+                variant="info"
+                active
+                label={i18n.t('{{count}} models running', { count, defaultValue: '{{count}} model running', defaultValue_plural: '{{count}} models running' })}
+            />
+        </Tooltip>
     );
 };

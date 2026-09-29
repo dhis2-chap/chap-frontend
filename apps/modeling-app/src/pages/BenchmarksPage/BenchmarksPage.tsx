@@ -1,5 +1,5 @@
 import i18n from '@dhis2/d2-i18n';
-import { Button, CircularLoader, DataTable, DataTableBody, DataTableCell, DataTableColumnHeader, DataTableHead, DataTableRow, NoticeBox } from '@dhis2/ui';
+import { CircularLoader, DataTable, DataTableBody, DataTableCell, DataTableColumnHeader, DataTableHead, DataTableRow, NoticeBox } from '@dhis2/ui';
 import { ApiError, BacktestsService, BacktestSpecificationSummary, Card } from '@dhis2-chap/ui';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
@@ -8,6 +8,8 @@ import { ChapErrorNotice } from '../../components/ChapErrorNotice';
 import { CountPill } from '../../components/CountPill';
 import { DatasetOriginFilter, matchesOrigin, useDatasetOriginFilter } from '../../components/DatasetOriginFilter';
 import { SpecificationParameters, formatPeriodRange } from './SpecificationParameters';
+import { BenchmarkRunsIndicator } from './BenchmarkRunsIndicator';
+import { useRunningBenchmarkJobs } from './useRunningBenchmarkJobs';
 import styles from './BenchmarksPage.module.css';
 
 const COLUMNS = () => [
@@ -26,6 +28,7 @@ export const BenchmarksPage = () => {
         refetchOnMount: 'always',
         refetchOnWindowFocus: true,
     });
+    const runningJobs = useRunningBenchmarkJobs();
     const specifications = query.data ?? [];
     const visible = specifications
         .filter(specification => matchesOrigin(specification.dataset, origin))
@@ -41,7 +44,6 @@ export const BenchmarksPage = () => {
             <Card className={styles.card}>
                 <div className={styles.toolbar}>
                     <DatasetOriginFilter datasets={specifications.map(specification => specification.dataset)} />
-                    <Button small disabled={query.isFetching} onClick={() => query.refetch()}>{i18n.t('Refresh')}</Button>
                 </div>
                 {query.isLoading ? <div className={styles.loading}><CircularLoader /></div> : query.error ? (
                     query.error.status === 404 ? (
@@ -80,7 +82,10 @@ export const BenchmarksPage = () => {
                                             <CountPill count={specification.orgUnitCount} tooltip={i18n.t('Evaluated on {{count}} locations', { count: specification.orgUnitCount })} />
                                         </DataTableCell>
                                         <DataTableCell>
-                                            <CountPill count={specification.backtestCount} tooltip={i18n.t('{{count}} model runs in this benchmark', { count: specification.backtestCount })} />
+                                            <div className={styles.runs}>
+                                                <CountPill count={specification.backtestCount} tooltip={i18n.t('{{count}} model runs in this benchmark', { count: specification.backtestCount })} />
+                                                <BenchmarkRunsIndicator specification={specification} runningJobs={runningJobs} />
+                                            </div>
                                         </DataTableCell>
                                     </DataTableRow>
                                 )) : (

@@ -8,6 +8,7 @@ import { ChapErrorNotice } from '../../components/ChapErrorNotice';
 import { AddBenchmarkModels } from './AddBenchmarkModels';
 import { BenchmarkLeaderboard } from './BenchmarkLeaderboard';
 import { BenchmarkRunsIndicator } from './BenchmarkRunsIndicator';
+import { useRunningBenchmarkJobs } from './useRunningBenchmarkJobs';
 import { isValidSpecificationId, useBacktestSpecification } from './useBacktestSpecification';
 import { SpecificationSummary } from './SpecificationParameters';
 import styles from './BenchmarksPage.module.css';
@@ -22,8 +23,8 @@ export const BenchmarkDetailsPage = () => {
 const BenchmarkDetails = ({ id }: { id: number }) => {
     const [addingModels, setAddingModels] = useState(false);
     const [submitted, setSubmitted] = useState<MakeBacktestsResponse>();
-    const [jobIds, setJobIds] = useState<string[]>([]);
     const query = useBacktestSpecification(id);
+    const runningJobs = useRunningBenchmarkJobs();
 
     if (!isValidSpecificationId(id)) return <NoticeBox error title={i18n.t('Invalid benchmark')} />;
     if (query.isLoading) return <div className={styles.loading}><CircularLoader /></div>;
@@ -57,8 +58,7 @@ const BenchmarkDetails = ({ id }: { id: number }) => {
                         specification={specification}
                         actions={(
                             <>
-                                <BenchmarkRunsIndicator jobIds={jobIds} />
-                                <Button small disabled={query.isFetching} onClick={() => query.refetch()}>{i18n.t('Refresh')}</Button>
+                                <BenchmarkRunsIndicator specification={specification} runningJobs={runningJobs} />
                                 <Button small primary disabled={addingModels} onClick={() => setAddingModels(true)}>{i18n.t('Add models')}</Button>
                             </>
                         )}
@@ -69,7 +69,6 @@ const BenchmarkDetails = ({ id }: { id: number }) => {
                                 onClose={() => setAddingModels(false)}
                                 onSuccess={(result) => {
                                     setSubmitted(result);
-                                    setJobIds(ids => [...ids, ...result.jobs.map(job => job.jobId)]);
                                     setAddingModels(false);
                                 }}
                             />
