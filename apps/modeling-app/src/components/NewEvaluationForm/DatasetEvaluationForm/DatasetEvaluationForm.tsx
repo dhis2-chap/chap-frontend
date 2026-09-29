@@ -15,6 +15,7 @@ import { z } from 'zod';
 import { useNavigate } from 'react-router-dom';
 import { ApiError, BacktestsService, Card } from '@dhis2-chap/ui';
 import { useNavigationBlocker } from '@/hooks/useNavigationBlocker';
+import { Features, useIsFeatureAvailable } from '@/hooks/useIsFeatureAvailable';
 import { NavigationConfirmModal } from '../../NavigationConfirmModal';
 import { NameInput } from '../../ModelExecutionForm/Sections/NameInput';
 import { ChapErrorNotice } from '../../ChapErrorNotice';
@@ -24,6 +25,7 @@ import { DatasetOriginFilter, matchesOrigin, useDatasetOriginFilter } from '../.
 import { datasetSupportsModel } from '../../NewDatasetForm/utils/datasetModels';
 import { getBacktestSplitting, getMinimumEvaluationPeriods } from '../hooks/backtestDefaults';
 import { countPeriods } from '@/utils/periods';
+import { ModelsSelector } from './ModelsSelector';
 import { fetchRunnableModel } from '@/hooks/modelsQuery';
 import { hasRevisionMismatch } from '@/utils/modelHealth';
 import { ModelHealthNotice } from '../../ModelHealth/ModelHealth';
@@ -32,7 +34,7 @@ import styles from './DatasetEvaluationForm.module.css';
 const schema = z.object({
     name: z.string().trim().min(1, { message: i18n.t('Name is required') }),
     datasetId: z.string(),
-    modelName: z.string(),
+    modelNames: z.array(z.string()).min(1),
 });
 
 type FormValues = z.infer<typeof schema>;
@@ -46,12 +48,13 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
     const { models, isLoading: isModelsLoading, error: modelsError } = useModels();
     const navigate = useNavigate();
     const queryClient = useQueryClient();
+    const { isAvailable: isMultiModelAvailable, isLoading: isVersionLoading } = useIsFeatureAvailable(Features.MULTI_MODEL_BACKTESTS);
 
     const methods = useForm<FormValues>({
         resolver: zodResolver(schema),
-        defaultValues: { name: '', datasetId: initialDatasetId, modelName: '' },
+        defaultValues: { name: '', datasetId: initialDatasetId, modelNames: [] },
     });
-    const [datasetId, modelName] = useWatch({ control: methods.control, name: ['datasetId', 'modelName'] });
+    const [datasetId, modelNames] = useWatch({ control: methods.control, name: ['datasetId', 'modelNames'] });
     const { origin } = useDatasetOriginFilter();
 
     const dataset = datasets.data?.find(item => String(item.id) === datasetId);
@@ -64,24 +67,34 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
     const compatibleModels = models?.filter(model => (
         dataset && datasetSupportsModel(dataset.covariates ?? [], dataset.periodType ?? '', model)
     )) ?? [];
-    const selectedModel = compatibleModels.find(model => model.name === modelName);
-    const canSubmit = !!selectedModel && !hasRevisionMismatch(selectedModel) &&
+    const selectedModels = compatibleModels.filter(model => modelNames.includes(model.name));
+    const canSubmit = selectedModels.length > 0 && !selectedModels.some(hasRevisionMismatch) &&
         !!splitting && !isTooShort && dataset?.id != null;
 
-    const createEvaluation = useMutation<unknown, ApiError | Error, string>({
-        mutationFn: async (name) => {
-            const model = await fetchRunnableModel(queryClient, selectedModel!.id);
-            return BacktestsService.createBacktestV1AnalyticsCreateBacktestPost({
-                name,
-                datasetId: dataset!.id!,
-                modelId: model.name,
-                ...splitting!,
-            });
+    const createEvaluation = useMutation<void, ApiError | Error, string>({
+        mutationFn: async (name: string) => {
+            const runnableModels = await Promise.all(
+                selectedModels.map(model => fetchRunnableModel(queryClient, model.id)),
+            );
+            const request = { name, datasetId: dataset!.id!, ...splitting! };
+            const modelIds = runnableModels.map(model => model.name);
+            if (isMultiModelAvailable) {
+                await BacktestsService.createBacktestsV1AnalyticsCreateBacktestsPost({ ...request, modelIds });
+                return;
+            }
+            // Chap Core < 2.4.0 has no multi-model endpoint: queue one backtest per model,
+            // named like the multi-model endpoint does, and keep failed models selected for retry.
+            const results = await Promise.allSettled(modelIds.map(modelId => (
+                BacktestsService.createBacktestV1AnalyticsCreateBacktestPost({ ...request, name: `${name}/${modelId}`, modelId })
+            )));
+            const failed = results.filter((result): result is PromiseRejectedResult => result.status === 'rejected');
+            if (failed.length) {
+                methods.setValue('modelNames', modelIds.filter((_, index) => results[index].status === 'rejected'));
+                throw failed[0].reason;
+            }
         },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['jobs'] });
-            navigate('/jobs');
-        },
+        onSettled: () => queryClient.invalidateQueries({ queryKey: ['jobs'] }),
+        onSuccess: () => navigate('/jobs'),
     });
 
     const {
@@ -89,10 +102,10 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
         handleConfirmNavigation,
         handleCancelNavigation,
     } = useNavigationBlocker({
-        shouldBlock: !createEvaluation.isLoading && !createEvaluation.isSuccess && methods.formState.isDirty,
+        shouldBlock: !createEvaluation.isLoading && methods.formState.isDirty,
     });
 
-    if (datasets.isLoading || isModelsLoading) {
+    if (datasets.isLoading || isModelsLoading || isVersionLoading) {
         return (
             <div className={styles.loadingContainer}>
                 <CircularLoader />
@@ -136,22 +149,25 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
                     <form
                         className={styles.formWrapper}
                         onSubmit={methods.handleSubmit(({ name }) => {
-                            if (canSubmit) {
+                            if (canSubmit && !createEvaluation.isLoading) {
                                 createEvaluation.mutate(name);
                             }
                         })}
                     >
-                        <NameInput />
+                        <NameInput disabled={createEvaluation.isLoading} />
 
                         <div className={styles.datasetRow}>
                             <SingleSelectField
                                 className={styles.datasetField}
                                 label={i18n.t('Dataset')}
                                 selected={datasetId}
+                                disabled={createEvaluation.isLoading}
+                                dataTest="evaluation-dataset-select"
                                 helpText={datasetOptions.length ? undefined : i18n.t('No datasets match the origin filter')}
                                 onChange={({ selected }) => {
                                     methods.setValue('datasetId', selected, { shouldDirty: true });
-                                    methods.setValue('modelName', '', { shouldDirty: true });
+                                    methods.setValue('modelNames', [], { shouldDirty: true });
+                                    createEvaluation.reset();
                                 }}
                             >
                                 {datasetOptions.map(item => (
@@ -161,25 +177,21 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
                             <DatasetOriginFilter datasets={savedDatasets} dense={false} />
                         </div>
 
-                        <SingleSelectField
-                            label={i18n.t('Model')}
-                            selected={modelName}
-                            disabled={!compatibleModels.length}
-                            onChange={({ selected }) => methods.setValue('modelName', selected, { shouldDirty: true })}
-                        >
-                            {compatibleModels.map(model => (
-                                <SingleSelectOption
-                                    key={model.id}
-                                    value={model.name}
-                                    label={hasRevisionMismatch(model)
-                                        ? i18n.t('{{model}} (needs update)', { model: model.displayName || model.name })
-                                        : model.displayName || model.name}
-                                    disabled={hasRevisionMismatch(model)}
-                                />
-                            ))}
-                        </SingleSelectField>
+                        <ModelsSelector
+                            models={compatibleModels}
+                            selectedModels={selectedModels}
+                            disabled={createEvaluation.isLoading}
+                            disabledReason={dataset ? undefined : i18n.t('Pick a dataset first')}
+                            onChange={selected => methods.setValue(
+                                'modelNames',
+                                selected.map(model => model.name),
+                                { shouldDirty: true },
+                            )}
+                        />
 
-                        <ModelHealthNotice model={selectedModel} />
+                        {selectedModels.map(model => (
+                            <ModelHealthNotice key={model.id} model={model} />
+                        ))}
 
                         {dataset && !compatibleModels.length && (
                             <NoticeBox warning title={i18n.t('No compatible model')}>
@@ -210,10 +222,10 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
                             </ButtonStrip>
                         </div>
 
-                        {!!createEvaluation.error && (
+                        {createEvaluation.error && (
                             <ChapErrorNotice
                                 error={createEvaluation.error}
-                                title={i18n.t('Could not create evaluation')}
+                                title={i18n.t('Could not start evaluation')}
                             />
                         )}
                     </form>

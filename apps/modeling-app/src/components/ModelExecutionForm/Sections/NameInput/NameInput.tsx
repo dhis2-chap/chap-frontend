@@ -8,11 +8,12 @@ import { BaseFormValues } from '../../hooks/useModelExecutionFormState';
 import styles from './NameInput.module.css';
 
 type Props = {
+    disabled?: boolean;
     label?: string;
     placeholder?: string;
 };
 
-export const NameInput = ({ label, placeholder }: Props = {}) => {
+export const NameInput = ({ disabled, label, placeholder }: Props = {}) => {
     const { control, formState: { errors } } = useFormContext<BaseFormValues>();
 
     return (
@@ -25,6 +26,7 @@ export const NameInput = ({ label, placeholder }: Props = {}) => {
                     <Input
                         {...field}
                         type="text"
+                        disabled={disabled}
                         error={!!errors.name}
                         onChange={payload => field.onChange(payload.value)}
                         dataTest="evaluation-name-input"

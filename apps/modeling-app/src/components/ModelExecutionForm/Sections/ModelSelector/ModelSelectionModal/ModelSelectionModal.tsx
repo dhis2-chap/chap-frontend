@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import {
     Button,
     ButtonStrip,
+    Checkbox,
     IconArrowRight16,
     IconCalendar16,
     IconCheckmark16,
@@ -10,6 +11,7 @@ import {
     Input,
     MenuItem,
     Modal,
+    ModalActions,
     ModalContent,
     ModalTitle,
     MultiSelect,
@@ -30,10 +32,16 @@ import { hasRevisionMismatch } from '@/utils/modelHealth';
 
 type Props = {
     models?: ModelSpecRead[];
-    selectedModel?: ModelSpecRead;
     onClose: () => void;
+} & ({
+    multiple?: false;
+    selectedModel?: ModelSpecRead;
     onConfirm: (model: ModelSpecRead) => void;
-};
+} | {
+    multiple: true;
+    selectedModels: ModelSpecRead[];
+    onConfirm: (models: ModelSpecRead[]) => void;
+});
 
 type ReadinessConfig = {
     label: string;
@@ -101,8 +109,9 @@ const getReadiness = (model: ModelSpecRead): ReadinessConfig | undefined =>
         ? READINESS_BY_STATUS[model.authorAssessedStatus]
         : undefined;
 
-const normalizePeriodType = (periodType: unknown): string | undefined => (
-    typeof periodType === 'string' ? periodType.toUpperCase() : undefined
+// Models without a supported period type run on any period, matching getPeriodLabel.
+const normalizePeriodType = (periodType: unknown): string => (
+    typeof periodType === 'string' ? periodType.toUpperCase() : PERIOD_TYPES.ANY
 );
 
 const getPeriodLabel = (model: ModelSpecRead): string => {
@@ -130,12 +139,18 @@ const sortByReadiness = (models: ModelSpecRead[]): ModelSpecRead[] =>
         return getModelName(a).localeCompare(getModelName(b));
     });
 
-export const ModelSelectionModal = ({
-    models,
-    selectedModel: initialSelectedModel,
-    onClose,
-    onConfirm,
-}: Props) => {
+const getSelectButtonLabel = (multiple: boolean, isSelected: boolean): string => {
+    if (multiple) {
+        return isSelected ? i18n.t('Remove from selection') : i18n.t('Add to selection');
+    }
+    return isSelected ? i18n.t('Selected') : i18n.t('Use this model');
+};
+
+export const ModelSelectionModal = (props: Props) => {
+    const { models, onClose, multiple } = props;
+    const [selectedIds, setSelectedIds] = useState<number[]>(() =>
+        props.multiple ? props.selectedModels.map(model => model.id) : [],
+    );
     const [search, setSearch] = useState('');
     const [periodTypeFilter, setPeriodTypeFilter] = useState<string>();
     const [statusFilters, setStatusFilters] = useState<string[]>([]);
@@ -145,9 +160,17 @@ export const ModelSelectionModal = ({
         onClose();
     };
 
+    const toggleSelected = (model: ModelSpecRead) => setSelectedIds(ids => ids.includes(model.id)
+        ? ids.filter(id => id !== model.id)
+        : [...ids, model.id]);
+
     const handleModelUse = (model: ModelSpecRead) => {
-        onConfirm(model);
-        handleModalClose();
+        if (props.multiple) {
+            toggleSelected(model);
+        } else {
+            props.onConfirm(model);
+            handleModalClose();
+        }
     };
 
     const sortedModels = useMemo(
@@ -155,15 +178,21 @@ export const ModelSelectionModal = ({
         [models],
     );
 
+    // Ignore selected IDs whose model has since disappeared from the list.
+    const selectedModels = sortedModels.filter(model => selectedIds.includes(model.id));
+
+    const handleConfirmSelection = () => {
+        if (props.multiple) {
+            props.onConfirm(selectedModels);
+            handleModalClose();
+        }
+    };
+
     const filteredModels = useMemo(() => {
         const query = search.trim().toLowerCase();
 
         return sortedModels.filter((model) => {
             const normalizedPeriodType = normalizePeriodType(model.supportedPeriodType);
-            if (!normalizedPeriodType) {
-                return false;
-            }
-
             const matchesSearch = (
                 !query
                 || getModelName(model).toLowerCase().includes(query)
@@ -191,16 +220,18 @@ export const ModelSelectionModal = ({
     );
 
     const focusedReadiness = focusedModel ? getReadiness(focusedModel) : undefined;
-    const selectedModelId = initialSelectedModel?.id.toString();
-    const focusedModelId = focusedModel?.id.toString();
+    const isModelSelected = (model: ModelSpecRead) => props.multiple
+        ? selectedIds.includes(model.id)
+        : props.selectedModel?.id === model.id;
+    const isFocusedModelSelected = focusedModel ? isModelSelected(focusedModel) : false;
     const hasAuthorNote = focusedModel?.authorNote && focusedModel.authorNote !== 'No Author note yet';
 
     return (
         <Modal fluid onClose={handleModalClose}>
-            <ModalTitle>{i18n.t('Select Model')}</ModalTitle>
+            <ModalTitle>{multiple ? i18n.t('Select Models') : i18n.t('Select Model')}</ModalTitle>
             <ModalContent>
                 <div className={styles.stage}>
-                    <div className={styles.wrapper}>
+                    <div className={cn(styles.wrapper, { [styles.multiple]: multiple })}>
                         <aside className={styles.rail}>
                             <div className={styles.controls}>
                                 <Input
@@ -255,11 +286,22 @@ export const ModelSelectionModal = ({
                                 {filteredModels.map((model) => {
                                     const readiness = getReadiness(model);
                                     const isFocused = focusedModel?.id === model.id;
-                                    const isSelected = selectedModelId === model.id.toString();
+                                    const isSelected = isModelSelected(model);
                                     const modelStableId = model.name || String(model.id);
 
                                     return (
-                                        <li key={model.id}>
+                                        <li key={model.id} className={styles.listRow}>
+                                            {multiple && (
+                                                <Checkbox
+                                                    dense
+                                                    className={styles.listCheckbox}
+                                                    checked={isSelected}
+                                                    disabled={hasRevisionMismatch(model) && !isSelected}
+                                                    onChange={() => toggleSelected(model)}
+                                                    label={<span className={styles.visuallyHidden}>{getModelName(model)}</span>}
+                                                    dataTest={`model-toggle-${toDataTestKey(modelStableId)}`}
+                                                />
+                                            )}
                                             <button
                                                 type="button"
                                                 className={cn(styles.listItem, {
@@ -277,7 +319,7 @@ export const ModelSelectionModal = ({
                                                     <span className={styles.listNameText}>{getModelName(model)}</span>
                                                     <ModelHealthBadge model={model} />
                                                 </div>
-                                                {isSelected && <IconCheckmark16 color="#1565c0" />}
+                                                {!multiple && isSelected && <IconCheckmark16 color="#1565c0" />}
                                             </button>
                                         </li>
                                     );
@@ -384,15 +426,13 @@ export const ModelSelectionModal = ({
                                         <ButtonStrip end>
                                             <Button
                                                 small
-                                                disabled={hasRevisionMismatch(focusedModel)}
-                                                primary={selectedModelId !== focusedModelId}
+                                                disabled={hasRevisionMismatch(focusedModel) && !isFocusedModelSelected}
+                                                primary={!isFocusedModelSelected}
                                                 onClick={() => handleModelUse(focusedModel)}
-                                                icon={selectedModelId === focusedModelId ? <IconCheckmark16 /> : undefined}
+                                                icon={isFocusedModelSelected ? <IconCheckmark16 /> : undefined}
                                                 dataTest={`model-select-${toDataTestKey(focusedModel.name || String(focusedModel.id))}`}
                                             >
-                                                {selectedModelId === focusedModelId
-                                                    ? i18n.t('Selected')
-                                                    : i18n.t('Use this model')}
+                                                {getSelectButtonLabel(!!multiple, isFocusedModelSelected)}
                                             </Button>
                                         </ButtonStrip>
                                     </div>
@@ -404,6 +444,20 @@ export const ModelSelectionModal = ({
                     </div>
                 </div>
             </ModalContent>
+            {multiple && (
+                <ModalActions>
+                    <ButtonStrip end>
+                        <Button secondary onClick={handleModalClose}>{i18n.t('Cancel')}</Button>
+                        <Button
+                            primary
+                            disabled={!selectedModels.length}
+                            onClick={handleConfirmSelection}
+                        >
+                            {i18n.t('Use selected models ({{count}})', { count: selectedModels.length })}
+                        </Button>
+                    </ButtonStrip>
+                </ModalActions>
+            )}
         </Modal>
     );
 };

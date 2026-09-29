@@ -1,0 +1,20 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacers-dp8);
+  border: 1px solid var(--colors-grey400);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background-color: var(--colors-grey100);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.mutedText {
+  margin: 0;
+  color: var(--colors-grey700);
+}

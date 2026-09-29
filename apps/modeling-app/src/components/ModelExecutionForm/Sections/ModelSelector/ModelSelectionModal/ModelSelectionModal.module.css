@@ -13,6 +13,11 @@
     overflow: hidden;
 }
 
+.wrapper.multiple {
+    /* Reserve space for the modal title, padding and selection footer. */
+    block-size: min(520px, calc(100vh - 280px));
+}
+
 .rail {
     border-inline-end: 1px solid var(--colors-grey200);
     display: flex;
@@ -61,11 +66,38 @@
     min-block-size: 0;
 }
 
-.listItem {
+.listRow {
     display: flex;
     align-items: center;
+}
+
+.listRow:hover {
+    background: var(--colors-grey200);
+}
+
+.listRow:has(.listItemFocused) {
+    background: #e7f1fb;
+}
+
+.listCheckbox {
+    flex-shrink: 0;
+    padding-inline-start: 14px;
+}
+
+.visuallyHidden {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+.listItem {
+    display: flex;
+    flex: 1;
+    align-items: center;
     gap: 8px;
-    inline-size: 100%;
     min-inline-size: 0;
     min-block-size: 36px;
     padding: 8px 14px;
@@ -75,20 +107,8 @@
     text-align: start;
 }
 
-.listItem:hover {
-    background: var(--colors-grey200);
-}
-
 .listItem:focus {
     outline: none;
-}
-
-.listItemFocused {
-    background: #e7f1fb;
-}
-
-.listItemFocused:hover {
-    background: #e7f1fb;
 }
 
 .dot {

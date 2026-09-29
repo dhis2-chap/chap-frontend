@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-09-28T15:36:25.130Z\n"
-"PO-Revision-Date: 2026-09-28T15:36:25.131Z\n"
+"POT-Creation-Date: 2026-09-28T16:25:40.171Z\n"
+"PO-Revision-Date: 2026-09-28T16:25:40.172Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -516,6 +516,21 @@ msgstr "Daily"
 msgid "Any period"
 msgstr "Any period"
 
+msgid "Remove from selection"
+msgstr "Remove from selection"
+
+msgid "Add to selection"
+msgstr "Add to selection"
+
+msgid "Selected"
+msgstr "Selected"
+
+msgid "Use this model"
+msgstr "Use this model"
+
+msgid "Select Models"
+msgstr "Select Models"
+
 msgid "Select Model"
 msgstr "Select Model"
 
@@ -549,14 +564,13 @@ msgstr "Unknown"
 msgid "Author note"
 msgstr "Author note"
 
-msgid "Selected"
-msgstr "Selected"
-
-msgid "Use this model"
-msgstr "Use this model"
-
 msgid "Select a model to see details"
 msgstr "Select a model to see details"
+
+msgid "Use selected models ({{count}})"
+msgid_plural "Use selected models ({{count}})"
+msgstr[0] "Use selected models ({{count}})"
+msgstr[1] "Use selected models ({{count}})"
 
 msgid "Select model"
 msgstr "Select model"
@@ -889,8 +903,8 @@ msgstr "Dataset"
 msgid "No datasets match the origin filter"
 msgstr "No datasets match the origin filter"
 
-msgid "{{model}} (needs update)"
-msgstr "{{model}} (needs update)"
+msgid "Pick a dataset first"
+msgstr "Pick a dataset first"
 
 msgid "No compatible model"
 msgstr "No compatible model"
@@ -911,8 +925,14 @@ msgstr ""
 msgid "Start evaluation"
 msgstr "Start evaluation"
 
-msgid "Could not create evaluation"
-msgstr "Could not create evaluation"
+msgid "Could not start evaluation"
+msgstr "Could not start evaluation"
+
+msgid "Select models"
+msgstr "Select models"
+
+msgid "No models selected"
+msgstr "No models selected"
 
 msgid "Start dry run"
 msgstr "Start dry run"
