@@ -6,7 +6,7 @@ import { Link, useParams } from 'react-router-dom';
 import { PageHeader } from '../../features/common-features/PageHeader/PageHeader';
 import { ChapErrorNotice } from '../../components/ChapErrorNotice';
 import { AddBenchmarkModels } from './AddBenchmarkModels';
-import { BenchmarkLeaderboard } from './BenchmarkLeaderboard';
+import { BenchmarkTable } from './BenchmarkTable';
 import { BenchmarkRunsIndicator } from './BenchmarkRunsIndicator';
 import { useRunningBenchmarkJobs } from './useRunningBenchmarkJobs';
 import { isValidSpecificationId, useBacktestSpecification } from './useBacktestSpecification';
@@ -45,7 +45,7 @@ const BenchmarkDetails = ({ id }: { id: number }) => {
                 </Card>
                 {submitted && (
                     <NoticeBox title={i18n.t('Model runs queued')}>
-                        {i18n.t('{{count}} model runs queued. Completed results will appear in the leaderboard.', { count: submitted.jobs.length })}
+                        {i18n.t('{{count}} model runs queued. Completed results will appear in the benchmarks.', { count: submitted.jobs.length })}
                         {' '}
                         <Link to="/jobs">{i18n.t('View jobs and failures')}</Link>
                         {submitted.specificationId !== id && (
@@ -54,7 +54,7 @@ const BenchmarkDetails = ({ id }: { id: number }) => {
                     </NoticeBox>
                 )}
                 <Card className={styles.card}>
-                    <BenchmarkLeaderboard
+                    <BenchmarkTable
                         specification={specification}
                         actions={(
                             <>
@@ -73,7 +73,7 @@ const BenchmarkDetails = ({ id }: { id: number }) => {
                                 }}
                             />
                         )}
-                    </BenchmarkLeaderboard>
+                    </BenchmarkTable>
                 </Card>
             </div>
         </>

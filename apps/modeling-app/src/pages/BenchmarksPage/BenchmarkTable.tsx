@@ -31,7 +31,7 @@ const ViewEvaluationButton = ({ evaluationId }: { evaluationId: number }) => {
     );
 };
 
-export const BenchmarkLeaderboard = ({ specification, actions, children }: Props) => {
+export const BenchmarkTable = ({ specification, actions, children }: Props) => {
     const { backtests } = specification;
     const evaluationId = backtests[0]?.id;
     const catalog = useQuery({
@@ -107,7 +107,7 @@ export const BenchmarkLeaderboard = ({ specification, actions, children }: Props
         <>
             <div className={styles.toolbar}>
                 <div>
-                    <h2 className={styles.cardTitle}>{i18n.t('Leaderboard')}</h2>
+                    <h2 className={styles.cardTitle}>{i18n.t('Benchmarks')}</h2>
                     <p className={styles.caption}>
                         {i18n.t('Aggregate scores across all splits and organisation units. The best score in each column is highlighted, including ties. Best only means best among these runs, not necessarily a good score.')}
                     </p>

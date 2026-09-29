@@ -53,10 +53,10 @@ test('compares runs, exports scores and adds a model to the same benchmark', asy
         }
         return status;
     }, { timeout: 180_000, intervals: [3000] }).toBe('SUCCESS');
-    // Job completion must refresh the leaderboard without a manual reload.
+    // Job completion must refresh the benchmarks without a manual reload.
     await expect(page.getByRole('button', { name: 'View evaluation', exact: true })).toHaveCount(2, { timeout: 20_000 });
     await expect(page.getByRole('cell', { name: modelDisplayName, exact: true })).toHaveCount(2);
-    await expect(page.locator('[title="Best score"]').first()).toBeVisible();
+    await expect(page.locator('[title="Best score among these runs"]').first()).toBeVisible();
     await expect(page.getByRole('button', { name: 'View evaluation', exact: true }).last()).toHaveAttribute('data-test', `view-evaluation-${evaluation.id}`);
 
     const downloadPromise = page.waitForEvent('download');
