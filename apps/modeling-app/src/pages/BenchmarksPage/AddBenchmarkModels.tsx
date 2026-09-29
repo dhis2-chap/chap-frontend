@@ -59,6 +59,9 @@ export const AddBenchmarkModels = ({ specification, onClose, onSuccess }: Props)
                         selectedModels={selectedModels}
                         onChange={selected => setSelectedIds(selected.map(model => model.id))}
                         disabled={mutation.isLoading}
+                        openOnMount
+                        // Backing out of the first pick leaves nothing to run, so close the panel too.
+                        onCancel={() => { if (!selectedIds.length) onClose(); }}
                     />
                     {!compatibleModels.length && (
                         <NoticeBox title={i18n.t('No compatible models')}>

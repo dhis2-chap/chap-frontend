@@ -25,8 +25,6 @@ test('compares runs, exports scores and adds a model to the same benchmark', asy
     await expect(page.getByRole('navigation', { name: 'Breadcrumbs' }).locator('[aria-current="page"]')).toHaveText(evaluation.dataset.name);
     await expect(page.locator(`[data-test="view-evaluation-${evaluation.id}"]`)).toBeVisible();
     await page.getByRole('button', { name: 'Add models', exact: true }).click();
-    await expect(page.getByRole('button', { name: 'Run models', exact: true })).toBeDisabled();
-    await page.getByRole('button', { name: 'Select models', exact: true }).click();
     const modal = page.getByRole('dialog');
     await modal.locator(`[data-test="model-toggle-${toDataTestKey(model.name)}"]`).click();
     await modal.getByRole('button', { name: 'Use selected models (1)', exact: true }).click();
