@@ -13,13 +13,14 @@ import {
     MenuItem,
     IconArrowRightMulti16,
     IconDownload16,
-    NoticeBox,
 } from '@dhis2/ui';
 import { ModelExecutionFormFields } from '../ModelExecutionForm/ModelExecutionFormFields';
 import { useNavigationBlocker } from '../../hooks/useNavigationBlocker';
 import { NavigationConfirmModal } from '../NavigationConfirmModal';
 import { SummaryModal } from '../ModelExecutionForm/SummaryModal';
 import { useModels } from '@/hooks/useModels';
+import { BacktestParameterFields } from './BacktestParameterFields';
+import { ChapErrorNotice } from '../ChapErrorNotice';
 import { hasRevisionMismatch } from '@/utils/modelHealth';
 
 type NewEvaluationFormProps = {
@@ -104,16 +105,16 @@ export const NewEvaluationFormComponent = ({ initialValues }: NewEvaluationFormP
                                     </ButtonStrip>
                                 </div>
                             )}
-                        />
+                        >
+                            <BacktestParameterFields disabled={isSubmitting || isValidationLoading} />
+                        </ModelExecutionFormFields>
 
                         {!!error && !importSummary && (
-                            <NoticeBox
-                                error
+                            <ChapErrorNotice
+                                error={error}
                                 title={i18n.t('There was an error')}
                                 className={styles.errorNotice}
-                            >
-                                {error.message}
-                            </NoticeBox>
+                            />
                         )}
 
                         {importSummary && summaryModalOpen && (

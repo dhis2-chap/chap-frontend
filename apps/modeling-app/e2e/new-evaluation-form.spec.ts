@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import type { MakeBacktestWithDataRequest, ModelSpecRead } from '@dhis2-chap/ui';
-import { readJson } from './helpers/evaluation-fixtures';
+import { chapUrl, readJson } from './helpers/evaluation-fixtures';
 import { openPeriodPickerAtYear, selectPeriod } from './helpers/period-picker';
 
 const REQUIRED_DATA_MAPPINGS = [
@@ -208,26 +208,50 @@ test('validates period rules with invalid values', async ({ page }) => {
     await expect(backtestCreateRequestCount).toBe(0);
 });
 
-test('accepts valid values without client-side validation errors', async ({ page }) => {
-    const newEvaluationUrl = '/#/evaluate/new';
+test('validates backtest parameters, submits chosen values, and shows backend validation errors', async ({ page }) => {
+    const providersResponse = await page.request.get(chapUrl('/v1/analytics/weather-providers'));
+    expect([200, 404]).toContain(providersResponse.status());
+    const supportsWeatherProviders = providersResponse.ok();
+    await page.goto('/#/evaluate/new');
+    await prepareValidFormData(page, 'Custom backtest parameters');
+    for (const [name, value] of Object.entries({ nPeriods: 3, nSplits: 7, stride: 1, nRetrain: 1 })) {
+        await expect(page.locator(`[data-test="backtest-${name}"] input`)).toHaveValue(String(value));
+    }
+    if (supportsWeatherProviders) {
+        await expect(page.locator('[data-test="backtest-futureWeatherProvider"]')).toContainText('Seasonal climatology');
+    }
 
-    await stubCreateBacktestWithData(page);
-    let backtestCreateRequestCount = 0;
-    page.on('request', (request) => {
-        if (isBacktestCreateRequest(request.url(), request.method())) {
-            backtestCreateRequestCount += 1;
-        }
+    const start = page.getByRole('button', { name: 'Start dry run' });
+    const retrains = page.locator('[data-test="backtest-nRetrain"] input');
+    await retrains.fill('8');
+    await start.click();
+    await expect(page.getByText('Number of retrains must not exceed the number of splits')).toBeVisible();
+    await retrains.fill('2');
+    const periods = page.locator('[data-test="backtest-nPeriods"] input');
+    await periods.fill('0');
+    await start.click();
+    await expect(page.getByText('Enter a whole number greater than zero')).toBeVisible();
+    await periods.fill('2');
+    await page.locator('[data-test="backtest-nSplits"] input').fill('4');
+    await page.locator('[data-test="backtest-stride"] input').fill('2');
+    if (supportsWeatherProviders) {
+        await page.locator('[data-test="backtest-futureWeatherProvider"]').click();
+        await page.getByText('Damped persistence', { exact: true }).click();
+    }
+
+    // A server-side rejection cannot reliably be caused by a valid UI form.
+    await page.route('**/analytics/create-backtest-with-data/*', route => route.fulfill({
+        status: 422,
+        json: { detail: [{ loc: ['body', 'futureWeatherProvider'], msg: 'Provider temporarily unavailable' }] },
+    }));
+    const requestPromise = page.waitForRequest(request => isBacktestCreateRequest(request.url(), request.method()));
+    await start.click();
+    const request = await requestPromise;
+    expect(request.postDataJSON()).toMatchObject({
+        nPeriods: 2, nSplits: 4, stride: 2, nRetrain: 2,
+        futureWeatherProvider: supportsWeatherProviders ? 'damped_persistence' : 'climatology',
     });
-
-    await page.goto(newEvaluationUrl);
-
-    await prepareValidFormData(page, 'Valid e2e evaluation');
-    const createBacktestRequest = page.waitForRequest(request =>
-        isBacktestCreateRequest(request.url(), request.method()),
-    );
-    await page.getByRole('button', { name: 'Start dry run' }).click();
-    await createBacktestRequest;
-    await expect(backtestCreateRequestCount).toBe(1);
+    await expect(page.getByText('futureWeatherProvider: Provider temporarily unavailable', { exact: true })).toBeVisible();
 });
 
 test('accepts a model without covariates with only its target mapped', async ({ page }) => {

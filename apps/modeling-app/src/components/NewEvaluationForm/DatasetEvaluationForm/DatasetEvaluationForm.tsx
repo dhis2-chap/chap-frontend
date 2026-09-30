@@ -23,7 +23,9 @@ import { useDatasets } from '@/hooks/useDatasets';
 import { useModels } from '@/hooks/useModels';
 import { DatasetOriginFilter, matchesOrigin, useDatasetOriginFilter } from '../../DatasetOriginFilter';
 import { datasetSupportsModel } from '../../NewDatasetForm/utils/datasetModels';
-import { getBacktestSplitting, getMinimumEvaluationPeriods } from '../hooks/backtestDefaults';
+import { BacktestParameterFields } from '../BacktestParameterFields';
+import { backtestParametersSchema } from '../hooks/backtestParameters';
+import { DEFAULT_BACKTEST_PARAMETERS, getMinimumEvaluationPeriods } from '../hooks/backtestDefaults';
 import { countPeriods } from '@/utils/periods';
 import { ModelsSelector } from './ModelsSelector';
 import { fetchRunnableModel } from '@/hooks/modelsQuery';
@@ -34,6 +36,7 @@ import styles from './DatasetEvaluationForm.module.css';
 const schema = z.object({
     name: z.string().trim().min(1, { message: i18n.t('Name is required') }),
     datasetId: z.string(),
+    backtestParameters: backtestParametersSchema,
     modelNames: z.array(z.string()).min(1),
 });
 
@@ -52,31 +55,30 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
 
     const methods = useForm<FormValues>({
         resolver: zodResolver(schema),
-        defaultValues: { name: '', datasetId: initialDatasetId, modelNames: [] },
+        defaultValues: { name: '', datasetId: initialDatasetId, modelNames: [], backtestParameters: DEFAULT_BACKTEST_PARAMETERS },
     });
-    const [datasetId, modelNames] = useWatch({ control: methods.control, name: ['datasetId', 'modelNames'] });
+    const [datasetId, modelNames, backtestParameters] = useWatch({ control: methods.control, name: ['datasetId', 'modelNames', 'backtestParameters'] });
     const { origin } = useDatasetOriginFilter();
 
     const dataset = datasets.data?.find(item => String(item.id) === datasetId);
     const savedDatasets = datasets.data?.filter(item => item.id != null) ?? [];
     const datasetOptions = savedDatasets.filter(item => matchesOrigin(item, origin) || item === dataset);
-    const splitting = getBacktestSplitting(dataset?.periodType);
     const periodCount = countPeriods(dataset?.firstPeriod, dataset?.lastPeriod);
-    const requiredPeriodCount = getMinimumEvaluationPeriods(dataset?.periodType);
+    const requiredPeriodCount = getMinimumEvaluationPeriods(dataset?.periodType, backtestParameters);
     const isTooShort = periodCount != null && !!requiredPeriodCount && periodCount < requiredPeriodCount;
     const compatibleModels = models?.filter(model => (
         dataset && datasetSupportsModel(dataset.covariates ?? [], dataset.periodType ?? '', model)
     )) ?? [];
     const selectedModels = compatibleModels.filter(model => modelNames.includes(model.name));
     const canSubmit = selectedModels.length > 0 && !selectedModels.some(hasRevisionMismatch) &&
-        !!splitting && !isTooShort && dataset?.id != null;
+        !!dataset?.periodType && !isTooShort && dataset?.id != null;
 
-    const createEvaluation = useMutation<void, ApiError | Error, string>({
-        mutationFn: async (name: string) => {
+    const createEvaluation = useMutation<void, ApiError | Error, FormValues>({
+        mutationFn: async ({ name, backtestParameters }: FormValues) => {
             const runnableModels = await Promise.all(
                 selectedModels.map(model => fetchRunnableModel(queryClient, model.id)),
             );
-            const request = { name, datasetId: dataset!.id!, ...splitting! };
+            const request = { name, datasetId: dataset!.id!, ...backtestParameters };
             const modelIds = runnableModels.map(model => model.name);
             if (isMultiModelAvailable) {
                 await BacktestsService.createBacktestsV1AnalyticsCreateBacktestsPost({ ...request, modelIds });
@@ -148,9 +150,10 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
                 <Card>
                     <form
                         className={styles.formWrapper}
-                        onSubmit={methods.handleSubmit(({ name }) => {
+                        noValidate
+                        onSubmit={methods.handleSubmit((values) => {
                             if (canSubmit && !createEvaluation.isLoading) {
-                                createEvaluation.mutate(name);
+                                createEvaluation.mutate(values);
                             }
                         })}
                     >
@@ -198,6 +201,8 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
                                 {i18n.t('No configured model matches this dataset’s covariates and period type.')}
                             </NoticeBox>
                         )}
+
+                        <BacktestParameterFields disabled={createEvaluation.isLoading} />
 
                         {isTooShort && (
                             <NoticeBox warning title={i18n.t('Dataset too short')}>

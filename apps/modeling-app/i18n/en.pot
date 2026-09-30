@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-09-28T16:25:40.171Z\n"
-"PO-Revision-Date: 2026-09-28T16:25:40.172Z\n"
+"POT-Creation-Date: 2026-09-30T08:56:54.301Z\n"
+"PO-Revision-Date: 2026-09-30T08:56:54.302Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -881,6 +881,54 @@ msgstr "{{covariate}} has no observations for these periods and organisation uni
 msgid "The selected organisation units must have geometry"
 msgstr "The selected organisation units must have geometry"
 
+msgid "Forecast periods"
+msgstr "Forecast periods"
+
+msgid "Number of periods to forecast at each split."
+msgstr "Number of periods to forecast at each split."
+
+msgid "Number of splits"
+msgstr "Number of splits"
+
+msgid "Total number of rolling train/test splits."
+msgstr "Total number of rolling train/test splits."
+
+msgid "Stride"
+msgstr "Stride"
+
+msgid "Number of periods to advance between successive splits."
+msgstr "Number of periods to advance between successive splits."
+
+msgid "Number of retrains"
+msgstr "Number of retrains"
+
+msgid "Retrains are evenly spaced across the splits. One means train once."
+msgstr "Retrains are evenly spaced across the splits. One means train once."
+
+msgid "Backtest parameters"
+msgstr "Backtest parameters"
+
+msgid "Future-weather provider"
+msgstr "Future-weather provider"
+
+msgid "Could not load weather providers"
+msgstr "Could not load weather providers"
+
+msgid "Retry"
+msgstr "Retry"
+
+msgid "No future-weather providers are available."
+msgstr "No future-weather providers are available."
+
+msgid ""
+"This provider uses observed future weather. Its evaluation scores are not "
+"comparable to production performance, and it cannot be used for future "
+"predictions."
+msgstr ""
+"This provider uses observed future weather. Its evaluation scores are not "
+"comparable to production performance, and it cannot be used for future "
+"predictions."
+
 msgid "Error loading datasets or models"
 msgstr "Error loading datasets or models"
 
@@ -945,6 +993,15 @@ msgstr "There was an error"
 
 msgid "Error loading models"
 msgstr "Error loading models"
+
+msgid "Enter a whole number greater than zero"
+msgstr "Enter a whole number greater than zero"
+
+msgid "Select a future-weather provider"
+msgstr "Select a future-weather provider"
+
+msgid "Number of retrains must not exceed the number of splits"
+msgstr "Number of retrains must not exceed the number of splits"
 
 msgid "Cannot run prediction"
 msgstr "Cannot run prediction"
@@ -1929,9 +1986,6 @@ msgstr "There are running jobs in the background"
 
 msgid "Running jobs"
 msgstr "Running jobs"
-
-msgid "Retry"
-msgstr "Retry"
 
 msgid "Waiting for connection"
 msgstr "Waiting for connection"

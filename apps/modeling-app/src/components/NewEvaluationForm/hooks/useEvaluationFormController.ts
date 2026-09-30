@@ -1,4 +1,5 @@
 import { useModelExecutionFormState, ModelExecutionFormValues } from '../../ModelExecutionForm/hooks/useModelExecutionFormState';
+import { DEFAULT_BACKTEST_PARAMETERS } from './backtestDefaults';
 import { useCreateNewBacktest } from './useCreateNewBacktest';
 import { useDhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
 
@@ -8,7 +9,10 @@ export const useEvaluationFormController = (initialValues?: Partial<ModelExecuti
         isLoading: periodSettingsLoading,
         error: periodSettingsError,
     } = useDhis2PeriodSettings();
-    const { methods } = useModelExecutionFormState({ initialValues, periodSettings });
+    const { methods } = useModelExecutionFormState({
+        initialValues: { backtestParameters: DEFAULT_BACKTEST_PARAMETERS, ...initialValues },
+        periodSettings,
+    });
 
     const {
         createNewBacktest,

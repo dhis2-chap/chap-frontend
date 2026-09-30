@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import i18n from '@dhis2/d2-i18n';
 import { PERIOD_TYPES } from '@dhis2-chap/core';
+import { backtestParametersSchema } from '../../NewEvaluationForm/hooks/backtestParameters';
 import {
     baseFormShape,
     covariateMappingSchema,
@@ -28,6 +29,7 @@ export const createModelExecutionFormSchema = (
 ) => (
     z.object({
         ...baseFormShape,
+        backtestParameters: backtestParametersSchema.optional(),
         modelId: z.string().min(1, { message: i18n.t('Please select a model') }),
         covariateMappings: z.array(covariateMappingSchema),
         targetMapping: z.object(
@@ -65,6 +67,7 @@ export const useModelExecutionFormState = ({
         resolver: zodResolver(createModelExecutionFormSchema(periodSettings)),
         defaultValues: {
             name: initialValues?.name ?? '',
+            backtestParameters: initialValues?.backtestParameters,
             periodType: initialValues?.periodType ?? PERIOD_TYPES.MONTH,
             fromPeriodId: initialValues?.fromPeriodId ?? '',
             toPeriodId: initialValues?.toPeriodId ?? '',
