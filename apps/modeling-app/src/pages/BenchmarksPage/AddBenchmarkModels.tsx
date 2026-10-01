@@ -70,11 +70,10 @@ export const AddBenchmarkModels = ({ specification, onClose, onSuccess }: Props)
                     )}
                     {modelsWithRun.length > 0 && (
                         <NoticeBox warning title={i18n.t('Already run with this version')}>
-                            {i18n.t('{{models}} already have a run in this benchmark with the same model version. Running again adds another row, which is useful for checking how much scores vary between runs.', {
+                            {i18n.t('{{models}} has already been run in this benchmark with this model version. Running it again adds another row, so you can see how much the scores vary between runs.', {
                                 count: modelsWithRun.length,
                                 models: modelsWithRun.map(model => model.displayName || model.name).join(', '),
-                                defaultValue: '{{models}} already has a run in this benchmark with the same model version. Running again adds another row, which is useful for checking how much scores vary between runs.',
-                                defaultValue_plural: '{{models}} already have a run in this benchmark with the same model version. Running again adds another row, which is useful for checking how much scores vary between runs.',
+                                defaultValue_plural: '{{models}} have already been run in this benchmark with these model versions. Running them again adds another row for each, so you can see how much the scores vary between runs.',
                             })}
                         </NoticeBox>
                     )}
