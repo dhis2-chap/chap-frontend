@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-01T06:49:44.314Z\n"
-"PO-Revision-Date: 2026-10-01T06:49:44.315Z\n"
+"POT-Creation-Date: 2026-10-01T11:27:26.936Z\n"
+"PO-Revision-Date: 2026-10-01T11:27:26.936Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -884,41 +884,17 @@ msgstr "{{covariate}} has no observations for these periods and organisation uni
 msgid "The selected organisation units must have geometry"
 msgstr "The selected organisation units must have geometry"
 
-msgid "Forecast periods"
-msgstr "Forecast periods"
-
-msgid "Number of periods to forecast at each split."
-msgstr "Number of periods to forecast at each split."
-
-msgid "Number of splits"
-msgstr "Number of splits"
-
-msgid "Total number of rolling train/test splits."
-msgstr "Total number of rolling train/test splits."
-
-msgid "Stride"
-msgstr "Stride"
-
-msgid "Number of periods to advance between successive splits."
-msgstr "Number of periods to advance between successive splits."
-
-msgid "Number of retrains"
-msgstr "Number of retrains"
-
-msgid "Retrains are evenly spaced across the splits. One means train once."
-msgstr "Retrains are evenly spaced across the splits. One means train once."
-
 msgid "Backtest parameters"
 msgstr "Backtest parameters"
 
-msgid "Future-weather provider"
-msgstr "Future-weather provider"
-
-msgid "Could not load weather providers"
-msgstr "Could not load weather providers"
+msgid "Could not load backtest parameters"
+msgstr "Could not load backtest parameters"
 
 msgid "Retry"
 msgstr "Retry"
+
+msgid "Could not load weather providers"
+msgstr "Could not load weather providers"
 
 msgid "No future-weather providers are available."
 msgstr "No future-weather providers are available."
@@ -1003,8 +979,8 @@ msgstr "Enter a whole number greater than zero"
 msgid "Select a future-weather provider"
 msgstr "Select a future-weather provider"
 
-msgid "Number of retrains must not exceed the number of splits"
-msgstr "Number of retrains must not exceed the number of splits"
+msgid "Number of training runs must not exceed the number of splits"
+msgstr "Number of training runs must not exceed the number of splits"
 
 msgid "Cannot run prediction"
 msgstr "Cannot run prediction"
@@ -1436,6 +1412,21 @@ msgstr "Summary"
 
 msgid "There was an error loading the evaluation summary. Please try again later."
 msgstr "There was an error loading the evaluation summary. Please try again later."
+
+msgid "Forecast periods"
+msgstr "Forecast periods"
+
+msgid "Number of splits"
+msgstr "Number of splits"
+
+msgid "Step between splits"
+msgstr "Step between splits"
+
+msgid "Number of training runs"
+msgstr "Number of training runs"
+
+msgid "Future-weather provider"
+msgstr "Future-weather provider"
 
 msgid "Model updated"
 msgstr "Model updated"
@@ -2603,6 +2594,15 @@ msgstr "Could not start model runs"
 msgid "Run models"
 msgstr "Run models"
 
+msgid "Could not download benchmark CSV. Try again."
+msgstr "Could not download benchmark CSV. Try again."
+
+msgid "Download CSV"
+msgstr "Download CSV"
+
+msgid "New evaluation from this dataset"
+msgstr "New evaluation from this dataset"
+
 msgid "Invalid benchmark"
 msgstr "Invalid benchmark"
 
@@ -2657,9 +2657,6 @@ msgstr ""
 "Aggregate scores across all splits and organisation units. The best score "
 "in each column is highlighted, including ties. Best only means best among "
 "these runs, not necessarily a good score."
-
-msgid "Download CSV"
-msgstr "Download CSV"
 
 msgid "Metric descriptions unavailable"
 msgstr "Metric descriptions unavailable"
@@ -2716,9 +2713,6 @@ msgstr "No benchmarks match the selected dataset origin."
 
 msgid "Splits"
 msgstr "Splits"
-
-msgid "Retraining"
-msgstr "Retraining"
 
 msgid "Future weather"
 msgstr "Future weather"

@@ -5,7 +5,7 @@ import { chapUrl, createCompletedNaiveEvaluation, readJson } from './helpers/eva
 import { toDataTestKey } from '../src/utils/dataTestKey';
 import { isVersionCompatible } from '../src/utils/compareVersions';
 
-test('compares runs, exports scores and adds a model to the same benchmark', async ({ page }) => {
+test('uses benchmark actions to view, add models, export scores and reuse the dataset', async ({ page }) => {
     test.setTimeout(240_000);
     const { chap_core_version: chapVersion } = await readJson<{ chap_core_version: string }>(
         await page.request.get(chapUrl('/system/info')),
@@ -26,12 +26,29 @@ test('compares runs, exports scores and adds a model to the same benchmark', asy
     await expect(page.getByRole('columnheader', { name: 'Model runs', exact: true })).toBeVisible();
     await expect(page.getByRole('link', { name: evaluation.dataset.name, exact: true })).toHaveCount(0);
     await page.goto('/#/evaluate/benchmarks?origin=all');
-    await page.getByRole('link', { name: evaluation.dataset.name, exact: true }).click();
+    await expect(page.getByRole('columnheader').last()).toHaveText('Actions');
+    const actions = page.locator(`[data-test="benchmark-actions-${specification.id}"]`);
+    await actions.click();
+    await page.getByRole('menuitem', { name: 'View', exact: true }).click();
     await expect(page).toHaveURL(`/#/evaluate/benchmarks/${specification.id}`);
     await expect(page.getByRole('navigation', { name: 'Breadcrumbs' }).locator('[aria-current="page"]')).toHaveText(evaluation.dataset.name);
     await expect(page.locator(`[data-test="view-evaluation-${evaluation.id}"]`)).toBeVisible();
-    await page.getByRole('button', { name: 'Add models', exact: true }).click();
+    await page.goBack();
+    await actions.click();
+    await page.getByRole('menuitem', { name: 'New evaluation from this dataset', exact: true }).click();
+    await expect(page).toHaveURL(`/#/evaluate/from-dataset?datasetId=${specification.dataset.id}`);
+    await expect(page.locator('[data-test="evaluation-dataset-select"]')).toContainText(evaluation.dataset.name);
+
+    await page.goto('/#/evaluate/benchmarks?origin=all');
+    await actions.click();
+    await page.getByRole('menuitem', { name: 'Add models', exact: true }).click();
+    await expect(page).toHaveURL(`/#/evaluate/benchmarks/${specification.id}?addModels=true`);
     const modal = page.getByRole('dialog');
+    await expect(modal).toBeVisible();
+    await modal.getByRole('button', { name: 'Cancel', exact: true }).click();
+    await expect(page).toHaveURL(`/#/evaluate/benchmarks/${specification.id}`);
+    await expect(modal).toHaveCount(0);
+    await page.getByRole('button', { name: 'Add models', exact: true }).click();
     await modal.locator(`[data-test="model-toggle-${toDataTestKey(model.name)}"]`).click();
     await modal.getByRole('button', { name: 'Use selected models (1)', exact: true }).click();
     await expect(page.getByText('Already run with this version', { exact: true })).toBeVisible();
@@ -49,6 +66,7 @@ test('compares runs, exports scores and adds a model to the same benchmark', asy
     const result = await readJson<MakeBacktestsResponse>(response, 'Run benchmark model');
     expect(result.specificationId).toBe(specification.id);
     await expect(page.getByText('Model runs queued', { exact: true })).toBeVisible();
+    await expect(page).toHaveURL(`/#/evaluate/benchmarks/${specification.id}`);
     await expect.poll(async () => {
         const jobResponse = await page.request.get(chapUrl(`/v1/jobs/${result.jobs[0].jobId}`));
         const status = await readJson<string>(jobResponse, 'Load model run status');
@@ -73,4 +91,13 @@ test('compares runs, exports scores and adds a model to the same benchmark', asy
     expect(csv).toContain('"future_weather_provider"');
     await page.locator(`[data-test="view-evaluation-${evaluation.id}"]`).click();
     await expect(page).toHaveURL(`/#/evaluate/${evaluation.id}`);
+
+    await page.goto('/#/evaluate/benchmarks?origin=all');
+    await actions.click();
+    const overviewDownloadPromise = page.waitForEvent('download');
+    await page.getByRole('menuitem', { name: 'Download CSV', exact: true }).click();
+    const overviewDownload = await overviewDownloadPromise;
+    expect(overviewDownload.suggestedFilename()).toBe(`benchmark-${specification.id}.csv`);
+    expect(await readFile((await overviewDownload.path())!, 'utf8')).toBe(csv);
+    await expect(page).toHaveURL('/#/evaluate/benchmarks?origin=all');
 });
