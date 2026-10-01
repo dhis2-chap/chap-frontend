@@ -165,6 +165,8 @@ export const JobsTable = ({ jobs, visibleFilters }: Props) => {
         },
         getRowId: row => row.id.toString(),
         enableRowSelection: false,
+        // Pagination is controlled by the URL, including page-size resets.
+        autoResetPageIndex: false,
         getSortedRowModel: getSortedRowModel(),
         getCoreRowModel: getCoreRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
@@ -233,10 +235,7 @@ export const JobsTable = ({ jobs, visibleFilters }: Props) => {
                             <Pagination
                                 page={pageIndex + 1}
                                 pageSize={pageSize}
-                                onPageSizeChange={(newPageSize: number) => {
-                                    setPageSize(newPageSize);
-                                    setPageIndex(0);
-                                }}
+                                onPageSizeChange={setPageSize}
                                 pageCount={table.getPageCount()}
                                 total={table.getRowCount()}
                                 isLastPage={!table.getCanNextPage()}
