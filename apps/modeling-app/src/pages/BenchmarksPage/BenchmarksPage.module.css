@@ -34,6 +34,16 @@
 
 .table {
     overflow-x: auto;
+    /* Zero intrinsic width so the table scrolls here instead of widening the page. */
+    inline-size: 0;
+    min-inline-size: 100%;
+}
+
+/* Keep the model visible while scrolling through wide metric columns. */
+.table .sticky {
+    position: sticky;
+    left: 0;
+    z-index: 1;
 }
 
 .loading {
