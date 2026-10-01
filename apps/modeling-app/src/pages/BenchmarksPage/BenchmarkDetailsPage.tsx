@@ -2,7 +2,7 @@ import { useState } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { Button, CircularLoader, NoticeBox } from '@dhis2/ui';
 import { Card, MakeBacktestsResponse } from '@dhis2-chap/ui';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { PageHeader } from '../../features/common-features/PageHeader/PageHeader';
 import { ChapErrorNotice } from '../../components/ChapErrorNotice';
 import { AddBenchmarkModels } from './AddBenchmarkModels';
@@ -21,7 +21,14 @@ export const BenchmarkDetailsPage = () => {
 };
 
 const BenchmarkDetails = ({ id }: { id: number }) => {
-    const [addingModels, setAddingModels] = useState(false);
+    const [searchParams, setSearchParams] = useSearchParams();
+    const addingModels = searchParams.get('addModels') === 'true';
+    const setAddingModels = (open: boolean) => setSearchParams((previous) => {
+        const next = new URLSearchParams(previous);
+        if (open) next.set('addModels', 'true');
+        else next.delete('addModels');
+        return next;
+    }, { replace: true });
     const [submitted, setSubmitted] = useState<MakeBacktestsResponse>();
     const query = useBacktestSpecification(id);
     const runningJobs = useRunningBenchmarkJobs();

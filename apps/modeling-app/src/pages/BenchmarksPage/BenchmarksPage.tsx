@@ -9,6 +9,7 @@ import { CountPill } from '../../components/CountPill';
 import { DatasetOriginFilter, matchesOrigin, useDatasetOriginFilter } from '../../components/DatasetOriginFilter';
 import { SpecificationParameters, formatPeriodRange } from './SpecificationParameters';
 import { BenchmarkRunsIndicator } from './BenchmarkRunsIndicator';
+import { BenchmarkActionsMenu } from './BenchmarkActionsMenu';
 import { useRunningBenchmarkJobs } from './useRunningBenchmarkJobs';
 import styles from './BenchmarksPage.module.css';
 
@@ -18,6 +19,7 @@ const COLUMNS = () => [
     { label: i18n.t('Backtest parameters') },
     { label: i18n.t('Locations') },
     { label: i18n.t('Model runs') },
+    { label: i18n.t('Actions') },
 ];
 
 export const BenchmarksPage = () => {
@@ -86,6 +88,9 @@ export const BenchmarksPage = () => {
                                                 <CountPill count={specification.backtestCount} tooltip={i18n.t('{{count}} model runs in this benchmark', { count: specification.backtestCount })} />
                                                 <BenchmarkRunsIndicator specification={specification} runningJobs={runningJobs} />
                                             </div>
+                                        </DataTableCell>
+                                        <DataTableCell>
+                                            <BenchmarkActionsMenu specification={specification} />
                                         </DataTableCell>
                                     </DataTableRow>
                                 )) : (
