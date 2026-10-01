@@ -106,7 +106,9 @@ export const NewEvaluationFormComponent = ({ initialValues }: NewEvaluationFormP
                                 </div>
                             )}
                         >
-                            <BacktestParameterFields disabled={isSubmitting || isValidationLoading} />
+                            <div className={styles.backtestParameters}>
+                                <BacktestParameterFields disabled={isSubmitting || isValidationLoading} />
+                            </div>
                         </ModelExecutionFormFields>
 
                         {!!error && !importSummary && (

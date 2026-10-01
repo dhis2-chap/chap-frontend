@@ -86,8 +86,8 @@ export const EvaluationSummaryWidget = ({ evaluationId }: Props) => {
                     {[
                         [i18n.t('Forecast periods'), backtest.nPeriods],
                         [i18n.t('Number of splits'), backtest.nSplits],
-                        [i18n.t('Stride'), backtest.stride],
-                        [i18n.t('Number of retrains'), backtest.nRetrain],
+                        [i18n.t('Step between splits'), backtest.stride],
+                        [i18n.t('Number of training runs'), backtest.nRetrain],
                         [i18n.t('Future-weather provider'), backtest.futureWeatherProvider],
                     ].map(([label, value]) => (
                         <div className={styles.row} key={label} data-test="backtest-parameter-summary">

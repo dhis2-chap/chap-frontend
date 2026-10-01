@@ -15,7 +15,7 @@ export const backtestParametersSchema = z.object({
     futureWeatherProvider: z.string().min(1, i18n.t('Select a future-weather provider')),
 }).refine(data => data.nRetrain <= data.nSplits, {
     path: ['nRetrain'],
-    message: i18n.t('Number of retrains must not exceed the number of splits'),
+    message: i18n.t('Number of training runs must not exceed the number of splits'),
 });
 
 export type BacktestParameters = z.infer<typeof backtestParametersSchema>;

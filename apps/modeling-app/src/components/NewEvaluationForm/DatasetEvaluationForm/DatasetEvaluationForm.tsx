@@ -25,7 +25,7 @@ import { DatasetOriginFilter, matchesOrigin, useDatasetOriginFilter } from '../.
 import { datasetSupportsModel } from '../../NewDatasetForm/utils/datasetModels';
 import { BacktestParameterFields } from '../BacktestParameterFields';
 import { backtestParametersSchema } from '../hooks/backtestParameters';
-import { DEFAULT_BACKTEST_PARAMETERS, getMinimumEvaluationPeriods } from '../hooks/backtestDefaults';
+import { getMinimumEvaluationPeriods } from '../hooks/backtestDefaults';
 import { countPeriods } from '@/utils/periods';
 import { ModelsSelector } from './ModelsSelector';
 import { fetchRunnableModel } from '@/hooks/modelsQuery';
@@ -55,7 +55,7 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
 
     const methods = useForm<FormValues>({
         resolver: zodResolver(schema),
-        defaultValues: { name: '', datasetId: initialDatasetId, modelNames: [], backtestParameters: DEFAULT_BACKTEST_PARAMETERS },
+        defaultValues: { name: '', datasetId: initialDatasetId, modelNames: [] },
     });
     const [datasetId, modelNames, backtestParameters] = useWatch({ control: methods.control, name: ['datasetId', 'modelNames', 'backtestParameters'] });
     const { origin } = useDatasetOriginFilter();

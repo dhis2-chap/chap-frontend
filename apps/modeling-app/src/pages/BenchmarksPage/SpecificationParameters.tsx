@@ -8,8 +8,8 @@ type Parameters = Pick<BacktestSpecificationSummary, 'nPeriods' | 'nSplits' | 's
 const getParameters = (s: Parameters) => [
     { label: i18n.t('Forecast periods'), value: s.nPeriods },
     { label: i18n.t('Splits'), value: s.nSplits },
-    { label: i18n.t('Stride'), value: s.stride },
-    { label: i18n.t('Retraining'), value: s.nRetrain },
+    { label: i18n.t('Step between splits'), value: s.stride },
+    { label: i18n.t('Number of training runs'), value: s.nRetrain },
     { label: i18n.t('Future weather'), value: s.futureWeatherProvider },
 ];
 

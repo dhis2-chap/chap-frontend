@@ -141,8 +141,8 @@ test.describe('saved dataset evaluations', () => {
             );
             await page.goto(`/#/evaluate/${result.id}`);
             for (const [label, value] of [
-                ['Forecast periods', '2'], ['Number of splits', '4'], ['Stride', '2'],
-                ['Number of retrains', '2'], ['Future-weather provider', 'damped_persistence'],
+                ['Forecast periods', '2'], ['Number of splits', '4'], ['Step between splits', '2'],
+                ['Number of training runs', '2'], ['Future-weather provider', 'damped_persistence'],
             ]) {
                 const row = page.locator('[data-test="backtest-parameter-summary"]').filter({ hasText: label });
                 await expect(row.locator('span').last()).toHaveText(value);

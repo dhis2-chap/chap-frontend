@@ -225,7 +225,7 @@ test('validates backtest parameters, submits chosen values, and shows backend va
     const retrains = page.locator('[data-test="backtest-nRetrain"] input');
     await retrains.fill('8');
     await start.click();
-    await expect(page.getByText('Number of retrains must not exceed the number of splits')).toBeVisible();
+    await expect(page.getByText('Number of training runs must not exceed the number of splits')).toBeVisible();
     await retrains.fill('2');
     const periods = page.locator('[data-test="backtest-nPeriods"] input');
     await periods.fill('0');

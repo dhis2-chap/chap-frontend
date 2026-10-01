@@ -1,7 +1,10 @@
 import i18n from '@dhis2/d2-i18n';
 import { Button, InputField, NoticeBox, SingleSelectField, SingleSelectOption } from '@dhis2/ui';
+import { useEffect } from 'react';
 import { Controller, useFormContext, useWatch } from 'react-hook-form';
 import type { BacktestParameters } from './hooks/backtestParameters';
+import { toBacktestDefaults } from './hooks/backtestDefaults';
+import { useBacktestParameters } from '@/hooks/useBacktestParameters';
 import { useWeatherProviders } from '@/hooks/useWeatherProviders';
 import { ChapErrorNotice } from '../ChapErrorNotice';
 import styles from './BacktestParameterFields.module.css';
@@ -11,33 +14,37 @@ type Props = {
 };
 
 export const BacktestParameterFields = ({ disabled }: Props) => {
-    const { control } = useFormContext<{ backtestParameters: BacktestParameters }>();
+    const { control, resetField } = useFormContext<{ backtestParameters: BacktestParameters }>();
     const [nSplits, providerId] = useWatch({ control, name: ['backtestParameters.nSplits', 'backtestParameters.futureWeatherProvider'] });
+    const parameters = useBacktestParameters();
     const providers = useWeatherProviders();
     const provider = providers.data?.find(item => item.id === providerId);
-    const counts = [
-        { name: 'nPeriods', label: i18n.t('Forecast periods'), helpText: i18n.t('Number of periods to forecast at each split.') },
-        { name: 'nSplits', label: i18n.t('Number of splits'), helpText: i18n.t('Total number of rolling train/test splits.') },
-        { name: 'stride', label: i18n.t('Stride'), helpText: i18n.t('Number of periods to advance between successive splits.') },
-        { name: 'nRetrain', label: i18n.t('Number of retrains'), helpText: i18n.t('Retrains are evenly spaced across the splits. One means train once.') },
-    ] as const;
+    const counts = parameters.data?.filter(item => item.type === 'integer') ?? [];
+    const providerParameter = parameters.data?.find(item => item.name === 'futureWeatherProvider');
+
+    // CHAP Core owns the defaults, so fill them in once they arrive.
+    useEffect(() => {
+        if (parameters.data) {
+            resetField('backtestParameters', { defaultValue: toBacktestDefaults(parameters.data) });
+        }
+    }, [parameters.data, resetField]);
 
     return (
         <fieldset className={styles.container}>
-            <legend>{i18n.t('Backtest parameters')}</legend>
+            <legend className={styles.legend}>{i18n.t('Backtest parameters')}</legend>
             <div className={styles.counts}>
-                {counts.map(({ name, label, helpText }) => (
+                {counts.map(({ name, label, description, minimum }) => (
                     <Controller
                         key={name}
-                        name={`backtestParameters.${name}`}
+                        name={`backtestParameters.${name as 'nPeriods' | 'nSplits' | 'stride' | 'nRetrain'}`}
                         control={control}
                         render={({ field, fieldState }) => (
                             <InputField
                                 name={field.name}
                                 label={label}
-                                helpText={helpText}
+                                helpText={description}
                                 type="number"
-                                min="1"
+                                min={minimum != null ? String(minimum) : undefined}
                                 step="1"
                                 max={name === 'nRetrain' && Number.isFinite(nSplits) ? String(nSplits) : undefined}
                                 value={Number.isFinite(field.value) ? String(field.value) : ''}
@@ -57,13 +64,13 @@ export const BacktestParameterFields = ({ disabled }: Props) => {
                 control={control}
                 render={({ field, fieldState }) => (
                     <SingleSelectField
-                        label={i18n.t('Future-weather provider')}
+                        label={providerParameter?.label}
                         selected={provider ? field.value : ''}
                         onChange={({ selected }) => field.onChange(selected)}
                         onBlur={field.onBlur}
                         disabled={disabled || providers.isLoading || !!providers.error}
                         loading={providers.isLoading}
-                        helpText={provider?.description}
+                        helpText={provider?.description ?? providerParameter?.description}
                         error={!!fieldState.error}
                         validationText={fieldState.error?.message}
                         dataTest="backtest-futureWeatherProvider"
@@ -74,6 +81,12 @@ export const BacktestParameterFields = ({ disabled }: Props) => {
                     </SingleSelectField>
                 )}
             />
+            {parameters.error && (
+                <div>
+                    <ChapErrorNotice error={parameters.error} title={i18n.t('Could not load backtest parameters')} />
+                    <Button small onClick={() => parameters.refetch()}>{i18n.t('Retry')}</Button>
+                </div>
+            )}
             {providers.error && (
                 <div>
                     <ChapErrorNotice error={providers.error} title={i18n.t('Could not load weather providers')} />

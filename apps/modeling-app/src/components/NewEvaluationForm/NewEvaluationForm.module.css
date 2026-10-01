@@ -38,3 +38,7 @@
 .errorContainer {
   margin-block: 1rem;
 }
+
+.backtestParameters {
+  margin-block-start: 2rem;
+}
