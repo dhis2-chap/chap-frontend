@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { BacktestRead, BacktestSpecificationRead, ConfiguredModelRead, MetricInfo, ModelSpecRead } from '@dhis2-chap/ui';
-import { benchmarkCsv, getBestRunIds, getJobModelName, getMetricIds, getModelsWithRun, makeBenchmarkRequest, requestMatchesSpecification } from './benchmarkUtils';
+import { benchmarkCsv, getBestRunIds, getJobModelName, getMetricIds, getModelsWithRun, makeBenchmarkRequest, metricSortKey, requestMatchesSpecification } from './benchmarkUtils';
 
 const run = (id: number, aggregateMetrics: Record<string, number>): BacktestRead => ({
     id, aggregateMetrics, datasetId: 12, modelId: `model-${id}`, configuredModel: null,
@@ -31,6 +31,13 @@ describe('benchmark scores', () => {
         expect(getBestRunIds([run(1, { score: 2 })], { id: 'score', displayName: 'Score' })).toEqual(new Set());
         expect(getBestRunIds([run(1, {})], { id: 'score', displayName: 'Score', target: 0 })).toEqual(new Set());
     });
+
+    it('sorts the best scores first, including target metrics', () => {
+        const sortBy = (metric?: MetricInfo) => (scores: number[]) => [...scores].sort((a, b) => metricSortKey(a, metric) - metricSortKey(b, metric));
+        expect(sortBy({ id: 'score', displayName: 'Score', target: 0.8, targetBehavior: 'closest' } as MetricInfo)([0.2, 0.79, 1])).toEqual([0.79, 1, 0.2]);
+        expect(sortBy({ id: 'score', displayName: 'Score', optimizationDirection: 'maximize' } as MetricInfo)([1, 3, 2])).toEqual([3, 2, 1]);
+        expect(sortBy()([3, 1, 2])).toEqual([1, 2, 3]);
+    });
 });
 
 it('preserves all saved parameters, rather than using evaluation defaults', () => {
@@ -43,7 +50,7 @@ it('preserves all saved parameters, rather than using evaluation defaults', () =
 it('exports all metrics in the supplied row order, with raw precision, blanks and CSV escaping', () => {
     const runs = [
         { ...run(2, { mae: 1.23456789 }), modelId: '=SUM(1,2)', modelTemplateVersion: '1.0', created: '2026-09-29T10:00:00' },
-        run(1, { mae: NaN, rmse: -2 }),
+        run(1, { mae: NaN, rmse: -2, sample_count: 5 }),
     ];
     expect(getMetricIds(runs)).toEqual(['mae', 'rmse']);
     const csv = benchmarkCsv(specification, runs);

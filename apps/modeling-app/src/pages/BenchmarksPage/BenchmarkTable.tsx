@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { saveAs } from 'file-saver';
 import { TableActionButton } from '../../components/TableActionButton';
 import { useModels } from '../../hooks/useModels';
-import { benchmarkCsv, getBestRunIds, getMetricIds } from './benchmarkUtils';
+import { benchmarkCsv, getBestRunIds, getMetricIds, metricSortKey } from './benchmarkUtils';
 import { prettifyMetricId } from '../../components/PageContent/EvaluationDetails/EvaluationMetricsWidget/metricCatalog';
 import styles from './BenchmarksPage.module.css';
 
@@ -67,7 +67,7 @@ export const BenchmarkTable = ({ specification, actions, children }: Props) => {
                     </span>
                 ),
                 sortUndefined: 'last',
-                sortDescFirst: metric?.optimizationDirection === 'maximize',
+                sortingFn: (a, b, id) => metricSortKey(a.getValue<number>(id), metric) - metricSortKey(b.getValue<number>(id), metric),
                 cell: (info) => {
                     const value = info.getValue();
                     if (value === undefined) return '—';
