@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import type { BacktestRead, DataBaseResponse, JobResponse } from '@dhis2-chap/ui';
+import type { BacktestRead, DataBaseResponse, JobDescription, JobResponse } from '@dhis2-chap/ui';
 import {
     createCompletedNaiveEvaluation,
     readJson,
@@ -41,7 +41,7 @@ test.describe.serial('prediction setup', () => {
         await expect(page.locator('[data-test="quick-action-predict"]')).toBeEnabled();
     });
 
-    test('runs a prediction from the saved setup dashboard', async ({ page }) => {
+    test('streams prediction logs on the dashboard and retains final model output after failure', async ({ page }) => {
         const latestEvaluationPeriod = evaluation.dataset?.lastPeriod;
 
         if (!latestEvaluationPeriod) {
@@ -49,6 +49,29 @@ test.describe.serial('prediction setup', () => {
         }
 
         predictionName = `E2E prediction ${Date.now()}`;
+
+        await page.clock.install();
+        let status = 'PENDING';
+        let logs = '';
+        let logRequests = 0;
+        // Keep real setup/submission, but control this job's timing and failure:
+        // the naive model normally finishes too quickly to observe live logs.
+        await page.route(`**/v1/crud/prediction-setups/${setup.id}/run`, async (route) => {
+            const response = await route.fetch();
+            const job = await readJson<JobResponse>(response, 'Run prediction');
+            await page.route('**/v1/jobs?*', async (jobsRoute) => {
+                const jobsResponse = await jobsRoute.fetch();
+                const jobs = await readJson<JobDescription[]>(jobsResponse, 'Load prediction jobs');
+                await jobsRoute.fulfill({
+                    json: jobs.map(item => item.id === job.id ? { ...item, status } : item),
+                });
+            });
+            await page.route(`**/v1/jobs/${job.id}/logs`, (route) => {
+                logRequests += 1;
+                return route.fulfill({ contentType: 'application/json', body: JSON.stringify(logs) });
+            });
+            await route.fulfill({ response });
+        }, { times: 1 });
 
         await page.goto(`/#/predictions/${setup.id}`);
 
@@ -73,6 +96,32 @@ test.describe.serial('prediction setup', () => {
         expect(prediction.id).toBeTruthy();
         await expect(page).toHaveURL(new RegExp(`/#/predictions/${setup.id}$`));
         await expect(page.getByText('Running job')).toBeVisible({ timeout: 30_000 });
+        const logsWidget = page.locator('[data-test="widget-contents"]').filter({ has: page.locator('pre') });
+        const logOutput = logsWidget.locator('pre');
+        await expect(page.getByText('Prediction job logs', { exact: true })).toBeVisible();
+        await expect(logOutput).toHaveText('No logs reported for this job');
+
+        status = 'STARTED';
+        logs = 'Preparing prediction dataset';
+        await expect(logOutput).toHaveText(logs, { timeout: 15_000 });
+        logs += '\nRunning model';
+        await expect(logOutput).toHaveText(logs, { timeout: 15_000 });
+
+        logs += '\nModel stdout: fitting prediction\nModel stderr: prediction failed\nTraceback: model exited with code 1';
+        status = 'FAILURE';
+        await expect(logOutput).toHaveText(logs, { timeout: 15_000 });
+        await expect(logsWidget.getByText('Failed', { exact: true })).toBeVisible();
+        await expect(page.getByText('Running job')).not.toBeVisible();
+
+        const finalLogRequests = logRequests;
+        await page.clock.fastForward(30_000);
+        expect(logRequests).toBe(finalLogRequests);
+        await expect(logOutput).toHaveText(logs);
+
+        // Direct visits still expose the failed job without navigation state.
+        await page.goto('/#/predictions');
+        await page.goto(`/#/predictions/${setup.id}`);
+        await expect(logOutput).toHaveText(logs);
     });
 
     test('opens the scoped activity page and shows rows for the saved setup', async ({ page }) => {
