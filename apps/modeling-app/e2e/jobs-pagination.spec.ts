@@ -1,13 +1,19 @@
 import { expect, test } from '@playwright/test';
-import { createCompletedNaiveEvaluation } from './helpers/evaluation-fixtures';
+import type { JobDescription } from '@dhis2-chap/ui';
 
 test('can reduce the page size after showing all jobs', async ({ page }) => {
-    test.setTimeout(240_000);
     page.setDefaultTimeout(15_000);
     const name = `E2E jobs pagination ${Date.now()}`;
-    for (let index = 0; index < 6; index++) {
-        await createCompletedNaiveEvaluation(page, `${name} ${index}`);
-    }
+    const jobs: JobDescription[] = Array.from({ length: 6 }, (_, index) => ({
+        id: `e2e-jobs-pagination-${index}`,
+        type: 'create_backtest',
+        name: `${name} ${index}`,
+        status: 'SUCCESS',
+        start_time: '2026-01-01T00:00:00',
+        end_time: '2026-01-01T00:01:00',
+        result: null,
+    }));
+    await page.route(/\/v1\/jobs(\?|$)/, route => route.fulfill({ json: jobs }));
 
     await page.goto(`/#/jobs?search=${encodeURIComponent(name)}`);
     const pageSize = page.locator('[data-test="dhis2-uiwidgets-pagination-pagesize-select"]');
