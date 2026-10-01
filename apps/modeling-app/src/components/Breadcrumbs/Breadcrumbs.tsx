@@ -6,7 +6,7 @@ import styles from './Breadcrumbs.module.css';
 export const Breadcrumbs = () => {
     const breadcrumbs = useMatches().flatMap((match) => {
         const label = (match.handle as RouteHandle | undefined)?.breadcrumb;
-        return label ? [{ id: match.id, pathname: match.pathname, label: label() }] : [];
+        return label ? [{ id: match.id, pathname: match.pathname, label: label(match) }] : [];
     });
 
     if (breadcrumbs.length < 2) {
