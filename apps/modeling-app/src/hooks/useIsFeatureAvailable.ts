@@ -10,6 +10,7 @@ export const FEATURE_MIN_VERSIONS = {
     datasetDownload: '1.1.5',
     metricsDownload: '1.4.1',
     multiModelBacktests: '2.4.0',
+    benchmarks: '2.4.0',
 } as const;
 
 /**
@@ -19,6 +20,7 @@ export const Features = {
     DATASET_DOWNLOAD: 'datasetDownload',
     METRICS_DOWNLOAD: 'metricsDownload',
     MULTI_MODEL_BACKTESTS: 'multiModelBacktests',
+    BENCHMARKS: 'benchmarks',
 } as const;
 
 export type Feature = keyof typeof FEATURE_MIN_VERSIONS;

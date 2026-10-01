@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { Button, Chip, IconSettings16, Label, Tooltip } from '@dhis2/ui';
 import type { ModelSpecRead } from '@dhis2-chap/ui';
@@ -12,11 +12,16 @@ type Props = {
     selectedModels: ModelSpecRead[];
     disabled?: boolean;
     disabledReason?: string;
+    /** Open the model picker right away instead of waiting for a click on Select models. */
+    openOnMount?: boolean;
+    /** Called when the picker is closed without confirming a selection. */
+    onCancel?: () => void;
     onChange: (models: ModelSpecRead[]) => void;
 };
 
-export const ModelsSelector = ({ models, selectedModels, disabled, disabledReason, onChange }: Props) => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
+export const ModelsSelector = ({ models, selectedModels, disabled, disabledReason, openOnMount, onCancel, onChange }: Props) => {
+    const [isModalOpen, setIsModalOpen] = useState(() => !!openOnMount && models.length > 0 && !disabledReason && !disabled);
+    const confirmed = useRef(false);
     const [infoModel, setInfoModel] = useState<ModelSpecRead>();
 
     const selectButton = (
@@ -60,8 +65,15 @@ export const ModelsSelector = ({ models, selectedModels, disabled, disabledReaso
                     multiple
                     models={models}
                     selectedModels={selectedModels}
-                    onClose={() => setIsModalOpen(false)}
-                    onConfirm={onChange}
+                    onClose={() => {
+                        setIsModalOpen(false);
+                        if (!confirmed.current) onCancel?.();
+                        confirmed.current = false;
+                    }}
+                    onConfirm={(selected) => {
+                        confirmed.current = true;
+                        onChange(selected);
+                    }}
                 />
             )}
 

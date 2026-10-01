@@ -11,7 +11,6 @@ import {
     IconAdd16,
     DataTableFoot,
     Pagination,
-    Tooltip,
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import {
@@ -26,7 +25,7 @@ import {
     RowSelectionState,
     SortingState,
 } from '@tanstack/react-table';
-import { BacktestRead, ModelSpecRead, Pill } from '@dhis2-chap/ui';
+import { BacktestRead, ModelSpecRead } from '@dhis2-chap/ui';
 import { Link, useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import styles from './BacktestsTable.module.css';
@@ -34,6 +33,7 @@ import { BacktestActionsMenu } from './BacktestActionsMenu';
 import { BacktestsTableFilters } from './BacktestsTableFilters';
 import { BatchActions } from './BatchActions';
 import { RunningJobsIndicator } from '../RunningJobsIndicator';
+import { CountPill } from '../CountPill';
 import { JOB_TYPES } from '../../hooks/useJobs';
 import { useBacktestsTableFilters } from './hooks/useBacktestsTableFilters';
 import { useTablePaginationParams } from '../../hooks/useTablePaginationParams';
@@ -103,31 +103,7 @@ const columns = [
         header: i18n.t('Locations'),
         cell: (info) => {
             const count = info.getValue();
-
-            if (count === 0) {
-                return count;
-            }
-
-            const tooltipContent = i18n.t('Evaluated on {{count}} locations', { count });
-
-            return (
-                <div className={styles.locationsCell}>
-                    <Tooltip content={tooltipContent}>
-                        {({ onMouseOver, onMouseOut, ref }) => (
-                            <span
-                                ref={ref}
-                                className={styles.infoIcon}
-                                onMouseEnter={onMouseOver}
-                                onMouseLeave={onMouseOut}
-                            >
-                                <Pill>
-                                    {count}
-                                </Pill>
-                            </span>
-                        )}
-                    </Tooltip>
-                </div>
-            );
+            return <CountPill count={count} tooltip={i18n.t('Evaluated on {{count}} locations', { count })} />;
         },
     }),
     columnHelper.display({

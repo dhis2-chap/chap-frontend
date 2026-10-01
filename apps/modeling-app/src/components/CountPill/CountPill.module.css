@@ -1,0 +1,16 @@
+.cell {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacers-dp8);
+}
+
+.trigger {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    color: var(--colors-grey600);
+}
+
+.trigger:hover {
+    color: var(--colors-grey900);
+}

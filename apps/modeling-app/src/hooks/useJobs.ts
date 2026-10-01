@@ -145,6 +145,7 @@ export const useJobs = ({
 
         if (statusChanged) {
             queryClient.invalidateQueries({ queryKey: ['backtests'] });
+            queryClient.invalidateQueries({ queryKey: ['backtest-specifications'] });
             queryClient.invalidateQueries({ queryKey: ['predictions'] });
             completedPredictionSetupIds.forEach((completedPredictionSetupId) => {
                 queryClient.invalidateQueries({

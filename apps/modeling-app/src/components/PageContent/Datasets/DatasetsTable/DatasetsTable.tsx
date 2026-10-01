@@ -25,6 +25,7 @@ import { useNavigate } from 'react-router-dom';
 import { DataSetInfo, getPeriodNameFromId, Tag } from '@dhis2-chap/ui';
 import { useTablePaginationParams } from '../../../../hooks/useTablePaginationParams';
 import { DatasetOriginFilter, matchesOrigin, useDatasetOriginFilter } from '../../../DatasetOriginFilter';
+import { TableActionButton } from '../../../TableActionButton';
 import styles from './DatasetsTable.module.css';
 
 const columnHelper = createColumnHelper<DataSetInfo>();
@@ -73,9 +74,9 @@ const EvaluateButton = ({ datasetId }: { datasetId?: number | null }) => {
     const navigate = useNavigate();
     if (datasetId == null) return null;
     return (
-        <Button small secondary onClick={() => navigate(`/evaluate/from-dataset?datasetId=${datasetId}`)}>
+        <TableActionButton onClick={() => navigate(`/evaluate/from-dataset?datasetId=${datasetId}`)}>
             {i18n.t('New evaluation')}
-        </Button>
+        </TableActionButton>
     );
 };
 
