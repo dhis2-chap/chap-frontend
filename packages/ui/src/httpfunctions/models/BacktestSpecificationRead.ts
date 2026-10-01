@@ -21,11 +21,11 @@ export type BacktestSpecificationRead = {
      */
     stride?: number;
     /**
-     * Number of times the model is retrained, evenly spaced across the splits. 1 means train once.
+     * Number of times the model is trained, evenly spaced across the splits. 1 means train once. Cannot exceed the number of splits.
      */
     nRetrain?: number;
     /**
-     * Id of the registered future-weather provider supplying climate covariates for each forecast window. Use the same provider here and on the prediction so backtest scores reflect what the model will see in production. See GET /v1/analytics/weather-providers.
+     * Source of weather data for each forecast window. Use the same provider for backtesting and prediction so scores reflect production conditions.
      */
     futureWeatherProvider?: string;
     /**

@@ -16,6 +16,10 @@ export type PredictionSetupCreate = {
      */
     name: string;
     /**
+     * Foreign key to the `AlertPolicy` the setup raises alerts against; `None` means no alerting.
+     */
+    alertPolicyId?: (number | null);
+    /**
      * Standard cron expression for when to run; `None` means manual-only.
      */
     scheduleCronExpression?: (string | null);
