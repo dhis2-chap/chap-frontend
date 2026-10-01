@@ -1,13 +1,15 @@
 import { ApiError, BacktestParameterInfo, BacktestsService } from '@dhis2-chap/ui';
 import { useQuery } from '@tanstack/react-query';
 import { Features, useIsFeatureAvailable } from './useIsFeatureAvailable';
+import { useRoute } from './useRoute';
 import { useWeatherProviders } from './useWeatherProviders';
 
 /** Older CHAP Core versions apply their own defaults, so the form leaves the parameters out. */
 export const useBacktestParameters = () => {
+    const { route } = useRoute();
     const { isAvailable } = useIsFeatureAvailable(Features.BACKTEST_PARAMETERS);
     const query = useQuery<BacktestParameterInfo[], ApiError>({
-        queryKey: ['backtest-parameters'],
+        queryKey: ['backtest-parameters', route?.url],
         queryFn: () => BacktestsService.listBacktestParametersV1AnalyticsBacktestParametersGet(),
         staleTime: Infinity,
         retry: false,

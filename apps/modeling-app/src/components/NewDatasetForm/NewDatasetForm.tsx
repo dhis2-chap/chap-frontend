@@ -28,7 +28,7 @@ import { useDhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
 import { useModels } from '@/hooks/useModels';
 import { useDatasets } from '@/hooks/useDatasets';
 import { getPreviousDataItems } from './utils/previousDataItems';
-import { getMinimumEvaluationPeriods, toBacktestDefaults } from '../NewEvaluationForm/hooks/backtestDefaults';
+import { getLegacyBacktestParameters, getMinimumEvaluationPeriods, toBacktestDefaults } from '../NewEvaluationForm/hooks/backtestDefaults';
 import { useBacktestParameters } from '@/hooks/useBacktestParameters';
 import { countPeriods } from '@/utils/periods';
 import styles from './NewDatasetForm.module.css';
@@ -73,7 +73,10 @@ export const NewDatasetForm = () => {
     const covariateNames = columnValues.map(column => column.covariateName.trim());
     const support = getModelSupport(covariateNames, periodType, models ?? []);
     const periodCount = countPeriods(fromPeriodId, toPeriodId, settings.calendar);
-    const minimumEvaluationPeriods = getMinimumEvaluationPeriods(periodType, backtestParameters.data && toBacktestDefaults(backtestParameters.data));
+    const minimumEvaluationPeriods = getMinimumEvaluationPeriods(
+        periodType,
+        backtestParameters.data ? toBacktestDefaults(backtestParameters.data) : getLegacyBacktestParameters(periodType),
+    );
     const isTooShortToEvaluate = !!periodCount && !!minimumEvaluationPeriods && periodCount < minimumEvaluationPeriods;
 
     // Fill unnamed columns before adding new ones, so a suggestion names a row added with "Add column".

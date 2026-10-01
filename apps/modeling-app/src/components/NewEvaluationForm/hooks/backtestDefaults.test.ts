@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { getMinimumEvaluationPeriods, toBacktestDefaults } from './backtestDefaults';
+import { getLegacyBacktestParameters, getMinimumEvaluationPeriods, toBacktestDefaults } from './backtestDefaults';
 
 const DEFAULTS = { nPeriods: 3, nSplits: 7, stride: 1 };
 
@@ -9,6 +9,14 @@ describe('toBacktestDefaults', () => {
             { name: 'nPeriods', label: 'Forecast periods', description: '', default: 3, type: 'integer', minimum: 1 },
             { name: 'futureWeatherProvider', label: 'Provider', description: '', default: 'climatology', type: 'string' },
         ])).toEqual({ nPeriods: 3, futureWeatherProvider: 'climatology' });
+    });
+});
+
+describe('getLegacyBacktestParameters', () => {
+    it('keeps the pre-2.4 settings per period type', () => {
+        expect(getMinimumEvaluationPeriods('month', getLegacyBacktestParameters('month'))).toBe(13);
+        expect(getMinimumEvaluationPeriods('WEEK', getLegacyBacktestParameters('WEEK'))).toBe(49);
+        expect(getLegacyBacktestParameters('day')).toBeUndefined();
     });
 });
 

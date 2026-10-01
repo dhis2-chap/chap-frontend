@@ -25,7 +25,7 @@ import { DatasetOriginFilter, matchesOrigin, useDatasetOriginFilter } from '../.
 import { datasetSupportsModel } from '../../NewDatasetForm/utils/datasetModels';
 import { BacktestParameterFields } from '../BacktestParameterFields';
 import { backtestParametersSchema } from '../hooks/backtestParameters';
-import { getMinimumEvaluationPeriods } from '../hooks/backtestDefaults';
+import { getLegacyBacktestParameters, getMinimumEvaluationPeriods } from '../hooks/backtestDefaults';
 import { countPeriods } from '@/utils/periods';
 import { ModelsSelector } from './ModelsSelector';
 import { fetchRunnableModel } from '@/hooks/modelsQuery';
@@ -64,7 +64,10 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
     const savedDatasets = datasets.data?.filter(item => item.id != null) ?? [];
     const datasetOptions = savedDatasets.filter(item => matchesOrigin(item, origin) || item === dataset);
     const periodCount = countPeriods(dataset?.firstPeriod, dataset?.lastPeriod);
-    const requiredPeriodCount = getMinimumEvaluationPeriods(dataset?.periodType, backtestParameters);
+    const requiredPeriodCount = getMinimumEvaluationPeriods(
+        dataset?.periodType,
+        backtestParameters ?? getLegacyBacktestParameters(dataset?.periodType),
+    );
     const isTooShort = periodCount != null && !!requiredPeriodCount && periodCount < requiredPeriodCount;
     const compatibleModels = models?.filter(model => (
         dataset && datasetSupportsModel(dataset.covariates ?? [], dataset.periodType ?? '', model)
@@ -78,7 +81,7 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
             const runnableModels = await Promise.all(
                 selectedModels.map(model => fetchRunnableModel(queryClient, model.id)),
             );
-            const request = { name, datasetId: dataset!.id!, ...backtestParameters };
+            const request = { name, datasetId: dataset!.id!, ...(backtestParameters ?? getLegacyBacktestParameters(dataset!.periodType)) };
             const modelIds = runnableModels.map(model => model.name);
             if (isMultiModelAvailable) {
                 await BacktestsService.createBacktestsV1AnalyticsCreateBacktestsPost({ ...request, modelIds });
