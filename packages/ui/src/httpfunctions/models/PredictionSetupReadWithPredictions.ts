@@ -2,6 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { AlertPolicyRead } from './AlertPolicyRead';
 import type { ConfiguredModelRead } from './ConfiguredModelRead';
 import type { DataSource } from './DataSource';
 import type { PredictionInfo } from './PredictionInfo';
@@ -58,6 +59,10 @@ export type PredictionSetupReadWithPredictions = {
      * Where to push each quantile of the predictive distribution.
      */
     quantileTargets: Array<QuantileTarget>;
+    /**
+     * Alert policy this setup raises alerts against; `None` means no alerting.
+     */
+    alertPolicy?: (AlertPolicyRead | null);
     /**
      * Predictions produced by this setup so far, summary view only.
      */

@@ -52,7 +52,11 @@ export class PredictionsService {
     }
     /**
      * Remove a forecast
-     * Permanently delete a prediction and every forecast row it contains. Use this to clean up obsolete or test forecasts from the listing. 404 if the id is unknown.
+     * Permanently delete a prediction and every forecast row it contains. Use this to clean up obsolete or test forecasts from the listing.
+     *
+     * Refused with 409 while alerts raised from this prediction still exist: an alert
+     * only means something alongside the forecast that justified it, so the alerts have
+     * to go first. 404 if the id is unknown.
      * @param predictionId
      * @returns any Successful Response
      * @throws ApiError
