@@ -24,6 +24,7 @@ import WarnAboutIncompatibleVersion from './features/common-features/WarnAboutIn
 import { Dhis2VersionWarning } from './components/Dhis2VersionWarning/Dhis2VersionWarning';
 import { DashboardPage } from './pages/DashboardPage';
 import { BenchmarksPage } from './pages/BenchmarksPage/BenchmarksPage';
+import { NewBenchmarkPage } from './pages/BenchmarksPage/NewBenchmarkPage';
 import { BenchmarkDetailsPage } from './pages/BenchmarksPage/BenchmarkDetailsPage';
 import { BenchmarkBreadcrumb } from './pages/BenchmarksPage/BenchmarkBreadcrumb';
 import { EvaluationPage } from './pages/EvaluationPage';
@@ -118,6 +119,11 @@ const router = createHashRouter([
                                 handle: { breadcrumb: () => i18n.t('Benchmarks'), fullWidth: true } satisfies RouteHandle,
                                 children: [
                                     { index: true, element: <BenchmarksPage /> },
+                                    {
+                                        path: 'new',
+                                        element: <NewBenchmarkPage />,
+                                        handle: { breadcrumb: () => i18n.t('New benchmark') } satisfies RouteHandle,
+                                    },
                                     {
                                         path: ':specificationId',
                                         element: <BenchmarkDetailsPage />,

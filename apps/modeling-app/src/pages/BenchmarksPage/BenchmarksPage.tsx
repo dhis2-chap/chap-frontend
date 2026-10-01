@@ -1,8 +1,8 @@
 import i18n from '@dhis2/d2-i18n';
-import { CircularLoader, DataTable, DataTableBody, DataTableCell, DataTableColumnHeader, DataTableHead, DataTableRow, NoticeBox } from '@dhis2/ui';
+import { Button, CircularLoader, DataTable, DataTableBody, DataTableCell, DataTableColumnHeader, DataTableHead, DataTableRow, IconAdd16, NoticeBox } from '@dhis2/ui';
 import { ApiError, BacktestsService, BacktestSpecificationSummary, Card } from '@dhis2-chap/ui';
 import { useQuery } from '@tanstack/react-query';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { PageHeader } from '../../features/common-features/PageHeader/PageHeader';
 import { ChapErrorNotice } from '../../components/ChapErrorNotice';
 import { CountPill } from '../../components/CountPill';
@@ -23,6 +23,7 @@ const COLUMNS = () => [
 ];
 
 export const BenchmarksPage = () => {
+    const navigate = useNavigate();
     const { origin } = useDatasetOriginFilter();
     const query = useQuery<BacktestSpecificationSummary[], ApiError>({
         queryKey: ['backtest-specifications'],
@@ -46,6 +47,9 @@ export const BenchmarksPage = () => {
             <Card className={styles.card}>
                 <div className={styles.toolbar}>
                     <DatasetOriginFilter datasets={specifications.map(specification => specification.dataset)} />
+                    <Button primary icon={<IconAdd16 />} onClick={() => navigate('/evaluate/benchmarks/new')}>
+                        {i18n.t('New benchmark')}
+                    </Button>
                 </div>
                 {query.isLoading ? <div className={styles.loading}><CircularLoader /></div> : query.error ? (
                     query.error.status === 404 ? (
@@ -55,9 +59,9 @@ export const BenchmarksPage = () => {
                     ) : <ChapErrorNotice error={query.error} title={i18n.t('Could not load benchmarks')} />
                 ) : !specifications.length ? (
                     <NoticeBox title={i18n.t('No benchmarks yet')}>
-                        {i18n.t('Benchmarks appear when evaluations are run on a saved dataset.')}
+                        {i18n.t('A benchmark is defined by a saved dataset and backtest parameters. Run models to compare their performance.')}
                         {' '}
-                        <Link to="/evaluate/from-dataset">{i18n.t('New evaluation')}</Link>
+                        <Link to="/evaluate/benchmarks/new">{i18n.t('New benchmark')}</Link>
                     </NoticeBox>
                 ) : (
                     <div className={styles.table}>

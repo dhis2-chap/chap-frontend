@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-01T07:12:05.418Z\n"
-"PO-Revision-Date: 2026-10-01T07:12:05.418Z\n"
+"POT-Creation-Date: 2026-10-01T12:29:38.453Z\n"
+"PO-Revision-Date: 2026-10-01T12:29:38.453Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -16,6 +16,9 @@ msgstr "Compare evaluations"
 
 msgid "Benchmarks"
 msgstr "Benchmarks"
+
+msgid "New benchmark"
+msgstr "New benchmark"
 
 msgid "New evaluation"
 msgstr "New evaluation"
@@ -890,6 +893,9 @@ msgstr "Error loading datasets or models"
 msgid "No saved datasets yet"
 msgstr "No saved datasets yet"
 
+msgid "Save a dataset first, then return here to run models in a benchmark."
+msgstr "Save a dataset first, then return here to run models in a benchmark."
+
 msgid ""
 "Save a dataset once and reuse it across evaluations, or import data for "
 "this evaluation only."
@@ -900,11 +906,39 @@ msgstr ""
 msgid "Import from DHIS2 instead"
 msgstr "Import from DHIS2 instead"
 
+msgid "How benchmarks work"
+msgstr "How benchmarks work"
+
+msgid ""
+"Runs with the same dataset and backtest parameters appear in the same "
+"benchmark. The run name labels your model runs; it does not create a "
+"separate benchmark."
+msgstr ""
+"Runs with the same dataset and backtest parameters appear in the same "
+"benchmark. The run name labels your model runs; it does not create a "
+"separate benchmark."
+
+msgid "Run name"
+msgstr "Run name"
+
+msgid "Benchmark model runs"
+msgstr "Benchmark model runs"
+
 msgid "Dataset"
 msgstr "Dataset"
 
 msgid "No datasets match the origin filter"
 msgstr "No datasets match the origin filter"
+
+msgid "Backtest parameters"
+msgstr "Backtest parameters"
+
+msgid ""
+"This dataset uses {{nPeriods}} forecast periods, {{nSplits}} splits, and a "
+"stride of {{stride}}."
+msgstr ""
+"This dataset uses {{nPeriods}} forecast periods, {{nSplits}} splits, and a "
+"stride of {{stride}}."
 
 msgid "Pick a dataset first"
 msgstr "Pick a dataset first"
@@ -924,6 +958,9 @@ msgid ""
 msgstr ""
 "This dataset has {{periodCount}} periods, but an evaluation needs at least "
 "{{requiredPeriodCount}}."
+
+msgid "Run benchmark"
+msgstr "Run benchmark"
 
 msgid "Start evaluation"
 msgstr "Start evaluation"
@@ -2633,9 +2670,6 @@ msgstr ""
 "Add models to run them against this benchmark. Completed runs will appear "
 "here."
 
-msgid "Backtest parameters"
-msgstr "Backtest parameters"
-
 msgid "Model runs"
 msgstr "Model runs"
 
@@ -2658,8 +2692,12 @@ msgstr "Could not load benchmarks"
 msgid "No benchmarks yet"
 msgstr "No benchmarks yet"
 
-msgid "Benchmarks appear when evaluations are run on a saved dataset."
-msgstr "Benchmarks appear when evaluations are run on a saved dataset."
+msgid ""
+"A benchmark is defined by a saved dataset and backtest parameters. Run "
+"models to compare their performance."
+msgstr ""
+"A benchmark is defined by a saved dataset and backtest parameters. Run "
+"models to compare their performance."
 
 msgid "{{count}} model runs in this benchmark"
 msgid_plural "{{count}} model runs in this benchmark"
@@ -2668,6 +2706,9 @@ msgstr[1] "{{count}} model runs in this benchmark"
 
 msgid "No benchmarks match the selected dataset origin."
 msgstr "No benchmarks match the selected dataset origin."
+
+msgid "Back to benchmarks"
+msgstr "Back to benchmarks"
 
 msgid "Forecast periods"
 msgstr "Forecast periods"

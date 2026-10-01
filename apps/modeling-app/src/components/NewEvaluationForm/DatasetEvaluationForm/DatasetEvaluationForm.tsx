@@ -41,9 +41,10 @@ type FormValues = z.infer<typeof schema>;
 
 type Props = {
     initialDatasetId?: string;
+    benchmarkContext?: boolean;
 };
 
-export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
+export const DatasetEvaluationForm = ({ initialDatasetId = '', benchmarkContext = false }: Props) => {
     const datasets = useDatasets();
     const { models, isLoading: isModelsLoading, error: modelsError } = useModels();
     const navigate = useNavigate();
@@ -128,14 +129,18 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
         return (
             <div className={styles.container}>
                 <NoticeBox title={i18n.t('No saved datasets yet')}>
-                    {i18n.t('Save a dataset once and reuse it across evaluations, or import data for this evaluation only.')}
+                    {benchmarkContext
+                        ? i18n.t('Save a dataset first, then return here to run models in a benchmark.')
+                        : i18n.t('Save a dataset once and reuse it across evaluations, or import data for this evaluation only.')}
                     <ButtonStrip className={styles.emptyActions}>
                         <Button small primary onClick={() => navigate('/datasets/new')}>
                             {i18n.t('New dataset')}
                         </Button>
-                        <Button small secondary onClick={() => navigate('/evaluate/new')}>
-                            {i18n.t('Import from DHIS2 instead')}
-                        </Button>
+                        {!benchmarkContext && (
+                            <Button small secondary onClick={() => navigate('/evaluate/new')}>
+                                {i18n.t('Import from DHIS2 instead')}
+                            </Button>
+                        )}
                     </ButtonStrip>
                 </NoticeBox>
             </div>
@@ -154,7 +159,16 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
                             }
                         })}
                     >
-                        <NameInput disabled={createEvaluation.isLoading} />
+                        {benchmarkContext && (
+                            <NoticeBox title={i18n.t('How benchmarks work')}>
+                                {i18n.t('Runs with the same dataset and backtest parameters appear in the same benchmark. The run name labels your model runs; it does not create a separate benchmark.')}
+                            </NoticeBox>
+                        )}
+                        <NameInput
+                            disabled={createEvaluation.isLoading}
+                            label={benchmarkContext ? i18n.t('Run name') : undefined}
+                            placeholder={benchmarkContext ? i18n.t('Benchmark model runs') : undefined}
+                        />
 
                         <div className={styles.datasetRow}>
                             <SingleSelectField
@@ -176,6 +190,16 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
                             </SingleSelectField>
                             <DatasetOriginFilter datasets={savedDatasets} dense={false} />
                         </div>
+
+                        {benchmarkContext && splitting && (
+                            <NoticeBox title={i18n.t('Backtest parameters')}>
+                                {i18n.t('This dataset uses {{nPeriods}} forecast periods, {{nSplits}} splits, and a stride of {{stride}}.', {
+                                    nPeriods: splitting.nPeriods,
+                                    nSplits: splitting.nSplits,
+                                    stride: splitting.stride,
+                                })}
+                            </NoticeBox>
+                        )}
 
                         <ModelsSelector
                             models={compatibleModels}
@@ -217,7 +241,7 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
                                     loading={createEvaluation.isLoading}
                                     disabled={!canSubmit || createEvaluation.isLoading}
                                 >
-                                    {i18n.t('Start evaluation')}
+                                    {benchmarkContext ? i18n.t('Run benchmark') : i18n.t('Start evaluation')}
                                 </Button>
                             </ButtonStrip>
                         </div>
