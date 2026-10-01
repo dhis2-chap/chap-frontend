@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-09-30T07:29:40.892Z\n"
-"PO-Revision-Date: 2026-09-30T07:29:40.892Z\n"
+"POT-Creation-Date: 2026-10-01T07:12:05.418Z\n"
+"PO-Revision-Date: 2026-10-01T07:12:05.418Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -2549,6 +2549,15 @@ msgstr "Could not start model runs"
 msgid "Run models"
 msgstr "Run models"
 
+msgid "Could not download benchmark CSV. Try again."
+msgstr "Could not download benchmark CSV. Try again."
+
+msgid "Download CSV"
+msgstr "Download CSV"
+
+msgid "New evaluation from this dataset"
+msgstr "New evaluation from this dataset"
+
 msgid "Invalid benchmark"
 msgstr "Invalid benchmark"
 
@@ -2603,9 +2612,6 @@ msgstr ""
 "Aggregate scores across all splits and organisation units. The best score "
 "in each column is highlighted, including ties. Best only means best among "
 "these runs, not necessarily a good score."
-
-msgid "Download CSV"
-msgstr "Download CSV"
 
 msgid "Metric descriptions unavailable"
 msgstr "Metric descriptions unavailable"
