@@ -28,10 +28,10 @@ const removeChips = (page: Page) => page.locator('[data-test^="selected-model-"]
 test.describe('saved dataset evaluations', () => {
     test('selects compatible models, resets on dataset change, and queues a job for each', async ({ page }) => {
         test.setTimeout(240_000);
-        // Stable CHAP releases predate the weather registry and stored parameters.
-        const providersResponse = await page.request.get(chapUrl('/v1/analytics/weather-providers'));
-        expect([200, 404]).toContain(providersResponse.status());
-        const supportsWeatherProviders = providersResponse.ok();
+        // Stable CHAP releases predate configurable backtest parameters and use their own defaults.
+        const parametersResponse = await page.request.get(chapUrl('/v1/analytics/backtest-parameters'));
+        expect([200, 404]).toContain(parametersResponse.status());
+        const supportsParameters = parametersResponse.ok();
         const evaluation: BacktestRead = await createCompletedNaiveEvaluation(page);
         const otherEvaluation = await createCompletedNaiveEvaluation(page, `E2E other dataset ${Date.now()}`);
         const templates = await readJson<ModelTemplateRead[]>(
@@ -82,20 +82,17 @@ test.describe('saved dataset evaluations', () => {
         await selectModels(page, ['naive_model', alternative.name]);
         await modal.getByRole('button', { name: 'Use selected models (2)', exact: true }).click();
 
-        const parameters = {
-            nPeriods: 2, nSplits: 4, stride: 2, nRetrain: 2,
-            futureWeatherProvider: supportsWeatherProviders ? 'damped_persistence' : 'climatology',
-        };
-        for (const [field, value] of Object.entries(parameters).filter(([field]) => field !== 'futureWeatherProvider')) {
-            await page.locator(`[data-test="backtest-${field}"] input`).fill(String(value));
-        }
-        // The minimum dataset length must follow the chosen configuration.
-        await page.locator('[data-test="backtest-nPeriods"] input').fill('1000');
-        await expect(page.getByText('Dataset too short', { exact: true })).toBeVisible();
-        await expect(start).toBeDisabled();
-        await page.locator('[data-test="backtest-nPeriods"] input').fill('2');
-        await expect(page.getByText('Dataset too short', { exact: true })).not.toBeVisible();
-        if (supportsWeatherProviders) {
+        const parameters = { nPeriods: 2, nSplits: 4, stride: 2, nRetrain: 2, futureWeatherProvider: 'damped_persistence' };
+        if (supportsParameters) {
+            for (const field of ['nPeriods', 'nSplits', 'stride', 'nRetrain'] as const) {
+                await page.locator(`[data-test="backtest-${field}"] input`).fill(String(parameters[field]));
+            }
+            // The minimum dataset length must follow the chosen configuration.
+            await page.locator('[data-test="backtest-nPeriods"] input').fill('1000');
+            await expect(page.getByText('Dataset too short', { exact: true })).toBeVisible();
+            await expect(start).toBeDisabled();
+            await page.locator('[data-test="backtest-nPeriods"] input').fill('2');
+            await expect(page.getByText('Dataset too short', { exact: true })).not.toBeVisible();
             await page.locator('[data-test="backtest-futureWeatherProvider"]').click();
             await page.getByText('Damped persistence', { exact: true }).click();
         }
@@ -112,7 +109,7 @@ test.describe('saved dataset evaluations', () => {
         const modelIds = ['naive_model', alternative.name];
         const submissions = await Promise.all(responses.map(async (response) => {
             const request = response.request().postDataJSON() as MakeBacktestsRequest | MakeBacktestRequest;
-            expect(request).toMatchObject({ datasetId: evaluation.datasetId, ...parameters });
+            expect(request).toMatchObject({ datasetId: evaluation.datasetId, ...(supportsParameters ? parameters : {}) });
             if ('modelIds' in request) {
                 const run = await readJson<MakeBacktestsResponse>(response, 'Start saved dataset evaluation');
                 expect(request.name).toBe(name);
@@ -133,7 +130,7 @@ test.describe('saved dataset evaluations', () => {
         for (const { model, jobId } of queued) {
             expect(jobs).toContainEqual(expect.objectContaining({ id: jobId, name: `${name}/${model}`, type: 'create_backtest' }));
         }
-        if (supportsWeatherProviders) {
+        if (supportsParameters) {
             await pollEvaluationJob(page, queued[0].jobId);
             const result = await readJson<DataBaseResponse>(
                 await page.request.get(chapUrl(`/v1/jobs/${queued[0].jobId}/database_result`)),
@@ -142,7 +139,7 @@ test.describe('saved dataset evaluations', () => {
             await page.goto(`/#/evaluate/${result.id}`);
             for (const [label, value] of [
                 ['Forecast periods', '2'], ['Number of splits', '4'], ['Step between splits', '2'],
-                ['Number of training runs', '2'], ['Future-weather provider', 'damped_persistence'],
+                ['Number of training runs', '2'], ['Future-weather provider', 'Damped persistence'],
             ]) {
                 const row = page.locator('[data-test="backtest-parameter-summary"]').filter({ hasText: label });
                 await expect(row.locator('span').last()).toHaveText(value);

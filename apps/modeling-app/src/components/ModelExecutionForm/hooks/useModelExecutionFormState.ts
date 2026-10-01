@@ -67,7 +67,6 @@ export const useModelExecutionFormState = ({
         resolver: zodResolver(createModelExecutionFormSchema(periodSettings)),
         defaultValues: {
             name: initialValues?.name ?? '',
-            backtestParameters: initialValues?.backtestParameters,
             periodType: initialValues?.periodType ?? PERIOD_TYPES.MONTH,
             fromPeriodId: initialValues?.fromPeriodId ?? '',
             toPeriodId: initialValues?.toPeriodId ?? '',

@@ -8,6 +8,7 @@ import { RegionView } from './Sections/RegionView';
 import { ModelView } from './Sections/ModelView';
 import { ModelVersionWarningView } from './Sections/ModelVersionWarningView';
 import { useModels } from '@/hooks/useModels';
+import { useBacktestParameterValues } from '@/hooks/useBacktestParameters';
 type Props = {
     evaluationId: number;
 };
@@ -26,6 +27,7 @@ const WidgetWrapper = ({ children }: { children: React.ReactNode }) => {
 export const EvaluationSummaryWidget = ({ evaluationId }: Props) => {
     const { backtest, isLoading, error } = useBacktestById(evaluationId);
     const { models, isLoading: isModelsLoading, error: modelsError } = useModels();
+    const parameterValues = useBacktestParameterValues(backtest ?? {});
 
     if (isLoading || isModelsLoading) {
         return (
@@ -83,13 +85,7 @@ export const EvaluationSummaryWidget = ({ evaluationId }: Props) => {
                         lastPeriod={backtest.dataset.lastPeriod}
                     />
                     <RegionView orgUnits={backtest.dataset.orgUnits} />
-                    {[
-                        [i18n.t('Forecast periods'), backtest.nPeriods],
-                        [i18n.t('Number of splits'), backtest.nSplits],
-                        [i18n.t('Step between splits'), backtest.stride],
-                        [i18n.t('Number of training runs'), backtest.nRetrain],
-                        [i18n.t('Future-weather provider'), backtest.futureWeatherProvider],
-                    ].map(([label, value]) => (
+                    {parameterValues.map(({ label, value }) => (
                         <div className={styles.row} key={label} data-test="backtest-parameter-summary">
                             <span className={styles.label}>{label}</span>
                             <span className={styles.value}>{value ?? '—'}</span>

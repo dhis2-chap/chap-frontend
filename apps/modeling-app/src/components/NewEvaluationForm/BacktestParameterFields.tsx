@@ -29,6 +29,10 @@ export const BacktestParameterFields = ({ disabled }: Props) => {
         }
     }, [parameters.data, resetField]);
 
+    if (!parameters.isAvailable) {
+        return null;
+    }
+
     return (
         <fieldset className={styles.container}>
             <legend className={styles.legend}>{i18n.t('Backtest parameters')}</legend>

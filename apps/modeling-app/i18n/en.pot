@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-01T11:27:26.936Z\n"
-"PO-Revision-Date: 2026-10-01T11:27:26.936Z\n"
+"POT-Creation-Date: 2026-10-01T12:40:31.502Z\n"
+"PO-Revision-Date: 2026-10-01T12:40:31.503Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -1413,21 +1413,6 @@ msgstr "Summary"
 msgid "There was an error loading the evaluation summary. Please try again later."
 msgstr "There was an error loading the evaluation summary. Please try again later."
 
-msgid "Forecast periods"
-msgstr "Forecast periods"
-
-msgid "Number of splits"
-msgstr "Number of splits"
-
-msgid "Step between splits"
-msgstr "Step between splits"
-
-msgid "Number of training runs"
-msgstr "Number of training runs"
-
-msgid "Future-weather provider"
-msgstr "Future-weather provider"
-
 msgid "Model updated"
 msgstr "Model updated"
 
@@ -2710,12 +2695,6 @@ msgstr[1] "{{count}} model runs in this benchmark"
 
 msgid "No benchmarks match the selected dataset origin."
 msgstr "No benchmarks match the selected dataset origin."
-
-msgid "Splits"
-msgstr "Splits"
-
-msgid "Future weather"
-msgstr "Future weather"
 
 msgid "Run predictions, review activity, and manage this setup."
 msgstr "Run predictions, review activity, and manage this setup."

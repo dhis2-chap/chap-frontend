@@ -36,7 +36,7 @@ import styles from './DatasetEvaluationForm.module.css';
 const schema = z.object({
     name: z.string().trim().min(1, { message: i18n.t('Name is required') }),
     datasetId: z.string(),
-    backtestParameters: backtestParametersSchema,
+    backtestParameters: backtestParametersSchema.optional(),
     modelNames: z.array(z.string()).min(1),
 });
 

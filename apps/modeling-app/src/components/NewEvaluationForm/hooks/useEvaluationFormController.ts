@@ -8,10 +8,7 @@ export const useEvaluationFormController = (initialValues?: Partial<ModelExecuti
         isLoading: periodSettingsLoading,
         error: periodSettingsError,
     } = useDhis2PeriodSettings();
-    const { methods } = useModelExecutionFormState({
-        initialValues,
-        periodSettings,
-    });
+    const { methods } = useModelExecutionFormState({ initialValues, periodSettings });
 
     const {
         createNewBacktest,

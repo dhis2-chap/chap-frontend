@@ -1,7 +1,6 @@
 import { useRef, useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ModelExecutionFormValues } from '../../ModelExecutionForm/hooks/useModelExecutionFormState';
-import { backtestParametersSchema } from './backtestParameters';
 import { BacktestsService, FeatureCollectionModel, MakeBacktestWithDataRequest, ApiError } from '@dhis2-chap/ui';
 import { useDataEngine } from '@dhis2/app-runtime';
 import { useNavigate } from 'react-router-dom';
@@ -48,7 +47,7 @@ export const useCreateNewBacktest = ({
             dataSources,
             dataToBeFetched: [],
             modelId: model.name,
-            ...backtestParametersSchema.parse(formData.backtestParameters),
+            ...formData.backtestParameters,
         };
 
         return { backtestRequest, hash };

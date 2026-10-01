@@ -1,17 +1,10 @@
 import i18n from '@dhis2/d2-i18n';
 import { Tag, getPeriodNameFromId } from '@dhis2-chap/ui';
 import type { BacktestSpecificationSummary, DataSetMeta } from '@dhis2-chap/ui';
+import { useBacktestParameterValues } from '@/hooks/useBacktestParameters';
 import styles from './BenchmarksPage.module.css';
 
 type Parameters = Pick<BacktestSpecificationSummary, 'nPeriods' | 'nSplits' | 'stride' | 'nRetrain' | 'futureWeatherProvider'>;
-
-const getParameters = (s: Parameters) => [
-    { label: i18n.t('Forecast periods'), value: s.nPeriods },
-    { label: i18n.t('Splits'), value: s.nSplits },
-    { label: i18n.t('Step between splits'), value: s.stride },
-    { label: i18n.t('Number of training runs'), value: s.nRetrain },
-    { label: i18n.t('Future weather'), value: s.futureWeatherProvider },
-];
 
 export const formatPeriodRange = (dataset: DataSetMeta) => (
     dataset.firstPeriod && dataset.lastPeriod
@@ -19,33 +12,39 @@ export const formatPeriodRange = (dataset: DataSetMeta) => (
         : '—'
 );
 
-export const SpecificationParameters = ({ specification }: { specification: Parameters }) => (
-    <div className={styles.parameterTags}>
-        {getParameters(specification).map(({ label, value }) => (
-            <Tag key={label}>
-                <span className={styles.parameterLabel}>{label}</span>
-                {value ?? '—'}
-            </Tag>
-        ))}
-    </div>
-);
+export const SpecificationParameters = ({ specification }: { specification: Parameters }) => {
+    const parameters = useBacktestParameterValues(specification);
+    return (
+        <div className={styles.parameterTags}>
+            {parameters.map(({ label, value }) => (
+                <Tag key={label}>
+                    <span className={styles.parameterLabel}>{label}</span>
+                    {value ?? '—'}
+                </Tag>
+            ))}
+        </div>
+    );
+};
 
 type SummaryProps = {
     specification: Parameters & { dataset: DataSetMeta };
     orgUnitCount: number;
 };
 
-export const SpecificationSummary = ({ specification, orgUnitCount }: SummaryProps) => (
-    <dl className={styles.summary}>
-        {[
-            { label: i18n.t('Period range'), value: formatPeriodRange(specification.dataset) },
-            { label: i18n.t('Organisation units'), value: orgUnitCount },
-            ...getParameters(specification),
-        ].map(({ label, value }) => (
-            <div key={label}>
-                <dt>{label}</dt>
-                <dd>{value ?? '—'}</dd>
-            </div>
-        ))}
-    </dl>
-);
+export const SpecificationSummary = ({ specification, orgUnitCount }: SummaryProps) => {
+    const parameters = useBacktestParameterValues(specification);
+    return (
+        <dl className={styles.summary}>
+            {[
+                { label: i18n.t('Period range'), value: formatPeriodRange(specification.dataset) },
+                { label: i18n.t('Organisation units'), value: orgUnitCount },
+                ...parameters,
+            ].map(({ label, value }) => (
+                <div key={label}>
+                    <dt>{label}</dt>
+                    <dd>{value ?? '—'}</dd>
+                </div>
+            ))}
+        </dl>
+    );
+};

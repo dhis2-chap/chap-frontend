@@ -209,17 +209,15 @@ test('validates period rules with invalid values', async ({ page }) => {
 });
 
 test('validates backtest parameters, submits chosen values, and shows backend validation errors', async ({ page }) => {
-    const providersResponse = await page.request.get(chapUrl('/v1/analytics/weather-providers'));
-    expect([200, 404]).toContain(providersResponse.status());
-    const supportsWeatherProviders = providersResponse.ok();
+    const parametersResponse = await page.request.get(chapUrl('/v1/analytics/backtest-parameters'));
+    expect([200, 404]).toContain(parametersResponse.status());
+    test.skip(!parametersResponse.ok(), 'Stable CHAP releases predate configurable backtest parameters');
     await page.goto('/#/evaluate/new');
     await prepareValidFormData(page, 'Custom backtest parameters');
     for (const [name, value] of Object.entries({ nPeriods: 3, nSplits: 7, stride: 1, nRetrain: 1 })) {
         await expect(page.locator(`[data-test="backtest-${name}"] input`)).toHaveValue(String(value));
     }
-    if (supportsWeatherProviders) {
-        await expect(page.locator('[data-test="backtest-futureWeatherProvider"]')).toContainText('Seasonal climatology');
-    }
+    await expect(page.locator('[data-test="backtest-futureWeatherProvider"]')).toContainText('Seasonal climatology');
 
     const start = page.getByRole('button', { name: 'Start dry run' });
     const retrains = page.locator('[data-test="backtest-nRetrain"] input');
@@ -234,10 +232,8 @@ test('validates backtest parameters, submits chosen values, and shows backend va
     await periods.fill('2');
     await page.locator('[data-test="backtest-nSplits"] input').fill('4');
     await page.locator('[data-test="backtest-stride"] input').fill('2');
-    if (supportsWeatherProviders) {
-        await page.locator('[data-test="backtest-futureWeatherProvider"]').click();
-        await page.getByText('Damped persistence', { exact: true }).click();
-    }
+    await page.locator('[data-test="backtest-futureWeatherProvider"]').click();
+    await page.getByText('Damped persistence', { exact: true }).click();
 
     // A server-side rejection cannot reliably be caused by a valid UI form.
     await page.route('**/analytics/create-backtest-with-data/*', route => route.fulfill({
@@ -249,7 +245,7 @@ test('validates backtest parameters, submits chosen values, and shows backend va
     const request = await requestPromise;
     expect(request.postDataJSON()).toMatchObject({
         nPeriods: 2, nSplits: 4, stride: 2, nRetrain: 2,
-        futureWeatherProvider: supportsWeatherProviders ? 'damped_persistence' : 'climatology',
+        futureWeatherProvider: 'damped_persistence',
     });
     await expect(page.getByText('futureWeatherProvider: Provider temporarily unavailable', { exact: true })).toBeVisible();
 });
