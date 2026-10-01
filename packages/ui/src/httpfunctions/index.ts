@@ -7,21 +7,11 @@ export { CancelablePromise, CancelError } from './core/CancelablePromise';
 export { OpenAPI } from './core/OpenAPI';
 export type { OpenAPIConfig } from './core/OpenAPI';
 
-export { AlertApproval } from './models/AlertApproval';
-export type { AlertApprovalRequest } from './models/AlertApprovalRequest';
-export type { AlertCreate } from './models/AlertCreate';
-export type { AlertIdsResponse } from './models/AlertIdsResponse';
-export type { AlertLevel } from './models/AlertLevel';
-export type { AlertPolicyCreate } from './models/AlertPolicyCreate';
-export type { AlertPolicyRead } from './models/AlertPolicyRead';
-export type { AlertRead } from './models/AlertRead';
-export type { AlertsCreate } from './models/AlertsCreate';
 export { AssessedStatus } from './models/AssessedStatus';
 export { AuthorAssessedStatus } from './models/AuthorAssessedStatus';
 export type { Backtest } from './models/Backtest';
 export type { BacktestDomain } from './models/BacktestDomain';
 export type { BacktestJob } from './models/BacktestJob';
-export type { BacktestParameterInfo } from './models/BacktestParameterInfo';
 export type { BacktestPlotType } from './models/BacktestPlotType';
 export type { BacktestRead } from './models/BacktestRead';
 export type { BacktestSpecificationRead } from './models/BacktestSpecificationRead';
@@ -69,7 +59,6 @@ export type { ModelConfigurationCreate } from './models/ModelConfigurationCreate
 export type { ModelMetadata } from './models/ModelMetadata';
 export type { ModelSpecRead } from './models/ModelSpecRead';
 export type { ModelTemplateDB } from './models/ModelTemplateDB';
-export type { ModelTemplateFromService } from './models/ModelTemplateFromService';
 export type { ModelTemplateRead } from './models/ModelTemplateRead';
 export type { MultiLineString } from './models/MultiLineString';
 export type { MultiPoint } from './models/MultiPoint';
@@ -107,8 +96,6 @@ export type { ValidationError } from './models/ValidationError';
 export type { VisualizationInfo } from './models/VisualizationInfo';
 export type { WeatherProviderInfo } from './models/WeatherProviderInfo';
 
-export { AlertPoliciesService } from './services/AlertPoliciesService';
-export { AlertsService } from './services/AlertsService';
 export { BacktestsService } from './services/BacktestsService';
 export { DatasetsService } from './services/DatasetsService';
 export { JobsService } from './services/JobsService';

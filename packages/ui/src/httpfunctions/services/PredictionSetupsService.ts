@@ -15,6 +15,8 @@ import { request as __request } from '../core/request';
 export class PredictionSetupsService {
     /**
      * Browse saved prediction setups
+     * ⚠️ **Experimental:** behavior and response shape may change without notice.
+     *
      * List every prediction setup so you can manage them, run them ad-hoc, or check which backtests have been promoted into a recurring forecast.
      *
      * Lightweight listing: each entry carries the setup's schedule, target backtest, and
@@ -31,6 +33,8 @@ export class PredictionSetupsService {
     }
     /**
      * Promote a backtest into a reusable prediction config
+     * ⚠️ **Experimental:** behavior and response shape may change without notice.
+     *
      * Save a backtest as a prediction setup — a named configuration you can rerun on fresh data, either ad-hoc via ``/run`` or on a cron schedule.
      *
      * Use this after evaluating a model on historical data and deciding it's good enough
@@ -56,6 +60,8 @@ export class PredictionSetupsService {
     }
     /**
      * View a prediction setup with its forecast history
+     * ⚠️ **Experimental:** behavior and response shape may change without notice.
+     *
      * Read a setup's configuration alongside every prediction it has produced, so a UI can show "what does this setup do" and "what has it actually forecast" on the same page.
      *
      * 404 if the id is unknown.
@@ -79,6 +85,8 @@ export class PredictionSetupsService {
     }
     /**
      * Tweak a prediction setup's schedule or targets
+     * ⚠️ **Experimental:** behavior and response shape may change without notice.
+     *
      * Adjust a setup without recreating it — pause or resume the schedule, change the cron expression, swap quantile targets, rename it.
      *
      * Only the fields you actually send are touched, so partial updates are safe. 404 if
@@ -107,6 +115,8 @@ export class PredictionSetupsService {
     }
     /**
      * Retire a prediction setup
+     * ⚠️ **Experimental:** behavior and response shape may change without notice.
+     *
      * Stop a setup from ever running again — cancels any in-flight jobs it has launched, then removes the setup row.
      *
      * Use this when a forecast workflow is being decommissioned. Cancellation of running
@@ -134,6 +144,8 @@ export class PredictionSetupsService {
     }
     /**
      * Run a prediction setup against fresh observations
+     * ⚠️ **Experimental:** behavior and response shape may change without notice.
+     *
      * Run a forecast from a saved setup using observations supplied directly in the request body — the manual equivalent of what the cron schedule does automatically.
      *
      * Use this when you want to forecast ahead of the schedule (a new data drop has

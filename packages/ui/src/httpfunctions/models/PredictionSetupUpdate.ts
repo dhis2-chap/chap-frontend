@@ -23,9 +23,5 @@ export type PredictionSetupUpdate = {
      * New full quantile-targets list; `None` leaves it unchanged.
      */
     quantileTargets?: (Array<QuantileTarget> | null);
-    /**
-     * New alert policy to raise alerts against; `None` leaves it unchanged.
-     */
-    alertPolicyId?: (number | null);
 };
 

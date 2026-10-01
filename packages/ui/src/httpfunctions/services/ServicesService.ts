@@ -16,10 +16,9 @@ export class ServicesService {
      * Announce a CHAPKit-hosted model service so CHAP Core can route work to it.
      *
      * The orchestrator records the service and returns the absolute ping URL the service
-     * must hit periodically to stay live. As a side effect, the service's model template
-     * is stored right away if it is not yet, so it can be configured without waiting for
-     * the next lazy sync. Configured models are not created from a service; they come
-     * from its marketplace entry through ``chap-admin install``. Requires the
+     * must hit periodically to stay live. As a side effect, the service's templates and
+     * default configurations are eagerly pulled into the v1 CRUD tables, so backtests and
+     * predictions can target it without waiting for the next lazy sync. Requires the
      * ``X-Service-Key`` header.
      * @param requestBody
      * @param xServiceKey
