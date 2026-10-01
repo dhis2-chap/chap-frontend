@@ -3,9 +3,15 @@ import { readFile } from 'node:fs/promises';
 import type { BacktestSpecificationRead, MakeBacktestsRequest, MakeBacktestsResponse, ModelSpecRead } from '@dhis2-chap/ui';
 import { chapUrl, createCompletedNaiveEvaluation, readJson } from './helpers/evaluation-fixtures';
 import { toDataTestKey } from '../src/utils/dataTestKey';
+import { isVersionCompatible } from '../src/utils/compareVersions';
 
 test('compares runs, exports scores and adds a model to the same benchmark', async ({ page }) => {
     test.setTimeout(240_000);
+    const { chap_core_version: chapVersion } = await readJson<{ chap_core_version: string }>(
+        await page.request.get(chapUrl('/system/info')),
+        'Load Chap Core version',
+    );
+    test.skip(!isVersionCompatible(chapVersion, '2.4.0'), 'Benchmarks need Chap Core >= 2.4.0');
     const evaluation = await createCompletedNaiveEvaluation(page, `E2E benchmark ${Date.now()}`);
     const specification = await readJson<BacktestSpecificationRead>(
         await page.request.get(chapUrl(`/v1/crud/backtest-specifications/${evaluation.specificationId}`)),
