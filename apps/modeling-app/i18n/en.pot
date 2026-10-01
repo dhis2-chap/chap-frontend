@@ -5,14 +5,17 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-09-30T08:56:54.301Z\n"
-"PO-Revision-Date: 2026-09-30T08:56:54.302Z\n"
+"POT-Creation-Date: 2026-10-01T06:49:44.314Z\n"
+"PO-Revision-Date: 2026-10-01T06:49:44.315Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
 
 msgid "Compare evaluations"
 msgstr "Compare evaluations"
+
+msgid "Benchmarks"
+msgstr "Benchmarks"
 
 msgid "New evaluation"
 msgstr "New evaluation"
@@ -2550,6 +2553,175 @@ msgstr "Requires superuser authority"
 
 msgid "Model not found"
 msgstr "Model not found"
+
+msgid ""
+"The selected models are no longer compatible with this dataset. Choose "
+"models again."
+msgstr ""
+"The selected models are no longer compatible with this dataset. Choose "
+"models again."
+
+msgid "Benchmark {{id}}"
+msgstr "Benchmark {{id}}"
+
+msgid "Add models"
+msgstr "Add models"
+
+msgid ""
+"Run configured models using this benchmark’s dataset and saved backtest "
+"parameters."
+msgstr ""
+"Run configured models using this benchmark’s dataset and saved backtest "
+"parameters."
+
+msgid "No compatible models"
+msgstr "No compatible models"
+
+msgid "Already run with this version"
+msgstr "Already run with this version"
+
+msgid ""
+"{{models}} has already been run in this benchmark with this model version. "
+"Running it again adds another row, so you can see how much the scores vary "
+"between runs."
+msgid_plural ""
+"{{models}} has already been run in this benchmark with this model version. "
+"Running it again adds another row, so you can see how much the scores vary "
+"between runs."
+msgstr[0] ""
+"{{models}} has already been run in this benchmark with this model version. "
+"Running it again adds another row, so you can see how much the scores vary "
+"between runs."
+msgstr[1] ""
+"{{models}} have already been run in this benchmark with these model "
+"versions. Running them again adds another row for each, so you can see how "
+"much the scores vary between runs."
+
+msgid "Could not start model runs"
+msgstr "Could not start model runs"
+
+msgid "Run models"
+msgstr "Run models"
+
+msgid "Invalid benchmark"
+msgstr "Invalid benchmark"
+
+msgid "Could not load benchmark"
+msgstr "Could not load benchmark"
+
+msgid ""
+"Benchmark {{id}}. Compare model runs that share this dataset and backtest "
+"setup."
+msgstr ""
+"Benchmark {{id}}. Compare model runs that share this dataset and backtest "
+"setup."
+
+msgid "Model runs queued"
+msgstr "Model runs queued"
+
+msgid ""
+"{{count}} model runs queued. Completed results will appear in the "
+"benchmarks."
+msgid_plural ""
+"{{count}} model runs queued. Completed results will appear in the "
+"benchmarks."
+msgstr[0] ""
+"{{count}} model runs queued. Completed results will appear in the "
+"benchmarks."
+msgstr[1] ""
+"{{count}} model runs queued. Completed results will appear in the "
+"benchmarks."
+
+msgid "View jobs and failures"
+msgstr "View jobs and failures"
+
+msgid "Open the benchmark returned by CHAP"
+msgstr "Open the benchmark returned by CHAP"
+
+msgid "{{count}} models running"
+msgid_plural "{{count}} models running"
+msgstr[0] "{{count}} model running"
+msgstr[1] "{{count}} models running"
+
+msgid "View evaluation"
+msgstr "View evaluation"
+
+msgid "Best score among these runs"
+msgstr "Best score among these runs"
+
+msgid ""
+"Aggregate scores across all splits and organisation units. The best score "
+"in each column is highlighted, including ties. Best only means best among "
+"these runs, not necessarily a good score."
+msgstr ""
+"Aggregate scores across all splits and organisation units. The best score "
+"in each column is highlighted, including ties. Best only means best among "
+"these runs, not necessarily a good score."
+
+msgid "Download CSV"
+msgstr "Download CSV"
+
+msgid "Metric descriptions unavailable"
+msgstr "Metric descriptions unavailable"
+
+msgid ""
+"Scores are still available, but best values cannot be highlighted without "
+"metric definitions."
+msgstr ""
+"Scores are still available, but best values cannot be highlighted without "
+"metric definitions."
+
+msgid "No model runs yet"
+msgstr "No model runs yet"
+
+msgid ""
+"Add models to run them against this benchmark. Completed runs will appear "
+"here."
+msgstr ""
+"Add models to run them against this benchmark. Completed runs will appear "
+"here."
+
+msgid "Model runs"
+msgstr "Model runs"
+
+msgid "Compare model runs evaluated on the same dataset and backtest parameters."
+msgstr "Compare model runs evaluated on the same dataset and backtest parameters."
+
+msgid "Benchmarks unavailable"
+msgstr "Benchmarks unavailable"
+
+msgid ""
+"This CHAP server does not support backtest specifications. Update CHAP Core "
+"to use benchmarks."
+msgstr ""
+"This CHAP server does not support backtest specifications. Update CHAP Core "
+"to use benchmarks."
+
+msgid "Could not load benchmarks"
+msgstr "Could not load benchmarks"
+
+msgid "No benchmarks yet"
+msgstr "No benchmarks yet"
+
+msgid "Benchmarks appear when evaluations are run on a saved dataset."
+msgstr "Benchmarks appear when evaluations are run on a saved dataset."
+
+msgid "{{count}} model runs in this benchmark"
+msgid_plural "{{count}} model runs in this benchmark"
+msgstr[0] "{{count}} model runs in this benchmark"
+msgstr[1] "{{count}} model runs in this benchmark"
+
+msgid "No benchmarks match the selected dataset origin."
+msgstr "No benchmarks match the selected dataset origin."
+
+msgid "Splits"
+msgstr "Splits"
+
+msgid "Retraining"
+msgstr "Retraining"
+
+msgid "Future weather"
+msgstr "Future weather"
 
 msgid "Run predictions, review activity, and manage this setup."
 msgstr "Run predictions, review activity, and manage this setup."

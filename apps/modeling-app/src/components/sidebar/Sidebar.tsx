@@ -14,6 +14,7 @@ import {
     SidenavParent,
 } from './sidenav';
 import { ReportBugDialog } from '../../features/common-features/ReportBugDialog/ReportBugDialog';
+import { Features, useIsFeatureAvailable } from '../../hooks/useIsFeatureAvailable';
 
 type LinkItem = {
     to: string;
@@ -78,6 +79,7 @@ export const Sidebar = ({
     const collapsedExternally = useRef<boolean>(false);
     const [collapsed, setCollapsed] = useState(false);
     const [isReportBugDialogOpen, setIsReportBugDialogOpen] = useState(false);
+    const { isAvailable: isBenchmarksAvailable } = useIsFeatureAvailable(Features.BENCHMARKS);
 
     useEffect(() => {
         // only react if explicitly defined
@@ -111,6 +113,7 @@ export const Sidebar = ({
                                     label: i18n.t('Compare'),
                                     to: '/evaluate/compare',
                                 },
+                                ...(isBenchmarksAvailable ? [{ label: i18n.t('Benchmarks'), to: '/evaluate/benchmarks' }] : []),
                             ]}
                         />
                         <SidebarNavLink to="/predictions" label={i18n.t('Predict')} />
