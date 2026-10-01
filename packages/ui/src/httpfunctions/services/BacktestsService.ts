@@ -4,6 +4,7 @@
 /* eslint-disable */
 import type { Backtest } from '../models/Backtest';
 import type { BacktestDomain } from '../models/BacktestDomain';
+import type { BacktestParameterInfo } from '../models/BacktestParameterInfo';
 import type { BacktestRead } from '../models/BacktestRead';
 import type { BacktestSpecificationRead } from '../models/BacktestSpecificationRead';
 import type { BacktestSpecificationSummary } from '../models/BacktestSpecificationSummary';
@@ -89,8 +90,8 @@ export class BacktestsService {
      * @param nPeriods Number of periods to forecast at each split.
      * @param nSplits Total number of rolling train/test splits.
      * @param stride Number of periods to advance between successive splits.
-     * @param nRetrain Number of times the model is retrained, evenly spaced across the splits. 1 means train once.
-     * @param futureWeatherProvider Id of the registered future-weather provider supplying climate covariates for each forecast window. Use the same provider here and on the prediction so backtest scores reflect what the model will see in production. See GET /v1/analytics/weather-providers.
+     * @param nRetrain Number of times the model is trained, evenly spaced across the splits. 1 means train once. Cannot exceed the number of splits.
+     * @param futureWeatherProvider Source of weather data for each forecast window. Use the same provider for backtesting and prediction so scores reflect production conditions.
      * @returns BacktestSpecificationSummary Successful Response
      * @throws ApiError
      */
@@ -504,6 +505,20 @@ export class BacktestsService {
             errors: {
                 422: `Validation Error`,
             },
+        });
+    }
+    /**
+     * Discover backtest parameter defaults and display metadata
+     * Populate a backtest form from the same field definitions used to validate requests.
+     *
+     * Use `GET /v1/analytics/weather-providers` to populate the `futureWeatherProvider` picker.
+     * @returns BacktestParameterInfo Successful Response
+     * @throws ApiError
+     */
+    public static listBacktestParametersV1AnalyticsBacktestParametersGet(): CancelablePromise<Array<BacktestParameterInfo>> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/v1/analytics/backtest-parameters',
         });
     }
     /**
