@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-02T09:13:11.596Z\n"
-"PO-Revision-Date: 2026-10-02T09:13:11.597Z\n"
+"POT-Creation-Date: 2026-10-02T09:38:00.798Z\n"
+"PO-Revision-Date: 2026-10-02T09:38:00.798Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -16,6 +16,9 @@ msgstr "Compare evaluations"
 
 msgid "Benchmarks"
 msgstr "Benchmarks"
+
+msgid "New benchmark"
+msgstr "New benchmark"
 
 msgid "New evaluation"
 msgstr "New evaluation"
@@ -923,6 +926,9 @@ msgstr "Error loading datasets or models"
 msgid "No saved datasets yet"
 msgstr "No saved datasets yet"
 
+msgid "Save a dataset first, then return here to run models in a benchmark."
+msgstr "Save a dataset first, then return here to run models in a benchmark."
+
 msgid ""
 "Save a dataset once and reuse it across evaluations, or import data for "
 "this evaluation only."
@@ -932,6 +938,24 @@ msgstr ""
 
 msgid "Import from DHIS2 instead"
 msgstr "Import from DHIS2 instead"
+
+msgid "How benchmarks work"
+msgstr "How benchmarks work"
+
+msgid ""
+"Runs with the same dataset and backtest parameters appear in the same "
+"benchmark. The run name labels your model runs; it does not create a "
+"separate benchmark."
+msgstr ""
+"Runs with the same dataset and backtest parameters appear in the same "
+"benchmark. The run name labels your model runs; it does not create a "
+"separate benchmark."
+
+msgid "Run name"
+msgstr "Run name"
+
+msgid "Benchmark model runs"
+msgstr "Benchmark model runs"
 
 msgid "No datasets match the origin filter"
 msgstr "No datasets match the origin filter"
@@ -954,6 +978,9 @@ msgid ""
 msgstr ""
 "This dataset has {{periodCount}} periods, but an evaluation needs at least "
 "{{requiredPeriodCount}}."
+
+msgid "Run benchmark"
+msgstr "Run benchmark"
 
 msgid "Start evaluation"
 msgstr "Start evaluation"
@@ -2687,8 +2714,12 @@ msgstr "Could not load benchmarks"
 msgid "No benchmarks yet"
 msgstr "No benchmarks yet"
 
-msgid "Benchmarks appear when evaluations are run on a saved dataset."
-msgstr "Benchmarks appear when evaluations are run on a saved dataset."
+msgid ""
+"A benchmark is defined by a saved dataset and backtest parameters. Run "
+"models to compare their performance."
+msgstr ""
+"A benchmark is defined by a saved dataset and backtest parameters. Run "
+"models to compare their performance."
 
 msgid "{{count}} model runs in this benchmark"
 msgid_plural "{{count}} model runs in this benchmark"
@@ -2697,6 +2728,9 @@ msgstr[1] "{{count}} model runs in this benchmark"
 
 msgid "No benchmarks match the selected filters."
 msgstr "No benchmarks match the selected filters."
+
+msgid "Back to benchmarks"
+msgstr "Back to benchmarks"
 
 msgid "Run predictions, review activity, and manage this setup."
 msgstr "Run predictions, review activity, and manage this setup."

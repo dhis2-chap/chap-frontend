@@ -5,6 +5,61 @@ import { chapUrl, createCompletedNaiveEvaluation, readJson } from './helpers/eva
 import { toDataTestKey } from '../src/utils/dataTestKey';
 import { isVersionCompatible } from '../src/utils/compareVersions';
 
+test('starts model runs from New benchmark and groups them by dataset and parameters', async ({ page }) => {
+    test.setTimeout(240_000);
+    const { chap_core_version: chapVersion } = await readJson<{ chap_core_version: string }>(
+        await page.request.get(chapUrl('/system/info')),
+        'Load Chap Core version',
+    );
+    test.skip(!isVersionCompatible(chapVersion, '2.4.0'), 'Benchmarks need Chap Core >= 2.4.0');
+    const evaluation = await createCompletedNaiveEvaluation(page, `E2E new benchmark ${Date.now()}`);
+
+    await page.goto('/#/evaluate/benchmarks');
+    await page.getByRole('button', { name: 'New benchmark', exact: true }).click();
+    await expect(page).toHaveURL('/#/evaluate/benchmarks/new');
+    await expect(page.getByRole('heading', { name: 'New benchmark', exact: true })).toBeVisible();
+    await expect(page.getByRole('navigation', { name: 'Breadcrumbs' }).locator('[aria-current="page"]')).toHaveText('New benchmark');
+    await page.getByRole('button', { name: 'Back to benchmarks', exact: true }).click();
+    await expect(page).toHaveURL('/#/evaluate/benchmarks');
+    await page.getByRole('button', { name: 'New benchmark', exact: true }).click();
+
+    const start = page.getByRole('button', { name: 'Run benchmark', exact: true });
+    await expect(start).toBeDisabled();
+    await expect(page.getByText('Runs with the same dataset and backtest parameters appear in the same benchmark.', { exact: false })).toBeVisible();
+    await page.getByText('Created manually', { exact: true }).click();
+    await page.getByText('Created by evaluations or predictions', { exact: true }).click();
+    await page.locator('[data-test="evaluation-dataset-select"]').click();
+    await page.getByText(evaluation.dataset.name, { exact: true }).click();
+    // Match the fixture's parameters so the backend reuses its benchmark.
+    for (const [field, value] of Object.entries({ nPeriods: 3, nSplits: 10, stride: 1 })) {
+        await page.locator(`[data-test="backtest-${field}"] input`).fill(String(value));
+    }
+    const name = `E2E benchmark runs ${Date.now()}`;
+    await page.locator('[data-test="evaluation-name-input"] input').fill(name);
+    await page.getByRole('button', { name: 'Select models', exact: true }).click();
+    const modal = page.getByRole('dialog');
+    await modal.locator(`[data-test="model-toggle-${toDataTestKey('naive_model')}"]`).click();
+    await modal.getByRole('button', { name: 'Use selected models (1)', exact: true }).click();
+
+    const responsePromise = page.waitForResponse(response => response.url().endsWith('/v1/analytics/create-backtests') && response.request().method() === 'POST');
+    await start.click();
+    const response = await responsePromise;
+    expect(response.request().postDataJSON()).toMatchObject({
+        name, datasetId: evaluation.datasetId, modelIds: ['naive_model'], nPeriods: 3, nSplits: 10, stride: 1,
+    });
+    const result = await readJson<MakeBacktestsResponse>(response, 'Run new benchmark');
+    expect(result.specificationId).toBe(evaluation.specificationId);
+    await expect(page).toHaveURL(`/#/evaluate/benchmarks/${result.specificationId}`);
+    await expect.poll(async () => {
+        const status = await readJson<string>(await page.request.get(chapUrl(`/v1/jobs/${result.jobs[0].jobId}`)), 'Load benchmark run status');
+        if (['FAILURE', 'REVOKED'].includes(status)) {
+            throw new Error(`Benchmark run failed: ${await (await page.request.get(chapUrl(`/v1/jobs/${result.jobs[0].jobId}/logs`))).text()}`);
+        }
+        return status;
+    }, { timeout: 180_000, intervals: [3000] }).toBe('SUCCESS');
+    await expect(page.getByRole('button', { name: 'View evaluation', exact: true })).toHaveCount(2, { timeout: 20_000 });
+});
+
 test('uses benchmark actions to view, add models, export scores and reuse the dataset', async ({ page }) => {
     test.setTimeout(240_000);
     const { chap_core_version: chapVersion } = await readJson<{ chap_core_version: string }>(

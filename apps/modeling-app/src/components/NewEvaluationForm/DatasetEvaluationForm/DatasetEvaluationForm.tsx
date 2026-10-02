@@ -44,9 +44,10 @@ type FormValues = z.infer<typeof schema>;
 
 type Props = {
     initialDatasetId?: string;
+    benchmarkContext?: boolean;
 };
 
-export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
+export const DatasetEvaluationForm = ({ initialDatasetId = '', benchmarkContext = false }: Props) => {
     const datasets = useDatasets();
     const { models, isLoading: isModelsLoading, error: modelsError } = useModels();
     const navigate = useNavigate();
@@ -76,7 +77,7 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
     const canSubmit = selectedModels.length > 0 && !selectedModels.some(hasRevisionMismatch) &&
         !!dataset?.periodType && !isTooShort && dataset?.id != null;
 
-    const createEvaluation = useMutation<void, ApiError | Error, FormValues>({
+    const createEvaluation = useMutation<number | undefined, ApiError | Error, FormValues>({
         mutationFn: async ({ name, backtestParameters }: FormValues) => {
             const runnableModels = await Promise.all(
                 selectedModels.map(model => fetchRunnableModel(queryClient, model.id)),
@@ -84,8 +85,8 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
             const request = { name, datasetId: dataset!.id!, ...(backtestParameters ?? getLegacyBacktestParameters(dataset!.periodType)) };
             const modelIds = runnableModels.map(model => model.name);
             if (isMultiModelAvailable) {
-                await BacktestsService.createBacktestsV1AnalyticsCreateBacktestsPost({ ...request, modelIds });
-                return;
+                const { specificationId } = await BacktestsService.createBacktestsV1AnalyticsCreateBacktestsPost({ ...request, modelIds });
+                return specificationId;
             }
             // Chap Core < 2.4.0 has no multi-model endpoint: queue one backtest per model,
             // named like the multi-model endpoint does, and keep failed models selected for retry.
@@ -99,7 +100,9 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
             }
         },
         onSettled: () => queryClient.invalidateQueries({ queryKey: ['jobs'] }),
-        onSuccess: () => navigate('/jobs'),
+        onSuccess: specificationId => navigate(
+            benchmarkContext && specificationId != null ? `/evaluate/benchmarks/${specificationId}` : '/jobs',
+        ),
     });
 
     const {
@@ -133,14 +136,18 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
         return (
             <div className={styles.container}>
                 <NoticeBox title={i18n.t('No saved datasets yet')}>
-                    {i18n.t('Save a dataset once and reuse it across evaluations, or import data for this evaluation only.')}
+                    {benchmarkContext
+                        ? i18n.t('Save a dataset first, then return here to run models in a benchmark.')
+                        : i18n.t('Save a dataset once and reuse it across evaluations, or import data for this evaluation only.')}
                     <ButtonStrip className={styles.emptyActions}>
                         <Button small primary onClick={() => navigate('/datasets/new')}>
                             {i18n.t('New dataset')}
                         </Button>
-                        <Button small secondary onClick={() => navigate('/evaluate/new')}>
-                            {i18n.t('Import from DHIS2 instead')}
-                        </Button>
+                        {!benchmarkContext && (
+                            <Button small secondary onClick={() => navigate('/evaluate/new')}>
+                                {i18n.t('Import from DHIS2 instead')}
+                            </Button>
+                        )}
                     </ButtonStrip>
                 </NoticeBox>
             </div>
@@ -160,7 +167,16 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
                             }
                         })}
                     >
-                        <NameInput disabled={createEvaluation.isLoading} />
+                        {benchmarkContext && (
+                            <NoticeBox title={i18n.t('How benchmarks work')}>
+                                {i18n.t('Runs with the same dataset and backtest parameters appear in the same benchmark. The run name labels your model runs; it does not create a separate benchmark.')}
+                            </NoticeBox>
+                        )}
+                        <NameInput
+                            disabled={createEvaluation.isLoading}
+                            label={benchmarkContext ? i18n.t('Run name') : undefined}
+                            placeholder={benchmarkContext ? i18n.t('Benchmark model runs') : undefined}
+                        />
 
                         <div className={styles.datasetRow}>
                             <SingleSelectField
@@ -225,7 +241,7 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
                                     loading={createEvaluation.isLoading}
                                     disabled={!canSubmit || createEvaluation.isLoading}
                                 >
-                                    {i18n.t('Start evaluation')}
+                                    {benchmarkContext ? i18n.t('Run benchmark') : i18n.t('Start evaluation')}
                                 </Button>
                             </ButtonStrip>
                         </div>
