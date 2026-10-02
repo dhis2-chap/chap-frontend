@@ -32,10 +32,21 @@ import {
 import { PredictionRunActionsMenu } from './PredictionRunActionsMenu';
 import styles from './PredictionRunsWidget.module.css';
 import { getChapErrorLabel } from '../../../../utils/chapErrors';
-import { JOB_TYPES } from '../../../../hooks/useJobs';
+import { isActiveJob, JOB_STATUSES, JOB_TYPES } from '../../../../hooks/useJobs';
+import { JobActionsMenu } from '../../../JobsTable/JobActionsMenu/JobActionsMenu';
+import { StatusCell } from '../../../JobsTable/TableCells/StatusCell';
 
 const EMPTY_VALUE = '-';
-const columnHelper = createColumnHelper<PredictionInfo>();
+
+// A completed prediction, or a prediction job that has not produced one yet.
+type PredictionRow = {
+    id: string;
+    created?: string;
+    prediction?: PredictionInfo;
+    job?: JobDescription;
+};
+
+const columnHelper = createColumnHelper<PredictionRow>();
 
 const formatDate = (created?: string | null) => (
     created ? format(new Date(created), 'dd.MM.yyyy, HH:mm') : EMPTY_VALUE
@@ -69,7 +80,7 @@ const formatPeriodSummary = (periods: string[]) => {
     return `${periods[0]} - ${periods[periods.length - 1]}`;
 };
 
-const getSortDirection = (column: Column<PredictionInfo>) => {
+const getSortDirection = (column: Column<PredictionRow>) => {
     return column.getIsSorted() || 'default';
 };
 
@@ -112,7 +123,7 @@ const WidgetHeader = ({
 
     return (
         <div className={styles.header}>
-            <span className={styles.title}>{i18n.t('Completed predictions')}</span>
+            <span className={styles.title}>{i18n.t('Predictions')}</span>
             <div className={styles.meta}>
                 {hasRunningJob && (
                     <StatusIndicator
@@ -147,38 +158,60 @@ export const PredictionRunsWidget = ({
     predictions,
 }: Props) => {
     const hasError = !!error;
-    const hasRuns = predictions.length > 0;
+
     const [open, setOpen] = useState(true);
     const [sorting, setSorting] = useState<SortingState>([{ id: 'created', desc: true }]);
     const navigate = useNavigate();
-    // A successful prediction job's result is the id of the prediction it created.
-    const predictionJobs = useMemo(() => new Map(
-        jobs
-            .filter(job => job.type === JOB_TYPES.MAKE_PREDICTION && job.result)
-            .map(job => [job.result, job]),
-    ), [jobs]);
+    const rows = useMemo<PredictionRow[]>(() => {
+        const predictionJobs = jobs.filter(job => job.type === JOB_TYPES.MAKE_PREDICTION);
+        // A successful prediction job's result is the id of the prediction it created.
+        const jobsByPredictionId = new Map(predictionJobs.map(job => [job.result, job]));
+        return [
+            ...predictionJobs.filter(isActiveJob).map(job => ({
+                id: job.id,
+                created: job.start_time ?? undefined,
+                job,
+            })),
+            ...predictions.map(prediction => ({
+                id: String(prediction.id),
+                created: prediction.created,
+                prediction,
+                job: jobsByPredictionId.get(String(prediction.id)),
+            })),
+        ];
+    }, [jobs, predictions]);
+    const hasRuns = rows.length > 0;
     const columns = useMemo(() => [
-        columnHelper.accessor('id', {
+        columnHelper.accessor(row => row.prediction?.id, {
+            id: 'runId',
             header: () => i18n.t('Run ID'),
-            cell: info => (
-                <Link to={`/predictions/${predictionSetupId}/runs/${info.row.original.id}`}>
-                    {info.getValue()}
-                </Link>
-            ),
+            cell: info => (info.row.original.prediction
+                ? (
+                        <Link to={`/predictions/${predictionSetupId}/runs/${info.row.original.prediction.id}`}>
+                            {info.getValue()}
+                        </Link>
+                    )
+                : EMPTY_VALUE),
         }),
         columnHelper.accessor('created', {
             header: () => i18n.t('Created'),
+            sortUndefined: 'first',
             cell: info => formatDate(info.getValue()),
         }),
-        columnHelper.accessor(row => formatPeriodList(getPredictionPeriodIds(row)) || String(row.nPeriods), {
+        columnHelper.accessor(row => row.job?.status ?? JOB_STATUSES.SUCCESS, {
+            id: 'status',
+            header: () => i18n.t('Status'),
+            enableSorting: false,
+            cell: info => <StatusCell status={info.getValue()} />,
+        }),
+        columnHelper.display({
             id: 'predictionPeriods',
             header: () => i18n.t('Prediction periods'),
-            enableSorting: false,
-            cell: info => (
-                <PredictionPeriodsCell prediction={info.row.original} />
-            ),
+            cell: info => (info.row.original.prediction
+                ? <PredictionPeriodsCell prediction={info.row.original.prediction} />
+                : EMPTY_VALUE),
         }),
-        columnHelper.accessor(row => getTrainingDataToDate(row) || '', {
+        columnHelper.accessor(row => (row.prediction && getTrainingDataToDate(row.prediction)) || '', {
             id: 'trainingDataToDate',
             header: () => i18n.t('Training data cutoff'),
             cell: info => formatPeriodId(info.getValue()) || EMPTY_VALUE,
@@ -187,17 +220,30 @@ export const PredictionRunsWidget = ({
             id: 'actions',
             header: () => i18n.t('Actions'),
             enableSorting: false,
-            cell: info => (
-                <PredictionRunActionsMenu
-                    predictionSetupId={predictionSetupId}
-                    predictionId={info.row.original.id}
-                    job={predictionJobs.get(String(info.row.original.id))}
-                />
-            ),
+            cell: ({ row: { original: { prediction, job } } }) => {
+                if (prediction) {
+                    return (
+                        <PredictionRunActionsMenu
+                            predictionSetupId={predictionSetupId}
+                            predictionId={prediction.id}
+                            job={job}
+                        />
+                    );
+                }
+                return job && (
+                    <JobActionsMenu
+                        jobId={job.id}
+                        status={job.status}
+                        result={job.result}
+                        type={job.type}
+                        showGoToResult={false}
+                    />
+                );
+            },
         }),
-    ], [predictionSetupId, predictionJobs]);
+    ], [predictionSetupId]);
     const table = useReactTable({
-        data: predictions,
+        data: rows,
         columns,
         state: {
             sorting,
@@ -238,7 +284,7 @@ export const PredictionRunsWidget = ({
                 )}
                 {!isLoading && !hasError && hasValidPredictionSetupId && !hasRuns && (
                     <div className={styles.emptyState}>
-                        {i18n.t('No completed predictions yet. Run a prediction to start producing predictions.')}
+                        {i18n.t('No predictions yet. Run a prediction to start producing predictions.')}
                     </div>
                 )}
                 {!isLoading && !hasError && hasRuns && (
@@ -266,13 +312,14 @@ export const PredictionRunsWidget = ({
                         </DataTableHead>
                         <DataTableBody>
                             {table.getRowModel().rows.map((row) => {
-                                const navigateToRun = () => navigate(
-                                    `/predictions/${predictionSetupId}/runs/${row.original.id}`,
-                                );
+                                const { prediction } = row.original;
+                                const navigateToRun = prediction && (() => navigate(
+                                    `/predictions/${predictionSetupId}/runs/${prediction.id}`,
+                                ));
                                 return (
                                     <DataTableRow
                                         key={row.id}
-                                        className={styles.clickableRow}
+                                        className={navigateToRun ? styles.clickableRow : undefined}
                                     >
                                         {row.getVisibleCells().map((cell) => {
                                             const isActionsCell = cell.column.id === 'actions';

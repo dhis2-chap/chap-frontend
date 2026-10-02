@@ -39,7 +39,7 @@ const getActiveJobsQueryKey = (predictionSetupId?: number) => (
         : ['jobs', 'active', { predictionSetupId }]
 );
 
-const isActiveJob = (job: JobDescription) => (
+export const isActiveJob = (job: JobDescription) => (
     job.status === JOB_STATUSES.PENDING
     || job.status === JOB_STATUSES.STARTED
 );

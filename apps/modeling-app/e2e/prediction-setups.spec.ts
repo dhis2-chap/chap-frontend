@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import type { BacktestRead, DataBaseResponse, JobResponse } from '@dhis2-chap/ui';
+import type { BacktestRead, DataBaseResponse, JobDescription, JobResponse } from '@dhis2-chap/ui';
 import {
     createCompletedNaiveEvaluation,
     readJson,
@@ -50,6 +50,15 @@ test.describe.serial('prediction setup', () => {
 
         predictionName = `E2E prediction ${Date.now()}`;
 
+        // The naive model finishes too quickly to observe, so hold the new job as running.
+        let runningJobId = '';
+        await page.route('**/v1/jobs?*', async (route) => {
+            const jobs = await readJson<JobDescription[]>(await route.fetch(), 'Load jobs');
+            await route.fulfill({
+                json: jobs.map(job => (job.id === runningJobId ? { ...job, status: 'STARTED' } : job)),
+            });
+        });
+
         await page.goto(`/#/predictions/${setup.id}`);
 
         await expect(page.getByRole('heading', { name: 'Prediction setup' })).toBeVisible();
@@ -69,10 +78,22 @@ test.describe.serial('prediction setup', () => {
         await page.locator('[data-test="prediction-start-button"]').click();
 
         const prediction = await readJson<JobResponse>(await runPredictionResponse, 'Run prediction');
+        runningJobId = prediction.id;
 
         expect(prediction.id).toBeTruthy();
         await expect(page).toHaveURL(new RegExp(`/#/predictions/${setup.id}$`));
         await expect(page.getByText('Running job')).toBeVisible({ timeout: 30_000 });
+
+        const runsTable = page.locator('table').filter({ hasText: 'Run ID' });
+        const runningRow = runsTable.locator('tbody tr').filter({ hasText: 'Running' });
+        await expect(runningRow).toBeVisible();
+        await runningRow.getByRole('button').last().click();
+        await page.locator('[data-test="job-overflow-view-logs"]').click();
+
+        const logsModal = page.locator('[data-test="dhis2-uicore-modal"]');
+        await expect(logsModal.getByText(`Job Logs - ${prediction.id}`)).toBeVisible();
+        await expect(logsModal.getByText('Running', { exact: true })).toBeVisible();
+        await page.unroute('**/v1/jobs?*');
     });
 
     test('opens the scoped activity page and shows rows for the saved setup', async ({ page }) => {
@@ -90,7 +111,7 @@ test.describe.serial('prediction setup', () => {
         await page.goto(`/#/predictions/${setup.id}`);
 
         const runsTable = page.locator('table').filter({ hasText: 'Run ID' });
-        const predictionRow = runsTable.locator('tbody tr').first();
+        const predictionRow = runsTable.locator('tbody tr').filter({ hasText: 'Success' }).first();
         await expect(predictionRow).toBeVisible({ timeout: 60_000 });
         await predictionRow.getByRole('button').last().click();
         await page.locator('[data-test="prediction-run-overflow-logs"]').click();

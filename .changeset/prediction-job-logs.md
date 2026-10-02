@@ -2,4 +2,4 @@
 "@dhis2-chap/modeling-app": minor
 ---
 
-Add a View Logs action to completed prediction runs on the prediction setup dashboard [CLIM-1157].
+Show running prediction jobs in the prediction setup's Predictions table, with a status column and a View Logs action for running and completed runs [CLIM-1157].
