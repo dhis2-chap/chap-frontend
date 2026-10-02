@@ -10,7 +10,9 @@ type Props = {
 
 export const DatasetFilter = ({ datasets }: Props) => {
     const { datasetId, setDatasetId } = useDatasetFilter();
-    const options = [...new Map(datasets.map(dataset => [dataset.id, dataset])).values()]
+    // Only manually created datasets are offered. Backends without the flag leave it undefined, so those are kept.
+    const manualDatasets = datasets.filter(dataset => dataset.createdManually !== false);
+    const options = [...new Map(manualDatasets.map(dataset => [dataset.id, dataset])).values()]
         .sort((a, b) => a.name.localeCompare(b.name));
 
     return (
@@ -19,6 +21,7 @@ export const DatasetFilter = ({ datasets }: Props) => {
                 dataTest="dataset-filter"
                 filterable
                 noMatchText={i18n.t('No datasets found')}
+                empty={i18n.t('No manually created datasets')}
                 dense
                 clearable
                 clearText={i18n.t('Clear')}
