@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-02T09:12:05.159Z\n"
-"PO-Revision-Date: 2026-10-02T09:12:05.160Z\n"
+"POT-Creation-Date: 2026-10-02T09:13:11.596Z\n"
+"PO-Revision-Date: 2026-10-02T09:13:11.597Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -893,6 +893,30 @@ msgstr "{{covariate}} has no observations for these periods and organisation uni
 msgid "The selected organisation units must have geometry"
 msgstr "The selected organisation units must have geometry"
 
+msgid "Backtest parameters"
+msgstr "Backtest parameters"
+
+msgid "Could not load backtest parameters"
+msgstr "Could not load backtest parameters"
+
+msgid "Retry"
+msgstr "Retry"
+
+msgid "Could not load weather providers"
+msgstr "Could not load weather providers"
+
+msgid "No future-weather providers are available."
+msgstr "No future-weather providers are available."
+
+msgid ""
+"This provider uses observed future weather. Its evaluation scores are not "
+"comparable to production performance, and it cannot be used for future "
+"predictions."
+msgstr ""
+"This provider uses observed future weather. Its evaluation scores are not "
+"comparable to production performance, and it cannot be used for future "
+"predictions."
+
 msgid "Error loading datasets or models"
 msgstr "Error loading datasets or models"
 
@@ -954,6 +978,15 @@ msgstr "There was an error"
 
 msgid "Error loading models"
 msgstr "Error loading models"
+
+msgid "Enter a whole number greater than zero"
+msgstr "Enter a whole number greater than zero"
+
+msgid "Select a future-weather provider"
+msgstr "Select a future-weather provider"
+
+msgid "Number of training runs must not exceed the number of splits"
+msgstr "Number of training runs must not exceed the number of splits"
 
 msgid "Cannot run prediction"
 msgstr "Cannot run prediction"
@@ -1141,8 +1174,8 @@ msgstr "Last run {{timeAgo}} ago"
 msgid "No runs yet"
 msgstr "No runs yet"
 
-msgid "Completed predictions"
-msgstr "Completed predictions"
+msgid "Predictions"
+msgstr "Predictions"
 
 msgid "Running job"
 msgstr "Running job"
@@ -1159,12 +1192,8 @@ msgstr "Training data cutoff"
 msgid "Error loading prediction runs"
 msgstr "Error loading prediction runs"
 
-msgid ""
-"No completed predictions yet. Run a prediction to start producing "
-"predictions."
-msgstr ""
-"No completed predictions yet. Run a prediction to start producing "
-"predictions."
+msgid "No predictions yet. Run a prediction to start producing predictions."
+msgstr "No predictions yet. Run a prediction to start producing predictions."
 
 msgid "Prediction run deleted"
 msgstr "Prediction run deleted"
@@ -1939,9 +1968,6 @@ msgstr "There are running jobs in the background"
 msgid "Running jobs"
 msgstr "Running jobs"
 
-msgid "Retry"
-msgstr "Retry"
-
 msgid "Waiting for connection"
 msgstr "Waiting for connection"
 
@@ -2639,9 +2665,6 @@ msgstr ""
 "Add models to run them against this benchmark. Completed runs will appear "
 "here."
 
-msgid "Backtest parameters"
-msgstr "Backtest parameters"
-
 msgid "Model runs"
 msgstr "Model runs"
 
@@ -2674,21 +2697,6 @@ msgstr[1] "{{count}} model runs in this benchmark"
 
 msgid "No benchmarks match the selected filters."
 msgstr "No benchmarks match the selected filters."
-
-msgid "Forecast periods"
-msgstr "Forecast periods"
-
-msgid "Splits"
-msgstr "Splits"
-
-msgid "Stride"
-msgstr "Stride"
-
-msgid "Retraining"
-msgstr "Retraining"
-
-msgid "Future weather"
-msgstr "Future weather"
 
 msgid "Run predictions, review activity, and manage this setup."
 msgstr "Run predictions, review activity, and manage this setup."

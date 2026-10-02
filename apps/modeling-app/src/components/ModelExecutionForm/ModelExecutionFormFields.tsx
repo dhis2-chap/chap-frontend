@@ -17,6 +17,7 @@ type Props = {
     periodSettingsLoading?: boolean;
     actions?: React.ReactNode;
     footer?: React.ReactNode;
+    children?: React.ReactNode;
 };
 
 export const ModelExecutionFormFields = ({
@@ -27,6 +28,7 @@ export const ModelExecutionFormFields = ({
     periodSettingsLoading,
     actions,
     footer,
+    children,
 }: Props) => {
     const {
         control,
@@ -36,7 +38,7 @@ export const ModelExecutionFormFields = ({
 
     return (
         <div className={styles.formWrapper}>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form noValidate onSubmit={handleSubmit(onSubmit)}>
                 <NameInput />
 
                 <PeriodSelector
@@ -56,6 +58,7 @@ export const ModelExecutionFormFields = ({
                     errors={errors}
                     periodSettings={periodSettings}
                 />
+                {children}
             </form>
 
             <ButtonStrip end>
