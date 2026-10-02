@@ -185,7 +185,7 @@ export const PredictionDetailsGrid = ({
                         {i18n.t('Outbreak thresholds')}
                     </span>
                     <span className={styles.toggleDescription}>
-                        {i18n.t('Show outbreak status and threshold overlays for this run.')}
+                        {i18n.t('Preview outbreak status and threshold overlays for this run. Saved alert policies are configured on the prediction setup.')}
                     </span>
                 </div>
                 <span onClick={handleSwitchClick}>
