@@ -32,14 +32,14 @@ import {
 import { PredictionRunActionsMenu } from './PredictionRunActionsMenu';
 import styles from './PredictionRunsWidget.module.css';
 import { getChapErrorLabel } from '../../../../utils/chapErrors';
-import { isActiveJob, JOB_STATUSES, JOB_TYPES } from '../../../../hooks/useJobs';
+import { JOB_STATUSES, JOB_TYPES } from '../../../../hooks/useJobs';
 import { JobActionsMenu } from '../../../JobsTable/JobActionsMenu/JobActionsMenu';
 import { ViewJobLogsModal } from '../../../JobsTable/JobActionsMenu/ViewJobLogsModal/ViewJobLogsModal';
 import { StatusCell } from '../../../JobsTable/TableCells/StatusCell';
 
 const EMPTY_VALUE = '-';
 
-// A completed prediction, or a prediction job that has not produced one yet.
+// A completed prediction, or a prediction job that has not produced one (running or failed).
 type PredictionRow = {
     id: string;
     created?: string;
@@ -171,7 +171,8 @@ export const PredictionRunsWidget = ({
         // A successful prediction job's result is the id of the prediction it created.
         const jobsByPredictionId = new Map(predictionJobs.map(job => [job.result, job]));
         return [
-            ...predictionJobs.filter(isActiveJob).map(job => ({
+            // Successful jobs are shown through the prediction they created.
+            ...predictionJobs.filter(job => job.status !== JOB_STATUSES.SUCCESS).map(job => ({
                 id: job.id,
                 created: job.start_time ?? undefined,
                 job,

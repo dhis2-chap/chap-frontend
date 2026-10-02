@@ -124,4 +124,24 @@ test.describe.serial('prediction setup', () => {
         await expect(logsModal.locator('pre')).toBeVisible();
         await expect(logsModal.getByText('Success', { exact: true })).toBeVisible();
     });
+
+    test('keeps failed prediction jobs in the predictions table', async ({ page }) => {
+        // Report this setup's prediction jobs as failed without needing a model that fails.
+        await page.route('**/v1/jobs?*', async (route) => {
+            const jobs = await readJson<JobDescription[]>(await route.fetch(), 'Load jobs');
+            await route.fulfill({
+                json: jobs.map(job => (job.prediction_setup_id === setup.id
+                    ? { ...job, status: 'FAILURE', result: null }
+                    : job)),
+            });
+        });
+
+        await page.goto(`/#/predictions/${setup.id}`);
+
+        const runsTable = page.locator('table').filter({ hasText: 'Run ID' });
+        const failedRow = runsTable.locator('tbody tr').filter({ hasText: 'Failed' }).first();
+        await expect(failedRow).toBeVisible();
+        await failedRow.getByRole('button').last().click();
+        await expect(page.locator('[data-test="job-overflow-view-logs"]')).toBeVisible();
+    });
 });
