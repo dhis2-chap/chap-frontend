@@ -9,6 +9,8 @@ import { PredictionRunsWidget } from './PredictionRunsWidget';
 import { QuickActionsWidget } from './QuickActionsWidget';
 import { SchedulingWidget } from './SchedulingWidget';
 import { SummaryWidget } from './SummaryWidget';
+import { AlertPolicyWidget } from '@/components/BackendAlerts/AlertPolicyWidget';
+import { StoredAlertsWidget } from '@/components/BackendAlerts/StoredAlertsWidget';
 import styles from './ConfiguredModelDashboard.module.css';
 
 export const ConfiguredModelDashboard: React.FC = () => {
@@ -51,6 +53,9 @@ export const ConfiguredModelDashboard: React.FC = () => {
                     isLoading={isLoading}
                     predictions={predictions}
                 />
+                {!isLoading && !error && predictionSetup && (
+                    <StoredAlertsWidget predictionIds={predictions.map(prediction => prediction.id)} />
+                )}
                 <ActivityWidget
                     error={jobsError}
                     hasValidPredictionSetupId={hasValidPredictionSetupId}
@@ -71,6 +76,9 @@ export const ConfiguredModelDashboard: React.FC = () => {
                         predictionSetup={predictionSetup}
                         isLoading={isLoading}
                     />
+                )}
+                {!isLoading && !error && predictionSetup && (
+                    <AlertPolicyWidget key={predictionSetup.id} setup={predictionSetup} />
                 )}
                 <SummaryWidget
                     predictionSetup={predictionSetup}
