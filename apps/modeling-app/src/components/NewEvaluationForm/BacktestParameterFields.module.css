@@ -1,0 +1,32 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacers-dp16);
+    min-inline-size: 0;
+    margin: 0;
+    padding: 1rem;
+    border: 1px solid var(--colors-grey400);
+    border-radius: 0.5rem;
+    background-color: var(--colors-grey100);
+}
+
+/* Float pulls the legend inside the box instead of onto the border, matching the Models selector */
+.legend {
+    float: left;
+    padding: 0;
+    font-size: 14px;
+    line-height: 16px;
+    color: var(--colors-grey900);
+}
+
+.counts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--spacers-dp16);
+}
+
+@media (max-width: 700px) {
+    .counts {
+        grid-template-columns: 1fr;
+    }
+}

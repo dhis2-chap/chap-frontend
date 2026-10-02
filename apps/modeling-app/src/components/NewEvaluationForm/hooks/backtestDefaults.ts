@@ -1,33 +1,31 @@
 import { PERIOD_TYPES } from '@dhis2-chap/core';
+import type { BacktestParameterInfo } from '@dhis2-chap/ui';
+import type { BacktestParameters } from './backtestParameters';
 
-const N_SPLITS = 10;
+export const toBacktestDefaults = (parameters: BacktestParameterInfo[]) => (
+    Object.fromEntries(parameters.map(({ name, default: value }) => [name, value])) as BacktestParameters
+);
 
-const N_PERIODS = {
-    [PERIOD_TYPES.MONTH]: 3,
-    [PERIOD_TYPES.WEEK]: 12,
+/** CHAP Core < 2.4 has no parameter metadata, so keep the settings the app sent before. */
+export const getLegacyBacktestParameters = (periodType: string | null | undefined) => {
+    const key = periodType?.toUpperCase();
+    if (key === PERIOD_TYPES.MONTH) return { nPeriods: 3, nSplits: 10, stride: 1 };
+    if (key === PERIOD_TYPES.WEEK) return { nPeriods: 12, nSplits: 10, stride: 4 };
+    return undefined;
 };
 
-const N_STRIDES = {
-    [PERIOD_TYPES.MONTH]: 1,
-    [PERIOD_TYPES.WEEK]: 4,
-};
-
-/** Splitting defaults for a backtest, keyed by period type (accepts the API's lowercase form too). */
-export const getBacktestSplitting = (periodType: string | null | undefined) => {
-    const key = periodType?.toUpperCase() as keyof typeof N_PERIODS;
-    if (!N_PERIODS[key]) {
+/** Every forecast split, plus the training period CHAP keeps before the first. */
+export const getMinimumEvaluationPeriods = (
+    periodType: string | null | undefined,
+    parameters: Pick<BacktestParameters, 'nPeriods' | 'nSplits' | 'stride'> | undefined,
+) => {
+    const key = periodType?.toUpperCase();
+    if (!parameters || (key !== PERIOD_TYPES.MONTH && key !== PERIOD_TYPES.WEEK)) {
         return undefined;
     }
-
-    return {
-        nPeriods: N_PERIODS[key],
-        nSplits: N_SPLITS,
-        stride: N_STRIDES[key],
-    };
-};
-
-/** Periods a dataset needs to be evaluated: every split, plus the training period chap-core keeps before the first. */
-export const getMinimumEvaluationPeriods = (periodType: string | null | undefined) => {
-    const splitting = getBacktestSplitting(periodType);
-    return splitting && splitting.nPeriods + (splitting.nSplits - 1) * splitting.stride + 1;
+    const { nPeriods, nSplits, stride } = parameters;
+    if (![nPeriods, nSplits, stride].every(value => Number.isInteger(value) && value > 0)) {
+        return undefined;
+    }
+    return nPeriods + (nSplits - 1) * stride + 1;
 };
