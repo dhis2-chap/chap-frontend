@@ -1,5 +1,41 @@
 # @dhis2-chap/modeling-app
 
+## 7.2.0
+
+### Minor Changes
+
+-   efc846c: Expose all backtest parameters when evaluating saved datasets or importing from DHIS2, with CHAP Core defaults, labels and descriptions, count validation, a weather-provider picker, and backend validation messages. Show the stored configuration in evaluation details (CLIM-1131). Requires CHAP Core 2.4.0; older versions keep the previous fixed settings. On CHAP Core 2.4.0, weekly evaluations use the same CHAP Core defaults as monthly ones instead of 12 forecast periods and a step of 4.
+-   7ceae29: Add benchmark overview actions to view a benchmark, add models, download its scores as CSV, or start a new evaluation with its dataset preselected.
+-   30102fb: Add searchable, clearable dataset filters to the Evaluations and Benchmarks lists.
+-   8d4f581: Show job logs directly from the dataset creation form while an import is running or after it fails, and refresh open logs when the job status changes. A created dataset can go straight to a new evaluation [CLIM-1182].
+-   516bc99: Add a download request action for failed jobs, requiring CHAP Core support for retrieving the original job request.
+-   4357c62: Add benchmarks under Evaluate, filtered to manually created datasets by default, with sortable model benchmarks, aggregate metrics CSV downloads, and model runs using an existing evaluation specification. Requires Chap Core 2.4.0 or later; the menu entry is hidden on older versions.
+-   e5385a5: Show model versions and commit SHAs when selecting models, commit SHAs in model details, and model versions in evaluation details, with links to GitHub revisions where available [CLIM-1179].
+-   faf9271: Add a New benchmark action and a dedicated saved-dataset evaluation flow explaining how datasets and backtest parameters group model runs into benchmarks.
+-   406ef2d: Show running and failed prediction jobs in the prediction setup's Predictions table, with a status column and a View Logs action for every run [CLIM-1157].
+-   5313507: Add a Datasets page where data can be imported once, named per covariate, and reused across evaluations (CLIM-1075). While building a dataset, the app suggests column names from CHAP, shows how many models can use it and which columns to add to support more, and lists the DHIS2 data items each column used in earlier datasets first in the data item picker. A data check has CHAP validate the data in a dry run and previews which locations it would leave out before anything is saved (needs a CHAP Core version with `dryRun` on make-dataset), and the locations CHAP leaves out on import are shown afterwards. New evaluations can now start from a saved dataset, with importing from DHIS2 as the second option.
+
+    Datasets created by evaluations and predictions are hidden from the Datasets page and the saved-dataset evaluation form, with an Origin filter that can be cleared to show them. This needs a CHAP Core version that flags datasets created manually; older versions keep showing all datasets (CLIM-1163).
+
+-   c65da29: Flag models whose service revision no longer matches the stored version in the picker, Models table, model details and execution forms. Explain the mismatch, prevent evaluations and predictions from starting such a model, and recheck health before a job is submitted. Models stay listed and usable if their health can't be loaded.
+-   e5aeac7: Use the shared model selection modal for saved dataset evaluations and allow evaluating multiple compatible models at once in a single request, so all resulting backtests share one evaluation specification (CLIM-1184).
+
+### Patch Changes
+
+-   737fb20: Align the Compare evaluations header with the selector bar on wide screens.
+-   83e974b: Label saved-dataset jobs as "Create evaluation" and include them in the evaluation filter alongside inline-data evaluations.
+-   319ab0f: Keep the jobs table responsive when changing the page size [CLIM-1259].
+-   787a772: Highlight the forecast line corresponding to the selected minimum outbreak probability in prediction tiles and alert previews.
+-   80eb938: Use metric names, descriptions, units, targets, and target behavior from CHAP Core in the evaluation metrics widget.
+-   Updated dependencies [516bc99]
+-   Updated dependencies [787a772]
+-   Updated dependencies [5313507]
+-   Updated dependencies [e7439b4]
+-   Updated dependencies [37499b5]
+-   Updated dependencies [80eb938]
+    -   @dhis2-chap/ui@7.2.0
+    -   @dhis2-chap/core@7.2.0
+
 ## 7.1.0
 
 ### Minor Changes
