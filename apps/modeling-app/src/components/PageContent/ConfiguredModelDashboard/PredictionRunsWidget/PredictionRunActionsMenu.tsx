@@ -3,6 +3,7 @@ import {
     FlyoutMenu,
     IconDelete16,
     IconImportItems24,
+    IconList24,
     IconMore16,
     IconView24,
     MenuItem,
@@ -15,11 +16,13 @@ import { DeletePredictionRunModal } from './DeletePredictionRunModal';
 type Props = {
     predictionSetupId?: string;
     predictionId: number;
+    onViewLogs?: () => void;
 };
 
 export const PredictionRunActionsMenu = ({
     predictionSetupId,
     predictionId,
+    onViewLogs,
 }: Props) => {
     const navigate = useNavigate();
     const [flyoutMenuIsOpen, setFlyoutMenuIsOpen] = useState(false);
@@ -68,6 +71,17 @@ export const PredictionRunActionsMenu = ({
                             icon={<IconImportItems24 />}
                             onClick={navigateToImport}
                         />
+                        {onViewLogs && (
+                            <MenuItem
+                                label={i18n.t('View Logs')}
+                                dataTest="prediction-run-overflow-logs"
+                                icon={<IconList24 />}
+                                onClick={() => {
+                                    onViewLogs();
+                                    setFlyoutMenuIsOpen(false);
+                                }}
+                            />
+                        )}
                         <MenuItem
                             label={i18n.t('Delete')}
                             dataTest="prediction-run-overflow-delete"

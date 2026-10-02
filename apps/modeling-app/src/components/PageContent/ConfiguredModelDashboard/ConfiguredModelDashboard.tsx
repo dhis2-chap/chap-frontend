@@ -49,6 +49,7 @@ export const ConfiguredModelDashboard: React.FC = () => {
                     hasValidPredictionSetupId={hasValidPredictionSetupId}
                     hasRunningJob={hasRunningJob}
                     isLoading={isLoading}
+                    jobs={jobs}
                     predictions={predictions}
                 />
                 <ActivityWidget

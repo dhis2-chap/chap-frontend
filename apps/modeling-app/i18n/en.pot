@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-01T12:29:38.453Z\n"
-"PO-Revision-Date: 2026-10-01T12:29:38.453Z\n"
+"POT-Creation-Date: 2026-10-02T09:38:00.798Z\n"
+"PO-Revision-Date: 2026-10-02T09:38:00.798Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -244,6 +244,15 @@ msgstr "Learn more about Modeling and CHAP"
 
 msgid "Configure settings"
 msgstr "Configure settings"
+
+msgid "No datasets found"
+msgstr "No datasets found"
+
+msgid "No manually created datasets"
+msgstr "No manually created datasets"
+
+msgid "Dataset"
+msgstr "Dataset"
 
 msgid "Origin"
 msgstr "Origin"
@@ -887,6 +896,30 @@ msgstr "{{covariate}} has no observations for these periods and organisation uni
 msgid "The selected organisation units must have geometry"
 msgstr "The selected organisation units must have geometry"
 
+msgid "Backtest parameters"
+msgstr "Backtest parameters"
+
+msgid "Could not load backtest parameters"
+msgstr "Could not load backtest parameters"
+
+msgid "Retry"
+msgstr "Retry"
+
+msgid "Could not load weather providers"
+msgstr "Could not load weather providers"
+
+msgid "No future-weather providers are available."
+msgstr "No future-weather providers are available."
+
+msgid ""
+"This provider uses observed future weather. Its evaluation scores are not "
+"comparable to production performance, and it cannot be used for future "
+"predictions."
+msgstr ""
+"This provider uses observed future weather. Its evaluation scores are not "
+"comparable to production performance, and it cannot be used for future "
+"predictions."
+
 msgid "Error loading datasets or models"
 msgstr "Error loading datasets or models"
 
@@ -924,21 +957,8 @@ msgstr "Run name"
 msgid "Benchmark model runs"
 msgstr "Benchmark model runs"
 
-msgid "Dataset"
-msgstr "Dataset"
-
 msgid "No datasets match the origin filter"
 msgstr "No datasets match the origin filter"
-
-msgid "Backtest parameters"
-msgstr "Backtest parameters"
-
-msgid ""
-"This dataset uses {{nPeriods}} forecast periods, {{nSplits}} splits, and a "
-"stride of {{stride}}."
-msgstr ""
-"This dataset uses {{nPeriods}} forecast periods, {{nSplits}} splits, and a "
-"stride of {{stride}}."
 
 msgid "Pick a dataset first"
 msgstr "Pick a dataset first"
@@ -985,6 +1005,15 @@ msgstr "There was an error"
 
 msgid "Error loading models"
 msgstr "Error loading models"
+
+msgid "Enter a whole number greater than zero"
+msgstr "Enter a whole number greater than zero"
+
+msgid "Select a future-weather provider"
+msgstr "Select a future-weather provider"
+
+msgid "Number of training runs must not exceed the number of splits"
+msgstr "Number of training runs must not exceed the number of splits"
 
 msgid "Cannot run prediction"
 msgstr "Cannot run prediction"
@@ -1172,8 +1201,8 @@ msgstr "Last run {{timeAgo}} ago"
 msgid "No runs yet"
 msgstr "No runs yet"
 
-msgid "Completed predictions"
-msgstr "Completed predictions"
+msgid "Predictions"
+msgstr "Predictions"
 
 msgid "Running job"
 msgstr "Running job"
@@ -1190,12 +1219,8 @@ msgstr "Training data cutoff"
 msgid "Error loading prediction runs"
 msgstr "Error loading prediction runs"
 
-msgid ""
-"No completed predictions yet. Run a prediction to start producing "
-"predictions."
-msgstr ""
-"No completed predictions yet. Run a prediction to start producing "
-"predictions."
+msgid "No predictions yet. Run a prediction to start producing predictions."
+msgstr "No predictions yet. Run a prediction to start producing predictions."
 
 msgid "Prediction run deleted"
 msgstr "Prediction run deleted"
@@ -1970,9 +1995,6 @@ msgstr "There are running jobs in the background"
 msgid "Running jobs"
 msgstr "Running jobs"
 
-msgid "Retry"
-msgstr "Retry"
-
 msgid "Waiting for connection"
 msgstr "Waiting for connection"
 
@@ -2704,26 +2726,11 @@ msgid_plural "{{count}} model runs in this benchmark"
 msgstr[0] "{{count}} model runs in this benchmark"
 msgstr[1] "{{count}} model runs in this benchmark"
 
-msgid "No benchmarks match the selected dataset origin."
-msgstr "No benchmarks match the selected dataset origin."
+msgid "No benchmarks match the selected filters."
+msgstr "No benchmarks match the selected filters."
 
 msgid "Back to benchmarks"
 msgstr "Back to benchmarks"
-
-msgid "Forecast periods"
-msgstr "Forecast periods"
-
-msgid "Splits"
-msgstr "Splits"
-
-msgid "Stride"
-msgstr "Stride"
-
-msgid "Retraining"
-msgstr "Retraining"
-
-msgid "Future weather"
-msgstr "Future weather"
 
 msgid "Run predictions, review activity, and manage this setup."
 msgstr "Run predictions, review activity, and manage this setup."

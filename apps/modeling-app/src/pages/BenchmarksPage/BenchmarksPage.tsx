@@ -7,6 +7,8 @@ import { PageHeader } from '../../features/common-features/PageHeader/PageHeader
 import { ChapErrorNotice } from '../../components/ChapErrorNotice';
 import { CountPill } from '../../components/CountPill';
 import { DatasetOriginFilter, matchesOrigin, useDatasetOriginFilter } from '../../components/DatasetOriginFilter';
+import { DatasetFilter } from '../../components/DatasetFilter/DatasetFilter';
+import { useDatasetFilter } from '../../components/DatasetFilter/useDatasetFilter';
 import { SpecificationParameters, formatPeriodRange } from './SpecificationParameters';
 import { BenchmarkRunsIndicator } from './BenchmarkRunsIndicator';
 import { BenchmarkActionsMenu } from './BenchmarkActionsMenu';
@@ -25,6 +27,7 @@ const COLUMNS = () => [
 export const BenchmarksPage = () => {
     const navigate = useNavigate();
     const { origin } = useDatasetOriginFilter();
+    const { datasetId } = useDatasetFilter();
     const query = useQuery<BacktestSpecificationSummary[], ApiError>({
         queryKey: ['backtest-specifications'],
         queryFn: () => BacktestsService.getBacktestSpecificationsV1CrudBacktestSpecificationsGet(),
@@ -35,6 +38,7 @@ export const BenchmarksPage = () => {
     const specifications = query.data ?? [];
     const visible = specifications
         .filter(specification => matchesOrigin(specification.dataset, origin))
+        .filter(specification => !datasetId || specification.dataset.id.toString() === datasetId)
         .sort((a, b) => b.id - a.id);
     const columns = COLUMNS();
 
@@ -46,7 +50,10 @@ export const BenchmarksPage = () => {
             />
             <Card className={styles.card}>
                 <div className={styles.toolbar}>
-                    <DatasetOriginFilter datasets={specifications.map(specification => specification.dataset)} />
+                    <div className={styles.actions}>
+                        <DatasetOriginFilter datasets={specifications.map(specification => specification.dataset)} />
+                        <DatasetFilter datasets={specifications.map(specification => specification.dataset)} />
+                    </div>
                     <Button primary icon={<IconAdd16 />} onClick={() => navigate('/evaluate/benchmarks/new')}>
                         {i18n.t('New benchmark')}
                     </Button>
@@ -100,7 +107,7 @@ export const BenchmarksPage = () => {
                                 )) : (
                                     <DataTableRow>
                                         <DataTableCell colSpan={String(columns.length)} align="center">
-                                            {i18n.t('No benchmarks match the selected dataset origin.')}
+                                            {i18n.t('No benchmarks match the selected filters.')}
                                         </DataTableCell>
                                     </DataTableRow>
                                 )}

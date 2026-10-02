@@ -30,7 +30,10 @@ test('starts model runs from New benchmark and groups them by dataset and parame
     await page.getByText('Created by evaluations or predictions', { exact: true }).click();
     await page.locator('[data-test="evaluation-dataset-select"]').click();
     await page.getByText(evaluation.dataset.name, { exact: true }).click();
-    await expect(page.getByText('This dataset uses 3 forecast periods, 10 splits, and a stride of 1.', { exact: true })).toBeVisible();
+    // Match the fixture's parameters so the backend reuses its benchmark.
+    for (const [field, value] of Object.entries({ nPeriods: 3, nSplits: 10, stride: 1 })) {
+        await page.locator(`[data-test="backtest-${field}"] input`).fill(String(value));
+    }
     const name = `E2E benchmark runs ${Date.now()}`;
     await page.locator('[data-test="evaluation-name-input"] input').fill(name);
     await page.getByRole('button', { name: 'Select models', exact: true }).click();

@@ -114,7 +114,7 @@ const getEvaluationJobStatus = async (page: Page, jobId: string) => {
     return await readJson<string>(response, 'Poll evaluation job status');
 };
 
-const pollEvaluationJob = async (page: Page, jobId: string) => {
+export const pollEvaluationJob = async (page: Page, jobId: string) => {
     const deadline = Date.now() + EVALUATION_TIMEOUT_MS;
 
     while (Date.now() < deadline) {
