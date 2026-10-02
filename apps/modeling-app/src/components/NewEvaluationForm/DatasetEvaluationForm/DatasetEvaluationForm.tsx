@@ -77,7 +77,7 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '', benchmarkContext 
     const canSubmit = selectedModels.length > 0 && !selectedModels.some(hasRevisionMismatch) &&
         !!dataset?.periodType && !isTooShort && dataset?.id != null;
 
-    const createEvaluation = useMutation<void, ApiError | Error, FormValues>({
+    const createEvaluation = useMutation<number | undefined, ApiError | Error, FormValues>({
         mutationFn: async ({ name, backtestParameters }: FormValues) => {
             const runnableModels = await Promise.all(
                 selectedModels.map(model => fetchRunnableModel(queryClient, model.id)),
@@ -85,8 +85,8 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '', benchmarkContext 
             const request = { name, datasetId: dataset!.id!, ...(backtestParameters ?? getLegacyBacktestParameters(dataset!.periodType)) };
             const modelIds = runnableModels.map(model => model.name);
             if (isMultiModelAvailable) {
-                await BacktestsService.createBacktestsV1AnalyticsCreateBacktestsPost({ ...request, modelIds });
-                return;
+                const { specificationId } = await BacktestsService.createBacktestsV1AnalyticsCreateBacktestsPost({ ...request, modelIds });
+                return specificationId;
             }
             // Chap Core < 2.4.0 has no multi-model endpoint: queue one backtest per model,
             // named like the multi-model endpoint does, and keep failed models selected for retry.
@@ -100,7 +100,9 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '', benchmarkContext 
             }
         },
         onSettled: () => queryClient.invalidateQueries({ queryKey: ['jobs'] }),
-        onSuccess: () => navigate('/jobs'),
+        onSuccess: specificationId => navigate(
+            benchmarkContext && specificationId != null ? `/evaluate/benchmarks/${specificationId}` : '/jobs',
+        ),
     });
 
     const {

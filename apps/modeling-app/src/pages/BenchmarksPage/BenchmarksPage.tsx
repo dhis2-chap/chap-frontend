@@ -41,6 +41,7 @@ export const BenchmarksPage = () => {
         .filter(specification => !datasetId || specification.dataset.id.toString() === datasetId)
         .sort((a, b) => b.id - a.id);
     const columns = COLUMNS();
+    const isUnsupported = query.error?.status === 404;
 
     return (
         <>
@@ -54,12 +55,14 @@ export const BenchmarksPage = () => {
                         <DatasetOriginFilter datasets={specifications.map(specification => specification.dataset)} />
                         <DatasetFilter datasets={specifications.map(specification => specification.dataset)} />
                     </div>
-                    <Button primary icon={<IconAdd16 />} onClick={() => navigate('/evaluate/benchmarks/new')}>
-                        {i18n.t('New benchmark')}
-                    </Button>
+                    {!isUnsupported && (
+                        <Button primary icon={<IconAdd16 />} onClick={() => navigate('/evaluate/benchmarks/new')}>
+                            {i18n.t('New benchmark')}
+                        </Button>
+                    )}
                 </div>
                 {query.isLoading ? <div className={styles.loading}><CircularLoader /></div> : query.error ? (
-                    query.error.status === 404 ? (
+                    isUnsupported ? (
                         <NoticeBox title={i18n.t('Benchmarks unavailable')}>
                             {i18n.t('This CHAP server does not support backtest specifications. Update CHAP Core to use benchmarks.')}
                         </NoticeBox>

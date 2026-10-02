@@ -49,7 +49,7 @@ test('starts model runs from New benchmark and groups them by dataset and parame
     });
     const result = await readJson<MakeBacktestsResponse>(response, 'Run new benchmark');
     expect(result.specificationId).toBe(evaluation.specificationId);
-    await expect(page).toHaveURL('/#/jobs');
+    await expect(page).toHaveURL(`/#/evaluate/benchmarks/${result.specificationId}`);
     await expect.poll(async () => {
         const status = await readJson<string>(await page.request.get(chapUrl(`/v1/jobs/${result.jobs[0].jobId}`)), 'Load benchmark run status');
         if (['FAILURE', 'REVOKED'].includes(status)) {
@@ -57,8 +57,7 @@ test('starts model runs from New benchmark and groups them by dataset and parame
         }
         return status;
     }, { timeout: 180_000, intervals: [3000] }).toBe('SUCCESS');
-    await page.goto(`/#/evaluate/benchmarks/${result.specificationId}`);
-    await expect(page.getByRole('button', { name: 'View evaluation', exact: true })).toHaveCount(2);
+    await expect(page.getByRole('button', { name: 'View evaluation', exact: true })).toHaveCount(2, { timeout: 20_000 });
 });
 
 test('uses benchmark actions to view, add models, export scores and reuse the dataset', async ({ page }) => {
