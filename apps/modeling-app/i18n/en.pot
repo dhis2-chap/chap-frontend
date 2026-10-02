@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-01T13:12:04.907Z\n"
-"PO-Revision-Date: 2026-10-01T13:12:04.907Z\n"
+"POT-Creation-Date: 2026-10-02T09:41:39.654Z\n"
+"PO-Revision-Date: 2026-10-02T09:41:39.654Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -28,6 +28,9 @@ msgstr "Datasets"
 
 msgid "New dataset"
 msgstr "New dataset"
+
+msgid "Alerts"
+msgstr "Alerts"
 
 msgid "Prediction setups"
 msgstr "Prediction setups"
@@ -80,6 +83,192 @@ msgstr ""
 msgid "Remove saved API token"
 msgstr "Remove saved API token"
 
+msgid "Delete alert policy"
+msgstr "Delete alert policy"
+
+msgid "Delete \"{{name}}\"? This cannot be undone."
+msgstr "Delete \"{{name}}\"? This cannot be undone."
+
+msgid "Unable to delete alert policy"
+msgstr "Unable to delete alert policy"
+
+msgid "Cancel"
+msgstr "Cancel"
+
+msgid "Delete"
+msgstr "Delete"
+
+msgid "Unable to load alert policies"
+msgstr "Unable to load alert policies"
+
+msgid "New policy"
+msgstr "New policy"
+
+msgid "Name"
+msgstr "Name"
+
+msgid "Levels"
+msgstr "Levels"
+
+msgid "Created"
+msgstr "Created"
+
+msgid "Actions"
+msgstr "Actions"
+
+msgid "No alert policies yet. Create one to choose it in a prediction setup."
+msgstr "No alert policies yet. Create one to choose it in a prediction setup."
+
+msgid "Alert policy"
+msgstr "Alert policy"
+
+msgid "No alert policies yet."
+msgstr "No alert policies yet."
+
+msgid "Create a policy"
+msgstr "Create a policy"
+
+msgid "Policy"
+msgstr "Policy"
+
+msgid "Select an alert policy"
+msgstr "Select an alert policy"
+
+msgid "Save"
+msgstr "Save"
+
+msgid "None"
+msgstr "None"
+
+msgid "Change policy"
+msgstr "Change policy"
+
+msgid "Enter a level name"
+msgstr "Enter a level name"
+
+msgid "Enter zero or more"
+msgstr "Enter zero or more"
+
+msgid "Enter a percentile between 0 and 100"
+msgstr "Enter a percentile between 0 and 100"
+
+msgid "Enter a whole number of years"
+msgstr "Enter a whole number of years"
+
+msgid "Enter a policy name"
+msgstr "Enter a policy name"
+
+msgid "Level names must be unique"
+msgstr "Level names must be unique"
+
+msgid "New alert policy"
+msgstr "New alert policy"
+
+msgid "Policy name"
+msgstr "Policy name"
+
+msgid ""
+"Add levels from least to most severe. A level fires when the forecast "
+"probability of exceeding its threshold reaches the minimum probability."
+msgstr ""
+"Add levels from least to most severe. A level fires when the forecast "
+"probability of exceeding its threshold reaches the minimum probability."
+
+msgid "Level name"
+msgstr "Level name"
+
+msgid "e.g. Monitor"
+msgstr "e.g. Monitor"
+
+msgid "Strategy"
+msgstr "Strategy"
+
+msgid "Percentile (%)"
+msgstr "Percentile (%)"
+
+msgid "SD above mean"
+msgstr "SD above mean"
+
+msgid "Baseline years"
+msgstr "Baseline years"
+
+msgid "All history"
+msgstr "All history"
+
+msgid "Min. probability"
+msgstr "Min. probability"
+
+msgid "Remove level"
+msgstr "Remove level"
+
+msgid "Add level"
+msgstr "Add level"
+
+msgid "Unable to create alert policy"
+msgstr "Unable to create alert policy"
+
+msgid "Create policy"
+msgstr "Create policy"
+
+msgid "Pending"
+msgstr "Pending"
+
+msgid "Approved"
+msgstr "Approved"
+
+msgid "Declined"
+msgstr "Declined"
+
+msgid "Search"
+msgstr "Search"
+
+msgid "Clear"
+msgstr "Clear"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Run {{id}}"
+msgstr "Run {{id}}"
+
+msgid "Unable to load alerts"
+msgstr "Unable to load alerts"
+
+msgid "Period"
+msgstr "Period"
+
+msgid "Organisation unit"
+msgstr "Organisation unit"
+
+msgid "Level"
+msgstr "Level"
+
+msgid "Run"
+msgstr "Run"
+
+msgid "Recorded"
+msgstr "Recorded"
+
+msgid "No alerts match these filters."
+msgstr "No alerts match these filters."
+
+msgid "No alerts have been recorded."
+msgstr "No alerts have been recorded."
+
+msgid "{{percentile}}th percentile, all history"
+msgstr "{{percentile}}th percentile, all history"
+
+msgid "{{percentile}}th percentile, {{count}}-year baseline"
+msgid_plural "{{percentile}}th percentile, {{count}}-year baseline"
+msgstr[0] "{{percentile}}th percentile, {{count}}-year baseline"
+msgstr[1] "{{percentile}}th percentile, {{count}}-year baseline"
+
+msgid "mean + {{stdMultiplier}} SD"
+msgstr "mean + {{stdMultiplier}} SD"
+
+msgid "{{name}} · {{threshold}} · ≥{{probability}}%"
+msgstr "{{name}} · {{threshold}} · ≥{{probability}}%"
+
 msgid "View"
 msgstr "View"
 
@@ -95,17 +284,11 @@ msgstr "Rename"
 msgid "Download"
 msgstr "Download"
 
-msgid "Delete"
-msgstr "Delete"
-
 msgid "{{name}} (Copy)"
 msgstr "{{name}} (Copy)"
 
 msgid "Create new based on..."
 msgstr "Create new based on..."
-
-msgid "Cancel"
-msgstr "Cancel"
 
 msgid "Failed to load evaluation data. Please try again."
 msgstr "Failed to load evaluation data. Please try again."
@@ -115,9 +298,6 @@ msgstr "Close"
 
 msgid "Select which attributes to copy to the new run{{escape}}"
 msgstr "Select which attributes to copy to the new run{{escape}}"
-
-msgid "Name"
-msgstr "Name"
 
 msgid "Untitled"
 msgstr "Untitled"
@@ -165,14 +345,8 @@ msgstr "Name is required"
 msgid "Rename evaluation"
 msgstr "Rename evaluation"
 
-msgid "Save"
-msgstr "Save"
-
 msgid "ID"
 msgstr "ID"
-
-msgid "Created"
-msgstr "Created"
 
 msgid "Locations"
 msgstr "Locations"
@@ -182,23 +356,14 @@ msgid_plural "Evaluated on {{count}} locations"
 msgstr[0] "Evaluated on {{count}} locations"
 msgstr[1] "Evaluated on {{count}} locations"
 
-msgid "Actions"
-msgstr "Actions"
-
 msgid "Sort by {{column}}"
 msgstr "Sort by {{column}}"
 
 msgid "No evaluations available"
 msgstr "No evaluations available"
 
-msgid "Search"
-msgstr "Search"
-
 msgid "No models found"
 msgstr "No models found"
-
-msgid "Clear"
-msgstr "Clear"
 
 msgid "{{count}} evaluations selected"
 msgid_plural "{{count}} evaluations selected"
@@ -354,9 +519,6 @@ msgstr "The original request is not available for this job."
 msgid "Failed to download the job request. Please try again."
 msgstr "Failed to download the job request. Please try again."
 
-msgid "Status"
-msgstr "Status"
-
 msgid "Type"
 msgstr "Type"
 
@@ -371,9 +533,6 @@ msgstr "Duration"
 
 msgid "No jobs available"
 msgstr "No jobs available"
-
-msgid "Pending"
-msgstr "Pending"
 
 msgid "Running"
 msgstr "Running"
@@ -549,14 +708,8 @@ msgstr "Version"
 msgid "Commit"
 msgstr "Commit"
 
-msgid "Period"
-msgstr "Period"
-
 msgid "Covariates"
 msgstr "Covariates"
-
-msgid "None"
-msgstr "None"
 
 msgid "Author"
 msgstr "Author"
@@ -1157,6 +1310,9 @@ msgstr ""
 msgid "Import"
 msgstr "Import"
 
+msgid "View alerts"
+msgstr "View alerts"
+
 msgid "{{count}} run"
 msgid_plural "{{count}} run"
 msgstr[0] "{{count}} run"
@@ -1723,8 +1879,12 @@ msgstr "Prediction run"
 msgid "Outbreak thresholds"
 msgstr "Outbreak thresholds"
 
-msgid "Show outbreak status and threshold overlays for this run."
-msgstr "Show outbreak status and threshold overlays for this run."
+msgid ""
+"Preview outbreak status and threshold overlays for this run. Saved alert "
+"policies are configured on the prediction setup."
+msgstr ""
+"Preview outbreak status and threshold overlays for this run. Saved alert "
+"policies are configured on the prediction setup."
 
 msgid ""
 "There was a problem loading the prediction data required for this "
@@ -1998,9 +2158,6 @@ msgstr "Lower percentile (%)"
 
 msgid "Upper percentile (%)"
 msgstr "Upper percentile (%)"
-
-msgid "Baseline years"
-msgstr "Baseline years"
 
 msgid ""
 "Most recent complete years in the dataset. Leave empty to use all available "
@@ -2529,6 +2686,19 @@ msgstr "Requires superuser authority"
 
 msgid "Model not found"
 msgstr "Model not found"
+
+msgid ""
+"Review recorded alerts and manage the policies prediction setups use to "
+"raise them."
+msgstr ""
+"Review recorded alerts and manage the policies prediction setups use to "
+"raise them."
+
+msgid "Recorded alerts"
+msgstr "Recorded alerts"
+
+msgid "Policies"
+msgstr "Policies"
 
 msgid ""
 "The selected models are no longer compatible with this dataset. Choose "

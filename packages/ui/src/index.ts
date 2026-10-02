@@ -1,6 +1,5 @@
 export { UncertaintyAreaChart } from './components/predictions/UncertaintyAreaChart/UncertaintyAreaChart';
 export * from './httpfunctions/index';
-export { getChapOpenApiSchema } from './services/thresholdSchema';
 export {
     evaluationResultToViewData,
     getSplitPeriod,

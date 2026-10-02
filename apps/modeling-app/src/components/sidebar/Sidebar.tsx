@@ -117,6 +117,7 @@ export const Sidebar = ({
                             ]}
                         />
                         <SidebarNavLink to="/predictions" label={i18n.t('Predict')} />
+                        <SidebarNavLink to="/alerts" label={i18n.t('Alerts')} />
                         <SidebarNavLink to="/models" label={i18n.t('Models')} />
                         <SidebarNavLink to="/jobs" label={i18n.t('Jobs')} />
                     </SidenavItems>

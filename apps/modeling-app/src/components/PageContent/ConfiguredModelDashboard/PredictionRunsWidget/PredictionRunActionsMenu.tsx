@@ -5,6 +5,7 @@ import {
     IconImportItems24,
     IconMore16,
     IconView24,
+    IconWarning24,
     MenuItem,
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
@@ -67,6 +68,12 @@ export const PredictionRunActionsMenu = ({
                             dataTest="prediction-run-overflow-import"
                             icon={<IconImportItems24 />}
                             onClick={navigateToImport}
+                        />
+                        <MenuItem
+                            label={i18n.t('View alerts')}
+                            dataTest="prediction-run-overflow-alerts"
+                            icon={<IconWarning24 />}
+                            onClick={() => navigate(`/alerts?predictionId=${predictionId}`)}
                         />
                         <MenuItem
                             label={i18n.t('Delete')}

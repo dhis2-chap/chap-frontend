@@ -1,124 +1,109 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import i18n from '@dhis2/d2-i18n';
-import { Button, CircularLoader, NoticeBox, SingleSelectField, SingleSelectOption } from '@dhis2/ui';
-import { Widget, type PredictionSetupReadWithPredictions } from '@dhis2-chap/ui';
+import {
+    Button,
+    ButtonStrip,
+    CircularLoader,
+    Modal,
+    ModalActions,
+    ModalContent,
+    ModalTitle,
+    NoticeBox,
+    SingleSelectField,
+    SingleSelectOption,
+} from '@dhis2/ui';
+import { Tag, Widget, type PredictionSetupReadWithPredictions } from '@dhis2-chap/ui';
 import { useAlertPolicies } from '@/hooks/useAlertPolicies';
-import { useUpdatePredictionSetup } from '../PageContent/ConfiguredModelDashboard/QuickActionsWidget/hooks/useUpdatePredictionSetup';
-import { parameterLabel } from '@/utils/thresholdParameterSchema';
 import { getChapErrorMessage } from '@/utils/chapErrors';
-import { CreateAlertPolicyDialog } from './CreateAlertPolicyDialog';
+import { useUpdatePredictionSetup } from '../PageContent/ConfiguredModelDashboard/QuickActionsWidget/hooks/useUpdatePredictionSetup';
+import { describeAlertLevel } from './describeAlertLevel';
 import styles from './BackendAlerts.module.css';
 
-export const AlertPolicyWidget = ({ setup }: { setup: PredictionSetupReadWithPredictions }) => {
-    const policies = useAlertPolicies();
-    const [selected, setSelected] = useState(String(setup.alertPolicy?.id ?? ''));
-    const [creating, setCreating] = useState(false);
-    const { updatePredictionSetup, isUpdating, error } = useUpdatePredictionSetup();
-    useEffect(
-        () => setSelected(String(setup.alertPolicy?.id ?? '')),
-        [setup.id, setup.alertPolicy?.id],
-    );
-    const policy = policies.data?.find(item => String(item.id) === selected);
-    const save = async () => {
-        if (!policy) return;
-        try {
-            await updatePredictionSetup({
-                predictionSetupId: setup.id,
-                data: { alertPolicyId: policy.id },
-            });
-        } catch {
-            // The mutation reports failure and the selected policy remains available for retry.
-        }
-    };
+const ChangeAlertPolicyModal = ({ setup, onClose }: { setup: PredictionSetupReadWithPredictions; onClose: () => void }) => {
+    const { data: policies, error, isLoading } = useAlertPolicies();
+    const [selected, setSelected] = useState(setup.alertPolicy?.id ? String(setup.alertPolicy.id) : undefined);
+    const { updatePredictionSetup, isUpdating } = useUpdatePredictionSetup({ onSuccess: onClose });
+
     return (
-        <Widget header={i18n.t('Alert policy')} noncollapsible>
-            <div className={styles.content}>
-                {policies.isLoading && <CircularLoader small />}
-                {policies.isError && (
+        <Modal small onClose={onClose}>
+            <ModalTitle>{i18n.t('Alert policy')}</ModalTitle>
+            <ModalContent>
+                {isLoading && <CircularLoader small />}
+                {error && (
                     <NoticeBox error title={i18n.t('Unable to load alert policies')}>
-                        {getChapErrorMessage(policies.error as Error)}
-                        <Button small onClick={() => policies.refetch()}>
-                            {i18n.t('Retry')}
-                        </Button>
+                        {getChapErrorMessage(error)}
                     </NoticeBox>
                 )}
-                {policies.data && (
-                    <>
-                        <SingleSelectField
-                            label={i18n.t('Saved policy')}
-                            selected={policy ? selected : undefined}
-                            placeholder={i18n.t('Select an alert policy')}
-                            disabled={isUpdating}
-                            onChange={({ selected: value }) => setSelected(value)}
-                        >
-                            {policies.data.map(item => (
-                                <SingleSelectOption
-                                    key={item.id}
-                                    value={String(item.id)}
-                                    label={item.name}
-                                />
-                            ))}
-                        </SingleSelectField>
-                        {policy?.levels?.map(level => (
-                            <div key={level.name} className={styles.level}>
-                                <strong>{level.name}</strong>
-                                <span>
-                                    {i18n.t('Strategy{{colon}} {{strategy}}', {
-                                        colon: ':',
-                                        strategy: level.thresholdParams.type,
-                                    })}
-                                </span>
-                                {Object.entries(level.thresholdParams)
-                                    .filter(([name]) => name !== 'type')
-                                    .map(([name, value]) => (
-                                        <span key={name}>
-                                            {i18n.t('{{parameter}}{{colon}} {{value}}', {
-                                                parameter: parameterLabel(name),
-                                                colon: ':',
-                                                value:
-                                                    value === null
-                                                        ? i18n.t('All available history')
-                                                        : String(value),
-                                            })}
-                                        </span>
-                                    ))}
-                                <span>
-                                    {i18n.t('Probability cut{{colon}} {{probability}}', {
-                                        colon: ':',
-                                        probability: `${level.exceedanceThreshold * 100}%`,
-                                    })}
-                                </span>
-                            </div>
-                        ))}
-                        <Button
-                            small
-                            primary
-                            disabled={!policy || policy.id === setup.alertPolicy?.id || isUpdating}
-                            loading={isUpdating}
-                            onClick={save}
-                        >
-                            {i18n.t('Use policy for this setup')}
-                        </Button>
-                        <Button small disabled={isUpdating} onClick={() => setCreating(true)}>
-                            {i18n.t('Create policy')}
-                        </Button>
-                        {error && (
-                            <NoticeBox error title={i18n.t('Unable to save alert policy')}>
-                                {getChapErrorMessage(error)}
-                            </NoticeBox>
-                        )}
-                    </>
+                {policies?.length === 0 && (
+                    <p>
+                        {i18n.t('No alert policies yet.')}
+                        {' '}
+                        <Link to="/alerts/policies">{i18n.t('Create a policy')}</Link>
+                    </p>
                 )}
-            </div>
-            {creating && (
-                <CreateAlertPolicyDialog
-                    onClose={() => setCreating(false)}
-                    onCreated={(id) => {
-                        setSelected(String(id));
-                        setCreating(false);
-                    }}
-                />
-            )}
-        </Widget>
+                {!!policies?.length && (
+                    <SingleSelectField
+                        label={i18n.t('Policy')}
+                        placeholder={i18n.t('Select an alert policy')}
+                        selected={policies.some(policy => String(policy.id) === selected) ? selected : undefined}
+                        onChange={({ selected: value }) => setSelected(value)}
+                    >
+                        {policies.map(policy => (
+                            <SingleSelectOption key={policy.id} value={String(policy.id)} label={policy.name} />
+                        ))}
+                    </SingleSelectField>
+                )}
+            </ModalContent>
+            <ModalActions>
+                <ButtonStrip end>
+                    <Button onClick={onClose} disabled={isUpdating}>{i18n.t('Cancel')}</Button>
+                    <Button
+                        primary
+                        disabled={!selected || selected === String(setup.alertPolicy?.id)}
+                        loading={isUpdating}
+                        onClick={() => updatePredictionSetup({
+                            predictionSetupId: setup.id,
+                            data: { alertPolicyId: Number(selected) },
+                        }).catch(() => {
+                            // useUpdatePredictionSetup reports the failure; keep the modal open for a retry.
+                        })}
+                    >
+                        {i18n.t('Save')}
+                    </Button>
+                </ButtonStrip>
+            </ModalActions>
+        </Modal>
+    );
+};
+
+export const AlertPolicyWidget = ({ setup }: { setup: PredictionSetupReadWithPredictions }) => {
+    const [editing, setEditing] = useState(false);
+    const policy = setup.alertPolicy;
+
+    return (
+        <>
+            <Widget header={i18n.t('Alerts')} noncollapsible>
+                <div className={styles.widgetContent}>
+                    <div className={styles.row}>
+                        <span className={styles.label}>{i18n.t('Alert policy')}</span>
+                        <span className={styles.value} data-test="alert-policy-name">
+                            {policy?.name ?? i18n.t('None')}
+                        </span>
+                        {!!policy?.levels?.length && (
+                            <div className={styles.tags}>
+                                {policy.levels.map(level => (
+                                    <Tag key={level.name}>{describeAlertLevel(level)}</Tag>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                    <Button small secondary onClick={() => setEditing(true)}>
+                        {i18n.t('Change policy')}
+                    </Button>
+                </div>
+            </Widget>
+            {editing && <ChangeAlertPolicyModal setup={setup} onClose={() => setEditing(false)} />}
+        </>
     );
 };
