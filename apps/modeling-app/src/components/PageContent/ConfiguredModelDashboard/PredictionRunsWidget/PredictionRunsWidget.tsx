@@ -19,7 +19,7 @@ import {
     SortingState,
     useReactTable,
 } from '@tanstack/react-table';
-import type { PredictionInfo } from '@dhis2-chap/ui';
+import type { JobDescription, PredictionInfo } from '@dhis2-chap/ui';
 import { StatusIndicator, Widget } from '@dhis2-chap/ui';
 import { Link, useNavigate } from 'react-router-dom';
 import { format, formatDistanceToNow } from 'date-fns';
@@ -32,6 +32,7 @@ import {
 import { PredictionRunActionsMenu } from './PredictionRunActionsMenu';
 import styles from './PredictionRunsWidget.module.css';
 import { getChapErrorLabel } from '../../../../utils/chapErrors';
+import { JOB_TYPES } from '../../../../hooks/useJobs';
 
 const EMPTY_VALUE = '-';
 const columnHelper = createColumnHelper<PredictionInfo>();
@@ -93,6 +94,7 @@ type Props = {
     hasValidPredictionSetupId: boolean;
     hasRunningJob: boolean;
     isLoading: boolean;
+    jobs: JobDescription[];
     predictions: PredictionInfo[];
 };
 
@@ -141,6 +143,7 @@ export const PredictionRunsWidget = ({
     hasValidPredictionSetupId,
     hasRunningJob,
     isLoading,
+    jobs,
     predictions,
 }: Props) => {
     const hasError = !!error;
@@ -148,6 +151,12 @@ export const PredictionRunsWidget = ({
     const [open, setOpen] = useState(true);
     const [sorting, setSorting] = useState<SortingState>([{ id: 'created', desc: true }]);
     const navigate = useNavigate();
+    // A successful prediction job's result is the id of the prediction it created.
+    const predictionJobs = useMemo(() => new Map(
+        jobs
+            .filter(job => job.type === JOB_TYPES.MAKE_PREDICTION && job.result)
+            .map(job => [job.result, job]),
+    ), [jobs]);
     const columns = useMemo(() => [
         columnHelper.accessor('id', {
             header: () => i18n.t('Run ID'),
@@ -182,10 +191,11 @@ export const PredictionRunsWidget = ({
                 <PredictionRunActionsMenu
                     predictionSetupId={predictionSetupId}
                     predictionId={info.row.original.id}
+                    job={predictionJobs.get(String(info.row.original.id))}
                 />
             ),
         }),
-    ], [predictionSetupId]);
+    ], [predictionSetupId, predictionJobs]);
     const table = useReactTable({
         data: predictions,
         columns,

@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-02T08:33:53.103Z\n"
-"PO-Revision-Date: 2026-10-02T08:33:53.103Z\n"
+"POT-Creation-Date: 2026-10-01T13:12:04.907Z\n"
+"PO-Revision-Date: 2026-10-01T13:12:04.907Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -327,14 +327,14 @@ msgstr "Download request"
 msgid "Copy Job ID"
 msgstr "Copy Job ID"
 
+msgid "Job Logs"
+msgstr "Job Logs"
+
 msgid "An error occurred while loading the logs."
 msgstr "An error occurred while loading the logs."
 
 msgid "No logs reported for this job"
 msgstr "No logs reported for this job"
-
-msgid "Job Logs"
-msgstr "Job Logs"
 
 msgid "Job cancelled"
 msgstr "Job cancelled"
@@ -1143,9 +1143,6 @@ msgstr "View all activity"
 
 msgid "No activity matches the selected filters"
 msgstr "No activity matches the selected filters"
-
-msgid "Prediction job logs"
-msgstr "Prediction job logs"
 
 msgid "Delete prediction run"
 msgstr "Delete prediction run"

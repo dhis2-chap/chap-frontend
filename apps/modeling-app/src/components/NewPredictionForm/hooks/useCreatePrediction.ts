@@ -70,12 +70,12 @@ export const useCreatePrediction = ({
                 predictionRequest,
             );
         },
-        onSuccess: (job) => {
+        onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['jobs'] });
             queryClient.invalidateQueries({ queryKey: ['predictions'] });
             queryClient.invalidateQueries({ queryKey: ['predictionSetups'] });
             onSuccess?.();
-            navigate(returnTo || '/jobs', { state: { predictionJobId: job.id } });
+            navigate(returnTo || '/jobs');
         },
         onError: (apiError: ApiError) => {
             onError?.(apiError);
