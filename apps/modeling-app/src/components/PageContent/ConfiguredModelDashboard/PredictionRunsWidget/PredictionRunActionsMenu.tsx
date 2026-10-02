@@ -10,26 +10,23 @@ import {
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { OverflowButton } from '@dhis2-chap/ui';
-import type { JobDescription } from '@dhis2-chap/ui';
 import { useNavigate } from 'react-router-dom';
 import { DeletePredictionRunModal } from './DeletePredictionRunModal';
-import { ViewJobLogsModal } from '../../../JobsTable/JobActionsMenu/ViewJobLogsModal/ViewJobLogsModal';
 
 type Props = {
     predictionSetupId?: string;
     predictionId: number;
-    job?: JobDescription;
+    onViewLogs?: () => void;
 };
 
 export const PredictionRunActionsMenu = ({
     predictionSetupId,
     predictionId,
-    job,
+    onViewLogs,
 }: Props) => {
     const navigate = useNavigate();
     const [flyoutMenuIsOpen, setFlyoutMenuIsOpen] = useState(false);
     const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
-    const [logsModalIsOpen, setLogsModalIsOpen] = useState(false);
     const parsedPredictionSetupId = Number(predictionSetupId);
     const numericPredictionSetupId = Number.isFinite(parsedPredictionSetupId)
         ? parsedPredictionSetupId
@@ -74,13 +71,13 @@ export const PredictionRunActionsMenu = ({
                             icon={<IconImportItems24 />}
                             onClick={navigateToImport}
                         />
-                        {job && (
+                        {onViewLogs && (
                             <MenuItem
                                 label={i18n.t('View Logs')}
                                 dataTest="prediction-run-overflow-logs"
                                 icon={<IconList24 />}
                                 onClick={() => {
-                                    setLogsModalIsOpen(true);
+                                    onViewLogs();
                                     setFlyoutMenuIsOpen(false);
                                 }}
                             />
@@ -98,14 +95,6 @@ export const PredictionRunActionsMenu = ({
                     </FlyoutMenu>
                 )}
             />
-
-            {logsModalIsOpen && job && (
-                <ViewJobLogsModal
-                    jobId={job.id}
-                    status={job.status}
-                    onClose={() => setLogsModalIsOpen(false)}
-                />
-            )}
 
             {deleteModalIsOpen && (
                 <DeletePredictionRunModal

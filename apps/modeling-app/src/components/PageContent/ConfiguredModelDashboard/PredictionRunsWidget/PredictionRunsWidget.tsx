@@ -34,6 +34,7 @@ import styles from './PredictionRunsWidget.module.css';
 import { getChapErrorLabel } from '../../../../utils/chapErrors';
 import { isActiveJob, JOB_STATUSES, JOB_TYPES } from '../../../../hooks/useJobs';
 import { JobActionsMenu } from '../../../JobsTable/JobActionsMenu/JobActionsMenu';
+import { ViewJobLogsModal } from '../../../JobsTable/JobActionsMenu/ViewJobLogsModal/ViewJobLogsModal';
 import { StatusCell } from '../../../JobsTable/TableCells/StatusCell';
 
 const EMPTY_VALUE = '-';
@@ -162,6 +163,9 @@ export const PredictionRunsWidget = ({
     const [open, setOpen] = useState(true);
     const [sorting, setSorting] = useState<SortingState>([{ id: 'created', desc: true }]);
     const navigate = useNavigate();
+    // Owned here so the modal stays open when a running row turns into a prediction row.
+    const [logsJobId, setLogsJobId] = useState<string>();
+    const logsJob = jobs.find(job => job.id === logsJobId);
     const rows = useMemo<PredictionRow[]>(() => {
         const predictionJobs = jobs.filter(job => job.type === JOB_TYPES.MAKE_PREDICTION);
         // A successful prediction job's result is the id of the prediction it created.
@@ -226,7 +230,7 @@ export const PredictionRunsWidget = ({
                         <PredictionRunActionsMenu
                             predictionSetupId={predictionSetupId}
                             predictionId={prediction.id}
-                            job={job}
+                            onViewLogs={job && (() => setLogsJobId(job.id))}
                         />
                     );
                 }
@@ -237,6 +241,7 @@ export const PredictionRunsWidget = ({
                         result={job.result}
                         type={job.type}
                         showGoToResult={false}
+                        onViewLogs={() => setLogsJobId(job.id)}
                     />
                 );
             },
@@ -343,6 +348,13 @@ export const PredictionRunsWidget = ({
                     </DataTable>
                 )}
             </div>
+            {logsJob && (
+                <ViewJobLogsModal
+                    jobId={logsJob.id}
+                    status={logsJob.status}
+                    onClose={() => setLogsJobId(undefined)}
+                />
+            )}
         </Widget>
     );
 };

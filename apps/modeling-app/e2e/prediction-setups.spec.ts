@@ -94,6 +94,9 @@ test.describe.serial('prediction setup', () => {
         await expect(logsModal.getByText(`Job Logs - ${prediction.id}`)).toBeVisible();
         await expect(logsModal.getByText('Running', { exact: true })).toBeVisible();
         await page.unroute('**/v1/jobs?*');
+
+        // The modal stays open with the final status once the running row is replaced.
+        await expect(logsModal.getByText('Success', { exact: true })).toBeVisible({ timeout: 30_000 });
     });
 
     test('opens the scoped activity page and shows rows for the saved setup', async ({ page }) => {
