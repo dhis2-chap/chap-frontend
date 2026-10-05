@@ -8,7 +8,7 @@ import { fetchRunnableModel } from '../../hooks/modelsQuery';
 import { hasRevisionMismatch } from '../../utils/modelHealth';
 import { ModelHealthNotice } from '../../components/ModelHealth/ModelHealth';
 import { ModelsSelector } from '../../components/NewEvaluationForm/DatasetEvaluationForm/ModelsSelector';
-import { datasetSupportsModel } from '../../components/NewDatasetForm/utils/datasetModels';
+import { datasetSupportsModel, getBacktestColumns } from '../../components/NewDatasetForm/utils/datasetModels';
 import { ChapErrorNotice } from '../../components/ChapErrorNotice';
 import { getModelsWithRun, makeBenchmarkRequest } from './benchmarkUtils';
 import styles from './BenchmarksPage.module.css';
@@ -24,13 +24,14 @@ export const AddBenchmarkModels = ({ specification, onClose, onSuccess }: Props)
     const queryClient = useQueryClient();
     const [selectedIds, setSelectedIds] = useState<number[]>([]);
     const { dataset } = specification;
-    const compatibleModels = models?.filter(model => datasetSupportsModel(dataset.covariates ?? [], dataset.periodType ?? '', model)) ?? [];
+    const columns = getBacktestColumns(dataset.covariates ?? [], specification.targetColumn ?? 'disease_cases');
+    const compatibleModels = models?.filter(model => datasetSupportsModel(columns, dataset.periodType ?? '', model)) ?? [];
     const selectedModels = compatibleModels.filter(model => selectedIds.includes(model.id));
     const modelsWithRun = getModelsWithRun(specification.backtests, selectedModels);
     const mutation = useMutation<MakeBacktestsResponse, ApiError | Error>({
         mutationFn: async () => {
             const runnable = await Promise.all(selectedModels.map(model => fetchRunnableModel(queryClient, model.id)));
-            if (!runnable.length || runnable.some(model => !datasetSupportsModel(dataset.covariates ?? [], dataset.periodType ?? '', model))) {
+            if (!runnable.length || runnable.some(model => !datasetSupportsModel(columns, dataset.periodType ?? '', model))) {
                 throw new Error(i18n.t('The selected models are no longer compatible with this dataset. Choose models again.'));
             }
             return BacktestsService.createBacktestsV1AnalyticsCreateBacktestsPost(makeBenchmarkRequest(
