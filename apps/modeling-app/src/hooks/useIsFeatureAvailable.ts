@@ -12,6 +12,7 @@ export const FEATURE_MIN_VERSIONS = {
     multiModelBacktests: '2.4.0',
     benchmarks: '2.4.0',
     backtestParameters: '2.4.0',
+    backtestTargetColumn: '2.4.0',
 } as const;
 
 /**
@@ -23,6 +24,7 @@ export const Features = {
     MULTI_MODEL_BACKTESTS: 'multiModelBacktests',
     BENCHMARKS: 'benchmarks',
     BACKTEST_PARAMETERS: 'backtestParameters',
+    BACKTEST_TARGET_COLUMN: 'backtestTargetColumn',
 } as const;
 
 export type Feature = keyof typeof FEATURE_MIN_VERSIONS;

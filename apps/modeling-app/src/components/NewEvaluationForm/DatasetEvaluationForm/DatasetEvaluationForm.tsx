@@ -54,6 +54,7 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '', benchmarkContext 
     const navigate = useNavigate();
     const queryClient = useQueryClient();
     const { isAvailable: isMultiModelAvailable, isLoading: isVersionLoading } = useIsFeatureAvailable(Features.MULTI_MODEL_BACKTESTS);
+    const { isAvailable: isTargetColumnAvailable } = useIsFeatureAvailable(Features.BACKTEST_TARGET_COLUMN);
 
     const methods = useForm<FormValues>({
         resolver: zodResolver(schema),
@@ -76,7 +77,8 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '', benchmarkContext 
     const isTooShort = periodCount != null && !!requiredPeriodCount && periodCount < requiredPeriodCount;
     const columns = dataset?.covariates ?? [];
     const defaultTargetColumn = columns.includes('disease_cases') ? 'disease_cases' : '';
-    const selectedTargetColumn = columns.includes(targetColumn) ? targetColumn : defaultTargetColumn;
+    // Chap Core < 2.4.0 always evaluates disease_cases.
+    const selectedTargetColumn = isTargetColumnAvailable && columns.includes(targetColumn) ? targetColumn : defaultTargetColumn;
     const compatibleModels = models?.filter(model => (
         dataset && selectedTargetColumn &&
         datasetSupportsModel(getBacktestColumns(columns, selectedTargetColumn), dataset.periodType ?? '', model)
@@ -90,7 +92,12 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '', benchmarkContext 
             const runnableModels = await Promise.all(
                 selectedModels.map(model => fetchRunnableModel(queryClient, model.id)),
             );
-            const request = { name, datasetId: dataset!.id!, targetColumn: selectedTargetColumn, ...(backtestParameters ?? getLegacyBacktestParameters(dataset!.periodType)) };
+            const request = {
+                name,
+                datasetId: dataset!.id!,
+                ...(isTargetColumnAvailable && { targetColumn: selectedTargetColumn }),
+                ...(backtestParameters ?? getLegacyBacktestParameters(dataset!.periodType)),
+            };
             const modelIds = runnableModels.map(model => model.name);
             if (isMultiModelAvailable) {
                 const { specificationId } = await BacktestsService.createBacktestsV1AnalyticsCreateBacktestsPost({ ...request, modelIds });
@@ -208,21 +215,23 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '', benchmarkContext 
                             <DatasetOriginFilter datasets={savedDatasets} dense={false} />
                         </div>
 
-                        <SingleSelectField
-                            label={i18n.t('Target column')}
-                            helpText={i18n.t('The dataset column the models predict and are scored against.')}
-                            selected={selectedTargetColumn}
-                            disabled={!dataset || createEvaluation.isLoading}
-                            dataTest="evaluation-target-column-select"
-                            onChange={({ selected }) => {
-                                methods.setValue('targetColumn', selected, { shouldDirty: true });
-                                createEvaluation.reset();
-                            }}
-                        >
-                            {columns.map(column => (
-                                <SingleSelectOption key={column} value={column} label={column} />
-                            ))}
-                        </SingleSelectField>
+                        {isTargetColumnAvailable && (
+                            <SingleSelectField
+                                label={i18n.t('Target column')}
+                                helpText={i18n.t('The dataset column the models predict and are scored against.')}
+                                selected={selectedTargetColumn}
+                                disabled={!dataset || createEvaluation.isLoading}
+                                dataTest="evaluation-target-column-select"
+                                onChange={({ selected }) => {
+                                    methods.setValue('targetColumn', selected, { shouldDirty: true });
+                                    createEvaluation.reset();
+                                }}
+                            >
+                                {columns.map(column => (
+                                    <SingleSelectOption key={column} value={column} label={column} />
+                                ))}
+                            </SingleSelectField>
+                        )}
 
                         <ModelsSelector
                             models={compatibleModels}

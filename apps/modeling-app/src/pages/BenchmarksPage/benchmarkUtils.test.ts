@@ -60,6 +60,8 @@ it('exports all metrics in the supplied row order, with raw precision, blanks an
     expect(csv.split('\r\n')[2]).toContain('"","-2"');
     expect(csv).not.toContain('NaN');
     expect(csv).toContain('"future_weather_provider"');
+    expect(csv).toContain('"target_column"');
+    expect(csv.split('\r\n')[1]).toContain('"perfect","cases"');
 });
 
 it('flags models that already ran at their current template version', () => {
