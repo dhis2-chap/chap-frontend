@@ -36,6 +36,7 @@ import styles from './DatasetEvaluationForm.module.css';
 const schema = z.object({
     name: z.string().trim().min(1, { message: i18n.t('Name is required') }),
     datasetId: z.string(),
+    targetColumn: z.string(),
     backtestParameters: backtestParametersSchema.optional(),
     modelNames: z.array(z.string()).min(1),
 });
@@ -56,9 +57,12 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '', benchmarkContext 
 
     const methods = useForm<FormValues>({
         resolver: zodResolver(schema),
-        defaultValues: { name: '', datasetId: initialDatasetId, modelNames: [] },
+        defaultValues: { name: '', datasetId: initialDatasetId, targetColumn: '', modelNames: [] },
     });
-    const [datasetId, modelNames, backtestParameters] = useWatch({ control: methods.control, name: ['datasetId', 'modelNames', 'backtestParameters'] });
+    const [datasetId, targetColumn, modelNames, backtestParameters] = useWatch({
+        control: methods.control,
+        name: ['datasetId', 'targetColumn', 'modelNames', 'backtestParameters'],
+    });
     const { origin } = useDatasetOriginFilter();
 
     const dataset = datasets.data?.find(item => String(item.id) === datasetId);
@@ -70,11 +74,16 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '', benchmarkContext 
         backtestParameters ?? getLegacyBacktestParameters(dataset?.periodType),
     );
     const isTooShort = periodCount != null && !!requiredPeriodCount && periodCount < requiredPeriodCount;
+    const columns = dataset?.covariates ?? [];
+    // The chosen target column stands in for each model's own target, so only the covariates must match by name.
+    const defaultTargetColumn = columns.find(column => models?.some(model => model.target.name === column)) ?? '';
+    const selectedTargetColumn = columns.includes(targetColumn) ? targetColumn : defaultTargetColumn;
     const compatibleModels = models?.filter(model => (
-        dataset && datasetSupportsModel(dataset.covariates ?? [], dataset.periodType ?? '', model)
+        dataset && selectedTargetColumn &&
+        datasetSupportsModel([...columns, model.target.name], dataset.periodType ?? '', model)
     )) ?? [];
     const selectedModels = compatibleModels.filter(model => modelNames.includes(model.name));
-    const canSubmit = selectedModels.length > 0 && !selectedModels.some(hasRevisionMismatch) &&
+    const canSubmit = selectedModels.length > 0 && !!selectedTargetColumn && !selectedModels.some(hasRevisionMismatch) &&
         !!dataset?.periodType && !isTooShort && dataset?.id != null;
 
     const createEvaluation = useMutation<number | undefined, ApiError | Error, FormValues>({
@@ -82,7 +91,7 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '', benchmarkContext 
             const runnableModels = await Promise.all(
                 selectedModels.map(model => fetchRunnableModel(queryClient, model.id)),
             );
-            const request = { name, datasetId: dataset!.id!, ...(backtestParameters ?? getLegacyBacktestParameters(dataset!.periodType)) };
+            const request = { name, datasetId: dataset!.id!, targetColumn: selectedTargetColumn, ...(backtestParameters ?? getLegacyBacktestParameters(dataset!.periodType)) };
             const modelIds = runnableModels.map(model => model.name);
             if (isMultiModelAvailable) {
                 const { specificationId } = await BacktestsService.createBacktestsV1AnalyticsCreateBacktestsPost({ ...request, modelIds });
@@ -188,6 +197,7 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '', benchmarkContext 
                                 helpText={datasetOptions.length ? undefined : i18n.t('No datasets match the origin filter')}
                                 onChange={({ selected }) => {
                                     methods.setValue('datasetId', selected, { shouldDirty: true });
+                                    methods.setValue('targetColumn', '', { shouldDirty: true });
                                     methods.setValue('modelNames', [], { shouldDirty: true });
                                     createEvaluation.reset();
                                 }}
@@ -199,11 +209,27 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '', benchmarkContext 
                             <DatasetOriginFilter datasets={savedDatasets} dense={false} />
                         </div>
 
+                        <SingleSelectField
+                            label={i18n.t('Target column')}
+                            helpText={i18n.t('The dataset column the models predict and are scored against.')}
+                            selected={selectedTargetColumn}
+                            disabled={!dataset || createEvaluation.isLoading}
+                            dataTest="evaluation-target-column-select"
+                            onChange={({ selected }) => {
+                                methods.setValue('targetColumn', selected, { shouldDirty: true });
+                                createEvaluation.reset();
+                            }}
+                        >
+                            {columns.map(column => (
+                                <SingleSelectOption key={column} value={column} label={column} />
+                            ))}
+                        </SingleSelectField>
+
                         <ModelsSelector
                             models={compatibleModels}
                             selectedModels={selectedModels}
                             disabled={createEvaluation.isLoading}
-                            disabledReason={dataset ? undefined : i18n.t('Pick a dataset first')}
+                            disabledReason={!dataset ? i18n.t('Pick a dataset first') : !selectedTargetColumn ? i18n.t('Pick a target column first') : undefined}
                             onChange={selected => methods.setValue(
                                 'modelNames',
                                 selected.map(model => model.name),
@@ -215,7 +241,7 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '', benchmarkContext 
                             <ModelHealthNotice key={model.id} model={model} />
                         ))}
 
-                        {dataset && !compatibleModels.length && (
+                        {dataset && selectedTargetColumn && !compatibleModels.length && (
                             <NoticeBox warning title={i18n.t('No compatible model')}>
                                 {i18n.t('No configured model matches this dataset’s covariates and period type.')}
                             </NoticeBox>
