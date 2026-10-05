@@ -10,7 +10,6 @@ import {
     DataTableColumnHeader,
     DataTableHead,
     DataTableRow,
-    IconAdd16,
     Modal,
     ModalActions,
     ModalContent,
@@ -22,7 +21,6 @@ import { Tag, type AlertPolicyRead } from '@dhis2-chap/ui';
 import { useAlertPolicies, useDeleteAlertPolicy } from '@/hooks/useAlertPolicies';
 import { getChapErrorMessage } from '@/utils/chapErrors';
 import { TableActionButton } from '../TableActionButton';
-import { CreateAlertPolicyModal } from './CreateAlertPolicyModal';
 import { describeAlertLevel } from './describeAlertLevel';
 import styles from './BackendAlerts.module.css';
 
@@ -57,7 +55,6 @@ const DeleteAlertPolicyModal = ({ policy, onClose }: { policy: AlertPolicyRead; 
 
 export const AlertPoliciesTable = () => {
     const { data: policies, error, isLoading } = useAlertPolicies();
-    const [creating, setCreating] = useState(false);
     const [deleting, setDeleting] = useState<AlertPolicyRead>();
 
     if (isLoading) return <CircularLoader />;
@@ -71,12 +68,6 @@ export const AlertPoliciesTable = () => {
 
     return (
         <div>
-            <div className={styles.toolbar}>
-                <span />
-                <Button primary small icon={<IconAdd16 />} onClick={() => setCreating(true)}>
-                    {i18n.t('New policy')}
-                </Button>
-            </div>
             <DataTable>
                 <DataTableHead>
                     <DataTableRow>
@@ -115,7 +106,6 @@ export const AlertPoliciesTable = () => {
                     )}
                 </DataTableBody>
             </DataTable>
-            {creating && <CreateAlertPolicyModal onClose={() => setCreating(false)} />}
             {deleting && <DeleteAlertPolicyModal policy={deleting} onClose={() => setDeleting(undefined)} />}
         </div>
     );

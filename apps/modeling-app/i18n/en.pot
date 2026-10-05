@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-02T09:41:39.654Z\n"
-"PO-Revision-Date: 2026-10-02T09:41:39.654Z\n"
+"POT-Creation-Date: 2026-10-05T08:34:52.216Z\n"
+"PO-Revision-Date: 2026-10-05T08:34:52.217Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -100,9 +100,6 @@ msgstr "Delete"
 
 msgid "Unable to load alert policies"
 msgstr "Unable to load alert policies"
-
-msgid "New policy"
-msgstr "New policy"
 
 msgid "Name"
 msgstr "Name"
@@ -2699,6 +2696,9 @@ msgstr "Recorded alerts"
 
 msgid "Policies"
 msgstr "Policies"
+
+msgid "New policy"
+msgstr "New policy"
 
 msgid ""
 "The selected models are no longer compatible with this dataset. Choose "
