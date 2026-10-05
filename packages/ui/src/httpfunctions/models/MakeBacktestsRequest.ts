@@ -27,6 +27,10 @@ export type MakeBacktestsRequest = {
      */
     futureWeatherProvider?: string;
     /**
+     * Dataset column to evaluate as the target.
+     */
+    targetColumn?: string;
+    /**
      * Name of the run; each backtest is named `<name>/<configured model name>`.
      */
     name: string;

@@ -9,7 +9,7 @@ const run = (id: number, aggregateMetrics: Record<string, number>): BacktestRead
 const specification: BacktestSpecificationRead = {
     id: 8, dataset: { id: 12, name: 'Dataset, "monthly"', firstPeriod: '202001', lastPeriod: '202412' },
     orgUnits: ['a'], backtests: [], nPeriods: 4, nSplits: 7, stride: 2, nRetrain: 3,
-    futureWeatherProvider: 'perfect',
+    futureWeatherProvider: 'perfect', targetColumn: 'cases',
 };
 
 describe('benchmark scores', () => {
@@ -43,7 +43,7 @@ describe('benchmark scores', () => {
 it('preserves all saved parameters, rather than using evaluation defaults', () => {
     expect(makeBenchmarkRequest(specification, [10, 11], 'Benchmark 8')).toEqual({
         name: 'Benchmark 8', modelIds: [10, 11], datasetId: 12,
-        nPeriods: 4, nSplits: 7, stride: 2, nRetrain: 3, futureWeatherProvider: 'perfect',
+        nPeriods: 4, nSplits: 7, stride: 2, nRetrain: 3, futureWeatherProvider: 'perfect', targetColumn: 'cases',
     });
 });
 
@@ -76,8 +76,9 @@ it('matches running evaluation requests to the benchmark they file under', () =>
     expect(requestMatchesSpecification(request, specification)).toBe(true);
     expect(requestMatchesSpecification({ ...request, datasetId: 13 }, specification)).toBe(false);
     expect(requestMatchesSpecification({ ...request, stride: 1 }, specification)).toBe(false);
+    expect(requestMatchesSpecification({ ...request, targetColumn: 'disease_cases' }, specification)).toBe(false);
     // Omitted parameters take CHAP Core's defaults, as in the saved-dataset evaluation form.
-    const defaults = { ...specification, nPeriods: 3, nSplits: 7, stride: 1, nRetrain: 1, futureWeatherProvider: 'climatology' };
+    const defaults = { ...specification, nPeriods: 3, nSplits: 7, stride: 1, nRetrain: 1, futureWeatherProvider: 'climatology', targetColumn: 'disease_cases' };
     expect(requestMatchesSpecification({ name: 'My evaluation', modelIds: [10], datasetId: 12 }, defaults)).toBe(true);
     expect(requestMatchesSpecification({ name: 'My evaluation', modelIds: [10], datasetId: 12 }, specification)).toBe(false);
 });

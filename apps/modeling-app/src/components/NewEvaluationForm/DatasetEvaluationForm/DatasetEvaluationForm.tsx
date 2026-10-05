@@ -22,7 +22,7 @@ import { ChapErrorNotice } from '../../ChapErrorNotice';
 import { useDatasets } from '@/hooks/useDatasets';
 import { useModels } from '@/hooks/useModels';
 import { DatasetOriginFilter, matchesOrigin, useDatasetOriginFilter } from '../../DatasetOriginFilter';
-import { datasetSupportsModel } from '../../NewDatasetForm/utils/datasetModels';
+import { datasetSupportsModel, getBacktestColumns } from '../../NewDatasetForm/utils/datasetModels';
 import { BacktestParameterFields } from '../BacktestParameterFields';
 import { backtestParametersSchema } from '../hooks/backtestParameters';
 import { getLegacyBacktestParameters, getMinimumEvaluationPeriods } from '../hooks/backtestDefaults';
@@ -75,12 +75,11 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '', benchmarkContext 
     );
     const isTooShort = periodCount != null && !!requiredPeriodCount && periodCount < requiredPeriodCount;
     const columns = dataset?.covariates ?? [];
-    // The chosen target column stands in for each model's own target, so only the covariates must match by name.
-    const defaultTargetColumn = columns.find(column => models?.some(model => model.target.name === column)) ?? '';
+    const defaultTargetColumn = columns.includes('disease_cases') ? 'disease_cases' : '';
     const selectedTargetColumn = columns.includes(targetColumn) ? targetColumn : defaultTargetColumn;
     const compatibleModels = models?.filter(model => (
         dataset && selectedTargetColumn &&
-        datasetSupportsModel([...columns, model.target.name], dataset.periodType ?? '', model)
+        datasetSupportsModel(getBacktestColumns(columns, selectedTargetColumn), dataset.periodType ?? '', model)
     )) ?? [];
     const selectedModels = compatibleModels.filter(model => modelNames.includes(model.name));
     const canSubmit = selectedModels.length > 0 && !!selectedTargetColumn && !selectedModels.some(hasRevisionMismatch) &&
@@ -178,7 +177,7 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '', benchmarkContext 
                     >
                         {benchmarkContext && (
                             <NoticeBox title={i18n.t('How benchmarks work')}>
-                                {i18n.t('Runs with the same dataset and backtest parameters appear in the same benchmark. The run name labels your model runs; it does not create a separate benchmark.')}
+                                {i18n.t('Runs with the same dataset, target column and backtest parameters appear in the same benchmark. The run name labels your model runs; it does not create a separate benchmark.')}
                             </NoticeBox>
                         )}
                         <NameInput

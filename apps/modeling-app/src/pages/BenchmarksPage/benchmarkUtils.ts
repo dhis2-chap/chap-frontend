@@ -44,6 +44,7 @@ export const makeBenchmarkRequest = (
     name,
     modelIds,
     datasetId: specification.dataset.id,
+    targetColumn: specification.targetColumn,
     nPeriods: specification.nPeriods,
     nSplits: specification.nSplits,
     stride: specification.stride,
@@ -52,9 +53,9 @@ export const makeBenchmarkRequest = (
 });
 
 // CHAP Core fills in these defaults when a request leaves the parameter out (BacktestParams).
-const REQUEST_DEFAULTS = { nPeriods: 3, nSplits: 7, stride: 1, nRetrain: 1, futureWeatherProvider: 'climatology' };
+const REQUEST_DEFAULTS = { nPeriods: 3, nSplits: 7, stride: 1, nRetrain: 1, futureWeatherProvider: 'climatology', targetColumn: 'disease_cases' };
 
-export type SpecificationParams = Pick<BacktestSpecificationSummary, 'dataset' | 'nPeriods' | 'nSplits' | 'stride' | 'nRetrain' | 'futureWeatherProvider'>;
+export type SpecificationParams = Pick<BacktestSpecificationSummary, 'dataset' | 'nPeriods' | 'nSplits' | 'stride' | 'nRetrain' | 'futureWeatherProvider' | 'targetColumn'>;
 
 /** Whether an evaluation request files its backtests under this benchmark. */
 export const requestMatchesSpecification = (request: Partial<MakeBacktestsRequest>, specification: SpecificationParams) => {
@@ -64,7 +65,8 @@ export const requestMatchesSpecification = (request: Partial<MakeBacktestsReques
         params.nSplits === specification.nSplits &&
         params.stride === specification.stride &&
         params.nRetrain === specification.nRetrain &&
-        params.futureWeatherProvider === specification.futureWeatherProvider;
+        params.futureWeatherProvider === specification.futureWeatherProvider &&
+        params.targetColumn === (specification.targetColumn ?? REQUEST_DEFAULTS.targetColumn);
 };
 
 /** CHAP Core names each job of a multi-model request `<request name>/<model name>`. */

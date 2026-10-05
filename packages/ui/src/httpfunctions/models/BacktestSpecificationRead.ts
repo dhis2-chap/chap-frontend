@@ -29,6 +29,10 @@ export type BacktestSpecificationRead = {
      */
     futureWeatherProvider?: string;
     /**
+     * Dataset column to evaluate as the target.
+     */
+    targetColumn?: string;
+    /**
      * Primary key of the specification.
      */
     id: number;
