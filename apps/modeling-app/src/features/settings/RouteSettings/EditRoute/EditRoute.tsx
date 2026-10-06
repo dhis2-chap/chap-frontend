@@ -10,7 +10,7 @@ interface EditRouteProps {
 }
 
 export const EditRoute = ({ route, onClose }: EditRouteProps) => {
-    const { saveRoute, isSaving } = useSaveRoute({
+    const { saveRoute, isSaving, error } = useSaveRoute({
         onSuccess: () => {
             onClose();
         },
@@ -25,6 +25,7 @@ export const EditRoute = ({ route, onClose }: EditRouteProps) => {
             onClose={onClose}
             onSubmit={handleSubmit}
             isLoading={isSaving}
+            error={error}
             initialUrl={route.url}
             tokenConfigured={hasRouteToken(route.headers)}
             modalTitle={i18n.t('Edit route')}
