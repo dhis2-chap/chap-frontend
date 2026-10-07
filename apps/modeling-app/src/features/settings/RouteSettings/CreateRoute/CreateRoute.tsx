@@ -10,7 +10,7 @@ import { RouteForm, RouteFormValues } from '../RouteForm';
 
 export const CreateRoute = () => {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
-    const { saveRoute, isSaving } = useSaveRoute({
+    const { saveRoute, isSaving, error, reset } = useSaveRoute({
         onSuccess: () => {
             setIsDialogOpen(false);
         },
@@ -21,6 +21,7 @@ export const CreateRoute = () => {
     };
 
     const handleOpenDialog = () => {
+        reset();
         setIsDialogOpen(true);
     };
 
@@ -60,6 +61,7 @@ export const CreateRoute = () => {
                     onClose={handleCloseDialog}
                     onSubmit={handleSubmit}
                     isLoading={isSaving}
+                    error={error}
                     initialUrl=""
                     modalTitle={i18n.t('Add route')}
                     submitButtonText={i18n.t('Add')}

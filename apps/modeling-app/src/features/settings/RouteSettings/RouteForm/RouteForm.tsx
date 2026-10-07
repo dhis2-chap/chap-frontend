@@ -7,7 +7,9 @@ import {
     ModalActions,
     ModalContent,
     ModalTitle,
+    NoticeBox,
 } from '@dhis2/ui';
+import { FetchError } from '@dhis2/app-runtime';
 import i18n from '@dhis2/d2-i18n';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -34,6 +36,7 @@ interface RouteFormProps {
     onClose: () => void;
     onSubmit: (data: RouteFormValues) => void;
     isLoading: boolean;
+    error: Error | null;
     initialUrl?: string;
     tokenConfigured?: boolean;
     modalTitle: string;
@@ -44,6 +47,7 @@ export const RouteForm = ({
     onClose,
     onSubmit,
     isLoading,
+    error,
     initialUrl = '',
     tokenConfigured = false,
     modalTitle,
@@ -66,6 +70,9 @@ export const RouteForm = ({
     });
 
     const handleFormSubmit = (data: RouteFormValues) => onSubmit(data);
+    const errorMessage = error instanceof FetchError
+        ? error.details.message || error.message
+        : error?.message;
 
     return (
         <Modal onClose={isLoading ? undefined : onClose} dataTest="route-form-modal">
@@ -106,6 +113,20 @@ export const RouteForm = ({
                             />
                         )}
                     />
+                    {error && (
+                        <div role="alert">
+                            <NoticeBox error title={i18n.t('Error saving route')} dataTest="route-save-error">
+                                {errorMessage || i18n.t('An unknown error occurred. Please try again.')}
+                                {errorMessage === 'Route URL is not permitted' && (
+                                    <p>
+                                        {i18n.t('Contact your DHIS2 server administrator to allow this CHAP Core URL in {{setting}} in dhis.conf and restart DHIS2.', {
+                                            setting: 'route.remote_servers_allowed',
+                                        })}
+                                    </p>
+                                )}
+                            </NoticeBox>
+                        </div>
+                    )}
                 </ModalContent>
                 <ModalActions>
                     <ButtonStrip>

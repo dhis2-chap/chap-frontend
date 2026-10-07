@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-05T10:56:32.272Z\n"
-"PO-Revision-Date: 2026-10-05T10:56:32.272Z\n"
+"POT-Creation-Date: 2026-10-06T08:11:04.394Z\n"
+"PO-Revision-Date: 2026-10-06T08:11:04.395Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -2489,6 +2489,19 @@ msgstr "URL must end with a double wildcard (/**)"
 msgid "CHAP Core URL"
 msgstr "CHAP Core URL"
 
+msgid "Error saving route"
+msgstr "Error saving route"
+
+msgid "An unknown error occurred. Please try again."
+msgstr "An unknown error occurred. Please try again."
+
+msgid ""
+"Contact your DHIS2 server administrator to allow this CHAP Core URL in "
+"{{setting}} in dhis.conf and restart DHIS2."
+msgstr ""
+"Contact your DHIS2 server administrator to allow this CHAP Core URL in "
+"{{setting}} in dhis.conf and restart DHIS2."
+
 msgid "Route settings"
 msgstr "Route settings"
 
@@ -2552,9 +2565,6 @@ msgstr "Error deleting route"
 
 msgid "Route deleted successfully"
 msgstr "Route deleted successfully"
-
-msgid "Error saving route"
-msgstr "Error saving route"
 
 msgid "Route saved successfully"
 msgstr "Route saved successfully"

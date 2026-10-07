@@ -23,10 +23,6 @@ export const useSaveRoute = ({ onSuccess, onError }: UseSaveRouteOptions = {}) =
     const queryClient = useQueryClient();
     const engine = useDataEngine();
 
-    const { show: showErrorAlert } = useAlert(
-        i18n.t('Error saving route'),
-        { critical: true },
-    );
     const { show: showSuccessAlert } = useAlert(
         i18n.t('Route saved successfully'),
         { success: true },
@@ -86,10 +82,7 @@ export const useSaveRoute = ({ onSuccess, onError }: UseSaveRouteOptions = {}) =
                 queryClient.invalidateQueries();
                 onSuccess?.();
             },
-            onError: (error: unknown) => {
-                showErrorAlert();
-                onError?.(error);
-            },
+            onError,
         },
     );
 
@@ -97,5 +90,6 @@ export const useSaveRoute = ({ onSuccess, onError }: UseSaveRouteOptions = {}) =
         saveRoute: mutation.mutate,
         isSaving: mutation.isLoading,
         error: mutation.error,
+        reset: mutation.reset,
     };
 };
