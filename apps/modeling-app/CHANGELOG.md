@@ -1,5 +1,13 @@
 # @dhis2-chap/modeling-app
 
+## 7.2.1
+
+### Patch Changes
+
+-   5390c24: Show server errors inline when adding or editing a CHAP route, with administrator guidance for URLs that are not permitted [CLIM-1305].
+    -   @dhis2-chap/ui@7.2.1
+    -   @dhis2-chap/core@7.2.1
+
 ## 7.2.0
 
 ### Minor Changes

@@ -1,5 +1,11 @@
 # @dhis2-chap/ui
 
+## 7.2.1
+
+### Patch Changes
+
+-   @dhis2-chap/core@7.2.1
+
 ## 7.2.0
 
 ### Minor Changes

@@ -1,5 +1,12 @@
 # @dhis2-chap/uncertainty-dashboard-plugin
 
+## 0.3.6
+
+### Patch Changes
+
+-   @dhis2-chap/ui@7.2.1
+-   @dhis2-chap/core@7.2.1
+
 ## 0.3.5
 
 ### Patch Changes
