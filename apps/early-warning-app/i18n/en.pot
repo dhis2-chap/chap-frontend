@@ -5,14 +5,14 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-12T17:03:30.395Z\n"
-"PO-Revision-Date: 2026-10-12T17:03:30.396Z\n"
+"POT-Creation-Date: 2026-10-13T07:40:10.785Z\n"
+"PO-Revision-Date: 2026-10-13T07:40:10.785Z\n"
 
 msgid "Early Warning"
 msgstr "Early Warning"
 
-msgid "Overview"
-msgstr "Overview"
+msgid "Review queue"
+msgstr "Review queue"
 
 msgid "Unable to load data"
 msgstr "Unable to load data"
@@ -20,24 +20,38 @@ msgstr "Unable to load data"
 msgid "Please try again."
 msgstr "Please try again."
 
-msgid "Cannot connect to CHAP"
-msgstr "Cannot connect to CHAP"
+msgid "Refresh"
+msgstr "Refresh"
 
-msgid "Check the CHAP route in the Modeling App settings and your access to it."
-msgstr "Check the CHAP route in the Modeling App settings and your access to it."
+msgid "Unable to load predictions awaiting review"
+msgstr "Unable to load predictions awaiting review"
 
-msgid "Retry"
-msgstr "Retry"
+msgid "No predictions awaiting review"
+msgstr "No predictions awaiting review"
 
-msgid "Connected to CHAP"
-msgstr "Connected to CHAP"
+msgid "Predictions appear here when CHAP raises pending alerts."
+msgstr "Predictions appear here when CHAP raises pending alerts."
 
-msgid ""
-"The Early Warning App uses the CHAP connection configured in the Modeling "
-"App."
-msgstr ""
-"The Early Warning App uses the CHAP connection configured in the Modeling "
-"App."
+msgid "Predictions awaiting review"
+msgstr "Predictions awaiting review"
+
+msgid "Prediction"
+msgstr "Prediction"
+
+msgid "Model"
+msgstr "Model"
+
+msgid "Created"
+msgstr "Created"
+
+msgid "Pending alerts by level"
+msgstr "Pending alerts by level"
+
+msgid "Unable to load prediction"
+msgstr "Unable to load prediction"
+
+msgid "Prediction not found."
+msgstr "Prediction not found."
 
 msgctxt "Application title"
 msgid "__MANIFEST_APP_TITLE"
