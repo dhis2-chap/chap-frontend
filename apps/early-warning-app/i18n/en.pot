@@ -5,14 +5,17 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-12T17:34:00.252Z\n"
-"PO-Revision-Date: 2026-10-12T17:34:00.252Z\n"
+"POT-Creation-Date: 2026-10-13T09:05:17.725Z\n"
+"PO-Revision-Date: 2026-10-13T09:05:17.727Z\n"
 
 msgid "Early Warning"
 msgstr "Early Warning"
 
 msgid "Overview"
 msgstr "Overview"
+
+msgid "Review queue"
+msgstr "Review queue"
 
 msgid "Settings"
 msgstr "Settings"
@@ -43,6 +46,39 @@ msgstr "Retry"
 
 msgid "Connected to CHAP"
 msgstr "Connected to CHAP"
+
+msgid "Refresh"
+msgstr "Refresh"
+
+msgid "Unable to load predictions awaiting review"
+msgstr "Unable to load predictions awaiting review"
+
+msgid "No predictions awaiting review"
+msgstr "No predictions awaiting review"
+
+msgid "Predictions appear here when CHAP raises pending alerts."
+msgstr "Predictions appear here when CHAP raises pending alerts."
+
+msgid "Predictions awaiting review"
+msgstr "Predictions awaiting review"
+
+msgid "Prediction"
+msgstr "Prediction"
+
+msgid "Model"
+msgstr "Model"
+
+msgid "Created"
+msgstr "Created"
+
+msgid "Pending alerts by level"
+msgstr "Pending alerts by level"
+
+msgid "Unable to load prediction"
+msgstr "Unable to load prediction"
+
+msgid "Prediction not found."
+msgstr "Prediction not found."
 
 msgctxt "Application title"
 msgid "__MANIFEST_APP_TITLE"

@@ -4,6 +4,8 @@ import { createHashRouter, RouterProvider } from 'react-router-dom';
 import { ChapApiProvider } from './components/ChapApiProvider';
 import { Layout } from './components/Layout';
 import { HomePage } from './pages/HomePage';
+import { QueuePage } from './pages/QueuePage';
+import { ReviewPage } from './pages/ReviewPage';
 import { SettingsPage } from './pages/SettingsPage';
 import './locales';
 
@@ -15,6 +17,8 @@ const router = createHashRouter([{
     element: <Layout />,
     children: [
         { path: '/', element: <HomePage /> },
+        { path: '/review-queue', element: <QueuePage /> },
+        { path: '/predictions/:predictionId', element: <ReviewPage /> },
         { path: '/settings', element: <SettingsPage /> },
     ],
 }]);
