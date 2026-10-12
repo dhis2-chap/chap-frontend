@@ -1,0 +1,2 @@
+.tag { display: inline-flex; align-items: center; gap: var(--spacers-dp8); white-space: nowrap; }
+.swatch { display: inline-block; width: 12px; height: 12px; border: 1px solid var(--colors-grey600); }

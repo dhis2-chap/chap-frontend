@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-13T07:40:37.948Z\n"
-"PO-Revision-Date: 2026-10-13T07:40:37.948Z\n"
+"POT-Creation-Date: 2026-10-13T07:43:59.691Z\n"
+"PO-Revision-Date: 2026-10-13T07:43:59.691Z\n"
 
 msgid "Forecast"
 msgstr "Forecast"
@@ -71,6 +71,30 @@ msgstr "Early Warning"
 
 msgid "Review queue"
 msgstr "Review queue"
+
+msgid "Overview"
+msgstr "Overview"
+
+msgid "Pending"
+msgstr "Pending"
+
+msgid "Accepted"
+msgstr "Accepted"
+
+msgid "Declined"
+msgstr "Declined"
+
+msgid "Organisation units with alerts"
+msgstr "Organisation units with alerts"
+
+msgid "Unable to load map boundaries"
+msgstr "Unable to load map boundaries"
+
+msgid "The review counts and forecasts are still available."
+msgstr "The review counts and forecasts are still available."
+
+msgid "No map boundaries are available for these organisation units."
+msgstr "No map boundaries are available for these organisation units."
 
 msgid "Unable to load data"
 msgstr "Unable to load data"

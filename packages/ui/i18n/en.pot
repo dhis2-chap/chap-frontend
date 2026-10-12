@@ -5,8 +5,14 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-09-28T09:00:32.060Z\n"
-"PO-Revision-Date: 2026-09-28T09:00:32.062Z\n"
+"POT-Creation-Date: 2026-10-12T17:10:16.432Z\n"
+"PO-Revision-Date: 2026-10-12T17:10:16.432Z\n"
+
+msgid "No alert"
+msgstr "No alert"
+
+msgid "Alert levels"
+msgstr "Alert levels"
 
 msgid "Median prediction"
 msgstr "Median prediction"
