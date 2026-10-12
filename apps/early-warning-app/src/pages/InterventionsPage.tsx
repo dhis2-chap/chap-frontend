@@ -8,7 +8,7 @@ import styles from '../components/SettingsEditor.module.css';
 
 export const InterventionsPage = () => {
     const engine = useDataEngine();
-    const levels = useQuery({
+    const { data: levels, error, isLoading } = useQuery({
         queryKey: ['early-warning', 'org-unit-levels'],
         queryFn: async () => {
             const response = await engine.query({ levels: { resource: 'organisationUnitLevels', params: {
@@ -21,7 +21,7 @@ export const InterventionsPage = () => {
     return (
         <>
             <PageHeader title={i18n.t('Interventions')} />
-            {levels.error && <NoticeBox error>{i18n.t('Could not load organisation unit levels.')}</NoticeBox>}
+            {error && <NoticeBox error>{i18n.t('Could not load organisation unit levels.')}</NoticeBox>}
             <SettingsEditor validate={settings => settings.interventions.some(item => !item.orgUnitLevel || !item.alertLevel.trim() || !item.action.trim())
                 ? i18n.t('Choose an organisation unit level and provide an alert level and recommended action.') : undefined}
             >
@@ -34,11 +34,11 @@ export const InterventionsPage = () => {
                             <p>{i18n.t('Recommended actions are matched by organisation unit level and the exact alert level name.')}</p>
                             {settings.interventions.map((item, index) => (
                                 <div key={index} className={styles.card}>
-                                    <SingleSelectField label={i18n.t('Organisation unit level')} selected={String(item.orgUnitLevel || '')} disabled={disabled || levels.isLoading} onChange={({ selected }) => updateItem(index, { orgUnitLevel: Number(selected) })}>
-                                        {(levels.data ?? []).map(level => <SingleSelectOption key={level.level} value={String(level.level)} label={level.displayName} />)}
+                                    <SingleSelectField label={i18n.t('Organisation unit level')} selected={String(item.orgUnitLevel || '')} disabled={disabled || isLoading} onChange={({ selected }) => updateItem(index, { orgUnitLevel: Number(selected) })}>
+                                        {(levels ?? []).map(level => <SingleSelectOption key={level.level} value={String(level.level)} label={level.displayName} />)}
                                     </SingleSelectField>
-                                    <InputField label={i18n.t('Alert level')} value={item.alertLevel} disabled={disabled} onChange={({ value }) => updateItem(index, { alertLevel: value })} />
-                                    <TextAreaField label={i18n.t('Recommended action')} value={item.action} disabled={disabled} onChange={({ value }) => updateItem(index, { action: value })} />
+                                    <InputField name={`intervention-level-${index}`} label={i18n.t('Alert level')} value={item.alertLevel} disabled={disabled} onChange={({ value }) => updateItem(index, { alertLevel: value })} />
+                                    <TextAreaField name={`intervention-action-${index}`} label={i18n.t('Recommended action')} value={item.action} disabled={disabled} onChange={({ value }) => updateItem(index, { action: value })} />
                                     <div><Button disabled={disabled} onClick={() => update({ interventions: settings.interventions.filter((_, position) => position !== index) })}>{i18n.t('Remove intervention')}</Button></div>
                                 </div>
                             ))}
