@@ -4,6 +4,7 @@ import { createHashRouter, RouterProvider } from 'react-router-dom';
 import { ChapApiProvider } from './components/ChapApiProvider';
 import { Layout } from './components/Layout';
 import { HomePage } from './pages/HomePage';
+import { SettingsPage } from './pages/SettingsPage';
 import './locales';
 
 const queryClient = new QueryClient({
@@ -12,7 +13,10 @@ const queryClient = new QueryClient({
 
 const router = createHashRouter([{
     element: <Layout />,
-    children: [{ path: '/', element: <HomePage /> }],
+    children: [
+        { path: '/', element: <HomePage /> },
+        { path: '/settings', element: <SettingsPage /> },
+    ],
 }]);
 
 const App = () => (
