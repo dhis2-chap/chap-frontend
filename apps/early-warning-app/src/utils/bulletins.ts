@@ -21,33 +21,56 @@ export const fillBulletinTemplate = (template: string, values: Record<string, st
     template.replace(/\{(\w+)\}/g, (placeholder, key: string) => values[key] ?? placeholder)
 );
 
+export const getOrgUnitAtLevel = (unit: OrgUnitInfo | undefined, level: number): OrgUnitRef | undefined => (
+    unit?.level === level ? unit : unit?.ancestors?.find(ancestor => ancestor.level === level)
+);
+
 export const buildBulletinMessages = (
     bulletins: Bulletin[],
     changes: DecisionChanges,
-    _orgUnits: Map<string, OrgUnitInfo>,
+    orgUnits: Map<string, OrgUnitInfo>,
     values: Record<string, string>,
     format: BulletinFormatters,
-): BulletinMessage[] => bulletins.flatMap((bulletin, index) => {
-    const triggered = bulletin.sendOn === 'alerts'
-        ? changes.accepted.length + changes.withdrawn.length > 0
-        : changes.accepted.length + changes.declined.length + changes.withdrawn.length > 0;
-    if (!triggered || !bulletin.recipientUserGroupIds.length) return [];
-    const withdrawn = new Set(changes.withdrawn.map(alert => alert.id));
-    const replacements = {
-        ...values,
-        count: String(changes.accepted.length),
-        orgUnit: '',
-        alerts: [...changes.accepted.map(format.acceptedLine), ...changes.withdrawn.map(alert => format.decisionLine(alert, 'withdrawn'))].join('\n'),
-        decisions: [
-            ...changes.accepted.map(alert => format.decisionLine(alert, 'accepted')),
-            ...changes.declined.filter(alert => !withdrawn.has(alert.id)).map(alert => format.decisionLine(alert, 'declined')),
-            ...changes.withdrawn.map(alert => format.decisionLine(alert, 'withdrawn')),
-        ].join('\n'),
-    };
-    return [{
-        key: String(index), bulletinName: bulletin.name,
-        subject: fillBulletinTemplate(bulletin.subjectTemplate, replacements),
-        text: fillBulletinTemplate(bulletin.bodyTemplate, replacements),
-        userGroupIds: bulletin.recipientUserGroupIds, orgUnitIds: [],
-    }];
-});
+): BulletinMessage[] => {
+    const messages: BulletinMessage[] = [];
+    for (const [index, bulletin] of bulletins.entries()) {
+        const groups = new Map<string, OrgUnitRef | undefined>();
+        if (bulletin.orgUnitLevel === undefined) groups.set('all', undefined);
+        else {
+            for (const alert of [...changes.accepted, ...changes.declined, ...changes.withdrawn]) {
+                const unit = getOrgUnitAtLevel(orgUnits.get(alert.orgUnit), bulletin.orgUnitLevel);
+                if (unit) groups.set(unit.id, unit);
+            }
+        }
+        for (const [groupId, orgUnit] of groups) {
+            const belongs = (alert: AlertRead) => !orgUnit || getOrgUnitAtLevel(orgUnits.get(alert.orgUnit), bulletin.orgUnitLevel!)?.id === groupId;
+            const accepted = changes.accepted.filter(belongs);
+            const declined = changes.declined.filter(belongs);
+            const withdrawn = changes.withdrawn.filter(belongs);
+            const triggered = bulletin.sendOn === 'alerts'
+                ? accepted.length + withdrawn.length > 0
+                : accepted.length + declined.length + withdrawn.length > 0;
+            const orgUnitIds = orgUnit && bulletin.notifyOrgUnitUsers ? [orgUnit.id] : [];
+            if (!triggered || (!bulletin.recipientUserGroupIds.length && !orgUnitIds.length)) continue;
+            const withdrawnIds = new Set(withdrawn.map(alert => alert.id));
+            const replacements = {
+                ...values,
+                count: String(accepted.length),
+                orgUnit: orgUnit?.displayName ?? '',
+                alerts: [...accepted.map(format.acceptedLine), ...withdrawn.map(alert => format.decisionLine(alert, 'withdrawn'))].join('\n'),
+                decisions: [
+                    ...accepted.map(alert => format.decisionLine(alert, 'accepted')),
+                    ...declined.filter(alert => !withdrawnIds.has(alert.id)).map(alert => format.decisionLine(alert, 'declined')),
+                    ...withdrawn.map(alert => format.decisionLine(alert, 'withdrawn')),
+                ].join('\n'),
+            };
+            messages.push({
+                key: `${index}:${groupId}`, bulletinName: bulletin.name, orgUnit,
+                subject: fillBulletinTemplate(bulletin.subjectTemplate, replacements),
+                text: fillBulletinTemplate(bulletin.bodyTemplate, replacements),
+                userGroupIds: bulletin.recipientUserGroupIds, orgUnitIds,
+            });
+        }
+    }
+    return messages;
+};
