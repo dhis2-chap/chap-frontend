@@ -173,7 +173,7 @@ const router = createHashRouter([
                         handle: { breadcrumb: () => i18n.t('Alerts') } satisfies RouteHandle,
                         children: [
                             { index: true, element: <AlertsPage /> },
-                            { path: 'policies', element: <AlertsPage policies /> },
+                            { path: 'policies', element: <Navigate to="/alerts" replace /> },
                         ],
                     },
                     {
