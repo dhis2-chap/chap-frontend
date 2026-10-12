@@ -170,11 +170,8 @@ const router = createHashRouter([
                     },
                     {
                         path: '/alerts',
-                        handle: { breadcrumb: () => i18n.t('Alerts') } satisfies RouteHandle,
-                        children: [
-                            { index: true, element: <AlertsPage /> },
-                            { path: 'policies', element: <AlertsPage policies /> },
-                        ],
+                        handle: { breadcrumb: () => i18n.t('Alert policies') } satisfies RouteHandle,
+                        element: <AlertsPage />,
                     },
                     {
                         path: '/predictions',

@@ -39,7 +39,7 @@ const ChangeAlertPolicyModal = ({ setup, onClose }: { setup: PredictionSetupRead
                     <p>
                         {i18n.t('No alert policies yet.')}
                         {' '}
-                        <Link to="/alerts/policies">{i18n.t('Create a policy')}</Link>
+                        <Link to="/alerts">{i18n.t('Create a policy')}</Link>
                     </p>
                 )}
                 {!!policies?.length && (
