@@ -1,0 +1,10 @@
+.content {
+    padding: var(--spacers-dp16);
+    overflow-x: auto;
+}
+.selectors {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacers-dp16);
+    margin-block-end: var(--spacers-dp16);
+}

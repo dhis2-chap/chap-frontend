@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { AlertPolicyRead, AlertRead, PredictionInfo } from '@dhis2-chap/ui';
-import { summarizePredictionReviews } from './reviewData';
+import { estimateExceedance, normalizeAlertPeriod, summarizePredictionReviews } from './reviewData';
 
 const prediction = (id: number, created: string) => ({ id, created }) as PredictionInfo;
 const alert = (id: number, predictionId: number, level = 'Monitor', alertPolicyId = 1) => (
@@ -25,5 +25,28 @@ describe('prediction review queue', () => {
             [policy(1, ['Monitor', 'Alert']), policy(2, ['Alert', 'Monitor'])],
         );
         expect(result[0].levelCounts).toEqual([{ level: 'Alert', count: 2 }, { level: 'Monitor', count: 2 }]);
+    });
+});
+
+describe('estimated exceedance', () => {
+    const quantiles = { quantile_low: 10, median: 50, quantile_high: 90 };
+    it('interpolates between quantiles and reports bounds outside them', () => {
+        expect(estimateExceedance(quantiles, 30)?.probability).toBeCloseTo(0.7);
+        expect(estimateExceedance(quantiles, 9)).toEqual({ probability: 0.9, bound: 'above' });
+        expect(estimateExceedance(quantiles, 100)?.bound).toBe('below');
+    });
+    it('handles flat quantiles without division by zero and rejects inconsistent values', () => {
+        expect(estimateExceedance({ quantile_low: 10, median: 10, quantile_high: 20 }, 10)?.probability).toBeCloseTo(0.5);
+        expect(estimateExceedance({ median: 50, quantile_high: 20 }, 30)).toBeUndefined();
+        expect(estimateExceedance({}, 30)).toBeUndefined();
+    });
+});
+
+describe('alert period matching', () => {
+    it('matches CHAP months/weeks to DHIS2 periods without changing already normalized ids', () => {
+        expect(normalizeAlertPeriod('2024-07')).toBe('202407');
+        expect(normalizeAlertPeriod('2024-W02')).toBe('2024W2');
+        expect(normalizeAlertPeriod('2024W02')).toBe('2024W2');
+        expect(normalizeAlertPeriod('202407')).toBe('202407');
     });
 });

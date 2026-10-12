@@ -2,6 +2,7 @@ import i18n from '@dhis2/d2-i18n';
 import { DataTable, DataTableBody, DataTableCell, DataTableColumnHeader, DataTableHead, DataTableRow, NoticeBox } from '@dhis2/ui';
 import { Card, Pill } from '@dhis2-chap/ui';
 import { Link, useParams } from 'react-router-dom';
+import { ForecastDetails } from '../components/ForecastReview';
 import { PageHeader } from '../components/PageHeader';
 import { ErrorNotice, Loading } from '../components/StateViews';
 import { usePendingPredictionAlerts } from '../hooks/usePredictionReviews';
@@ -29,7 +30,7 @@ export const PredictionPage = () => {
             <Link className={styles.back} to="/review-queue">{i18n.t('Back to review queue')}</Link>
             <PageHeader title={prediction.name}>
                 <p className={styles.description}>
-                    {i18n.t('Pending alerts from {{model}}. Reviewing alerts will be added here.', {
+                    {i18n.t('Pending alerts from {{model}}. Inspect forecasts and thresholds below.', {
                         model: prediction.configuredModel?.name ?? prediction.modelId,
                     })}
                 </p>
@@ -60,6 +61,7 @@ export const PredictionPage = () => {
                     </DataTable>
                 </Card>
             )}
+            <ForecastDetails predictionId={prediction.id} />
         </>
     );
 };
