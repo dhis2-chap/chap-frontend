@@ -24,6 +24,25 @@ describe('bulletin content', () => {
     });
 });
 
+it('isolates each district bulletin, including withdrawals and organisation unit recipients', () => {
+    const a = { id: 'districtA', displayName: 'District A', level: 2 };
+    const b = { id: 'districtB', displayName: 'District B', level: 2 };
+    const units = new Map([
+        ['unitA', { id: 'unitA', displayName: 'Clinic A', level: 3, ancestors: [a] }],
+        ['unitB', { id: 'unitB', displayName: 'Clinic B', level: 3, ancestors: [b] }],
+    ]);
+    const withdrawn = { ...alert, id: 2, orgUnit: 'unitB' };
+    const messages = buildBulletinMessages([{ ...bulletin, orgUnitLevel: 2, notifyOrgUnitUsers: true, recipientUserGroupIds: [], bodyTemplate: '{orgUnit}\n{alerts}' }], {
+        accepted: [alert], declined: [withdrawn], withdrawn: [withdrawn],
+    }, units, {}, { acceptedLine: value => value.orgUnit, decisionLine: value => `withdrawn ${value.orgUnit}` });
+    expect(messages.map(message => message.text)).toEqual(['District A\nunitA', 'District B\nwithdrawn unitB']);
+    expect(messages.map(message => message.orgUnitIds)).toEqual([['districtA'], ['districtB']]);
+});
+
+it('never falls back to a whole-review message for missing organisation unit metadata', () => {
+    expect(buildBulletinMessages([{ ...bulletin, orgUnitLevel: 2 }], { accepted: [alert], declined: [], withdrawn: [] }, new Map(), {}, format)).toEqual([]);
+});
+
 it('includes a withdrawal supplied without a declined duplicate', () => {
     const messages = buildBulletinMessages([{ ...bulletin, sendOn: 'decisions' }], { accepted: [], declined: [], withdrawn: [alert] }, new Map(), {}, format);
     expect(messages[0].text).toBe('withdrawn\nwithdrawn');

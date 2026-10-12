@@ -1,4 +1,4 @@
-import { Button, CircularLoader, InputField, MultiSelectField, MultiSelectOption, NoticeBox, SingleSelectField, SingleSelectOption, TextAreaField } from '@dhis2/ui';
+import { Button, Checkbox, CircularLoader, InputField, MultiSelectField, MultiSelectOption, NoticeBox, SingleSelectField, SingleSelectOption, TextAreaField } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { PageHeader } from '../components/PageHeader';
 import { SettingsEditor } from '../components/SettingsEditor';
@@ -37,6 +37,11 @@ export const BulletinsPage = () => {
                                         <SingleSelectOption value="alerts" label={i18n.t('Alerts are accepted or withdrawn')} />
                                         <SingleSelectOption value="decisions" label={i18n.t('Any decision is made')} />
                                     </SingleSelectField>
+                                    <SingleSelectField label={i18n.t('Bulletin scope')} disabled={disabled} selected={String(bulletin.orgUnitLevel ?? 'all')} onChange={({ selected }) => updateBulletin(index, { orgUnitLevel: selected === 'all' ? undefined : Number(selected), notifyOrgUnitUsers: selected === 'all' ? false : bulletin.notifyOrgUnitUsers })}>
+                                        <SingleSelectOption value="all" label={i18n.t('Whole review')} />
+                                        {metadata.data?.levels.map(item => <SingleSelectOption key={item.level} value={String(item.level)} label={item.displayName} />)}
+                                    </SingleSelectField>
+                                    {bulletin.orgUnitLevel !== undefined && <Checkbox label={i18n.t('Notify users assigned to the organisation unit')} checked={bulletin.notifyOrgUnitUsers} disabled={disabled} onChange={({ checked }) => updateBulletin(index, { notifyOrgUnitUsers: checked })} />}
                                     <MultiSelectField label={i18n.t('Recipient user groups')} disabled={disabled} selected={bulletin.recipientUserGroupIds} onChange={({ selected }) => updateBulletin(index, { recipientUserGroupIds: selected })}>
                                         {metadata.data?.groups.map(item => <MultiSelectOption key={item.id} value={item.id} label={item.displayName} />)}
                                     </MultiSelectField>

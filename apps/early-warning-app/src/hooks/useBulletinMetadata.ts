@@ -8,10 +8,12 @@ export const useBulletinMetadata = () => {
         queryKey: ['early-warning', 'bulletin-metadata'],
         queryFn: async () => {
             const response = await engine.query({
+                levels: { resource: 'organisationUnitLevels', params: { fields: 'level,displayName', paging: false, order: 'level:asc' } },
                 groups: { resource: 'userGroups', params: { fields: 'id,displayName', paging: false, order: 'displayName:asc' } },
                 dashboards: { resource: 'dashboards', params: { fields: 'id,displayName', paging: false, order: 'displayName:asc' } },
             });
             return {
+                levels: (response.levels as { organisationUnitLevels: { level: number; displayName: string }[] }).organisationUnitLevels,
                 groups: (response.groups as { userGroups: NamedItem[] }).userGroups,
                 dashboards: (response.dashboards as { dashboards: NamedItem[] }).dashboards,
             };
