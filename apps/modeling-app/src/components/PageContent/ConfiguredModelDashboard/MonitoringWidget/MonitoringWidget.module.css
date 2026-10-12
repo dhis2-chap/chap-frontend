@@ -1,0 +1,16 @@
+.content {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.content p {
+    margin: 0;
+}
+
+.explanation {
+    color: var(--colors-grey700);
+    font-size: 14px;
+    line-height: 1.5;
+}
