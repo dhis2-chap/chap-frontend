@@ -1,6 +1,7 @@
 import i18n from '@dhis2/d2-i18n';
 import { CircularLoader, NoticeBox } from '@dhis2/ui';
 import { Link, useParams } from 'react-router-dom';
+import { ForecastReview } from '../components/ForecastReview';
 import { useReviewData } from '../hooks/useReviewData';
 
 export const ReviewPage = () => {
@@ -17,21 +18,7 @@ export const ReviewPage = () => {
             <Link to="/">{i18n.t('Review queue')}</Link>
             <h1>{review.prediction.name}</h1>
             <p>{review.prediction.configuredModel?.name ?? review.prediction.modelId}</p>
-            <ul>
-                {review.alerts.map(alert => (
-                    <li key={alert.id}>
-                        {alert.orgUnit}
-                        {' '}
-                        ·
-                        {' '}
-                        {alert.timePeriod}
-                        {' '}
-                        ·
-                        {' '}
-                        {alert.level}
-                    </li>
-                ))}
-            </ul>
+            <ForecastReview review={review} />
         </>
     );
 };

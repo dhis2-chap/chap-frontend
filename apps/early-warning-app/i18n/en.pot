@@ -5,8 +5,66 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-13T07:40:10.785Z\n"
-"PO-Revision-Date: 2026-10-13T07:40:10.785Z\n"
+"POT-Creation-Date: 2026-10-13T07:40:37.948Z\n"
+"PO-Revision-Date: 2026-10-13T07:40:37.948Z\n"
+
+msgid "Forecast"
+msgstr "Forecast"
+
+msgid "Some forecast context could not be loaded"
+msgstr "Some forecast context could not be loaded"
+
+msgid "Please refresh to try again."
+msgstr "Please refresh to try again."
+
+msgid "Loading observed cases and thresholds…"
+msgstr "Loading observed cases and thresholds…"
+
+msgid "No forecast values are available."
+msgstr "No forecast values are available."
+
+msgid "Organisation unit"
+msgstr "Organisation unit"
+
+msgid "Alert threshold"
+msgstr "Alert threshold"
+
+msgid "Cases"
+msgstr "Cases"
+
+msgid "Alert statistics"
+msgstr "Alert statistics"
+
+msgid "Thresholds reflect the current alert policy and available observations."
+msgstr "Thresholds reflect the current alert policy and available observations."
+
+msgid ""
+"Exceedance probabilities are estimates from forecast quantiles. CHAP "
+"determines alerts using the full forecast distribution."
+msgstr ""
+"Exceedance probabilities are estimates from forecast quantiles. CHAP "
+"determines alerts using the full forecast distribution."
+
+msgid "No alerts for this prediction."
+msgstr "No alerts for this prediction."
+
+msgid "Period"
+msgstr "Period"
+
+msgid "Alert level"
+msgstr "Alert level"
+
+msgid "Forecast (80% range)"
+msgstr "Forecast (80% range)"
+
+msgid "Threshold"
+msgstr "Threshold"
+
+msgid "Chance of exceeding"
+msgstr "Chance of exceeding"
+
+msgid "Policy trigger"
+msgstr "Policy trigger"
 
 msgid "Early Warning"
 msgstr "Early Warning"
