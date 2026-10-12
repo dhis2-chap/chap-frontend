@@ -16,8 +16,8 @@ export const BulletinPreview = ({ messages, onChange, disabled }: Props) => (
                         {message.orgUnit ? ` — ${message.orgUnit.displayName}` : ''}
                     </h3>
                     <p>{i18n.t('{{groups}} user group(s), {{units}} organisation unit(s)', { groups: message.userGroupIds.length, units: message.orgUnitIds.length })}</p>
-                    <InputField label={i18n.t('Subject')} value={message.subject} disabled={disabled} onChange={({ value }) => update({ subject: value })} />
-                    <TextAreaField label={i18n.t('Message')} value={message.text} disabled={disabled} onChange={({ value }) => update({ text: value })} />
+                    <InputField name={`preview-subject-${message.key}`} label={i18n.t('Subject')} value={message.subject} disabled={disabled} onChange={({ value }) => update({ subject: value })} />
+                    <TextAreaField name={`preview-body-${message.key}`} label={i18n.t('Message')} value={message.text} disabled={disabled} onChange={({ value }) => update({ text: value })} />
                     <div><Button disabled={disabled} onClick={() => onChange(messages.filter(current => current.key !== message.key))}>{i18n.t('Skip this bulletin')}</Button></div>
                 </div>
             );

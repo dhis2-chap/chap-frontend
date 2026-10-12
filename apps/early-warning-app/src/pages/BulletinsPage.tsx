@@ -32,7 +32,7 @@ export const BulletinsPage = () => {
                             </p>
                             {settings.bulletins.map((bulletin, index) => (
                                 <div className={styles.card} key={index}>
-                                    <InputField label={i18n.t('Bulletin name')} disabled={disabled} value={bulletin.name} onChange={({ value }) => updateBulletin(index, { name: value })} />
+                                    <InputField name={`bulletin-name-${index}`} label={i18n.t('Bulletin name')} disabled={disabled} value={bulletin.name} onChange={({ value }) => updateBulletin(index, { name: value })} />
                                     <SingleSelectField label={i18n.t('Send when')} disabled={disabled} selected={bulletin.sendOn} onChange={({ selected }) => updateBulletin(index, { sendOn: selected as Bulletin['sendOn'] })}>
                                         <SingleSelectOption value="alerts" label={i18n.t('Alerts are accepted or withdrawn')} />
                                         <SingleSelectOption value="decisions" label={i18n.t('Any decision is made')} />
@@ -40,8 +40,8 @@ export const BulletinsPage = () => {
                                     <MultiSelectField label={i18n.t('Recipient user groups')} disabled={disabled} selected={bulletin.recipientUserGroupIds} onChange={({ selected }) => updateBulletin(index, { recipientUserGroupIds: selected })}>
                                         {metadata.data?.groups.map(item => <MultiSelectOption key={item.id} value={item.id} label={item.displayName} />)}
                                     </MultiSelectField>
-                                    <InputField label={i18n.t('Subject template')} disabled={disabled} value={bulletin.subjectTemplate} onChange={({ value }) => updateBulletin(index, { subjectTemplate: value })} />
-                                    <TextAreaField label={i18n.t('Message template')} disabled={disabled} value={bulletin.bodyTemplate} onChange={({ value }) => updateBulletin(index, { bodyTemplate: value })} />
+                                    <InputField name={`bulletin-subject-${index}`} label={i18n.t('Subject template')} disabled={disabled} value={bulletin.subjectTemplate} onChange={({ value }) => updateBulletin(index, { subjectTemplate: value })} />
+                                    <TextAreaField name={`bulletin-body-${index}`} label={i18n.t('Message template')} disabled={disabled} value={bulletin.bodyTemplate} onChange={({ value }) => updateBulletin(index, { bodyTemplate: value })} />
                                     <div><Button disabled={disabled} onClick={() => update({ bulletins: settings.bulletins.filter((_, position) => position !== index) })}>{i18n.t('Remove bulletin')}</Button></div>
                                 </div>
                             ))}
