@@ -6,6 +6,7 @@ import { Layout } from './components/Layout';
 import { HomePage } from './pages/HomePage';
 import { SettingsPage } from './pages/SettingsPage';
 import { InterventionsPage } from './pages/InterventionsPage';
+import { BulletinsPage } from './pages/BulletinsPage';
 import './locales';
 
 const queryClient = new QueryClient({
@@ -17,6 +18,7 @@ const router = createHashRouter([{
     children: [
         { path: '/', element: <HomePage /> },
         { path: '/interventions', element: <InterventionsPage /> },
+        { path: '/bulletins', element: <BulletinsPage /> },
         { path: '/settings', element: <SettingsPage /> },
     ],
 }]);
