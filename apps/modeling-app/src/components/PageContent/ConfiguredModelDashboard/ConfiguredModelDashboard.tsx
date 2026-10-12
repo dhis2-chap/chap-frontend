@@ -8,6 +8,7 @@ import { ActivityWidget } from './ActivityWidget';
 import { PredictionRunsWidget } from './PredictionRunsWidget';
 import { QuickActionsWidget } from './QuickActionsWidget';
 import { SchedulingWidget } from './SchedulingWidget';
+import { MonitoringWidget } from './MonitoringWidget/MonitoringWidget';
 import { SummaryWidget } from './SummaryWidget';
 import styles from './ConfiguredModelDashboard.module.css';
 
@@ -52,6 +53,13 @@ export const ConfiguredModelDashboard: React.FC = () => {
                     jobs={jobs}
                     predictions={predictions}
                 />
+                {predictionSetup && (
+                    <MonitoringWidget
+                        key={predictionSetup.id}
+                        predictionSetupId={predictionSetup.id}
+                        evaluationId={predictionSetup.backtestId}
+                    />
+                )}
                 <ActivityWidget
                     error={jobsError}
                     hasValidPredictionSetupId={hasValidPredictionSetupId}
