@@ -6,17 +6,6 @@
     margin-block-end: var(--spacers-dp16);
 }
 
-.filters {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--spacers-dp8);
-}
-
-.filter {
-    inline-size: 200px;
-}
-
 .tags {
     display: flex;
     flex-wrap: wrap;
