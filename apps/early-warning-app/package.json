@@ -1,0 +1,27 @@
+{
+    "name": "@dhis2-chap/early-warning-app",
+    "version": "0.1.0",
+    "private": true,
+    "license": "BSD-3-Clause",
+    "scripts": {
+        "start": "d2-app-scripts start",
+        "build": "d2-app-scripts build",
+        "tsc:check": "tsc --noEmit",
+        "linter:check": "eslint . --config ../../eslint.config.mts"
+    },
+    "dependencies": {
+        "@dhis2-chap/core": "workspace:*",
+        "@dhis2-chap/ui": "workspace:*",
+        "@dhis2/app-runtime": "3.14.6",
+        "@dhis2/d2-i18n": "1.2.0",
+        "@dhis2/ui": "^10.13.0",
+        "@tanstack/react-query": "4",
+        "react": "^18.3.1",
+        "react-dom": "^18.3.1",
+        "react-router-dom": "^7.0.2"
+    },
+    "devDependencies": {
+        "@dhis2/cli-app-scripts": "12.11.1",
+        "vite": "5.4.21"
+    }
+}

@@ -1,0 +1,12 @@
+ .layout {
+    display: grid;
+    grid-template-columns: 240px minmax(0, 1fr);
+    height: 100%;
+    min-height: calc(100vh - 48px);
+    background: var(--colors-grey100);
+}
+.title { padding: var(--spacers-dp16); font-size: 18px; }
+.content { padding: var(--spacers-dp24); min-width: 0; overflow: auto; }
+@media (max-width: 700px) {
+    .layout { grid-template-columns: 1fr; height: auto; }
+}

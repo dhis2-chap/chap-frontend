@@ -12,7 +12,7 @@ import {
     SidenavItems,
     SidenavLink,
     SidenavParent,
-} from './sidenav';
+} from '@dhis2-chap/ui';
 import { ReportBugDialog } from '../../features/common-features/ReportBugDialog/ReportBugDialog';
 import { Features, useIsFeatureAvailable } from '../../hooks/useIsFeatureAvailable';
 

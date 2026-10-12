@@ -1,0 +1,48 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: i18next-conv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"POT-Creation-Date: 2026-10-12T17:03:30.395Z\n"
+"PO-Revision-Date: 2026-10-12T17:03:30.396Z\n"
+
+msgid "Early Warning"
+msgstr "Early Warning"
+
+msgid "Overview"
+msgstr "Overview"
+
+msgid "Unable to load data"
+msgstr "Unable to load data"
+
+msgid "Please try again."
+msgstr "Please try again."
+
+msgid "Cannot connect to CHAP"
+msgstr "Cannot connect to CHAP"
+
+msgid "Check the CHAP route in the Modeling App settings and your access to it."
+msgstr "Check the CHAP route in the Modeling App settings and your access to it."
+
+msgid "Retry"
+msgstr "Retry"
+
+msgid "Connected to CHAP"
+msgstr "Connected to CHAP"
+
+msgid ""
+"The Early Warning App uses the CHAP connection configured in the Modeling "
+"App."
+msgstr ""
+"The Early Warning App uses the CHAP connection configured in the Modeling "
+"App."
+
+msgctxt "Application title"
+msgid "__MANIFEST_APP_TITLE"
+msgstr "Early Warning"
+
+msgctxt "Application description"
+msgid "__MANIFEST_APP_DESCRIPTION"
+msgstr "Review CHAP forecasts and alerts"
