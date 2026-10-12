@@ -5,6 +5,7 @@ import { ChapApiProvider } from './components/ChapApiProvider';
 import { Layout } from './components/Layout';
 import { HomePage } from './pages/HomePage';
 import { SettingsPage } from './pages/SettingsPage';
+import { InterventionsPage } from './pages/InterventionsPage';
 import './locales';
 
 const queryClient = new QueryClient({
@@ -15,6 +16,7 @@ const router = createHashRouter([{
     element: <Layout />,
     children: [
         { path: '/', element: <HomePage /> },
+        { path: '/interventions', element: <InterventionsPage /> },
         { path: '/settings', element: <SettingsPage /> },
     ],
 }]);

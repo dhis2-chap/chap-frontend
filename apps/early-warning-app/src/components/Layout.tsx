@@ -15,6 +15,7 @@ export const Layout = () => {
                 <SidenavHeader><h2 className={styles.title}>{i18n.t('Early Warning')}</h2></SidenavHeader>
                 <SidenavItems>
                     <SidenavLink to="/" label={i18n.t('Overview')} LinkComponent={NavLink} end />
+                    <SidenavLink to="/interventions" label={i18n.t('Interventions')} LinkComponent={NavLink} />
                     <SidenavLink to="/settings" label={i18n.t('Settings')} LinkComponent={NavLink} />
                 </SidenavItems>
             </Sidenav>
