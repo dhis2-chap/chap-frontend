@@ -47,9 +47,6 @@ msgstr "Retry"
 msgid "Connected to CHAP"
 msgstr "Connected to CHAP"
 
-msgid "Refresh"
-msgstr "Refresh"
-
 msgid "Unable to load predictions awaiting review"
 msgstr "Unable to load predictions awaiting review"
 

@@ -15,6 +15,5 @@ export const usePredictionReviews = () => {
         reviews: summarizePredictionReviews(alerts.data ?? [], predictions.data ?? []),
         isLoading: alerts.isLoading || predictions.isLoading,
         error: alerts.error || predictions.error,
-        refetch: () => Promise.all([alerts.refetch(), predictions.refetch()]),
     };
 };
