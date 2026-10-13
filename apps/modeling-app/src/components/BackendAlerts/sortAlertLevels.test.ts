@@ -32,6 +32,11 @@ describe('sortAlertLevels', () => {
         expect(names(sortAlertLevels(levels))).toEqual(['First', 'Second']);
     });
 
+    it('orders same-strategy levels separated by another strategy', () => {
+        const levels = [seasonal('Action', 3, 0.75), percentile('Watch', 0.9, 0.75), seasonal('Monitor', 1, 0.75)];
+        expect(names(sortAlertLevels(levels))).toEqual(['Monitor', 'Action', 'Watch']);
+    });
+
     it('does not mutate the input', () => {
         const levels = [seasonal('Action', 2, 0.9), seasonal('Monitor', 2, 0.75)];
         sortAlertLevels(levels);

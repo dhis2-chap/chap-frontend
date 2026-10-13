@@ -19,6 +19,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useAlertPolicies } from '@/hooks/useAlertPolicies';
+import { getChapErrorMessage } from '@/utils/chapErrors';
 import { DataItemSelect } from '../../PageContent/PredictionImport/QuantileMappingForm/DataItemSelect';
 import {
     ALERT_KEY,
@@ -75,8 +76,8 @@ export const MarkReadyForForecastingModal = ({
     title = i18n.t('Create prediction setup'),
     isSubmitting = false,
 }: MarkReadyForForecastingModalProps) => {
-    const { data: alertPolicies, isLoading: alertPoliciesLoading } = useAlertPolicies();
-    const hasNoAlertPolicies = !alertPoliciesLoading && !alertPolicies?.length;
+    const { data: alertPolicies, error: alertPoliciesError, isLoading: alertPoliciesLoading } = useAlertPolicies();
+    const hasNoAlertPolicies = !alertPoliciesLoading && !alertPoliciesError && !alertPolicies?.length;
     const [importMappingIsEnabled, setImportMappingIsEnabled] = useState(
         defaultValues?.use_import_mapping ?? false,
     );
@@ -158,7 +159,11 @@ export const MarkReadyForForecastingModal = ({
                                         : i18n.t('Every prediction run automatically raises pending alerts with this policy, for review before release. Leave empty to run predictions without alerts.')}
                                     placeholder={i18n.t('No alert policy')}
                                     loading={alertPoliciesLoading}
-                                    disabled={hasNoAlertPolicies}
+                                    disabled={hasNoAlertPolicies || !!alertPoliciesError}
+                                    error={!!alertPoliciesError}
+                                    validationText={alertPoliciesError
+                                        ? i18n.t('Unable to load alert policies{{colon}} {{message}}', { colon: ':', message: getChapErrorMessage(alertPoliciesError) })
+                                        : undefined}
                                     clearable
                                     // An unmatched selected value makes SingleSelect throw in dev builds.
                                     selected={alertPolicies?.some(policy => String(policy.id) === field.value) ? field.value : ''}
