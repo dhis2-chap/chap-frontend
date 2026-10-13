@@ -1,6 +1,6 @@
 import { NoticeBox } from '@dhis2/ui';
 import style from './WarnAboutIncompatibleVersion.module.css';
-import { useRoute } from '../../../hooks/useRoute';
+import { useRoute } from '@dhis2-chap/ui';
 import chapConfig from '../../../chap.json';
 import { useChapStatus } from '../../settings/ChapSettings/hooks/useChapStatus';
 import { isVersionCompatible } from '../../../utils/compareVersions';

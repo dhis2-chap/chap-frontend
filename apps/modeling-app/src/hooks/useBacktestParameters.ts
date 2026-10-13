@@ -1,7 +1,6 @@
-import { ApiError, BacktestParameterInfo, BacktestsService } from '@dhis2-chap/ui';
+import { ApiError, BacktestParameterInfo, BacktestsService, useRoute } from '@dhis2-chap/ui';
 import { useQuery } from '@tanstack/react-query';
 import { Features, useIsFeatureAvailable } from './useIsFeatureAvailable';
-import { useRoute } from './useRoute';
 import { useWeatherProviders } from './useWeatherProviders';
 
 /** Older CHAP Core versions apply their own defaults, so the form leaves the parameters out. */

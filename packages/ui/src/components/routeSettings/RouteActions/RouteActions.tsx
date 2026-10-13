@@ -13,7 +13,7 @@ import {
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { EditRoute } from '../EditRoute';
-import type { Route } from '../../../../hooks/useRoute';
+import type { Route } from '../useRoute';
 import { DeleteRouteModal } from '../DeleteRouteModal';
 import { useQueryClient } from '@tanstack/react-query';
 import styles from './RouteActions.module.css';

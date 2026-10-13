@@ -1,7 +1,7 @@
 import { NoticeBox, Button } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
-import { Route } from '../../../../hooks/useRoute';
-import { useUpdateRouteTimeout } from './useUpdateRouteTimeout';
+import { Route } from '../useRoute';
+import { useUpdateRouteTimeout } from '../hooks/useUpdateRouteTimeout';
 import { RECOMMENDED_TIMEOUT_SECONDS } from '../constants';
 import styles from './TimeoutWarning.module.css';
 

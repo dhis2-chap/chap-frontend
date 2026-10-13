@@ -1,14 +1,14 @@
 import { useEffect } from 'react';
 import { Card, CircularLoader } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
-import { useRoute } from '../../../hooks/useRoute';
+import { useRoute } from './useRoute';
 import styles from './RouteSettings.module.css';
 import { CreateRoute } from './CreateRoute/CreateRoute';
 import { RouteActions } from './RouteActions';
 import { PublicAccessWarning } from './PublicAccessWarning';
 import { TimeoutWarning } from './TimeoutWarning';
-import { hasRouteToken } from '../../../components/ApiTokenField/routeToken';
-import { useAuthority } from '../../../hooks/useAuthority';
+import { hasRouteToken } from './routeToken';
+import { useCanManageRoutes } from './hooks/useCanManageRoutes';
 
 const RouteWrapper = ({ children }: { children: React.ReactNode }) => {
     return (
@@ -23,9 +23,6 @@ const RouteWrapper = ({ children }: { children: React.ReactNode }) => {
     );
 };
 
-const ROUTE_AUTHORITY_PRIVATE_ADD = 'F_ROUTE_PRIVATE_ADD';
-const ROUTE_AUTHORITY_PUBLIC_ADD = 'F_ROUTE_PUBLIC_ADD';
-
 export const RouteSettings = () => {
     const {
         route,
@@ -34,11 +31,9 @@ export const RouteSettings = () => {
     } = useRoute();
 
     const {
-        hasAuthority: canAddRoute,
+        canManageRoutes: canAddRoute,
         isLoading: canAddRouteLoading,
-    } = useAuthority({
-        authority: [ROUTE_AUTHORITY_PRIVATE_ADD, ROUTE_AUTHORITY_PUBLIC_ADD],
-    });
+    } = useCanManageRoutes();
 
     useEffect(() => {
         if (routeError) {

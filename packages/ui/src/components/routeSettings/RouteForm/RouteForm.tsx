@@ -15,7 +15,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import styles from '../RouteSettings.module.css';
-import { ApiTokenField } from '../../../../components/ApiTokenField/ApiTokenField';
+import { ApiTokenField } from '../ApiTokenField';
 
 const routeSchema = z.object({
     apiToken: z.string().trim().refine(value => !/[\r\n]/.test(value), {

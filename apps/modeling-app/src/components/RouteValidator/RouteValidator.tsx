@@ -1,4 +1,4 @@
-import { useRoute } from '../../hooks/useRoute';
+import { useRoute } from '@dhis2-chap/ui';
 import { CircularLoader } from '@dhis2/ui';
 import { Navigate } from 'react-router-dom';
 import styles from './RouteValidator.module.css';

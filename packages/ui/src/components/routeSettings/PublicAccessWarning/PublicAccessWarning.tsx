@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { NoticeBox } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
-import { Route } from '../../../../hooks/useRoute';
+import { Route } from '../useRoute';
 
 type Props = {
     route: Route;

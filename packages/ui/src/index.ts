@@ -95,3 +95,4 @@ export { parseOrgUnits } from './components/maps/utils';
 export type { FeatureCollection } from './components/maps/utils';
 
 export * from './components/sidenav';
+export * from './components/routeSettings';

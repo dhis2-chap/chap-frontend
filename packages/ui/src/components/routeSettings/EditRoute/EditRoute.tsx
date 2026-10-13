@@ -1,8 +1,8 @@
 import i18n from '@dhis2/d2-i18n';
 import { useSaveRoute } from '../hooks/useSaveRoute';
 import { RouteForm, RouteFormValues } from '../RouteForm';
-import { hasRouteToken } from '../../../../components/ApiTokenField/routeToken';
-import type { Route } from '../../../../hooks/useRoute';
+import { hasRouteToken } from '../routeToken';
+import type { Route } from '../useRoute';
 
 interface EditRouteProps {
     route: Route;

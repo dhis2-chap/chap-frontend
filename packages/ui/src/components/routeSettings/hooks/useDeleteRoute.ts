@@ -1,6 +1,5 @@
-import { useDataEngine } from '@dhis2/app-runtime';
+import { useAlert, useDataEngine } from '@dhis2/app-runtime';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useAlert } from '@dhis2/app-service-alerts';
 import i18n from '@dhis2/d2-i18n';
 
 type UseDeleteRouteOptions = {

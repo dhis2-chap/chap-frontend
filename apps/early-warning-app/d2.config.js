@@ -5,6 +5,8 @@ const config = {
     description: 'Review CHAP forecasts and alerts',
     id: '060f3364-d853-40f9-bcf7-ad902c522cd5',
     minDHIS2Version: '2.40',
+    // Shared with the Modeling App: users need it to call the CHAP route.
+    customAuthorities: ['F_CHAP_MODELING_APP'],
     entryPoints: { app: './src/App.tsx' },
     viteConfigExtensions: './vite.config.mts',
 };

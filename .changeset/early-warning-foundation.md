@@ -4,4 +4,4 @@
 "@dhis2-chap/modeling-app": patch
 ---
 
-Add the Early Warning App and share Modeling side navigation [CLIM-1403].
+Add the Early Warning App with its own CHAP route settings, and share the Modeling side navigation and route settings [CLIM-1403].

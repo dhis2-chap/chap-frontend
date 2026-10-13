@@ -1,11 +1,9 @@
-import { useDataEngine } from '@dhis2/app-runtime';
+import { useAlert, useDataEngine } from '@dhis2/app-runtime';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import i18n from '@dhis2/d2-i18n';
-import { useAlert } from '@dhis2/app-service-alerts';
-import { CHAP_MODELING_APP_AUTHORITY } from '../../../../utils/global-authorities';
-import type { Route } from '../../../../hooks/useRoute';
-import { updateRouteToken } from '../../../../components/ApiTokenField/routeToken';
-import { RECOMMENDED_TIMEOUT_SECONDS } from '../constants';
+import { CHAP_ROUTE_CODE, type Route } from '../useRoute';
+import { updateRouteToken } from '../routeToken';
+import { CHAP_ROUTE_AUTHORITY, RECOMMENDED_TIMEOUT_SECONDS } from '../constants';
 
 type SaveRouteVariables = {
     url: string;
@@ -33,7 +31,7 @@ export const useSaveRoute = ({ onSuccess, onError }: UseSaveRouteOptions = {}) =
             const { id, url, apiToken, removeApiToken } = variables;
 
             if (id) {
-                const queryKey = ['routes', 'chap'];
+                const queryKey = ['routes', CHAP_ROUTE_CODE];
                 const existingRouteData = queryClient.getQueryData<{ routes: Route[] }>(queryKey);
 
                 if (!existingRouteData) {
@@ -64,9 +62,9 @@ export const useSaveRoute = ({ onSuccess, onError }: UseSaveRouteOptions = {}) =
                     type: 'create' as const,
                     data: {
                         name: 'Chap Modeling App',
-                        code: 'chap',
+                        code: CHAP_ROUTE_CODE,
                         url: url,
-                        authorities: [CHAP_MODELING_APP_AUTHORITY],
+                        authorities: [CHAP_ROUTE_AUTHORITY],
                         headers: updateRouteToken({
                             'Content-Type': 'application/json',
                         }, apiToken),

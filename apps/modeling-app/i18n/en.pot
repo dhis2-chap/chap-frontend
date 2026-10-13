@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-06T08:11:04.394Z\n"
-"PO-Revision-Date: 2026-10-06T08:11:04.395Z\n"
+"POT-Creation-Date: 2026-10-12T17:34:00.069Z\n"
+"PO-Revision-Date: 2026-10-12T17:34:00.070Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -55,33 +55,6 @@ msgstr "Models"
 
 msgid "New model"
 msgstr "New model"
-
-msgid "CHAP API token (optional)"
-msgstr "CHAP API token (optional)"
-
-msgid ""
-"A token is configured. Leave blank to keep it, or enter a new token to "
-"replace it."
-msgstr ""
-"A token is configured. Leave blank to keep it, or enter a new token to "
-"replace it."
-
-msgid ""
-"Enter the token configured on your CHAP server. Leave blank if the server "
-"does not require one."
-msgstr ""
-"Enter the token configured on your CHAP server. Leave blank if the server "
-"does not require one."
-
-msgid ""
-"The token is saved in the DHIS2 route and sent to CHAP with each request. "
-"Users who can read the route configuration can access it."
-msgstr ""
-"The token is saved in the DHIS2 route and sent to CHAP with each request. "
-"Users who can read the route configuration can access it."
-
-msgid "Remove saved API token"
-msgstr "Remove saved API token"
 
 msgid "View"
 msgstr "View"
@@ -2437,137 +2410,6 @@ msgstr "Settings saved successfully"
 
 msgid "Failed to save settings"
 msgstr "Failed to save settings"
-
-msgid "Route configuration"
-msgstr "Route configuration"
-
-msgid "No route found."
-msgstr "No route found."
-
-msgid "Add route"
-msgstr "Add route"
-
-msgid "Delete route"
-msgstr "Delete route"
-
-msgid "Are you sure you want to delete this route?"
-msgstr "Are you sure you want to delete this route?"
-
-msgid "Edit route"
-msgstr "Edit route"
-
-msgid "Public access"
-msgstr "Public access"
-
-msgid ""
-"Your route is public and can be accessed by anyone. This can potentially "
-"expose sensitive data. If you want to restrict access, click the "
-"\"Sharing\" button and remove access for \"All users\"."
-msgstr ""
-"Your route is public and can be accessed by anyone. This can potentially "
-"expose sensitive data. If you want to restrict access, click the "
-"\"Sharing\" button and remove access for \"All users\"."
-
-msgid "Sharing"
-msgstr "Sharing"
-
-msgid "Edit"
-msgstr "Edit"
-
-msgid "The token must not contain line breaks"
-msgstr "The token must not contain line breaks"
-
-msgid "Invalid URL format"
-msgstr "Invalid URL format"
-
-msgid "URL is required"
-msgstr "URL is required"
-
-msgid "URL must end with a double wildcard (/**)"
-msgstr "URL must end with a double wildcard (/**)"
-
-msgid "CHAP Core URL"
-msgstr "CHAP Core URL"
-
-msgid "Error saving route"
-msgstr "Error saving route"
-
-msgid "An unknown error occurred. Please try again."
-msgstr "An unknown error occurred. Please try again."
-
-msgid ""
-"Contact your DHIS2 server administrator to allow this CHAP Core URL in "
-"{{setting}} in dhis.conf and restart DHIS2."
-msgstr ""
-"Contact your DHIS2 server administrator to allow this CHAP Core URL in "
-"{{setting}} in dhis.conf and restart DHIS2."
-
-msgid "Route settings"
-msgstr "Route settings"
-
-msgid ""
-"There was an error loading the route settings. Please try to reload the "
-"page."
-msgstr ""
-"There was an error loading the route settings. Please try to reload the "
-"page."
-
-msgid "If the problem persists, please contact your system administrator."
-msgstr "If the problem persists, please contact your system administrator."
-
-msgid "You do not have permission to add or modify routes."
-msgstr "You do not have permission to add or modify routes."
-
-msgid "If you think this is an error, please contact your system administrator."
-msgstr "If you think this is an error, please contact your system administrator."
-
-msgid "Code"
-msgstr "Code"
-
-msgid "URL"
-msgstr "URL"
-
-msgid "API token"
-msgstr "API token"
-
-msgid "Configured"
-msgstr "Configured"
-
-msgid "Not configured"
-msgstr "Not configured"
-
-msgid "Authorities"
-msgstr "Authorities"
-
-msgid "Low response timeout"
-msgstr "Low response timeout"
-
-msgid ""
-"The response timeout is currently set to {{timeout}} seconds. This may "
-"cause long-running requests to fail before they complete. We recommend "
-"increasing it to {{recommended}} seconds."
-msgstr ""
-"The response timeout is currently set to {{timeout}} seconds. This may "
-"cause long-running requests to fail before they complete. We recommend "
-"increasing it to {{recommended}} seconds."
-
-msgid "Increase to {{recommended}} seconds"
-msgstr "Increase to {{recommended}} seconds"
-
-msgid "Error updating route timeout"
-msgstr "Error updating route timeout"
-
-msgid "Route timeout updated successfully"
-msgstr "Route timeout updated successfully"
-
-msgid "Error deleting route"
-msgstr "Error deleting route"
-
-msgid "Route deleted successfully"
-msgstr "Route deleted successfully"
-
-msgid "Route saved successfully"
-msgstr "Route saved successfully"
 
 msgid "Data Pruning"
 msgstr "Data Pruning"
