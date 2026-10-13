@@ -4,6 +4,7 @@ import { NoticeBox, SingleSelectField, SingleSelectOption, DataTable, DataTableH
 import { UncertaintyAreaChart, Widget, getPeriodNameFromId } from '@dhis2-chap/ui';
 import type { ReviewData } from '../hooks/useReviewData';
 import { estimateExceedance, normalizeAlertPeriod } from '../utils/reviewData';
+import { LevelTag } from './LevelTag';
 import styles from './ForecastReview.module.css';
 
 const formatNumber = (value: number | null | undefined) => value == null ? '—' : value.toLocaleString(undefined, { maximumFractionDigits: 1 });
@@ -13,7 +14,7 @@ const formatProbability = (estimate: ReturnType<typeof estimateExceedance>) => {
     return `${prefix}${(100 * estimate.probability).toLocaleString(undefined, { maximumFractionDigits: 1 })}%`;
 };
 
-export const ForecastReview = ({ review }: { review: ReviewData }) => {
+export const ForecastReview = ({ review, colors }: { review: ReviewData; colors: Record<string, string> }) => {
     const [orgUnitId, setOrgUnitId] = useState('');
     const [thresholdKey, setThresholdKey] = useState('');
     const series = review.series.find(item => item.orgUnitId === orgUnitId) ?? review.series[0];
@@ -81,7 +82,7 @@ export const ForecastReview = ({ review }: { review: ReviewData }) => {
                                         <DataTableRow key={alert.id}>
                                             <DataTableCell>{review.orgUnits.get(alert.orgUnit)?.displayName ?? alert.orgUnit}</DataTableCell>
                                             <DataTableCell>{getPeriodNameFromId(normalizeAlertPeriod(alert.timePeriod))}</DataTableCell>
-                                            <DataTableCell>{alert.level}</DataTableCell>
+                                            <DataTableCell><LevelTag level={alert.level} colors={colors} /></DataTableCell>
                                             <DataTableCell>{point ? `${formatNumber(point.quantiles.quantile_low)} – ${formatNumber(point.quantiles.quantile_high)}` : '—'}</DataTableCell>
                                             <DataTableCell>{formatNumber(value)}</DataTableCell>
                                             <DataTableCell>{formatProbability(point && value != null ? estimateExceedance(point.quantiles, value) : undefined)}</DataTableCell>

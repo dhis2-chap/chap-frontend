@@ -1,0 +1,18 @@
+.maps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacers-dp16);
+}
+.card { min-width: 0; }
+.card h3 { margin-block: 0 var(--spacers-dp12); }
+.legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacers-dp16);
+    list-style: none;
+    padding: 0;
+}
+.legend li { display: flex; align-items: center; gap: var(--spacers-dp8); }
+.swatch { width: 12px; height: 12px; border: 1px solid var(--colors-grey600); }
+
+.viewport { height: 320px; }

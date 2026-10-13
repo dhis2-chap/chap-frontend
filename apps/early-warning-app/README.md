@@ -12,3 +12,5 @@ Implementation follows [CLIM-1402](https://dhis2.atlassian.net/browse/CLIM-1402)
 The review queue lists predictions with pending alerts, newest first, with the model and counts by alert level. Open a prediction to inspect its alerts. Predictions without alerts are not included.
 
 Prediction details reuse the Modeling App forecast chart. Select an organisation unit and alert-policy threshold to inspect the forecast; the alert statistics show the 80% range, threshold and estimated exceedance probability alongside the policy trigger. Thresholds use the current policy and available observations, rather than a stored snapshot from the original run.
+
+Optional review maps show accepted and pending alerts for each forecast period, alongside review counts. Declined alerts are omitted. Maps and alert tags share a default yellow-to-red palette; colour configuration is deferred to the settings work. This map enhancement can be reviewed independently of the initial import and submission flow.
