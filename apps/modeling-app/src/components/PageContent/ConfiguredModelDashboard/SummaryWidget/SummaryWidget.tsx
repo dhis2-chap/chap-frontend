@@ -97,6 +97,12 @@ export const SummaryWidget = ({
                             {formatPeriodType(predictionSetup.periodType)}
                         </span>
                     </div>
+                    <div className={styles.row}>
+                        <span className={styles.label}>{i18n.t('Alert policy')}</span>
+                        <span className={styles.value} data-test="prediction-setup-alert-policy">
+                            {predictionSetup.alertPolicy?.name ?? i18n.t('None')}
+                        </span>
+                    </div>
                     {trainingFirstPeriod && (
                         <div className={styles.row}>
                             <span className={styles.label}>{i18n.t('Training start period')}</span>

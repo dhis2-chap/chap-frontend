@@ -1,0 +1,122 @@
+import { useState } from 'react';
+import i18n from '@dhis2/d2-i18n';
+import {
+    Button,
+    ButtonStrip,
+    CircularLoader,
+    DataTable,
+    DataTableBody,
+    DataTableCell,
+    DataTableColumnHeader,
+    DataTableHead,
+    DataTableRow,
+    Modal,
+    ModalActions,
+    ModalContent,
+    ModalTitle,
+    NoticeBox,
+} from '@dhis2/ui';
+import { format } from 'date-fns';
+import { Tag, type AlertPolicyRead, type ApiError } from '@dhis2-chap/ui';
+import { useAlertPolicies, useDeleteAlertPolicy } from '@/hooks/useAlertPolicies';
+import { getChapErrorMessage } from '@/utils/chapErrors';
+import { TableActionButton } from '../TableActionButton';
+import { describeAlertLevel } from './describeAlertLevel';
+import { sortAlertLevels } from './sortAlertLevels';
+import styles from './BackendAlerts.module.css';
+
+const CONFLICT = 409;
+
+// CHAP refuses with 409 while a prediction setup or a raised alert still points at the policy.
+const getDeleteErrorMessage = (error: ApiError) => (
+    error.status === CONFLICT
+        ? i18n.t('This policy is used by a prediction setup or has alerts raised against it, so it cannot be deleted.')
+        : getChapErrorMessage(error)
+);
+
+const DeleteAlertPolicyModal = ({ policy, onClose }: { policy: AlertPolicyRead; onClose: () => void }) => {
+    const deletePolicy = useDeleteAlertPolicy();
+    return (
+        <Modal small onClose={onClose} dataTest="delete-alert-policy-modal">
+            <ModalTitle>{i18n.t('Delete alert policy')}</ModalTitle>
+            <ModalContent>
+                <p>{i18n.t('Delete "{{name}}"? This cannot be undone.', { name: policy.name })}</p>
+                {deletePolicy.error && (
+                    <NoticeBox error title={i18n.t('Unable to delete alert policy')}>
+                        {getDeleteErrorMessage(deletePolicy.error)}
+                    </NoticeBox>
+                )}
+            </ModalContent>
+            <ModalActions>
+                <ButtonStrip end>
+                    <Button onClick={onClose} disabled={deletePolicy.isLoading}>{i18n.t('Cancel')}</Button>
+                    <Button
+                        destructive
+                        loading={deletePolicy.isLoading}
+                        onClick={() => deletePolicy.mutate(policy.id, { onSuccess: onClose })}
+                    >
+                        {i18n.t('Delete')}
+                    </Button>
+                </ButtonStrip>
+            </ModalActions>
+        </Modal>
+    );
+};
+
+export const AlertPoliciesTable = () => {
+    const { data: policies, error, isLoading } = useAlertPolicies();
+    const [deleting, setDeleting] = useState<AlertPolicyRead>();
+
+    if (isLoading) return <CircularLoader />;
+    if (error) {
+        return (
+            <NoticeBox error title={i18n.t('Unable to load alert policies')}>
+                {getChapErrorMessage(error)}
+            </NoticeBox>
+        );
+    }
+
+    return (
+        <>
+            <DataTable>
+                <DataTableHead>
+                    <DataTableRow>
+                        <DataTableColumnHeader>{i18n.t('Name')}</DataTableColumnHeader>
+                        <DataTableColumnHeader>{i18n.t('Levels')}</DataTableColumnHeader>
+                        <DataTableColumnHeader>{i18n.t('Created')}</DataTableColumnHeader>
+                        <DataTableColumnHeader>{i18n.t('Actions')}</DataTableColumnHeader>
+                    </DataTableRow>
+                </DataTableHead>
+                <DataTableBody>
+                    {policies?.length ? policies.map(policy => (
+                        <DataTableRow key={policy.id}>
+                            <DataTableCell>{policy.name}</DataTableCell>
+                            <DataTableCell>
+                                <div className={styles.tags}>
+                                    {sortAlertLevels(policy.levels ?? []).map(level => (
+                                        <Tag key={level.name}>{describeAlertLevel(level)}</Tag>
+                                    ))}
+                                </div>
+                            </DataTableCell>
+                            <DataTableCell>
+                                {policy.created ? format(new Date(policy.created), 'dd.MM.yyyy') : '-'}
+                            </DataTableCell>
+                            <DataTableCell>
+                                <TableActionButton destructive onClick={() => setDeleting(policy)}>
+                                    {i18n.t('Delete')}
+                                </TableActionButton>
+                            </DataTableCell>
+                        </DataTableRow>
+                    )) : (
+                        <DataTableRow>
+                            <DataTableCell colSpan="4" align="center">
+                                {i18n.t('No alert policies yet.')}
+                            </DataTableCell>
+                        </DataTableRow>
+                    )}
+                </DataTableBody>
+            </DataTable>
+            {deleting && <DeleteAlertPolicyModal policy={deleting} onClose={() => setDeleting(undefined)} />}
+        </>
+    );
+};

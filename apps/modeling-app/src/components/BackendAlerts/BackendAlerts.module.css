@@ -1,0 +1,33 @@
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacers-dp4);
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacers-dp16);
+}
+
+.help {
+    margin: 0;
+    color: var(--colors-grey700);
+    font-size: 14px;
+}
+
+.levelRow {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacers-dp12);
+}
+
+.levelRow > :not(button) {
+    flex: 1 1 0;
+    min-inline-size: 0;
+}
+
+/* Align the icon button with the dense inputs below their labels. */
+.levelRow > button {
+    margin-block-start: 26px;
+}
