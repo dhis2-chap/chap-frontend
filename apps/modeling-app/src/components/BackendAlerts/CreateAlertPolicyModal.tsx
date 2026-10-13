@@ -70,7 +70,7 @@ const DEFAULT_VALUE = { seasonal: '2', percentile: '75' };
 const NEW_LEVEL: LevelValues = {
     name: '',
     strategy: 'seasonal',
-    value: '2',
+    value: DEFAULT_VALUE.seasonal,
     baselineYears: '5',
     probability: String(DEFAULT_OUTBREAK_PROBABILITY),
 };
@@ -97,14 +97,11 @@ export const CreateAlertPolicyModal = ({ onClose }: { onClose: () => void }) => 
     const { fields, append, remove } = useFieldArray({ control, name: 'levels' });
     const levels = watch('levels');
 
-    const save = handleSubmit(async (values) => {
-        try {
-            await create.mutateAsync({ name: values.name.trim(), levels: sortAlertLevels(values.levels.map(toAlertLevel)) });
-            onClose();
-        } catch {
-            // The mutation error is shown below and the form stays open for a retry.
-        }
-    });
+    // On failure the mutation error is shown below and the form stays open for a retry.
+    const save = handleSubmit(values => create.mutate(
+        { name: values.name.trim(), levels: sortAlertLevels(values.levels.map(toAlertLevel)) },
+        { onSuccess: onClose },
+    ));
 
     return (
         <Modal large onClose={onClose} dataTest="create-alert-policy-modal">
