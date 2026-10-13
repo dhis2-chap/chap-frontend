@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createHashRouter, Navigate, RouterProvider } from 'react-router-dom';
 import { ChapApiProvider } from './components/ChapApiProvider';
 import { Layout } from './components/Layout';
+import { PredictionPage } from './pages/PredictionPage';
 import { QueuePage } from './pages/QueuePage';
 import { SettingsPage } from './pages/SettingsPage';
 import './locales';
@@ -16,6 +17,7 @@ const router = createHashRouter([{
     children: [
         { path: '/', element: <Navigate to="/review-queue" replace /> },
         { path: '/review-queue', element: <QueuePage /> },
+        { path: '/predictions/:predictionId', element: <PredictionPage /> },
         { path: '/settings', element: <SettingsPage /> },
     ],
 }]);

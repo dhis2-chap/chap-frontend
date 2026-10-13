@@ -1,16 +1,29 @@
 import i18n from '@dhis2/d2-i18n';
 import { DataTable, DataTableBody, DataTableCell, DataTableColumnHeader, DataTableHead, DataTableRow, NoticeBox } from '@dhis2/ui';
-import { Card, Pill } from '@dhis2-chap/ui';
+import { Card, Pill, useRoute } from '@dhis2-chap/ui';
 import { format } from 'date-fns';
+import { Link } from 'react-router-dom';
 import { PageHeader } from '../components/PageHeader';
 import { ErrorNotice, Loading } from '../components/StateViews';
 import { usePredictionReviews } from '../hooks/usePredictionReviews';
-import styles from './QueuePage.module.css';
+import styles from './ReviewPages.module.css';
 
 export const QueuePage = () => {
-    const { reviews, isLoading, error } = usePredictionReviews();
+    const { route, isLoading: isRouteLoading, error: routeError } = useRoute();
+    const { reviews, isLoading, error } = usePredictionReviews(!!route);
 
     const content = () => {
+        if (isRouteLoading) return <Loading />;
+        if (routeError) return <ErrorNotice error={routeError} />;
+        if (!route) {
+            return (
+                <NoticeBox warning title={i18n.t('No CHAP route configured')}>
+                    {i18n.t('Add a route to your CHAP server to start using the Early Warning App.')}
+                    {' '}
+                    <Link to="/settings">{i18n.t('Go to settings')}</Link>
+                </NoticeBox>
+            );
+        }
         if (isLoading) return <Loading />;
         if (error) return <ErrorNotice error={error} />;
         if (reviews.length === 0) {
@@ -35,7 +48,7 @@ export const QueuePage = () => {
                         {reviews.map(({ prediction, levelCounts }) => (
                             <DataTableRow key={prediction.id}>
                                 <DataTableCell>
-                                    <span className={styles.strong}>{prediction.name}</span>
+                                    <Link className={styles.strong} to={`/predictions/${prediction.id}`}>{prediction.name}</Link>
                                     <span className={styles.muted}>{i18n.t('Prediction {{id}}', { id: `#${prediction.id}` })}</span>
                                 </DataTableCell>
                                 <DataTableCell>{prediction.configuredModel?.name ?? prediction.modelId}</DataTableCell>

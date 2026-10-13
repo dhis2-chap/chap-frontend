@@ -1,39 +1,39 @@
 import type { AlertPolicyRead, AlertRead, PredictionInfo } from '@dhis2-chap/ui';
 
-type LevelCount = { level: string; count: number };
-
 // Policies store levels from least to most severe, so a level's index is its severity.
-const severity = (alert: AlertRead, policies: AlertPolicyRead[]) => {
+export const severity = (alert: AlertRead, policies: AlertPolicyRead[]) => {
     const levels = policies.find(policy => policy.id === alert.alertPolicyId)?.levels ?? [];
     const index = levels.findIndex(level => level.name === alert.level);
     return index === -1 ? levels.length : index;
 };
 
-/** Predictions with pending alerts, newest first, with pending counts per level from least to most severe. */
+const countLevels = (alerts: AlertRead[], policies: AlertPolicyRead[]) => {
+    const counts = new Map<string, { level: string; count: number; severity: number }>();
+    for (const alert of alerts) {
+        const entry = counts.get(alert.level) ?? { level: alert.level, count: 0, severity: Infinity };
+        entry.count++;
+        entry.severity = Math.min(entry.severity, severity(alert, policies));
+        counts.set(alert.level, entry);
+    }
+    return [...counts.values()]
+        .sort((a, b) => a.severity - b.severity || a.level.localeCompare(b.level))
+        .map(({ level, count }) => ({ level, count }));
+};
+
+/** Predictions with pending alerts, newest first, with counts per level from least to most severe. */
 export const summarizePredictionReviews = (
-    alerts: AlertRead[],
+    pendingAlerts: AlertRead[],
     predictions: PredictionInfo[],
     policies: AlertPolicyRead[],
 ) => {
     const byPrediction = new Map<number, AlertRead[]>();
-    for (const alert of alerts) {
-        if (alert.predictionId == null || (alert.approved && alert.approved !== 'pending')) continue;
-        const group = byPrediction.get(alert.predictionId) ?? [];
-        group.push(alert);
-        byPrediction.set(alert.predictionId, group);
+    for (const alert of pendingAlerts) {
+        if (alert.predictionId == null) continue;
+        byPrediction.set(alert.predictionId, [...byPrediction.get(alert.predictionId) ?? [], alert]);
     }
     return predictions.flatMap((prediction) => {
-        const pending = byPrediction.get(prediction.id);
-        if (!pending) return [];
-        const sorted = [...pending].sort((a, b) => severity(a, policies) - severity(b, policies)
-            || a.level.localeCompare(b.level));
-        const levelCounts: LevelCount[] = [];
-        for (const alert of sorted) {
-            const last = levelCounts[levelCounts.length - 1];
-            if (last?.level === alert.level) last.count++;
-            else levelCounts.push({ level: alert.level, count: 1 });
-        }
-        return [{ prediction, levelCounts }];
+        const alerts = byPrediction.get(prediction.id);
+        return alerts ? [{ prediction, levelCounts: countLevels(alerts, policies) }] : [];
     }).sort((a, b) => Date.parse(b.prediction.created) - Date.parse(a.prediction.created)
         || b.prediction.id - a.prediction.id);
 };

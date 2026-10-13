@@ -9,4 +9,4 @@ The app requires DHIS2 2.40+ and an accessible `chap` route. Configure it under 
 
 Implementation follows [CLIM-1402](https://dhis2.atlassian.net/browse/CLIM-1402). Automatic alert creation requires the CHAP backend work in [CLIM-1335](https://dhis2.atlassian.net/browse/CLIM-1335).
 
-The review queue lists predictions with pending alerts, newest first, with the model and pending counts per alert level from least to most severe. Settings manages the shared CHAP route and shows the CHAP connection status.
+The review queue lists predictions with pending alerts, newest first, with the model and pending counts per alert level from least to most severe. Open a prediction to preview its pending alerts. Settings manages the shared CHAP route and shows the CHAP connection status.
