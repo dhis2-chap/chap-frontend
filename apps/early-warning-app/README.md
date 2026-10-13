@@ -17,4 +17,16 @@ Prediction details reuse the Modeling App forecast chart. Select an organisation
 
 Import uses the prediction setup's data-element mapping configured in the Modeling App. Reviewers select which organisation units to import; only accepted alerts produce outbreak indicators. Import is unavailable without a forecast mapping. App-specific mapping overrides are deferred.
 
-The import helpers share the Modeling App's forecast mapping and import-response validation, including conversion of CHAP month/week periods into DHIS2 period IDs. Review submission wires these helpers into the approval workflow in the next PR.
+The import helpers share the Modeling App's forecast mapping and import-response validation, including conversion of CHAP month/week periods into DHIS2 period IDs. The review preview shows decision changes and selected forecast imports before submission.
+
+## Review submission
+
+Reviewers can accept or decline individual pending alerts or all pending alerts, leaving untouched alerts unchanged. Previously reviewed alerts are read-only in this PR; the next PR adds changes and withdrawal. Submission validates any DHIS2 import first, records CHAP decisions, then imports forecasts and saves their indicator targets. Failed preflight validation can be cancelled and corrected. Once a write is attempted, keep the preview open and retry to resume incomplete tasks; completed tasks are not repeated. These checkpoints exist only while the preview stays open. Refreshing loses that retry context.
+
+The current DHIS2 user's name is recorded as the reviewer. It is attribution, not authorization: the CHAP approval endpoint accepts a caller-supplied reviewer, so access must be enforced on the server or route. This app does not claim that a UI authority check secures the API. Notifications and reviewer-role settings are deferred.
+
+## Import records
+
+The app stores successfully imported indicator targets in its shared DHIS2 datastore namespace so later withdrawals can clear the original targets, even after a setup mapping changes. Saving the import record is a separate retryable step; a failed save stops submission and must be retried before closing the preview. Imports made elsewhere or before this tracking existed cannot be inferred from the API. Concurrent reviewers should coordinate because CHAP decisions, imports and datastore updates do not form one transaction.
+
+Register the app in DHIS2 and grant its users app access plus `F_CHAP_EARLY_WARNING_APP` to read and write the `chap-early-warning` datastore namespace. This authority controls the app's import records only; it does not authorize or protect CHAP approval endpoints. There is no separate reviewer-role gate in this initial workflow.

@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-13T07:43:41.376Z\n"
-"PO-Revision-Date: 2026-10-13T07:43:41.376Z\n"
+"POT-Creation-Date: 2026-10-13T07:50:53.434Z\n"
+"PO-Revision-Date: 2026-10-13T07:50:53.434Z\n"
 
 msgid "Forecast"
 msgstr "Forecast"
@@ -72,6 +72,51 @@ msgstr "Early Warning"
 msgid "Review queue"
 msgstr "Review queue"
 
+msgid "Review decisions"
+msgstr "Review decisions"
+
+msgid "Accept all pending"
+msgstr "Accept all pending"
+
+msgid "Decline all pending"
+msgstr "Decline all pending"
+
+msgid "Current status"
+msgstr "Current status"
+
+msgid "Decision"
+msgstr "Decision"
+
+msgid "Accepted"
+msgstr "Accepted"
+
+msgid "Declined"
+msgstr "Declined"
+
+msgid "Pending"
+msgstr "Pending"
+
+msgid "Already reviewed"
+msgstr "Already reviewed"
+
+msgid "Leave unchanged"
+msgstr "Leave unchanged"
+
+msgid "Accept"
+msgstr "Accept"
+
+msgid "Decline"
+msgstr "Decline"
+
+msgid "Unable to identify the current reviewer"
+msgstr "Unable to identify the current reviewer"
+
+msgid "Unable to load import history"
+msgstr "Unable to load import history"
+
+msgid "Preview review"
+msgstr "Preview review"
+
 msgid "Import forecasts into DHIS2"
 msgstr "Import forecasts into DHIS2"
 
@@ -90,6 +135,69 @@ msgstr "Unable to load data"
 
 msgid "Please try again."
 msgstr "Please try again."
+
+msgid "Validate forecast import"
+msgstr "Validate forecast import"
+
+msgid "Record decisions"
+msgstr "Record decisions"
+
+msgid "Save import record"
+msgstr "Save import record"
+
+msgid "Import forecasts"
+msgstr "Import forecasts"
+
+msgid "Waiting"
+msgstr "Waiting"
+
+msgid "Running"
+msgstr "Running"
+
+msgid "Done"
+msgstr "Done"
+
+msgid "Failed"
+msgstr "Failed"
+
+msgid "{{accepted}} accepted, {{declined}} declined, {{pending}} left pending"
+msgstr "{{accepted}} accepted, {{declined}} declined, {{pending}} left pending"
+
+msgid "{{count}} data values to import"
+msgid_plural "{{count}} data values to import"
+msgstr[0] "{{count}} data values to import"
+msgstr[1] "{{count}} data values to import"
+
+msgid "Review submission stopped"
+msgstr "Review submission stopped"
+
+msgid ""
+"Retry to continue from the failed step. Keep this page open; completed "
+"steps will not run again."
+msgstr ""
+"Retry to continue from the failed step. Keep this page open; completed "
+"steps will not run again."
+
+msgid "Review submitted"
+msgstr "Review submitted"
+
+msgid "Cancel"
+msgstr "Cancel"
+
+msgid "Retry failed step"
+msgstr "Retry failed step"
+
+msgid "Submit review"
+msgstr "Submit review"
+
+msgid "Import history must be loaded before submitting a review."
+msgstr "Import history must be loaded before submitting a review."
+
+msgid "Finish the current submission before starting another."
+msgstr "Finish the current submission before starting another."
+
+msgid "Unable to identify the current reviewer."
+msgstr "Unable to identify the current reviewer."
 
 msgid "Refresh"
 msgstr "Refresh"

@@ -1,6 +1,7 @@
 import i18n from '@dhis2/d2-i18n';
 import { CircularLoader, NoticeBox } from '@dhis2/ui';
 import { Link, useParams } from 'react-router-dom';
+import { ReviewActions } from '../components/ReviewActions';
 import { ForecastReview } from '../components/ForecastReview';
 import { useReviewData } from '../hooks/useReviewData';
 
@@ -19,6 +20,7 @@ export const ReviewPage = () => {
             <h1>{review.prediction.name}</h1>
             <p>{review.prediction.configuredModel?.name ?? review.prediction.modelId}</p>
             <ForecastReview review={review} />
+            <ReviewActions key={review.prediction.id} data={review} />
         </>
     );
 };
