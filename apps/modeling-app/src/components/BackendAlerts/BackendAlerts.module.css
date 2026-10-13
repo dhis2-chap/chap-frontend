@@ -31,31 +31,3 @@
 .levelRow > button {
     margin-block-start: 26px;
 }
-
-.widgetContent {
-    padding: 16px;
-    padding-block-start: 8px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-}
-
-.row {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.label {
-    color: var(--colors-grey700);
-    font-size: 13px;
-    line-height: 18px;
-}
-
-.value {
-    color: var(--colors-grey900);
-    font-size: 14px;
-    line-height: 20px;
-    font-weight: 500;
-}

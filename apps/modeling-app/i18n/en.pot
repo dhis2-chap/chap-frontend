@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-12T17:34:00.069Z\n"
-"PO-Revision-Date: 2026-10-12T17:34:00.070Z\n"
+"POT-Creation-Date: 2026-10-13T12:22:00.618Z\n"
+"PO-Revision-Date: 2026-10-13T12:22:00.618Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -32,6 +32,9 @@ msgstr "Datasets"
 msgid "New dataset"
 msgstr "New dataset"
 
+msgid "Alert policies"
+msgstr "Alert policies"
+
 msgid "Prediction setups"
 msgstr "Prediction setups"
 
@@ -55,6 +58,105 @@ msgstr "Models"
 
 msgid "New model"
 msgstr "New model"
+
+msgid "Unable to load alert policies"
+msgstr "Unable to load alert policies"
+
+msgid "Name"
+msgstr "Name"
+
+msgid "Levels"
+msgstr "Levels"
+
+msgid "Created"
+msgstr "Created"
+
+msgid "No alert policies yet."
+msgstr "No alert policies yet."
+
+msgid "Enter a level name"
+msgstr "Enter a level name"
+
+msgid "Enter zero or more"
+msgstr "Enter zero or more"
+
+msgid "Enter a percentile between 0 and 100"
+msgstr "Enter a percentile between 0 and 100"
+
+msgid "Enter a whole number of years"
+msgstr "Enter a whole number of years"
+
+msgid "Enter a policy name"
+msgstr "Enter a policy name"
+
+msgid "Level names must be unique"
+msgstr "Level names must be unique"
+
+msgid "New alert policy"
+msgstr "New alert policy"
+
+msgid "Policy name"
+msgstr "Policy name"
+
+msgid ""
+"Add levels from least to most severe. A level fires when the forecast "
+"probability of exceeding its threshold reaches the minimum probability."
+msgstr ""
+"Add levels from least to most severe. A level fires when the forecast "
+"probability of exceeding its threshold reaches the minimum probability."
+
+msgid "Level name"
+msgstr "Level name"
+
+msgid "e.g. Monitor"
+msgstr "e.g. Monitor"
+
+msgid "Strategy"
+msgstr "Strategy"
+
+msgid "Percentile (%)"
+msgstr "Percentile (%)"
+
+msgid "SD above mean"
+msgstr "SD above mean"
+
+msgid "Baseline years"
+msgstr "Baseline years"
+
+msgid "All history"
+msgstr "All history"
+
+msgid "Min. probability"
+msgstr "Min. probability"
+
+msgid "Remove level"
+msgstr "Remove level"
+
+msgid "Add level"
+msgstr "Add level"
+
+msgid "Unable to create alert policy"
+msgstr "Unable to create alert policy"
+
+msgid "Cancel"
+msgstr "Cancel"
+
+msgid "Create policy"
+msgstr "Create policy"
+
+msgid "{{percentile}}th percentile, all history"
+msgstr "{{percentile}}th percentile, all history"
+
+msgid "{{percentile}}th percentile, {{count}}-year baseline"
+msgid_plural "{{percentile}}th percentile, {{count}}-year baseline"
+msgstr[0] "{{percentile}}th percentile, {{count}}-year baseline"
+msgstr[1] "{{percentile}}th percentile, {{count}}-year baseline"
+
+msgid "mean + {{stdMultiplier}} SD"
+msgstr "mean + {{stdMultiplier}} SD"
+
+msgid "{{name}} · {{threshold}} · ≥{{probability}}%"
+msgstr "{{name}} · {{threshold}} · ≥{{probability}}%"
 
 msgid "View"
 msgstr "View"
@@ -80,9 +182,6 @@ msgstr "{{name}} (Copy)"
 msgid "Create new based on..."
 msgstr "Create new based on..."
 
-msgid "Cancel"
-msgstr "Cancel"
-
 msgid "Failed to load evaluation data. Please try again."
 msgstr "Failed to load evaluation data. Please try again."
 
@@ -91,9 +190,6 @@ msgstr "Close"
 
 msgid "Select which attributes to copy to the new run{{escape}}"
 msgstr "Select which attributes to copy to the new run{{escape}}"
-
-msgid "Name"
-msgstr "Name"
 
 msgid "Untitled"
 msgstr "Untitled"
@@ -146,9 +242,6 @@ msgstr "Save"
 
 msgid "ID"
 msgstr "ID"
-
-msgid "Created"
-msgstr "Created"
 
 msgid "Locations"
 msgstr "Locations"
@@ -2010,9 +2103,6 @@ msgstr "Lower percentile (%)"
 msgid "Upper percentile (%)"
 msgstr "Upper percentile (%)"
 
-msgid "Baseline years"
-msgstr "Baseline years"
-
 msgid ""
 "Most recent complete years in the dataset. Leave empty to use all available "
 "history."
@@ -2419,6 +2509,12 @@ msgstr "Requires superuser authority"
 
 msgid "Model not found"
 msgstr "Model not found"
+
+msgid "Create the policies used to raise alerts from forecasts."
+msgstr "Create the policies used to raise alerts from forecasts."
+
+msgid "New policy"
+msgstr "New policy"
 
 msgid ""
 "The selected models are no longer compatible with this dataset. Choose "
