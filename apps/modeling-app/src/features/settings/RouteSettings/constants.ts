@@ -1,1 +1,0 @@
-export const RECOMMENDED_TIMEOUT_SECONDS = 30;

@@ -29,6 +29,8 @@ type Props = {
     type: string;
     showGoToResult?: boolean;
     allowDeleteSuccess?: boolean;
+    // Lets a parent own the logs modal so it survives this menu unmounting.
+    onViewLogs?: () => void;
 };
 
 export const JobActionsMenu = ({
@@ -38,6 +40,7 @@ export const JobActionsMenu = ({
     type,
     showGoToResult = true,
     allowDeleteSuccess = true,
+    onViewLogs,
 }: Props) => {
     const navigate = useNavigate();
     const [flyoutMenuIsOpen, setFlyoutMenuIsOpen] = useState(false);
@@ -57,7 +60,11 @@ export const JobActionsMenu = ({
 
     const handleViewLogs = () => {
         setFlyoutMenuIsOpen(false);
-        setViewLogsModalIsOpen(true);
+        if (onViewLogs) {
+            onViewLogs();
+        } else {
+            setViewLogsModalIsOpen(true);
+        }
     };
 
     const handleNavigateToResult = () => {

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
     DataTable,
     DataTableHead,
@@ -37,6 +37,8 @@ import { CountPill } from '../CountPill';
 import { JOB_TYPES } from '../../hooks/useJobs';
 import { useBacktestsTableFilters } from './hooks/useBacktestsTableFilters';
 import { useTablePaginationParams } from '../../hooks/useTablePaginationParams';
+import { DatasetFilter } from '../DatasetFilter/DatasetFilter';
+import { useDatasetFilter } from '../DatasetFilter/useDatasetFilter';
 
 const columnHelper = createColumnHelper<BacktestRead>();
 const EMPTY_VALUE = '-';
@@ -131,12 +133,16 @@ type Props = {
 export const BacktestsTable = ({ backtests, models }: Props) => {
     const navigate = useNavigate();
     const { columnFilters } = useBacktestsTableFilters();
+    const { datasetId } = useDatasetFilter();
+    const filteredBacktests = useMemo(() => (
+        datasetId ? backtests.filter(backtest => backtest.datasetId.toString() === datasetId) : backtests
+    ), [backtests, datasetId]);
     const { pageIndex, pageSize, setPageIndex, setPageSize } = useTablePaginationParams();
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
     const [sorting, setSorting] = useState<SortingState>([{ id: 'created', desc: true }]);
 
     const table = useReactTable({
-        data: backtests || [],
+        data: filteredBacktests,
         columns,
         state: {
             sorting,
@@ -172,6 +178,7 @@ export const BacktestsTable = ({ backtests, models }: Props) => {
                         <BacktestsTableFilters
                             models={models}
                         />
+                        <DatasetFilter datasets={backtests.map(backtest => backtest.dataset)} />
                     </div>
 
                     <div className={styles.rightSection}>

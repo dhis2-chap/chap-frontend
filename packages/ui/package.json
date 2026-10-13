@@ -2,7 +2,7 @@
     "name": "@dhis2-chap/ui",
     "packageManager": "pnpm@10.14.0",
     "type": "commonjs",
-    "version": "7.1.0",
+    "version": "7.2.0",
     "module": "./build/es/index.js",
     "types": "./build/types/index.d.ts",
     "license": "MIT",
@@ -25,7 +25,9 @@
     },
     "peerDependencies": {
         "react": ">=18",
-        "react-dom": ">=18"
+        "react-dom": ">=18",
+        "@dhis2/app-runtime": "^3.14.6",
+        "@tanstack/react-query": "4"
     },
     "dependencies": {
         "@dhis2-chap/core": "workspace:*",
@@ -33,16 +35,21 @@
         "@dhis2/maps-gl": "^4.1.2",
         "@dhis2/multi-calendar-dates": "^2.1.2",
         "@dhis2/ui": "^10.13.0",
+        "@hookform/resolvers": "^5.0.1",
         "classnames": "^2.5.1",
         "date-fns": "^4.1.0",
         "highcharts": "11.4.8",
         "highcharts-react-official": "^3.2.1",
         "p-queue": "^8.1.0",
+        "react-hook-form": "^7.51.5",
         "react-virtuoso": "^4.6.2",
-        "styled-jsx": "^4.0.1"
+        "styled-jsx": "^4.0.1",
+        "zod": "^3.23.8"
     },
     "devDependencies": {
+        "@dhis2/app-runtime": "3.14.6",
         "@dhis2/cli-app-scripts": "12.11.1",
+        "@tanstack/react-query": "4",
         "@types/css-modules": "^1.0.5",
         "@types/highcharts": "^5.0.44",
         "@types/node": "^22.10.1",

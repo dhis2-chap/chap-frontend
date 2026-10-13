@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { ModelSpecRead } from '@dhis2-chap/ui';
-import { datasetSupportsModel, getModelSupport } from './datasetModels';
+import { datasetSupportsModel, getBacktestColumns, getModelSupport } from './datasetModels';
 
 const model: ModelSpecRead = {
     id: 1,
@@ -30,6 +30,11 @@ describe('datasetSupportsModel', () => {
         expect(datasetSupportsModel(names, 'MONTH', { ...model, archived: true })).toBe(false);
         expect(datasetSupportsModel(names, '', model)).toBe(false);
     });
+});
+
+it('evaluates the chosen target column as disease_cases', () => {
+    expect(getBacktestColumns(['cases', 'disease_cases', 'rainfall'], 'cases')).toEqual(['rainfall', 'disease_cases']);
+    expect(getBacktestColumns(['disease_cases', 'rainfall'], 'disease_cases')).toEqual(['rainfall', 'disease_cases']);
 });
 
 describe('getModelSupport', () => {

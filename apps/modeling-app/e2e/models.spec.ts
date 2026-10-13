@@ -5,7 +5,7 @@ import type {
     ModelSpecRead,
     ModelTemplateRead,
 } from '@dhis2-chap/ui';
-import { chapUrl, readJson } from './helpers/evaluation-fixtures';
+import { chapUrl, getChap, readJson } from './helpers/evaluation-fixtures';
 
 const NAIVE_MODEL_TEMPLATE_NAME = 'naive_model';
 const DHIS2_USERNAME = process.env.E2E_DHIS2_USERNAME ?? 'system';
@@ -41,7 +41,7 @@ const waitForModelsPage = async (page: Page) => {
 
 const createArchivedConfiguredModel = async (page: Page, name: string) => {
     const templates = await readJson<ModelTemplateRead[]>(
-        await page.request.get(chapUrl('/v1/crud/model-templates')),
+        await getChap(page, '/v1/crud/model-templates'),
         'Load model templates',
     );
     const naiveModelTemplate = templates.find(template => template.name === NAIVE_MODEL_TEMPLATE_NAME);

@@ -22,7 +22,9 @@
     border: 1px solid #e0e0e0;
     padding: 16px;
     max-block-size: 60vh;
-    overflow-y: auto;
+    overflow: auto;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
     font-family: monospace;
     font-size: 14px;
 }

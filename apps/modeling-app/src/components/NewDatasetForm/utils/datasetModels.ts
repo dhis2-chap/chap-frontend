@@ -28,6 +28,15 @@ export const datasetSupportsModel = (
     getRequiredCovariates(model).every(name => covariateNames.includes(name))
 );
 
+/**
+ * The columns a backtest sees: CHAP Core evaluates the chosen target column as `disease_cases`,
+ * replacing any existing `disease_cases` column.
+ */
+export const getBacktestColumns = (columns: string[], targetColumn: string): string[] => [
+    ...columns.filter(column => column !== targetColumn && column !== 'disease_cases'),
+    'disease_cases',
+];
+
 export type ColumnSuggestion = {
     columns: string[];
     /** Models that become runnable once all these columns are added. */

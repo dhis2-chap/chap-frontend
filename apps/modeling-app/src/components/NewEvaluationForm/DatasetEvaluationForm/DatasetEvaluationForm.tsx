@@ -22,7 +22,7 @@ import { ChapErrorNotice } from '../../ChapErrorNotice';
 import { useDatasets } from '@/hooks/useDatasets';
 import { useModels } from '@/hooks/useModels';
 import { DatasetOriginFilter, matchesOrigin, useDatasetOriginFilter } from '../../DatasetOriginFilter';
-import { datasetSupportsModel } from '../../NewDatasetForm/utils/datasetModels';
+import { datasetSupportsModel, getBacktestColumns } from '../../NewDatasetForm/utils/datasetModels';
 import { BacktestParameterFields } from '../BacktestParameterFields';
 import { backtestParametersSchema } from '../hooks/backtestParameters';
 import { getLegacyBacktestParameters, getMinimumEvaluationPeriods } from '../hooks/backtestDefaults';
@@ -36,6 +36,7 @@ import styles from './DatasetEvaluationForm.module.css';
 const schema = z.object({
     name: z.string().trim().min(1, { message: i18n.t('Name is required') }),
     datasetId: z.string(),
+    targetColumn: z.string(),
     backtestParameters: backtestParametersSchema.optional(),
     modelNames: z.array(z.string()).min(1),
 });
@@ -44,20 +45,25 @@ type FormValues = z.infer<typeof schema>;
 
 type Props = {
     initialDatasetId?: string;
+    benchmarkContext?: boolean;
 };
 
-export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
+export const DatasetEvaluationForm = ({ initialDatasetId = '', benchmarkContext = false }: Props) => {
     const datasets = useDatasets();
     const { models, isLoading: isModelsLoading, error: modelsError } = useModels();
     const navigate = useNavigate();
     const queryClient = useQueryClient();
     const { isAvailable: isMultiModelAvailable, isLoading: isVersionLoading } = useIsFeatureAvailable(Features.MULTI_MODEL_BACKTESTS);
+    const { isAvailable: isTargetColumnAvailable } = useIsFeatureAvailable(Features.BACKTEST_TARGET_COLUMN);
 
     const methods = useForm<FormValues>({
         resolver: zodResolver(schema),
-        defaultValues: { name: '', datasetId: initialDatasetId, modelNames: [] },
+        defaultValues: { name: '', datasetId: initialDatasetId, targetColumn: '', modelNames: [] },
     });
-    const [datasetId, modelNames, backtestParameters] = useWatch({ control: methods.control, name: ['datasetId', 'modelNames', 'backtestParameters'] });
+    const [datasetId, targetColumn, modelNames, backtestParameters] = useWatch({
+        control: methods.control,
+        name: ['datasetId', 'targetColumn', 'modelNames', 'backtestParameters'],
+    });
     const { origin } = useDatasetOriginFilter();
 
     const dataset = datasets.data?.find(item => String(item.id) === datasetId);
@@ -69,23 +75,33 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
         backtestParameters ?? getLegacyBacktestParameters(dataset?.periodType),
     );
     const isTooShort = periodCount != null && !!requiredPeriodCount && periodCount < requiredPeriodCount;
+    const columns = dataset?.covariates ?? [];
+    const defaultTargetColumn = columns.includes('disease_cases') ? 'disease_cases' : '';
+    // Chap Core < 2.4.0 always evaluates disease_cases.
+    const selectedTargetColumn = isTargetColumnAvailable && columns.includes(targetColumn) ? targetColumn : defaultTargetColumn;
     const compatibleModels = models?.filter(model => (
-        dataset && datasetSupportsModel(dataset.covariates ?? [], dataset.periodType ?? '', model)
+        dataset && selectedTargetColumn &&
+        datasetSupportsModel(getBacktestColumns(columns, selectedTargetColumn), dataset.periodType ?? '', model)
     )) ?? [];
     const selectedModels = compatibleModels.filter(model => modelNames.includes(model.name));
-    const canSubmit = selectedModels.length > 0 && !selectedModels.some(hasRevisionMismatch) &&
+    const canSubmit = selectedModels.length > 0 && !!selectedTargetColumn && !selectedModels.some(hasRevisionMismatch) &&
         !!dataset?.periodType && !isTooShort && dataset?.id != null;
 
-    const createEvaluation = useMutation<void, ApiError | Error, FormValues>({
+    const createEvaluation = useMutation<number | undefined, ApiError | Error, FormValues>({
         mutationFn: async ({ name, backtestParameters }: FormValues) => {
             const runnableModels = await Promise.all(
                 selectedModels.map(model => fetchRunnableModel(queryClient, model.id)),
             );
-            const request = { name, datasetId: dataset!.id!, ...(backtestParameters ?? getLegacyBacktestParameters(dataset!.periodType)) };
+            const request = {
+                name,
+                datasetId: dataset!.id!,
+                ...(isTargetColumnAvailable && { targetColumn: selectedTargetColumn }),
+                ...(backtestParameters ?? getLegacyBacktestParameters(dataset!.periodType)),
+            };
             const modelIds = runnableModels.map(model => model.name);
             if (isMultiModelAvailable) {
-                await BacktestsService.createBacktestsV1AnalyticsCreateBacktestsPost({ ...request, modelIds });
-                return;
+                const { specificationId } = await BacktestsService.createBacktestsV1AnalyticsCreateBacktestsPost({ ...request, modelIds });
+                return specificationId;
             }
             // Chap Core < 2.4.0 has no multi-model endpoint: queue one backtest per model,
             // named like the multi-model endpoint does, and keep failed models selected for retry.
@@ -99,7 +115,9 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
             }
         },
         onSettled: () => queryClient.invalidateQueries({ queryKey: ['jobs'] }),
-        onSuccess: () => navigate('/jobs'),
+        onSuccess: specificationId => navigate(
+            benchmarkContext && specificationId != null ? `/evaluate/benchmarks/${specificationId}` : '/jobs',
+        ),
     });
 
     const {
@@ -133,14 +151,18 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
         return (
             <div className={styles.container}>
                 <NoticeBox title={i18n.t('No saved datasets yet')}>
-                    {i18n.t('Save a dataset once and reuse it across evaluations, or import data for this evaluation only.')}
+                    {benchmarkContext
+                        ? i18n.t('Save a dataset first, then return here to run models in a benchmark.')
+                        : i18n.t('Save a dataset once and reuse it across evaluations, or import data for this evaluation only.')}
                     <ButtonStrip className={styles.emptyActions}>
                         <Button small primary onClick={() => navigate('/datasets/new')}>
                             {i18n.t('New dataset')}
                         </Button>
-                        <Button small secondary onClick={() => navigate('/evaluate/new')}>
-                            {i18n.t('Import from DHIS2 instead')}
-                        </Button>
+                        {!benchmarkContext && (
+                            <Button small secondary onClick={() => navigate('/evaluate/new')}>
+                                {i18n.t('Import from DHIS2 instead')}
+                            </Button>
+                        )}
                     </ButtonStrip>
                 </NoticeBox>
             </div>
@@ -160,7 +182,16 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
                             }
                         })}
                     >
-                        <NameInput disabled={createEvaluation.isLoading} />
+                        {benchmarkContext && (
+                            <NoticeBox title={i18n.t('How benchmarks work')}>
+                                {i18n.t('Runs with the same dataset, target column and backtest parameters appear in the same benchmark. The run name labels your model runs; it does not create a separate benchmark.')}
+                            </NoticeBox>
+                        )}
+                        <NameInput
+                            disabled={createEvaluation.isLoading}
+                            label={benchmarkContext ? i18n.t('Run name') : undefined}
+                            placeholder={benchmarkContext ? i18n.t('Benchmark model runs') : undefined}
+                        />
 
                         <div className={styles.datasetRow}>
                             <SingleSelectField
@@ -172,6 +203,7 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
                                 helpText={datasetOptions.length ? undefined : i18n.t('No datasets match the origin filter')}
                                 onChange={({ selected }) => {
                                     methods.setValue('datasetId', selected, { shouldDirty: true });
+                                    methods.setValue('targetColumn', '', { shouldDirty: true });
                                     methods.setValue('modelNames', [], { shouldDirty: true });
                                     createEvaluation.reset();
                                 }}
@@ -183,11 +215,29 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
                             <DatasetOriginFilter datasets={savedDatasets} dense={false} />
                         </div>
 
+                        {isTargetColumnAvailable && (
+                            <SingleSelectField
+                                label={i18n.t('Target column')}
+                                helpText={i18n.t('The dataset column the models predict and are scored against.')}
+                                selected={selectedTargetColumn}
+                                disabled={!dataset || createEvaluation.isLoading}
+                                dataTest="evaluation-target-column-select"
+                                onChange={({ selected }) => {
+                                    methods.setValue('targetColumn', selected, { shouldDirty: true });
+                                    createEvaluation.reset();
+                                }}
+                            >
+                                {columns.map(column => (
+                                    <SingleSelectOption key={column} value={column} label={column} />
+                                ))}
+                            </SingleSelectField>
+                        )}
+
                         <ModelsSelector
                             models={compatibleModels}
                             selectedModels={selectedModels}
                             disabled={createEvaluation.isLoading}
-                            disabledReason={dataset ? undefined : i18n.t('Pick a dataset first')}
+                            disabledReason={!dataset ? i18n.t('Pick a dataset first') : !selectedTargetColumn ? i18n.t('Pick a target column first') : undefined}
                             onChange={selected => methods.setValue(
                                 'modelNames',
                                 selected.map(model => model.name),
@@ -199,7 +249,7 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
                             <ModelHealthNotice key={model.id} model={model} />
                         ))}
 
-                        {dataset && !compatibleModels.length && (
+                        {dataset && selectedTargetColumn && !compatibleModels.length && (
                             <NoticeBox warning title={i18n.t('No compatible model')}>
                                 {i18n.t('No configured model matches this dataset’s covariates and period type.')}
                             </NoticeBox>
@@ -225,7 +275,7 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '' }: Props) => {
                                     loading={createEvaluation.isLoading}
                                     disabled={!canSubmit || createEvaluation.isLoading}
                                 >
-                                    {i18n.t('Start evaluation')}
+                                    {benchmarkContext ? i18n.t('Run benchmark') : i18n.t('Start evaluation')}
                                 </Button>
                             </ButtonStrip>
                         </div>

@@ -82,11 +82,12 @@ export class BacktestsService {
      * List backtest specifications: a dataset plus the parameters that make backtests under it comparable.
      *
      * A specification with several backtests under it is a benchmark. Filter by
-     * ``datasetId`` and any of the ``BacktestParams`` fields; the full tuple identifies at
+     * ``datasetId``, ``targetColumn`` and any of the ``BacktestParams`` fields; the full tuple identifies at
      * most one specification, which is how an external system finds a benchmark again
      * without storing the specification id. Rows carry counts only; fetch
      * ``/backtest-specifications/{id}`` for the backtests themselves.
      * @param datasetId Only specifications evaluating this dataset.
+     * @param targetColumn Only specifications evaluating this column.
      * @param nPeriods Number of periods to forecast at each split.
      * @param nSplits Total number of rolling train/test splits.
      * @param stride Number of periods to advance between successive splits.
@@ -97,6 +98,7 @@ export class BacktestsService {
      */
     public static getBacktestSpecificationsV1CrudBacktestSpecificationsGet(
         datasetId?: (number | null),
+        targetColumn?: (string | null),
         nPeriods?: (number | null),
         nSplits?: (number | null),
         stride?: (number | null),
@@ -108,6 +110,7 @@ export class BacktestsService {
             url: '/v1/crud/backtest-specifications',
             query: {
                 'datasetId': datasetId,
+                'targetColumn': targetColumn,
                 'nPeriods': nPeriods,
                 'nSplits': nSplits,
                 'stride': stride,
@@ -367,7 +370,7 @@ export class BacktestsService {
      *
      * Runs asynchronously; you get a job id and poll ``/v1/jobs/{id}`` (or
      * ``/v1/jobs/{id}/evaluation_result`` once finished) to find the resulting backtest.
-     * 404 if the referenced dataset does not exist.
+     * 404 if the referenced dataset does not exist; 422 if targetColumn is not a dataset column.
      * @param requestBody
      * @returns JobResponse Successful Response
      * @throws ApiError
@@ -394,7 +397,7 @@ export class BacktestsService {
      * which every backtest of the run files, so the results can be fetched from
      * ``GET /v1/crud/backtest-specifications/{id}`` without a second lookup, plus one job id
      * per model to poll via ``/v1/jobs/{id}``. 404 if the dataset or a model does not exist,
-     * 422 if no org unit has target data left to train on for these parameters.
+     * 422 if targetColumn is not a dataset column or no org unit has target data left to train on.
      * @param requestBody
      * @returns MakeBacktestsResponse Successful Response
      * @throws ApiError

@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-12T07:56:55.277Z\n"
-"PO-Revision-Date: 2026-10-12T07:56:55.277Z\n"
+"POT-Creation-Date: 2026-10-12T17:34:00.069Z\n"
+"PO-Revision-Date: 2026-10-12T17:34:00.070Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -16,6 +16,9 @@ msgstr "Compare evaluations"
 
 msgid "Benchmarks"
 msgstr "Benchmarks"
+
+msgid "New benchmark"
+msgstr "New benchmark"
 
 msgid "New evaluation"
 msgstr "New evaluation"
@@ -28,9 +31,6 @@ msgstr "Datasets"
 
 msgid "New dataset"
 msgstr "New dataset"
-
-msgid "Alert policies"
-msgstr "Alert policies"
 
 msgid "Prediction setups"
 msgstr "Prediction setups"
@@ -56,174 +56,6 @@ msgstr "Models"
 msgid "New model"
 msgstr "New model"
 
-msgid "CHAP API token (optional)"
-msgstr "CHAP API token (optional)"
-
-msgid ""
-"A token is configured. Leave blank to keep it, or enter a new token to "
-"replace it."
-msgstr ""
-"A token is configured. Leave blank to keep it, or enter a new token to "
-"replace it."
-
-msgid ""
-"Enter the token configured on your CHAP server. Leave blank if the server "
-"does not require one."
-msgstr ""
-"Enter the token configured on your CHAP server. Leave blank if the server "
-"does not require one."
-
-msgid ""
-"The token is saved in the DHIS2 route and sent to CHAP with each request. "
-"Users who can read the route configuration can access it."
-msgstr ""
-"The token is saved in the DHIS2 route and sent to CHAP with each request. "
-"Users who can read the route configuration can access it."
-
-msgid "Remove saved API token"
-msgstr "Remove saved API token"
-
-msgid "Delete alert policy"
-msgstr "Delete alert policy"
-
-msgid "Delete \"{{name}}\"? This cannot be undone."
-msgstr "Delete \"{{name}}\"? This cannot be undone."
-
-msgid "Unable to delete alert policy"
-msgstr "Unable to delete alert policy"
-
-msgid "Cancel"
-msgstr "Cancel"
-
-msgid "Delete"
-msgstr "Delete"
-
-msgid "Unable to load alert policies"
-msgstr "Unable to load alert policies"
-
-msgid "Name"
-msgstr "Name"
-
-msgid "Levels"
-msgstr "Levels"
-
-msgid "Created"
-msgstr "Created"
-
-msgid "Actions"
-msgstr "Actions"
-
-msgid "No alert policies yet. Create one to choose it in a prediction setup."
-msgstr "No alert policies yet. Create one to choose it in a prediction setup."
-
-msgid "Alert policy"
-msgstr "Alert policy"
-
-msgid "No alert policies yet."
-msgstr "No alert policies yet."
-
-msgid "Create a policy"
-msgstr "Create a policy"
-
-msgid "Policy"
-msgstr "Policy"
-
-msgid "Select an alert policy"
-msgstr "Select an alert policy"
-
-msgid "Save"
-msgstr "Save"
-
-msgid "Alerts"
-msgstr "Alerts"
-
-msgid "None"
-msgstr "None"
-
-msgid "Change policy"
-msgstr "Change policy"
-
-msgid "Enter a level name"
-msgstr "Enter a level name"
-
-msgid "Enter zero or more"
-msgstr "Enter zero or more"
-
-msgid "Enter a percentile between 0 and 100"
-msgstr "Enter a percentile between 0 and 100"
-
-msgid "Enter a whole number of years"
-msgstr "Enter a whole number of years"
-
-msgid "Enter a policy name"
-msgstr "Enter a policy name"
-
-msgid "Level names must be unique"
-msgstr "Level names must be unique"
-
-msgid "New alert policy"
-msgstr "New alert policy"
-
-msgid "Policy name"
-msgstr "Policy name"
-
-msgid ""
-"Add levels from least to most severe. A level fires when the forecast "
-"probability of exceeding its threshold reaches the minimum probability."
-msgstr ""
-"Add levels from least to most severe. A level fires when the forecast "
-"probability of exceeding its threshold reaches the minimum probability."
-
-msgid "Level name"
-msgstr "Level name"
-
-msgid "e.g. Monitor"
-msgstr "e.g. Monitor"
-
-msgid "Strategy"
-msgstr "Strategy"
-
-msgid "Percentile (%)"
-msgstr "Percentile (%)"
-
-msgid "SD above mean"
-msgstr "SD above mean"
-
-msgid "Baseline years"
-msgstr "Baseline years"
-
-msgid "All history"
-msgstr "All history"
-
-msgid "Min. probability"
-msgstr "Min. probability"
-
-msgid "Remove level"
-msgstr "Remove level"
-
-msgid "Add level"
-msgstr "Add level"
-
-msgid "Unable to create alert policy"
-msgstr "Unable to create alert policy"
-
-msgid "Create policy"
-msgstr "Create policy"
-
-msgid "{{percentile}}th percentile, all history"
-msgstr "{{percentile}}th percentile, all history"
-
-msgid "{{percentile}}th percentile, {{count}}-year baseline"
-msgid_plural "{{percentile}}th percentile, {{count}}-year baseline"
-msgstr[0] "{{percentile}}th percentile, {{count}}-year baseline"
-msgstr[1] "{{percentile}}th percentile, {{count}}-year baseline"
-
-msgid "mean + {{stdMultiplier}} SD"
-msgstr "mean + {{stdMultiplier}} SD"
-
-msgid "{{name}} · {{threshold}} · ≥{{probability}}%"
-msgstr "{{name}} · {{threshold}} · ≥{{probability}}%"
-
 msgid "View"
 msgstr "View"
 
@@ -239,11 +71,17 @@ msgstr "Rename"
 msgid "Download"
 msgstr "Download"
 
+msgid "Delete"
+msgstr "Delete"
+
 msgid "{{name}} (Copy)"
 msgstr "{{name}} (Copy)"
 
 msgid "Create new based on..."
 msgstr "Create new based on..."
+
+msgid "Cancel"
+msgstr "Cancel"
 
 msgid "Failed to load evaluation data. Please try again."
 msgstr "Failed to load evaluation data. Please try again."
@@ -253,6 +91,9 @@ msgstr "Close"
 
 msgid "Select which attributes to copy to the new run{{escape}}"
 msgstr "Select which attributes to copy to the new run{{escape}}"
+
+msgid "Name"
+msgstr "Name"
 
 msgid "Untitled"
 msgstr "Untitled"
@@ -300,8 +141,14 @@ msgstr "Name is required"
 msgid "Rename evaluation"
 msgstr "Rename evaluation"
 
+msgid "Save"
+msgstr "Save"
+
 msgid "ID"
 msgstr "ID"
+
+msgid "Created"
+msgstr "Created"
 
 msgid "Locations"
 msgstr "Locations"
@@ -310,6 +157,9 @@ msgid "Evaluated on {{count}} locations"
 msgid_plural "Evaluated on {{count}} locations"
 msgstr[0] "Evaluated on {{count}} locations"
 msgstr[1] "Evaluated on {{count}} locations"
+
+msgid "Actions"
+msgstr "Actions"
 
 msgid "Sort by {{column}}"
 msgstr "Sort by {{column}}"
@@ -367,6 +217,15 @@ msgstr "Learn more about Modeling and CHAP"
 
 msgid "Configure settings"
 msgstr "Configure settings"
+
+msgid "No datasets found"
+msgstr "No datasets found"
+
+msgid "No manually created datasets"
+msgstr "No manually created datasets"
+
+msgid "Dataset"
+msgstr "Dataset"
 
 msgid "Origin"
 msgstr "Origin"
@@ -680,6 +539,9 @@ msgstr "Period"
 
 msgid "Covariates"
 msgstr "Covariates"
+
+msgid "None"
+msgstr "None"
 
 msgid "Author"
 msgstr "Author"
@@ -1037,6 +899,9 @@ msgstr "Error loading datasets or models"
 msgid "No saved datasets yet"
 msgstr "No saved datasets yet"
 
+msgid "Save a dataset first, then return here to run models in a benchmark."
+msgstr "Save a dataset first, then return here to run models in a benchmark."
+
 msgid ""
 "Save a dataset once and reuse it across evaluations, or import data for "
 "this evaluation only."
@@ -1047,14 +912,38 @@ msgstr ""
 msgid "Import from DHIS2 instead"
 msgstr "Import from DHIS2 instead"
 
-msgid "Dataset"
-msgstr "Dataset"
+msgid "How benchmarks work"
+msgstr "How benchmarks work"
+
+msgid ""
+"Runs with the same dataset, target column and backtest parameters appear in "
+"the same benchmark. The run name labels your model runs; it does not create "
+"a separate benchmark."
+msgstr ""
+"Runs with the same dataset, target column and backtest parameters appear in "
+"the same benchmark. The run name labels your model runs; it does not create "
+"a separate benchmark."
+
+msgid "Run name"
+msgstr "Run name"
+
+msgid "Benchmark model runs"
+msgstr "Benchmark model runs"
 
 msgid "No datasets match the origin filter"
 msgstr "No datasets match the origin filter"
 
+msgid "Target column"
+msgstr "Target column"
+
+msgid "The dataset column the models predict and are scored against."
+msgstr "The dataset column the models predict and are scored against."
+
 msgid "Pick a dataset first"
 msgstr "Pick a dataset first"
+
+msgid "Pick a target column first"
+msgstr "Pick a target column first"
 
 msgid "No compatible model"
 msgstr "No compatible model"
@@ -1071,6 +960,9 @@ msgid ""
 msgstr ""
 "This dataset has {{periodCount}} periods, but an evaluation needs at least "
 "{{requiredPeriodCount}}."
+
+msgid "Run benchmark"
+msgstr "Run benchmark"
 
 msgid "Start evaluation"
 msgstr "Start evaluation"
@@ -1291,8 +1183,8 @@ msgstr "Last run {{timeAgo}} ago"
 msgid "No runs yet"
 msgstr "No runs yet"
 
-msgid "Completed predictions"
-msgstr "Completed predictions"
+msgid "Predictions"
+msgstr "Predictions"
 
 msgid "Running job"
 msgstr "Running job"
@@ -1309,12 +1201,8 @@ msgstr "Training data cutoff"
 msgid "Error loading prediction runs"
 msgstr "Error loading prediction runs"
 
-msgid ""
-"No completed predictions yet. Run a prediction to start producing "
-"predictions."
-msgstr ""
-"No completed predictions yet. Run a prediction to start producing "
-"predictions."
+msgid "No predictions yet. Run a prediction to start producing predictions."
+msgstr "No predictions yet. Run a prediction to start producing predictions."
 
 msgid "Prediction run deleted"
 msgstr "Prediction run deleted"
@@ -1846,12 +1734,8 @@ msgstr "Prediction run"
 msgid "Outbreak thresholds"
 msgstr "Outbreak thresholds"
 
-msgid ""
-"Preview outbreak status and threshold overlays for this run. Saved alert "
-"policies are configured on the prediction setup."
-msgstr ""
-"Preview outbreak status and threshold overlays for this run. Saved alert "
-"policies are configured on the prediction setup."
+msgid "Show outbreak status and threshold overlays for this run."
+msgstr "Show outbreak status and threshold overlays for this run."
 
 msgid ""
 "There was a problem loading the prediction data required for this "
@@ -2125,6 +2009,9 @@ msgstr "Lower percentile (%)"
 
 msgid "Upper percentile (%)"
 msgstr "Upper percentile (%)"
+
+msgid "Baseline years"
+msgstr "Baseline years"
 
 msgid ""
 "Most recent complete years in the dataset. Leave empty to use all available "
@@ -2524,127 +2411,6 @@ msgstr "Settings saved successfully"
 msgid "Failed to save settings"
 msgstr "Failed to save settings"
 
-msgid "Route configuration"
-msgstr "Route configuration"
-
-msgid "No route found."
-msgstr "No route found."
-
-msgid "Add route"
-msgstr "Add route"
-
-msgid "Delete route"
-msgstr "Delete route"
-
-msgid "Are you sure you want to delete this route?"
-msgstr "Are you sure you want to delete this route?"
-
-msgid "Edit route"
-msgstr "Edit route"
-
-msgid "Public access"
-msgstr "Public access"
-
-msgid ""
-"Your route is public and can be accessed by anyone. This can potentially "
-"expose sensitive data. If you want to restrict access, click the "
-"\"Sharing\" button and remove access for \"All users\"."
-msgstr ""
-"Your route is public and can be accessed by anyone. This can potentially "
-"expose sensitive data. If you want to restrict access, click the "
-"\"Sharing\" button and remove access for \"All users\"."
-
-msgid "Sharing"
-msgstr "Sharing"
-
-msgid "Edit"
-msgstr "Edit"
-
-msgid "The token must not contain line breaks"
-msgstr "The token must not contain line breaks"
-
-msgid "Invalid URL format"
-msgstr "Invalid URL format"
-
-msgid "URL is required"
-msgstr "URL is required"
-
-msgid "URL must end with a double wildcard (/**)"
-msgstr "URL must end with a double wildcard (/**)"
-
-msgid "CHAP Core URL"
-msgstr "CHAP Core URL"
-
-msgid "Route settings"
-msgstr "Route settings"
-
-msgid ""
-"There was an error loading the route settings. Please try to reload the "
-"page."
-msgstr ""
-"There was an error loading the route settings. Please try to reload the "
-"page."
-
-msgid "If the problem persists, please contact your system administrator."
-msgstr "If the problem persists, please contact your system administrator."
-
-msgid "You do not have permission to add or modify routes."
-msgstr "You do not have permission to add or modify routes."
-
-msgid "If you think this is an error, please contact your system administrator."
-msgstr "If you think this is an error, please contact your system administrator."
-
-msgid "Code"
-msgstr "Code"
-
-msgid "URL"
-msgstr "URL"
-
-msgid "API token"
-msgstr "API token"
-
-msgid "Configured"
-msgstr "Configured"
-
-msgid "Not configured"
-msgstr "Not configured"
-
-msgid "Authorities"
-msgstr "Authorities"
-
-msgid "Low response timeout"
-msgstr "Low response timeout"
-
-msgid ""
-"The response timeout is currently set to {{timeout}} seconds. This may "
-"cause long-running requests to fail before they complete. We recommend "
-"increasing it to {{recommended}} seconds."
-msgstr ""
-"The response timeout is currently set to {{timeout}} seconds. This may "
-"cause long-running requests to fail before they complete. We recommend "
-"increasing it to {{recommended}} seconds."
-
-msgid "Increase to {{recommended}} seconds"
-msgstr "Increase to {{recommended}} seconds"
-
-msgid "Error updating route timeout"
-msgstr "Error updating route timeout"
-
-msgid "Route timeout updated successfully"
-msgstr "Route timeout updated successfully"
-
-msgid "Error deleting route"
-msgstr "Error deleting route"
-
-msgid "Route deleted successfully"
-msgstr "Route deleted successfully"
-
-msgid "Error saving route"
-msgstr "Error saving route"
-
-msgid "Route saved successfully"
-msgstr "Route saved successfully"
-
 msgid "Data Pruning"
 msgstr "Data Pruning"
 
@@ -2653,12 +2419,6 @@ msgstr "Requires superuser authority"
 
 msgid "Model not found"
 msgstr "Model not found"
-
-msgid "Manage the policies prediction setups use to raise alerts."
-msgstr "Manage the policies prediction setups use to raise alerts."
-
-msgid "New policy"
-msgstr "New policy"
 
 msgid ""
 "The selected models are no longer compatible with this dataset. Choose "
@@ -2815,16 +2575,23 @@ msgstr "Could not load benchmarks"
 msgid "No benchmarks yet"
 msgstr "No benchmarks yet"
 
-msgid "Benchmarks appear when evaluations are run on a saved dataset."
-msgstr "Benchmarks appear when evaluations are run on a saved dataset."
+msgid ""
+"A benchmark is defined by a saved dataset and backtest parameters. Run "
+"models to compare their performance."
+msgstr ""
+"A benchmark is defined by a saved dataset and backtest parameters. Run "
+"models to compare their performance."
 
 msgid "{{count}} model runs in this benchmark"
 msgid_plural "{{count}} model runs in this benchmark"
 msgstr[0] "{{count}} model runs in this benchmark"
 msgstr[1] "{{count}} model runs in this benchmark"
 
-msgid "No benchmarks match the selected dataset origin."
-msgstr "No benchmarks match the selected dataset origin."
+msgid "No benchmarks match the selected filters."
+msgstr "No benchmarks match the selected filters."
+
+msgid "Back to benchmarks"
+msgstr "Back to benchmarks"
 
 msgid "Run predictions, review activity, and manage this setup."
 msgstr "Run predictions, review activity, and manage this setup."
