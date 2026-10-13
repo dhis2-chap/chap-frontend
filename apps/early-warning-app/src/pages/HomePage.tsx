@@ -9,8 +9,8 @@ import { ErrorNotice, Loading } from '../components/StateViews';
 export const HomePage = () => {
     const { route, isLoading: isRouteLoading, error: routeError } = useRoute();
     const connection = useQuery({
-        queryKey: ['chapHealth'],
-        queryFn: () => SystemService.healthHealthGet(),
+        queryKey: ['chapReadiness'],
+        queryFn: () => SystemService.readinessHealthReadyGet(),
         enabled: !!route,
     });
 

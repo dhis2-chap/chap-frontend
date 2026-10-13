@@ -1,4 +1,4 @@
- .layout {
+.layout {
     display: grid;
     grid-template-columns: 240px minmax(0, 1fr);
     height: 100%;

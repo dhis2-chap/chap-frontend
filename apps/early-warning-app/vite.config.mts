@@ -7,10 +7,5 @@ export default defineConfig({
             allow: [path.resolve(__dirname, '../..')],
         },
     },
-    resolve: {
-        alias: {
-            '@': path.resolve(__dirname, 'src'),
-        },
-    },
     clearScreen: true,
 });
