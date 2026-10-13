@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-13T07:40:37.948Z\n"
-"PO-Revision-Date: 2026-10-13T07:40:37.948Z\n"
+"POT-Creation-Date: 2026-10-13T07:43:41.376Z\n"
+"PO-Revision-Date: 2026-10-13T07:43:41.376Z\n"
 
 msgid "Forecast"
 msgstr "Forecast"
@@ -71,6 +71,19 @@ msgstr "Early Warning"
 
 msgid "Review queue"
 msgstr "Review queue"
+
+msgid "Import forecasts into DHIS2"
+msgstr "Import forecasts into DHIS2"
+
+msgid ""
+"Configure a forecast data-element mapping on the prediction setup in the "
+"Modeling App to enable import."
+msgstr ""
+"Configure a forecast data-element mapping on the prediction setup in the "
+"Modeling App to enable import."
+
+msgid "Organisation units to import"
+msgstr "Organisation units to import"
 
 msgid "Unable to load data"
 msgstr "Unable to load data"

@@ -1,4 +1,5 @@
 import {
+    mapForecastDataValues,
     DEFAULT_DHIS2_CALENDAR,
     DEFAULT_DHIS2_LOCALE,
     getLastNPeriodIds,
@@ -12,7 +13,6 @@ import type {
     EndemicThresholdPoint,
     OutbreakIndicator,
     PredictionEntry,
-    QuantileKey,
 } from '@dhis2-chap/ui';
 
 export const STANDARD_QUANTILES = [0.1, 0.25, 0.5, 0.75, 0.9];
@@ -21,22 +21,6 @@ const CLEAR_WINDOW_PERIODS_BY_TYPE = {
     MONTHLY: 12,
     WEEKLY: 52,
 } as const;
-
-const QUANTILE_STRINGS = {
-    QUANTILE_LOW: 'quantile_low',
-    MEDIAN: 'median',
-    QUANTILE_HIGH: 'quantile_high',
-    QUANTILE_MID_LOW: 'quantile_mid_low',
-    QUANTILE_MID_HIGH: 'quantile_mid_high',
-} as const;
-
-const QUANTILE_MAP: Record<number, QuantileKey> = {
-    0.1: QUANTILE_STRINGS.QUANTILE_LOW,
-    0.25: QUANTILE_STRINGS.QUANTILE_MID_LOW,
-    0.5: QUANTILE_STRINGS.MEDIAN,
-    0.75: QUANTILE_STRINGS.QUANTILE_MID_HIGH,
-    0.9: QUANTILE_STRINGS.QUANTILE_HIGH,
-};
 
 export type QuantileMapping = {
     quantileLowId: string;
@@ -75,28 +59,6 @@ type BuildClearDataValuesOptions = BuildClearPeriodIdsOptions & {
     endemicThresholdPeriodIds?: string[];
 };
 
-const mapQuantileToKey = (quantile: number): QuantileKey | null => QUANTILE_MAP[quantile] ?? null;
-
-const mapQuantileKeyToDataElement = (
-    quantileKey: QuantileKey,
-    quantileMapping: QuantileMapping,
-): string => {
-    switch (quantileKey) {
-        case QUANTILE_STRINGS.QUANTILE_LOW:
-            return quantileMapping.quantileLowId;
-        case QUANTILE_STRINGS.MEDIAN:
-            return quantileMapping.quantileMedianId;
-        case QUANTILE_STRINGS.QUANTILE_HIGH:
-            return quantileMapping.quantileHighId;
-        case QUANTILE_STRINGS.QUANTILE_MID_LOW:
-            return quantileMapping.quantileMidLowId;
-        case QUANTILE_STRINGS.QUANTILE_MID_HIGH:
-            return quantileMapping.quantileMidHighId;
-        default:
-            throw new Error(`Unknown quantile key: ${quantileKey}`);
-    }
-};
-
 export const deduplicateIds = (ids: string[]): string[] => (
     Array.from(new Set(ids.filter(Boolean)))
 );
@@ -119,21 +81,13 @@ export const transformPredictionEntriesToDataValues = (
     predictionEntries: PredictionEntry[],
     quantileMapping: QuantileMapping,
 ): PredictionDataValue[] => (
-    predictionEntries
-        .map((entry) => {
-            const quantileKey = mapQuantileToKey(entry.quantile);
-            if (!quantileKey) {
-                return null;
-            }
-
-            return {
-                dataElement: mapQuantileKeyToDataElement(quantileKey, quantileMapping),
-                period: entry.period,
-                orgUnit: entry.orgUnit,
-                value: entry.value.toString(),
-            };
-        })
-        .filter((value): value is PredictionDataValue => value !== null)
+    mapForecastDataValues(predictionEntries, [
+        { quantile: 'quantile_low', dataElementId: quantileMapping.quantileLowId },
+        { quantile: 'quantile_mid_low', dataElementId: quantileMapping.quantileMidLowId },
+        { quantile: 'median', dataElementId: quantileMapping.quantileMedianId },
+        { quantile: 'quantile_mid_high', dataElementId: quantileMapping.quantileMidHighId },
+        { quantile: 'quantile_high', dataElementId: quantileMapping.quantileHighId },
+    ])
 );
 
 export const transformOutbreakIndicatorsToDataValues = (
