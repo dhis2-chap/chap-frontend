@@ -140,7 +140,8 @@ export class PredictionSetupsService {
      * arrived, a model investigation, etc.). Returns a job id; track it via
      * ``/v1/jobs/{id}`` or filter the jobs list with ``predictionSetupId`` to see every
      * job this setup has launched. Returns 404 if the setup is unknown, 409 if its
-     * configured model has been archived, 422 if ``provided_data`` is empty.
+     * configured model has been archived, 422 if ``provided_data`` is empty or missing
+     * the backtest's target column. Forecasts use the same target as the backtest.
      * @param predictionSetupId
      * @param requestBody
      * @returns JobResponse Successful Response
