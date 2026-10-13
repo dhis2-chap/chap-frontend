@@ -22,6 +22,7 @@ import { useAlertPolicies, useDeleteAlertPolicy } from '@/hooks/useAlertPolicies
 import { getChapErrorMessage } from '@/utils/chapErrors';
 import { TableActionButton } from '../TableActionButton';
 import { describeAlertLevel } from './describeAlertLevel';
+import { sortAlertLevels } from './sortAlertLevels';
 import styles from './BackendAlerts.module.css';
 
 const CONFLICT = 409;
@@ -92,7 +93,7 @@ export const AlertPoliciesTable = () => {
                             <DataTableCell>{policy.name}</DataTableCell>
                             <DataTableCell>
                                 <div className={styles.tags}>
-                                    {policy.levels?.map(level => (
+                                    {sortAlertLevels(policy.levels ?? []).map(level => (
                                         <Tag key={level.name}>{describeAlertLevel(level)}</Tag>
                                     ))}
                                 </div>
