@@ -24,6 +24,7 @@ import {
 import { useCreateAlertPolicy } from '@/hooks/useAlertPolicies';
 import { useThresholdStrategies } from '@/hooks/useThresholdStrategies';
 import { getChapErrorMessage } from '@/utils/chapErrors';
+import { sortAlertLevels } from './sortAlertLevels';
 import styles from './BackendAlerts.module.css';
 
 const isNumberIn = (value: string, min: number, max: number) => (
@@ -98,7 +99,7 @@ export const CreateAlertPolicyModal = ({ onClose }: { onClose: () => void }) => 
 
     const save = handleSubmit(async (values) => {
         try {
-            await create.mutateAsync({ name: values.name.trim(), levels: values.levels.map(toAlertLevel) });
+            await create.mutateAsync({ name: values.name.trim(), levels: sortAlertLevels(values.levels.map(toAlertLevel)) });
             onClose();
         } catch {
             // The mutation error is shown below and the form stays open for a retry.
@@ -124,7 +125,7 @@ export const CreateAlertPolicyModal = ({ onClose }: { onClose: () => void }) => 
                         )}
                     />
                     <p className={styles.help}>
-                        {i18n.t('Add levels from least to most severe. A level fires when the forecast probability of exceeding its threshold reaches the minimum probability.')}
+                        {i18n.t('Levels are saved from least to most strict, where a higher minimum probability is stricter. A level fires when the forecast probability of exceeding its threshold reaches the minimum probability.')}
                     </p>
                     {fields.map((field, index) => {
                         const strategy = levels[index]?.strategy;

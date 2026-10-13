@@ -10,7 +10,7 @@ export const AlertsPage = () => {
         <>
             <PageHeader
                 pageTitle={i18n.t('Alert policies')}
-                pageDescription={i18n.t('Create the policies used to raise alerts from forecasts.')}
+                pageDescription={i18n.t('Manage the policies used to raise alerts from forecasts.')}
                 setDrawerOpen={setCreating}
                 setDrawerOpenText={i18n.t('New policy')}
             />

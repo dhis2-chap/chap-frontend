@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-13T12:22:00.618Z\n"
-"PO-Revision-Date: 2026-10-13T12:22:00.618Z\n"
+"POT-Creation-Date: 2026-10-13T12:43:07.019Z\n"
+"PO-Revision-Date: 2026-10-13T12:43:07.020Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -59,6 +59,28 @@ msgstr "Models"
 msgid "New model"
 msgstr "New model"
 
+msgid ""
+"This policy is used by a prediction setup or has alerts raised against it, "
+"so it cannot be deleted."
+msgstr ""
+"This policy is used by a prediction setup or has alerts raised against it, "
+"so it cannot be deleted."
+
+msgid "Delete alert policy"
+msgstr "Delete alert policy"
+
+msgid "Delete \"{{name}}\"? This cannot be undone."
+msgstr "Delete \"{{name}}\"? This cannot be undone."
+
+msgid "Unable to delete alert policy"
+msgstr "Unable to delete alert policy"
+
+msgid "Cancel"
+msgstr "Cancel"
+
+msgid "Delete"
+msgstr "Delete"
+
 msgid "Unable to load alert policies"
 msgstr "Unable to load alert policies"
 
@@ -70,6 +92,9 @@ msgstr "Levels"
 
 msgid "Created"
 msgstr "Created"
+
+msgid "Actions"
+msgstr "Actions"
 
 msgid "No alert policies yet."
 msgstr "No alert policies yet."
@@ -99,11 +124,13 @@ msgid "Policy name"
 msgstr "Policy name"
 
 msgid ""
-"Add levels from least to most severe. A level fires when the forecast "
-"probability of exceeding its threshold reaches the minimum probability."
+"Levels are saved from least to most strict, where a higher minimum "
+"probability is stricter. A level fires when the forecast probability of "
+"exceeding its threshold reaches the minimum probability."
 msgstr ""
-"Add levels from least to most severe. A level fires when the forecast "
-"probability of exceeding its threshold reaches the minimum probability."
+"Levels are saved from least to most strict, where a higher minimum "
+"probability is stricter. A level fires when the forecast probability of "
+"exceeding its threshold reaches the minimum probability."
 
 msgid "Level name"
 msgstr "Level name"
@@ -138,9 +165,6 @@ msgstr "Add level"
 msgid "Unable to create alert policy"
 msgstr "Unable to create alert policy"
 
-msgid "Cancel"
-msgstr "Cancel"
-
 msgid "Create policy"
 msgstr "Create policy"
 
@@ -172,9 +196,6 @@ msgstr "Rename"
 
 msgid "Download"
 msgstr "Download"
-
-msgid "Delete"
-msgstr "Delete"
 
 msgid "{{name}} (Copy)"
 msgstr "{{name}} (Copy)"
@@ -250,9 +271,6 @@ msgid "Evaluated on {{count}} locations"
 msgid_plural "Evaluated on {{count}} locations"
 msgstr[0] "Evaluated on {{count}} locations"
 msgstr[1] "Evaluated on {{count}} locations"
-
-msgid "Actions"
-msgstr "Actions"
 
 msgid "Sort by {{column}}"
 msgstr "Sort by {{column}}"
@@ -2510,8 +2528,8 @@ msgstr "Requires superuser authority"
 msgid "Model not found"
 msgstr "Model not found"
 
-msgid "Create the policies used to raise alerts from forecasts."
-msgstr "Create the policies used to raise alerts from forecasts."
+msgid "Manage the policies used to raise alerts from forecasts."
+msgstr "Manage the policies used to raise alerts from forecasts."
 
 msgid "New policy"
 msgstr "New policy"

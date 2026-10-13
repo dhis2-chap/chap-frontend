@@ -16,3 +16,11 @@ export const useCreateAlertPolicy = () => {
         onSuccess: () => queryClient.invalidateQueries({ queryKey: ALERT_POLICIES_QUERY_KEY }),
     });
 };
+
+export const useDeleteAlertPolicy = () => {
+    const queryClient = useQueryClient();
+    return useMutation<unknown, ApiError, number>({
+        mutationFn: (id: number) => AlertPoliciesService.deleteAlertPolicyV1CrudAlertPoliciesAlertPolicyIdDelete(id),
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: ALERT_POLICIES_QUERY_KEY }),
+    });
+};
