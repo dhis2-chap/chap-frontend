@@ -11,6 +11,7 @@ export type SubmitReviewInput = {
     accepted: AlertRead[];
     declined: AlertRead[];
     dataValues: ForecastDataValue[];
+    clearValues?: Omit<ForecastDataValue, 'value'>[];
     afterImport?: () => Promise<unknown>;
 };
 
@@ -30,8 +31,13 @@ export const useSubmitReview = () => {
             const importValues = async (dryRun: boolean) => assertDataValueSetImportAccepted(await engine.mutate({
                 resource: 'dataValueSets', type: 'create', params: { dryRun }, data: { dataValues },
             }), { allowIgnored: false });
+            const clearValues = input.clearValues ?? [];
+            const clearIndicators = async (dryRun: boolean) => assertDataValueSetImportAccepted(await engine.mutate({
+                resource: 'dataValueSets', type: 'create', params: { dryRun, importStrategy: 'DELETE' }, data: { dataValues: clearValues },
+            }), { allowIgnored: false });
             const tasks: ReviewTask[] = [];
             if (dataValues.length) tasks.push({ id: 'validate', step: 'validateImport', run: () => importValues(true) });
+            if (clearValues.length) tasks.push({ id: 'validateClear', step: 'validateImport', run: () => clearIndicators(true) });
             for (const [id, alerts, approved] of [
                 ['accept', accepted, AlertApproval.APPROVED],
                 ['decline', declined, AlertApproval.DECLINED],
@@ -39,6 +45,7 @@ export const useSubmitReview = () => {
                 if (alerts.length) tasks.push({ id, step: 'recordDecisions', run: () => AlertsService.approveAlertsV1CrudAlertsApprovePost({ alertIds: alerts.map(alert => alert.id), approved, approvedBy: reviewer }) });
             }
             if (dataValues.length) tasks.push({ id: 'import', step: 'importForecast', run: () => importValues(false) });
+            if (clearValues.length) tasks.push({ id: 'clear', step: 'importForecast', run: () => clearIndicators(false) });
             if (input.afterImport) tasks.push({ id: 'saveImport', step: 'saveImport', run: input.afterImport });
             await runReviewTasks(tasks, completed.current, (step, status) => {
                 if (step !== 'validateImport' && status === 'running') writesStarted.current = true;
