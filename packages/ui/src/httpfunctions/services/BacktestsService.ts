@@ -30,7 +30,8 @@ export class BacktestsService {
      * periods, regions) but not the raw forecasts — fetch those via
      * ``/backtests/{id}/full`` only when you actually need them. Filter by
      * ``specificationId`` to get the backtests that are comparable with each other, or by
-     * ``datasetId`` for everything run against one dataset.
+     * ``datasetId`` for everything run against one dataset. Backtests of built-in baseline
+     * models are reference results and are not listed.
      * @param specificationId
      * @param datasetId
      * @returns BacktestRead Successful Response
@@ -129,7 +130,8 @@ export class BacktestsService {
      * This is the benchmark leaderboard: each backtest row is the ``BacktestRead`` shape
      * with aggregate metrics, the configured model and its template, so a client can rank
      * models without a request per backtest. Forecasts and per-org-unit metrics are not
-     * included. 404 if the id is unknown.
+     * included, and neither are backtests of built-in baseline models. Baselines that have not
+     * run on the specification yet are queued after the response is sent. 404 if the id is unknown.
      * @param specificationId
      * @returns BacktestSpecificationRead Successful Response
      * @throws ApiError

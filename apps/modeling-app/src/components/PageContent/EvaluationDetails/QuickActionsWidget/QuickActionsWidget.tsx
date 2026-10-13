@@ -59,6 +59,7 @@ export const QuickActionsWidget = ({
                 backtestId: evaluationId,
                 name: values.name,
                 quantileTargets: buildQuantileTargetsFromForm(values),
+                alertPolicyId: values.alert_policy_id ? Number(values.alert_policy_id) : null,
             },
         });
         setMarkReadyModalIsOpen(false);

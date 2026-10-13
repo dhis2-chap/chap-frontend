@@ -71,6 +71,7 @@ export type { ModelSpecRead } from './models/ModelSpecRead';
 export type { ModelTemplateDB } from './models/ModelTemplateDB';
 export type { ModelTemplateFromService } from './models/ModelTemplateFromService';
 export type { ModelTemplateRead } from './models/ModelTemplateRead';
+export { ModelTemplateRole } from './models/ModelTemplateRole';
 export type { MultiLineString } from './models/MultiLineString';
 export type { MultiPoint } from './models/MultiPoint';
 export type { MultiPolygon } from './models/MultiPolygon';

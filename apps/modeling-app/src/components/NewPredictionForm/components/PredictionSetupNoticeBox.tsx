@@ -16,9 +16,10 @@ type Props = {
     modelId: string;
     periodType: SupportedPeriodType;
     fromPeriod: string;
+    alertPolicyName?: string;
 };
 
-export const PredictionSetupNoticeBox = ({ modelId, periodType, fromPeriod }: Props) => {
+export const PredictionSetupNoticeBox = ({ modelId, periodType, fromPeriod, alertPolicyName }: Props) => {
     const { models } = useModels();
 
     const modelName = useMemo(() => {
@@ -48,6 +49,14 @@ export const PredictionSetupNoticeBox = ({ modelId, periodType, fromPeriod }: Pr
                 <div className={styles.metaRow}>
                     <dt className={styles.metaTerm}>{i18n.t('Training start')}</dt>
                     <dd className={styles.metaDefinition}>{formatPeriodId(fromPeriod) ?? fromPeriod}</dd>
+                </div>
+                <div className={styles.metaRow}>
+                    <dt className={styles.metaTerm}>{i18n.t('Alert policy')}</dt>
+                    <dd className={styles.metaDefinition} data-test="new-prediction-alert-policy">
+                        {alertPolicyName
+                            ? i18n.t('{{policy}} (raises pending alerts for review)', { policy: alertPolicyName })
+                            : i18n.t('None (this run raises no alerts)')}
+                    </dd>
                 </div>
             </dl>
         </div>
