@@ -21,6 +21,7 @@ import { useNavigationBlocker } from '../../hooks/useNavigationBlocker';
 import { NavigationConfirmModal } from '../NavigationConfirmModal';
 import { type Dhis2PeriodSettings, useDhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
 import { useModels } from '@/hooks/useModels';
+import { usePredictionSetup } from '@/hooks/usePredictionSetup';
 import { hasRevisionMismatch } from '@/utils/modelHealth';
 import { ModelHealthNotice } from '@/components/ModelHealth/ModelHealth';
 
@@ -66,6 +67,7 @@ const NewPredictionFormFields = ({
 
     const { models } = useModels();
     const model = models?.find(model => String(model.id) === context.initialValues.modelId);
+    const { predictionSetup } = usePredictionSetup(predictionSetupId);
 
     const {
         showConfirmModal,
@@ -85,6 +87,7 @@ const NewPredictionFormFields = ({
                                 modelId={context.initialValues.modelId}
                                 periodType={periodType}
                                 fromPeriod={fromPeriod}
+                                alertPolicyName={predictionSetup?.alertPolicy?.name}
                             />
 
                             <ModelHealthNotice model={model} />

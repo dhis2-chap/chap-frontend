@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-13T12:43:07.019Z\n"
-"PO-Revision-Date: 2026-10-13T12:43:07.020Z\n"
+"POT-Creation-Date: 2026-10-13T16:59:24.918Z\n"
+"PO-Revision-Date: 2026-10-13T16:59:24.919Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -1145,6 +1145,15 @@ msgstr "Run a new prediction"
 msgid "Training start"
 msgstr "Training start"
 
+msgid "Alert policy"
+msgstr "Alert policy"
+
+msgid "{{policy}} (raises pending alerts for review)"
+msgstr "{{policy}} (raises pending alerts for review)"
+
+msgid "None (this run raises no alerts)"
+msgstr "None (this run raises no alerts)"
+
 msgid "Please select a period"
 msgstr "Please select a period"
 
@@ -2068,6 +2077,23 @@ msgstr "Failed to delete prediction setup"
 
 msgid "Setup name"
 msgstr "Setup name"
+
+msgid ""
+"No alert policies exist yet. Create one under Alert policies to raise "
+"alerts from this setup."
+msgstr ""
+"No alert policies exist yet. Create one under Alert policies to raise "
+"alerts from this setup."
+
+msgid ""
+"Every prediction run automatically raises pending alerts with this policy, "
+"for review before release. Leave empty to run predictions without alerts."
+msgstr ""
+"Every prediction run automatically raises pending alerts with this policy, "
+"for review before release. Leave empty to run predictions without alerts."
+
+msgid "No alert policy"
+msgstr "No alert policy"
 
 msgid "You can change this configuration at any point."
 msgstr "You can change this configuration at any point."

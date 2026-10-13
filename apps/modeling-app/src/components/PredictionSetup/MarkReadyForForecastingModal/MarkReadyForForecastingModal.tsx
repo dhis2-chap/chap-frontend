@@ -7,6 +7,8 @@ import {
     ModalContent,
     ModalTitle,
     NoticeBox,
+    SingleSelectField,
+    SingleSelectOption,
     Switch,
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
@@ -16,6 +18,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { useAlertPolicies } from '@/hooks/useAlertPolicies';
 import { DataItemSelect } from '../../PageContent/PredictionImport/QuantileMappingForm/DataItemSelect';
 import {
     ALERT_KEY,
@@ -38,9 +41,13 @@ const markReadyForForecastingSchema = z.object({
     quantile_mid_low: quantileFieldSchema,
     quantile_low: quantileFieldSchema,
     outbreak_indicator: quantileFieldSchema,
+    alert_policy_id: z.string(),
 });
 
-export type MarkReadyForForecastingFormValues = PredictionSetupFormValues;
+export type MarkReadyForForecastingFormValues = PredictionSetupFormValues & {
+    // Empty string means the setup raises no alerts.
+    alert_policy_id: string;
+};
 
 const quantileFields: Array<{
     name: typeof QUANTILE_KEYS[number];
@@ -68,6 +75,8 @@ export const MarkReadyForForecastingModal = ({
     title = i18n.t('Create prediction setup'),
     isSubmitting = false,
 }: MarkReadyForForecastingModalProps) => {
+    const { data: alertPolicies, isLoading: alertPoliciesLoading } = useAlertPolicies();
+    const hasNoAlertPolicies = !alertPoliciesLoading && !alertPolicies?.length;
     const [importMappingIsEnabled, setImportMappingIsEnabled] = useState(
         defaultValues?.use_import_mapping ?? false,
     );
@@ -89,6 +98,7 @@ export const MarkReadyForForecastingModal = ({
             quantile_mid_low: '',
             quantile_low: '',
             outbreak_indicator: '',
+            alert_policy_id: '',
             ...defaultValues,
         },
     });
@@ -134,6 +144,31 @@ export const MarkReadyForForecastingModal = ({
                                     dataTest="ready-configuration-name-input"
                                     required
                                 />
+                            )}
+                        />
+                        <Controller
+                            name="alert_policy_id"
+                            control={control}
+                            render={({ field }) => (
+                                <SingleSelectField
+                                    className={styles.alertPolicySelect}
+                                    label={i18n.t('Alert policy')}
+                                    helpText={hasNoAlertPolicies
+                                        ? i18n.t('No alert policies exist yet. Create one under Alert policies to raise alerts from this setup.')
+                                        : i18n.t('Every prediction run automatically raises pending alerts with this policy, for review before release. Leave empty to run predictions without alerts.')}
+                                    placeholder={i18n.t('No alert policy')}
+                                    loading={alertPoliciesLoading}
+                                    disabled={hasNoAlertPolicies}
+                                    clearable
+                                    // An unmatched selected value makes SingleSelect throw in dev builds.
+                                    selected={alertPolicies?.some(policy => String(policy.id) === field.value) ? field.value : ''}
+                                    onChange={({ selected }) => field.onChange(selected ?? '')}
+                                    dataTest="prediction-setup-alert-policy-select"
+                                >
+                                    {alertPolicies?.map(policy => (
+                                        <SingleSelectOption key={policy.id} value={String(policy.id)} label={policy.name} />
+                                    ))}
+                                </SingleSelectField>
                             )}
                         />
                         <NoticeBox
