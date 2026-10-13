@@ -37,6 +37,7 @@ export const SubmitReviewModal = ({ input, pendingCount, onClose, onDone }: {
                     })}
                 </p>
                 <p>{i18n.t('{{count}} data values to import', { count: input.dataValues.length })}</p>
+                {!!input.clearValues?.length && <p>{i18n.t('{{count}} outbreak indicators to clear', { count: input.clearValues.length })}</p>}
                 {started && (
                     <ol>
                         {Object.entries(submission.steps).map(([step, status]) => (

@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-13T07:50:53.434Z\n"
-"PO-Revision-Date: 2026-10-13T07:50:53.434Z\n"
+"POT-Creation-Date: 2026-10-13T07:46:30.152Z\n"
+"PO-Revision-Date: 2026-10-13T07:46:30.153Z\n"
 
 msgid "Forecast"
 msgstr "Forecast"
@@ -72,6 +72,9 @@ msgstr "Early Warning"
 msgid "Review queue"
 msgstr "Review queue"
 
+msgid "Review history"
+msgstr "Review history"
+
 msgid "Review decisions"
 msgstr "Review decisions"
 
@@ -96,14 +99,14 @@ msgstr "Declined"
 msgid "Pending"
 msgstr "Pending"
 
-msgid "Already reviewed"
-msgstr "Already reviewed"
-
 msgid "Leave unchanged"
 msgstr "Leave unchanged"
 
 msgid "Accept"
 msgstr "Accept"
+
+msgid "Withdraw"
+msgstr "Withdraw"
 
 msgid "Decline"
 msgstr "Decline"
@@ -113,6 +116,19 @@ msgstr "Unable to identify the current reviewer"
 
 msgid "Unable to load import history"
 msgstr "Unable to load import history"
+
+msgid ""
+"{{count}} previously imported outbreak indicators will be cleared, using "
+"their original mappings."
+msgid_plural ""
+"{{count}} previously imported outbreak indicators will be cleared, using "
+"their original mappings."
+msgstr[0] ""
+"{{count}} previously imported outbreak indicators will be cleared, using "
+"their original mappings."
+msgstr[1] ""
+"{{count}} previously imported outbreak indicators will be cleared, using "
+"their original mappings."
 
 msgid "Preview review"
 msgstr "Preview review"
@@ -168,6 +184,11 @@ msgid_plural "{{count}} data values to import"
 msgstr[0] "{{count}} data values to import"
 msgstr[1] "{{count}} data values to import"
 
+msgid "{{count}} outbreak indicators to clear"
+msgid_plural "{{count}} outbreak indicators to clear"
+msgstr[0] "{{count}} outbreak indicators to clear"
+msgstr[1] "{{count}} outbreak indicators to clear"
+
 msgid "Review submission stopped"
 msgstr "Review submission stopped"
 
@@ -202,6 +223,27 @@ msgstr "Unable to identify the current reviewer."
 msgid "Refresh"
 msgstr "Refresh"
 
+msgid "Unable to load review history"
+msgstr "Unable to load review history"
+
+msgid "No predictions have been reviewed yet."
+msgstr "No predictions have been reviewed yet."
+
+msgid "Reviewed predictions"
+msgstr "Reviewed predictions"
+
+msgid "Prediction"
+msgstr "Prediction"
+
+msgid "Reviewers"
+msgstr "Reviewers"
+
+msgid "Latest review"
+msgstr "Latest review"
+
+msgid "Unknown"
+msgstr "Unknown"
+
 msgid "Unable to load predictions awaiting review"
 msgstr "Unable to load predictions awaiting review"
 
@@ -213,9 +255,6 @@ msgstr "Predictions appear here when CHAP raises pending alerts."
 
 msgid "Predictions awaiting review"
 msgstr "Predictions awaiting review"
-
-msgid "Prediction"
-msgstr "Prediction"
 
 msgid "Model"
 msgstr "Model"

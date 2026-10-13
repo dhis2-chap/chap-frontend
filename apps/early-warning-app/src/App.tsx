@@ -4,6 +4,7 @@ import { createHashRouter, RouterProvider } from 'react-router-dom';
 import { ChapApiProvider } from './components/ChapApiProvider';
 import { Layout } from './components/Layout';
 import { QueuePage } from './pages/QueuePage';
+import { HistoryPage } from './pages/HistoryPage';
 import { ReviewPage } from './pages/ReviewPage';
 import './locales';
 
@@ -14,6 +15,7 @@ const queryClient = new QueryClient({
 const router = createHashRouter([{
     element: <Layout />,
     children: [
+        { path: '/history', element: <HistoryPage /> },
         { path: '/', element: <QueuePage /> },
         { path: '/predictions/:predictionId', element: <ReviewPage /> },
     ],

@@ -5,7 +5,7 @@ import { Widget } from '@dhis2-chap/ui';
 import { ReviewImport } from './ReviewImport';
 import { SubmitReviewModal } from './SubmitReviewModal';
 import { useImportLedger } from '../hooks/useImportLedger';
-import { describeImportedIndicators, updateImportLedger } from '../utils/importLedger';
+import { describeImportedIndicators, getWithdrawnIndicators, updateImportLedger } from '../utils/importLedger';
 import { useCurrentUser } from '../hooks/useCurrentUser';
 import type { useReviewData } from '../hooks/useReviewData';
 import type { SubmitReviewInput } from '../hooks/useSubmitReview';
@@ -22,7 +22,11 @@ export const ReviewActions = ({ data }: { data: ReturnType<typeof useReviewData>
     const [selected, setSelected] = useState<string[]>([]);
     const [preview, setPreview] = useState<{ input: SubmitReviewInput; pendingCount: number }>();
     const mapping = setup?.quantileTargets ?? [];
-    const changes = getDecisionChanges(alerts.filter(alert => !alert.approved || alert.approved === 'pending'), decisions);
+    const changes = getDecisionChanges(alerts, decisions);
+    const withdrawn = getWithdrawnIndicators(ledger.data?.records ?? [], [
+        ...changes.declined,
+        ...alerts.filter(alert => alert.approved === 'declined' && decisions.get(alert.id) !== 'accept'),
+    ]);
     const available = hasImportMapping(mapping);
     const forecastOrgUnits = [...new Set(entries.map(entry => entry.orgUnit))].map(id => ({ id, displayName: orgUnits.get(id)?.displayName ?? id }));
     const choose = (ids: number[], decision?: Decision) => setDecisions((current) => {
@@ -39,8 +43,9 @@ export const ReviewActions = ({ data }: { data: ReturnType<typeof useReviewData>
             input: {
                 reviewer: currentUser.displayName ?? currentUser.username ?? '', accepted: changes.accepted, declined: changes.declined,
                 dataValues,
-                afterImport: imported.length
-                    ? () => ledger.save(updateImportLedger(ledger.data?.records ?? [], imported, [])) : undefined,
+                clearValues: withdrawn.map(({ dataElement, period, orgUnit }) => ({ dataElement, period, orgUnit })),
+                afterImport: imported.length || withdrawn.length
+                    ? () => ledger.save(updateImportLedger(ledger.data?.records ?? [], imported, withdrawn)) : undefined,
             },
             pendingCount: alerts.filter(alert => (!alert.approved || alert.approved === 'pending') && !decisions.has(alert.id)).length,
         });
@@ -72,13 +77,11 @@ export const ReviewActions = ({ data }: { data: ReturnType<typeof useReviewData>
                                 </DataTableCell>
                                 <DataTableCell>{alert.approved === 'approved' ? i18n.t('Accepted') : alert.approved === 'declined' ? i18n.t('Declined') : i18n.t('Pending')}</DataTableCell>
                                 <DataTableCell>
-                                    {alert.approved && alert.approved !== 'pending' ? i18n.t('Already reviewed') : (
-                                        <SingleSelect selected={decisions.get(alert.id) ?? ''} onChange={({ selected }) => choose([alert.id], selected as Decision || undefined)}>
-                                            <SingleSelectOption value="" label={i18n.t('Leave unchanged')} />
-                                            <SingleSelectOption value="accept" label={i18n.t('Accept')} />
-                                            <SingleSelectOption value="decline" label={i18n.t('Decline')} />
-                                        </SingleSelect>
-                                    )}
+                                    <SingleSelect selected={decisions.get(alert.id) ?? ''} onChange={({ selected }) => choose([alert.id], selected as Decision || undefined)}>
+                                        <SingleSelectOption value="" label={i18n.t('Leave unchanged')} />
+                                        <SingleSelectOption value="accept" label={i18n.t('Accept')} />
+                                        <SingleSelectOption value="decline" label={alert.approved === 'approved' ? i18n.t('Withdraw') : i18n.t('Decline')} />
+                                    </SingleSelect>
                                 </DataTableCell>
                             </DataTableRow>
                         ))}
@@ -86,8 +89,9 @@ export const ReviewActions = ({ data }: { data: ReturnType<typeof useReviewData>
                 </DataTable>
                 {currentUser.error && <NoticeBox error title={i18n.t('Unable to identify the current reviewer')}>{currentUser.error.message}</NoticeBox>}
                 {ledger.error && <NoticeBox error title={i18n.t('Unable to load import history')}>{ledger.error.message}</NoticeBox>}
+                {withdrawn.length > 0 && <NoticeBox>{i18n.t('{{count}} previously imported outbreak indicators will be cleared, using their original mappings.', { count: withdrawn.length })}</NoticeBox>}
                 <ReviewImport enabled={importEnabled} available={available} selected={selected} orgUnits={forecastOrgUnits} onEnabledChange={setImportEnabled} onSelectionChange={setSelected} />
-                <Button primary disabled={ledger.isLoading || !!ledger.error || currentUser.isLoading || !!currentUser.error || !currentUser.username || !(changes.accepted.length + changes.declined.length || (importEnabled && available && selected.length))} onClick={openPreview}>{i18n.t('Preview review')}</Button>
+                <Button primary disabled={ledger.isLoading || !!ledger.error || currentUser.isLoading || !!currentUser.error || !currentUser.username || !(changes.accepted.length + changes.declined.length + withdrawn.length || (importEnabled && available && selected.length))} onClick={openPreview}>{i18n.t('Preview review')}</Button>
                 {preview && (
                     <SubmitReviewModal
                         {...preview}
