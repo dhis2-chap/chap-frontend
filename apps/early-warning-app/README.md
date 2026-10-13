@@ -12,3 +12,9 @@ Implementation follows [CLIM-1402](https://dhis2.atlassian.net/browse/CLIM-1402)
 The review queue lists predictions with pending alerts, newest first, with the model and counts by alert level. Open a prediction to inspect its alerts. Predictions without alerts are not included.
 
 Prediction details reuse the Modeling App forecast chart. Select an organisation unit and alert-policy threshold to inspect the forecast; the alert statistics show the 80% range, threshold and estimated exceedance probability alongside the policy trigger. Thresholds use the current policy and available observations, rather than a stored snapshot from the original run.
+
+## Forecast import
+
+Import uses the prediction setup's data-element mapping configured in the Modeling App. Reviewers select which organisation units to import; only accepted alerts produce outbreak indicators. Import is unavailable without a forecast mapping. App-specific mapping overrides are deferred.
+
+The import helpers share the Modeling App's forecast mapping and import-response validation, including conversion of CHAP month/week periods into DHIS2 period IDs. Review submission wires these helpers into the approval workflow in the next PR.
