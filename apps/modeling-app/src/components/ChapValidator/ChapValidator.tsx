@@ -3,8 +3,7 @@ import i18n from '@dhis2/d2-i18n';
 import { Button, CircularLoader, IconError24 } from '@dhis2/ui';
 import { useNavigate } from 'react-router-dom';
 import styles from './ChapValidator.module.css';
-import { useChapStatus } from '../../features/settings/ChapSettings/hooks/useChapStatus';
-import { useRoute } from '@dhis2-chap/ui';
+import { useChapStatus, useRoute } from '@dhis2-chap/ui';
 
 type Props = {
     children: React.ReactNode;

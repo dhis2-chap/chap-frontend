@@ -5,14 +5,14 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-12T17:34:00.252Z\n"
-"PO-Revision-Date: 2026-10-12T17:34:00.252Z\n"
+"POT-Creation-Date: 2026-10-13T19:08:30.760Z\n"
+"PO-Revision-Date: 2026-10-13T19:08:30.760Z\n"
 
 msgid "Early Warning"
 msgstr "Early Warning"
 
-msgid "Overview"
-msgstr "Overview"
+msgid "Review queue"
+msgstr "Review queue"
 
 msgid "Settings"
 msgstr "Settings"
@@ -23,6 +23,30 @@ msgstr "Unable to load data"
 msgid "Please try again."
 msgstr "Please try again."
 
+msgid "Prediction not found"
+msgstr "Prediction not found"
+
+msgid "Back to review queue"
+msgstr "Back to review queue"
+
+msgid "Pending alerts from {{model}}. Reviewing alerts will be added here."
+msgstr "Pending alerts from {{model}}. Reviewing alerts will be added here."
+
+msgid "No pending alerts"
+msgstr "No pending alerts"
+
+msgid "All alerts from this prediction have been reviewed."
+msgstr "All alerts from this prediction have been reviewed."
+
+msgid "Location"
+msgstr "Location"
+
+msgid "Period"
+msgstr "Period"
+
+msgid "Level"
+msgstr "Level"
+
 msgid "No CHAP route configured"
 msgstr "No CHAP route configured"
 
@@ -32,17 +56,29 @@ msgstr "Add a route to your CHAP server to start using the Early Warning App."
 msgid "Go to settings"
 msgstr "Go to settings"
 
-msgid "Cannot connect to CHAP"
-msgstr "Cannot connect to CHAP"
+msgid "No predictions awaiting review"
+msgstr "No predictions awaiting review"
 
-msgid "Check the CHAP route in settings and your access to it."
-msgstr "Check the CHAP route in settings and your access to it."
+msgid "Predictions appear here when CHAP raises pending alerts."
+msgstr "Predictions appear here when CHAP raises pending alerts."
 
-msgid "Retry"
-msgstr "Retry"
+msgid "Prediction"
+msgstr "Prediction"
 
-msgid "Connected to CHAP"
-msgstr "Connected to CHAP"
+msgid "Model"
+msgstr "Model"
+
+msgid "Created"
+msgstr "Created"
+
+msgid "Pending alerts"
+msgstr "Pending alerts"
+
+msgid "Prediction {{id}}"
+msgstr "Prediction {{id}}"
+
+msgid "Predictions with alerts that have not been reviewed yet, newest first."
+msgstr "Predictions with alerts that have not been reviewed yet, newest first."
 
 msgctxt "Application title"
 msgid "__MANIFEST_APP_TITLE"
