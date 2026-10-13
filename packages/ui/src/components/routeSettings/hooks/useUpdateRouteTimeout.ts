@@ -2,6 +2,7 @@ import { useDataEngine, useAlert } from '@dhis2/app-runtime';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import i18n from '@dhis2/d2-i18n';
 import type { Route } from '../useRoute';
+import { getRouteUpdateMutation } from '../routeMutation';
 
 type UpdateRouteTimeoutVariables = {
     route: Route;
@@ -25,16 +26,7 @@ export const useUpdateRouteTimeout = () => {
         async (variables: UpdateRouteTimeoutVariables) => {
             const { route, responseTimeoutSeconds } = variables;
 
-            const updateMutation = {
-                resource: 'routes',
-                type: 'update' as const,
-                id: route.id,
-                data: {
-                    ...route,
-                    responseTimeoutSeconds,
-                },
-            };
-            return engine.mutate(updateMutation);
+            return engine.mutate(getRouteUpdateMutation(route, { responseTimeoutSeconds }, false));
         },
         {
             onSuccess: () => {

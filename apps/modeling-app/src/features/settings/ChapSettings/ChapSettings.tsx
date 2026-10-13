@@ -90,7 +90,7 @@ export const ChapSettings = ({ route }: Props) => {
         isUnauthorized,
         isAuthenticated,
         authRequired: !!status.auth_required,
-        tokenConfigured: hasRouteToken(route.headers),
+        tokenConfigured: hasRouteToken(route),
     });
 
     return (

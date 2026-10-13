@@ -109,7 +109,7 @@ export const RouteSettings = () => {
 
                         <span className={styles.label}>{i18n.t('API token')}</span>
                         <span className={styles.value}>
-                            {hasRouteToken(route.headers) ? i18n.t('Configured') : i18n.t('Not configured')}
+                            {hasRouteToken(route) ? i18n.t('Configured') : i18n.t('Not configured')}
                         </span>
 
                         {route.authorities.length > 0 ? (

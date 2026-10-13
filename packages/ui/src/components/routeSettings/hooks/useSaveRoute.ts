@@ -1,15 +1,14 @@
-import { useAlert, useDataEngine } from '@dhis2/app-runtime';
+import { useAlert, useConfig, useDataEngine } from '@dhis2/app-runtime';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import i18n from '@dhis2/d2-i18n';
 import { CHAP_ROUTE_CODE, type Route } from '../useRoute';
-import { updateRouteToken } from '../routeToken';
+import { supportsEncryptedRouteAuth } from '../routeToken';
+import { getRouteTokenSettings, getRouteUpdateMutation, type RouteChanges } from '../routeMutation';
 import { CHAP_ROUTE_AUTHORITY, RECOMMENDED_TIMEOUT_SECONDS } from '../constants';
 
-type SaveRouteVariables = {
+type SaveRouteVariables = RouteChanges & {
     url: string;
     id?: string;
-    apiToken?: string;
-    removeApiToken?: boolean;
 };
 
 type UseSaveRouteOptions = {
@@ -20,6 +19,8 @@ type UseSaveRouteOptions = {
 export const useSaveRoute = ({ onSuccess, onError }: UseSaveRouteOptions = {}) => {
     const queryClient = useQueryClient();
     const engine = useDataEngine();
+    const { serverVersion } = useConfig();
+    const encrypted = supportsEncryptedRouteAuth(serverVersion);
 
     const { show: showSuccessAlert } = useAlert(
         i18n.t('Route saved successfully'),
@@ -28,7 +29,7 @@ export const useSaveRoute = ({ onSuccess, onError }: UseSaveRouteOptions = {}) =
 
     const mutation = useMutation<unknown, Error, SaveRouteVariables>(
         async (variables: SaveRouteVariables) => {
-            const { id, url, apiToken, removeApiToken } = variables;
+            const { id, url, apiToken, ...changes } = variables;
 
             if (id) {
                 const queryKey = ['routes', CHAP_ROUTE_CODE];
@@ -44,18 +45,7 @@ export const useSaveRoute = ({ onSuccess, onError }: UseSaveRouteOptions = {}) =
                     throw new Error(`Route with id ${id} not found in cache for update.`);
                 }
 
-                const updateMutation = {
-                    resource: 'routes',
-                    type: 'update' as const,
-                    id: id,
-                    data: {
-                        ...(existingRoute || {}),
-                        url: url,
-                        headers: updateRouteToken(existingRoute.headers, apiToken, removeApiToken),
-                        responseTimeoutSeconds: existingRoute.responseTimeoutSeconds ?? RECOMMENDED_TIMEOUT_SECONDS,
-                    },
-                };
-                return engine.mutate(updateMutation);
+                return engine.mutate(getRouteUpdateMutation(existingRoute, { url, apiToken, ...changes }, encrypted));
             } else {
                 const createMutation = {
                     resource: 'routes',
@@ -65,9 +55,9 @@ export const useSaveRoute = ({ onSuccess, onError }: UseSaveRouteOptions = {}) =
                         code: CHAP_ROUTE_CODE,
                         url: url,
                         authorities: [CHAP_ROUTE_AUTHORITY],
-                        headers: updateRouteToken({
-                            'Content-Type': 'application/json',
-                        }, apiToken),
+                        ...(apiToken?.trim()
+                            ? getRouteTokenSettings({ 'Content-Type': 'application/json' }, apiToken, encrypted)
+                            : { headers: { 'Content-Type': 'application/json' } }),
                         responseTimeoutSeconds: RECOMMENDED_TIMEOUT_SECONDS,
                     },
                 };
