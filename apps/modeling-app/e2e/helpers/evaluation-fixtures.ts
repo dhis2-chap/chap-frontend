@@ -1,4 +1,4 @@
-import type { APIResponse, Page } from '@playwright/test';
+import type { APIRequestContext, Page } from '@playwright/test';
 import type {
     BacktestRead,
     DataBaseResponse,
@@ -52,6 +52,24 @@ export const chapUrl = (path: string) => (
     `${DHIS2_BASE_URL}/api/routes/chap/run${path}`
 );
 
+// Retry only safe reads when the DHIS2 route proxy returns malformed headers.
+export const getChap = async (
+    page: Page,
+    path: string,
+    options?: Parameters<APIRequestContext['get']>[1],
+) => {
+    for (let attempt = 0; ; attempt++) {
+        try {
+            return await page.request.get(chapUrl(path), options);
+        } catch (error) {
+            if (attempt >= 2 || !(error instanceof Error) || !error.message.includes('Parse Error: Invalid header token')) {
+                throw error;
+            }
+            await new Promise(resolve => setTimeout(resolve, 250));
+        }
+    }
+};
+
 const dhis2Url = (path: string, params?: Record<string, string>) => {
     const queryString = params ? `?${new URLSearchParams(params)}` : '';
     return `${DHIS2_BASE_URL}/api/${path}${queryString}`;
@@ -99,33 +117,18 @@ const getOrgUnitGeoJson = async (page: Page, orgUnitIds: string[]) => {
     };
 };
 
-const getEvaluationJobStatus = async (page: Page, jobId: string) => {
-    let response: APIResponse;
-
-    try {
-        response = await page.request.get(chapUrl(`/v1/jobs/${jobId}`));
-    } catch (error) {
-        // The DHIS2 route proxy occasionally relays a response that Node's HTTP
-        // parser rejects ("Invalid header token"); treat it as a missed poll.
-        console.warn(`Polling evaluation job ${jobId} failed, retrying: ${String(error)}`);
-        return undefined;
-    }
-
-    return await readJson<string>(response, 'Poll evaluation job status');
-};
-
 export const pollEvaluationJob = async (page: Page, jobId: string) => {
     const deadline = Date.now() + EVALUATION_TIMEOUT_MS;
 
     while (Date.now() < deadline) {
-        const status = await getEvaluationJobStatus(page, jobId);
+        const status = await readJson<string>(await getChap(page, `/v1/jobs/${jobId}`), 'Poll evaluation job status');
 
         if (status === 'SUCCESS') {
             return;
         }
 
         if (status === 'FAILURE' || status === 'REVOKED') {
-            const logsResponse = await page.request.get(chapUrl(`/v1/jobs/${jobId}/logs`));
+            const logsResponse = await getChap(page, `/v1/jobs/${jobId}/logs`);
             const logs = logsResponse.ok() ? await logsResponse.text() : '';
             throw new Error(`Evaluation job ${jobId} ended with ${status}.\n${logs}`);
         }
@@ -186,12 +189,12 @@ export const createCompletedNaiveEvaluation = async (
     await pollEvaluationJob(page, importSummary.id);
 
     const { id } = await readJson<DataBaseResponse>(
-        await page.request.get(chapUrl(`/v1/jobs/${importSummary.id}/database_result`)),
+        await getChap(page, `/v1/jobs/${importSummary.id}/database_result`),
         'Load created evaluation id',
     );
 
     return await readJson<BacktestRead>(
-        await page.request.get(chapUrl(`/v1/crud/backtests/${id}/info`)),
+        await getChap(page, `/v1/crud/backtests/${id}/info`),
         'Load created evaluation details',
     );
 };

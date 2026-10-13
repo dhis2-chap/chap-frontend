@@ -1,14 +1,14 @@
 import { expect, test } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
 import type { BacktestSpecificationRead, MakeBacktestsRequest, MakeBacktestsResponse, ModelSpecRead } from '@dhis2-chap/ui';
-import { chapUrl, createCompletedNaiveEvaluation, readJson } from './helpers/evaluation-fixtures';
+import { getChap, createCompletedNaiveEvaluation, readJson } from './helpers/evaluation-fixtures';
 import { toDataTestKey } from '../src/utils/dataTestKey';
 import { isVersionCompatible } from '../src/utils/compareVersions';
 
 test('starts model runs from New benchmark and groups them by dataset and parameters', async ({ page }) => {
     test.setTimeout(240_000);
     const { chap_core_version: chapVersion } = await readJson<{ chap_core_version: string }>(
-        await page.request.get(chapUrl('/system/info')),
+        await getChap(page, '/system/info'),
         'Load Chap Core version',
     );
     test.skip(!isVersionCompatible(chapVersion, '2.4.0'), 'Benchmarks need Chap Core >= 2.4.0');
@@ -25,7 +25,7 @@ test('starts model runs from New benchmark and groups them by dataset and parame
 
     const start = page.getByRole('button', { name: 'Run benchmark', exact: true });
     await expect(start).toBeDisabled();
-    await expect(page.getByText('Runs with the same dataset and backtest parameters appear in the same benchmark.', { exact: false })).toBeVisible();
+    await expect(page.getByText('Runs with the same dataset, target column and backtest parameters appear in the same benchmark.', { exact: false })).toBeVisible();
     await page.getByText('Created manually', { exact: true }).click();
     await page.getByText('Created by evaluations or predictions', { exact: true }).click();
     await page.locator('[data-test="evaluation-dataset-select"]').click();
@@ -51,9 +51,9 @@ test('starts model runs from New benchmark and groups them by dataset and parame
     expect(result.specificationId).toBe(evaluation.specificationId);
     await expect(page).toHaveURL(`/#/evaluate/benchmarks/${result.specificationId}`);
     await expect.poll(async () => {
-        const status = await readJson<string>(await page.request.get(chapUrl(`/v1/jobs/${result.jobs[0].jobId}`)), 'Load benchmark run status');
+        const status = await readJson<string>(await getChap(page, `/v1/jobs/${result.jobs[0].jobId}`), 'Load benchmark run status');
         if (['FAILURE', 'REVOKED'].includes(status)) {
-            throw new Error(`Benchmark run failed: ${await (await page.request.get(chapUrl(`/v1/jobs/${result.jobs[0].jobId}/logs`))).text()}`);
+            throw new Error(`Benchmark run failed: ${await (await getChap(page, `/v1/jobs/${result.jobs[0].jobId}/logs`)).text()}`);
         }
         return status;
     }, { timeout: 180_000, intervals: [3000] }).toBe('SUCCESS');
@@ -63,17 +63,17 @@ test('starts model runs from New benchmark and groups them by dataset and parame
 test('uses benchmark actions to view, add models, export scores and reuse the dataset', async ({ page }) => {
     test.setTimeout(240_000);
     const { chap_core_version: chapVersion } = await readJson<{ chap_core_version: string }>(
-        await page.request.get(chapUrl('/system/info')),
+        await getChap(page, '/system/info'),
         'Load Chap Core version',
     );
     test.skip(!isVersionCompatible(chapVersion, '2.4.0'), 'Benchmarks need Chap Core >= 2.4.0');
     const evaluation = await createCompletedNaiveEvaluation(page, `E2E benchmark ${Date.now()}`);
     const specification = await readJson<BacktestSpecificationRead>(
-        await page.request.get(chapUrl(`/v1/crud/backtest-specifications/${evaluation.specificationId}`)),
+        await getChap(page, `/v1/crud/backtest-specifications/${evaluation.specificationId}`),
         'Load benchmark',
     );
     const model = evaluation.configuredModel!;
-    const models = await readJson<ModelSpecRead[]>(await page.request.get(chapUrl('/v1/crud/configured-models')), 'Load configured models');
+    const models = await readJson<ModelSpecRead[]>(await getChap(page, '/v1/crud/configured-models'), 'Load configured models');
     const modelDisplayName = models.find(({ id }) => id === model.id)?.displayName || model.name;
 
     // Datasets created by an evaluation are hidden until the origin filter is widened.
@@ -123,10 +123,10 @@ test('uses benchmark actions to view, add models, export scores and reuse the da
     await expect(page.getByText('Model runs queued', { exact: true })).toBeVisible();
     await expect(page).toHaveURL(`/#/evaluate/benchmarks/${specification.id}`);
     await expect.poll(async () => {
-        const jobResponse = await page.request.get(chapUrl(`/v1/jobs/${result.jobs[0].jobId}`));
+        const jobResponse = await getChap(page, `/v1/jobs/${result.jobs[0].jobId}`);
         const status = await readJson<string>(jobResponse, 'Load model run status');
         if (['FAILURE', 'REVOKED'].includes(status)) {
-            throw new Error(`Benchmark model failed: ${await (await page.request.get(chapUrl(`/v1/jobs/${result.jobs[0].jobId}/logs`))).text()}`);
+            throw new Error(`Benchmark model failed: ${await (await getChap(page, `/v1/jobs/${result.jobs[0].jobId}/logs`)).text()}`);
         }
         return status;
     }, { timeout: 180_000, intervals: [3000] }).toBe('SUCCESS');

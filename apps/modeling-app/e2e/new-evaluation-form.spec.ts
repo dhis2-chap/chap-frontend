@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import type { MakeBacktestWithDataRequest, ModelSpecRead } from '@dhis2-chap/ui';
-import { chapUrl, readJson } from './helpers/evaluation-fixtures';
+import { getChap, readJson } from './helpers/evaluation-fixtures';
 import { openPeriodPickerAtYear, selectPeriod } from './helpers/period-picker';
 
 const REQUIRED_DATA_MAPPINGS = [
@@ -209,7 +209,7 @@ test('validates period rules with invalid values', async ({ page }) => {
 });
 
 test('validates backtest parameters, submits chosen values, and shows backend validation errors', async ({ page }) => {
-    const parametersResponse = await page.request.get(chapUrl('/v1/analytics/backtest-parameters'));
+    const parametersResponse = await getChap(page, '/v1/analytics/backtest-parameters');
     expect([200, 404]).toContain(parametersResponse.status());
     test.skip(!parametersResponse.ok(), 'Stable CHAP releases predate configurable backtest parameters');
     await page.goto('/#/evaluate/new');

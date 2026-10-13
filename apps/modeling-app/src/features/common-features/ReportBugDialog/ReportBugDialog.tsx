@@ -15,7 +15,7 @@ import {
     IconMail16,
 } from '@dhis2/ui-icons';
 import { useCopyToClipboard } from '../../../hooks/useCopyToClipboard';
-import { useRoute } from '../../../hooks/useRoute';
+import { useRoute } from '@dhis2-chap/ui';
 import { useChapStatus } from '../../settings/ChapSettings/hooks/useChapStatus';
 import styles from './ReportBugDialog.module.css';
 

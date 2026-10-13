@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 import type { DataList, EvaluationEntry } from '@dhis2-chap/ui';
 import type { Spec } from 'vega';
-import { createCompletedNaiveEvaluation, chapUrl, readJson } from './helpers/evaluation-fixtures';
+import { createCompletedNaiveEvaluation, getChap, readJson } from './helpers/evaluation-fixtures';
 
 test('logs in and loads the evaluations table', async ({ page }) => {
     await page.goto('/#/evaluate');
@@ -23,11 +23,11 @@ test('renders predicted vs actual for the selected horizon without experimental 
     await expect(page.getByText('Evaluation plots', { exact: true })).toBeVisible();
 
     const entries = await readJson<EvaluationEntry[]>(
-        await page.request.get(chapUrl(`/v1/analytics/evaluation-entry?backtestId=${evaluation.id}&quantiles=0.5`)),
+        await getChap(page, `/v1/analytics/evaluation-entry?backtestId=${evaluation.id}&quantiles=0.5`),
         'Load median predictions',
     );
     const actual = await readJson<DataList>(
-        await page.request.get(chapUrl(`/v1/analytics/actual-cases/${evaluation.id}`)),
+        await getChap(page, `/v1/analytics/actual-cases/${evaluation.id}`),
         'Load actual cases',
     );
 

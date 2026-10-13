@@ -1,7 +1,6 @@
 import styles from './Settings.module.css';
-import { RouteSettings } from './RouteSettings';
+import { RouteSettings, useRoute } from '@dhis2-chap/ui';
 import { ChapSettings } from './ChapSettings';
-import { useRoute } from '../../hooks/useRoute';
 
 export const SettingsPage = () => {
     const { route } = useRoute();

@@ -11,7 +11,7 @@ import type {
     ModelConfigurationCreate,
     ModelTemplateRead,
 } from '@dhis2-chap/ui';
-import { chapUrl, createCompletedNaiveEvaluation, pollEvaluationJob, readJson } from './helpers/evaluation-fixtures';
+import { chapUrl, getChap, createCompletedNaiveEvaluation, pollEvaluationJob, readJson } from './helpers/evaluation-fixtures';
 import { toDataTestKey } from '../src/utils/dataTestKey';
 
 const selectModels = async (page: Page, names: string[]) => {
@@ -29,13 +29,13 @@ test.describe('saved dataset evaluations', () => {
     test('selects compatible models, resets on dataset change, and queues a job for each', async ({ page }) => {
         test.setTimeout(240_000);
         // Stable CHAP releases predate configurable backtest parameters and use their own defaults.
-        const parametersResponse = await page.request.get(chapUrl('/v1/analytics/backtest-parameters'));
+        const parametersResponse = await getChap(page, '/v1/analytics/backtest-parameters');
         expect([200, 404]).toContain(parametersResponse.status());
         const supportsParameters = parametersResponse.ok();
         const evaluation: BacktestRead = await createCompletedNaiveEvaluation(page);
         const otherEvaluation = await createCompletedNaiveEvaluation(page, `E2E other dataset ${Date.now()}`);
         const templates = await readJson<ModelTemplateRead[]>(
-            await page.request.get(chapUrl('/v1/crud/model-templates')),
+            await getChap(page, '/v1/crud/model-templates'),
             'Load model templates',
         );
         const template = templates.find(model => model.name === 'naive_model')!;
@@ -124,7 +124,7 @@ test.describe('saved dataset evaluations', () => {
         const jobIds = queued.map(({ jobId }) => jobId);
         expect(new Set(jobIds).size).toBe(2);
         const jobs = await readJson<JobDescription[]>(
-            await page.request.get(chapUrl('/v1/jobs'), { params: new URLSearchParams(jobIds.map(id => ['ids', id])) }),
+            await getChap(page, '/v1/jobs', { params: new URLSearchParams(jobIds.map(id => ['ids', id])) }),
             'Load submitted evaluation jobs',
         );
         for (const { model, jobId } of queued) {
@@ -133,7 +133,7 @@ test.describe('saved dataset evaluations', () => {
         if (supportsParameters) {
             await pollEvaluationJob(page, queued[0].jobId);
             const result = await readJson<DataBaseResponse>(
-                await page.request.get(chapUrl(`/v1/jobs/${queued[0].jobId}/database_result`)),
+                await getChap(page, `/v1/jobs/${queued[0].jobId}/database_result`),
                 'Load evaluation result',
             );
             await page.goto(`/#/evaluate/${result.id}`);
