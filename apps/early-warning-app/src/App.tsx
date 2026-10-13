@@ -1,9 +1,8 @@
 import { CssReset, CssVariables } from '@dhis2/ui';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { createHashRouter, RouterProvider } from 'react-router-dom';
+import { createHashRouter, Navigate, RouterProvider } from 'react-router-dom';
 import { ChapApiProvider } from './components/ChapApiProvider';
 import { Layout } from './components/Layout';
-import { HomePage } from './pages/HomePage';
 import { QueuePage } from './pages/QueuePage';
 import { ReviewPage } from './pages/ReviewPage';
 import { SettingsPage } from './pages/SettingsPage';
@@ -16,7 +15,7 @@ const queryClient = new QueryClient({
 const router = createHashRouter([{
     element: <Layout />,
     children: [
-        { path: '/', element: <HomePage /> },
+        { path: '/', element: <Navigate to="/review-queue" replace /> },
         { path: '/review-queue', element: <QueuePage /> },
         { path: '/predictions/:predictionId', element: <ReviewPage /> },
         { path: '/settings', element: <SettingsPage /> },

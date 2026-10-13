@@ -2,9 +2,9 @@ import { useEffect } from 'react';
 import { Card, CircularLoader, colors, NoticeBox } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import styles from './ChapSettings.module.css';
-import { hasRouteToken, type Route } from '@dhis2-chap/ui';
-import { useChapStatus } from './hooks/useChapStatus';
-import { useChapAuthStatus } from '../../../hooks/useChapAuthStatus';
+import { hasRouteToken, type Route } from '../routeSettings';
+import { useChapStatus } from './useChapStatus';
+import { useChapAuthStatus } from './useChapAuthStatus';
 import { ServerSecurityNotices } from './ServerSecurityNotices';
 
 type Props = {
