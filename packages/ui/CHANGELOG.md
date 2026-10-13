@@ -1,5 +1,15 @@
 # @dhis2-chap/ui
 
+## 7.3.0
+
+### Minor Changes
+
+-   cabdadf: Add the Early Warning App with its own CHAP route settings, and share the Modeling side navigation and route settings [CLIM-1403].
+
+### Patch Changes
+
+-   @dhis2-chap/core@7.3.0
+
 ## 7.2.0
 
 ### Minor Changes

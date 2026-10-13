@@ -1,5 +1,19 @@
 # @dhis2-chap/modeling-app
 
+## 7.3.0
+
+### Minor Changes
+
+-   98a7f2b: Add an Alert policies page for creating and deleting alert policies with tiered levels, saved from least to most strict (CLIM-1136). Prediction setups can be given an alert policy when created or edited, and the setup page shows which policy its runs use. Requires the CHAP Core alert-policy REST endpoints.
+
+### Patch Changes
+
+-   cabdadf: Add the Early Warning App with its own CHAP route settings, and share the Modeling side navigation and route settings [CLIM-1403].
+-   5390c24: Show server errors inline when adding or editing a CHAP route, with administrator guidance for URLs that are not permitted [CLIM-1305].
+-   Updated dependencies [cabdadf]
+    -   @dhis2-chap/ui@7.3.0
+    -   @dhis2-chap/core@7.3.0
+
 ## 7.2.0
 
 ### Minor Changes
