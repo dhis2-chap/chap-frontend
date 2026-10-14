@@ -1,5 +1,7 @@
-import type { AlertLevel } from '@dhis2-chap/ui';
-import { single } from './describeAlertLevel';
+import type { AlertLevel } from '../httpfunctions';
+
+// Alert levels describe a single threshold line, so list values hold one number.
+const single = (value?: number | number[]) => (Array.isArray(value) ? value[0] : value);
 
 const thresholdValue = (params: AlertLevel['thresholdParams']) => (
     'quantile' in params ? single(params.quantile) : single('stdMultiplier' in params ? params.stdMultiplier : undefined)

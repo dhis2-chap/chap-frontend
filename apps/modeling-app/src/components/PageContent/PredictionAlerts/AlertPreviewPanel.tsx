@@ -10,6 +10,8 @@ import {
     getStableMaxYForThresholdChart,
     UncertaintyAreaChart,
     Widget,
+    useEndemicThresholds,
+    usePredictionSeries,
 } from '@dhis2-chap/ui';
 import type {
     EndemicThresholdPoint,
@@ -17,13 +19,11 @@ import type {
     OutbreakProbability,
     PredictionInfo,
 } from '@dhis2-chap/ui';
-import { useEndemicThresholds } from '@/hooks/useEndemicThresholds';
 import type { ThresholdParams } from '@/utils/thresholdStrategyParams';
 import {
     OutbreakProbabilityControl,
     ThresholdCalculationStatus,
 } from '../../ThresholdTilesExplorer';
-import { usePredictionSeries } from '../PredictionDetails/hooks/usePredictionSeries';
 import styles from './PredictionAlerts.module.css';
 
 type Props = {

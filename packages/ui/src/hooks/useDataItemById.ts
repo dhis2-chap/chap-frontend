@@ -1,4 +1,4 @@
-import { useApiDataQuery } from '../utils/useApiDataQuery';
+import { useApiDataQuery } from './useApiDataQuery';
 
 type DataItem = {
     id: string;

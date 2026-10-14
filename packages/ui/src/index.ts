@@ -1,4 +1,5 @@
 export { UncertaintyAreaChart } from './components/predictions/UncertaintyAreaChart/UncertaintyAreaChart';
+export type { AlertLine, ThresholdLine } from './components/predictions/UncertaintyAreaChart/UncertaintyAreaChart';
 export * from './httpfunctions/index';
 export {
     evaluationResultToViewData,
@@ -22,6 +23,7 @@ export { ComparisonPlotList } from './components/evaluation/ComparisonPlotList/C
 export { ComparionPlotWrapper } from './components/evaluation/ComparionPlotWrapper/ComparionPlotWrapper';
 export { PredictionTable } from './components/predictions/PredictionTable/PredictionTable';
 export { PredictionMap } from './components/predictions/PredictionMap/PredictionMap';
+export { OrgUnitMenu } from './components/predictions/OrgUnitMenu/OrgUnitMenu';
 export {
     OverflowButton,
     Ping,
@@ -83,12 +85,20 @@ export {
     type ThresholdTileViewModel,
 } from './utils/outbreakThresholdTiles';
 export { getSeriesPeriods } from './utils/chartPeriods';
+export { sortAlertLevels } from './utils/sortAlertLevels';
 export { getPeriodNameFromId } from './utils/Time';
 export {
     plotResultsToViewData,
     getStableMaxYByOrgUnitId,
     type PlotDataResult,
 } from './utils/plotDataForEvaluations';
+
+// Hooks
+export { useApiDataQuery } from './hooks/useApiDataQuery';
+export { useOrgUnitsById } from './hooks/useOrgUnitsById';
+export { useDataItemById } from './hooks/useDataItemById';
+export { usePredictionSeries } from './hooks/usePredictionSeries';
+export { useEndemicThresholds, useEndemicThresholdsForParams } from './hooks/useEndemicThresholds';
 
 // Map utilities
 export { parseOrgUnits } from './components/maps/utils';

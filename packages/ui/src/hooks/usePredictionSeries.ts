@@ -1,23 +1,28 @@
 import { useMemo } from 'react';
+import i18n from '@dhis2/d2-i18n';
 import { getLastNPeriods, PERIOD_TYPES } from '@dhis2-chap/core';
-import { buildPredictionSeries, ModelSpecRead, PredictionInfo } from '@dhis2-chap/ui';
-import { useOrgUnitsById } from '../../../../hooks/useOrgUnitsById';
-import { useDataItemById } from '../../../../hooks/useDataItemById';
-import { useActualCasesByDatasetId } from '../../../../hooks/useActualCasesByDatasetId';
+import type { ModelSpecRead } from '../httpfunctions';
+import type { PredictionInfo } from '../interfaces/Prediction';
+import { buildPredictionSeries } from '../utils/PredictionViewModel';
+import { useOrgUnitsById } from './useOrgUnitsById';
+import { useDataItemById } from './useDataItemById';
+import { useActualCasesByDatasetId } from './useActualCasesByDatasetId';
 import { usePredictionEntries } from './usePredictionEntries';
 
-const PERIODS_BY_PERIOD_TYPE = {
-    [PERIOD_TYPES.DAY]: 365 * 2,
-    [PERIOD_TYPES.WEEK]: 52 * 2,
-    [PERIOD_TYPES.MONTH]: 12 * 2,
+const PERIODS_PER_YEAR_BY_PERIOD_TYPE = {
+    [PERIOD_TYPES.DAY]: 365,
+    [PERIOD_TYPES.WEEK]: 52,
+    [PERIOD_TYPES.MONTH]: 12,
 };
 
 type Props = {
     prediction: PredictionInfo;
-    model: ModelSpecRead;
+    // Without a model the target is unknown, so the series has no target data element.
+    model?: Pick<ModelSpecRead, 'target'>;
+    historyYears?: number;
 };
 
-export const usePredictionSeries = ({ prediction, model }: Props) => {
+export const usePredictionSeries = ({ prediction, model, historyYears = 2 }: Props) => {
     const {
         dataset,
     } = prediction;
@@ -42,9 +47,9 @@ export const usePredictionSeries = ({ prediction, model }: Props) => {
         return getLastNPeriods(
             dataset.lastPeriod,
             dataset.periodType as keyof typeof PERIOD_TYPES,
-            PERIODS_BY_PERIOD_TYPE[dataset.periodType?.toUpperCase() as keyof typeof PERIODS_BY_PERIOD_TYPE],
+            PERIODS_PER_YEAR_BY_PERIOD_TYPE[dataset.periodType?.toUpperCase() as keyof typeof PERIODS_PER_YEAR_BY_PERIOD_TYPE] * historyYears,
         );
-    }, [dataset]);
+    }, [dataset, historyYears]);
 
     const {
         data: actualCasesData,
@@ -57,7 +62,7 @@ export const usePredictionSeries = ({ prediction, model }: Props) => {
     });
 
     const predictionTargetId: string = dataset.dataSources?.find(
-        dataSource => dataSource.covariate === model.target.name,
+        dataSource => dataSource.covariate === model?.target.name,
     )?.dataElementId ?? '';
     const shouldLoadPredictionTarget = !!predictionTargetId;
 
@@ -87,7 +92,7 @@ export const usePredictionSeries = ({ prediction, model }: Props) => {
 
     return {
         series,
-        predictionTargetName: dataItem?.displayName ?? (predictionTargetId || model.target.displayName),
+        predictionTargetName: dataItem?.displayName ?? (predictionTargetId || model?.target.displayName || i18n.t('Cases')),
         isLoading: isPredictionEntriesLoading
             || (isOrgUnitsQueryEnabled && isOrgUnitsLoading)
             || (shouldLoadPredictionTarget && isDataItemLoading)

@@ -1,5 +1,4 @@
-import { useDataItemById } from '@/hooks/useDataItemById';
-import { useApiDataQuery } from '@/utils/useApiDataQuery';
+import { useDataItemById, useApiDataQuery } from '@dhis2-chap/ui';
 import { DataItemSelectField } from './DataItemSelectField';
 
 type DataItem = {

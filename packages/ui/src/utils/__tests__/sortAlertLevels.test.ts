@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import type { AlertLevel } from '@dhis2-chap/ui';
-import { sortAlertLevels } from './sortAlertLevels';
+import type { AlertLevel } from '../../httpfunctions';
+import { sortAlertLevels } from '../sortAlertLevels';
 
 const seasonal = (name: string, stdMultiplier: number, exceedanceThreshold: number): AlertLevel => ({
     name,

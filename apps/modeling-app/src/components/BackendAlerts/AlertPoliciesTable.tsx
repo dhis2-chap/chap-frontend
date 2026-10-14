@@ -17,12 +17,11 @@ import {
     NoticeBox,
 } from '@dhis2/ui';
 import { format } from 'date-fns';
-import { Tag, type AlertPolicyRead, type ApiError } from '@dhis2-chap/ui';
+import { sortAlertLevels, Tag, type AlertPolicyRead, type ApiError } from '@dhis2-chap/ui';
 import { useAlertPolicies, useDeleteAlertPolicy } from '@/hooks/useAlertPolicies';
 import { getChapErrorMessage } from '@/utils/chapErrors';
 import { TableActionButton } from '../TableActionButton';
 import { describeAlertLevel } from './describeAlertLevel';
-import { sortAlertLevels } from './sortAlertLevels';
 import styles from './BackendAlerts.module.css';
 
 const CONFLICT = 409;

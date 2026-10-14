@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react';
 import { Query, useQueryClient } from '@tanstack/react-query';
-import { useApiDataQuery } from '../utils/useApiDataQuery';
+import { useApiDataQuery } from './useApiDataQuery';
 
 type OrganisationUnit = {
     id: string;

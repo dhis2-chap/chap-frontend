@@ -1,0 +1,7 @@
+.sidebar {
+    flex-shrink: 0;
+    inline-size: 200px;
+    border-inline-end: 1px solid var(--colors-grey300);
+    overflow-y: auto;
+    max-block-size: 400px;
+}

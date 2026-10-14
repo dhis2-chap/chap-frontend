@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import styles from './PredictionResultWidget.module.css';
 import i18n from '@dhis2/d2-i18n';
-import { TabBar, Tab, Menu, MenuItem } from '@dhis2/ui';
+import { TabBar, Tab } from '@dhis2/ui';
 import {
+    OrgUnitMenu,
     UncertaintyAreaChart,
     PredictionTable,
     PredictionOrgUnitSeries,
@@ -60,19 +61,12 @@ export const PredictionResultWidgetComponent = ({
                         </Tab>
                     </TabBar>
                     <div className={styles.mainLayout}>
-                        <div className={styles.sidebar}>
-                            <Menu dense>
-                                {series.map(s => (
-                                    <MenuItem
-                                        active={selectedTab !== 'map' && selectedSeries?.orgUnitId === s.orgUnitId}
-                                        disabled={selectedTab === 'map'}
-                                        key={s.orgUnitId}
-                                        label={s.orgUnitName}
-                                        onClick={() => onSelectOrgUnit(s.orgUnitId)}
-                                    />
-                                ))}
-                            </Menu>
-                        </div>
+                        <OrgUnitMenu
+                            series={series}
+                            selectedOrgUnitId={selectedSeries?.orgUnitId}
+                            onSelect={onSelectOrgUnit}
+                            disabled={selectedTab === 'map'}
+                        />
 
                         <div className={styles.plotArea}>
                             {selectedTab === 'chart' && selectedSeries && (

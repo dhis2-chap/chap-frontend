@@ -1,8 +1,9 @@
-import type { AlertPolicyRead, AlertRead, PredictionInfo } from '@dhis2-chap/ui';
+import { canonicalizePeriodId } from '@dhis2-chap/core';
+import { sortAlertLevels, type AlertPolicyRead, type AlertRead, type PredictionInfo } from '@dhis2-chap/ui';
 
-// Policies store levels from least to most severe, so a level's index is its severity.
+// A level's index in the strictness order is its severity, the order the backend uses.
 export const severity = (alert: AlertRead, policies: AlertPolicyRead[]) => {
-    const levels = policies.find(policy => policy.id === alert.alertPolicyId)?.levels ?? [];
+    const levels = sortAlertLevels(policies.find(policy => policy.id === alert.alertPolicyId)?.levels ?? []);
     const index = levels.findIndex(level => level.name === alert.level);
     return index === -1 ? levels.length : index;
 };
@@ -37,3 +38,8 @@ export const summarizePredictionReviews = (
     }).sort((a, b) => Date.parse(b.prediction.created) - Date.parse(a.prediction.created)
         || b.prediction.id - a.prediction.id);
 };
+
+/** Alerts may use CHAP's dashed IDs while analytics uses DHIS2 period IDs. */
+export const normalizeAlertPeriod = (period: string) => (
+    canonicalizePeriodId(period.trim().replace(/^(\d{4})-(?=\d{2}$|W)/, '$1'))
+);
