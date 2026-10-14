@@ -1,4 +1,4 @@
-import { useApiDataQuery } from '../utils/useApiDataQuery';
+import { useApiDataQuery } from '@dhis2-chap/ui';
 
 type User = {
     id: string;

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { getThresholdQueryState } from './thresholdQueryState';
+import { getThresholdQueryState } from '../thresholdQueryState';
 
 const freshResult = {
     data: { entries: [] },

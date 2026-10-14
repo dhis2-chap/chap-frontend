@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { ApiError, PredictionEntry, PredictionsService } from '@dhis2-chap/ui';
+import { ApiError, PredictionsService, type PredictionEntry } from '../httpfunctions';
 
 const STANDARD_QUANTILES = [0.1, 0.25, 0.5, 0.75, 0.9];
 

@@ -1,5 +1,4 @@
-import { parseOrgUnits, FeatureCollection } from '@dhis2-chap/ui';
-import { useApiDataQuery } from '../utils/useApiDataQuery';
+import { parseOrgUnits, FeatureCollection, useApiDataQuery } from '@dhis2-chap/ui';
 
 interface OrganisationUnit {
     id: string;

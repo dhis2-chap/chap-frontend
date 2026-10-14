@@ -1,10 +1,21 @@
 .content {
-    padding: var(--spacers-dp16);
-    overflow-x: auto;
+    padding-inline: var(--spacers-dp16);
+    padding-block-end: var(--spacers-dp16);
 }
-.selectors {
+.layout {
     display: flex;
-    flex-wrap: wrap;
     gap: var(--spacers-dp16);
-    margin-block-end: var(--spacers-dp16);
+    min-block-size: 400px;
+}
+.plotArea {
+    flex: 1;
+    min-inline-size: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacers-dp12);
+}
+.note {
+    margin: 0;
+    font-size: 12px;
+    color: var(--colors-grey600);
 }

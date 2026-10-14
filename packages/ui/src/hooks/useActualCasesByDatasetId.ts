@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { ApiError, BacktestsService, DataList } from '@dhis2-chap/ui';
+import { ApiError, BacktestsService, type DataList } from '../httpfunctions';
 
 type Props = {
     datasetId: number | undefined;

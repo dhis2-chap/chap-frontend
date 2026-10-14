@@ -1,7 +1,7 @@
+import { useApiDataQuery } from '@dhis2-chap/ui';
 import { useRef, useState } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { Layer, Popper, IconChevronDown16, IconCross16 } from '@dhis2/ui';
-import { useApiDataQuery } from '../../../../utils/useApiDataQuery';
 import { useDebounce } from '../../../../hooks/useDebounce';
 import styles from './DataElementSelector.module.css';
 

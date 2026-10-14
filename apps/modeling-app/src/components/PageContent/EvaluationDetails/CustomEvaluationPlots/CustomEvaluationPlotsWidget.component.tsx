@@ -3,10 +3,9 @@ import { CircularLoader, IconWarning24 } from '@dhis2/ui';
 import { VegaEmbed } from 'react-vega';
 import { VisualizationSpec } from 'vega-embed';
 import i18n from '@dhis2/d2-i18n';
-import { ApiError } from '@dhis2-chap/ui';
+import { ApiError, useOrgUnitsById } from '@dhis2-chap/ui';
 import styles from './CustomEvaluationPlotsWidget.module.css';
 import { useIsolatedPlots } from '@/components/BacktestsTable/hooks/useIsolatedPlots';
-import { useOrgUnitsById } from '@/hooks/useOrgUnitsById';
 import { FacetCoordinates } from '@/components/BacktestsTable/hooks/useFacetCoordinates';
 
 type Props = {

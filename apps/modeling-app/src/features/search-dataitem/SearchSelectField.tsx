@@ -1,3 +1,4 @@
+import { useApiDataQuery } from '@dhis2-chap/ui';
 import { useRef, useState } from 'react';
 import { z } from 'zod';
 import i18n from '@dhis2/d2-i18n';
@@ -5,7 +6,6 @@ import styles from './SearchSelectField.module.css';
 import { Label, Layer, Popper, IconChevronDown16, IconCross16 } from '@dhis2/ui';
 import { useDataEngine } from '@dhis2/app-runtime';
 import { useQuery } from '@tanstack/react-query';
-import { useApiDataQuery } from '../../utils/useApiDataQuery';
 import { useDebounce } from '../../hooks/useDebounce';
 import { dimensionItemTypeSchema } from '../../components/ModelExecutionForm/hooks/useModelExecutionFormState';
 

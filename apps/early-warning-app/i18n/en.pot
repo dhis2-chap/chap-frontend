@@ -5,54 +5,29 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-13T19:14:27.394Z\n"
-"PO-Revision-Date: 2026-10-13T19:14:27.394Z\n"
+"POT-Creation-Date: 2026-10-14T09:22:43.845Z\n"
+"PO-Revision-Date: 2026-10-14T09:22:43.846Z\n"
+
+msgid "Endemic threshold ({{levels}})"
+msgstr "Endemic threshold ({{levels}})"
 
 msgid "Forecast"
 msgstr "Forecast"
 
-msgid "Some forecast context could not be loaded"
-msgstr "Some forecast context could not be loaded"
-
-msgid "Please refresh to try again."
-msgstr "Please refresh to try again."
-
-msgid "Loading observed cases and thresholds…"
-msgstr "Loading observed cases and thresholds…"
-
 msgid "No forecast values are available."
 msgstr "No forecast values are available."
 
-msgid "Organisation unit"
-msgstr "Organisation unit"
+msgid "Thresholds could not be loaded"
+msgstr "Thresholds could not be loaded"
 
-msgid "Alert threshold"
-msgstr "Alert threshold"
-
-msgid "Cases"
-msgstr "Cases"
-
-msgid "Alert statistics"
-msgstr "Alert statistics"
-
-msgid "Thresholds reflect the current alert policy and available observations."
-msgstr "Thresholds reflect the current alert policy and available observations."
-
-msgid ""
-"Exceedance probabilities are estimates from forecast quantiles. CHAP "
-"determines alerts using the full forecast distribution."
-msgstr ""
-"Exceedance probabilities are estimates from forecast quantiles. CHAP "
-"determines alerts using the full forecast distribution."
-
-msgid "No alerts for this prediction."
-msgstr "No alerts for this prediction."
+msgid "No pending alerts for this organisation unit."
+msgstr "No pending alerts for this organisation unit."
 
 msgid "Period"
 msgstr "Period"
 
-msgid "Alert level"
-msgstr "Alert level"
+msgid "Level"
+msgstr "Level"
 
 msgid "Forecast (80% range)"
 msgstr "Forecast (80% range)"
@@ -65,6 +40,13 @@ msgstr "Chance of exceeding"
 
 msgid "Policy trigger"
 msgstr "Policy trigger"
+
+msgid ""
+"Thresholds use the current alert policy and observations. Chances are "
+"estimated from forecast quantiles."
+msgstr ""
+"Thresholds use the current alert policy and observations. Chances are "
+"estimated from forecast quantiles."
 
 msgid "Early Warning"
 msgstr "Early Warning"
@@ -87,20 +69,18 @@ msgstr "Prediction not found"
 msgid "Back to review queue"
 msgstr "Back to review queue"
 
-msgid "Pending alerts from {{model}}. Inspect forecasts and thresholds below."
-msgstr "Pending alerts from {{model}}. Inspect forecasts and thresholds below."
+msgid ""
+"Pending alerts from {{model}}. Select an organisation unit to review its "
+"forecast."
+msgstr ""
+"Pending alerts from {{model}}. Select an organisation unit to review its "
+"forecast."
 
 msgid "No pending alerts"
 msgstr "No pending alerts"
 
 msgid "All alerts from this prediction have been reviewed."
 msgstr "All alerts from this prediction have been reviewed."
-
-msgid "Location"
-msgstr "Location"
-
-msgid "Level"
-msgstr "Level"
 
 msgid "No CHAP route configured"
 msgstr "No CHAP route configured"

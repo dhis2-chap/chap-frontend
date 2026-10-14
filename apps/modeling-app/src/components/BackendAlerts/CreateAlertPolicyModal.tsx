@@ -19,12 +19,12 @@ import {
 import {
     DEFAULT_OUTBREAK_PROBABILITY,
     OUTBREAK_PROBABILITY_OPTIONS,
+    sortAlertLevels,
     type AlertLevel,
 } from '@dhis2-chap/ui';
 import { useCreateAlertPolicy } from '@/hooks/useAlertPolicies';
 import { useThresholdStrategies } from '@/hooks/useThresholdStrategies';
 import { getChapErrorMessage } from '@/utils/chapErrors';
-import { sortAlertLevels } from './sortAlertLevels';
 import styles from './BackendAlerts.module.css';
 
 const isNumberIn = (value: string, min: number, max: number) => (
