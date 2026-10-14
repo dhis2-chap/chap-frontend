@@ -3,10 +3,10 @@ import { DataTable, DataTableBody, DataTableCell, DataTableColumnHeader, DataTab
 import { Card, Pill, useRoute } from '@dhis2-chap/ui';
 import { format } from 'date-fns';
 import { Link } from 'react-router-dom';
-import { PageHeader } from '../components/PageHeader';
-import { ErrorNotice, Loading } from '../components/StateViews';
-import { usePredictionReviews } from '../hooks/usePredictionReviews';
-import styles from './ReviewPages.module.css';
+import { PageHeader } from '../../components/PageHeader';
+import { ErrorNotice, Loading } from '../../components/StateViews';
+import { usePredictionReviews } from '../../hooks/usePredictionReviews';
+import styles from './QueuePage.module.css';
 
 export const QueuePage = () => {
     const { route, isLoading: isRouteLoading, error: routeError } = useRoute();
@@ -70,9 +70,10 @@ export const QueuePage = () => {
 
     return (
         <>
-            <PageHeader title={i18n.t('Review queue')}>
-                <p className={styles.description}>{i18n.t('Predictions with alerts that have not been reviewed yet, newest first.')}</p>
-            </PageHeader>
+            <PageHeader
+                title={i18n.t('Review queue')}
+                description={i18n.t('Predictions with alerts that have not been reviewed yet, newest first.')}
+            />
             {content()}
         </>
     );

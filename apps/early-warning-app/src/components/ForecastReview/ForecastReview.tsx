@@ -26,8 +26,8 @@ import {
     type PredictionInfo,
 } from '@dhis2-chap/ui';
 import { canonicalizePeriodId } from '@dhis2-chap/core';
-import { ErrorNotice, Loading } from './StateViews';
-import { normalizeAlertPeriod, severity } from '../utils/reviewData';
+import { ErrorNotice, Loading } from '../StateViews';
+import { normalizeAlertPeriod, severity } from '../../utils/reviewData';
 import styles from './ForecastReview.module.css';
 
 type Props = {
@@ -65,21 +65,27 @@ export const ForecastReview = ({ prediction, alerts, policies }: Props) => {
         return grouped;
     }, [alerts, policies]);
 
-    // Org units with the most severe and most alerts first, so reviewers start where it matters.
-    const sortedSeries = useMemo(() => {
+    // Alert org units without a forecast stay selectable, so no pending alert is hidden.
+    // Most severe and most alerts first, so reviewers start where it matters.
+    const orgUnits = useMemo(() => {
+        const names = new Map(series.map(s => [s.orgUnitId, s.orgUnitName]));
+        alertsByOrgUnit.forEach((_, orgUnitId) => {
+            if (!names.has(orgUnitId)) names.set(orgUnitId, orgUnitId);
+        });
         const rank = (orgUnitId: string) => {
             const orgUnitAlerts = alertsByOrgUnit.get(orgUnitId);
             return orgUnitAlerts ? [severity(orgUnitAlerts[0], policies), orgUnitAlerts.length] : [-1, 0];
         };
-        return [...series].sort((a, b) => {
+        return [...names].map(([orgUnitId, orgUnitName]) => ({ orgUnitId, orgUnitName })).sort((a, b) => {
             const [severityA, countA] = rank(a.orgUnitId);
             const [severityB, countB] = rank(b.orgUnitId);
             return severityB - severityA || countB - countA;
         });
     }, [series, alertsByOrgUnit, policies]);
 
-    const selectedSeries = sortedSeries.find(s => s.orgUnitId === selectedOrgUnitId) ?? sortedSeries[0];
-    const selectedAlerts = (selectedSeries && alertsByOrgUnit.get(selectedSeries.orgUnitId)) || [];
+    const selectedOrgUnit = orgUnits.find(o => o.orgUnitId === selectedOrgUnitId) ?? orgUnits[0];
+    const selectedSeries = series.find(s => s.orgUnitId === selectedOrgUnit?.orgUnitId);
+    const selectedAlerts = (selectedOrgUnit && alertsByOrgUnit.get(selectedOrgUnit.orgUnitId)) || [];
 
     // Alerts from one prediction come from its setup's policy; chart all of its levels.
     const policy = policies.find(p => p.id === alerts[0]?.alertPolicyId);
@@ -118,16 +124,16 @@ export const ForecastReview = ({ prediction, alerts, policies }: Props) => {
     });
 
     if (isLoading) return <Loading />;
-    if (error) return <ErrorNotice error={error} />;
 
     return (
         <Widget header={i18n.t('Forecast')} noncollapsible>
             <div className={styles.content}>
-                {!selectedSeries ? <p>{i18n.t('No forecast values are available.')}</p> : (
+                {!!error && <ErrorNotice error={error} />}
+                {!selectedOrgUnit ? <p>{i18n.t('No forecast values are available.')}</p> : (
                     <div className={styles.layout}>
                         <OrgUnitMenu
-                            series={sortedSeries}
-                            selectedOrgUnitId={selectedSeries.orgUnitId}
+                            series={orgUnits}
+                            selectedOrgUnitId={selectedOrgUnit.orgUnitId}
                             onSelect={setSelectedOrgUnitId}
                             getSuffix={(orgUnitId) => {
                                 const count = alertsByOrgUnit.get(orgUnitId)?.length;
@@ -140,19 +146,21 @@ export const ForecastReview = ({ prediction, alerts, policies }: Props) => {
                                     {thresholdsError.message}
                                 </NoticeBox>
                             )}
-                            <UncertaintyAreaChart
-                                series={selectedSeries}
-                                predictionTargetName={predictionTargetName}
-                                endemicThresholds={thresholdLines ? undefined : thresholdsFor(levels[0]) || undefined}
-                                thresholdLines={thresholdLines}
-                                alertLines={alertLines}
-                                outbreakPeriods={rows.map(({ period, chance }) => ({
-                                    period,
-                                    outbreak: true,
-                                    supportedProbability: chance ?? '<10',
-                                    value: '1',
-                                }))}
-                            />
+                            {!selectedSeries ? <p>{i18n.t('No forecast values are available for this organisation unit.')}</p> : (
+                                <UncertaintyAreaChart
+                                    series={selectedSeries}
+                                    predictionTargetName={predictionTargetName}
+                                    endemicThresholds={thresholdLines ? undefined : thresholdsFor(levels[0]) || undefined}
+                                    thresholdLines={thresholdLines}
+                                    alertLines={alertLines}
+                                    outbreakPeriods={rows.map(({ period, chance }) => ({
+                                        period,
+                                        outbreak: true,
+                                        supportedProbability: chance ?? '<10',
+                                        value: '1',
+                                    }))}
+                                />
+                            )}
                             {rows.length === 0 ? <p>{i18n.t('No pending alerts for this organisation unit.')}</p> : (
                                 <>
                                     <DataTable>

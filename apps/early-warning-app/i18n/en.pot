@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-14T09:22:43.845Z\n"
-"PO-Revision-Date: 2026-10-14T09:22:43.846Z\n"
+"POT-Creation-Date: 2026-10-14T11:58:55.076Z\n"
+"PO-Revision-Date: 2026-10-14T11:58:55.076Z\n"
 
 msgid "Endemic threshold ({{levels}})"
 msgstr "Endemic threshold ({{levels}})"
@@ -19,6 +19,9 @@ msgstr "No forecast values are available."
 
 msgid "Thresholds could not be loaded"
 msgstr "Thresholds could not be loaded"
+
+msgid "No forecast values are available for this organisation unit."
+msgstr "No forecast values are available for this organisation unit."
 
 msgid "No pending alerts for this organisation unit."
 msgstr "No pending alerts for this organisation unit."

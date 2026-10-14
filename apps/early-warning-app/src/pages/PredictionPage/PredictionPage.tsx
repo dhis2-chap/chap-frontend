@@ -1,11 +1,11 @@
 import i18n from '@dhis2/d2-i18n';
 import { NoticeBox } from '@dhis2/ui';
 import { Link, useParams } from 'react-router-dom';
-import { ForecastReview } from '../components/ForecastReview';
-import { PageHeader } from '../components/PageHeader';
-import { ErrorNotice, Loading } from '../components/StateViews';
-import { usePendingPredictionAlerts } from '../hooks/usePredictionReviews';
-import styles from './ReviewPages.module.css';
+import { ForecastReview } from '../../components/ForecastReview';
+import { PageHeader } from '../../components/PageHeader';
+import { ErrorNotice, Loading } from '../../components/StateViews';
+import { usePendingPredictionAlerts } from '../../hooks/usePendingPredictionAlerts';
+import styles from './PredictionPage.module.css';
 
 export const PredictionPage = () => {
     const { predictionId } = useParams();
@@ -18,13 +18,12 @@ export const PredictionPage = () => {
     return (
         <>
             <Link className={styles.back} to="/review-queue">{i18n.t('Back to review queue')}</Link>
-            <PageHeader title={prediction.name}>
-                <p className={styles.description}>
-                    {i18n.t('Pending alerts from {{model}}. Select an organisation unit to review its forecast.', {
-                        model: prediction.configuredModel?.name ?? prediction.modelId,
-                    })}
-                </p>
-            </PageHeader>
+            <PageHeader
+                title={prediction.name}
+                description={i18n.t('Pending alerts from {{model}}. Select an organisation unit to review its forecast.', {
+                    model: prediction.configuredModel?.name ?? prediction.modelId,
+                })}
+            />
             {alerts.length === 0 && (
                 <NoticeBox title={i18n.t('No pending alerts')}>
                     {i18n.t('All alerts from this prediction have been reviewed.')}

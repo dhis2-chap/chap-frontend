@@ -145,7 +145,7 @@ const getChartOptions = (
         if (quantileKey === 'median') return;
 
         chartSeries.push({
-            id: index === 0 ? 'prediction-probability' : `prediction-probability-${line.probability}`,
+            id: `prediction-probability-${index}`,
             type: 'line',
             name: line.name
                 ? i18n.t('{{name}} alert line ({{probability}}%)', { name: line.name, probability: line.probability })
@@ -347,16 +347,18 @@ const getChartOptions = (
                     },
                 }];
             }),
+            // Periods outside the axis get no band rather than shading the first period.
             plotBands: outbreakPeriods
                 .filter(outbreakPeriod => outbreakPeriod.outbreak)
-                .map((outbreakPeriod) => {
+                .flatMap((outbreakPeriod) => {
                     const index = getPeriodIndex(outbreakPeriod.period);
+                    if (index === undefined) return [];
 
-                    return {
-                        from: (index ?? 0) - 0.5,
-                        to: (index ?? 0) + 0.5,
+                    return [{
+                        from: index - 0.5,
+                        to: index + 0.5,
                         color: 'rgba(212, 64, 64, 0.16)',
-                    };
+                    }];
                 }),
         },
         yAxis: {
