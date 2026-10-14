@@ -96,7 +96,7 @@ const assertUnhandledStrategy = (strategy: never): never => {
     throw new Error(`Unhandled threshold strategy: ${JSON.stringify(strategy)}`);
 };
 
-const fractionToPercentString = (fraction: number): string => {
+export const fractionToPercentString = (fraction: number): string => {
     const percent = fraction * 100;
 
     // Use the shortest percentage that converts back to the same fraction.

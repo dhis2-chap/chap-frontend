@@ -1,9 +1,9 @@
 import { NoticeBox } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
-import styles from '../ChapSettings.module.css';
-import { hasRouteToken, useRoute } from '@dhis2-chap/ui';
-import { useChapStatus } from '../hooks/useChapStatus';
-import { useChapAuthStatus } from '../../../../hooks/useChapAuthStatus';
+import styles from './ChapSettings.module.css';
+import { hasRouteToken, useRoute } from '../routeSettings';
+import { useChapStatus } from './useChapStatus';
+import { useChapAuthStatus } from './useChapAuthStatus';
 
 export const ServerSecurityNotices = () => {
     const { route } = useRoute();

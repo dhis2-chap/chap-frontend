@@ -1,6 +1,5 @@
-import { useChapStatus } from '../features/settings/ChapSettings/hooks/useChapStatus';
 import { isVersionCompatible } from '../utils/compareVersions';
-import { useRoute } from '@dhis2-chap/ui';
+import { useChapStatus, useRoute } from '@dhis2-chap/ui';
 
 /**
  * Centralized feature toggle configuration.

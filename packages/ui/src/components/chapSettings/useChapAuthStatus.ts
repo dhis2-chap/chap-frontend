@@ -1,6 +1,5 @@
-import { ApiError, ModelSpecRead, ModelsService } from '@dhis2-chap/ui';
 import { useQuery } from '@tanstack/react-query';
-import { isUnauthorizedError } from '../utils/chapErrors';
+import { ApiError, ModelSpecRead, ModelsService } from '../../httpfunctions';
 
 /**
  * `/system/info` is public, so a reachable server says nothing about whether the
@@ -22,7 +21,7 @@ export const useChapAuthStatus = () => {
     });
 
     return {
-        isUnauthorized: isUnauthorizedError(error),
+        isUnauthorized: error?.status === 401,
         isAuthenticated: isSuccess,
         isLoading,
     };

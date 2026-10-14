@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { ApiError, SystemService, type Route } from '@dhis2-chap/ui';
+import { ApiError, SystemService } from '../../httpfunctions';
+import type { Route } from '../routeSettings';
 
 // Older CHAP versions omit this field. Keep the generated client unchanged.
 type ChapStatus = Awaited<ReturnType<typeof SystemService.systemInfoSystemInfoGet>> & {
