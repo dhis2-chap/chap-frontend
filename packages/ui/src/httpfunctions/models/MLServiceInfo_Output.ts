@@ -53,6 +53,14 @@ export type MLServiceInfo_Output = {
      */
     requires_geo?: boolean;
     /**
+     * Name of the variable the model predicts.
+     */
+    target?: string;
+    /**
+     * Search space used by HPO when tuning the model's user options.
+     */
+    hpo_search_space?: (Record<string, any> | null);
+    /**
      * Commit the service image was built from.
      */
     git_revision?: (string | null);

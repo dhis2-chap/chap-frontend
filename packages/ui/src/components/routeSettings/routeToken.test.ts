@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { hasRouteToken, supportsEncryptedRouteAuth, updateRouteToken } from './routeToken';
+import { hasPlainTextRouteToken, hasRouteToken, supportsEncryptedRouteAuth, updateRouteToken } from './routeToken';
 
 describe('CHAP route token', () => {
     const headers = { 'Content-Type': 'application/json', 'authorization': 'Bearer saved-token', 'X-Custom': 'keep' };
@@ -15,6 +15,17 @@ describe('CHAP route token', () => {
         expect(hasRouteToken({ headers: {}, auth: { type: 'api-headers' } })).toBe(true);
         expect(hasRouteToken({ headers: {}, auth: null })).toBe(false);
         expect(hasRouteToken({ headers: {}, auth: { type: 'api-token' } })).toBe(true);
+    });
+
+    it('flags readable tokens even when encrypted authentication is also configured', () => {
+        for (const value of ['Bearer secret', 'apitoken secret']) {
+            const route = { headers: { AUTHORIZATION: value }, auth: { type: 'api-token' } };
+            expect(hasPlainTextRouteToken(route)).toBe(true);
+            expect(hasRouteToken({ headers: route.headers })).toBe(true);
+        }
+        expect(hasPlainTextRouteToken({ headers: {} })).toBe(false);
+        expect(hasPlainTextRouteToken({ headers: { Authorization: 'Bearer ' } })).toBe(false);
+        expect(hasPlainTextRouteToken()).toBe(false);
     });
 
     it.each([

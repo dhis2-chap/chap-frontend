@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Card, CircularLoader } from '@dhis2/ui';
+import { Card, CircularLoader, NoticeBox } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { useRoute } from './useRoute';
 import styles from './RouteSettings.module.css';
@@ -7,7 +7,7 @@ import { CreateRoute } from './CreateRoute/CreateRoute';
 import { RouteActions } from './RouteActions';
 import { PublicAccessWarning } from './PublicAccessWarning';
 import { TimeoutWarning } from './TimeoutWarning';
-import { hasRouteToken } from './routeToken';
+import { hasPlainTextRouteToken, hasRouteToken } from './routeToken';
 import { useCanManageRoutes } from './hooks/useCanManageRoutes';
 
 const RouteWrapper = ({ children }: { children: React.ReactNode }) => {
@@ -88,6 +88,12 @@ export const RouteSettings = () => {
             <div className={styles.settingsContainer}>
 
                 <PublicAccessWarning route={route} />
+
+                {hasPlainTextRouteToken(route) && (
+                    <NoticeBox warning title={i18n.t('API token stored in plain text')} dataTest="route-plain-text-token-warning">
+                        {i18n.t('Users who can read this route configuration can read its API token. Edit the route and re-enter the token to store it encrypted on supported DHIS2 versions. If the token may have been exposed, rotate it on the CHAP server and enter the new token here.')}
+                    </NoticeBox>
+                )}
 
                 <TimeoutWarning route={route} />
 
