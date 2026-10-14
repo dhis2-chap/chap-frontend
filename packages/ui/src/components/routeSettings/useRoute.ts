@@ -8,7 +8,7 @@ const RouteRequest = {
         resource: 'routes',
         params: {
             filter: `code:eq:${CHAP_ROUTE_CODE}`,
-            fields: 'id,code,name,displayName,url,authorities,disabled,headers,sharing[public],responseTimeoutSeconds',
+            fields: 'id,code,name,displayName,url,authorities,disabled,headers,auth[type],sharing[public],responseTimeoutSeconds',
         },
     },
 };
@@ -21,6 +21,7 @@ export type Route = {
     url: string;
     authorities: string[];
     headers: Record<string, string>;
+    auth?: { type: string } | null;
     sharing: {
         public: string;
     };
