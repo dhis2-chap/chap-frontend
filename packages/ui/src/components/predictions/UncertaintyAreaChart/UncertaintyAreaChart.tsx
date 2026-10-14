@@ -161,6 +161,7 @@ const getChartOptions = (
             zIndex: 6,
             marker: { enabled: false },
             connectNulls: false,
+            visible: !line.hidden,
         });
     });
 
@@ -420,6 +421,8 @@ interface PredicationChartProps {
 export interface AlertLine {
     probability: OutbreakProbability;
     name?: string;
+    // Start hidden; the line can still be toggled on from the legend.
+    hidden?: boolean;
 }
 
 export interface ThresholdLine {

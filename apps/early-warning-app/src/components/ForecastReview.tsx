@@ -101,9 +101,10 @@ export const ForecastReview = ({ prediction, alerts, policies }: Props) => {
             }))
         : undefined;
     // The forecast has quantiles for these probabilities only, so other levels have no line.
+    // Hidden until toggled on from the legend, to keep the chart readable.
     const alertLines = levels.flatMap((level) => {
         const probability = OUTBREAK_PROBABILITY_OPTIONS.find(p => p === Math.round(level.exceedanceThreshold * 100));
-        return probability ? [{ name: level.name, probability }] : [];
+        return probability ? [{ name: level.name, probability, hidden: true }] : [];
     });
 
     const rows = [...selectedAlerts].sort((a, b) => a.timePeriod.localeCompare(b.timePeriod)).map((alert) => {
