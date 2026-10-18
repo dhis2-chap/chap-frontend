@@ -16,6 +16,25 @@ export const supportsEncryptedRouteAuth = (version?: { major: number; minor: num
         || (version.minor === 40 && (version.patch ?? 0) >= 7)
     )));
 
+/** CHAP Core accepts `Authorization: ApiToken` from 2.5.0; older servers only accept Bearer. */
+const supportsChapApiToken = (version = '') => {
+    const [major = 0, minor = 0] = version.split('.').map(Number);
+    return major > 2 || (major === 2 && minor >= 5);
+};
+
+export type RouteTokenStorage = 'api-token' | 'api-headers' | 'header';
+
+/** Unknown CHAP versions (e.g. before the route exists) use encrypted Bearer headers, which every CHAP accepts. */
+export const getRouteTokenStorage = (
+    dhis2Version?: { major: number; minor: number; patch?: number },
+    chapVersion?: string,
+): RouteTokenStorage => {
+    if (!supportsEncryptedRouteAuth(dhis2Version)) {
+        return 'header';
+    }
+    return supportsChapApiToken(chapVersion) ? 'api-token' : 'api-headers';
+};
+
 export const updateRouteToken = (
     headers: Record<string, string> = {},
     apiToken = '',

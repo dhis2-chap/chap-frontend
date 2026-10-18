@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { hasPlainTextRouteToken, hasRouteToken, supportsEncryptedRouteAuth, updateRouteToken } from './routeToken';
+import { getRouteTokenStorage, hasPlainTextRouteToken, hasRouteToken, supportsEncryptedRouteAuth, updateRouteToken } from './routeToken';
 
 describe('CHAP route token', () => {
     const headers = { 'Content-Type': 'application/json', 'authorization': 'Bearer saved-token', 'X-Custom': 'keep' };
@@ -33,6 +33,18 @@ describe('CHAP route token', () => {
         [41, 4, true], [42, 0, true], [43, 0, true],
     ])('checks encrypted auth support in 2.%i.%i', (minor, patch, expected) => {
         expect(supportsEncryptedRouteAuth({ major: 2, minor, patch })).toBe(expected);
+    });
+
+    it.each([
+        ['2.5.0', 'api-token'], ['2.5.0.dev0', 'api-token'], ['3.0.0', 'api-token'],
+        ['2.4.0', 'api-headers'], [undefined, 'api-headers'],
+    ])('stores tokens for CHAP %s as %s', (chapVersion, expected) => {
+        expect(getRouteTokenStorage({ major: 2, minor: 42, patch: 0 }, chapVersion)).toBe(expected);
+    });
+
+    it('falls back to plain headers when DHIS2 cannot encrypt route auth', () => {
+        expect(getRouteTokenStorage({ major: 2, minor: 41, patch: 3 }, '2.5.0')).toBe('header');
+        expect(getRouteTokenStorage(undefined, '2.5.0')).toBe('header');
     });
 
     it('keeps the existing token when editing only the URL', () => {

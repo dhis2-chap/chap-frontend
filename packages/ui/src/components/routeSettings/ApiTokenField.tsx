@@ -40,7 +40,7 @@ export const ApiTokenField = ({ value, onChange, configured, reentryRequired, re
             />
             {encrypted ? (
                 <p className={styles.help}>
-                    {i18n.t('New tokens use encrypted API token authentication in DHIS2. CHAP Core must support ApiToken authentication. Existing plain-text tokens remain readable until replaced.')}
+                    {i18n.t('New tokens are stored encrypted in DHIS2. Existing plain-text tokens remain readable until replaced.')}
                 </p>
             ) : (
                 <NoticeBox warning title={i18n.t('API tokens will be stored in plain text')}>

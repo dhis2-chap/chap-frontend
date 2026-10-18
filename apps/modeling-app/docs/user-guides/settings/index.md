@@ -29,7 +29,7 @@ If no route exists yet, click **Add route** and enter the URL of your CHAP backe
 
 To modify or delete an existing route, use the action buttons next to the route configuration header.
 
-If CHAP requires authentication, enter the server's `CHAP_API_TOKEN` in **CHAP API token**. The app uses encrypted DHIS2 `api-token` authentication on DHIS2 2.40.7+, 2.41.4+, and 2.42+. This requires CHAP Core with [ApiToken support](https://github.com/dhis2-chap/chap-core/pull/728). Leave the field blank when creating a route only if CHAP does not require authentication.
+If CHAP requires authentication, enter the server's `CHAP_API_TOKEN` in **CHAP API token**. On DHIS2 2.40.7+, 2.41.4+, and 2.42+ the token is stored encrypted: as DHIS2 `api-token` authentication for CHAP Core 2.5.0 and later, and as an encrypted Bearer header for older or not yet reachable CHAP servers. Re-enter the token after upgrading CHAP Core to switch to `api-token`. Leave the field blank when creating a route only if CHAP does not require authentication.
 
 Tokens saved through earlier versions of the Modeling App may be stored in plain text in the route's Authorization header. Upgrading does not migrate them automatically. Edit the route and re-enter the token to store it encrypted on a supported DHIS2 version. If it may have been exposed, rotate it on the CHAP server and enter the new token. Older DHIS2 versions still use plain-text headers and show a warning.
 

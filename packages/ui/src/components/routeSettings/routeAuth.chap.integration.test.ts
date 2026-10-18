@@ -3,7 +3,7 @@ import { OpenAPI } from '../../httpfunctions/core/OpenAPI';
 import { ModelsService } from '../../httpfunctions/services/ModelsService';
 import { SystemService } from '../../httpfunctions/services/SystemService';
 import { getRouteTokenSettings, getRouteUpdateMutation } from './routeMutation';
-import { hasPlainTextRouteToken } from './routeToken';
+import { hasPlainTextRouteToken, type RouteTokenStorage } from './routeToken';
 import type { Route } from './useRoute';
 
 // Opt-in: authenticated CHAP reachable from DHIS2, with the URL on its route allowlist.
@@ -30,7 +30,7 @@ it.skipIf(!baseUrl || !chapUrl || !token)('uses the generated client through rea
             name: `CHAP ApiToken regression ${Date.now()}`,
             url: chapUrl,
             sharing: { public: '--------' },
-            ...getRouteTokenSettings({}, token!, true),
+            ...getRouteTokenSettings({}, token!, 'api-token'),
         });
         expect(created.status).toBe(201);
         id = (await created.json()).response.uid;
@@ -43,12 +43,15 @@ it.skipIf(!baseUrl || !chapUrl || !token)('uses the generated client through rea
         const route = await readRoute();
         expect(route.auth).toEqual({ type: 'api-token' });
         expect(hasPlainTextRouteToken(route)).toBe(false);
-        const update = async (changes: Parameters<typeof getRouteUpdateMutation>[1]) => {
-            const mutation = getRouteUpdateMutation(await readRoute(), changes, true);
+        const update = async (changes: Parameters<typeof getRouteUpdateMutation>[1], storage: RouteTokenStorage = 'api-token') => {
+            const mutation = getRouteUpdateMutation(await readRoute(), changes, storage);
             expect((await api(`routes/${id}`, 'PATCH', mutation.data)).status).toBe(200);
         };
-        expect(() => getRouteUpdateMutation(route, { responseTimeoutSeconds: 30 }, true)).toThrow();
+        expect(() => getRouteUpdateMutation(route, { responseTimeoutSeconds: 30 }, 'api-token')).toThrow();
         await update({ responseTimeoutSeconds: 30, apiToken: token });
+        expect(Array.isArray(await checkModels())).toBe(true);
+        await update({ apiToken: token }, 'api-headers');
+        expect((await readRoute()).auth).toEqual({ type: 'api-headers' });
         expect(Array.isArray(await checkModels())).toBe(true);
         await update({ apiToken: 'intentionally-invalid-token' });
         await expect(checkModels()).rejects.toMatchObject({ status: 401 });

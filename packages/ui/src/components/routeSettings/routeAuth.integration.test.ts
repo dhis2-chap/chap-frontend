@@ -1,7 +1,7 @@
 import { createServer } from 'node:http';
 import type { AddressInfo } from 'node:net';
 import { expect, it } from 'vitest';
-import { getRouteUpdateMutation } from './routeMutation';
+import { getRouteTokenSettings, getRouteUpdateMutation } from './routeMutation';
 import { hasRouteToken } from './routeToken';
 import type { Route } from './useRoute';
 
@@ -34,8 +34,7 @@ it.skipIf(!baseUrl)('keeps authenticated requests working through guarded route 
         const created = await api('routes', 'POST', {
             name: `CLIM-1417 regression ${Date.now()}`,
             url: `http://${host}:${port}/**`,
-            headers: { 'X-Custom': 'keep' },
-            auth: { type: 'api-headers', headers: { Authorization: `Bearer ${token}` } },
+            ...getRouteTokenSettings({ 'X-Custom': 'keep' }, token, 'api-headers'),
         });
         expect(created.status).toBe(201);
         id = (await created.json()).response.uid;
@@ -50,10 +49,10 @@ it.skipIf(!baseUrl)('keeps authenticated requests working through guarded route 
         expect((await api(`routes/${id}/run/probe`)).status).toBe(200);
 
         // A timeout-only edit must never reach the backend that drops the secret.
-        expect(() => getRouteUpdateMutation(route, { responseTimeoutSeconds: 30 }, true)).toThrow();
+        expect(() => getRouteUpdateMutation(route, { responseTimeoutSeconds: 30 }, 'api-token')).toThrow();
         expect((await api(`routes/${id}/run/probe`)).status).toBe(200);
         scheme = 'ApiToken';
-        const timeout = getRouteUpdateMutation(route, { responseTimeoutSeconds: 30, apiToken: token }, true);
+        const timeout = getRouteUpdateMutation(route, { responseTimeoutSeconds: 30, apiToken: token }, 'api-token');
         expect((await api(`routes/${id}`, 'PATCH', timeout.data)).status).toBe(200);
         route = await readRoute();
         expect(route.responseTimeoutSeconds).toBe(30);
@@ -62,10 +61,10 @@ it.skipIf(!baseUrl)('keeps authenticated requests working through guarded route 
         expect((await api(`routes/${id}/run/probe`)).status).toBe(200);
 
         token = 'clim-1417-replacement';
-        const replacement = getRouteUpdateMutation(route, { url: route.url, apiToken: token }, true);
+        const replacement = getRouteUpdateMutation(route, { url: route.url, apiToken: token }, 'api-token');
         expect((await api(`routes/${id}`, 'PATCH', replacement.data)).status).toBe(200);
         expect((await api(`routes/${id}/run/probe`)).status).toBe(200);
-        const removal = getRouteUpdateMutation(route, { removeApiToken: true }, true);
+        const removal = getRouteUpdateMutation(route, { removeApiToken: true }, 'api-token');
         expect((await api(`routes/${id}`, 'PATCH', removal.data)).status).toBe(200);
         expect((await api(`routes/${id}/run/probe`)).status).toBe(401);
 
@@ -76,14 +75,21 @@ it.skipIf(!baseUrl)('keeps authenticated requests working through guarded route 
         ])).status).toBe(200);
         route = await readRoute();
         expect(hasRouteToken(route)).toBe(true);
-        const legacyTimeout = getRouteUpdateMutation(route, { responseTimeoutSeconds: 40 }, true);
+        const legacyTimeout = getRouteUpdateMutation(route, { responseTimeoutSeconds: 40 }, 'api-token');
         expect((await api(`routes/${id}`, 'PATCH', legacyTimeout.data)).status).toBe(200);
         expect((await api(`routes/${id}/run/probe`)).status).toBe(200);
-        scheme = 'ApiToken';
-        const migration = getRouteUpdateMutation(route, { apiToken: token }, true);
+        // CHAP servers without ApiToken support keep Bearer, now encrypted.
+        const migration = getRouteUpdateMutation(route, { apiToken: token }, 'api-headers');
         expect((await api(`routes/${id}`, 'PATCH', migration.data)).status).toBe(200);
         route = await readRoute();
         expect(route.headers).toEqual({});
+        expect(route.auth).toEqual({ type: 'api-headers' });
+        expect((await api(`routes/${id}/run/probe`)).status).toBe(200);
+
+        scheme = 'ApiToken';
+        const upgrade = getRouteUpdateMutation(route, { apiToken: token }, 'api-token');
+        expect((await api(`routes/${id}`, 'PATCH', upgrade.data)).status).toBe(200);
+        route = await readRoute();
         expect(route.auth).toEqual({ type: 'api-token' });
         expect((await api(`routes/${id}/run/probe`)).status).toBe(200);
     } finally {

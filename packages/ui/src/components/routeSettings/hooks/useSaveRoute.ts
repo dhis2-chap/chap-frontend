@@ -1,8 +1,9 @@
 import { useAlert, useConfig, useDataEngine } from '@dhis2/app-runtime';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import i18n from '@dhis2/d2-i18n';
-import { CHAP_ROUTE_CODE, type Route } from '../useRoute';
-import { supportsEncryptedRouteAuth } from '../routeToken';
+import { CHAP_ROUTE_CODE, useRoute, type Route } from '../useRoute';
+import { getRouteTokenStorage } from '../routeToken';
+import { useChapStatus } from '../../chapSettings/useChapStatus';
 import { getRouteTokenSettings, getRouteUpdateMutation, type RouteChanges } from '../routeMutation';
 import { CHAP_ROUTE_AUTHORITY, RECOMMENDED_TIMEOUT_SECONDS } from '../constants';
 
@@ -20,7 +21,9 @@ export const useSaveRoute = ({ onSuccess, onError }: UseSaveRouteOptions = {}) =
     const queryClient = useQueryClient();
     const engine = useDataEngine();
     const { serverVersion } = useConfig();
-    const encrypted = supportsEncryptedRouteAuth(serverVersion);
+    const { route } = useRoute();
+    const { status } = useChapStatus({ route });
+    const storage = getRouteTokenStorage(serverVersion, status?.chap_core_version);
 
     const { show: showSuccessAlert } = useAlert(
         i18n.t('Route saved successfully'),
@@ -45,7 +48,7 @@ export const useSaveRoute = ({ onSuccess, onError }: UseSaveRouteOptions = {}) =
                     throw new Error(`Route with id ${id} not found in cache for update.`);
                 }
 
-                return engine.mutate(getRouteUpdateMutation(existingRoute, { url, apiToken, ...changes }, encrypted));
+                return engine.mutate(getRouteUpdateMutation(existingRoute, { url, apiToken, ...changes }, storage));
             } else {
                 const createMutation = {
                     resource: 'routes',
@@ -56,7 +59,7 @@ export const useSaveRoute = ({ onSuccess, onError }: UseSaveRouteOptions = {}) =
                         url: url,
                         authorities: [CHAP_ROUTE_AUTHORITY],
                         ...(apiToken?.trim()
-                            ? getRouteTokenSettings({ 'Content-Type': 'application/json' }, apiToken, encrypted)
+                            ? getRouteTokenSettings({ 'Content-Type': 'application/json' }, apiToken, storage)
                             : { headers: { 'Content-Type': 'application/json' } }),
                         responseTimeoutSeconds: RECOMMENDED_TIMEOUT_SECONDS,
                     },
