@@ -47,7 +47,7 @@ After a route is configured, these warnings may appear:
 
 - **API token stored in plain text**: Users who can read the route configuration can read the token. Replace it with encrypted authentication as described above.
 
-- **Public access warning**: Shown when your route has public read/write access. This means any DHIS2 user can reach the CHAP backend, which could expose sensitive data. To restrict access, click the **Sharing** button and remove access for "All users".
+- **Public access warning**: Shown when your route is publicly readable. This means any DHIS2 user can read the route configuration and reach the CHAP backend, which could expose sensitive data. To restrict access, click the **Sharing** button and remove access for "All users".
 
 - **Low response timeout warning**: Shown when the route's timeout is set below 10 seconds. Long-running model operations (evaluations, predictions) may fail with a low timeout. Click the **Increase to 30 seconds** button to apply the recommended setting.
 

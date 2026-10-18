@@ -2,7 +2,7 @@ import { useConfig } from '@dhis2/app-runtime';
 import { supportsEncryptedRouteAuth } from './routeToken';
 import { routeTokenReentryMessage, unsupportedRouteTokenMessage } from './routeMutation';
 import i18n from '@dhis2/d2-i18n';
-import { Checkbox, InputField, NoticeBox } from '@dhis2/ui';
+import { Checkbox, Field, InputField, NoticeBox } from '@dhis2/ui';
 import styles from './ApiTokenField.module.css';
 
 type Props = {
@@ -35,7 +35,9 @@ export const ApiTokenField = ({ value, onChange, configured, reentryRequired, re
                 <NoticeBox warning title={i18n.t('Setting API tokens is not supported on this DHIS2 version')} dataTest="route-api-token-unsupported">
                     {unsupportedRouteTokenMessage()}
                 </NoticeBox>
-                {removeCheckbox}
+                <Field error={!!error} validationText={error}>
+                    {removeCheckbox}
+                </Field>
             </div>
         );
     }
