@@ -33,7 +33,7 @@ If CHAP requires authentication, enter the server's `CHAP_API_TOKEN` in **CHAP A
 
 Tokens saved through earlier versions of the Modeling App may be stored in plain text in the route's Authorization header. Upgrading does not migrate them automatically. Edit the route and re-enter the token to store it encrypted on a supported DHIS2 version. If it may have been exposed, rotate it on the CHAP server and enter the new token. On older DHIS2 versions the Modeling App does not support setting API tokens, because DHIS2 could only store them in plain text; upgrade DHIS2 first. You can still remove an existing token there.
 
-When editing a route with encrypted authentication, re-enter the token or explicitly remove it before saving, including when increasing the timeout. DHIS2 cannot preserve the encrypted credential during these updates.
+When editing a route with encrypted authentication, re-enter the token or explicitly remove it before saving, including when increasing the timeout. DHIS2 cannot preserve the encrypted credential during these updates, so saving replaces all encrypted authentication on the route, including custom headers.
 
 > **Required permissions**: You need either the `F_ROUTE_PRIVATE_ADD` or `F_ROUTE_PUBLIC_ADD` authority in DHIS2 to create or edit routes. If you do not have these, contact your system administrator.
 

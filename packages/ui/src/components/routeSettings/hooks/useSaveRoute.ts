@@ -23,7 +23,6 @@ export const useSaveRoute = ({ onSuccess, onError }: UseSaveRouteOptions = {}) =
     const { serverVersion } = useConfig();
     const { route } = useRoute();
     const { status } = useChapStatus({ route });
-    const storage = getRouteTokenStorage(serverVersion, status?.chap_core_version);
 
     const { show: showSuccessAlert } = useAlert(
         i18n.t('Route saved successfully'),
@@ -33,6 +32,8 @@ export const useSaveRoute = ({ onSuccess, onError }: UseSaveRouteOptions = {}) =
     const mutation = useMutation<unknown, Error, SaveRouteVariables>(
         async (variables: SaveRouteVariables) => {
             const { id, url, apiToken, ...changes } = variables;
+            // The known CHAP version belongs to the saved URL; a new URL falls back to Bearer, which every CHAP accepts.
+            const storage = getRouteTokenStorage(serverVersion, url === route?.url ? status?.chap_core_version : undefined);
 
             if (id) {
                 const queryKey = ['routes', CHAP_ROUTE_CODE];

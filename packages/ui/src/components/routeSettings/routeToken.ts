@@ -5,7 +5,7 @@ export const hasPlainTextRouteToken = (route?: Pick<Route, 'headers'>) =>
         name.toLowerCase() === 'authorization' && /^(Bearer|ApiToken)\s+\S+/i.test(value),
     );
 
-/** Encrypted credentials are write-only; only the authentication type is returned. */
+/** Encrypted credentials are write-only; only the authentication type is returned, so any encrypted auth counts as the token. */
 export const hasRouteToken = (route?: Pick<Route, 'headers' | 'auth'>) =>
     route?.auth?.type === 'api-token' || route?.auth?.type === 'api-headers' || hasPlainTextRouteToken(route);
 
