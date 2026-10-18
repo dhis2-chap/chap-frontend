@@ -22,32 +22,22 @@ const supportsChapApiToken = (version = '') => {
     return major > 2 || (major === 2 && minor >= 5);
 };
 
-export type RouteTokenStorage = 'api-token' | 'api-headers' | 'header';
+export type RouteTokenStorage = 'api-token' | 'api-headers';
 
-/** Unknown CHAP versions (e.g. before the route exists) use encrypted Bearer headers, which every CHAP accepts. */
+/**
+ * Tokens are only ever stored encrypted; returns undefined when DHIS2 cannot encrypt route auth.
+ * Unknown CHAP versions (e.g. before the route exists) use encrypted Bearer headers, which every CHAP accepts.
+ */
 export const getRouteTokenStorage = (
     dhis2Version?: { major: number; minor: number; patch?: number },
     chapVersion?: string,
-): RouteTokenStorage => {
+): RouteTokenStorage | undefined => {
     if (!supportsEncryptedRouteAuth(dhis2Version)) {
-        return 'header';
+        return undefined;
     }
     return supportsChapApiToken(chapVersion) ? 'api-token' : 'api-headers';
 };
 
-export const updateRouteToken = (
-    headers: Record<string, string> = {},
-    apiToken = '',
-    removeApiToken = false,
-): Record<string, string> => {
-    if (!apiToken.trim() && !removeApiToken) {
-        return { ...headers };
-    }
-    const updated = Object.fromEntries(
-        Object.entries(headers).filter(([name]) => name.toLowerCase() !== 'authorization'),
-    );
-    if (!removeApiToken && apiToken.trim()) {
-        updated.Authorization = `Bearer ${apiToken.trim()}`;
-    }
-    return updated;
-};
+/** Header names are case-insensitive. */
+export const removeRouteToken = (headers: Record<string, string> = {}): Record<string, string> =>
+    Object.fromEntries(Object.entries(headers).filter(([name]) => name.toLowerCase() !== 'authorization'));

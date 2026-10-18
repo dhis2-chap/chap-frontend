@@ -26,7 +26,7 @@ export const useUpdateRouteTimeout = () => {
         async (variables: UpdateRouteTimeoutVariables) => {
             const { route, responseTimeoutSeconds } = variables;
 
-            return engine.mutate(getRouteUpdateMutation(route, { responseTimeoutSeconds }, 'header'));
+            return engine.mutate(getRouteUpdateMutation(route, { responseTimeoutSeconds }));
         },
         {
             onSuccess: () => {

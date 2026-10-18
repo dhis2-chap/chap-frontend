@@ -1,6 +1,6 @@
 import { useConfig } from '@dhis2/app-runtime';
 import { supportsEncryptedRouteAuth } from './routeToken';
-import { routeTokenReentryMessage } from './routeMutation';
+import { routeTokenReentryMessage, unsupportedRouteTokenMessage } from './routeMutation';
 import i18n from '@dhis2/d2-i18n';
 import { Checkbox, InputField, NoticeBox } from '@dhis2/ui';
 import styles from './ApiTokenField.module.css';
@@ -19,6 +19,27 @@ type Props = {
 export const ApiTokenField = ({ value, onChange, configured, reentryRequired, remove, onRemoveChange, disabled, error }: Props) => {
     const { serverVersion } = useConfig();
     const encrypted = supportsEncryptedRouteAuth(serverVersion);
+    const removeCheckbox = configured && (
+        <Checkbox
+            label={i18n.t('Remove saved API token')}
+            checked={remove}
+            onChange={({ checked }) => onRemoveChange(checked)}
+            disabled={disabled}
+            dataTest="remove-route-api-token"
+        />
+    );
+
+    if (!encrypted) {
+        return (
+            <div className={styles.container}>
+                <NoticeBox warning title={i18n.t('Setting API tokens is not supported on this DHIS2 version')} dataTest="route-api-token-unsupported">
+                    {unsupportedRouteTokenMessage()}
+                </NoticeBox>
+                {removeCheckbox}
+            </div>
+        );
+    }
+
     return (
         <div className={styles.container}>
             <InputField
@@ -38,24 +59,10 @@ export const ApiTokenField = ({ value, onChange, configured, reentryRequired, re
                         : i18n.t('Enter the token configured on your CHAP server. Leave blank if the server does not require one.')}
                 dataTest="route-api-token-input"
             />
-            {encrypted ? (
-                <p className={styles.help}>
-                    {i18n.t('New tokens are stored encrypted in DHIS2. Existing plain-text tokens remain readable until replaced.')}
-                </p>
-            ) : (
-                <NoticeBox warning title={i18n.t('API tokens will be stored in plain text')}>
-                    {i18n.t('This DHIS2 version stores new tokens in plain route headers. Users who can read the route configuration can access them. Upgrade DHIS2 to store tokens encrypted.')}
-                </NoticeBox>
-            )}
-            {configured && (
-                <Checkbox
-                    label={i18n.t('Remove saved API token')}
-                    checked={remove}
-                    onChange={({ checked }) => onRemoveChange(checked)}
-                    disabled={disabled}
-                    dataTest="remove-route-api-token"
-                />
-            )}
+            <p className={styles.help}>
+                {i18n.t('New tokens are stored encrypted in DHIS2. Existing plain-text tokens remain readable until replaced.')}
+            </p>
+            {removeCheckbox}
         </div>
     );
 };

@@ -47,14 +47,24 @@ describe('route updates', () => {
             ]);
     });
 
-    it('uses encrypted authentication for new tokens, with a legacy fallback', () => {
+    it('stores new tokens as api-token or encrypted Bearer headers', () => {
         expect(getRouteTokenSettings({}, ' secret ', 'api-token')).toEqual({
             headers: {}, auth: { type: 'api-token', token: 'secret' },
         });
         expect(getRouteTokenSettings({}, ' secret ', 'api-headers')).toEqual({
             headers: {}, auth: { type: 'api-headers', headers: { Authorization: 'Bearer secret' } },
         });
-        expect(getRouteTokenSettings({}, ' secret ', 'header')).toEqual({ headers: { Authorization: 'Bearer secret' } });
+    });
+
+    it('refuses to store tokens in plain text when DHIS2 cannot encrypt them', () => {
+        expect(() => getRouteTokenSettings({}, 'secret', undefined)).toThrow('does not support setting API tokens');
+        expect(() => getRouteUpdateMutation(route, { apiToken: 'secret' })).toThrow('does not support setting API tokens');
+    });
+
+    it('still removes a legacy plain-text token when DHIS2 cannot encrypt', () => {
+        expect(getRouteUpdateMutation(route, { removeApiToken: true }).data).toEqual([
+            { op: 'add', path: '/headers', value: { 'Content-Type': 'application/json' } },
+        ]);
     });
 
     it('migrates a legacy token to encrypted Bearer headers for CHAP servers without ApiToken support', () => {
@@ -62,10 +72,5 @@ describe('route updates', () => {
             { op: 'add', path: '/headers', value: { 'Content-Type': 'application/json' } },
             { op: 'add', path: '/auth', value: { type: 'api-headers', headers: { Authorization: 'Bearer new-token' } } },
         ]);
-    });
-
-    it('keeps an encrypted route encrypted even if DHIS2 version detection says otherwise', () => {
-        expect(getRouteUpdateMutation({ ...route, auth: { type: 'api-token' } }, { apiToken: 'new-token' }, 'header').data)
-            .toContainEqual({ op: 'add', path: '/auth', value: { type: 'api-headers', headers: { Authorization: 'Bearer new-token' } } });
     });
 });
