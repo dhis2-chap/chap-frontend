@@ -25,9 +25,15 @@ Click **Settings** in the sidebar to open the settings area. The General setting
 
 The **Route settings** card manages the DHIS2 route that proxies requests to your CHAP backend server.
 
-If no route exists yet, click **Add route** and enter the URL of your CHAP backend (for example, `https://chap.example.org`). If a route already exists, you will see its name, code, URL, and any assigned authorities.
+If no route exists yet, click **Add route** and enter the URL of your CHAP backend (for example, `https://chap.example.org/**`). If a route already exists, you will see its name, code, URL, and any assigned authorities.
 
 To modify or delete an existing route, use the action buttons next to the route configuration header.
+
+If CHAP requires authentication, enter the server's `CHAP_API_TOKEN` in **CHAP API token**. On DHIS2 2.40.7+, 2.41.4+, and 2.42+ the token is stored encrypted: as DHIS2 `api-token` authentication for CHAP Core 2.5.0 and later, and as an encrypted Bearer header for older or not yet reachable CHAP servers. Re-enter the token after upgrading CHAP Core to switch to `api-token`. Leave the field blank when creating a route only if CHAP does not require authentication.
+
+Tokens saved through earlier versions of the Modeling App may be stored in plain text in the route's Authorization header. Upgrading does not migrate them automatically. Edit the route and re-enter the token to store it encrypted on a supported DHIS2 version. If it may have been exposed, rotate it on the CHAP server and enter the new token. On older DHIS2 versions the Modeling App does not support setting API tokens, because DHIS2 could only store them in plain text; upgrade DHIS2 first. You can still remove an existing token there.
+
+When editing a route with encrypted authentication, re-enter the token or explicitly remove it before saving, including when increasing the timeout. DHIS2 cannot preserve the encrypted credential during these updates, so saving replaces all encrypted authentication on the route, including custom headers.
 
 > **Required permissions**: You need either the `F_ROUTE_PRIVATE_ADD` or `F_ROUTE_PUBLIC_ADD` authority in DHIS2 to create or edit routes. If you do not have these, contact your system administrator.
 
@@ -35,11 +41,13 @@ To modify or delete an existing route, use the action buttons next to the route 
 
 ---
 
-### Step 3: Review Public Access and Timeout Warnings
+### Step 3: Review Route Warnings
 
-After a route is configured, two warnings may appear:
+After a route is configured, these warnings may appear:
 
-- **Public access warning**: Shown when your route has public read/write access. This means any DHIS2 user can reach the CHAP backend, which could expose sensitive data. To restrict access, click the **Sharing** button and remove access for "All users".
+- **API token stored in plain text**: Users who can read the route configuration can read the token. Replace it with encrypted authentication as described above.
+
+- **Public access warning**: Shown when your route is publicly readable. This means any DHIS2 user can read the route configuration and reach the CHAP backend, which could expose sensitive data. To restrict access, click the **Sharing** button and remove access for "All users".
 
 - **Low response timeout warning**: Shown when the route's timeout is set below 10 seconds. Long-running model operations (evaluations, predictions) may fail with a low timeout. Click the **Increase to 30 seconds** button to apply the recommended setting.
 

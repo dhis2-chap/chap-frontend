@@ -7,9 +7,10 @@ import type { Route } from '../useRoute';
 interface EditRouteProps {
     route: Route;
     onClose: () => void;
+    responseTimeoutSeconds?: number;
 }
 
-export const EditRoute = ({ route, onClose }: EditRouteProps) => {
+export const EditRoute = ({ route, onClose, responseTimeoutSeconds }: EditRouteProps) => {
     const { saveRoute, isSaving, error } = useSaveRoute({
         onSuccess: () => {
             onClose();
@@ -17,7 +18,7 @@ export const EditRoute = ({ route, onClose }: EditRouteProps) => {
     });
 
     const handleSubmit = (data: RouteFormValues) => {
-        saveRoute({ id: route.id, ...data });
+        saveRoute({ id: route.id, responseTimeoutSeconds, ...data });
     };
 
     return (
@@ -27,8 +28,9 @@ export const EditRoute = ({ route, onClose }: EditRouteProps) => {
             isLoading={isSaving}
             error={error}
             initialUrl={route.url}
-            tokenConfigured={hasRouteToken(route.headers)}
-            modalTitle={i18n.t('Edit route')}
+            tokenReentryRequired={!!route.auth}
+            tokenConfigured={hasRouteToken(route)}
+            modalTitle={responseTimeoutSeconds === undefined ? i18n.t('Edit route') : i18n.t('Increase response timeout to {{timeout}} seconds', { timeout: responseTimeoutSeconds })}
             submitButtonText={i18n.t('Save')}
         />
     );
