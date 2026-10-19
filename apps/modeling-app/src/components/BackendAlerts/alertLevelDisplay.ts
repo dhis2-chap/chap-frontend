@@ -2,13 +2,17 @@ import i18n from '@dhis2/d2-i18n';
 import { z } from 'zod';
 import type { AlertPolicyRead } from '@dhis2-chap/ui';
 
+// Swatch colours follow the green/yellow/orange/red scale used by public warning systems.
 export const ALERT_COLORS = {
-    green: { label: i18n.t('Green'), color: '#27783e', background: '#e3f3e7' },
-    yellow: { label: i18n.t('Yellow'), color: '#715600', background: '#fff4c2' },
-    orange: { label: i18n.t('Orange'), color: '#984900', background: '#ffead5' },
-    red: { label: i18n.t('Red'), color: '#a82020', background: '#fce2e2' },
+    green: { label: i18n.t('Green'), color: '#43a047', background: '#e3f3e7' },
+    yellow: { label: i18n.t('Yellow'), color: '#ffc107', background: '#fff4c2' },
+    orange: { label: i18n.t('Orange'), color: '#fb8c00', background: '#ffead5' },
+    red: { label: i18n.t('Red'), color: '#e53935', background: '#fce2e2' },
     purple: { label: i18n.t('Purple'), color: '#713a91', background: '#f0e5f7' },
 } as const;
+
+// Presets offered in the colour picker. Purple remains valid for colours saved earlier.
+export const PICKER_COLORS = ['green', 'yellow', 'orange', 'red'] as const;
 
 const presetColorSchema = z.enum(['green', 'yellow', 'orange', 'red', 'purple']);
 export const alertColorSchema = z.union([presetColorSchema, z.string().regex(/^#[0-9a-f]{6}$/i)]);

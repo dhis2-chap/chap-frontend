@@ -1,7 +1,7 @@
 import { useId } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { Button, Field } from '@dhis2/ui';
-import { ALERT_COLORS, getAlertColor, type AlertColor } from './alertLevelDisplay';
+import { ALERT_COLORS, PICKER_COLORS, getAlertColor, type AlertColor } from './alertLevelDisplay';
 import styles from './BackendAlerts.module.css';
 
 export const AlertColorSelect = ({ value, onChange, disabled, label }: {
@@ -14,17 +14,17 @@ export const AlertColorSelect = ({ value, onChange, disabled, label }: {
     return (
         <Field label={label ?? i18n.t('Colour')} name={id} disabled={disabled} dataTest="alert-colour-picker">
             <div className={styles.colorPresets}>
-                {Object.entries(ALERT_COLORS).map(([key, option]) => (
+                {PICKER_COLORS.map(key => (
                     <Button
                         key={key}
                         small
-                        aria-label={option.label}
-                        title={option.label}
+                        aria-label={ALERT_COLORS[key].label}
+                        title={ALERT_COLORS[key].label}
                         aria-pressed={value === key}
                         toggled={value === key}
                         disabled={disabled}
                         onClick={() => onChange(key)}
-                        icon={<span className={styles.colorSwatch} style={{ background: option.color }} />}
+                        icon={<span className={styles.colorSwatch} style={{ background: ALERT_COLORS[key].color }} />}
                     />
                 ))}
             </div>

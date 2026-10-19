@@ -21,12 +21,17 @@ test.describe.serial('alert level presentation', () => {
         const modal = page.locator('[data-test="create-alert-policy-modal"]');
         await modal.getByLabel('Policy name', { exact: true }).fill(policyName);
         const names = modal.getByLabel('Level name', { exact: true });
-        await expect(names.nth(0)).toHaveValue('Watch');
-        await expect(names.nth(1)).toHaveValue('Possible outbreak');
-        await names.nth(1).fill('Action');
+        await expect(names).toHaveCount(1);
+        await expect(names.nth(0)).toHaveValue('');
+        await names.nth(0).fill('Watch');
         await modal.getByLabel('Custom colour', { exact: true }).nth(0).fill('#11aabb');
+        await modal.locator('[data-test="dhis2-uiwidgets-singleselectfield"]').filter({ hasText: 'Strategy' }).nth(0)
+            .locator('[data-test="dhis2-uicore-select-input"]').click();
+        await page.locator('[data-test="dhis2-uicore-singleselectoption"]').filter({ hasText: /percentile/i }).click();
         // A zero percentile ensures this fixture raises alerts, regardless of its forecast values.
         await modal.getByLabel('Percentile (%)', { exact: true }).nth(0).fill('0');
+        await modal.getByRole('button', { name: 'Add level', exact: true }).click();
+        await names.nth(1).fill('Action');
         let creations = 0;
         page.on('request', (request) => {
             if (request.method() === 'POST' && request.url().endsWith('/v1/crud/alert-policies')) creations++;
@@ -48,14 +53,14 @@ test.describe.serial('alert level presentation', () => {
         const row = page.getByRole('row').filter({ hasText: policyName });
         await row.getByRole('button', { name: 'Colours', exact: true }).click();
         const edit = page.locator('[data-test="edit-alert-policy-display-modal"]');
-        await expect(edit.getByRole('textbox')).toHaveCount(0);
+        await expect(edit.locator('input[type="text"]')).toHaveCount(0);
         await expect(edit.getByLabel('Custom colour', { exact: true }).nth(0)).toHaveValue('#11aabb');
-        await edit.getByRole('button', { name: 'Purple', exact: true }).nth(1).click();
-        await expect(edit.getByRole('button', { name: 'Purple', exact: true }).nth(1)).toHaveAttribute('aria-pressed', 'true');
+        await edit.getByRole('button', { name: 'Yellow', exact: true }).nth(1).click();
+        await expect(edit.getByRole('button', { name: 'Yellow', exact: true }).nth(1)).toHaveAttribute('aria-pressed', 'true');
         await edit.getByRole('button', { name: 'Save', exact: true }).click();
         await expect(edit).not.toBeVisible();
         await page.reload();
-        await expect(row.getByText(/Action/).locator('span')).toHaveCSS('background-color', 'rgb(113, 58, 145)');
+        await expect(row.getByText(/Action/).locator('span')).toHaveCSS('background-color', 'rgb(255, 193, 7)');
         await expect(row.getByText(/Watch/).locator('span')).toHaveCSS('background-color', 'rgb(17, 170, 187)');
     });
 
@@ -76,7 +81,7 @@ test.describe.serial('alert level presentation', () => {
         expect(alerts.length).toBeGreaterThan(0);
         await page.goto(`/#/predictions/${setup.id}/runs/${prediction.id}`);
         const label = alerts.some(alert => alert.level === 'Action') ? 'Action' : 'Watch';
-        const color = label === 'Action' ? 'rgb(113, 58, 145)' : 'rgb(17, 170, 187)';
+        const color = label === 'Action' ? 'rgb(255, 193, 7)' : 'rgb(17, 170, 187)';
         const alert = alerts.find(item => item.level === label)!;
         const orgUnit = await readJson<{ displayName: string }>(await page.request.get(
             `${process.env.E2E_DHIS2_BASE_URL ?? 'http://localhost:8080'}/api/organisationUnits/${alert.orgUnit}?fields=displayName`,

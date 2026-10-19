@@ -103,10 +103,7 @@ export const CreateAlertPolicyModal = ({ onClose }: { onClose: () => void }) => 
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: '',
-            levels: [
-                { ...NEW_LEVEL, name: i18n.t('Watch'), color: 'orange', strategy: 'percentile', value: '50', probability: '50' },
-                { ...NEW_LEVEL, name: i18n.t('Possible outbreak'), color: 'red', strategy: 'percentile', value: '75', probability: '50' },
-            ],
+            levels: [NEW_LEVEL],
         },
     });
     const { fields, append, remove } = useFieldArray({ control, name: 'levels' });
