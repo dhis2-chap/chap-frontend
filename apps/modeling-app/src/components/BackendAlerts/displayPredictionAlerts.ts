@@ -3,7 +3,6 @@ import { getAlertLevelDisplay, type AlertLevelDisplay, type AlertPolicyDisplay }
 
 export type DisplayedPredictionAlert = AlertRead & {
     display: AlertLevelDisplay;
-    policyName: string;
     severity: number;
 };
 
@@ -16,7 +15,6 @@ export const displayPredictionAlerts = (
     return {
         ...alert,
         display: getAlertLevelDisplay(alert.level, policy, displays.get(alert.alertPolicyId)),
-        policyName: policy?.name ?? String(alert.alertPolicyId),
         severity: policy?.levels?.findIndex(level => level.name === alert.level) ?? -1,
     };
 }).sort((a, b) => b.severity - a.severity || a.orgUnit.localeCompare(b.orgUnit) || a.timePeriod.localeCompare(b.timePeriod));

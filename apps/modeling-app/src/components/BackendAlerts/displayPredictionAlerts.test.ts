@@ -33,7 +33,7 @@ describe('recorded alert presentation', () => {
 
     it('preserves alerts when their policy cannot be loaded', () => {
         expect(displayPredictionAlerts([alert(1, 99, 'Action')], [], new Map())[0]).toMatchObject({
-            id: 1, level: 'Action', display: { label: 'Action' }, policyName: '99',
+            id: 1, level: 'Action', display: { label: 'Action' },
         });
     });
 

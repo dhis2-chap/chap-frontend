@@ -1,4 +1,3 @@
-import type { KeyboardEvent, MouseEvent } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import {
     Button,
@@ -35,6 +34,7 @@ import { usePredictionSeries } from '../hooks/usePredictionSeries';
 import styles from './PredictionDetailsGrid.module.css';
 
 export type PredictionRunAlertSettings = {
+    alertsEnabled: boolean;
     alertProbability: OutbreakProbability;
     thresholdParams: ThresholdParams;
     thresholdsEnabled: boolean;
@@ -49,6 +49,7 @@ type Props = {
 };
 
 const DEFAULT_SETTINGS: PredictionRunAlertSettings = {
+    alertsEnabled: true,
     alertProbability: DEFAULT_OUTBREAK_PROBABILITY,
     thresholdParams: getDefaultThresholdParams(DEFAULT_THRESHOLD_STRATEGY),
     thresholdsEnabled: false,
@@ -117,21 +118,6 @@ export const PredictionDetailsGrid = ({
         });
     };
 
-    const toggleThresholds = () => {
-        updateSettings({ thresholdsEnabled: !settings.thresholdsEnabled });
-    };
-
-    const handleThresholdKeyDown = (event: KeyboardEvent) => {
-        if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            toggleThresholds();
-        }
-    };
-
-    const handleSwitchClick = (event: MouseEvent) => {
-        event.stopPropagation();
-    };
-
     const summaryList = (
         <dl className={styles.summaryList}>
             <SummaryRow
@@ -175,28 +161,45 @@ export const PredictionDetailsGrid = ({
                 </div>
             )}
 
-            <div
+            <Switch
                 className={styles.toggleButton}
-                onClick={toggleThresholds}
-                onKeyDown={handleThresholdKeyDown}
-                role="button"
-                tabIndex={0}
-            >
-                <div className={styles.toggleText}>
-                    <span className={styles.toggleTitle}>
-                        {i18n.t('Explore thresholds')}
+                aria-label={i18n.t('Alert levels')}
+                checked={settings.alertsEnabled}
+                onChange={({ checked }) => updateSettings({ alertsEnabled: checked })}
+                label={(
+                    <span className={styles.toggleText}>
+                        <span className={styles.toggleTitle}>{i18n.t('Alert levels')}</span>
+                        <span className={styles.toggleDescription}>
+                            {i18n.t('Show recorded alerts on the plots.')}
+                        </span>
                     </span>
-                    <span className={styles.toggleDescription}>
-                        {i18n.t('Explore threshold lines for this run. Recorded alerts stay visible.')}
+                )}
+            />
+            {settings.alertsEnabled && (
+                alerts.isLoading ? <CircularLoader small /> : alerts.error ? (
+                    <NoticeBox error title={i18n.t('Unable to load raised alerts')}>
+                        <Button small onClick={() => alerts.refetch()}>{i18n.t('Retry')}</Button>
+                    </NoticeBox>
+                ) : alerts.displayError ? (
+                    <NoticeBox warning title={i18n.t('Saved labels and colours could not be loaded')}>
+                        {i18n.t('Alerts are shown with their original labels and default colours.')}
+                    </NoticeBox>
+                ) : null
+            )}
+            <Switch
+                className={styles.toggleButton}
+                aria-label={i18n.t('Explore thresholds')}
+                checked={settings.thresholdsEnabled}
+                onChange={({ checked }) => updateSettings({ thresholdsEnabled: checked })}
+                label={(
+                    <span className={styles.toggleText}>
+                        <span className={styles.toggleTitle}>{i18n.t('Explore thresholds')}</span>
+                        <span className={styles.toggleDescription}>
+                            {i18n.t('Explore threshold lines for this run.')}
+                        </span>
                     </span>
-                </div>
-                <span onClick={handleSwitchClick}>
-                    <Switch
-                        checked={settings.thresholdsEnabled}
-                        onChange={toggleThresholds}
-                    />
-                </span>
-            </div>
+                )}
+            />
             {showThresholds && (
                 <>
                     <ThresholdStrategyControl
@@ -258,7 +261,7 @@ export const PredictionDetailsGrid = ({
             predictionTargetName={predictionTargetName}
             selectedProbability={settings.alertProbability}
             tiles={tiles}
-            raisedAlerts={alerts.displayedAlerts}
+            raisedAlerts={settings.alertsEnabled ? alerts.displayedAlerts : []}
             showStatusFilter={false}
             showThresholds={thresholdsVisible}
             panel={panelContent}

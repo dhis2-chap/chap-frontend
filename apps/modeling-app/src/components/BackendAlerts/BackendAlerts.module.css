@@ -50,11 +50,6 @@
     .levelRow > :not(button) { flex-basis: 40%; }
 }
 
-.alertTable {
-    max-block-size: 360px;
-    overflow: auto;
-}
-
 .policyLevelRow {
     display: grid;
     grid-template-columns: 1.4fr 1fr 1.8fr auto;

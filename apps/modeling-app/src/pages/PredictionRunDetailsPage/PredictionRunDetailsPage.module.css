@@ -15,8 +15,5 @@
 }
 
 .content {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacers-dp24);
     margin-block-start: 24px;
 }

@@ -50,7 +50,7 @@ test.describe.serial('alert level presentation', () => {
         await expect(row.getByText(/Investigate/)).toHaveCSS('color', 'rgb(113, 58, 145)');
     });
 
-    test('shows recorded alerts with the saved labels and colours on prediction details', async ({ page }) => {
+    test('shows recorded alerts on prediction plots by default and can hide them', async ({ page }) => {
         const evaluation = await createCompletedNaiveEvaluation(page);
         const setup = await readJson<DataBaseResponse>(await page.request.post(chapUrl('/v1/crud/prediction-setups'), {
             data: { backtestId: evaluation.id, name: `E2E alert run ${Date.now()}`, alertPolicyId: policyId },
@@ -66,14 +66,26 @@ test.describe.serial('alert level presentation', () => {
         const alerts = await readJson<AlertRead[]>(await getChap(page, `/v1/crud/alerts?predictionId=${prediction.id}`), 'Load recorded alerts');
         expect(alerts.length).toBeGreaterThan(0);
         await page.goto(`/#/predictions/${setup.id}/runs/${prediction.id}`);
-        const table = page.locator('[data-test="prediction-raised-alerts"]');
-        await expect(table.locator('tbody tr')).toHaveCount(alerts.length);
         const label = alerts.some(alert => alert.level === 'Action') ? 'Investigate' : 'Watch';
         const color = label === 'Investigate' ? 'rgb(113, 58, 145)' : 'rgb(152, 73, 0)';
-        await expect(table.getByText(label, { exact: true }).first()).toHaveCSS('color', color);
-        const region = await table.locator('tbody tr').filter({ hasText: label }).first().locator('td').first().innerText();
-        await page.getByPlaceholder('Search regions').fill(region);
-        await expect(page.locator('article .highcharts-plot-band').first()).toBeVisible();
-        await expect(page.locator('article').getByText(label, { exact: true }).first()).toBeVisible();
+        const alert = alerts.find(item => item.level === (label === 'Investigate' ? 'Action' : 'Watch'))!;
+        const orgUnit = await readJson<{ displayName: string }>(await page.request.get(
+            `${process.env.E2E_DHIS2_BASE_URL ?? 'http://localhost:8080'}/api/organisationUnits/${alert.orgUnit}?fields=displayName`,
+        ), 'Load alert region');
+        await page.getByPlaceholder('Search regions').fill(orgUnit.displayName);
+        const plot = page.locator('article');
+        const alertLevels = page.getByRole('switch', { name: 'Alert levels', exact: true });
+        const exploreThresholds = page.getByRole('switch', { name: 'Explore thresholds', exact: true });
+        await expect(alertLevels).toBeChecked();
+        await expect(exploreThresholds).not.toBeChecked();
+        await expect(page.getByText('Raised alerts', { exact: true })).toHaveCount(0);
+        await expect(plot.getByText(label, { exact: true })).toHaveCSS('color', color);
+        await expect(plot.locator('.highcharts-plot-band').first()).toBeVisible();
+        await alertLevels.uncheck();
+        await expect(plot.getByText(label, { exact: true })).toHaveCount(0);
+        await expect(plot.locator('.highcharts-plot-band')).toHaveCount(0);
+        await alertLevels.check();
+        await expect(plot.getByText(label, { exact: true })).toBeVisible();
+        await expect(plot.locator('.highcharts-plot-band').first()).toBeVisible();
     });
 });

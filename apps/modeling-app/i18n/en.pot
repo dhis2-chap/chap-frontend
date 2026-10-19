@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-19T08:58:51.429Z\n"
-"PO-Revision-Date: 2026-10-19T08:58:51.430Z\n"
+"POT-Creation-Date: 2026-10-19T09:40:21.671Z\n"
+"PO-Revision-Date: 2026-10-19T09:40:21.672Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -203,48 +203,6 @@ msgstr "Please try again."
 
 msgid "Save"
 msgstr "Save"
-
-msgid "Pending"
-msgstr "Pending"
-
-msgid "Approved"
-msgstr "Approved"
-
-msgid "Declined"
-msgstr "Declined"
-
-msgid "Raised alerts"
-msgstr "Raised alerts"
-
-msgid "Unable to load raised alerts"
-msgstr "Unable to load raised alerts"
-
-msgid "Retry"
-msgstr "Retry"
-
-msgid "Saved labels and colours could not be loaded"
-msgstr "Saved labels and colours could not be loaded"
-
-msgid "Alerts are shown with their original labels and default colours."
-msgstr "Alerts are shown with their original labels and default colours."
-
-msgid "No alerts were raised for this prediction."
-msgstr "No alerts were raised for this prediction."
-
-msgid "Region"
-msgstr "Region"
-
-msgid "Period"
-msgstr "Period"
-
-msgid "Alert level"
-msgstr "Alert level"
-
-msgid "Policy"
-msgstr "Policy"
-
-msgid "Review status"
-msgstr "Review status"
 
 msgid "Green"
 msgstr "Green"
@@ -558,6 +516,9 @@ msgstr "Duration"
 msgid "No jobs available"
 msgstr "No jobs available"
 
+msgid "Pending"
+msgstr "Pending"
+
 msgid "Running"
 msgstr "Running"
 
@@ -731,6 +692,9 @@ msgstr "Version"
 
 msgid "Commit"
 msgstr "Commit"
+
+msgid "Period"
+msgstr "Period"
 
 msgid "Covariates"
 msgstr "Covariates"
@@ -1069,6 +1033,9 @@ msgstr "Backtest parameters"
 
 msgid "Could not load backtest parameters"
 msgstr "Could not load backtest parameters"
+
+msgid "Retry"
+msgstr "Retry"
 
 msgid "Could not load weather providers"
 msgstr "Could not load weather providers"
@@ -1932,11 +1899,26 @@ msgstr "Thresholds unavailable"
 msgid "Prediction run"
 msgstr "Prediction run"
 
+msgid "Alert levels"
+msgstr "Alert levels"
+
+msgid "Show recorded alerts on the plots."
+msgstr "Show recorded alerts on the plots."
+
+msgid "Unable to load raised alerts"
+msgstr "Unable to load raised alerts"
+
+msgid "Saved labels and colours could not be loaded"
+msgstr "Saved labels and colours could not be loaded"
+
+msgid "Alerts are shown with their original labels and default colours."
+msgstr "Alerts are shown with their original labels and default colours."
+
 msgid "Explore thresholds"
 msgstr "Explore thresholds"
 
-msgid "Explore threshold lines for this run. Recorded alerts stay visible."
-msgstr "Explore threshold lines for this run. Recorded alerts stay visible."
+msgid "Explore threshold lines for this run."
+msgstr "Explore threshold lines for this run."
 
 msgid ""
 "There was a problem loading the prediction data required for this "
