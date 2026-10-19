@@ -201,8 +201,7 @@ export const ModelSelectionModal = (props: Props) => {
                 !query
                 || getModelName(model).toLowerCase().includes(query)
                 || (model.description ?? '').toLowerCase().includes(query)
-                || (model.author ?? '').toLowerCase().includes(query)
-                || (model.organization ?? '').toLowerCase().includes(query)
+                || getAuthorLine(model).toLowerCase().includes(query)
             );
             const matchesPeriodType = (
                 !periodTypeFilter
