@@ -17,6 +17,7 @@ import type {
 } from '@dhis2-chap/ui';
 import { useMemo } from 'react';
 import { usePredictionAlerts } from '@/hooks/usePredictionAlerts';
+import { Features, useIsFeatureAvailable } from '@/hooks/useIsFeatureAvailable';
 import { useEndemicThresholds } from '@/hooks/useEndemicThresholds';
 import {
     DEFAULT_THRESHOLD_STRATEGY,
@@ -71,7 +72,12 @@ export const PredictionDetailsGrid = ({
         isLoading: isSeriesLoading,
         error: seriesError,
     } = usePredictionSeries({ prediction, model });
-    const alerts = usePredictionAlerts(prediction);
+    const { isAvailable: isAlertsAvailable } = useIsFeatureAvailable(Features.PREDICTION_ALERTS);
+    const alerts = usePredictionAlerts(prediction, isAlertsAvailable);
+    // Recorded alerts replace the threshold outbreak shading only while they are shown.
+    const raisedAlerts = isAlertsAvailable && settings.alertsEnabled && alerts.displayedAlerts.length > 0
+        ? alerts.displayedAlerts
+        : undefined;
     const showThresholds = settings.thresholdsEnabled;
 
     const {
@@ -162,11 +168,13 @@ export const PredictionDetailsGrid = ({
                 </div>
             )}
 
-            <AlertLevelsSection
-                alerts={alerts}
-                enabled={settings.alertsEnabled}
-                onEnabledChange={alertsEnabled => updateSettings({ alertsEnabled })}
-            />
+            {isAlertsAvailable && (
+                <AlertLevelsSection
+                    alerts={alerts}
+                    enabled={settings.alertsEnabled}
+                    onEnabledChange={alertsEnabled => updateSettings({ alertsEnabled })}
+                />
+            )}
             <Switch
                 className={styles.toggleButton}
                 aria-label={i18n.t('Explore thresholds')}
@@ -242,8 +250,7 @@ export const PredictionDetailsGrid = ({
             predictionTargetName={predictionTargetName}
             selectedProbability={settings.alertProbability}
             tiles={tiles}
-            raisedAlerts={settings.alertsEnabled ? alerts.displayedAlerts : []}
-            showStatusFilter={false}
+            raisedAlerts={raisedAlerts}
             showThresholds={thresholdsVisible}
             panel={panelContent}
             panelHeader={i18n.t('Prediction settings')}

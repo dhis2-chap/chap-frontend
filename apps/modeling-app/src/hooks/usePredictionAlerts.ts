@@ -7,10 +7,11 @@ import { usePredictionSetup } from './usePredictionSetup';
 import { displayPredictionAlerts } from '@/components/BackendAlerts/displayPredictionAlerts';
 import { getPredictionAlertStatus } from '@/components/BackendAlerts/predictionAlertStatus';
 
-export const usePredictionAlerts = (prediction: PredictionInfo) => {
+export const usePredictionAlerts = (prediction: PredictionInfo, enabled: boolean) => {
     const alerts = useQuery({
         queryKey: ['prediction-alerts', OpenAPI.BASE, prediction.id],
         queryFn: () => AlertsService.listAlertsV1CrudAlertsGet(undefined, prediction.id),
+        enabled,
     });
     const policies = useAlertPolicies();
     const displays = useAlertPolicyDisplays();
