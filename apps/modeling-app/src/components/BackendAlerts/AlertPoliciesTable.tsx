@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import {
     Button,
@@ -69,6 +69,10 @@ const DeleteAlertPolicyModal = ({ policy, onClose }: { policy: AlertPolicyRead; 
 export const AlertPoliciesTable = () => {
     const { data: policies, error, isLoading } = useAlertPolicies();
     const [deleting, setDeleting] = useState<AlertPolicyRead>();
+    // Newest first; ids break ties and order policies without a created date.
+    const sortedPolicies = useMemo(() => [...policies ?? []].sort((a, b) => (
+        (b.created ?? '').localeCompare(a.created ?? '') || b.id - a.id
+    )), [policies]);
 
     if (isLoading) return <CircularLoader />;
     if (error) {
@@ -91,7 +95,7 @@ export const AlertPoliciesTable = () => {
                     </DataTableRow>
                 </DataTableHead>
                 <DataTableBody>
-                    {policies?.length ? policies.map(policy => (
+                    {sortedPolicies.length ? sortedPolicies.map(policy => (
                         <AlertPolicyRow key={policy.id} policy={policy} onDelete={() => setDeleting(policy)} />
                     )) : (
                         <DataTableRow>
