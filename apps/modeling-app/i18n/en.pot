@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-13T17:17:07.040Z\n"
-"PO-Revision-Date: 2026-10-13T17:17:07.041Z\n"
+"POT-Creation-Date: 2026-10-19T07:52:30.175Z\n"
+"PO-Revision-Date: 2026-10-19T07:52:30.176Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -615,6 +615,9 @@ msgstr "Daily"
 msgid "Any period"
 msgstr "Any period"
 
+msgid "Unknown"
+msgstr "Unknown"
+
 msgid "Remove from selection"
 msgstr "Remove from selection"
 
@@ -656,9 +659,6 @@ msgstr "None"
 
 msgid "Author"
 msgstr "Author"
-
-msgid "Unknown"
-msgstr "Unknown"
 
 msgid "Author note"
 msgstr "Author note"
@@ -2337,90 +2337,6 @@ msgstr "Select evaluation to compare with"
 
 msgid "No evaluations found"
 msgstr "No evaluations found"
-
-msgid "CHAP settings"
-msgstr "CHAP settings"
-
-msgid "Checking..."
-msgstr "Checking..."
-
-msgid "API token rejected"
-msgstr "API token rejected"
-
-msgid "No API token configured"
-msgstr "No API token configured"
-
-msgid "Not required by this server"
-msgstr "Not required by this server"
-
-msgid "API token accepted"
-msgstr "API token accepted"
-
-msgid "Could not be verified"
-msgstr "Could not be verified"
-
-msgid "An error occurred while connecting to the CHAP server."
-msgstr "An error occurred while connecting to the CHAP server."
-
-msgid ""
-"Are you sure you have configured your route correctly? See the console for "
-"more details."
-msgstr ""
-"Are you sure you have configured your route correctly? See the console for "
-"more details."
-
-msgid "Server information"
-msgstr "Server information"
-
-msgid "CHAP Version"
-msgstr "CHAP Version"
-
-msgid "Python Version"
-msgstr "Python Version"
-
-msgid "Connected"
-msgstr "Connected"
-
-msgid "Authentication"
-msgstr "Authentication"
-
-msgid "The CHAP server rejected the API token"
-msgstr "The CHAP server rejected the API token"
-
-msgid ""
-"The server is reachable, but requests are refused. Check the token for "
-"typos, then edit the route settings to enter the token configured on your "
-"CHAP server."
-msgstr ""
-"The server is reachable, but requests are refused. Check the token for "
-"typos, then edit the route settings to enter the token configured on your "
-"CHAP server."
-
-msgid "No API token is configured"
-msgstr "No API token is configured"
-
-msgid ""
-"The server is reachable, but it refuses requests without a token. Edit the "
-"route settings to add the token configured on your CHAP server."
-msgstr ""
-"The server is reachable, but it refuses requests without a token. Edit the "
-"route settings to add the token configured on your CHAP server."
-
-msgid "CHAP requires an API token"
-msgstr "CHAP requires an API token"
-
-msgid "Edit the route settings to add the token configured on your CHAP server."
-msgstr "Edit the route settings to add the token configured on your CHAP server."
-
-msgid "Restrict access to your CHAP server"
-msgstr "Restrict access to your CHAP server"
-
-msgid ""
-"This server does not report API token protection. Keep it on a private "
-"network or restrict access with a firewall."
-msgstr ""
-"This server does not report API token protection. Keep it on a private "
-"network or restrict access with a firewall."
 
 msgid "Confirm"
 msgstr "Confirm"
