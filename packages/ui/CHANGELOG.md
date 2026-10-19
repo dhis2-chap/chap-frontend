@@ -4,8 +4,7 @@
 
 ### Minor Changes
 
--   ab4b8f1: Choose a colour for each alert level from green, yellow, orange and red presets or a custom colour, and edit the colours of existing policies. Show recorded alerts on prediction plots by default, with a toggle in Prediction settings.
--   cabdadf: Add the Early Warning App with its own CHAP route settings, and share the Modeling side navigation and route settings [CLIM-1403].
+-   ab4b8f1: Choose a colour for each alert level from green, yellow, orange and red presets or a custom colour, and edit the colours of existing policies. Show recorded alerts on prediction plots by default, with a toggle in Prediction settings. Recorded alert overlays require CHAP Core 2.5.0 or later and are hidden on older versions.
 
 ### Patch Changes
 

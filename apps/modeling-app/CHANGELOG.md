@@ -5,12 +5,11 @@
 ### Minor Changes
 
 -   98a7f2b: Add an Alert policies page for creating and deleting alert policies with tiered levels, saved from least to most strict (CLIM-1136). Prediction setups can be given an alert policy when created or edited, and the setup page shows which policy its runs use. Requires the CHAP Core alert-policy REST endpoints.
--   ab4b8f1: Choose a colour for each alert level from green, yellow, orange and red presets or a custom colour, and edit the colours of existing policies. Show recorded alerts on prediction plots by default, with a toggle in Prediction settings.
+-   ab4b8f1: Choose a colour for each alert level from green, yellow, orange and red presets or a custom colour, and edit the colours of existing policies. Show recorded alerts on prediction plots by default, with a toggle in Prediction settings. Recorded alert overlays require CHAP Core 2.5.0 or later and are hidden on older versions.
 -   90b097b: Filter prediction detail plots by recorded alert level, together with region search.
 
 ### Patch Changes
 
--   cabdadf: Add the Early Warning App with its own CHAP route settings, and share the Modeling side navigation and route settings [CLIM-1403].
 -   d595d01: Show model authors beneath model names in the model selection list [CLIM-1120].
 -   5ac76da: Recognise encrypted route authentication and require token re-entry before edits that would discard it. Store new tokens encrypted on supported DHIS2 versions and warn for publicly readable routes [CLIM-1417].
 
