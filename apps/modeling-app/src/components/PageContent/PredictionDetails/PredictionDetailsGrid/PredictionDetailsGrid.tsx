@@ -17,6 +17,7 @@ import type {
     PredictionInfo,
 } from '@dhis2-chap/ui';
 import { useMemo } from 'react';
+import { usePredictionAlerts } from '@/hooks/usePredictionAlerts';
 import { useEndemicThresholds } from '@/hooks/useEndemicThresholds';
 import {
     DEFAULT_THRESHOLD_STRATEGY,
@@ -68,6 +69,7 @@ export const PredictionDetailsGrid = ({
         isLoading: isSeriesLoading,
         error: seriesError,
     } = usePredictionSeries({ prediction, model });
+    const alerts = usePredictionAlerts(prediction.id);
     const showThresholds = settings.thresholdsEnabled;
 
     const {
@@ -133,11 +135,11 @@ export const PredictionDetailsGrid = ({
     const summaryList = (
         <dl className={styles.summaryList}>
             <SummaryRow
-                label={i18n.t('Regions with alerts')}
+                label={i18n.t('Regions exceeding threshold')}
                 value={`${summary.regionsWithAlerts} / ${summary.totalRegions}`}
             />
             <SummaryRow
-                label={i18n.t('Alert periods')}
+                label={i18n.t('Periods exceeding threshold')}
                 value={summary.alertPeriods}
             />
             {summary.unavailableThresholds > 0 && (
@@ -182,10 +184,10 @@ export const PredictionDetailsGrid = ({
             >
                 <div className={styles.toggleText}>
                     <span className={styles.toggleTitle}>
-                        {i18n.t('Outbreak thresholds')}
+                        {i18n.t('Explore thresholds')}
                     </span>
                     <span className={styles.toggleDescription}>
-                        {i18n.t('Show outbreak status and threshold overlays for this run.')}
+                        {i18n.t('Explore threshold lines for this run. Recorded alerts stay visible.')}
                     </span>
                 </div>
                 <span onClick={handleSwitchClick}>
@@ -256,6 +258,8 @@ export const PredictionDetailsGrid = ({
             predictionTargetName={predictionTargetName}
             selectedProbability={settings.alertProbability}
             tiles={tiles}
+            raisedAlerts={alerts.displayedAlerts}
+            showStatusFilter={false}
             showThresholds={thresholdsVisible}
             panel={panelContent}
             panelHeader={i18n.t('Prediction settings')}

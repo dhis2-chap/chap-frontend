@@ -19,6 +19,9 @@ import {
 } from '@dhis2-chap/ui';
 import type { OutbreakProbability, ThresholdTileViewModel, ZoomRange } from '@dhis2-chap/ui';
 import { ID_MAIN_LAYOUT } from '../layout/Layout';
+import { ALERT_COLORS } from '@/components/BackendAlerts/alertLevelDisplay';
+import { AlertLevelTag } from '@/components/BackendAlerts/AlertLevelTag';
+import type { DisplayedPredictionAlert } from '@/components/BackendAlerts/displayPredictionAlerts';
 import styles from './ThresholdTilesExplorer.module.css';
 
 export type StatusFilterValue = ThresholdTileViewModel['status'] | 'all' | undefined;
@@ -91,6 +94,7 @@ const ThresholdTile = memo(function ThresholdTile({
     selectedProbability,
     showThresholds,
     tile,
+    raisedAlerts,
     zoomRange,
     onZoomChange,
 }: {
@@ -98,6 +102,7 @@ const ThresholdTile = memo(function ThresholdTile({
     selectedProbability: OutbreakProbability;
     showThresholds: boolean;
     tile: ThresholdTileViewModel;
+    raisedAlerts?: DisplayedPredictionAlert[];
     zoomRange?: ZoomRange | null;
     onZoomChange?: (range: ZoomRange | null) => void;
 }) {
@@ -124,11 +129,18 @@ const ThresholdTile = memo(function ThresholdTile({
             : []
     ), [showThresholds, tile.indicators]);
 
+    const alertPeriods = useMemo(() => raisedAlerts?.map(alert => ({
+        period: alert.timePeriod,
+        label: alert.display.label,
+        color: ALERT_COLORS[alert.display.color].background,
+    })), [raisedAlerts]);
+
     return (
         <article className={styles.tile}>
             <div className={styles.tileHeader}>
                 <h3 title={tile.orgUnitName}>{tile.orgUnitName}</h3>
-                {showThresholds && (
+                {raisedAlerts?.[0] && <AlertLevelTag display={raisedAlerts[0].display} />}
+                {raisedAlerts === undefined && showThresholds && (
                     <span className={[
                         styles.statusBadge,
                         tile.status === 'outbreak'
@@ -149,6 +161,7 @@ const ThresholdTile = memo(function ThresholdTile({
                     endemicThreshold={showThresholds ? tile.endemicThreshold : undefined}
                     endemicThresholds={showThresholds ? tile.endemicThresholds : undefined}
                     outbreakPeriods={outbreakPeriods}
+                    alertPeriods={alertPeriods}
                     outbreakProbability={showThresholds ? selectedProbability : undefined}
                     variant="tile"
                     zoomRange={zoomRange}
@@ -164,6 +177,7 @@ type Props = {
     predictionTargetName: string;
     selectedProbability: OutbreakProbability;
     tiles: ThresholdTileViewModel[];
+    raisedAlerts?: DisplayedPredictionAlert[];
     showThresholds: boolean;
     showStatusFilter?: boolean;
     statusFilterVariant?: StatusFilterVariant;
@@ -177,6 +191,7 @@ export const ThresholdTilesExplorer = ({
     predictionTargetName,
     selectedProbability,
     tiles,
+    raisedAlerts,
     showThresholds,
     showStatusFilter = true,
     statusFilterVariant = 'clearable',
@@ -185,6 +200,16 @@ export const ThresholdTilesExplorer = ({
     gridResetKey = '',
     zoomResetDeps = [],
 }: Props) => {
+    const alertsByOrgUnit = useMemo(() => {
+        if (!raisedAlerts) return undefined;
+        const map = new Map<string, DisplayedPredictionAlert[]>();
+        for (const alert of raisedAlerts) {
+            const group = map.get(alert.orgUnit) ?? [];
+            group.push(alert);
+            map.set(alert.orgUnit, group);
+        }
+        return map;
+    }, [raisedAlerts]);
     const [regionSearch, setRegionSearch] = useState('');
     const [clearableStatusFilter, setClearableStatusFilter] = useState<
         ThresholdTileViewModel['status'] | undefined
@@ -411,6 +436,7 @@ export const ThresholdTilesExplorer = ({
                                         selectedProbability={selectedProbability}
                                         showThresholds={showThresholds}
                                         tile={filteredTiles[index]}
+                                        raisedAlerts={alertsByOrgUnit ? alertsByOrgUnit.get(filteredTiles[index].orgUnitId) ?? [] : undefined}
                                         zoomRange={zoomRange}
                                         onZoomChange={setZoomRange}
                                     />

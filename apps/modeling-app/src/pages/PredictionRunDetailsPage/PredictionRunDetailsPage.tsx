@@ -16,6 +16,7 @@ import {
     PredictionDetailsGrid,
     type PredictionRunAlertSettings,
 } from '../../components/PageContent/PredictionDetails/PredictionDetailsGrid';
+import { PredictionRunAlerts } from '@/components/BackendAlerts/PredictionRunAlerts';
 import { ChapErrorNotice } from '../../components/ChapErrorNotice';
 
 export const PredictionRunDetailsPage: React.FC = () => {
@@ -98,6 +99,7 @@ export const PredictionRunDetailsPage: React.FC = () => {
                 {i18n.t('Back to prediction setup')}
             </Button>
             <div className={styles.content}>
+                <PredictionRunAlerts predictionId={prediction.id} />
                 <PredictionDetailsGrid
                     prediction={prediction}
                     model={model}

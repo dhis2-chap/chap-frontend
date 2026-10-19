@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -25,6 +26,9 @@ import { useCreateAlertPolicy } from '@/hooks/useAlertPolicies';
 import { useThresholdStrategies } from '@/hooks/useThresholdStrategies';
 import { getChapErrorMessage } from '@/utils/chapErrors';
 import { sortAlertLevels } from './sortAlertLevels';
+import { useSaveAlertPolicyDisplay } from '@/hooks/useAlertPolicyDisplay';
+import { alertColorSchema } from './alertLevelDisplay';
+import { AlertColorSelect } from './AlertColorSelect';
 import styles from './BackendAlerts.module.css';
 
 const isNumberIn = (value: string, min: number, max: number) => (
@@ -33,6 +37,7 @@ const isNumberIn = (value: string, min: number, max: number) => (
 
 const levelSchema = z.object({
     name: z.string().trim().min(1, i18n.t('Enter a level name')),
+    color: alertColorSchema,
     strategy: z.enum(['seasonal', 'percentile']),
     value: z.string(),
     baselineYears: z.string(),
@@ -69,6 +74,7 @@ const DEFAULT_VALUE = { seasonal: '2', percentile: '75' };
 
 const NEW_LEVEL: LevelValues = {
     name: '',
+    color: 'red',
     strategy: 'seasonal',
     value: DEFAULT_VALUE.seasonal,
     baselineYears: '5',
@@ -89,30 +95,58 @@ const toAlertLevel = (level: LevelValues): AlertLevel => ({
 
 export const CreateAlertPolicyModal = ({ onClose }: { onClose: () => void }) => {
     const create = useCreateAlertPolicy();
+    const saveDisplay = useSaveAlertPolicyDisplay();
+    const [createdPolicyId, setCreatedPolicyId] = useState<number>();
+    const isSaving = create.isLoading || saveDisplay.isLoading;
     const { thresholdStrategies, isLoading: isStrategiesLoading } = useThresholdStrategies();
     const { control, handleSubmit, setValue, watch, formState: { errors } } = useForm<FormValues>({
         resolver: zodResolver(formSchema),
-        defaultValues: { name: '', levels: [NEW_LEVEL] },
+        defaultValues: {
+            name: '',
+            levels: [
+                { ...NEW_LEVEL, name: i18n.t('Watch'), color: 'orange', strategy: 'percentile', value: '50', probability: '50' },
+                { ...NEW_LEVEL, name: i18n.t('Possible outbreak'), color: 'red', strategy: 'percentile', value: '75', probability: '50' },
+            ],
+        },
     });
     const { fields, append, remove } = useFieldArray({ control, name: 'levels' });
     const levels = watch('levels');
 
-    // On failure the mutation error is shown below and the form stays open for a retry.
-    const save = handleSubmit(values => create.mutate(
-        { name: values.name.trim(), levels: sortAlertLevels(values.levels.map(toAlertLevel)) },
-        { onSuccess: onClose },
-    ));
+    // A failed colour save must not create a second policy when retried.
+    const save = handleSubmit(async (values) => {
+        try {
+            let policyId = createdPolicyId;
+            if (policyId === undefined) {
+                const result = await create.mutateAsync({
+                    name: values.name.trim(),
+                    levels: sortAlertLevels(values.levels.map(toAlertLevel)),
+                });
+                policyId = result.id;
+                setCreatedPolicyId(policyId);
+            }
+            await saveDisplay.mutateAsync({
+                policyId,
+                display: Object.fromEntries(values.levels.map(level => [level.name.trim(), {
+                    label: level.name.trim(), color: level.color,
+                }])),
+            });
+            onClose();
+        } catch {
+            // Mutation errors are rendered below; keep the form available for retry.
+        }
+    });
 
     return (
         <Modal large onClose={onClose} dataTest="create-alert-policy-modal">
             <ModalTitle>{i18n.t('New alert policy')}</ModalTitle>
             <ModalContent>
-                <div className={styles.form}>
+                <fieldset className={styles.form} disabled={isSaving || createdPolicyId !== undefined}>
                     <Controller
                         name="name"
                         control={control}
                         render={({ field }) => (
                             <InputField
+                                name={field.name}
                                 label={i18n.t('Policy name')}
                                 value={field.value}
                                 onChange={({ value }) => field.onChange(value ?? '')}
@@ -128,7 +162,7 @@ export const CreateAlertPolicyModal = ({ onClose }: { onClose: () => void }) => 
                         const strategy = levels[index]?.strategy;
                         const levelErrors = errors.levels?.[index];
                         return (
-                            <div key={field.id} className={styles.levelRow}>
+                            <div key={field.id} className={styles.policyLevelRow}>
                                 <Controller
                                     name={`levels.${index}.name`}
                                     control={control}
@@ -137,11 +171,19 @@ export const CreateAlertPolicyModal = ({ onClose }: { onClose: () => void }) => 
                                             dense
                                             label={i18n.t('Level name')}
                                             placeholder={i18n.t('e.g. Monitor')}
+                                            name={input.name}
                                             value={input.value}
                                             onChange={({ value }) => input.onChange(value ?? '')}
                                             error={!!levelErrors?.name}
                                             validationText={levelErrors?.name?.message}
                                         />
+                                    )}
+                                />
+                                <Controller
+                                    name={`levels.${index}.color`}
+                                    control={control}
+                                    render={({ field: input }) => (
+                                        <AlertColorSelect value={input.value} onChange={input.onChange} disabled={isSaving || createdPolicyId !== undefined} />
                                     )}
                                 />
                                 <Controller
@@ -152,6 +194,7 @@ export const CreateAlertPolicyModal = ({ onClose }: { onClose: () => void }) => 
                                             dense
                                             label={i18n.t('Strategy')}
                                             loading={isStrategiesLoading}
+                                            disabled={isSaving || createdPolicyId !== undefined}
                                             // An unmatched selected value makes SingleSelect throw in dev builds.
                                             selected={thresholdStrategies?.some(item => item.id === input.value) ? input.value : undefined}
                                             onChange={({ selected }) => {
@@ -175,6 +218,7 @@ export const CreateAlertPolicyModal = ({ onClose }: { onClose: () => void }) => 
                                             label={strategy === 'percentile'
                                                 ? i18n.t('Percentile (%)')
                                                 : i18n.t('SD above mean')}
+                                            name={input.name}
                                             value={input.value}
                                             onChange={({ value }) => input.onChange(value ?? '')}
                                             error={!!levelErrors?.value}
@@ -192,6 +236,7 @@ export const CreateAlertPolicyModal = ({ onClose }: { onClose: () => void }) => 
                                                 type="number"
                                                 label={i18n.t('Baseline years')}
                                                 placeholder={i18n.t('All history')}
+                                                name={input.name}
                                                 value={input.value}
                                                 onChange={({ value }) => input.onChange(value ?? '')}
                                                 error={!!levelErrors?.baselineYears}
@@ -207,6 +252,7 @@ export const CreateAlertPolicyModal = ({ onClose }: { onClose: () => void }) => 
                                         <SingleSelectField
                                             dense
                                             label={i18n.t('Min. probability')}
+                                            disabled={isSaving || createdPolicyId !== undefined}
                                             selected={input.value}
                                             onChange={({ selected }) => input.onChange(selected)}
                                         >
@@ -236,20 +282,25 @@ export const CreateAlertPolicyModal = ({ onClose }: { onClose: () => void }) => 
                             {i18n.t('Add level')}
                         </Button>
                     </div>
+                    {!!saveDisplay.error && (
+                        <NoticeBox error title={i18n.t('Policy created, but colours could not be saved')}>
+                            {i18n.t('Retry to save the colours. The policy has already been created.')}
+                        </NoticeBox>
+                    )}
                     {create.error && (
                         <NoticeBox error title={i18n.t('Unable to create alert policy')}>
                             {getChapErrorMessage(create.error)}
                         </NoticeBox>
                     )}
-                </div>
+                </fieldset>
             </ModalContent>
             <ModalActions>
                 <ButtonStrip end>
-                    <Button onClick={onClose} disabled={create.isLoading}>
+                    <Button onClick={onClose} disabled={isSaving}>
                         {i18n.t('Cancel')}
                     </Button>
-                    <Button primary onClick={() => save()} loading={create.isLoading}>
-                        {i18n.t('Create policy')}
+                    <Button primary onClick={() => save()} loading={isSaving} disabled={isSaving}>
+                        {createdPolicyId === undefined ? i18n.t('Create policy') : i18n.t('Retry saving colours')}
                     </Button>
                 </ButtonStrip>
             </ModalActions>

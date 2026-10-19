@@ -17,12 +17,15 @@ import {
     NoticeBox,
 } from '@dhis2/ui';
 import { format } from 'date-fns';
-import { Tag, type AlertPolicyRead, type ApiError } from '@dhis2-chap/ui';
+import { type AlertPolicyRead, type ApiError } from '@dhis2-chap/ui';
 import { useAlertPolicies, useDeleteAlertPolicy } from '@/hooks/useAlertPolicies';
 import { getChapErrorMessage } from '@/utils/chapErrors';
 import { TableActionButton } from '../TableActionButton';
 import { describeAlertLevel } from './describeAlertLevel';
-import { sortAlertLevels } from './sortAlertLevels';
+import { useAlertPolicyDisplay } from '@/hooks/useAlertPolicyDisplay';
+import { getAlertLevelDisplay } from './alertLevelDisplay';
+import { AlertLevelTag } from './AlertLevelTag';
+import { EditAlertPolicyDisplayModal } from './EditAlertPolicyDisplayModal';
 import styles from './BackendAlerts.module.css';
 
 const CONFLICT = 409;
@@ -89,24 +92,7 @@ export const AlertPoliciesTable = () => {
                 </DataTableHead>
                 <DataTableBody>
                     {policies?.length ? policies.map(policy => (
-                        <DataTableRow key={policy.id}>
-                            <DataTableCell>{policy.name}</DataTableCell>
-                            <DataTableCell>
-                                <div className={styles.tags}>
-                                    {sortAlertLevels(policy.levels ?? []).map(level => (
-                                        <Tag key={level.name}>{describeAlertLevel(level)}</Tag>
-                                    ))}
-                                </div>
-                            </DataTableCell>
-                            <DataTableCell>
-                                {policy.created ? format(new Date(policy.created), 'dd.MM.yyyy') : '-'}
-                            </DataTableCell>
-                            <DataTableCell>
-                                <TableActionButton destructive onClick={() => setDeleting(policy)}>
-                                    {i18n.t('Delete')}
-                                </TableActionButton>
-                            </DataTableCell>
-                        </DataTableRow>
+                        <AlertPolicyRow key={policy.id} policy={policy} onDelete={() => setDeleting(policy)} />
                     )) : (
                         <DataTableRow>
                             <DataTableCell colSpan="4" align="center">
@@ -118,5 +104,40 @@ export const AlertPoliciesTable = () => {
             </DataTable>
             {deleting && <DeleteAlertPolicyModal policy={deleting} onClose={() => setDeleting(undefined)} />}
         </>
+    );
+};
+
+const AlertPolicyRow = ({ policy, onDelete }: { policy: AlertPolicyRead; onDelete: () => void }) => {
+    const display = useAlertPolicyDisplay(policy.id);
+    const [editing, setEditing] = useState(false);
+    return (
+        <DataTableRow>
+            <DataTableCell>{policy.name}</DataTableCell>
+            <DataTableCell>
+                <div className={styles.tags}>
+                    {(policy.levels ?? []).map((level) => {
+                        const presentation = getAlertLevelDisplay(level.name, policy, display.data);
+                        return (
+                            <AlertLevelTag key={level.name} display={presentation}>
+                                {describeAlertLevel({ ...level, name: presentation.label })}
+                            </AlertLevelTag>
+                        );
+                    })}
+                </div>
+                {!!display.error && <p>{i18n.t('Saved labels and colours could not be loaded.')}</p>}
+            </DataTableCell>
+            <DataTableCell>{policy.created ? format(new Date(policy.created), 'dd.MM.yyyy') : '-'}</DataTableCell>
+            <DataTableCell>
+                <div className={styles.tags}>
+                    <TableActionButton disabled={display.isLoading || !!display.error} onClick={() => setEditing(true)}>
+                        {i18n.t('Labels and colours')}
+                    </TableActionButton>
+                    <TableActionButton destructive onClick={onDelete}>{i18n.t('Delete')}</TableActionButton>
+                </div>
+                {editing && (
+                    <EditAlertPolicyDisplayModal policy={policy} display={display.data ?? {}} onClose={() => setEditing(false)} />
+                )}
+            </DataTableCell>
+        </DataTableRow>
     );
 };

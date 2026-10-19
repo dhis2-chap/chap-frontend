@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-18T10:53:44.835Z\n"
-"PO-Revision-Date: 2026-10-18T10:53:44.835Z\n"
+"POT-Creation-Date: 2026-10-19T08:57:03.120Z\n"
+"PO-Revision-Date: 2026-10-19T08:57:03.121Z\n"
 
 msgid "CHAP settings"
 msgstr "CHAP settings"
@@ -142,6 +142,9 @@ msgstr "Endemic threshold"
 
 msgid "Prediction for {{predictionTargetName}} for {{orgUnitName}}"
 msgstr "Prediction for {{predictionTargetName}} for {{orgUnitName}}"
+
+msgid "Alert level"
+msgstr "Alert level"
 
 msgid "Outbreak"
 msgstr "Outbreak"

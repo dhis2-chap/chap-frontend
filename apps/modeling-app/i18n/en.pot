@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-13T17:17:07.040Z\n"
-"PO-Revision-Date: 2026-10-13T17:17:07.041Z\n"
+"POT-Creation-Date: 2026-10-19T08:58:51.429Z\n"
+"PO-Revision-Date: 2026-10-19T08:58:51.430Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -59,6 +59,9 @@ msgstr "Models"
 msgid "New model"
 msgstr "New model"
 
+msgid "Colour"
+msgstr "Colour"
+
 msgid ""
 "This policy is used by a prediction setup or has alerts raised against it, "
 "so it cannot be deleted."
@@ -99,6 +102,12 @@ msgstr "Actions"
 msgid "No alert policies yet."
 msgstr "No alert policies yet."
 
+msgid "Saved labels and colours could not be loaded."
+msgstr "Saved labels and colours could not be loaded."
+
+msgid "Labels and colours"
+msgstr "Labels and colours"
+
 msgid "Enter a level name"
 msgstr "Enter a level name"
 
@@ -116,6 +125,12 @@ msgstr "Enter a policy name"
 
 msgid "Level names must be unique"
 msgstr "Level names must be unique"
+
+msgid "Watch"
+msgstr "Watch"
+
+msgid "Possible outbreak"
+msgstr "Possible outbreak"
 
 msgid "New alert policy"
 msgstr "New alert policy"
@@ -162,11 +177,89 @@ msgstr "Remove level"
 msgid "Add level"
 msgstr "Add level"
 
+msgid "Policy created, but colours could not be saved"
+msgstr "Policy created, but colours could not be saved"
+
+msgid "Retry to save the colours. The policy has already been created."
+msgstr "Retry to save the colours. The policy has already been created."
+
 msgid "Unable to create alert policy"
 msgstr "Unable to create alert policy"
 
 msgid "Create policy"
 msgstr "Create policy"
+
+msgid "Retry saving colours"
+msgstr "Retry saving colours"
+
+msgid "Edit labels and colours"
+msgstr "Edit labels and colours"
+
+msgid "Unable to save labels and colours"
+msgstr "Unable to save labels and colours"
+
+msgid "Please try again."
+msgstr "Please try again."
+
+msgid "Save"
+msgstr "Save"
+
+msgid "Pending"
+msgstr "Pending"
+
+msgid "Approved"
+msgstr "Approved"
+
+msgid "Declined"
+msgstr "Declined"
+
+msgid "Raised alerts"
+msgstr "Raised alerts"
+
+msgid "Unable to load raised alerts"
+msgstr "Unable to load raised alerts"
+
+msgid "Retry"
+msgstr "Retry"
+
+msgid "Saved labels and colours could not be loaded"
+msgstr "Saved labels and colours could not be loaded"
+
+msgid "Alerts are shown with their original labels and default colours."
+msgstr "Alerts are shown with their original labels and default colours."
+
+msgid "No alerts were raised for this prediction."
+msgstr "No alerts were raised for this prediction."
+
+msgid "Region"
+msgstr "Region"
+
+msgid "Period"
+msgstr "Period"
+
+msgid "Alert level"
+msgstr "Alert level"
+
+msgid "Policy"
+msgstr "Policy"
+
+msgid "Review status"
+msgstr "Review status"
+
+msgid "Green"
+msgstr "Green"
+
+msgid "Yellow"
+msgstr "Yellow"
+
+msgid "Orange"
+msgstr "Orange"
+
+msgid "Red"
+msgstr "Red"
+
+msgid "Purple"
+msgstr "Purple"
 
 msgid "{{percentile}}th percentile, all history"
 msgstr "{{percentile}}th percentile, all history"
@@ -257,9 +350,6 @@ msgstr "Name is required"
 
 msgid "Rename evaluation"
 msgstr "Rename evaluation"
-
-msgid "Save"
-msgstr "Save"
 
 msgid "ID"
 msgstr "ID"
@@ -468,9 +558,6 @@ msgstr "Duration"
 msgid "No jobs available"
 msgstr "No jobs available"
 
-msgid "Pending"
-msgstr "Pending"
-
 msgid "Running"
 msgstr "Running"
 
@@ -644,9 +731,6 @@ msgstr "Version"
 
 msgid "Commit"
 msgstr "Commit"
-
-msgid "Period"
-msgstr "Period"
 
 msgid "Covariates"
 msgstr "Covariates"
@@ -985,9 +1069,6 @@ msgstr "Backtest parameters"
 
 msgid "Could not load backtest parameters"
 msgstr "Could not load backtest parameters"
-
-msgid "Retry"
-msgstr "Retry"
 
 msgid "Could not load weather providers"
 msgstr "Could not load weather providers"
@@ -1839,11 +1920,11 @@ msgstr "Adjust alert output"
 msgid "Apply"
 msgstr "Apply"
 
-msgid "Regions with alerts"
-msgstr "Regions with alerts"
+msgid "Regions exceeding threshold"
+msgstr "Regions exceeding threshold"
 
-msgid "Alert periods"
-msgstr "Alert periods"
+msgid "Periods exceeding threshold"
+msgstr "Periods exceeding threshold"
 
 msgid "Thresholds unavailable"
 msgstr "Thresholds unavailable"
@@ -1851,11 +1932,11 @@ msgstr "Thresholds unavailable"
 msgid "Prediction run"
 msgstr "Prediction run"
 
-msgid "Outbreak thresholds"
-msgstr "Outbreak thresholds"
+msgid "Explore thresholds"
+msgstr "Explore thresholds"
 
-msgid "Show outbreak status and threshold overlays for this run."
-msgstr "Show outbreak status and threshold overlays for this run."
+msgid "Explore threshold lines for this run. Recorded alerts stay visible."
+msgstr "Explore threshold lines for this run. Recorded alerts stay visible."
 
 msgid ""
 "There was a problem loading the prediction data required for this "
@@ -2337,90 +2418,6 @@ msgstr "Select evaluation to compare with"
 
 msgid "No evaluations found"
 msgstr "No evaluations found"
-
-msgid "CHAP settings"
-msgstr "CHAP settings"
-
-msgid "Checking..."
-msgstr "Checking..."
-
-msgid "API token rejected"
-msgstr "API token rejected"
-
-msgid "No API token configured"
-msgstr "No API token configured"
-
-msgid "Not required by this server"
-msgstr "Not required by this server"
-
-msgid "API token accepted"
-msgstr "API token accepted"
-
-msgid "Could not be verified"
-msgstr "Could not be verified"
-
-msgid "An error occurred while connecting to the CHAP server."
-msgstr "An error occurred while connecting to the CHAP server."
-
-msgid ""
-"Are you sure you have configured your route correctly? See the console for "
-"more details."
-msgstr ""
-"Are you sure you have configured your route correctly? See the console for "
-"more details."
-
-msgid "Server information"
-msgstr "Server information"
-
-msgid "CHAP Version"
-msgstr "CHAP Version"
-
-msgid "Python Version"
-msgstr "Python Version"
-
-msgid "Connected"
-msgstr "Connected"
-
-msgid "Authentication"
-msgstr "Authentication"
-
-msgid "The CHAP server rejected the API token"
-msgstr "The CHAP server rejected the API token"
-
-msgid ""
-"The server is reachable, but requests are refused. Check the token for "
-"typos, then edit the route settings to enter the token configured on your "
-"CHAP server."
-msgstr ""
-"The server is reachable, but requests are refused. Check the token for "
-"typos, then edit the route settings to enter the token configured on your "
-"CHAP server."
-
-msgid "No API token is configured"
-msgstr "No API token is configured"
-
-msgid ""
-"The server is reachable, but it refuses requests without a token. Edit the "
-"route settings to add the token configured on your CHAP server."
-msgstr ""
-"The server is reachable, but it refuses requests without a token. Edit the "
-"route settings to add the token configured on your CHAP server."
-
-msgid "CHAP requires an API token"
-msgstr "CHAP requires an API token"
-
-msgid "Edit the route settings to add the token configured on your CHAP server."
-msgstr "Edit the route settings to add the token configured on your CHAP server."
-
-msgid "Restrict access to your CHAP server"
-msgstr "Restrict access to your CHAP server"
-
-msgid ""
-"This server does not report API token protection. Keep it on a private "
-"network or restrict access with a firewall."
-msgstr ""
-"This server does not report API token protection. Keep it on a private "
-"network or restrict access with a firewall."
 
 msgid "Confirm"
 msgstr "Confirm"
