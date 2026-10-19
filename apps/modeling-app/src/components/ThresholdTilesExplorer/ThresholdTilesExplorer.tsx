@@ -215,7 +215,9 @@ export const ThresholdTilesExplorer = ({
     const alertLevels = useMemo(() => (
         [...new Set(raisedAlerts?.map(alert => alert.level))]
     ), [raisedAlerts]);
-    const [selectedAlertLevel, setSelectedAlertLevel] = useState('');
+    const [alertLevelSelection, setAlertLevelSelection] = useState('');
+    // Refetched alerts can drop the selected level; fall back to all levels.
+    const selectedAlertLevel = alertLevels.includes(alertLevelSelection) ? alertLevelSelection : '';
     const isAlertLevelFilterShown = alertLevels.length > 0;
     const [regionSearch, setRegionSearch] = useState('');
     const [clearableStatusFilter, setClearableStatusFilter] = useState<
@@ -232,7 +234,7 @@ export const ThresholdTilesExplorer = ({
     }, zoomResetDeps);
 
     useEffect(() => {
-        setSelectedAlertLevel('');
+        setAlertLevelSelection('');
     }, [gridResetKey, isAlertLevelFilterShown]);
 
     useEffect(() => {
@@ -292,13 +294,13 @@ export const ThresholdTilesExplorer = ({
     const filteredTiles = useMemo(() => (
         tiles.filter(tile => (
             (!isStatusFilterShown || !activeStatusFilter || activeStatusFilter === 'all' || tile.status === activeStatusFilter) &&
-            (!isAlertLevelFilterShown || !selectedAlertLevel || alertsByOrgUnit?.get(tile.orgUnitId)?.some(alert => alert.level === selectedAlertLevel)) &&
+            (!selectedAlertLevel || alertsByOrgUnit?.get(tile.orgUnitId)?.some(alert => alert.level === selectedAlertLevel)) &&
             (
                 normalizedRegionSearch.length === 0
                 || tile.orgUnitName.toLocaleLowerCase().includes(normalizedRegionSearch)
             )
         ))
-    ), [activeStatusFilter, isStatusFilterShown, isAlertLevelFilterShown, selectedAlertLevel, alertsByOrgUnit, normalizedRegionSearch, tiles]);
+    ), [activeStatusFilter, isStatusFilterShown, selectedAlertLevel, alertsByOrgUnit, normalizedRegionSearch, tiles]);
 
     const shiftZoom = useCallback((direction: 1 | -1) => {
         setZoomRange((prev) => {
@@ -343,7 +345,7 @@ export const ThresholdTilesExplorer = ({
                         placeholder={i18n.t('All alert levels')}
                         prefix={selectedAlertLevel ? i18n.t('Alert level') : undefined}
                         selected={selectedAlertLevel}
-                        onChange={({ selected }) => setSelectedAlertLevel(selected)}
+                        onChange={({ selected }) => setAlertLevelSelection(selected)}
                         dataTest="alert-level-filter"
                     >
                         {alertLevels.map(level => (
