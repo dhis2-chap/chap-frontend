@@ -98,6 +98,8 @@ export const CreateAlertPolicyModal = ({ onClose }: { onClose: () => void }) => 
     const saveDisplay = useSaveAlertPolicyDisplay();
     const [createdPolicyId, setCreatedPolicyId] = useState<number>();
     const isSaving = create.isLoading || saveDisplay.isLoading;
+    // Once created, only the colour save can be retried.
+    const isLocked = isSaving || createdPolicyId !== undefined;
     const { thresholdStrategies, isLoading: isStrategiesLoading } = useThresholdStrategies();
     const { control, handleSubmit, setValue, watch, formState: { errors } } = useForm<FormValues>({
         resolver: zodResolver(formSchema),
@@ -135,7 +137,7 @@ export const CreateAlertPolicyModal = ({ onClose }: { onClose: () => void }) => 
         <Modal large onClose={onClose} dataTest="create-alert-policy-modal">
             <ModalTitle>{i18n.t('New alert policy')}</ModalTitle>
             <ModalContent>
-                <fieldset className={styles.form} disabled={isSaving || createdPolicyId !== undefined}>
+                <fieldset className={styles.form} disabled={isLocked}>
                     <Controller
                         name="name"
                         control={control}
@@ -178,7 +180,7 @@ export const CreateAlertPolicyModal = ({ onClose }: { onClose: () => void }) => 
                                     name={`levels.${index}.color`}
                                     control={control}
                                     render={({ field: input }) => (
-                                        <AlertColorSelect value={input.value} onChange={input.onChange} disabled={isSaving || createdPolicyId !== undefined} />
+                                        <AlertColorSelect value={input.value} onChange={input.onChange} disabled={isLocked} />
                                     )}
                                 />
                                 <Controller
@@ -189,7 +191,7 @@ export const CreateAlertPolicyModal = ({ onClose }: { onClose: () => void }) => 
                                             dense
                                             label={i18n.t('Strategy')}
                                             loading={isStrategiesLoading}
-                                            disabled={isSaving || createdPolicyId !== undefined}
+                                            disabled={isLocked}
                                             // An unmatched selected value makes SingleSelect throw in dev builds.
                                             selected={thresholdStrategies?.some(item => item.id === input.value) ? input.value : undefined}
                                             onChange={({ selected }) => {
@@ -247,7 +249,7 @@ export const CreateAlertPolicyModal = ({ onClose }: { onClose: () => void }) => 
                                         <SingleSelectField
                                             dense
                                             label={i18n.t('Min. probability')}
-                                            disabled={isSaving || createdPolicyId !== undefined}
+                                            disabled={isLocked}
                                             selected={input.value}
                                             onChange={({ selected }) => input.onChange(selected)}
                                         >

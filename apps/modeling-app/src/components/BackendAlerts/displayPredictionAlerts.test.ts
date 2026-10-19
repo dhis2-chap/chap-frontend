@@ -13,24 +13,18 @@ const alert = (id: number, policyId: number, level: string): AlertRead => ({
 
 describe('recorded alert presentation', () => {
     it('keeps identically named levels separate by policy and labels them with the level name', () => {
-        const result = displayPredictionAlerts([alert(1, 1, 'Watch'), alert(2, 2, 'Watch')], policies, new Map([
-            [1, { Watch: { color: 'yellow' } }],
-            [2, { Watch: { color: 'purple' } }],
-        ]));
+        const result = displayPredictionAlerts([alert(1, 1, 'Watch'), alert(2, 2, 'Watch')], policies, {
+            1: { Watch: { color: 'yellow' } },
+            2: { Watch: { color: '#713a91' } },
+        });
         expect(result.map(item => [item.level, item.display])).toEqual([
             ['Watch', { label: 'Watch', color: 'yellow' }],
-            ['Watch', { label: 'Watch', color: 'purple' }],
+            ['Watch', { label: 'Watch', color: '#713a91' }],
         ]);
     });
 
-    it('ignores labels saved by earlier versions', () => {
-        const display = alertPolicyDisplaySchema.parse({ Watch: { label: 'Surveillance', color: 'yellow' } });
-        expect(displayPredictionAlerts([alert(1, 1, 'Watch')], policies, new Map([[1, display]]))[0].display)
-            .toEqual({ label: 'Watch', color: 'yellow' });
-    });
-
     it('orders recorded alerts by the saved severity ladder and falls back for existing policies', () => {
-        const result = displayPredictionAlerts([alert(1, 1, 'Watch'), alert(2, 1, 'Action')], policies, new Map());
+        const result = displayPredictionAlerts([alert(1, 1, 'Watch'), alert(2, 1, 'Action')], policies, {});
         expect(result.map(item => [item.id, item.display])).toEqual([
             [2, { label: 'Action', color: 'red' }],
             [1, { label: 'Watch', color: 'orange' }],
@@ -38,7 +32,7 @@ describe('recorded alert presentation', () => {
     });
 
     it('preserves alerts when their policy cannot be loaded', () => {
-        expect(displayPredictionAlerts([alert(1, 99, 'Action')], [], new Map())[0]).toMatchObject({
+        expect(displayPredictionAlerts([alert(1, 99, 'Action')], [], {})[0]).toMatchObject({
             id: 1, level: 'Action', display: { label: 'Action' },
         });
     });
@@ -49,8 +43,8 @@ describe('recorded alert presentation', () => {
     });
 
     it('supports custom colours alongside saved presets', () => {
-        const display = alertPolicyDisplaySchema.parse({ Watch: { color: '#FFFF00' }, Action: { color: 'purple' } });
+        const display = alertPolicyDisplaySchema.parse({ Watch: { color: '#FFFF00' }, Action: { color: 'red' } });
         expect(getAlertColor(display.Watch.color)).toEqual({ color: '#FFFF00', background: '#FFFF0026' });
-        expect(getAlertColor(display.Action.color)).toMatchObject({ color: '#713a91', background: '#f0e5f7' });
+        expect(getAlertColor(display.Action.color)).toMatchObject({ color: '#e53935', background: '#fce2e2' });
     });
 });

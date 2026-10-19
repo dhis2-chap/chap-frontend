@@ -3,4 +3,4 @@
 "@dhis2-chap/ui": minor
 ---
 
-Add editable alert level labels and colours, with preset swatches, a custom colour picker, and Watch and Possible outbreak defaults. Show recorded alerts on prediction plots by default, with a toggle in Prediction settings.
+Choose a colour for each alert level from green, yellow, orange and red presets or a custom colour, and edit the colours of existing policies. Show recorded alerts on prediction plots by default, with a toggle in Prediction settings.

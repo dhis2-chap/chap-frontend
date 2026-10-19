@@ -9,12 +9,12 @@ export type DisplayedPredictionAlert = AlertRead & {
 export const displayPredictionAlerts = (
     alerts: AlertRead[],
     policies: AlertPolicyRead[],
-    displays: Map<number, AlertPolicyDisplay | undefined>,
+    displays: Record<number, AlertPolicyDisplay | undefined>,
 ): DisplayedPredictionAlert[] => alerts.map((alert) => {
     const policy = policies.find(item => item.id === alert.alertPolicyId);
     return {
         ...alert,
-        display: getAlertLevelDisplay(alert.level, policy, displays.get(alert.alertPolicyId)),
+        display: getAlertLevelDisplay(alert.level, policy, displays[alert.alertPolicyId]),
         severity: policy?.levels?.findIndex(level => level.name === alert.level) ?? -1,
     };
 }).sort((a, b) => b.severity - a.severity || a.orgUnit.localeCompare(b.orgUnit) || a.timePeriod.localeCompare(b.timePeriod));

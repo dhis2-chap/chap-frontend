@@ -1,38 +1,38 @@
 import { useDataEngine } from '@dhis2/app-runtime';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { z } from 'zod';
-import { OpenAPI } from '@dhis2-chap/ui';
 import { alertPolicyDisplaySchema, type AlertPolicyDisplay } from '@/components/BackendAlerts/alertLevelDisplay';
 
-// Presentation belongs to this DHIS2 instance; group it by CHAP server, then by policy id.
+// Colours for every policy are stored under one key, by policy id.
 const RESOURCE = 'dataStore/modeling/alert-policy-display';
 const QUERY_KEY = ['alert-policy-display'];
-const storedSchema = z.record(z.record(alertPolicyDisplaySchema));
+const storedSchema = z.record(alertPolicyDisplaySchema);
 type StoredDisplays = z.infer<typeof storedSchema>;
 
-const fetchStoredDisplays = async (engine: ReturnType<typeof useDataEngine>): Promise<StoredDisplays> => {
+// Resolves to undefined when the key has not been created yet.
+const fetchStoredDisplays = async (engine: ReturnType<typeof useDataEngine>): Promise<StoredDisplays | undefined> => {
     try {
         const result = await engine.query({ displays: { resource: RESOURCE } });
         return storedSchema.parse(result.displays);
     } catch (error) {
-        if ((error as { details?: { httpStatusCode?: number } })?.details?.httpStatusCode === 404) return {};
+        if ((error as { details?: { httpStatusCode?: number } })?.details?.httpStatusCode === 404) return undefined;
         throw error;
     }
 };
 
-const useServerDisplays = <T>(select: (displays: Record<string, AlertPolicyDisplay>) => T) => {
+const useStoredDisplays = <T>(select: (displays: StoredDisplays) => T) => {
     const engine = useDataEngine();
     return useQuery({
         queryKey: QUERY_KEY,
         queryFn: () => fetchStoredDisplays(engine),
-        select: stored => select(stored[OpenAPI.BASE] ?? {}),
+        select: stored => select(stored ?? {}),
         retry: false,
     });
 };
 
-export const useAlertPolicyDisplays = () => useServerDisplays(displays => displays);
+export const useAlertPolicyDisplays = () => useStoredDisplays(displays => displays);
 
-export const useAlertPolicyDisplay = (policyId: number) => useServerDisplays(displays => displays[policyId]);
+export const useAlertPolicyDisplay = (policyId: number) => useStoredDisplays(displays => displays[policyId]);
 
 export const useSaveAlertPolicyDisplay = () => {
     const engine = useDataEngine();
@@ -40,11 +40,10 @@ export const useSaveAlertPolicyDisplay = () => {
     return useMutation({
         mutationFn: async ({ policyId, display }: { policyId: number; display: AlertPolicyDisplay }) => {
             const stored = await fetchStoredDisplays(engine);
-            const next = {
-                ...stored,
-                [OpenAPI.BASE]: { ...stored[OpenAPI.BASE], [policyId]: alertPolicyDisplaySchema.parse(display) },
-            };
-            await engine.mutate({ resource: RESOURCE, type: 'update', id: '', data: next });
+            const next = { ...stored, [policyId]: alertPolicyDisplaySchema.parse(display) };
+            // Older DHIS2 versions only create a missing key with POST.
+            const type = stored ? 'update' : 'create';
+            await engine.mutate({ resource: RESOURCE, type, data: next } as Parameters<typeof engine.mutate>[0]);
             return next;
         },
         onSuccess: (next) => {

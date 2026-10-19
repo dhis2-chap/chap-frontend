@@ -24,6 +24,8 @@ import { AlertLevelTag } from '@/components/BackendAlerts/AlertLevelTag';
 import type { DisplayedPredictionAlert } from '@/components/BackendAlerts/displayPredictionAlerts';
 import styles from './ThresholdTilesExplorer.module.css';
 
+const NO_ALERTS: DisplayedPredictionAlert[] = [];
+
 export type StatusFilterValue = ThresholdTileViewModel['status'] | 'all' | undefined;
 
 type StatusFilterVariant = 'clearable' | 'all-option';
@@ -436,7 +438,7 @@ export const ThresholdTilesExplorer = ({
                                         selectedProbability={selectedProbability}
                                         showThresholds={showThresholds}
                                         tile={filteredTiles[index]}
-                                        raisedAlerts={alertsByOrgUnit ? alertsByOrgUnit.get(filteredTiles[index].orgUnitId) ?? [] : undefined}
+                                        raisedAlerts={alertsByOrgUnit ? alertsByOrgUnit.get(filteredTiles[index].orgUnitId) ?? NO_ALERTS : undefined}
                                         zoomRange={zoomRange}
                                         onZoomChange={setZoomRange}
                                     />

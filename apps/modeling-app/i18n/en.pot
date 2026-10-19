@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-19T10:50:27.926Z\n"
-"PO-Revision-Date: 2026-10-19T10:50:27.927Z\n"
+"POT-Creation-Date: 2026-10-19T11:09:50.029Z\n"
+"PO-Revision-Date: 2026-10-19T11:09:50.030Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -212,9 +212,6 @@ msgstr "Orange"
 
 msgid "Red"
 msgstr "Red"
-
-msgid "Purple"
-msgstr "Purple"
 
 msgid "{{percentile}}th percentile, all history"
 msgstr "{{percentile}}th percentile, all history"

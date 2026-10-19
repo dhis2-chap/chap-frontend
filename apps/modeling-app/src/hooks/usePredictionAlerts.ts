@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { AlertsService, OpenAPI, type PredictionInfo } from '@dhis2-chap/ui';
 import { useAlertPolicies } from './useAlertPolicies';
@@ -12,19 +13,19 @@ export const usePredictionAlerts = (prediction: PredictionInfo) => {
         queryFn: () => AlertsService.listAlertsV1CrudAlertsGet(undefined, prediction.id),
     });
     const policies = useAlertPolicies();
-    const policyIds = [...new Set(alerts.data?.map(alert => alert.alertPolicyId) ?? [])];
     const displays = useAlertPolicyDisplays();
     const setupId = prediction.predictionSetupId ?? undefined;
     const setup = usePredictionSetup(setupId);
     const setupPolicy = setupId === undefined ? null : setup.predictionSetup && (setup.predictionSetup.alertPolicy ?? null);
+    // Keep a stable reference so the memoised plot tiles only re-render when alerts change.
+    const displayedAlerts = useMemo(
+        () => displayPredictionAlerts(alerts.data ?? [], policies.data ?? [], displays.data ?? {}),
+        [alerts.data, policies.data, displays.data],
+    );
     return {
         ...alerts,
         isLoading: alerts.isLoading || (setupId !== undefined && setup.isLoading),
-        displayedAlerts: displayPredictionAlerts(
-            alerts.data ?? [],
-            policies.data ?? [],
-            new Map(policyIds.map(id => [id, displays.data?.[id]])),
-        ),
+        displayedAlerts,
         status: getPredictionAlertStatus({
             alerts: alerts.data ?? [],
             policies: policies.data ?? [],

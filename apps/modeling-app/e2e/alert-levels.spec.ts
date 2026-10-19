@@ -37,7 +37,7 @@ test.describe.serial('alert level presentation', () => {
             if (request.method() === 'POST' && request.url().endsWith('/v1/crud/alert-policies')) creations++;
         });
         await page.route('**/dataStore/modeling/alert-policy-display', async (route) => {
-            if (route.request().method() === 'PUT') {
+            if (route.request().method() !== 'GET') {
                 await route.fulfill({ status: 503, json: { httpStatusCode: 503, message: 'Temporary failure' } });
             } else await route.continue();
         });

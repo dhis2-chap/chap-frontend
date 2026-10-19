@@ -1,7 +1,7 @@
 import { useId } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { Button, Field } from '@dhis2/ui';
-import { ALERT_COLORS, PICKER_COLORS, getAlertColor, type AlertColor } from './alertLevelDisplay';
+import { ALERT_COLORS, PRESET_COLORS, getAlertColor, type AlertColor } from './alertLevelDisplay';
 import styles from './BackendAlerts.module.css';
 
 export const AlertColorSelect = ({ value, onChange, disabled, label }: {
@@ -14,7 +14,7 @@ export const AlertColorSelect = ({ value, onChange, disabled, label }: {
     return (
         <Field label={label ?? i18n.t('Colour')} name={id} disabled={disabled} dataTest="alert-colour-picker">
             <div className={styles.colorPresets}>
-                {PICKER_COLORS.map(key => (
+                {PRESET_COLORS.map(key => (
                     <Button
                         key={key}
                         small
