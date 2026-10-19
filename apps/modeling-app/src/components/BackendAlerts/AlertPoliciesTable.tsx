@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import {
     Button,
@@ -17,12 +17,15 @@ import {
     NoticeBox,
 } from '@dhis2/ui';
 import { format } from 'date-fns';
-import { Tag, type AlertPolicyRead, type ApiError } from '@dhis2-chap/ui';
+import { type AlertPolicyRead, type ApiError } from '@dhis2-chap/ui';
 import { useAlertPolicies, useDeleteAlertPolicy } from '@/hooks/useAlertPolicies';
 import { getChapErrorMessage } from '@/utils/chapErrors';
 import { TableActionButton } from '../TableActionButton';
 import { describeAlertLevel } from './describeAlertLevel';
-import { sortAlertLevels } from './sortAlertLevels';
+import { useAlertPolicyDisplay } from '@/hooks/useAlertPolicyDisplay';
+import { getAlertLevelDisplay } from './alertLevelDisplay';
+import { AlertLevelTag } from './AlertLevelTag';
+import { EditAlertPolicyDisplayModal } from './EditAlertPolicyDisplayModal';
 import styles from './BackendAlerts.module.css';
 
 const CONFLICT = 409;
@@ -66,6 +69,10 @@ const DeleteAlertPolicyModal = ({ policy, onClose }: { policy: AlertPolicyRead; 
 export const AlertPoliciesTable = () => {
     const { data: policies, error, isLoading } = useAlertPolicies();
     const [deleting, setDeleting] = useState<AlertPolicyRead>();
+    // Newest first; ids break ties and order policies without a created date.
+    const sortedPolicies = useMemo(() => [...policies ?? []].sort((a, b) => (
+        (b.created ?? '').localeCompare(a.created ?? '') || b.id - a.id
+    )), [policies]);
 
     if (isLoading) return <CircularLoader />;
     if (error) {
@@ -88,25 +95,8 @@ export const AlertPoliciesTable = () => {
                     </DataTableRow>
                 </DataTableHead>
                 <DataTableBody>
-                    {policies?.length ? policies.map(policy => (
-                        <DataTableRow key={policy.id}>
-                            <DataTableCell>{policy.name}</DataTableCell>
-                            <DataTableCell>
-                                <div className={styles.tags}>
-                                    {sortAlertLevels(policy.levels ?? []).map(level => (
-                                        <Tag key={level.name}>{describeAlertLevel(level)}</Tag>
-                                    ))}
-                                </div>
-                            </DataTableCell>
-                            <DataTableCell>
-                                {policy.created ? format(new Date(policy.created), 'dd.MM.yyyy') : '-'}
-                            </DataTableCell>
-                            <DataTableCell>
-                                <TableActionButton destructive onClick={() => setDeleting(policy)}>
-                                    {i18n.t('Delete')}
-                                </TableActionButton>
-                            </DataTableCell>
-                        </DataTableRow>
+                    {sortedPolicies.length ? sortedPolicies.map(policy => (
+                        <AlertPolicyRow key={policy.id} policy={policy} onDelete={() => setDeleting(policy)} />
                     )) : (
                         <DataTableRow>
                             <DataTableCell colSpan="4" align="center">
@@ -118,5 +108,44 @@ export const AlertPoliciesTable = () => {
             </DataTable>
             {deleting && <DeleteAlertPolicyModal policy={deleting} onClose={() => setDeleting(undefined)} />}
         </>
+    );
+};
+
+const AlertPolicyRow = ({ policy, onDelete }: { policy: AlertPolicyRead; onDelete: () => void }) => {
+    const display = useAlertPolicyDisplay(policy.id);
+    const [editing, setEditing] = useState(false);
+    return (
+        <DataTableRow>
+            <DataTableCell>{policy.name}</DataTableCell>
+            <DataTableCell>
+                <div className={styles.tags}>
+                    {(policy.levels ?? []).map((level) => {
+                        const presentation = getAlertLevelDisplay(level.name, policy, display.data);
+                        return (
+                            <AlertLevelTag key={level.name} display={presentation}>
+                                {describeAlertLevel(level)}
+                            </AlertLevelTag>
+                        );
+                    })}
+                </div>
+                {!!display.error && (
+                    <p className={styles.help} title={(display.error as Error).message}>
+                        {i18n.t('Saved colours could not be loaded, so default colours are shown. Use Colours to save them again.')}
+                    </p>
+                )}
+            </DataTableCell>
+            <DataTableCell>{policy.created ? format(new Date(policy.created), 'dd.MM.yyyy') : '-'}</DataTableCell>
+            <DataTableCell>
+                <div className={styles.tags}>
+                    <TableActionButton disabled={display.isLoading} onClick={() => setEditing(true)}>
+                        {i18n.t('Colours')}
+                    </TableActionButton>
+                    <TableActionButton destructive onClick={onDelete}>{i18n.t('Delete')}</TableActionButton>
+                </div>
+                {editing && (
+                    <EditAlertPolicyDisplayModal policy={policy} display={display.data ?? {}} onClose={() => setEditing(false)} />
+                )}
+            </DataTableCell>
+        </DataTableRow>
     );
 };

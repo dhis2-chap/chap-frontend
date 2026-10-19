@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-19T07:52:30.175Z\n"
-"PO-Revision-Date: 2026-10-19T07:52:30.176Z\n"
+"POT-Creation-Date: 2026-10-19T12:07:36.251Z\n"
+"PO-Revision-Date: 2026-10-19T12:07:36.252Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -59,6 +59,12 @@ msgstr "Models"
 msgid "New model"
 msgstr "New model"
 
+msgid "Colour"
+msgstr "Colour"
+
+msgid "Custom colour"
+msgstr "Custom colour"
+
 msgid ""
 "This policy is used by a prediction setup or has alerts raised against it, "
 "so it cannot be deleted."
@@ -98,6 +104,16 @@ msgstr "Actions"
 
 msgid "No alert policies yet."
 msgstr "No alert policies yet."
+
+msgid ""
+"Saved colours could not be loaded, so default colours are shown. Use "
+"Colours to save them again."
+msgstr ""
+"Saved colours could not be loaded, so default colours are shown. Use "
+"Colours to save them again."
+
+msgid "Colours"
+msgstr "Colours"
 
 msgid "Enter a level name"
 msgstr "Enter a level name"
@@ -162,11 +178,44 @@ msgstr "Remove level"
 msgid "Add level"
 msgstr "Add level"
 
+msgid "Policy created, but colours could not be saved"
+msgstr "Policy created, but colours could not be saved"
+
+msgid "Retry to save the colours. The policy has already been created."
+msgstr "Retry to save the colours. The policy has already been created."
+
 msgid "Unable to create alert policy"
 msgstr "Unable to create alert policy"
 
 msgid "Create policy"
 msgstr "Create policy"
+
+msgid "Retry saving colours"
+msgstr "Retry saving colours"
+
+msgid "Edit alert colours"
+msgstr "Edit alert colours"
+
+msgid "Unable to save alert colours"
+msgstr "Unable to save alert colours"
+
+msgid "Please try again."
+msgstr "Please try again."
+
+msgid "Save"
+msgstr "Save"
+
+msgid "Green"
+msgstr "Green"
+
+msgid "Yellow"
+msgstr "Yellow"
+
+msgid "Orange"
+msgstr "Orange"
+
+msgid "Red"
+msgstr "Red"
 
 msgid "{{percentile}}th percentile, all history"
 msgstr "{{percentile}}th percentile, all history"
@@ -257,9 +306,6 @@ msgstr "Name is required"
 
 msgid "Rename evaluation"
 msgstr "Rename evaluation"
-
-msgid "Save"
-msgstr "Save"
 
 msgid "ID"
 msgstr "ID"
@@ -1839,11 +1885,48 @@ msgstr "Adjust alert output"
 msgid "Apply"
 msgstr "Apply"
 
-msgid "Regions with alerts"
-msgstr "Regions with alerts"
+msgid "Alert levels"
+msgstr "Alert levels"
 
-msgid "Alert periods"
-msgstr "Alert periods"
+msgid "Unable to load raised alerts"
+msgstr "Unable to load raised alerts"
+
+msgid ""
+"No alerts were recorded for this run. The prediction setup has no alert "
+"policy. Add one to raise alerts on future runs."
+msgstr ""
+"No alerts were recorded for this run. The prediction setup has no alert "
+"policy. Add one to raise alerts on future runs."
+
+msgid ""
+"No alerts were recorded for this run. The prediction setup now uses "
+"{{policy}}, but no level may have been reached, or the policy may have been "
+"added after this run."
+msgstr ""
+"No alerts were recorded for this run. The prediction setup now uses "
+"{{policy}}, but no level may have been reached, or the policy may have been "
+"added after this run."
+
+msgid "No alerts were recorded for this run."
+msgstr "No alerts were recorded for this run."
+
+msgid "Show {{alertCount}} alerts raised by {{policy}} on the plots."
+msgstr "Show {{alertCount}} alerts raised by {{policy}} on the plots."
+
+msgid "Show recorded alerts on the plots."
+msgstr "Show recorded alerts on the plots."
+
+msgid "Saved alert colours could not be loaded"
+msgstr "Saved alert colours could not be loaded"
+
+msgid "Alerts are shown with default colours."
+msgstr "Alerts are shown with default colours."
+
+msgid "Regions exceeding threshold"
+msgstr "Regions exceeding threshold"
+
+msgid "Periods exceeding threshold"
+msgstr "Periods exceeding threshold"
 
 msgid "Thresholds unavailable"
 msgstr "Thresholds unavailable"
@@ -1851,11 +1934,11 @@ msgstr "Thresholds unavailable"
 msgid "Prediction run"
 msgstr "Prediction run"
 
-msgid "Outbreak thresholds"
-msgstr "Outbreak thresholds"
+msgid "Explore thresholds"
+msgstr "Explore thresholds"
 
-msgid "Show outbreak status and threshold overlays for this run."
-msgstr "Show outbreak status and threshold overlays for this run."
+msgid "Explore threshold lines for this run."
+msgstr "Explore threshold lines for this run."
 
 msgid ""
 "There was a problem loading the prediction data required for this "
