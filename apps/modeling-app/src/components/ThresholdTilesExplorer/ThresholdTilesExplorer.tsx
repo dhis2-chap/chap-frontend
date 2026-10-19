@@ -274,19 +274,21 @@ export const ThresholdTilesExplorer = ({
     }, [scrollParent, tiles.length]);
 
     const normalizedRegionSearch = regionSearch.trim().toLocaleLowerCase();
+    // Threshold status must not hide regions with recorded alerts.
+    const isStatusFilterShown = showThresholds && showStatusFilter && !raisedAlerts;
     const activeStatusFilter = statusFilterVariant === 'all-option'
         ? allOptionStatusFilter
         : clearableStatusFilter;
 
     const filteredTiles = useMemo(() => (
         tiles.filter(tile => (
-            (!showThresholds || !showStatusFilter || !activeStatusFilter || activeStatusFilter === 'all' || tile.status === activeStatusFilter) &&
+            (!isStatusFilterShown || !activeStatusFilter || activeStatusFilter === 'all' || tile.status === activeStatusFilter) &&
             (
                 normalizedRegionSearch.length === 0
                 || tile.orgUnitName.toLocaleLowerCase().includes(normalizedRegionSearch)
             )
         ))
-    ), [activeStatusFilter, normalizedRegionSearch, showStatusFilter, showThresholds, tiles]);
+    ), [activeStatusFilter, isStatusFilterShown, normalizedRegionSearch, tiles]);
 
     const shiftZoom = useCallback((direction: 1 | -1) => {
         setZoomRange((prev) => {
@@ -322,7 +324,7 @@ export const ThresholdTilesExplorer = ({
                     onChange={({ value }) => setRegionSearch(value ?? '')}
                 />
             </div>
-            {showThresholds && showStatusFilter && (
+            {isStatusFilterShown && (
                 <div className={styles.statusFilter}>
                     <span className={styles.filterLabel}>{i18n.t('Status filter')}</span>
                     <div className={styles.statusSelect}>

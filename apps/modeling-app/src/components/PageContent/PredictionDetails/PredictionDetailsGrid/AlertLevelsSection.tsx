@@ -34,7 +34,7 @@ export const AlertLevelsSection = ({ alerts, enabled, onEnabledChange }: Props) 
     if (status.kind === 'noPolicy') {
         return (
             <NoAlerts
-                message={i18n.t('This run had no alert policy, so it raised no alerts. Add a policy to the prediction setup to raise alerts on future runs.')}
+                message={i18n.t('No alerts were recorded for this run. The prediction setup has no alert policy. Add one to raise alerts on future runs.')}
             />
         );
     }

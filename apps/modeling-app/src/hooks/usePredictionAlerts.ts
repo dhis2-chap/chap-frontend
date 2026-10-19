@@ -14,7 +14,7 @@ export const usePredictionAlerts = (prediction: PredictionInfo, enabled: boolean
         enabled,
     });
     const policies = useAlertPolicies();
-    const displays = useAlertPolicyDisplays();
+    const displays = useAlertPolicyDisplays([...new Set(alerts.data?.map(alert => alert.alertPolicyId))].sort((a, b) => a - b));
     const setupId = prediction.predictionSetupId ?? undefined;
     const setup = usePredictionSetup(setupId);
     const setupPolicy = setupId === undefined ? null : setup.predictionSetup && (setup.predictionSetup.alertPolicy ?? null);

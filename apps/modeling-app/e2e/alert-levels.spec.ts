@@ -36,7 +36,7 @@ test.describe.serial('alert level presentation', () => {
         page.on('request', (request) => {
             if (request.method() === 'POST' && request.url().endsWith('/v1/crud/alert-policies')) creations++;
         });
-        await page.route('**/dataStore/modeling/alert-policy-display', async (route) => {
+        await page.route('**/dataStore/modeling/alert-policy-display-*', async (route) => {
             if (route.request().method() !== 'GET') {
                 await route.fulfill({ status: 503, json: { httpStatusCode: 503, message: 'Temporary failure' } });
             } else await route.continue();
@@ -45,7 +45,7 @@ test.describe.serial('alert level presentation', () => {
         await modal.getByRole('button', { name: 'Create policy', exact: true }).click();
         policyId = (await readJson<DataBaseResponse>(await created, 'Create policy')).id;
         await expect(modal.getByText('Policy created, but colours could not be saved', { exact: true })).toBeVisible();
-        await page.unroute('**/dataStore/modeling/alert-policy-display');
+        await page.unroute('**/dataStore/modeling/alert-policy-display-*');
         await modal.getByRole('button', { name: 'Retry saving colours' }).click();
         await expect(modal).not.toBeVisible();
         expect(creations).toBe(1);
