@@ -1,5 +1,21 @@
 # @dhis2-chap/ui
 
+## 7.3.0
+
+### Minor Changes
+
+-   ab4b8f1: Choose a colour for each alert level from green, yellow, orange and red presets or a custom colour, and edit the colours of existing policies. Show recorded alerts on prediction plots by default, with a toggle in Prediction settings. Recorded alert overlays require CHAP Core 2.5.0 or later and are hidden on older versions.
+
+### Patch Changes
+
+-   5ac76da: Recognise encrypted route authentication and require token re-entry before edits that would discard it. Store new tokens encrypted on supported DHIS2 versions and warn for publicly readable routes [CLIM-1417].
+
+    Store new and replacement CHAP tokens encrypted on DHIS2 2.40.7+, 2.41.4+, and 2.42+: as DHIS2 `api-token` authentication for Chap Core 2.5.0+ (dhis2-chap/chap-core#728), and as encrypted `api-headers` Bearer authentication for older or unreachable Chap Core servers. Regenerate the backend client from Chap Core 2.5.0.dev0.
+
+    **Existing installations:** API tokens previously entered through the Modeling App may be stored in plain text in the route's Authorization header, readable by users with access to the route configuration. Upgrading the app does not migrate these tokens automatically. A warning now identifies affected routes. On supported DHIS2 versions, edit the route and re-enter the token to replace the plain-text header with encrypted authentication. If the token may have been exposed, rotate it on the CHAP server and save the new token in the route. The apps no longer set tokens on older DHIS2 versions, which can only store them in plain text; upgrade DHIS2 before migrating. Existing tokens can still be removed there.
+
+    -   @dhis2-chap/core@7.3.0
+
 ## 7.2.0
 
 ### Minor Changes
