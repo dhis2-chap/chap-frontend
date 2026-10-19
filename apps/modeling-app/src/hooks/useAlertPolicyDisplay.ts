@@ -1,43 +1,54 @@
 import { useDataEngine } from '@dhis2/app-runtime';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { z } from 'zod';
 import { OpenAPI } from '@dhis2-chap/ui';
 import { alertPolicyDisplaySchema, type AlertPolicyDisplay } from '@/components/BackendAlerts/alertLevelDisplay';
 
-// Presentation belongs to this DHIS2 instance; scope it to the CHAP server too.
-const resourceFor = (policyId: number) => `dataStore/modeling/alert-policy-display-${btoa(OpenAPI.BASE).replaceAll('/', '_').replaceAll('+', '-').replaceAll('=', '')}-${policyId}`;
-const queryKeyFor = (policyId: number) => ['alert-policy-display', OpenAPI.BASE, policyId];
+// Presentation belongs to this DHIS2 instance; group it by CHAP server, then by policy id.
+const RESOURCE = 'dataStore/modeling/alert-policy-display';
+const QUERY_KEY = ['alert-policy-display'];
+const storedSchema = z.record(z.record(alertPolicyDisplaySchema));
+type StoredDisplays = z.infer<typeof storedSchema>;
 
-export const alertPolicyDisplayQuery = (engine: ReturnType<typeof useDataEngine>, policyId: number) => ({
-    queryKey: queryKeyFor(policyId),
-    queryFn: async () => {
-        try {
-            const result = await engine.query({ display: { resource: resourceFor(policyId) } });
-            return alertPolicyDisplaySchema.parse(result.display);
-        } catch (error) {
-            if ((error as { details?: { httpStatusCode?: number } })?.details?.httpStatusCode === 404) return {};
-            throw error;
-        }
-    },
-    retry: false,
-});
-
-export const useAlertPolicyDisplay = (policyId: number) => {
-    const engine = useDataEngine();
-    return useQuery(alertPolicyDisplayQuery(engine, policyId));
+const fetchStoredDisplays = async (engine: ReturnType<typeof useDataEngine>): Promise<StoredDisplays> => {
+    try {
+        const result = await engine.query({ displays: { resource: RESOURCE } });
+        return storedSchema.parse(result.displays);
+    } catch (error) {
+        if ((error as { details?: { httpStatusCode?: number } })?.details?.httpStatusCode === 404) return {};
+        throw error;
+    }
 };
+
+const useServerDisplays = <T>(select: (displays: Record<string, AlertPolicyDisplay>) => T) => {
+    const engine = useDataEngine();
+    return useQuery({
+        queryKey: QUERY_KEY,
+        queryFn: () => fetchStoredDisplays(engine),
+        select: stored => select(stored[OpenAPI.BASE] ?? {}),
+        retry: false,
+    });
+};
+
+export const useAlertPolicyDisplays = () => useServerDisplays(displays => displays);
+
+export const useAlertPolicyDisplay = (policyId: number) => useServerDisplays(displays => displays[policyId]);
 
 export const useSaveAlertPolicyDisplay = () => {
     const engine = useDataEngine();
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: ({ policyId, display }: { policyId: number; display: AlertPolicyDisplay }) => engine.mutate({
-            resource: resourceFor(policyId),
-            type: 'update',
-            id: '',
-            data: alertPolicyDisplaySchema.parse(display),
-        }),
-        onSuccess: (_result, { policyId, display }) => {
-            queryClient.setQueryData(queryKeyFor(policyId), display);
+        mutationFn: async ({ policyId, display }: { policyId: number; display: AlertPolicyDisplay }) => {
+            const stored = await fetchStoredDisplays(engine);
+            const next = {
+                ...stored,
+                [OpenAPI.BASE]: { ...stored[OpenAPI.BASE], [policyId]: alertPolicyDisplaySchema.parse(display) },
+            };
+            await engine.mutate({ resource: RESOURCE, type: 'update', id: '', data: next });
+            return next;
+        },
+        onSuccess: (next) => {
+            queryClient.setQueryData(QUERY_KEY, next);
         },
     });
 };
