@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import type { AlertRead, DataBaseResponse, JobResponse, PredictionInfo } from '@dhis2-chap/ui';
+import type { AlertRead, AlertsCreate, DataBaseResponse, JobResponse, PredictionEntry, PredictionInfo, RunPredictionSetupRequest } from '@dhis2-chap/ui';
 import { chapUrl, createCompletedNaiveEvaluation, getChap, pollEvaluationJob, readJson } from './helpers/evaluation-fixtures';
 import { selectPeriod } from './helpers/period-picker';
 
@@ -7,6 +7,7 @@ test.setTimeout(240_000);
 
 test.describe.serial('alert level presentation', () => {
     let policyId: number;
+    let predictionRequest: RunPredictionSetupRequest;
     const policyName = `E2E alert colours ${Date.now()}`;
 
     test.beforeEach(async ({ page }) => {
@@ -76,7 +77,9 @@ test.describe.serial('alert level presentation', () => {
         await selectPeriod(page, 'prediction-absolute-period-input', evaluation.dataset!.lastPeriod!);
         const running = page.waitForResponse(response => response.request().method() === 'POST' && response.url().endsWith(`/prediction-setups/${setup.id}/run`));
         await page.locator('[data-test="prediction-start-button"]').click();
-        const job = await readJson<JobResponse>(await running, 'Run prediction');
+        const response = await running;
+        predictionRequest = response.request().postDataJSON();
+        const job = await readJson<JobResponse>(response, 'Run prediction');
         await pollEvaluationJob(page, job.id);
         const prediction = await readJson<PredictionInfo>(await getChap(page, `/v1/jobs/${job.id}/database_result`), 'Load prediction');
         const alerts = await readJson<AlertRead[]>(await getChap(page, `/v1/crud/alerts?predictionId=${prediction.id}`), 'Load recorded alerts');
@@ -103,5 +106,60 @@ test.describe.serial('alert level presentation', () => {
         await alertLevels.check();
         await expect(plot.getByText(label, { exact: true })).toBeVisible();
         await expect(plot.locator('.highcharts-plot-band').first()).toBeVisible();
+    });
+
+    test('filters regions by any recorded alert level and combines with region search', async ({ page }) => {
+        // Run without an automatic policy so we can record a predictable mix of alerts.
+        const evaluation = await createCompletedNaiveEvaluation(page);
+        const setup = await readJson<DataBaseResponse>(await page.request.post(chapUrl('/v1/crud/prediction-setups'), {
+            data: { backtestId: evaluation.id, name: `E2E alert filter ${Date.now()}` },
+        }), 'Create filter prediction setup');
+        const job = await readJson<JobResponse>(await page.request.post(chapUrl(`/v1/crud/prediction-setups/${setup.id}/run`), {
+            data: { ...predictionRequest, name: `E2E alert filter ${Date.now()}` },
+        }), 'Run filter prediction');
+        await pollEvaluationJob(page, job.id);
+        const prediction = await readJson<PredictionInfo>(await getChap(page, `/v1/jobs/${job.id}/database_result`), 'Load filter prediction');
+        const entries = await readJson<PredictionEntry[]>(await getChap(page, `/v1/analytics/prediction-entry/${prediction.id}?quantiles=0.5`), 'Load forecast periods');
+        const periods = [...new Set(entries.map(entry => entry.period))].sort();
+        expect(periods.length).toBeGreaterThanOrEqual(2);
+        const [mixedRegion, actionRegion] = ['W6sNfkJcXGC', 'YvLOmtTQD6b'];
+        const data: AlertsCreate = {
+            alerts: [
+                { orgUnit: mixedRegion, timePeriod: periods[0], level: 'Watch', alertPolicyId: policyId, predictionId: prediction.id },
+                { orgUnit: mixedRegion, timePeriod: periods[1], level: 'Action', alertPolicyId: policyId, predictionId: prediction.id },
+                { orgUnit: actionRegion, timePeriod: periods[0], level: 'Action', alertPolicyId: policyId, predictionId: prediction.id },
+            ],
+        };
+        await readJson(await page.request.post(chapUrl('/v1/crud/alerts'), { data }), 'Record filter test alerts');
+        const orgUnit = await readJson<{ displayName: string }>(await page.request.get(
+            `${process.env.E2E_DHIS2_BASE_URL ?? 'http://localhost:8080'}/api/organisationUnits/${actionRegion}?fields=displayName`,
+        ), 'Load alert region');
+        await page.goto(`/#/predictions/${setup.id}/runs/${prediction.id}`);
+        const filter = page.locator('[data-test="alert-level-filter"]');
+        const input = filter.locator('[data-test="dhis2-uicore-select-input"]');
+        const plots = page.locator('article');
+        await expect(filter).toContainText('All alert levels');
+        await input.click();
+        await page.locator('[data-test="dhis2-uicore-singleselectoption"]').getByText('Action', { exact: true }).click();
+        await expect(plots).toHaveCount(2);
+        await input.click();
+        await page.locator('[data-test="dhis2-uicore-singleselectoption"]').getByText('Watch', { exact: true }).click();
+        await expect(plots).toHaveCount(1);
+        // A region still matches its lower level even when its badge shows the highest one.
+        await expect(plots.getByText('Action', { exact: true })).toBeVisible();
+        await page.getByPlaceholder('Search regions').fill(orgUnit.displayName);
+        await expect(page.getByText('No regions match the selected filters.', { exact: true })).toBeVisible();
+        await filter.locator('[data-test="alert-level-filter-clear"]').click();
+        await expect(plots.getByRole('heading', { name: orgUnit.displayName, exact: true })).toBeVisible();
+        await input.click();
+        await page.locator('[data-test="dhis2-uicore-singleselectoption"]').getByText('Watch', { exact: true }).click();
+        await expect(plots).toHaveCount(0);
+        const alertLevels = page.getByRole('switch', { name: 'Alert levels', exact: true });
+        await alertLevels.uncheck();
+        await expect(filter).toHaveCount(0);
+        await expect(plots.getByRole('heading', { name: orgUnit.displayName, exact: true })).toBeVisible();
+        await alertLevels.check();
+        await expect(filter).toContainText('All alert levels');
+        await expect(plots.getByRole('heading', { name: orgUnit.displayName, exact: true })).toBeVisible();
     });
 });
