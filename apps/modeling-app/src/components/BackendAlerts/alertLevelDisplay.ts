@@ -17,26 +17,25 @@ export type AlertColor = z.infer<typeof alertColorSchema>;
 export const getAlertColor = (value: AlertColor) => {
     const preset = presetColorSchema.safeParse(value);
     if (preset.success) {
-        const color = ALERT_COLORS[preset.data];
-        return { ...color, text: color.color };
+        return ALERT_COLORS[preset.data];
     }
-    return { color: value, background: `${value}26`, text: 'var(--colors-grey900)' };
+    return { color: value, background: `${value}26` };
 };
 
-export const alertLevelDisplaySchema = z.object({
-    label: z.string().trim().min(1),
-    color: alertColorSchema,
-});
-export const alertPolicyDisplaySchema = z.record(alertLevelDisplaySchema);
-export type AlertLevelDisplay = z.infer<typeof alertLevelDisplaySchema>;
+// Only the colour is stored per level; the label is always the policy's level name.
+export const alertLevelColorSchema = z.object({ color: alertColorSchema });
+export const alertPolicyDisplaySchema = z.record(alertLevelColorSchema);
 export type AlertPolicyDisplay = z.infer<typeof alertPolicyDisplaySchema>;
+export type AlertLevelDisplay = { label: string; color: AlertColor };
 
 export const getAlertLevelDisplay = (
     levelName: string,
     policy?: AlertPolicyRead,
     display?: AlertPolicyDisplay,
 ): AlertLevelDisplay => {
-    if (display && Object.prototype.hasOwnProperty.call(display, levelName)) return display[levelName];
+    if (display && Object.prototype.hasOwnProperty.call(display, levelName)) {
+        return { label: levelName, color: display[levelName].color };
+    }
     const levels = policy?.levels ?? [];
     const index = levels.findIndex(level => level.name === levelName);
     return {

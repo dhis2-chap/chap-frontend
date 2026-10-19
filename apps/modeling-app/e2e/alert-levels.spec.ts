@@ -46,16 +46,16 @@ test.describe.serial('alert level presentation', () => {
         expect(creations).toBe(1);
         await page.reload();
         const row = page.getByRole('row').filter({ hasText: policyName });
-        await row.getByRole('button', { name: 'Labels and colours' }).click();
+        await row.getByRole('button', { name: 'Colours', exact: true }).click();
         const edit = page.locator('[data-test="edit-alert-policy-display-modal"]');
-        await edit.getByLabel('Action', { exact: true }).fill('Investigate');
+        await expect(edit.getByRole('textbox')).toHaveCount(0);
         await expect(edit.getByLabel('Custom colour', { exact: true }).nth(0)).toHaveValue('#11aabb');
         await edit.getByRole('button', { name: 'Purple', exact: true }).nth(1).click();
         await expect(edit.getByRole('button', { name: 'Purple', exact: true }).nth(1)).toHaveAttribute('aria-pressed', 'true');
         await edit.getByRole('button', { name: 'Save', exact: true }).click();
         await expect(edit).not.toBeVisible();
         await page.reload();
-        await expect(row.getByText(/Investigate/)).toHaveCSS('color', 'rgb(113, 58, 145)');
+        await expect(row.getByText(/Action/).locator('span')).toHaveCSS('background-color', 'rgb(113, 58, 145)');
         await expect(row.getByText(/Watch/).locator('span')).toHaveCSS('background-color', 'rgb(17, 170, 187)');
     });
 
@@ -75,9 +75,9 @@ test.describe.serial('alert level presentation', () => {
         const alerts = await readJson<AlertRead[]>(await getChap(page, `/v1/crud/alerts?predictionId=${prediction.id}`), 'Load recorded alerts');
         expect(alerts.length).toBeGreaterThan(0);
         await page.goto(`/#/predictions/${setup.id}/runs/${prediction.id}`);
-        const label = alerts.some(alert => alert.level === 'Action') ? 'Investigate' : 'Watch';
-        const color = label === 'Investigate' ? 'rgb(113, 58, 145)' : 'rgb(17, 170, 187)';
-        const alert = alerts.find(item => item.level === (label === 'Investigate' ? 'Action' : 'Watch'))!;
+        const label = alerts.some(alert => alert.level === 'Action') ? 'Action' : 'Watch';
+        const color = label === 'Action' ? 'rgb(113, 58, 145)' : 'rgb(17, 170, 187)';
+        const alert = alerts.find(item => item.level === label)!;
         const orgUnit = await readJson<{ displayName: string }>(await page.request.get(
             `${process.env.E2E_DHIS2_BASE_URL ?? 'http://localhost:8080'}/api/organisationUnits/${alert.orgUnit}?fields=displayName`,
         ), 'Load alert region');

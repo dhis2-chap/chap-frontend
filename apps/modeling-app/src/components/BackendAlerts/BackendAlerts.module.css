@@ -20,17 +20,6 @@
     font-size: 14px;
 }
 
-.levelRow {
-    display: flex;
-    align-items: flex-start;
-    gap: var(--spacers-dp12);
-}
-
-.levelRow > :not(button) {
-    flex: 1 1 0;
-    min-inline-size: 0;
-}
-
 .levelTag {
     display: inline-flex;
     align-items: center;
@@ -84,11 +73,6 @@
 .customColor input:disabled {
     opacity: 0.5;
     cursor: not-allowed;
-}
-
-@media (max-width: 900px) {
-    .levelRow { flex-wrap: wrap; }
-    .levelRow > :not(button) { flex-basis: 40%; }
 }
 
 .policyLevelRow {

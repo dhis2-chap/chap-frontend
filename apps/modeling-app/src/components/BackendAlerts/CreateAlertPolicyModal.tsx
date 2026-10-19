@@ -126,9 +126,7 @@ export const CreateAlertPolicyModal = ({ onClose }: { onClose: () => void }) => 
             }
             await saveDisplay.mutateAsync({
                 policyId,
-                display: Object.fromEntries(values.levels.map(level => [level.name.trim(), {
-                    label: level.name.trim(), color: level.color,
-                }])),
+                display: Object.fromEntries(values.levels.map(level => [level.name.trim(), { color: level.color }])),
             });
             onClose();
         } catch {

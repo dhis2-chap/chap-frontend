@@ -181,8 +181,8 @@ export const PredictionDetailsGrid = ({
                         <Button small onClick={() => alerts.refetch()}>{i18n.t('Retry')}</Button>
                     </NoticeBox>
                 ) : alerts.displayError ? (
-                    <NoticeBox warning title={i18n.t('Saved labels and colours could not be loaded')}>
-                        {i18n.t('Alerts are shown with their original labels and default colours.')}
+                    <NoticeBox warning title={i18n.t('Saved alert colours could not be loaded')}>
+                        {i18n.t('Alerts are shown with default colours.')}
                     </NoticeBox>
                 ) : null
             )}

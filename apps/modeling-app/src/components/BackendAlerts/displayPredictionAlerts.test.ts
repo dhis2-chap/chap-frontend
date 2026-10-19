@@ -12,15 +12,21 @@ const alert = (id: number, policyId: number, level: string): AlertRead => ({
 });
 
 describe('recorded alert presentation', () => {
-    it('keeps identically named levels separate by policy and does not change recorded identifiers', () => {
+    it('keeps identically named levels separate by policy and labels them with the level name', () => {
         const result = displayPredictionAlerts([alert(1, 1, 'Watch'), alert(2, 2, 'Watch')], policies, new Map([
-            [1, { Watch: { label: 'Surveillance', color: 'yellow' } }],
-            [2, { Watch: { label: 'Investigate', color: 'purple' } }],
+            [1, { Watch: { color: 'yellow' } }],
+            [2, { Watch: { color: 'purple' } }],
         ]));
         expect(result.map(item => [item.level, item.display])).toEqual([
-            ['Watch', { label: 'Surveillance', color: 'yellow' }],
-            ['Watch', { label: 'Investigate', color: 'purple' }],
+            ['Watch', { label: 'Watch', color: 'yellow' }],
+            ['Watch', { label: 'Watch', color: 'purple' }],
         ]);
+    });
+
+    it('ignores labels saved by earlier versions', () => {
+        const display = alertPolicyDisplaySchema.parse({ Watch: { label: 'Surveillance', color: 'yellow' } });
+        expect(displayPredictionAlerts([alert(1, 1, 'Watch')], policies, new Map([[1, display]]))[0].display)
+            .toEqual({ label: 'Watch', color: 'yellow' });
     });
 
     it('orders recorded alerts by the saved severity ladder and falls back for existing policies', () => {
@@ -37,22 +43,14 @@ describe('recorded alert presentation', () => {
         });
     });
 
-    it('rejects empty labels and invalid colours from stored settings', () => {
-        expect(alertPolicyDisplaySchema.safeParse({ Watch: { label: ' ', color: 'orange' } }).success).toBe(false);
-        expect(alertPolicyDisplaySchema.safeParse({ Watch: { label: 'Watch', color: '<script>' } }).success).toBe(false);
-        expect(alertPolicyDisplaySchema.safeParse({ Watch: { label: 'Watch', color: '#12345' } }).success).toBe(false);
+    it('rejects invalid colours from stored settings', () => {
+        expect(alertPolicyDisplaySchema.safeParse({ Watch: { color: '<script>' } }).success).toBe(false);
+        expect(alertPolicyDisplaySchema.safeParse({ Watch: { color: '#12345' } }).success).toBe(false);
     });
 
-    it('supports custom colours alongside saved presets and keeps bright labels readable', () => {
-        const display = alertPolicyDisplaySchema.parse({
-            Watch: { label: 'Watch', color: '#FFFF00' },
-            Action: { label: 'Action', color: 'purple' },
-        });
-        expect(getAlertColor(display.Watch.color)).toEqual({
-            color: '#FFFF00', background: '#FFFF0026', text: 'var(--colors-grey900)',
-        });
-        expect(getAlertColor(display.Action.color)).toMatchObject({
-            color: '#713a91', background: '#f0e5f7', text: '#713a91',
-        });
+    it('supports custom colours alongside saved presets', () => {
+        const display = alertPolicyDisplaySchema.parse({ Watch: { color: '#FFFF00' }, Action: { color: 'purple' } });
+        expect(getAlertColor(display.Watch.color)).toEqual({ color: '#FFFF00', background: '#FFFF0026' });
+        expect(getAlertColor(display.Action.color)).toMatchObject({ color: '#713a91', background: '#f0e5f7' });
     });
 });

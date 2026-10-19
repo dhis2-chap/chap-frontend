@@ -7,7 +7,7 @@ export const AlertLevelTag = ({ display, children }: { display: AlertLevelDispla
     const color = getAlertColor(display.color);
     return (
         <Tag>
-            <span className={styles.levelTag} style={{ color: color.text }}>
+            <span className={styles.levelTag}>
                 <span className={styles.colorDot} style={{ background: color.color }} />
                 {children ?? display.label}
             </span>

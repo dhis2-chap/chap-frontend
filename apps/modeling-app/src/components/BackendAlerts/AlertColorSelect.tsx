@@ -4,14 +4,15 @@ import { Button, Field } from '@dhis2/ui';
 import { ALERT_COLORS, getAlertColor, type AlertColor } from './alertLevelDisplay';
 import styles from './BackendAlerts.module.css';
 
-export const AlertColorSelect = ({ value, onChange, disabled }: {
+export const AlertColorSelect = ({ value, onChange, disabled, label }: {
     value: AlertColor;
     onChange: (value: AlertColor) => void;
     disabled?: boolean;
+    label?: string;
 }) => {
     const id = useId();
     return (
-        <Field label={i18n.t('Colour')} name={id} disabled={disabled} dataTest="alert-colour-picker">
+        <Field label={label ?? i18n.t('Colour')} name={id} disabled={disabled} dataTest="alert-colour-picker">
             <div className={styles.colorPresets}>
                 {Object.entries(ALERT_COLORS).map(([key, option]) => (
                     <Button

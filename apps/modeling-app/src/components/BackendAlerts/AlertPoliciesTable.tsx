@@ -119,18 +119,18 @@ const AlertPolicyRow = ({ policy, onDelete }: { policy: AlertPolicyRead; onDelet
                         const presentation = getAlertLevelDisplay(level.name, policy, display.data);
                         return (
                             <AlertLevelTag key={level.name} display={presentation}>
-                                {describeAlertLevel({ ...level, name: presentation.label })}
+                                {describeAlertLevel(level)}
                             </AlertLevelTag>
                         );
                     })}
                 </div>
-                {!!display.error && <p>{i18n.t('Saved labels and colours could not be loaded.')}</p>}
+                {!!display.error && <p>{i18n.t('Saved colours could not be loaded.')}</p>}
             </DataTableCell>
             <DataTableCell>{policy.created ? format(new Date(policy.created), 'dd.MM.yyyy') : '-'}</DataTableCell>
             <DataTableCell>
                 <div className={styles.tags}>
                     <TableActionButton disabled={display.isLoading || !!display.error} onClick={() => setEditing(true)}>
-                        {i18n.t('Labels and colours')}
+                        {i18n.t('Colours')}
                     </TableActionButton>
                     <TableActionButton destructive onClick={onDelete}>{i18n.t('Delete')}</TableActionButton>
                 </div>
