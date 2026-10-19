@@ -45,6 +45,47 @@
     flex-shrink: 0;
 }
 
+.colorPresets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacers-dp4);
+}
+
+.colorSwatch {
+    inline-size: 16px;
+    block-size: 16px;
+    border-radius: 2px;
+}
+
+.customColor {
+    display: flex;
+    align-items: center;
+    gap: var(--spacers-dp8);
+    margin-block-start: var(--spacers-dp8);
+    color: var(--colors-grey800);
+    font-size: 13px;
+}
+
+.customColor input {
+    inline-size: 36px;
+    block-size: 28px;
+    padding: 2px;
+    border: 1px solid var(--colors-grey500);
+    border-radius: 3px;
+    background: var(--colors-white);
+    cursor: pointer;
+}
+
+.customColor input:focus-visible {
+    outline: 2px solid var(--colors-blue600);
+    outline-offset: 2px;
+}
+
+.customColor input:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 @media (max-width: 900px) {
     .levelRow { flex-wrap: wrap; }
     .levelRow > :not(button) { flex-basis: 40%; }

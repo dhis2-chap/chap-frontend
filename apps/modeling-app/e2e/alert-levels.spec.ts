@@ -18,6 +18,7 @@ test.describe.serial('alert level presentation', () => {
         await expect(names.nth(0)).toHaveValue('Watch');
         await expect(names.nth(1)).toHaveValue('Possible outbreak');
         await names.nth(1).fill('Action');
+        await modal.getByLabel('Custom colour', { exact: true }).nth(0).fill('#11aabb');
         // A zero percentile ensures this fixture raises alerts, regardless of its forecast values.
         await modal.getByLabel('Percentile (%)', { exact: true }).nth(0).fill('0');
         let creations = 0;
@@ -42,12 +43,14 @@ test.describe.serial('alert level presentation', () => {
         await row.getByRole('button', { name: 'Labels and colours' }).click();
         const edit = page.locator('[data-test="edit-alert-policy-display-modal"]');
         await edit.getByLabel('Action', { exact: true }).fill('Investigate');
-        await edit.locator('[data-test="dhis2-uiwidgets-singleselectfield"]').nth(1).click();
-        await page.getByText('Purple', { exact: true }).click();
+        await expect(edit.getByLabel('Custom colour', { exact: true }).nth(0)).toHaveValue('#11aabb');
+        await edit.getByRole('button', { name: 'Purple', exact: true }).nth(1).click();
+        await expect(edit.getByRole('button', { name: 'Purple', exact: true }).nth(1)).toHaveAttribute('aria-pressed', 'true');
         await edit.getByRole('button', { name: 'Save', exact: true }).click();
         await expect(edit).not.toBeVisible();
         await page.reload();
         await expect(row.getByText(/Investigate/)).toHaveCSS('color', 'rgb(113, 58, 145)');
+        await expect(row.getByText(/Watch/).locator('span')).toHaveCSS('background-color', 'rgb(17, 170, 187)');
     });
 
     test('shows recorded alerts on prediction plots by default and can hide them', async ({ page }) => {
@@ -67,7 +70,7 @@ test.describe.serial('alert level presentation', () => {
         expect(alerts.length).toBeGreaterThan(0);
         await page.goto(`/#/predictions/${setup.id}/runs/${prediction.id}`);
         const label = alerts.some(alert => alert.level === 'Action') ? 'Investigate' : 'Watch';
-        const color = label === 'Investigate' ? 'rgb(113, 58, 145)' : 'rgb(152, 73, 0)';
+        const color = label === 'Investigate' ? 'rgb(113, 58, 145)' : 'rgb(17, 170, 187)';
         const alert = alerts.find(item => item.level === (label === 'Investigate' ? 'Action' : 'Watch'))!;
         const orgUnit = await readJson<{ displayName: string }>(await page.request.get(
             `${process.env.E2E_DHIS2_BASE_URL ?? 'http://localhost:8080'}/api/organisationUnits/${alert.orgUnit}?fields=displayName`,
@@ -79,7 +82,7 @@ test.describe.serial('alert level presentation', () => {
         await expect(alertLevels).toBeChecked();
         await expect(exploreThresholds).not.toBeChecked();
         await expect(page.getByText('Raised alerts', { exact: true })).toHaveCount(0);
-        await expect(plot.getByText(label, { exact: true })).toHaveCSS('color', color);
+        await expect(plot.getByText(label, { exact: true }).locator('span')).toHaveCSS('background-color', color);
         await expect(plot.locator('.highcharts-plot-band').first()).toBeVisible();
         await alertLevels.uncheck();
         await expect(plot.getByText(label, { exact: true })).toHaveCount(0);

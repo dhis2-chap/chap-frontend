@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-19T09:40:21.671Z\n"
-"PO-Revision-Date: 2026-10-19T09:40:21.672Z\n"
+"POT-Creation-Date: 2026-10-19T09:56:50.927Z\n"
+"PO-Revision-Date: 2026-10-19T09:56:50.927Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -61,6 +61,9 @@ msgstr "New model"
 
 msgid "Colour"
 msgstr "Colour"
+
+msgid "Custom colour"
+msgstr "Custom colour"
 
 msgid ""
 "This policy is used by a prediction setup or has alerts raised against it, "

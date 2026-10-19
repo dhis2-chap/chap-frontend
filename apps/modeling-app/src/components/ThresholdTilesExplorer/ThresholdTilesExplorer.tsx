@@ -19,7 +19,7 @@ import {
 } from '@dhis2-chap/ui';
 import type { OutbreakProbability, ThresholdTileViewModel, ZoomRange } from '@dhis2-chap/ui';
 import { ID_MAIN_LAYOUT } from '../layout/Layout';
-import { ALERT_COLORS } from '@/components/BackendAlerts/alertLevelDisplay';
+import { getAlertColor } from '@/components/BackendAlerts/alertLevelDisplay';
 import { AlertLevelTag } from '@/components/BackendAlerts/AlertLevelTag';
 import type { DisplayedPredictionAlert } from '@/components/BackendAlerts/displayPredictionAlerts';
 import styles from './ThresholdTilesExplorer.module.css';
@@ -132,7 +132,7 @@ const ThresholdTile = memo(function ThresholdTile({
     const alertPeriods = useMemo(() => raisedAlerts?.map(alert => ({
         period: alert.timePeriod,
         label: alert.display.label,
-        color: ALERT_COLORS[alert.display.color].background,
+        color: getAlertColor(alert.display.color).background,
     })), [raisedAlerts]);
 
     return (

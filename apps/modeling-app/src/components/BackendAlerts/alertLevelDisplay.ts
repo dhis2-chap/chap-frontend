@@ -10,8 +10,19 @@ export const ALERT_COLORS = {
     purple: { label: i18n.t('Purple'), color: '#713a91', background: '#f0e5f7' },
 } as const;
 
-export const alertColorSchema = z.enum(['green', 'yellow', 'orange', 'red', 'purple']);
+const presetColorSchema = z.enum(['green', 'yellow', 'orange', 'red', 'purple']);
+export const alertColorSchema = z.union([presetColorSchema, z.string().regex(/^#[0-9a-f]{6}$/i)]);
 export type AlertColor = z.infer<typeof alertColorSchema>;
+
+export const getAlertColor = (value: AlertColor) => {
+    const preset = presetColorSchema.safeParse(value);
+    if (preset.success) {
+        const color = ALERT_COLORS[preset.data];
+        return { ...color, text: color.color };
+    }
+    return { color: value, background: `${value}26`, text: 'var(--colors-grey900)' };
+};
+
 export const alertLevelDisplaySchema = z.object({
     label: z.string().trim().min(1),
     color: alertColorSchema,

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { AlertPolicyRead, AlertRead } from '@dhis2-chap/ui';
 import { displayPredictionAlerts } from './displayPredictionAlerts';
-import { alertPolicyDisplaySchema } from './alertLevelDisplay';
+import { alertPolicyDisplaySchema, getAlertColor } from './alertLevelDisplay';
 
 const policies = [
     { id: 1, name: 'Malaria', levels: [{ name: 'Watch' }, { name: 'Action' }] },
@@ -40,5 +40,19 @@ describe('recorded alert presentation', () => {
     it('rejects empty labels and invalid colours from stored settings', () => {
         expect(alertPolicyDisplaySchema.safeParse({ Watch: { label: ' ', color: 'orange' } }).success).toBe(false);
         expect(alertPolicyDisplaySchema.safeParse({ Watch: { label: 'Watch', color: '<script>' } }).success).toBe(false);
+        expect(alertPolicyDisplaySchema.safeParse({ Watch: { label: 'Watch', color: '#12345' } }).success).toBe(false);
+    });
+
+    it('supports custom colours alongside saved presets and keeps bright labels readable', () => {
+        const display = alertPolicyDisplaySchema.parse({
+            Watch: { label: 'Watch', color: '#FFFF00' },
+            Action: { label: 'Action', color: 'purple' },
+        });
+        expect(getAlertColor(display.Watch.color)).toEqual({
+            color: '#FFFF00', background: '#FFFF0026', text: 'var(--colors-grey900)',
+        });
+        expect(getAlertColor(display.Action.color)).toMatchObject({
+            color: '#713a91', background: '#f0e5f7', text: '#713a91',
+        });
     });
 });
