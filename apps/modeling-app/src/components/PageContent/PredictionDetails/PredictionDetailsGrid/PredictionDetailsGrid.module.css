@@ -104,3 +104,10 @@
         text-align: start;
     }
 }
+
+.panelHelp {
+    margin: 0;
+    color: var(--colors-grey700);
+    font-size: 13px;
+    line-height: 1.4;
+}

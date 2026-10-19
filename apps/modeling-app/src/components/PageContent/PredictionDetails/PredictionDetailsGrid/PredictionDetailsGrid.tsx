@@ -31,6 +31,7 @@ import {
     ThresholdTilesExplorer,
 } from '../../../ThresholdTilesExplorer';
 import { usePredictionSeries } from '../hooks/usePredictionSeries';
+import { AlertLevelsSection } from './AlertLevelsSection';
 import styles from './PredictionDetailsGrid.module.css';
 
 export type PredictionRunAlertSettings = {
@@ -70,7 +71,7 @@ export const PredictionDetailsGrid = ({
         isLoading: isSeriesLoading,
         error: seriesError,
     } = usePredictionSeries({ prediction, model });
-    const alerts = usePredictionAlerts(prediction.id);
+    const alerts = usePredictionAlerts(prediction);
     const showThresholds = settings.thresholdsEnabled;
 
     const {
@@ -161,31 +162,11 @@ export const PredictionDetailsGrid = ({
                 </div>
             )}
 
-            <Switch
-                className={styles.toggleButton}
-                aria-label={i18n.t('Alert levels')}
-                checked={settings.alertsEnabled}
-                onChange={({ checked }) => updateSettings({ alertsEnabled: checked })}
-                label={(
-                    <span className={styles.toggleText}>
-                        <span className={styles.toggleTitle}>{i18n.t('Alert levels')}</span>
-                        <span className={styles.toggleDescription}>
-                            {i18n.t('Show recorded alerts on the plots.')}
-                        </span>
-                    </span>
-                )}
+            <AlertLevelsSection
+                alerts={alerts}
+                enabled={settings.alertsEnabled}
+                onEnabledChange={alertsEnabled => updateSettings({ alertsEnabled })}
             />
-            {settings.alertsEnabled && (
-                alerts.isLoading ? <CircularLoader small /> : alerts.error ? (
-                    <NoticeBox error title={i18n.t('Unable to load raised alerts')}>
-                        <Button small onClick={() => alerts.refetch()}>{i18n.t('Retry')}</Button>
-                    </NoticeBox>
-                ) : alerts.displayError ? (
-                    <NoticeBox warning title={i18n.t('Saved alert colours could not be loaded')}>
-                        {i18n.t('Alerts are shown with default colours.')}
-                    </NoticeBox>
-                ) : null
-            )}
             <Switch
                 className={styles.toggleButton}
                 aria-label={i18n.t('Explore thresholds')}

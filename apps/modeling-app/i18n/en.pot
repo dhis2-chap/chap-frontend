@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-19T10:28:25.623Z\n"
-"PO-Revision-Date: 2026-10-19T10:28:25.624Z\n"
+"POT-Creation-Date: 2026-10-19T10:50:27.926Z\n"
+"PO-Revision-Date: 2026-10-19T10:50:27.927Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -128,12 +128,6 @@ msgstr "Enter a policy name"
 
 msgid "Level names must be unique"
 msgstr "Level names must be unique"
-
-msgid "Watch"
-msgstr "Watch"
-
-msgid "Possible outbreak"
-msgstr "Possible outbreak"
 
 msgid "New alert policy"
 msgstr "New alert policy"
@@ -1890,6 +1884,43 @@ msgstr "Adjust alert output"
 msgid "Apply"
 msgstr "Apply"
 
+msgid "Alert levels"
+msgstr "Alert levels"
+
+msgid "Unable to load raised alerts"
+msgstr "Unable to load raised alerts"
+
+msgid ""
+"This run had no alert policy, so it raised no alerts. Add a policy to the "
+"prediction setup to raise alerts on future runs."
+msgstr ""
+"This run had no alert policy, so it raised no alerts. Add a policy to the "
+"prediction setup to raise alerts on future runs."
+
+msgid ""
+"No alerts were recorded for this run. The prediction setup now uses "
+"{{policy}}, but no level may have been reached, or the policy may have been "
+"added after this run."
+msgstr ""
+"No alerts were recorded for this run. The prediction setup now uses "
+"{{policy}}, but no level may have been reached, or the policy may have been "
+"added after this run."
+
+msgid "No alerts were recorded for this run."
+msgstr "No alerts were recorded for this run."
+
+msgid "Show {{alertCount}} alerts raised by {{policy}} on the plots."
+msgstr "Show {{alertCount}} alerts raised by {{policy}} on the plots."
+
+msgid "Show recorded alerts on the plots."
+msgstr "Show recorded alerts on the plots."
+
+msgid "Saved alert colours could not be loaded"
+msgstr "Saved alert colours could not be loaded"
+
+msgid "Alerts are shown with default colours."
+msgstr "Alerts are shown with default colours."
+
 msgid "Regions exceeding threshold"
 msgstr "Regions exceeding threshold"
 
@@ -1901,21 +1932,6 @@ msgstr "Thresholds unavailable"
 
 msgid "Prediction run"
 msgstr "Prediction run"
-
-msgid "Alert levels"
-msgstr "Alert levels"
-
-msgid "Show recorded alerts on the plots."
-msgstr "Show recorded alerts on the plots."
-
-msgid "Unable to load raised alerts"
-msgstr "Unable to load raised alerts"
-
-msgid "Saved alert colours could not be loaded"
-msgstr "Saved alert colours could not be loaded"
-
-msgid "Alerts are shown with default colours."
-msgstr "Alerts are shown with default colours."
 
 msgid "Explore thresholds"
 msgstr "Explore thresholds"
