@@ -315,9 +315,14 @@ export const ModelSelectionModal = (props: Props) => {
                                                     className={styles.dot}
                                                     style={{ backgroundColor: readiness?.color ?? '#b0b0b0' }}
                                                 />
-                                                <div className={styles.listName}>
-                                                    <span className={styles.listNameText}>{getModelName(model)}</span>
-                                                    <ModelHealthBadge model={model} />
+                                                <div className={styles.listLabel}>
+                                                    <div className={styles.listName}>
+                                                        <span className={styles.listNameText}>{getModelName(model)}</span>
+                                                        <ModelHealthBadge model={model} />
+                                                    </div>
+                                                    <span className={styles.listAuthor} title={model.author || undefined}>
+                                                        {model.author || i18n.t('Unknown')}
+                                                    </span>
                                                 </div>
                                                 {!multiple && isSelected && <IconCheckmark16 color="#1565c0" />}
                                             </button>
