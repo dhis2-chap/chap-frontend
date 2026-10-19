@@ -212,6 +212,11 @@ export const ThresholdTilesExplorer = ({
         }
         return map;
     }, [raisedAlerts]);
+    const alertLevels = useMemo(() => (
+        [...new Set(raisedAlerts?.map(alert => alert.level))]
+    ), [raisedAlerts]);
+    const [selectedAlertLevel, setSelectedAlertLevel] = useState('');
+    const isAlertLevelFilterShown = alertLevels.length > 0;
     const [regionSearch, setRegionSearch] = useState('');
     const [clearableStatusFilter, setClearableStatusFilter] = useState<
         ThresholdTileViewModel['status'] | undefined
@@ -225,6 +230,10 @@ export const ThresholdTilesExplorer = ({
     useEffect(() => {
         setZoomRange(null);
     }, zoomResetDeps);
+
+    useEffect(() => {
+        setSelectedAlertLevel('');
+    }, [gridResetKey, isAlertLevelFilterShown]);
 
     useEffect(() => {
         if (!showThresholds && clearableStatusFilter !== undefined) {
@@ -283,12 +292,13 @@ export const ThresholdTilesExplorer = ({
     const filteredTiles = useMemo(() => (
         tiles.filter(tile => (
             (!isStatusFilterShown || !activeStatusFilter || activeStatusFilter === 'all' || tile.status === activeStatusFilter) &&
+            (!isAlertLevelFilterShown || !selectedAlertLevel || alertsByOrgUnit?.get(tile.orgUnitId)?.some(alert => alert.level === selectedAlertLevel)) &&
             (
                 normalizedRegionSearch.length === 0
                 || tile.orgUnitName.toLocaleLowerCase().includes(normalizedRegionSearch)
             )
         ))
-    ), [activeStatusFilter, isStatusFilterShown, normalizedRegionSearch, tiles]);
+    ), [activeStatusFilter, isStatusFilterShown, isAlertLevelFilterShown, selectedAlertLevel, alertsByOrgUnit, normalizedRegionSearch, tiles]);
 
     const shiftZoom = useCallback((direction: 1 | -1) => {
         setZoomRange((prev) => {
@@ -324,6 +334,24 @@ export const ThresholdTilesExplorer = ({
                     onChange={({ value }) => setRegionSearch(value ?? '')}
                 />
             </div>
+            {isAlertLevelFilterShown && (
+                <div className={styles.statusSelect}>
+                    <SingleSelect
+                        dense
+                        clearable
+                        clearText={i18n.t('Clear')}
+                        placeholder={i18n.t('All alert levels')}
+                        prefix={selectedAlertLevel ? i18n.t('Alert level') : undefined}
+                        selected={selectedAlertLevel}
+                        onChange={({ selected }) => setSelectedAlertLevel(selected)}
+                        dataTest="alert-level-filter"
+                    >
+                        {alertLevels.map(level => (
+                            <SingleSelectOption key={level} value={level} label={level} />
+                        ))}
+                    </SingleSelect>
+                </div>
+            )}
             {isStatusFilterShown && (
                 <div className={styles.statusFilter}>
                     <span className={styles.filterLabel}>{i18n.t('Status filter')}</span>
@@ -429,7 +457,7 @@ export const ThresholdTilesExplorer = ({
                 {filteredTiles.length > 0
                     ? (
                             <VirtuosoGrid
-                                key={`${gridResetKey}-${activeStatusFilter ?? 'all'}-${normalizedRegionSearch}`}
+                                key={`${gridResetKey}-${activeStatusFilter ?? 'all'}-${selectedAlertLevel}-${normalizedRegionSearch}`}
                                 components={gridComponents}
                                 computeItemKey={(index: number) => filteredTiles[index]?.orgUnitId ?? index}
                                 customScrollParent={scrollParent ?? undefined}
