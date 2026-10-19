@@ -128,12 +128,16 @@ const AlertPolicyRow = ({ policy, onDelete }: { policy: AlertPolicyRead; onDelet
                         );
                     })}
                 </div>
-                {!!display.error && <p>{i18n.t('Saved colours could not be loaded.')}</p>}
+                {!!display.error && (
+                    <p className={styles.help} title={(display.error as Error).message}>
+                        {i18n.t('Saved colours could not be loaded, so default colours are shown. Use Colours to save them again.')}
+                    </p>
+                )}
             </DataTableCell>
             <DataTableCell>{policy.created ? format(new Date(policy.created), 'dd.MM.yyyy') : '-'}</DataTableCell>
             <DataTableCell>
                 <div className={styles.tags}>
-                    <TableActionButton disabled={display.isLoading || !!display.error} onClick={() => setEditing(true)}>
+                    <TableActionButton disabled={display.isLoading} onClick={() => setEditing(true)}>
                         {i18n.t('Colours')}
                     </TableActionButton>
                     <TableActionButton destructive onClick={onDelete}>{i18n.t('Delete')}</TableActionButton>

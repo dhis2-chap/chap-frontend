@@ -62,6 +62,8 @@ test.describe.serial('alert level presentation', () => {
         await page.reload();
         await expect(row.getByText(/Action/).locator('span')).toHaveCSS('background-color', 'rgb(255, 193, 7)');
         await expect(row.getByText(/Watch/).locator('span')).toHaveCSS('background-color', 'rgb(17, 170, 187)');
+        // Policies without saved colours fall back to defaults instead of erroring.
+        await expect(page.getByText(/Saved colours could not be loaded/)).toHaveCount(0);
     });
 
     test('shows recorded alerts on prediction plots by default and can hide them', async ({ page }) => {
