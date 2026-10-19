@@ -109,6 +109,10 @@ const getReadiness = (model: ModelSpecRead): ReadinessConfig | undefined =>
         ? READINESS_BY_STATUS[model.authorAssessedStatus]
         : undefined;
 
+const getAuthorLine = (model: ModelSpecRead): string => (
+    [model.author || i18n.t('Unknown'), model.organization].filter(Boolean).join(' · ')
+);
+
 // Models without a supported period type run on any period, matching getPeriodLabel.
 const normalizePeriodType = (periodType: unknown): string => (
     typeof periodType === 'string' ? periodType.toUpperCase() : PERIOD_TYPES.ANY
@@ -320,8 +324,8 @@ export const ModelSelectionModal = (props: Props) => {
                                                         <span className={styles.listNameText}>{getModelName(model)}</span>
                                                         <ModelHealthBadge model={model} />
                                                     </div>
-                                                    <span className={styles.listAuthor} title={model.author || undefined}>
-                                                        {model.author || i18n.t('Unknown')}
+                                                    <span className={styles.listAuthor} title={getAuthorLine(model)}>
+                                                        {getAuthorLine(model)}
                                                     </span>
                                                 </div>
                                                 {!multiple && isSelected && <IconCheckmark16 color="#1565c0" />}
@@ -393,10 +397,7 @@ export const ModelSelectionModal = (props: Props) => {
                                                     <IconWorld16 color="#212934" />
                                                     {i18n.t('Author')}
                                                 </dt>
-                                                <dd>
-                                                    {focusedModel.author || i18n.t('Unknown')}
-                                                    {focusedModel.organization ? ` · ${focusedModel.organization}` : ''}
-                                                </dd>
+                                                <dd>{getAuthorLine(focusedModel)}</dd>
                                             </div>
                                             {focusedReadiness && (
                                                 <div className={styles.spec}>
