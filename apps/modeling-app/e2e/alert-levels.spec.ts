@@ -9,6 +9,12 @@ test.describe.serial('alert level presentation', () => {
     let policyId: number;
     const policyName = `E2E alert colours ${Date.now()}`;
 
+    test.beforeEach(async ({ page }) => {
+        const response = await getChap(page, '/v1/crud/alert-policies');
+        expect([200, 404]).toContain(response.status());
+        test.skip(!response.ok(), 'Stable CHAP releases predate alert policies');
+    });
+
     test('saves editable levels and retries a failed colour save without creating another policy', async ({ page }) => {
         await page.goto('/#/alerts');
         await page.getByRole('button', { name: 'New policy', exact: true }).click();
