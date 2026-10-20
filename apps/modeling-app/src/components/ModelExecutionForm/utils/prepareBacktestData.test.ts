@@ -60,6 +60,17 @@ describe('shared evaluation and prediction preflight', () => {
         client.clear();
     });
 
+    it('rejects mappings that leave a model covariate unmapped before fetching data', async () => {
+        const client = new QueryClient();
+        const withRh = { ...model, covariates: [{ name: 'RH', displayName: 'RH', description: 'RH' }] };
+        vi.mocked(ModelsService.listConfiguredModelsV1CrudConfiguredModelsGet).mockResolvedValue([withRh]);
+
+        await expect(prepareBacktestData(form, dataEngine, client, settings))
+            .rejects.toThrow('Not mapped: RH');
+        expect(fetchAnalytics).not.toHaveBeenCalled();
+        client.clear();
+    });
+
     it('recovers from a cached mismatch once the model is healthy again', async () => {
         const client = new QueryClient();
         client.setQueryData(['models'], [{ ...model, healthStatus: 'revision_mismatch' }]);

@@ -44,6 +44,21 @@ export const prepareBacktestData = async (
 ): Promise<PreparedBacktestData> => {
     const model = await fetchRunnableModel(queryClient, Number(formData.modelId));
 
+    // A copied evaluation or a model switch can leave mappings that do not match the model.
+    const mappedNames = new Set(formData.covariateMappings.map(mapping => mapping.covariateName));
+    const unmapped = (model.covariates ?? [])
+        .map(covariate => covariate.name)
+        .filter(name => !mappedNames.has(name));
+    if (formData.targetMapping.covariateName !== model.target.name) {
+        unmapped.push(model.target.name);
+    }
+    if (unmapped.length > 0) {
+        throw new Error(i18n.t('Map every model covariate to a data item before starting. Not mapped{{colon}} {{names}}', {
+            colon: ':',
+            names: unmapped.join(', '),
+        }));
+    }
+
     const periods = calculatePeriods(
         formData.periodType,
         formData.fromPeriodId,
