@@ -20,8 +20,15 @@ describe('monitoring chart data', () => {
             { x: Date.UTC(2026, 2, 1), name: '202603', y: 8 },
         ]);
         expect(series.running.map(point => point.y)).toEqual([0, 5]);
-        expect(series.evaluation.map(point => point.y)).toEqual([0, 0]);
+        expect(series.evaluation.map(point => point.name)).toEqual(['202512', '202601', '202603']);
+        expect(series.evaluation.map(point => point.y)).toEqual([0, 0, 0]);
         expect(data.points[0].period).toBe('202603');
+    });
+
+    it('keeps backtest splits in their own series', () => {
+        const series = monitoringSeries(data);
+        expect(series.evaluationPerSplit).toEqual([{ x: Date.UTC(2025, 11, 1), name: '202512', y: 99 }]);
+        expect(series.evaluationRunning.map(point => point.y)).toEqual([99]);
     });
 
     it('keeps an unavailable baseline missing and supports ISO weeks across year boundaries', () => {
@@ -39,6 +46,7 @@ describe('monitoring chart data', () => {
 
     it('does not turn evaluation-only data into production performance', () => {
         const series = monitoringSeries({ ...data, points: [data.points[1]] });
-        expect(series).toEqual({ evaluation: [], perRun: [], running: [] });
+        expect(series.perRun).toEqual([]);
+        expect(series.evaluation).toEqual([]);
     });
 });

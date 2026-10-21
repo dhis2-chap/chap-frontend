@@ -57,15 +57,31 @@ export const MonitoringWidget = ({ predictionSetupId, evaluationId }: Props) => 
         series: [
             {
                 type: 'line',
-                name: i18n.t('Evaluation'),
+                name: i18n.t('Evaluation per backtest split'),
+                data: series?.evaluationPerSplit,
+                color: '#a0adba',
+                lineWidth: 1,
+                showInLegend: !!series?.evaluationPerSplit.length,
+            },
+            {
+                type: 'line',
+                name: i18n.t('Evaluation running aggregate'),
+                data: series?.evaluationRunning,
+                color: '#6c7787',
+                showInLegend: !!series?.evaluationRunning.length,
+            },
+            {
+                type: 'line',
+                name: i18n.t('Evaluation score'),
+                marker: { enabled: false },
                 data: series?.evaluation,
                 color: '#6c7787',
                 dashStyle: 'Dash',
                 visible: monitoring.data?.evaluationValue != null,
                 showInLegend: monitoring.data?.evaluationValue != null,
             },
-            { type: 'line', name: i18n.t('Per prediction run'), data: series?.perRun, color: '#147cd7' },
-            { type: 'line', name: i18n.t('Running aggregate'), data: series?.running, color: '#277314' },
+            { type: 'line', name: i18n.t('Prediction per run'), data: series?.perRun, color: '#147cd7' },
+            { type: 'line', name: i18n.t('Prediction running aggregate'), data: series?.running, color: '#277314' },
         ],
     };
 
@@ -99,7 +115,7 @@ export const MonitoringWidget = ({ predictionSetupId, evaluationId }: Props) => 
                 ) : (
                     <>
                         <p className={styles.explanation}>
-                            {i18n.t('Compare the evaluation score with prediction performance as observed outcomes arrive. Each point is a prediction run, dated by the last observed period used to make its forecast. The running aggregate combines scored predictions across runs.')}
+                            {i18n.t('Compare the evaluation with prediction performance as observed outcomes arrive. Each point is a backtest split or prediction run, dated by the last observed period used to make its forecast. The running aggregates combine scored forecasts across splits or runs, and the dashed line carries the final evaluation score forward.')}
                         </p>
                         {monitoring.data?.evaluationValue == null && (
                             <NoticeBox>{i18n.t('No evaluation score is available for this metric. Only prediction performance is shown.')}</NoticeBox>
