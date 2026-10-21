@@ -1,5 +1,13 @@
 # @dhis2-chap/modeling-app
 
+## 7.3.1
+
+### Patch Changes
+
+-   3c5a8c6: Send only the selected model's covariates when running an evaluation or prediction, block runs while one is unmapped, and send a data item mapped to several covariates under each of them [CLIM-1499].
+    -   @dhis2-chap/ui@7.3.1
+    -   @dhis2-chap/core@7.3.1
+
 ## 7.3.0
 
 ### Minor Changes
