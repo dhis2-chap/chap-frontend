@@ -57,8 +57,9 @@
     text-align: end;
 }
 
-.toggleButton {
+.toggleButton.toggleButton {
     display: flex;
+    flex-direction: row-reverse;
     align-items: center;
     justify-content: space-between;
     gap: var(--spacers-dp16);
@@ -102,4 +103,11 @@
     .summaryList dd {
         text-align: start;
     }
+}
+
+.panelHelp {
+    margin: 0;
+    color: var(--colors-grey700);
+    font-size: 13px;
+    line-height: 1.4;
 }

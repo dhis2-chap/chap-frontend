@@ -19,7 +19,12 @@ import {
 } from '@dhis2-chap/ui';
 import type { OutbreakProbability, ThresholdTileViewModel, ZoomRange } from '@dhis2-chap/ui';
 import { ID_MAIN_LAYOUT } from '../layout/Layout';
+import { getAlertColor } from '@/components/BackendAlerts/alertLevelDisplay';
+import { AlertLevelTag } from '@/components/BackendAlerts/AlertLevelTag';
+import type { DisplayedPredictionAlert } from '@/components/BackendAlerts/displayPredictionAlerts';
 import styles from './ThresholdTilesExplorer.module.css';
+
+const NO_ALERTS: DisplayedPredictionAlert[] = [];
 
 export type StatusFilterValue = ThresholdTileViewModel['status'] | 'all' | undefined;
 
@@ -91,6 +96,7 @@ const ThresholdTile = memo(function ThresholdTile({
     selectedProbability,
     showThresholds,
     tile,
+    raisedAlerts,
     zoomRange,
     onZoomChange,
 }: {
@@ -98,6 +104,7 @@ const ThresholdTile = memo(function ThresholdTile({
     selectedProbability: OutbreakProbability;
     showThresholds: boolean;
     tile: ThresholdTileViewModel;
+    raisedAlerts?: DisplayedPredictionAlert[];
     zoomRange?: ZoomRange | null;
     onZoomChange?: (range: ZoomRange | null) => void;
 }) {
@@ -124,11 +131,18 @@ const ThresholdTile = memo(function ThresholdTile({
             : []
     ), [showThresholds, tile.indicators]);
 
+    const alertPeriods = useMemo(() => raisedAlerts?.map(alert => ({
+        period: alert.timePeriod,
+        label: alert.display.label,
+        color: getAlertColor(alert.display.color).background,
+    })), [raisedAlerts]);
+
     return (
         <article className={styles.tile}>
             <div className={styles.tileHeader}>
                 <h3 title={tile.orgUnitName}>{tile.orgUnitName}</h3>
-                {showThresholds && (
+                {raisedAlerts?.[0] && <AlertLevelTag display={raisedAlerts[0].display} />}
+                {raisedAlerts === undefined && showThresholds && (
                     <span className={[
                         styles.statusBadge,
                         tile.status === 'outbreak'
@@ -149,6 +163,7 @@ const ThresholdTile = memo(function ThresholdTile({
                     endemicThreshold={showThresholds ? tile.endemicThreshold : undefined}
                     endemicThresholds={showThresholds ? tile.endemicThresholds : undefined}
                     outbreakPeriods={outbreakPeriods}
+                    alertPeriods={alertPeriods}
                     outbreakProbability={showThresholds ? selectedProbability : undefined}
                     variant="tile"
                     zoomRange={zoomRange}
@@ -164,6 +179,7 @@ type Props = {
     predictionTargetName: string;
     selectedProbability: OutbreakProbability;
     tiles: ThresholdTileViewModel[];
+    raisedAlerts?: DisplayedPredictionAlert[];
     showThresholds: boolean;
     showStatusFilter?: boolean;
     statusFilterVariant?: StatusFilterVariant;
@@ -177,6 +193,7 @@ export const ThresholdTilesExplorer = ({
     predictionTargetName,
     selectedProbability,
     tiles,
+    raisedAlerts,
     showThresholds,
     showStatusFilter = true,
     statusFilterVariant = 'clearable',
@@ -185,6 +202,23 @@ export const ThresholdTilesExplorer = ({
     gridResetKey = '',
     zoomResetDeps = [],
 }: Props) => {
+    const alertsByOrgUnit = useMemo(() => {
+        if (!raisedAlerts) return undefined;
+        const map = new Map<string, DisplayedPredictionAlert[]>();
+        for (const alert of raisedAlerts) {
+            const group = map.get(alert.orgUnit) ?? [];
+            group.push(alert);
+            map.set(alert.orgUnit, group);
+        }
+        return map;
+    }, [raisedAlerts]);
+    const alertLevels = useMemo(() => (
+        [...new Set(raisedAlerts?.map(alert => alert.level))]
+    ), [raisedAlerts]);
+    const [alertLevelSelection, setAlertLevelSelection] = useState('');
+    // Refetched alerts can drop the selected level; fall back to all levels.
+    const selectedAlertLevel = alertLevels.includes(alertLevelSelection) ? alertLevelSelection : '';
+    const isAlertLevelFilterShown = alertLevels.length > 0;
     const [regionSearch, setRegionSearch] = useState('');
     const [clearableStatusFilter, setClearableStatusFilter] = useState<
         ThresholdTileViewModel['status'] | undefined
@@ -198,6 +232,10 @@ export const ThresholdTilesExplorer = ({
     useEffect(() => {
         setZoomRange(null);
     }, zoomResetDeps);
+
+    useEffect(() => {
+        setAlertLevelSelection('');
+    }, [gridResetKey, isAlertLevelFilterShown]);
 
     useEffect(() => {
         if (!showThresholds && clearableStatusFilter !== undefined) {
@@ -247,19 +285,22 @@ export const ThresholdTilesExplorer = ({
     }, [scrollParent, tiles.length]);
 
     const normalizedRegionSearch = regionSearch.trim().toLocaleLowerCase();
+    // Threshold status must not hide regions with recorded alerts.
+    const isStatusFilterShown = showThresholds && showStatusFilter && !raisedAlerts;
     const activeStatusFilter = statusFilterVariant === 'all-option'
         ? allOptionStatusFilter
         : clearableStatusFilter;
 
     const filteredTiles = useMemo(() => (
         tiles.filter(tile => (
-            (!showThresholds || !showStatusFilter || !activeStatusFilter || activeStatusFilter === 'all' || tile.status === activeStatusFilter) &&
+            (!isStatusFilterShown || !activeStatusFilter || activeStatusFilter === 'all' || tile.status === activeStatusFilter) &&
+            (!selectedAlertLevel || alertsByOrgUnit?.get(tile.orgUnitId)?.some(alert => alert.level === selectedAlertLevel)) &&
             (
                 normalizedRegionSearch.length === 0
                 || tile.orgUnitName.toLocaleLowerCase().includes(normalizedRegionSearch)
             )
         ))
-    ), [activeStatusFilter, normalizedRegionSearch, showStatusFilter, showThresholds, tiles]);
+    ), [activeStatusFilter, isStatusFilterShown, selectedAlertLevel, alertsByOrgUnit, normalizedRegionSearch, tiles]);
 
     const shiftZoom = useCallback((direction: 1 | -1) => {
         setZoomRange((prev) => {
@@ -295,7 +336,25 @@ export const ThresholdTilesExplorer = ({
                     onChange={({ value }) => setRegionSearch(value ?? '')}
                 />
             </div>
-            {showThresholds && showStatusFilter && (
+            {isAlertLevelFilterShown && (
+                <div className={styles.statusSelect}>
+                    <SingleSelect
+                        dense
+                        clearable
+                        clearText={i18n.t('Clear')}
+                        placeholder={i18n.t('All alert levels')}
+                        prefix={selectedAlertLevel ? i18n.t('Alert level') : undefined}
+                        selected={selectedAlertLevel}
+                        onChange={({ selected }) => setAlertLevelSelection(selected)}
+                        dataTest="alert-level-filter"
+                    >
+                        {alertLevels.map(level => (
+                            <SingleSelectOption key={level} value={level} label={level} />
+                        ))}
+                    </SingleSelect>
+                </div>
+            )}
+            {isStatusFilterShown && (
                 <div className={styles.statusFilter}>
                     <span className={styles.filterLabel}>{i18n.t('Status filter')}</span>
                     <div className={styles.statusSelect}>
@@ -400,7 +459,7 @@ export const ThresholdTilesExplorer = ({
                 {filteredTiles.length > 0
                     ? (
                             <VirtuosoGrid
-                                key={`${gridResetKey}-${activeStatusFilter ?? 'all'}-${normalizedRegionSearch}`}
+                                key={`${gridResetKey}-${activeStatusFilter ?? 'all'}-${selectedAlertLevel}-${normalizedRegionSearch}`}
                                 components={gridComponents}
                                 computeItemKey={(index: number) => filteredTiles[index]?.orgUnitId ?? index}
                                 customScrollParent={scrollParent ?? undefined}
@@ -411,6 +470,7 @@ export const ThresholdTilesExplorer = ({
                                         selectedProbability={selectedProbability}
                                         showThresholds={showThresholds}
                                         tile={filteredTiles[index]}
+                                        raisedAlerts={alertsByOrgUnit ? alertsByOrgUnit.get(filteredTiles[index].orgUnitId) ?? NO_ALERTS : undefined}
                                         zoomRange={zoomRange}
                                         onZoomChange={setZoomRange}
                                     />

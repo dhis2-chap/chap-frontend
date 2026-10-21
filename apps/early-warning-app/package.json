@@ -1,6 +1,6 @@
 {
     "name": "@dhis2-chap/early-warning-app",
-    "version": "0.1.0",
+    "version": "0.2.1",
     "private": true,
     "license": "BSD-3-Clause",
     "scripts": {

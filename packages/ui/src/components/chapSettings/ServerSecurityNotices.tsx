@@ -14,7 +14,7 @@ export const ServerSecurityNotices = () => {
         return null;
     }
 
-    const tokenConfigured = hasRouteToken(route?.headers);
+    const tokenConfigured = hasRouteToken(route);
 
     if (isUnauthorized) {
         return tokenConfigured ? (

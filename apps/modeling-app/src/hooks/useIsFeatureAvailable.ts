@@ -12,6 +12,8 @@ export const FEATURE_MIN_VERSIONS = {
     benchmarks: '2.4.0',
     backtestParameters: '2.4.0',
     backtestTargetColumn: '2.4.0',
+    // CHAP raises alerts when a prediction run finishes from 2.5.0.
+    predictionAlerts: '2.5.0',
 } as const;
 
 /**
@@ -24,6 +26,7 @@ export const Features = {
     BENCHMARKS: 'benchmarks',
     BACKTEST_PARAMETERS: 'backtestParameters',
     BACKTEST_TARGET_COLUMN: 'backtestTargetColumn',
+    PREDICTION_ALERTS: 'predictionAlerts',
 } as const;
 
 export type Feature = keyof typeof FEATURE_MIN_VERSIONS;

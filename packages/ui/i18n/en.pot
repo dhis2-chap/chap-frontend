@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-14T09:19:44.981Z\n"
-"PO-Revision-Date: 2026-10-14T09:19:44.982Z\n"
+"POT-Creation-Date: 2026-10-21T15:55:37.102Z\n"
+"PO-Revision-Date: 2026-10-21T15:55:37.103Z\n"
 
 msgid "CHAP settings"
 msgstr "CHAP settings"
@@ -149,6 +149,9 @@ msgstr "Endemic threshold"
 msgid "Prediction for {{predictionTargetName}} for {{orgUnitName}}"
 msgstr "Prediction for {{predictionTargetName}} for {{orgUnitName}}"
 
+msgid "Alert level"
+msgstr "Alert level"
+
 msgid "Outbreak"
 msgstr "Outbreak"
 
@@ -160,6 +163,15 @@ msgstr "No"
 
 msgid "Number of cases"
 msgstr "Number of cases"
+
+msgid "Remove saved API token"
+msgstr "Remove saved API token"
+
+msgid "Setting API tokens is not supported on this DHIS2 version"
+msgstr "Setting API tokens is not supported on this DHIS2 version"
+
+msgid "CHAP API token"
+msgstr "CHAP API token"
 
 msgid "CHAP API token (optional)"
 msgstr "CHAP API token (optional)"
@@ -179,14 +191,11 @@ msgstr ""
 "does not require one."
 
 msgid ""
-"The token is saved in the DHIS2 route and sent to CHAP with each request. "
-"Users who can read the route configuration can access it."
+"New tokens are stored encrypted in DHIS2. Existing plain-text tokens remain "
+"readable until replaced."
 msgstr ""
-"The token is saved in the DHIS2 route and sent to CHAP with each request. "
-"Users who can read the route configuration can access it."
-
-msgid "Remove saved API token"
-msgstr "Remove saved API token"
+"New tokens are stored encrypted in DHIS2. Existing plain-text tokens remain "
+"readable until replaced."
 
 msgid "Route configuration"
 msgstr "Route configuration"
@@ -214,6 +223,9 @@ msgstr "Delete"
 
 msgid "Edit route"
 msgstr "Edit route"
+
+msgid "Increase response timeout to {{timeout}} seconds"
+msgstr "Increase response timeout to {{timeout}} seconds"
 
 msgid "Save"
 msgstr "Save"
@@ -283,6 +295,20 @@ msgstr "You do not have permission to add or modify routes."
 msgid "If you think this is an error, please contact your system administrator."
 msgstr "If you think this is an error, please contact your system administrator."
 
+msgid "API token stored in plain text"
+msgstr "API token stored in plain text"
+
+msgid ""
+"Users who can read this route configuration can read its API token. Edit "
+"the route and re-enter the token to store it encrypted on supported DHIS2 "
+"versions. If the token may have been exposed, rotate it on the CHAP server "
+"and enter the new token here."
+msgstr ""
+"Users who can read this route configuration can read its API token. Edit "
+"the route and re-enter the token to store it encrypted on supported DHIS2 "
+"versions. If the token may have been exposed, rotate it on the CHAP server "
+"and enter the new token here."
+
 msgid "Name"
 msgstr "Name"
 
@@ -333,6 +359,24 @@ msgstr "Error updating route timeout"
 
 msgid "Route timeout updated successfully"
 msgstr "Route timeout updated successfully"
+
+msgid ""
+"DHIS2 cannot preserve encrypted authentication when updating this route. "
+"Re-enter the CHAP API token, or explicitly remove it, before saving. Saving "
+"replaces all encrypted authentication on the route, including custom "
+"headers."
+msgstr ""
+"DHIS2 cannot preserve encrypted authentication when updating this route. "
+"Re-enter the CHAP API token, or explicitly remove it, before saving. Saving "
+"replaces all encrypted authentication on the route, including custom "
+"headers."
+
+msgid ""
+"This app does not support setting API tokens on this DHIS2 version. Upgrade "
+"DHIS2 to 2.40.7, 2.41.4, 2.42 or later to store the token encrypted."
+msgstr ""
+"This app does not support setting API tokens on this DHIS2 version. Upgrade "
+"DHIS2 to 2.40.7, 2.41.4, 2.42 or later to store the token encrypted."
 
 msgid "Cases"
 msgstr "Cases"

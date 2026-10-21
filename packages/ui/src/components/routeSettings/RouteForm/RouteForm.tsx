@@ -16,6 +16,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import styles from '../RouteSettings.module.css';
 import { ApiTokenField } from '../ApiTokenField';
+import { routeTokenReentryMessage } from '../routeMutation';
 
 const routeSchema = z.object({
     apiToken: z.string().trim().refine(value => !/[\r\n]/.test(value), {
@@ -39,6 +40,7 @@ interface RouteFormProps {
     error: Error | null;
     initialUrl?: string;
     tokenConfigured?: boolean;
+    tokenReentryRequired?: boolean;
     modalTitle: string;
     submitButtonText: string;
 }
@@ -50,6 +52,7 @@ export const RouteForm = ({
     error,
     initialUrl = '',
     tokenConfigured = false,
+    tokenReentryRequired = false,
     modalTitle,
     submitButtonText,
 }: RouteFormProps) => {
@@ -58,6 +61,7 @@ export const RouteForm = ({
         handleSubmit,
         watch,
         setValue,
+        setError,
         formState: { errors },
     } = useForm<RouteFormValues>({
         resolver: zodResolver(routeSchema),
@@ -69,7 +73,13 @@ export const RouteForm = ({
         },
     });
 
-    const handleFormSubmit = (data: RouteFormValues) => onSubmit(data);
+    const handleFormSubmit = (data: RouteFormValues) => {
+        if (tokenReentryRequired && !data.apiToken.trim() && !data.removeApiToken) {
+            setError('apiToken', { message: routeTokenReentryMessage() });
+            return;
+        }
+        onSubmit(data);
+    };
     const errorMessage = error instanceof FetchError
         ? error.details.message || error.message
         : error?.message;
@@ -102,7 +112,8 @@ export const RouteForm = ({
                             <ApiTokenField
                                 value={field.value}
                                 onChange={field.onChange}
-                                configured={tokenConfigured}
+                                configured={tokenConfigured || tokenReentryRequired}
+                                reentryRequired={tokenReentryRequired}
                                 remove={watch('removeApiToken')}
                                 onRemoveChange={(remove) => {
                                     setValue('removeApiToken', remove);

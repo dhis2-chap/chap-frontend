@@ -104,8 +104,13 @@ export const useMappingState = (model: ModelSpecRead) => {
     const getMappingsForSubmission = () => {
         if (!localState.targetMapping) return null;
 
+        // Mappings carried over from another model are kept in local state but never saved.
+        const covariateNames = (model.covariates ?? []).map(covariate => covariate.name);
         const { targetMapping, covariateMappings } = getLocalStateForValidation();
-        return { targetMapping, covariateMappings };
+        return {
+            targetMapping,
+            covariateMappings: covariateMappings.filter(mapping => covariateNames.includes(mapping.covariateName)),
+        };
     };
 
     return {

@@ -56,6 +56,7 @@ const getChartOptions = (
     outbreakProbability?: OutbreakProbability,
     alertLines?: AlertLine[],
     thresholdLines?: ThresholdLine[],
+    alertPeriods?: AlertPeriodChartInfo[],
 ): Highcharts.Options => {
     const isTile = variant === 'tile';
     const disabledAnimationOptions = getDisabledAnimationOptions();
@@ -66,6 +67,10 @@ const getChartOptions = (
     const outbreakInfoByPeriod = new Map(
         outbreakPeriods.map(outbreakPeriod => [outbreakPeriod.period, outbreakPeriod]),
     );
+    const alertInfoByPeriod = new Map(alertPeriods?.map(alert => [canonicalizePeriodId(alert.period), alert]));
+    const escapeHtml = (value: string) => value.replace(/[&<>"']/g, character => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', '\'': '&#39;',
+    })[character] ?? character);
     const median: Highcharts.PointOptionsObject[] = series.points
         .map(p => ({ name: p.period, x: getPeriodIndex(p.period), y: p.quantiles.median }));
 
@@ -306,7 +311,10 @@ const getChartOptions = (
                 const period = String(points[0]?.point.name ?? this.x);
                 const outbreakInfo = outbreakInfoByPeriod.get(period);
 
-                if (outbreakInfo) {
+                const alertInfo = alertInfoByPeriod.get(canonicalizePeriodId(period));
+                if (alertInfo) {
+                    lines.push(`${i18n.t('Alert level')}: <b>${escapeHtml(alertInfo.label)}</b>`);
+                } else if (alertPeriods === undefined && outbreakInfo) {
                     lines.push(
                         `${i18n.t('Outbreak')}: <b>${outbreakInfo.outbreak ? i18n.t('Yes') : i18n.t('No')}</b>`,
                     );
@@ -348,18 +356,23 @@ const getChartOptions = (
                 }];
             }),
             // Periods outside the axis get no band rather than shading the first period.
-            plotBands: outbreakPeriods
-                .filter(outbreakPeriod => outbreakPeriod.outbreak)
-                .flatMap((outbreakPeriod) => {
-                    const index = getPeriodIndex(outbreakPeriod.period);
-                    if (index === undefined) return [];
+            plotBands: alertPeriods !== undefined
+                ? alertPeriods.flatMap((alert) => {
+                        const index = getPeriodIndex(alert.period);
+                        return index === undefined ? [] : [{ from: index - 0.5, to: index + 0.5, color: alert.color }];
+                    })
+                : outbreakPeriods
+                        .filter(outbreakPeriod => outbreakPeriod.outbreak)
+                        .flatMap((outbreakPeriod) => {
+                            const index = getPeriodIndex(outbreakPeriod.period);
+                            if (index === undefined) return [];
 
-                    return [{
-                        from: index - 0.5,
-                        to: index + 0.5,
-                        color: 'rgba(212, 64, 64, 0.16)',
-                    }];
-                }),
+                            return [{
+                                from: index - 0.5,
+                                to: index + 0.5,
+                                color: 'rgba(212, 64, 64, 0.16)',
+                            }];
+                        }),
         },
         yAxis: {
             title: {
@@ -413,6 +426,7 @@ interface PredicationChartProps {
     alertLines?: AlertLine[];
     // Extra named threshold lines, e.g. one per threshold strategy.
     thresholdLines?: ThresholdLine[];
+    alertPeriods?: AlertPeriodChartInfo[];
     variant?: UncertaintyAreaChartVariant;
     zoomRange?: ZoomRange | null;
     onZoomChange?: (range: ZoomRange | null) => void;
@@ -430,6 +444,12 @@ export interface AlertLine {
 export interface ThresholdLine {
     name: string;
     thresholds: EndemicThresholdPoint[];
+}
+
+export interface AlertPeriodChartInfo {
+    period: string;
+    label: string;
+    color: string;
 }
 
 export interface OutbreakPeriodChartInfo {
@@ -450,6 +470,7 @@ export const UncertaintyAreaChart = ({
     outbreakProbability,
     alertLines,
     thresholdLines,
+    alertPeriods,
     variant = 'default',
     zoomRange,
     onZoomChange,
@@ -519,6 +540,7 @@ export const UncertaintyAreaChart = ({
             outbreakProbability,
             alertLines,
             thresholdLines,
+            alertPeriods,
         );
     }, [
         series,
@@ -529,6 +551,7 @@ export const UncertaintyAreaChart = ({
         outbreakProbability,
         alertLines,
         thresholdLines,
+        alertPeriods,
         variant,
         handleAfterSetExtremes,
         hasExternalZoomControls,

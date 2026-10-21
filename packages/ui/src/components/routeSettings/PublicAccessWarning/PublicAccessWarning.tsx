@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import { NoticeBox } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { Route } from '../useRoute';
@@ -8,13 +7,7 @@ type Props = {
 };
 
 export const PublicAccessWarning = ({ route }: Props) => {
-    const isPublic = useMemo(() => {
-        if (route.sharing.public.startsWith('rw')) {
-            return true;
-        }
-
-        return false;
-    }, [route.sharing.public]);
+    const isPublic = route.sharing.public.startsWith('r');
 
     if (!isPublic) {
         return null;

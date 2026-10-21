@@ -1,4 +1,3 @@
-import type { KeyboardEvent, MouseEvent } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import {
     Button,
@@ -17,6 +16,8 @@ import type {
     PredictionInfo,
 } from '@dhis2-chap/ui';
 import { useMemo } from 'react';
+import { usePredictionAlerts } from '@/hooks/usePredictionAlerts';
+import { Features, useIsFeatureAvailable } from '@/hooks/useIsFeatureAvailable';
 import {
     DEFAULT_THRESHOLD_STRATEGY,
     getDefaultThresholdParams,
@@ -29,9 +30,11 @@ import {
     ThresholdStrategyControl,
     ThresholdTilesExplorer,
 } from '../../../ThresholdTilesExplorer';
+import { AlertLevelsSection } from './AlertLevelsSection';
 import styles from './PredictionDetailsGrid.module.css';
 
 export type PredictionRunAlertSettings = {
+    alertsEnabled: boolean;
     alertProbability: OutbreakProbability;
     thresholdParams: ThresholdParams;
     thresholdsEnabled: boolean;
@@ -46,6 +49,7 @@ type Props = {
 };
 
 const DEFAULT_SETTINGS: PredictionRunAlertSettings = {
+    alertsEnabled: true,
     alertProbability: DEFAULT_OUTBREAK_PROBABILITY,
     thresholdParams: getDefaultThresholdParams(DEFAULT_THRESHOLD_STRATEGY),
     thresholdsEnabled: false,
@@ -66,6 +70,12 @@ export const PredictionDetailsGrid = ({
         isLoading: isSeriesLoading,
         error: seriesError,
     } = usePredictionSeries({ prediction, model });
+    const { isAvailable: isAlertsAvailable } = useIsFeatureAvailable(Features.PREDICTION_ALERTS);
+    const alerts = usePredictionAlerts(prediction, isAlertsAvailable);
+    // Recorded alerts replace the threshold outbreak shading only while they are shown.
+    const raisedAlerts = isAlertsAvailable && settings.alertsEnabled && alerts.displayedAlerts.length > 0
+        ? alerts.displayedAlerts
+        : undefined;
     const showThresholds = settings.thresholdsEnabled;
 
     const {
@@ -113,29 +123,14 @@ export const PredictionDetailsGrid = ({
         });
     };
 
-    const toggleThresholds = () => {
-        updateSettings({ thresholdsEnabled: !settings.thresholdsEnabled });
-    };
-
-    const handleThresholdKeyDown = (event: KeyboardEvent) => {
-        if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            toggleThresholds();
-        }
-    };
-
-    const handleSwitchClick = (event: MouseEvent) => {
-        event.stopPropagation();
-    };
-
     const summaryList = (
         <dl className={styles.summaryList}>
             <SummaryRow
-                label={i18n.t('Regions with alerts')}
+                label={i18n.t('Regions exceeding threshold')}
                 value={`${summary.regionsWithAlerts} / ${summary.totalRegions}`}
             />
             <SummaryRow
-                label={i18n.t('Alert periods')}
+                label={i18n.t('Periods exceeding threshold')}
                 value={summary.alertPeriods}
             />
             {summary.unavailableThresholds > 0 && (
@@ -171,28 +166,27 @@ export const PredictionDetailsGrid = ({
                 </div>
             )}
 
-            <div
+            {isAlertsAvailable && (
+                <AlertLevelsSection
+                    alerts={alerts}
+                    enabled={settings.alertsEnabled}
+                    onEnabledChange={alertsEnabled => updateSettings({ alertsEnabled })}
+                />
+            )}
+            <Switch
                 className={styles.toggleButton}
-                onClick={toggleThresholds}
-                onKeyDown={handleThresholdKeyDown}
-                role="button"
-                tabIndex={0}
-            >
-                <div className={styles.toggleText}>
-                    <span className={styles.toggleTitle}>
-                        {i18n.t('Outbreak thresholds')}
+                aria-label={i18n.t('Explore thresholds')}
+                checked={settings.thresholdsEnabled}
+                onChange={({ checked }) => updateSettings({ thresholdsEnabled: checked })}
+                label={(
+                    <span className={styles.toggleText}>
+                        <span className={styles.toggleTitle}>{i18n.t('Explore thresholds')}</span>
+                        <span className={styles.toggleDescription}>
+                            {i18n.t('Explore threshold lines for this run.')}
+                        </span>
                     </span>
-                    <span className={styles.toggleDescription}>
-                        {i18n.t('Show outbreak status and threshold overlays for this run.')}
-                    </span>
-                </div>
-                <span onClick={handleSwitchClick}>
-                    <Switch
-                        checked={settings.thresholdsEnabled}
-                        onChange={toggleThresholds}
-                    />
-                </span>
-            </div>
+                )}
+            />
             {showThresholds && (
                 <>
                     <ThresholdStrategyControl
@@ -254,6 +248,7 @@ export const PredictionDetailsGrid = ({
             predictionTargetName={predictionTargetName}
             selectedProbability={settings.alertProbability}
             tiles={tiles}
+            raisedAlerts={raisedAlerts}
             showThresholds={thresholdsVisible}
             panel={panelContent}
             panelHeader={i18n.t('Prediction settings')}
