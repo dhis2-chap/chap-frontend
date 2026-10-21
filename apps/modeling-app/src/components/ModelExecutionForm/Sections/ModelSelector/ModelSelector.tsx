@@ -27,9 +27,12 @@ export const ModelSelector = ({
     const modelId = useWatch({ control, name: 'modelId' });
 
     const handleModalConfirm = (model: ModelSpecRead) => {
+        if (model.id.toString() !== modelId) {
+            // resetField would restore the mappings prefilled from a copied evaluation, which belong to the old model.
+            methods.setValue('covariateMappings', []);
+            methods.setValue('targetMapping', undefined as unknown as ModelExecutionFormValues['targetMapping']);
+        }
         methods.setValue('modelId', model.id.toString(), { shouldValidate: true, shouldDirty: true });
-        methods.resetField('covariateMappings');
-        methods.resetField('targetMapping');
         setIsModelModalOpen(false);
     };
 
