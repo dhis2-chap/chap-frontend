@@ -44,11 +44,12 @@ export const prepareBacktestData = async (
 ): Promise<PreparedBacktestData> => {
     const model = await fetchRunnableModel(queryClient, Number(formData.modelId));
 
-    // A copied evaluation or a model switch can leave mappings that do not match the model.
-    const mappedNames = new Set(formData.covariateMappings.map(mapping => mapping.covariateName));
-    const unmapped = (model.covariates ?? [])
-        .map(covariate => covariate.name)
-        .filter(name => !mappedNames.has(name));
+    // A copied evaluation or a model switch can leave mappings that do not match the model,
+    // so only the model's own covariates are sent and each of them must be mapped.
+    const covariateNames = (model.covariates ?? []).map(covariate => covariate.name);
+    const covariateMappings = formData.covariateMappings.filter(mapping => covariateNames.includes(mapping.covariateName));
+    const mappedNames = new Set(covariateMappings.map(mapping => mapping.covariateName));
+    const unmapped = covariateNames.filter(name => !mappedNames.has(name));
     if (formData.targetMapping.covariateName !== model.target.name) {
         unmapped.push(model.target.name);
     }
@@ -66,21 +67,14 @@ export const prepareBacktestData = async (
         periodSettings,
     );
 
-    const dataItems = [
-        ...formData.covariateMappings.map(mapping => mapping.dataItem.id),
-        formData.targetMapping.dataItem.id,
-    ];
+    const mappings = [...covariateMappings, formData.targetMapping];
 
-    const dataSources: DataSource[] = [
-        ...formData.covariateMappings.map(mapping => ({
-            covariate: mapping.covariateName,
-            dataElementId: mapping.dataItem.id,
-        })),
-        {
-            covariate: formData.targetMapping.covariateName,
-            dataElementId: formData.targetMapping.dataItem.id,
-        },
-    ];
+    const dataItems = [...new Set(mappings.map(mapping => mapping.dataItem.id))];
+
+    const dataSources: DataSource[] = mappings.map(mapping => ({
+        covariate: mapping.covariateName,
+        dataElementId: mapping.dataItem.id,
+    }));
 
     // Create a unique key of the data elements, periods, and org units for caching
     const hash = generateBacktestDataHash(dataItems, periods, formData.orgUnits.map(ou => ou.id));
@@ -112,26 +106,24 @@ export const prepareBacktestData = async (
     }
 
     const convertDhis2AnalyticsToChap = (data: [string, string, string, string][]): ObservationBase[] => {
-        return data.map((row) => {
+        return data.flatMap((row) => {
             const dataItemId = row[0];
-            const dataLayer = formData
-                .targetMapping
-                .dataItem
-                .id === dataItemId ? formData.targetMapping : formData.covariateMappings.find(mapping => mapping.dataItem.id === dataItemId);
+            // A data item mapped to several covariates is sent once for each of them.
+            const dataLayers = mappings.filter(mapping => mapping.dataItem.id === dataItemId);
 
-            if (!dataLayer) {
+            if (dataLayers.length === 0) {
                 throw new Error(i18n.t('Data layer not found for data item id{{escape}} {{dataItemId}}', {
                     dataItemId,
                     escape: ':',
                 }));
             }
 
-            return {
+            return dataLayers.map(dataLayer => ({
                 featureName: dataLayer.covariateName,
                 orgUnit: row[1],
                 period: row[2],
                 value: parseFloat(row[3]),
-            };
+            }));
         });
     };
 

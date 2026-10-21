@@ -71,6 +71,30 @@ describe('shared evaluation and prediction preflight', () => {
         client.clear();
     });
 
+    it('sends only the model covariates, under every covariate a data item is mapped to', async () => {
+        const client = new QueryClient();
+        const covariate = (name: string) => ({ name, displayName: name, description: name });
+        const humidity = { id: 'hum', displayName: 'Humidity', dimensionItemType: 'DATA_ELEMENT' } as const;
+        vi.mocked(ModelsService.listConfiguredModelsV1CrudConfiguredModelsGet)
+            .mockResolvedValue([{ ...model, covariates: [covariate('RH'), covariate('humidity_lagged')] }]);
+        vi.mocked(fetchAnalytics).mockResolvedValue({
+            response: { metaData: { dimensions: { ou: ['org-unit'] } }, rows: [['hum', 'org-unit', '202401', '80']] },
+        });
+        const copiedForm = {
+            ...form,
+            covariateMappings: [
+                { covariateName: 'humidity', dataItem: humidity },
+                { covariateName: 'RH', dataItem: humidity },
+                { covariateName: 'humidity_lagged', dataItem: humidity },
+            ],
+        };
+
+        const result = await prepareBacktestData(copiedForm, dataEngine, client, settings);
+        expect(result.observations.map(observation => observation.featureName)).toEqual(['RH', 'humidity_lagged']);
+        expect(result.dataSources.map(dataSource => dataSource.covariate)).toEqual(['RH', 'humidity_lagged', 'disease_cases']);
+        client.clear();
+    });
+
     it('recovers from a cached mismatch once the model is healthy again', async () => {
         const client = new QueryClient();
         client.setQueryData(['models'], [{ ...model, healthStatus: 'revision_mismatch' }]);
