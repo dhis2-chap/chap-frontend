@@ -2,4 +2,4 @@
 "@dhis2-chap/modeling-app": patch
 ---
 
-Stop an evaluation or prediction from starting while a model covariate is unmapped, and clear the copied mappings when another model is selected.
+Send only the selected model's covariates when running an evaluation or prediction, block runs while one is unmapped, and send a data item mapped to several covariates under each of them [CLIM-1499].
