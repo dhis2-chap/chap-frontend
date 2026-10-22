@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useDataEngine } from '@dhis2/app-runtime';
 import { useNavigate } from 'react-router-dom';
@@ -12,6 +13,7 @@ import { ModelExecutionFormValues } from '../../ModelExecutionForm/hooks/useMode
 import { prepareBacktestData } from '../../ModelExecutionForm/utils/prepareBacktestData';
 import { PERIOD_TYPES } from '@dhis2-chap/core';
 import { buildOrgUnitFeatureCollection } from '../../ModelExecutionForm/utils/orgUnitGeoJson';
+import { getImportSummaryFromApiError } from '../../ModelExecutionForm/utils/importSummaryUtils';
 import { type Dhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
 
 type Props = {
@@ -37,6 +39,7 @@ export const useCreatePrediction = ({
     const dataEngine = useDataEngine();
     const queryClient = useQueryClient();
     const navigate = useNavigate();
+    const [dataHash, setDataHash] = useState<string>();
 
     const {
         mutate: createPrediction,
@@ -44,14 +47,17 @@ export const useCreatePrediction = ({
         error,
     } = useMutation<JobResponse, ApiError, ModelExecutionFormValues>({
         mutationFn: async (formData: ModelExecutionFormValues) => {
+            setDataHash(undefined);
             const nPeriods = N_PERIODS[formData.periodType.toUpperCase() as keyof typeof N_PERIODS];
 
-            const { observations, orgUnitResponse } = await prepareBacktestData(
+            const { observations, orgUnitResponse, hash } = await prepareBacktestData(
                 formData,
                 dataEngine,
                 queryClient,
                 periodSettings,
             );
+
+            setDataHash(hash);
 
             const geojson: FeatureCollectionModel = buildOrgUnitFeatureCollection(
                 orgUnitResponse.geojson.organisationUnits,
@@ -84,6 +90,7 @@ export const useCreatePrediction = ({
 
     return {
         createPrediction,
+        importSummary: error ? getImportSummaryFromApiError(error, dataHash) : null,
         isSubmitting: isPending,
         error,
     };

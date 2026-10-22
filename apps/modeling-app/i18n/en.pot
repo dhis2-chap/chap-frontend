@@ -1160,6 +1160,24 @@ msgstr "Cannot run prediction"
 msgid "Prediction run name"
 msgstr "Prediction run name"
 
+msgid "Prediction could not run"
+msgstr "Prediction could not run"
+
+msgid ""
+"Check or import the required climate data for the listed variables and "
+"organisation units, or adjust the training period in the prediction setup "
+"before retrying."
+msgstr ""
+"Check or import the required climate data for the listed variables and "
+"organisation units, or adjust the training period in the prediction setup "
+"before retrying."
+
+msgid "View rejected data"
+msgstr "View rejected data"
+
+msgid "Prediction data rejected"
+msgstr "Prediction data rejected"
+
 msgid "Loading period settings"
 msgstr "Loading period settings"
 
