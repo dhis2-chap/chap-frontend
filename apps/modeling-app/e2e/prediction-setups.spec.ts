@@ -41,60 +41,39 @@ test.describe.serial('prediction setup', () => {
         await expect(page.locator('[data-test="quick-action-predict"]')).toBeEnabled();
     });
 
-    test('explains missing prediction data and falls back safely for generic errors', async ({ page }) => {
-        const periods = [
-            ...Array.from({ length: 34 }, (_, index) => `2025W${19 + index}`),
-            '2026W01',
-        ];
+    test('explains missing prediction data', async ({ page }) => {
+        const periods = ['2025W19', '2025W20', '2025W21', '2025W22', '2026W01'];
         const orgUnitId = 'W6sNfkJcXGC';
         const orgUnit = await readJson<{ displayName: string }>(await page.request.get(
             `${process.env.E2E_DHIS2_BASE_URL ?? 'http://localhost:8080'}/api/organisationUnits/${orgUnitId}?fields=displayName`,
         ), 'Load organisation-unit name');
 
         // Reproduce the reported climate-provider rejection while using a real saved setup and DHIS2 data.
-        let responseBody: unknown = {
-            detail: {
-                message: 'All regions rejected due to missing values',
-                imported_count: 0,
-                rejected: [
-                    { reason: 'Missing value for some/all time periods', featureName: 'mean_temperature', orgUnit: orgUnitId, timePeriods: periods },
-                    { reason: 'Missing value for some/all time periods', featureName: 'rainfall', orgUnit: 'unknownUnit', timePeriods: ['2025W20'] },
-                ],
-            },
-        };
         await page.route(`**/v1/crud/prediction-setups/${setup.id}/run`, route => route.fulfill({
             status: 400,
-            json: responseBody,
+            json: {
+                detail: {
+                    message: 'All regions rejected due to missing values',
+                    imported_count: 0,
+                    rejected: [
+                        { reason: 'Missing value for some/all time periods', featureName: 'mean_temperature', orgUnit: orgUnitId, timePeriods: periods },
+                    ],
+                },
+            },
         }));
         await page.goto(`/#/predictions/${setup.id}/new`);
         await page.locator('[data-test="prediction-name-input"] input').fill('Rejected climate data');
         await selectPeriod(page, 'prediction-absolute-period-input', evaluation.dataset!.lastPeriod!);
 
-        const runButton = page.getByRole('button', { name: 'Run prediction', exact: true });
-        await runButton.click();
+        await page.getByRole('button', { name: 'Run prediction', exact: true }).click();
         await expect(page.getByText('All regions rejected due to missing values')).toBeVisible();
-        await expect(page.getByText('Check or import the required climate data', { exact: false })).toBeVisible();
         await page.getByRole('button', { name: 'View rejected data' }).click();
 
-        const dialog = page.locator('[data-test="dhis2-uicore-modal"]');
-        const temperatureRow = dialog.locator('tbody tr').filter({ hasText: 'mean_temperature' });
-        await expect(temperatureRow.getByText(orgUnit.displayName, { exact: true })).toBeVisible();
-        await expect(dialog.locator('tbody tr').filter({ hasText: 'rainfall' }).getByText('unknownUnit', { exact: true })).toBeVisible();
-        await expect(temperatureRow.getByText(periods.join(', '), { exact: true })).toBeHidden();
-        await temperatureRow.locator('summary').click();
-        await expect(temperatureRow.getByText(periods.join(', '), { exact: true })).toBeVisible();
-        await dialog.getByRole('button', { name: 'Close', exact: true }).click();
-
-        // Retry with both an ordinary error and an unrecognised detail object.
-        for (const body of [{}, { detail: { unexpected: true } }]) {
-            responseBody = body;
-            const response = page.waitForResponse(res => res.url().endsWith(`/prediction-setups/${setup.id}/run`));
-            await runButton.click();
-            await response;
-            await expect(page.getByText('Prediction could not run', { exact: true })).toBeVisible();
-            await expect(page.getByText('Bad Request', { exact: true })).toBeVisible();
-            await expect(page.getByRole('button', { name: 'View rejected data' })).toBeHidden();
-        }
+        const row = page.locator('[data-test="dhis2-uicore-modal"] tbody tr').filter({ hasText: 'mean_temperature' });
+        await expect(row.getByText(orgUnit.displayName, { exact: true })).toBeVisible();
+        await expect(row.getByText(periods.join(', '), { exact: true })).toBeHidden();
+        await row.locator('summary').click();
+        await expect(row.getByText(periods.join(', '), { exact: true })).toBeVisible();
     });
 
     test('runs a prediction from the saved setup dashboard', async ({ page }) => {

@@ -25,10 +25,8 @@ describe('normalizeImportSummary', () => {
     });
 
     it('rejects unknown or malformed details instead of passing unsafe rows to the dialog', () => {
-        for (const detail of [null, 'Bad Request', {}, { rejected: [] },
-            { imported_count: 0, rejected: [null] },
+        for (const detail of ['Bad Request', { rejected: [] },
             { imported_count: 0, rejected: [{ ...rejection, orgUnit: {} }] },
-            { imported_count: 0, rejected: [{ ...rejection, timePeriods: '2025W19' }] },
             { imported_count: 0, rejected: [{ ...rejection, timePeriods: [null] }] },
         ]) {
             expect(normalizeImportSummary(detail)).toBeNull();

@@ -18,8 +18,8 @@ import {
 import { PredictionSetupNoticeBox } from './components/PredictionSetupNoticeBox';
 import { PeriodSelectionField } from './components/PeriodSelectionField';
 import styles from './NewPredictionForm.module.css';
-import { SummaryModal } from '../ModelExecutionForm/SummaryModal/SummaryModal';
-import { getChapErrorMessage, getChapErrorTitle } from '@/utils/chapErrors';
+import { SummaryModal } from '../ModelExecutionForm/SummaryModal';
+import { ChapErrorNotice } from '../ChapErrorNotice';
 import { useNavigationBlocker } from '../../hooks/useNavigationBlocker';
 import { NavigationConfirmModal } from '../NavigationConfirmModal';
 import { type Dhis2PeriodSettings, useDhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
@@ -138,23 +138,22 @@ const NewPredictionFormFields = ({
                             </div>
 
                             {!!error && (
-                                <NoticeBox
-                                    error
-                                    title={getChapErrorTitle(error, i18n.t('Prediction could not run'))}
+                                <ChapErrorNotice
+                                    error={error}
+                                    title={i18n.t('Prediction could not run')}
                                     className={styles.errorNotice}
                                 >
-                                    <p>{getChapErrorMessage(error)}</p>
                                     {!!importSummary?.rejected.length && (
                                         <>
                                             <p>
-                                                {i18n.t('Check or import the required climate data for the listed variables and organisation units, or adjust the training period in the prediction setup before retrying.')}
+                                                {i18n.t('Check or import the required data for the listed variables and organisation units, or adjust the training period in the prediction setup before retrying.')}
                                             </p>
                                             <Button small onClick={() => setShowImportSummary(true)}>
                                                 {i18n.t('View rejected data')}
                                             </Button>
                                         </>
                                     )}
-                                </NoticeBox>
+                                </ChapErrorNotice>
                             )}
                         </div>
                     </Card>
