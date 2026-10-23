@@ -1,5 +1,13 @@
 # @dhis2-chap/modeling-app
 
+## 7.3.2
+
+### Patch Changes
+
+-   5540248: Show missing climate data details and retry guidance when a prediction run is rejected, including organisation-unit names and expandable lists of missing periods.
+    -   @dhis2-chap/ui@7.3.2
+    -   @dhis2-chap/core@7.3.2
+
 ## 7.3.1
 
 ### Patch Changes
