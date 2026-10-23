@@ -100,27 +100,28 @@ test.describe.serial('alert level presentation', () => {
         await expect(page.getByText('Raised alerts', { exact: true })).toHaveCount(0);
         await expect(plot.getByText(label, { exact: true }).locator('span')).toHaveCSS('background-color', color);
         await expect(plot.locator('.highcharts-plot-band').first()).toBeVisible();
-        const policyLines = plot.locator('.highcharts-graph[stroke="#11aabb"], .highcharts-graph[stroke="#ffc107"]');
-        await expect(policyLines).toHaveCount(2);
+        // Both saved levels use different parameters, so the policy view draws two
+        // lines; exploration draws a single one in the same colour.
+        const thresholdLines = plot.locator('.highcharts-graph[stroke="#212934"]');
+        await expect(thresholdLines).toHaveCount(2);
         await alertLevels.uncheck();
         await expect(plot.getByText(label, { exact: true })).toHaveCount(0);
         await expect(plot.locator('.highcharts-plot-band')).toHaveCount(0);
-        await expect(policyLines).toHaveCount(0);
+        await expect(thresholdLines).toHaveCount(0);
         await alertLevels.check();
         await expect(plot.getByText(label, { exact: true })).toBeVisible();
         await expect(plot.locator('.highcharts-plot-band').first()).toBeVisible();
-        await expect(policyLines).toHaveCount(2);
+        await expect(thresholdLines).toHaveCount(2);
 
         await exploreThresholds.check();
         await expect(alertLevels).toBeDisabled();
-        await expect(policyLines).toHaveCount(0);
         await expect(plot.getByText(label, { exact: true })).toHaveCount(0);
         await expect(page.locator('[data-test="alert-level-filter"]')).toHaveCount(0);
-        await expect(plot.locator('.highcharts-graph[stroke="#212934"]')).toHaveCount(1);
+        await expect(thresholdLines).toHaveCount(1);
         await expect(page.getByText('Regions exceeding threshold', { exact: true })).toBeVisible();
         await exploreThresholds.uncheck();
         await expect(alertLevels).toBeEnabled();
-        await expect(policyLines).toHaveCount(2);
+        await expect(thresholdLines).toHaveCount(2);
         await expect(plot.getByText(label, { exact: true })).toBeVisible();
         await expect(plot.locator('.highcharts-plot-band').first()).toBeVisible();
         await expect(page.getByText('Regions exceeding threshold', { exact: true })).toHaveCount(0);

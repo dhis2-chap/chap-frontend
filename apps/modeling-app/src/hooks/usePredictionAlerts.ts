@@ -32,7 +32,6 @@ export const usePredictionAlerts = (prediction: PredictionInfo, enabled: boolean
         ...alerts,
         isLoading: alerts.isLoading || (setupId !== undefined && setup.isLoading),
         displayedAlerts,
-        policyDisplays: displays.data,
         status,
         displayError: policies.error || displays.error,
     };

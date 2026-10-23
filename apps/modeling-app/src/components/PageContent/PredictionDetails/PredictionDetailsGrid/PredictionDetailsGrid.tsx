@@ -87,7 +87,6 @@ export const PredictionDetailsGrid = ({
         datasetId: prediction.datasetId,
         series,
         policies: alerts.status.kind === 'raised' ? alerts.status.policies : NO_POLICIES,
-        displays: alerts.policyDisplays,
         enabled: showPolicy,
     });
 

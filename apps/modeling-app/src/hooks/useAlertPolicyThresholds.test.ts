@@ -15,11 +15,14 @@ vi.mock('@dhis2-chap/ui', async () => ({
     OpenAPI: { BASE: 'test-backend' },
 }));
 
+const seasonal = { type: 'seasonal', stdMultiplier: 2 };
+const percentile = { type: 'percentile', quantile: [0.25, 0.75], baselineYears: null };
 const policies: AlertPolicyRead[] = [{
     id: 3, name: 'Policy', created: null,
     levels: [
-        { name: 'Watch', exceedanceThreshold: 0.5, thresholdParams: { type: 'seasonal', stdMultiplier: 2 } },
-        { name: 'Action', exceedanceThreshold: 0.9, thresholdParams: { type: 'percentile', quantile: [0.25, 0.75], baselineYears: null } },
+        { name: 'Watch', exceedanceThreshold: 0.5, thresholdParams: seasonal },
+        { name: 'Action', exceedanceThreshold: 0.9, thresholdParams: seasonal },
+        { name: 'Band', exceedanceThreshold: 0.9, thresholdParams: percentile },
     ],
 }];
 const series: PredictionOrgUnitSeries[] = [{
@@ -34,10 +37,7 @@ const series: PredictionOrgUnitSeries[] = [{
 const renderHook = (enabled = true, selectedPolicies = policies) => {
     let result: ReturnType<typeof useAlertPolicyThresholds> | undefined;
     const Probe = () => {
-        result = useAlertPolicyThresholds({
-            datasetId: 7, series, policies: selectedPolicies, enabled,
-            displays: { 3: { Watch: { color: '#123456' } } },
-        });
+        result = useAlertPolicyThresholds({ datasetId: 7, series, policies: selectedPolicies, enabled });
         return null;
     };
     renderToStaticMarkup(createElement(Probe));
@@ -50,23 +50,22 @@ describe('policy thresholds', () => {
         vi.mocked(useQuery).mockReturnValue({ data: undefined, fetchStatus: 'idle' } as ReturnType<typeof useQuery>);
     });
 
-    it('computes every saved level with its own parameters and draws its upper line', async () => {
+    it('draws one upper line per distinct parameter set, labelled with the levels sharing it', async () => {
         vi.mocked(DatasetsService.computeThresholdsV1AnalyticsThresholdsPost)
-            .mockResolvedValueOnce({ params: policies[0].levels![0].thresholdParams, lines: [2], entries: [{ location: 'region', period: '2024W1', values: [10] }] })
-            .mockResolvedValueOnce({ params: policies[0].levels![1].thresholdParams, lines: [0.25, 0.75], entries: [{ location: 'region', period: '2024W1', values: [4, 20] }] });
+            .mockResolvedValueOnce({ params: seasonal, lines: [2], entries: [{ location: 'region', period: '2024W1', values: [10] }] })
+            .mockResolvedValueOnce({ params: percentile, lines: [0.25, 0.75], entries: [{ location: 'region', period: '2024W1', values: [4, 20] }] });
         renderHook();
         const options = vi.mocked(useQuery).mock.calls[0][0] as unknown as { enabled: boolean; queryFn: () => Promise<unknown> };
         expect(options.enabled).toBe(true);
         const data = await options.queryFn();
-        expect(vi.mocked(DatasetsService.computeThresholdsV1AnalyticsThresholdsPost).mock.calls).toEqual(
-            policies[0].levels!.map(level => [{
-                datasetId: 7, locations: ['region'], periodIds: ['2024W1'], params: level.thresholdParams,
-            }]),
-        );
+        expect(vi.mocked(DatasetsService.computeThresholdsV1AnalyticsThresholdsPost).mock.calls).toEqual([
+            [{ datasetId: 7, locations: ['region'], periodIds: ['2024W1'], params: seasonal }],
+            [{ datasetId: 7, locations: ['region'], periodIds: ['2024W1'], params: percentile }],
+        ]);
         vi.mocked(useQuery).mockReturnValue({ data, fetchStatus: 'idle' } as ReturnType<typeof useQuery>);
         expect(renderHook().linesByOrgUnit.get('region')).toEqual([
-            { id: 'policy-threshold-3-Watch', label: 'Policy: Watch', color: '#123456', points: [{ period: '2024W1', value: 10 }] },
-            { id: 'policy-threshold-3-Action', label: 'Policy: Action', color: '#e53935', points: [{ period: '2024W1', value: 20, lowerValue: 4 }] },
+            { id: 'policy-threshold-3-0', label: 'Policy: Watch, Action', color: '#212934', points: [{ period: '2024W1', value: 10 }] },
+            { id: 'policy-threshold-3-1', label: 'Policy: Band', color: '#212934', points: [{ period: '2024W1', value: 20, lowerValue: 4 }] },
         ]);
     });
 
