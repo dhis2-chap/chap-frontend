@@ -6,6 +6,8 @@ import styles from './PredictionDetailsGrid.module.css';
 type Props = {
     alerts: ReturnType<typeof usePredictionAlerts>;
     enabled: boolean;
+    // Exploration takes precedence over the policy view, so the switch has no effect while it is on.
+    disabled?: boolean;
     onEnabledChange: (enabled: boolean) => void;
 };
 
@@ -16,7 +18,7 @@ const NoAlerts = ({ message }: { message: string }) => (
     </div>
 );
 
-export const AlertLevelsSection = ({ alerts, enabled, onEnabledChange }: Props) => {
+export const AlertLevelsSection = ({ alerts, enabled, disabled, onEnabledChange }: Props) => {
     if (alerts.isLoading) {
         return <CircularLoader small />;
     }
@@ -59,13 +61,14 @@ export const AlertLevelsSection = ({ alerts, enabled, onEnabledChange }: Props) 
                 className={styles.toggleButton}
                 aria-label={i18n.t('Alert levels')}
                 checked={enabled}
+                disabled={disabled}
                 onChange={({ checked }) => onEnabledChange(checked)}
                 label={(
                     <span className={styles.toggleText}>
                         <span className={styles.toggleTitle}>{i18n.t('Alert levels')}</span>
                         <span className={styles.toggleDescription}>
                             {policyNames
-                                ? i18n.t('Show {{alertCount}} alerts raised by {{policy}} on the plots.', {
+                                ? i18n.t('Show the {{alertCount}} alerts {{policy}} raised for this run, with its threshold lines.', {
                                         alertCount: status.alertCount,
                                         policy: policyNames,
                                     })

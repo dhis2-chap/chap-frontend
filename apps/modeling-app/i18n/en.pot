@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-22T18:16:11.343Z\n"
-"PO-Revision-Date: 2026-10-22T18:16:11.344Z\n"
+"POT-Creation-Date: 2026-10-23T07:11:22.898Z\n"
+"PO-Revision-Date: 2026-10-23T07:11:22.898Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -1935,8 +1935,12 @@ msgstr ""
 msgid "No alerts were recorded for this run."
 msgstr "No alerts were recorded for this run."
 
-msgid "Show {{alertCount}} alerts raised by {{policy}} on the plots."
-msgstr "Show {{alertCount}} alerts raised by {{policy}} on the plots."
+msgid ""
+"Show the {{alertCount}} alerts {{policy}} raised for this run, with its "
+"threshold lines."
+msgstr ""
+"Show the {{alertCount}} alerts {{policy}} raised for this run, with its "
+"threshold lines."
 
 msgid "Show recorded alerts on the plots."
 msgstr "Show recorded alerts on the plots."
@@ -1959,11 +1963,18 @@ msgstr "Thresholds unavailable"
 msgid "Prediction run"
 msgstr "Prediction run"
 
+msgid "Edit the alert policy to change its thresholds."
+msgstr "Edit the alert policy to change its thresholds."
+
 msgid "Explore thresholds"
 msgstr "Explore thresholds"
 
-msgid "Explore threshold lines for this run."
-msgstr "Explore threshold lines for this run."
+msgid ""
+"Try other threshold settings on this run. Recorded alerts are hidden while "
+"exploring."
+msgstr ""
+"Try other threshold settings on this run. Recorded alerts are hidden while "
+"exploring."
 
 msgid ""
 "There was a problem loading the prediction data required for this "
@@ -2225,6 +2236,9 @@ msgstr "There are running jobs in the background"
 msgid "Running jobs"
 msgstr "Running jobs"
 
+msgid "Review the threshold parameters and apply your changes."
+msgstr "Review the threshold parameters and apply your changes."
+
 msgid "Waiting for connection"
 msgstr "Waiting for connection"
 
@@ -2239,9 +2253,6 @@ msgstr "Unable to calculate thresholds"
 
 msgid "There was a problem calculating thresholds for this prediction run."
 msgstr "There was a problem calculating thresholds for this prediction run."
-
-msgid "Review the threshold parameters and apply your changes."
-msgstr "Review the threshold parameters and apply your changes."
 
 msgid "Unable to load threshold strategies"
 msgstr "Unable to load threshold strategies"
@@ -2586,6 +2597,17 @@ msgstr "Requires superuser authority"
 
 msgid "Model not found"
 msgstr "Model not found"
+
+msgid "Seasonal mean + {{stdMultiplier}} SD"
+msgstr "Seasonal mean + {{stdMultiplier}} SD"
+
+msgid "{{percent}}th percentile, {{count}}-year baseline"
+msgid_plural "{{percent}}th percentile, {{count}}-year baseline"
+msgstr[0] "{{percent}}th percentile, {{count}}-year baseline"
+msgstr[1] "{{percent}}th percentile, {{count}}-year baseline"
+
+msgid "{{percent}}th percentile"
+msgstr "{{percent}}th percentile"
 
 msgid "Manage the policies used to raise alerts from forecasts."
 msgstr "Manage the policies used to raise alerts from forecasts."
