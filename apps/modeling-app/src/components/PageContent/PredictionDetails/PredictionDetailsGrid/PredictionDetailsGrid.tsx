@@ -106,15 +106,16 @@ export const PredictionDetailsGrid = ({
 
     // During a recalculation the previous thresholds stay visible
     // (keepPreviousData), so the grid is not remounted and the status filter
-    // survives a param change.
-    const thresholdsVisible = showThresholds && !!thresholdMap;
+    // survives a param change. Once exploration is off they are ignored.
+    const activeThresholdMap = showThresholds ? thresholdMap : undefined;
+    const thresholdsVisible = !!activeThresholdMap;
 
     const {
         summary,
         tiles,
     } = useMemo(() => (
-        getThresholdTileViewModels(series, settings.alertProbability, showThresholds ? thresholdMap : undefined)
-    ), [series, settings.alertProbability, thresholdMap, showThresholds]);
+        getThresholdTileViewModels(series, settings.alertProbability, activeThresholdMap)
+    ), [series, settings.alertProbability, activeThresholdMap]);
 
     const predictionPeriods = useMemo(() => {
         const points = series[0]?.points ?? [];
@@ -192,6 +193,7 @@ export const PredictionDetailsGrid = ({
                     isPaused={policyThresholds.isPaused}
                     error={policyThresholds.error}
                     onRetry={policyThresholds.refetch}
+                    hint={i18n.t('Edit the alert policy to change its thresholds.')}
                 />
             )}
             <Switch
@@ -278,7 +280,6 @@ export const PredictionDetailsGrid = ({
             zoomResetDeps={[
                 prediction.id,
                 settings.alertProbability,
-                settings.alertsEnabled,
                 settings.thresholdsEnabled,
                 settings.thresholdParams,
             ]}

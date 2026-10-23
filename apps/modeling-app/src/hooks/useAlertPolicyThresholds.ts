@@ -4,6 +4,7 @@ import {
     ApiError,
     buildEndemicThresholdMap,
     DatasetsService,
+    getThresholdLineRoles,
     OpenAPI,
     type AlertPolicyRead,
     type EndemicThresholdPoint,
@@ -12,7 +13,7 @@ import {
 } from '@dhis2-chap/ui';
 import { getAlertColor, getAlertLevelDisplay, type AlertPolicyDisplay } from '@/components/BackendAlerts/alertLevelDisplay';
 import { getThresholdQueryState } from '@/utils/thresholdQueryState';
-import { useThresholdScope } from './useEndemicThresholds';
+import { THRESHOLDS_CACHE_TIME, useThresholdScope } from './useEndemicThresholds';
 
 type Props = {
     datasetId: number;
@@ -33,12 +34,11 @@ export const useAlertPolicyThresholds = ({ datasetId, series, policies, displays
             const response = await DatasetsService.computeThresholdsV1AnalyticsThresholdsPost({
                 datasetId, periodIds, locations, params: level.thresholdParams,
             });
-            // Each policy level defines exactly one threshold line.
-            return buildEndemicThresholdMap(response.entries, { upperIndex: 0 });
+            return buildEndemicThresholdMap(response.entries, getThresholdLineRoles(response.lines));
         })),
         enabled: isQueryEnabled,
         staleTime: Infinity,
-        cacheTime: 30 * 60 * 1000,
+        cacheTime: THRESHOLDS_CACHE_TIME,
         retry: false,
     });
     const linesByOrgUnit = useMemo(() => {

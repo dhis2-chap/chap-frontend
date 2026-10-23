@@ -240,9 +240,11 @@ export const ThresholdTilesExplorer = ({
         setZoomRange(null);
     }, zoomResetDeps);
 
+    // Only a new prediction clears the selection: hiding the filter (for
+    // example while exploring thresholds) keeps it for when alerts return.
     useEffect(() => {
         setAlertLevelSelection('');
-    }, [gridResetKey, isAlertLevelFilterShown]);
+    }, [gridResetKey]);
 
     useEffect(() => {
         if (!showThresholds && clearableStatusFilter !== undefined) {

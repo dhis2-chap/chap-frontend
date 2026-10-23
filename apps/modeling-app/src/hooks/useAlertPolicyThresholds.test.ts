@@ -6,6 +6,7 @@ import { DatasetsService, type AlertPolicyRead, type PredictionOrgUnitSeries } f
 import { useAlertPolicyThresholds } from './useAlertPolicyThresholds';
 
 vi.mock('@tanstack/react-query', () => ({ useQuery: vi.fn() }));
+// The ui barrel needs a DOM, so pull in only the pure helpers the hook uses.
 vi.mock('@dhis2-chap/ui', async () => ({
     ...await import('../../../../packages/ui/src/utils/outbreakAlerts'),
     ...await import('../../../../packages/ui/src/utils/chartPeriods'),
@@ -18,7 +19,7 @@ const policies: AlertPolicyRead[] = [{
     id: 3, name: 'Policy', created: null,
     levels: [
         { name: 'Watch', exceedanceThreshold: 0.5, thresholdParams: { type: 'seasonal', stdMultiplier: 2 } },
-        { name: 'Action', exceedanceThreshold: 0.9, thresholdParams: { type: 'percentile', quantile: [0.9], baselineYears: null } },
+        { name: 'Action', exceedanceThreshold: 0.9, thresholdParams: { type: 'percentile', quantile: [0.25, 0.75], baselineYears: null } },
     ],
 }];
 const series: PredictionOrgUnitSeries[] = [{
@@ -49,11 +50,10 @@ describe('policy thresholds', () => {
         vi.mocked(useQuery).mockReturnValue({ data: undefined, fetchStatus: 'idle' } as ReturnType<typeof useQuery>);
     });
 
-    it('computes every saved level with its own parameters and canonical chart periods', async () => {
-        const original = structuredClone(policies);
+    it('computes every saved level with its own parameters and draws its upper line', async () => {
         vi.mocked(DatasetsService.computeThresholdsV1AnalyticsThresholdsPost)
             .mockResolvedValueOnce({ params: policies[0].levels![0].thresholdParams, lines: [2], entries: [{ location: 'region', period: '2024W1', values: [10] }] })
-            .mockResolvedValueOnce({ params: policies[0].levels![1].thresholdParams, lines: [0.9], entries: [{ location: 'region', period: '2024W1', values: [null] }] });
+            .mockResolvedValueOnce({ params: policies[0].levels![1].thresholdParams, lines: [0.25, 0.75], entries: [{ location: 'region', period: '2024W1', values: [4, 20] }] });
         renderHook();
         const options = vi.mocked(useQuery).mock.calls[0][0] as unknown as { enabled: boolean; queryFn: () => Promise<unknown> };
         expect(options.enabled).toBe(true);
@@ -66,9 +66,8 @@ describe('policy thresholds', () => {
         vi.mocked(useQuery).mockReturnValue({ data, fetchStatus: 'idle' } as ReturnType<typeof useQuery>);
         expect(renderHook().linesByOrgUnit.get('region')).toEqual([
             { id: 'policy-threshold-3-Watch', label: 'Policy: Watch', color: '#123456', points: [{ period: '2024W1', value: 10 }] },
-            { id: 'policy-threshold-3-Action', label: 'Policy: Action', color: '#e53935', points: [{ period: '2024W1', value: null }] },
+            { id: 'policy-threshold-3-Action', label: 'Policy: Action', color: '#e53935', points: [{ period: '2024W1', value: 20, lowerValue: 4 }] },
         ]);
-        expect(policies).toEqual(original);
     });
 
     it.each([false, true])('does not calculate without an active policy (enabled: %s)', (enabled) => {

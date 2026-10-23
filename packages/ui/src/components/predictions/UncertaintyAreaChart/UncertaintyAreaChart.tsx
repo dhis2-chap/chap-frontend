@@ -244,7 +244,6 @@ const getChartOptions = (
                 enabled: false,
             },
             lineWidth: 2,
-            connectNulls: false,
         });
     }
 

@@ -22,7 +22,7 @@ type Props = {
 
 // Fresh forever while cached, but garbage-collect unused responses so a
 // session of param experimentation cannot grow the query cache unboundedly.
-const THRESHOLDS_CACHE_TIME = 30 * 60 * 1000;
+export const THRESHOLDS_CACHE_TIME = 30 * 60 * 1000;
 
 export const useThresholdScope = (series: PredictionOrgUnitSeries[]) => {
     // Request thresholds for exactly the periods the charts display. Actual

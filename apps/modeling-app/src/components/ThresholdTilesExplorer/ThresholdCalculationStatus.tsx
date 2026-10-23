@@ -10,9 +10,16 @@ type Props = {
     isPaused?: boolean;
     error?: ApiError | null;
     onRetry?: () => void;
+    hint?: string;
 };
 
-export const ThresholdCalculationStatus = ({ isLoading, isPaused, error, onRetry }: Props) => {
+export const ThresholdCalculationStatus = ({
+    isLoading,
+    isPaused,
+    error,
+    onRetry,
+    hint = i18n.t('Review the threshold parameters and apply your changes.'),
+}: Props) => {
     if (isPaused) {
         return (
             <NoticeBox warning title={i18n.t('Waiting for connection')}>
@@ -35,7 +42,7 @@ export const ThresholdCalculationStatus = ({ isLoading, isPaused, error, onRetry
             <ErrorNoticeWithRetry title={i18n.t('Unable to calculate thresholds')} onRetry={onRetry}>
                 <div>{detail ?? i18n.t('There was a problem calculating thresholds for this prediction run.')}</div>
                 {(error.status === 400 || error.status === 422) && (
-                    <div>{i18n.t('Review the threshold parameters and apply your changes.')}</div>
+                    <div>{hint}</div>
                 )}
             </ErrorNoticeWithRetry>
         );

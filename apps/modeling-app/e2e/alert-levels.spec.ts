@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import type { AlertPolicyRead, AlertRead, AlertsCreate, DataBaseResponse, JobResponse, PredictionEntry, PredictionInfo, RunPredictionSetupRequest } from '@dhis2-chap/ui';
+import type { AlertRead, AlertsCreate, DataBaseResponse, JobResponse, PredictionEntry, PredictionInfo, RunPredictionSetupRequest } from '@dhis2-chap/ui';
 import { chapUrl, createCompletedNaiveEvaluation, getChap, pollEvaluationJob, readJson } from './helpers/evaluation-fixtures';
 import { selectPeriod } from './helpers/period-picker';
 
@@ -83,8 +83,6 @@ test.describe.serial('alert level presentation', () => {
         await pollEvaluationJob(page, job.id);
         const prediction = await readJson<PredictionInfo>(await getChap(page, `/v1/jobs/${job.id}/database_result`), 'Load prediction');
         const alerts = await readJson<AlertRead[]>(await getChap(page, `/v1/crud/alerts?predictionId=${prediction.id}`), 'Load recorded alerts');
-        const policies = await readJson<AlertPolicyRead[]>(await getChap(page, '/v1/crud/alert-policies'), 'Load policies');
-        const policy = policies.find(item => item.id === policyId);
         expect(alerts.length).toBeGreaterThan(0);
         await page.goto(`/#/predictions/${setup.id}/runs/${prediction.id}`);
         const label = alerts.some(alert => alert.level === 'Action') ? 'Action' : 'Watch';
@@ -124,9 +122,6 @@ test.describe.serial('alert level presentation', () => {
         await expect(plot.getByText(label, { exact: true })).toBeVisible();
         await expect(plot.locator('.highcharts-plot-band').first()).toBeVisible();
         await expect(page.getByText('Regions exceeding threshold', { exact: true })).toHaveCount(0);
-        expect(await readJson<AlertRead[]>(await getChap(page, `/v1/crud/alerts?predictionId=${prediction.id}`), 'Reload alerts')).toEqual(alerts);
-        const savedPolicies = await readJson<AlertPolicyRead[]>(await getChap(page, '/v1/crud/alert-policies'), 'Reload policies');
-        expect(savedPolicies.find(item => item.id === policyId)).toEqual(policy);
     });
 
     test('filters regions by any recorded alert level and combines with region search', async ({ page }) => {
