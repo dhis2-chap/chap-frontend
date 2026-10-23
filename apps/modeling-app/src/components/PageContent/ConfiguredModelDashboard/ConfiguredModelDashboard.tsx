@@ -9,6 +9,7 @@ import { PredictionRunsWidget } from './PredictionRunsWidget';
 import { QuickActionsWidget } from './QuickActionsWidget';
 import { SchedulingWidget } from './SchedulingWidget';
 import { SummaryWidget } from './SummaryWidget';
+import { InputCompletenessWidget } from './InputCompletenessWidget/InputCompletenessWidget';
 import styles from './ConfiguredModelDashboard.module.css';
 
 export const ConfiguredModelDashboard: React.FC = () => {
@@ -51,6 +52,13 @@ export const ConfiguredModelDashboard: React.FC = () => {
                     isLoading={isLoading}
                     jobs={jobs}
                     predictions={predictions}
+                />
+                <InputCompletenessWidget
+                    key={predictionSetupId}
+                    setup={predictionSetup}
+                    predictions={predictions}
+                    isLoading={isLoading}
+                    error={error}
                 />
                 <ActivityWidget
                     error={jobsError}
