@@ -25,6 +25,9 @@ import { describeAlertLevel } from './describeAlertLevel';
 import { useAlertPolicyDisplay } from '@/hooks/useAlertPolicyDisplay';
 import { getAlertLevelDisplay } from './alertLevelDisplay';
 import { AlertLevelTag } from './AlertLevelTag';
+import { useAlertPolicyOutputCodes } from '@/hooks/useAlertPolicyOutputCodes';
+import { getDefaultAlertPolicyOutputCodes } from './alertPolicyOutputCodes';
+import { EditAlertPolicyOutputCodesModal } from './EditAlertPolicyOutputCodesModal';
 import { EditAlertPolicyDisplayModal } from './EditAlertPolicyDisplayModal';
 import styles from './BackendAlerts.module.css';
 
@@ -113,6 +116,8 @@ export const AlertPoliciesTable = () => {
 
 const AlertPolicyRow = ({ policy, onDelete }: { policy: AlertPolicyRead; onDelete: () => void }) => {
     const display = useAlertPolicyDisplay(policy.id);
+    const codes = useAlertPolicyOutputCodes(policy);
+    const [editingCodes, setEditingCodes] = useState(false);
     const [editing, setEditing] = useState(false);
     return (
         <DataTableRow>
@@ -140,8 +145,18 @@ const AlertPolicyRow = ({ policy, onDelete }: { policy: AlertPolicyRead; onDelet
                     <TableActionButton disabled={display.isLoading} onClick={() => setEditing(true)}>
                         {i18n.t('Colours')}
                     </TableActionButton>
+                    <TableActionButton disabled={codes.isLoading} onClick={() => setEditingCodes(true)}>
+                        {i18n.t('Output codes')}
+                    </TableActionButton>
                     <TableActionButton destructive onClick={onDelete}>{i18n.t('Delete')}</TableActionButton>
                 </div>
+                {editingCodes && (
+                    <EditAlertPolicyOutputCodesModal
+                        policy={policy}
+                        codes={codes.data ?? getDefaultAlertPolicyOutputCodes(policy)}
+                        onClose={() => setEditingCodes(false)}
+                    />
+                )}
                 {editing && (
                     <EditAlertPolicyDisplayModal policy={policy} display={display.data ?? {}} onClose={() => setEditing(false)} />
                 )}
