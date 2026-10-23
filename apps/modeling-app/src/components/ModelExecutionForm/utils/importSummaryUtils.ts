@@ -1,5 +1,5 @@
-import { ApiError } from '@dhis2-chap/ui';
-import { ImportSummaryCorrected } from '../types';
+import type { ApiError } from '@dhis2-chap/ui';
+import type { ImportSummaryCorrected } from '../types';
 
 const isRecord = (value: unknown): value is Record<string, unknown> => (
     typeof value === 'object' && value !== null && !Array.isArray(value)
@@ -19,7 +19,15 @@ export const normalizeImportSummary = (
     }
 
     const rejected = value.rejected;
-    if (!Array.isArray(rejected)) {
+    if (!Array.isArray(rejected) || !rejected.every(item => (
+        isRecord(item) &&
+        typeof item.reason === 'string' &&
+        typeof item.featureName === 'string' &&
+        typeof item.orgUnit === 'string' &&
+        (item.timePeriods === undefined || (
+            Array.isArray(item.timePeriods) && item.timePeriods.every(period => typeof period === 'string')
+        ))
+    ))) {
         return null;
     }
 

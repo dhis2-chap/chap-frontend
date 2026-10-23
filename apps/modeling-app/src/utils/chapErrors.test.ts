@@ -20,6 +20,14 @@ describe('getChapErrorMessage', () => {
         }
     });
 
+    it('shows the explanation in a structured prediction rejection', () => {
+        expect(getChapErrorMessage({
+            message: 'Bad Request',
+            body: { detail: { message: 'All regions rejected due to missing values', imported_count: 0, rejected: [] } },
+        })).toBe('All regions rejected due to missing values');
+        expect(getChapErrorMessage({ message: 'Bad Request', body: { detail: { message: {} } } })).toBe('Bad Request');
+    });
+
     it('preserves the actionable authorization message', () => {
         expect(getChapErrorMessage({ status: 401, body: { detail: 'Unauthorized' } })).toContain('API token');
     });
