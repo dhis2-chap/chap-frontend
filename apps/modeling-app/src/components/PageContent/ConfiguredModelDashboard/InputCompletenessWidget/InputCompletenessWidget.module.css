@@ -1,0 +1,33 @@
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacers-dp16);
+    padding: var(--spacers-dp16);
+    min-width: 0;
+}
+
+.description {
+    margin: 0;
+    color: var(--colors-grey700);
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.range {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacers-dp16);
+}
+
+.chart {
+    min-width: 0;
+}
+
+.gaps {
+    max-height: 320px;
+    overflow: auto;
+    margin: 0;
+    padding-inline-start: var(--spacers-dp24);
+    font-size: 14px;
+    line-height: 1.6;
+}
