@@ -27,6 +27,6 @@ export const usePendingPredictionAlerts = (predictionId: number) => {
         alerts: alerts.data ?? [],
         policies: policies.data ?? [],
         isLoading: enabled && (prediction.isLoading || alerts.isLoading || policies.isLoading),
-        error: prediction.error || alerts.error,
+        error: prediction.error || alerts.error || policies.error,
     };
 };

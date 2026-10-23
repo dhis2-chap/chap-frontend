@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { canonicalizePeriodId } from '@dhis2-chap/core';
 import Highcharts from 'highcharts';
@@ -57,6 +57,8 @@ const getChartOptions = (
     alertLines?: AlertLine[],
     thresholdLines?: ThresholdLine[],
     alertPeriods?: AlertPeriodChartInfo[],
+    alertLineVisibility: Record<number, boolean> = {},
+    onAlertLineToggle?: (index: number, visible: boolean) => void,
 ): Highcharts.Options => {
     const isTile = variant === 'tile';
     const disabledAnimationOptions = getDisabledAnimationOptions();
@@ -166,27 +168,13 @@ const getChartOptions = (
             zIndex: 6,
             marker: { enabled: false },
             connectNulls: false,
-            visible: !line.hidden,
-        });
-    });
-
-    thresholdLines?.forEach((line, index) => {
-        const valueByPeriod = new Map(line.thresholds.map(t => [canonicalizePeriodId(t.period), t.value]));
-        chartSeries.push({
-            id: `endemic-threshold-line-${index}`,
-            type: 'line',
-            name: line.name,
-            data: periods.map(period => ({
-                name: period,
-                x: getPeriodIndex(period),
-                y: valueByPeriod.get(canonicalizePeriodId(period)) ?? null,
-            })),
-            color: '#212934',
-            dashStyle: THRESHOLD_DASH_STYLES[index % THRESHOLD_DASH_STYLES.length],
-            zIndex: 5,
-            marker: { enabled: false },
-            lineWidth: 2,
-            connectNulls: false,
+            // Highcharts reapplies this on every options update, so legend toggles are remembered.
+            visible: alertLineVisibility[index] ?? !line.hidden,
+            events: {
+                legendItemClick() {
+                    onAlertLineToggle?.(index, !this.visible);
+                },
+            },
         });
     });
 
@@ -206,9 +194,11 @@ const getChartOptions = (
         });
     }
 
-    if (endemicThresholds && endemicThresholds.length > 0) {
+    const thresholdLineList: ThresholdLine[] = thresholdLines
+        ?? (endemicThresholds?.length ? [{ thresholds: endemicThresholds }] : []);
+    thresholdLineList.forEach((line, index) => {
         const thresholdByPeriod = new Map(
-            endemicThresholds.map(t => [canonicalizePeriodId(t.period), t]),
+            line.thresholds.map(t => [canonicalizePeriodId(t.period), t]),
         );
         // Keep unavailable periods as explicit null points; omitting them
         // would make Highcharts interpolate across the gap despite
@@ -228,9 +218,11 @@ const getChartOptions = (
 
         if (bandData.some(point => point.low !== undefined)) {
             chartSeries.push({
-                id: 'endemic-channel',
+                id: `endemic-channel-${index}`,
                 type: 'arearange',
-                name: i18n.t('Endemic channel'),
+                name: line.name
+                    ? i18n.t('Endemic channel ({{name}})', { name: line.name })
+                    : i18n.t('Endemic channel'),
                 data: bandData,
                 zIndex: 3,
                 lineWidth: 0,
@@ -245,12 +237,14 @@ const getChartOptions = (
 
         if (thresholdData.some(point => point.y !== null)) {
             chartSeries.push({
-                id: 'endemic-threshold',
+                id: `endemic-threshold-${index}`,
                 type: 'line',
                 data: thresholdData,
-                name: i18n.t('Endemic threshold'),
+                name: line.name
+                    ? i18n.t('Endemic threshold ({{name}})', { name: line.name })
+                    : i18n.t('Endemic threshold'),
                 color: '#212934',
-                dashStyle: 'Dash',
+                dashStyle: THRESHOLD_DASH_STYLES[index % THRESHOLD_DASH_STYLES.length],
                 zIndex: 5,
                 marker: {
                     enabled: false,
@@ -259,7 +253,9 @@ const getChartOptions = (
                 connectNulls: false,
             });
         }
-    } else if (endemicThreshold !== undefined && endemicThreshold !== null) {
+    });
+
+    if (thresholdLineList.length === 0 && endemicThreshold !== undefined && endemicThreshold !== null) {
         chartSeries.push({
             id: 'endemic-threshold',
             type: 'line',
@@ -424,7 +420,7 @@ interface PredicationChartProps {
     outbreakProbability?: OutbreakProbability;
     // Several alert lines, e.g. one per alert-policy level; replaces outbreakProbability.
     alertLines?: AlertLine[];
-    // Extra named threshold lines, e.g. one per threshold strategy.
+    // Several threshold lines, e.g. one per threshold strategy; replaces endemicThresholds.
     thresholdLines?: ThresholdLine[];
     alertPeriods?: AlertPeriodChartInfo[];
     variant?: UncertaintyAreaChartVariant;
@@ -442,8 +438,9 @@ export interface AlertLine {
 }
 
 export interface ThresholdLine {
-    name: string;
     thresholds: EndemicThresholdPoint[];
+    // Qualifies the legend entries, e.g. the alert levels using the line.
+    name?: string;
 }
 
 export interface AlertPeriodChartInfo {
@@ -524,6 +521,11 @@ export const UncertaintyAreaChart = ({
     }, [zoomRange, chartDataKey]);
 
     const hasExternalZoomControls = onZoomChange !== undefined;
+    // Legend toggles outlive option rebuilds, which would otherwise reapply the initial visibility.
+    const [alertLineVisibility, setAlertLineVisibility] = useState<Record<number, boolean>>({});
+    const handleAlertLineToggle = useCallback((index: number, visible: boolean) => {
+        setAlertLineVisibility(previous => ({ ...previous, [index]: visible }));
+    }, []);
     const options: Highcharts.Options | undefined = useMemo(() => {
         if (!series || series.points.length === 0) return undefined;
         return getChartOptions(
@@ -541,6 +543,8 @@ export const UncertaintyAreaChart = ({
             alertLines,
             thresholdLines,
             alertPeriods,
+            alertLineVisibility,
+            handleAlertLineToggle,
         );
     }, [
         series,
@@ -552,6 +556,8 @@ export const UncertaintyAreaChart = ({
         alertLines,
         thresholdLines,
         alertPeriods,
+        alertLineVisibility,
+        handleAlertLineToggle,
         variant,
         handleAfterSetExtremes,
         hasExternalZoomControls,

@@ -4,7 +4,7 @@ import { PredictionOrgUnitSeries } from '../../../interfaces/Prediction';
 import styles from './OrgUnitMenu.module.css';
 
 interface OrgUnitMenuProps {
-    series: Pick<PredictionOrgUnitSeries, 'orgUnitId' | 'orgUnitName'>[];
+    orgUnits: Pick<PredictionOrgUnitSeries, 'orgUnitId' | 'orgUnitName'>[];
     selectedOrgUnitId: string | undefined;
     onSelect: (orgUnitId: string) => void;
     disabled?: boolean;
@@ -12,7 +12,7 @@ interface OrgUnitMenuProps {
 }
 
 export const OrgUnitMenu = ({
-    series,
+    orgUnits,
     selectedOrgUnitId,
     onSelect,
     disabled,
@@ -20,14 +20,14 @@ export const OrgUnitMenu = ({
 }: OrgUnitMenuProps) => (
     <div className={styles.sidebar}>
         <Menu dense>
-            {series.map(s => (
+            {orgUnits.map(orgUnit => (
                 <MenuItem
-                    active={!disabled && selectedOrgUnitId === s.orgUnitId}
+                    active={!disabled && selectedOrgUnitId === orgUnit.orgUnitId}
                     disabled={disabled}
-                    key={s.orgUnitId}
-                    label={s.orgUnitName}
-                    suffix={getSuffix?.(s.orgUnitId)}
-                    onClick={() => onSelect(s.orgUnitId)}
+                    key={orgUnit.orgUnitId}
+                    label={orgUnit.orgUnitName}
+                    suffix={getSuffix?.(orgUnit.orgUnitId)}
+                    onClick={() => onSelect(orgUnit.orgUnitId)}
                 />
             ))}
         </Menu>

@@ -40,7 +40,10 @@ export const summarizePredictionReviews = (
         || b.prediction.id - a.prediction.id);
 };
 
-/** Alerts may use CHAP's dashed IDs while analytics uses DHIS2 period IDs. */
-export const normalizeAlertPeriod = (period: string) => (
-    canonicalizePeriodId(period.trim().replace(/^(\d{4})-(?=\d{2}$|W)/, '$1'))
+/** Alerts may use CHAP's dashed IDs (2024-07, 2024-07-15, 2024-W02, 2024-S02) while analytics uses DHIS2 period IDs. */
+export const normalizeAlertPeriod = (period: string) => canonicalizePeriodId(
+    period.trim()
+        .replace(/^(\d{4})-S(\d+)$/, '$1SunW$2')
+        .replace(/^(\d{4})-W(\d+)$/, '$1W$2')
+        .replace(/^(\d{4})-(\d{2})(?:-(\d{2}))?$/, '$1$2$3'),
 );

@@ -86,7 +86,7 @@ export {
     type ThresholdTileViewModel,
 } from './utils/outbreakThresholdTiles';
 export { getSeriesPeriods } from './utils/chartPeriods';
-export { sortAlertLevels } from './utils/sortAlertLevels';
+export { singleThresholdValue, sortAlertLevels } from './utils/sortAlertLevels';
 export {
     ALERT_COLORS,
     PRESET_COLORS,

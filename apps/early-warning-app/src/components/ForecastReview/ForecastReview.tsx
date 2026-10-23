@@ -20,6 +20,7 @@ import {
     sortAlertLevels,
     UncertaintyAreaChart,
     useEndemicThresholdsForParams,
+    useOrgUnitsById,
     usePredictionSeries,
     Widget,
     type AlertLevel,
@@ -70,12 +71,19 @@ export const ForecastReview = ({ prediction, alerts, policies }: Props) => {
     }, [alerts, policies]);
 
     // Alert org units without a forecast stay selectable, so no pending alert is hidden.
+    const alertOnlyOrgUnitIds = useMemo(() => {
+        const forecasted = new Set(series.map(s => s.orgUnitId));
+        return [...alertsByOrgUnit.keys()].filter(orgUnitId => !forecasted.has(orgUnitId));
+    }, [series, alertsByOrgUnit]);
+    const { data: alertOnlyOrgUnits } = useOrgUnitsById(alertOnlyOrgUnitIds);
+
     // Most severe and most alerts first, so reviewers start where it matters.
     const orgUnits = useMemo(() => {
-        const names = new Map(series.map(s => [s.orgUnitId, s.orgUnitName]));
-        alertsByOrgUnit.forEach((_, orgUnitId) => {
-            if (!names.has(orgUnitId)) names.set(orgUnitId, orgUnitId);
-        });
+        const names = new Map([
+            ...series.map(s => [s.orgUnitId, s.orgUnitName] as const),
+            ...alertOnlyOrgUnitIds.map(orgUnitId => [orgUnitId, orgUnitId] as const),
+            ...(alertOnlyOrgUnits?.organisationUnits ?? []).map(orgUnit => [orgUnit.id, orgUnit.displayName] as const),
+        ]);
         const rank = (orgUnitId: string) => {
             const orgUnitAlerts = alertsByOrgUnit.get(orgUnitId);
             return orgUnitAlerts ? [severity(orgUnitAlerts[0], policies), orgUnitAlerts.length] : [-1, 0];
@@ -85,7 +93,7 @@ export const ForecastReview = ({ prediction, alerts, policies }: Props) => {
             const [severityB, countB] = rank(b.orgUnitId);
             return severityB - severityA || countB - countA;
         });
-    }, [series, alertsByOrgUnit, policies]);
+    }, [series, alertOnlyOrgUnitIds, alertOnlyOrgUnits, alertsByOrgUnit, policies]);
 
     const selectedOrgUnit = orgUnits.find(o => o.orgUnitId === selectedOrgUnitId) ?? orgUnits[0];
     const selectedSeries = series.find(s => s.orgUnitId === selectedOrgUnit?.orgUnitId);
@@ -93,23 +101,18 @@ export const ForecastReview = ({ prediction, alerts, policies }: Props) => {
 
     // Alerts from one prediction come from its setup's policy; chart all of its levels.
     const policy = policies.find(p => p.id === alerts[0]?.alertPolicyId);
-    const levels = useMemo(() => sortAlertLevels(policy?.levels ?? []), [policy]);
-    const levelGroups = useMemo(() => groupByThresholdParams(levels), [levels]);
+    const levels = sortAlertLevels(policy?.levels ?? []);
+    const levelGroups = groupByThresholdParams(levels);
     const { thresholdMaps, error: thresholdsError } = useEndemicThresholdsForParams({
         datasetId: prediction.datasetId,
         series,
         paramsList: levelGroups.map(group => group[0].thresholdParams),
     });
-    const thresholdsFor = (level: AlertLevel | undefined) => {
-        const index = levelGroups.findIndex(group => level && group.includes(level));
-        return selectedSeries && thresholdMaps[index]?.get(selectedSeries.orgUnitId);
-    };
-    const thresholdLines = levelGroups.length > 1
-        ? levelGroups.map(group => ({
-                name: i18n.t('Endemic threshold ({{levels}})', { levels: group.map(level => level.name).join(', ') }),
-                thresholds: thresholdsFor(group[0]) ?? [],
-            }))
-        : undefined;
+    const thresholdsForGroup = (index: number) => selectedSeries && thresholdMaps[index]?.get(selectedSeries.orgUnitId);
+    const thresholdLines = levelGroups.map((group, index) => ({
+        name: group.map(level => level.name).join(', '),
+        thresholds: thresholdsForGroup(index) ?? [],
+    }));
     // The forecast has quantiles for these probabilities only, so other levels have no line.
     // Hidden until toggled on from the legend, to keep the chart readable.
     const alertLines = levels.flatMap((level) => {
@@ -121,7 +124,8 @@ export const ForecastReview = ({ prediction, alerts, policies }: Props) => {
         const period = normalizeAlertPeriod(alert.timePeriod);
         const point = selectedSeries?.points.find(p => canonicalizePeriodId(p.period) === period);
         const alertLevel = levels.find(l => l.name === alert.level);
-        const threshold = thresholdsFor(alertLevel)
+        const groupIndex = levelGroups.findIndex(group => alertLevel && group.includes(alertLevel));
+        const threshold = thresholdsForGroup(groupIndex)
             ?.find(t => canonicalizePeriodId(t.period) === period)?.value ?? undefined;
         const chance = point && threshold !== undefined ? getSupportedOutbreakProbabilityBucket(point, threshold) : undefined;
         return { alert, period, point, alertLevel, threshold, chance };
@@ -148,7 +152,7 @@ export const ForecastReview = ({ prediction, alerts, policies }: Props) => {
                 {!selectedOrgUnit ? <p>{i18n.t('No forecast values are available.')}</p> : (
                     <div className={styles.layout}>
                         <OrgUnitMenu
-                            series={orgUnits}
+                            orgUnits={orgUnits}
                             selectedOrgUnitId={selectedOrgUnit.orgUnitId}
                             onSelect={setSelectedOrgUnitId}
                             getSuffix={(orgUnitId) => {
@@ -166,7 +170,6 @@ export const ForecastReview = ({ prediction, alerts, policies }: Props) => {
                                 <UncertaintyAreaChart
                                     series={selectedSeries}
                                     predictionTargetName={predictionTargetName}
-                                    endemicThresholds={thresholdLines ? undefined : thresholdsFor(levels[0]) || undefined}
                                     thresholdLines={thresholdLines}
                                     alertLines={alertLines}
                                     alertPeriods={alertPeriods}
@@ -196,7 +199,13 @@ export const ForecastReview = ({ prediction, alerts, policies }: Props) => {
                                                         {point ? `${formatNumber(point.quantiles.quantile_low)} – ${formatNumber(point.quantiles.quantile_high)}` : '—'}
                                                     </DataTableCell>
                                                     <DataTableCell>{formatNumber(threshold)}</DataTableCell>
-                                                    <DataTableCell>{chance === undefined ? '—' : chance === '<10' ? '< 10%' : `≥ ${chance}%`}</DataTableCell>
+                                                    <DataTableCell>
+                                                        {chance === undefined
+                                                            ? '—'
+                                                            : chance === '<10'
+                                                                ? i18n.t('Less than 10%')
+                                                                : i18n.t('At least {{probability}}%', { probability: chance })}
+                                                    </DataTableCell>
                                                     <DataTableCell>{alertLevel ? `${Math.round(alertLevel.exceedanceThreshold * 100)}%` : '—'}</DataTableCell>
                                                 </DataTableRow>
                                             ))}

@@ -50,9 +50,11 @@ describe('prediction review queue', () => {
 });
 
 describe('alert period matching', () => {
-    it('matches CHAP months/weeks to DHIS2 periods without changing already normalized ids', () => {
+    it('matches CHAP periods to DHIS2 periods without changing already normalized ids', () => {
         expect(normalizeAlertPeriod('2024-07')).toBe('202407');
+        expect(normalizeAlertPeriod('2024-07-15')).toBe('20240715');
         expect(normalizeAlertPeriod('2024-W02')).toBe('2024W2');
+        expect(normalizeAlertPeriod('2024-S02')).toBe('2024SunW2');
         expect(normalizeAlertPeriod('2024W02')).toBe('2024W2');
         expect(normalizeAlertPeriod('202407')).toBe('202407');
     });

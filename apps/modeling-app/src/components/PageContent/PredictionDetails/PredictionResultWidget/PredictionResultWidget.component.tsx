@@ -62,7 +62,7 @@ export const PredictionResultWidgetComponent = ({
                     </TabBar>
                     <div className={styles.mainLayout}>
                         <OrgUnitMenu
-                            series={series}
+                            orgUnits={series}
                             selectedOrgUnitId={selectedSeries?.orgUnitId}
                             onSelect={onSelectOrgUnit}
                             disabled={selectedTab === 'map'}
