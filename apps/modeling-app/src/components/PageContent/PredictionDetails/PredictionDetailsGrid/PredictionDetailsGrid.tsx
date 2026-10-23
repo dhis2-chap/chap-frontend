@@ -184,6 +184,7 @@ export const PredictionDetailsGrid = ({
                 <AlertLevelsSection
                     alerts={alerts}
                     enabled={settings.alertsEnabled}
+                    disabled={showThresholds}
                     onEnabledChange={alertsEnabled => updateSettings({ alertsEnabled })}
                 />
             )}
@@ -205,7 +206,7 @@ export const PredictionDetailsGrid = ({
                     <span className={styles.toggleText}>
                         <span className={styles.toggleTitle}>{i18n.t('Explore thresholds')}</span>
                         <span className={styles.toggleDescription}>
-                            {i18n.t('Explore threshold lines for this run.')}
+                            {i18n.t('Try other threshold settings on this run. Recorded alerts are hidden while exploring.')}
                         </span>
                     </span>
                 )}

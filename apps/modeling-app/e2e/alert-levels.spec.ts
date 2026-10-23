@@ -112,12 +112,14 @@ test.describe.serial('alert level presentation', () => {
         await expect(policyLines).toHaveCount(2);
 
         await exploreThresholds.check();
+        await expect(alertLevels).toBeDisabled();
         await expect(policyLines).toHaveCount(0);
         await expect(plot.getByText(label, { exact: true })).toHaveCount(0);
         await expect(page.locator('[data-test="alert-level-filter"]')).toHaveCount(0);
         await expect(plot.locator('.highcharts-graph[stroke="#212934"]')).toHaveCount(1);
         await expect(page.getByText('Regions exceeding threshold', { exact: true })).toBeVisible();
         await exploreThresholds.uncheck();
+        await expect(alertLevels).toBeEnabled();
         await expect(policyLines).toHaveCount(2);
         await expect(plot.getByText(label, { exact: true })).toBeVisible();
         await expect(plot.locator('.highcharts-plot-band').first()).toBeVisible();
