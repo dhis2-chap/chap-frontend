@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import i18n from '@dhis2/d2-i18n';
 import { useQuery } from '@tanstack/react-query';
 import {
     ApiError,
@@ -6,12 +7,14 @@ import {
     DatasetsService,
     getThresholdLineRoles,
     OpenAPI,
+    type AlertLevel,
     type AlertPolicyRead,
     type EndemicThresholdPoint,
     type PredictionOrgUnitSeries,
     type ThresholdChartLine,
 } from '@dhis2-chap/ui';
 import { getThresholdQueryState } from '@/utils/thresholdQueryState';
+import { fractionToPercentString } from '@/utils/thresholdStrategyParams';
 import { THRESHOLDS_CACHE_TIME, useThresholdScope } from './useEndemicThresholds';
 
 type Props = {
@@ -25,24 +28,35 @@ type Props = {
 // shading, since levels sharing a line differ only in exceedance probability.
 const POLICY_LINE_COLOR = '#212934';
 
-// Levels of a policy often share threshold parameters and differ only in the
-// exceedance probability, so one line is drawn per distinct set of parameters.
-type PolicyLevel = NonNullable<AlertPolicyRead['levels']>[number];
+// A policy level describes a single line, so list-valued params hold one entry.
+const single = (value: number | number[] | undefined) => (Array.isArray(value) ? value[0] : value);
 
-const getPolicyLines = (policies: AlertPolicyRead[]) => policies.flatMap((policy) => {
-    const byParams = new Map<string, { params: PolicyLevel['thresholdParams']; levels: string[] }>();
-    for (const level of policy.levels ?? []) {
-        const key = JSON.stringify(level.thresholdParams);
-        const line = byParams.get(key) ?? { params: level.thresholdParams, levels: [] };
-        line.levels.push(level.name);
-        byParams.set(key, line);
+const describeThreshold = (params: AlertLevel['thresholdParams']): string => {
+    if (params.type === 'seasonal' && 'stdMultiplier' in params) {
+        return i18n.t('Seasonal mean + {{stdMultiplier}} SD', { stdMultiplier: single(params.stdMultiplier) });
     }
-    return [...byParams.values()].map((line, index) => ({
-        id: `policy-threshold-${policy.id}-${index}`,
-        label: `${policy.name}: ${line.levels.join(', ')}`,
-        params: line.params,
+    if (params.type === 'percentile' && 'quantile' in params) {
+        const percent = fractionToPercentString(single(params.quantile) ?? 0);
+        return params.baselineYears
+            ? i18n.t('{{percent}}th percentile, {{count}}-year baseline', { percent, count: params.baselineYears })
+            : i18n.t('{{percent}}th percentile', { percent });
+    }
+    return params.type;
+};
+
+// Levels often share threshold parameters and differ only in the exceedance
+// probability, so one line is drawn per distinct set of parameters.
+const getPolicyLines = (policies: AlertPolicyRead[]) => {
+    const byParams = new Map<string, AlertLevel['thresholdParams']>();
+    for (const level of policies.flatMap(policy => policy.levels ?? [])) {
+        byParams.set(JSON.stringify(level.thresholdParams), level.thresholdParams);
+    }
+    return [...byParams.values()].map((params, index) => ({
+        id: `policy-threshold-${index}`,
+        label: describeThreshold(params),
+        params,
     }));
-});
+};
 
 export const useAlertPolicyThresholds = ({ datasetId, series, policies, enabled }: Props) => {
     const { periodIds, locations } = useThresholdScope(series);

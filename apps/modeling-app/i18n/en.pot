@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-23T06:08:42.645Z\n"
-"PO-Revision-Date: 2026-10-23T06:08:42.645Z\n"
+"POT-Creation-Date: 2026-10-23T07:11:22.898Z\n"
+"PO-Revision-Date: 2026-10-23T07:11:22.898Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -2597,6 +2597,17 @@ msgstr "Requires superuser authority"
 
 msgid "Model not found"
 msgstr "Model not found"
+
+msgid "Seasonal mean + {{stdMultiplier}} SD"
+msgstr "Seasonal mean + {{stdMultiplier}} SD"
+
+msgid "{{percent}}th percentile, {{count}}-year baseline"
+msgid_plural "{{percent}}th percentile, {{count}}-year baseline"
+msgstr[0] "{{percent}}th percentile, {{count}}-year baseline"
+msgstr[1] "{{percent}}th percentile, {{count}}-year baseline"
+
+msgid "{{percent}}th percentile"
+msgstr "{{percent}}th percentile"
 
 msgid "Manage the policies used to raise alerts from forecasts."
 msgstr "Manage the policies used to raise alerts from forecasts."

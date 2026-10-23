@@ -16,7 +16,7 @@ vi.mock('@dhis2-chap/ui', async () => ({
 }));
 
 const seasonal = { type: 'seasonal', stdMultiplier: 2 };
-const percentile = { type: 'percentile', quantile: [0.25, 0.75], baselineYears: null };
+const percentile = { type: 'percentile', quantile: 0.75, baselineYears: 5 };
 const policies: AlertPolicyRead[] = [{
     id: 3, name: 'Policy', created: null,
     levels: [
@@ -50,10 +50,10 @@ describe('policy thresholds', () => {
         vi.mocked(useQuery).mockReturnValue({ data: undefined, fetchStatus: 'idle' } as ReturnType<typeof useQuery>);
     });
 
-    it('draws one upper line per distinct parameter set, labelled with the levels sharing it', async () => {
+    it('draws one line per distinct parameter set, labelled with its strategy', async () => {
         vi.mocked(DatasetsService.computeThresholdsV1AnalyticsThresholdsPost)
             .mockResolvedValueOnce({ params: seasonal, lines: [2], entries: [{ location: 'region', period: '2024W1', values: [10] }] })
-            .mockResolvedValueOnce({ params: percentile, lines: [0.25, 0.75], entries: [{ location: 'region', period: '2024W1', values: [4, 20] }] });
+            .mockResolvedValueOnce({ params: percentile, lines: [0.75], entries: [{ location: 'region', period: '2024W1', values: [20] }] });
         renderHook();
         const options = vi.mocked(useQuery).mock.calls[0][0] as unknown as { enabled: boolean; queryFn: () => Promise<unknown> };
         expect(options.enabled).toBe(true);
@@ -64,8 +64,8 @@ describe('policy thresholds', () => {
         ]);
         vi.mocked(useQuery).mockReturnValue({ data, fetchStatus: 'idle' } as ReturnType<typeof useQuery>);
         expect(renderHook().linesByOrgUnit.get('region')).toEqual([
-            { id: 'policy-threshold-3-0', label: 'Policy: Watch, Action', color: '#212934', points: [{ period: '2024W1', value: 10 }] },
-            { id: 'policy-threshold-3-1', label: 'Policy: Band', color: '#212934', points: [{ period: '2024W1', value: 20, lowerValue: 4 }] },
+            { id: 'policy-threshold-0', label: 'Seasonal mean + 2 SD', color: '#212934', points: [{ period: '2024W1', value: 10 }] },
+            { id: 'policy-threshold-1', label: '75th percentile, 5-year baseline', color: '#212934', points: [{ period: '2024W1', value: 20 }] },
         ]);
     });
 
