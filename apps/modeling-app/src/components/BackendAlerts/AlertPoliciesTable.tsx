@@ -17,14 +17,17 @@ import {
     NoticeBox,
 } from '@dhis2/ui';
 import { format } from 'date-fns';
-import { type AlertPolicyRead, type ApiError } from '@dhis2-chap/ui';
+import {
+    AlertLevelTag,
+    getAlertLevelDisplay,
+    useAlertPolicyDisplay,
+    type AlertPolicyRead,
+    type ApiError,
+} from '@dhis2-chap/ui';
 import { useAlertPolicies, useDeleteAlertPolicy } from '@/hooks/useAlertPolicies';
 import { getChapErrorMessage } from '@/utils/chapErrors';
 import { TableActionButton } from '../TableActionButton';
 import { describeAlertLevel } from './describeAlertLevel';
-import { useAlertPolicyDisplay } from '@/hooks/useAlertPolicyDisplay';
-import { getAlertLevelDisplay } from './alertLevelDisplay';
-import { AlertLevelTag } from './AlertLevelTag';
 import { EditAlertPolicyDisplayModal } from './EditAlertPolicyDisplayModal';
 import styles from './BackendAlerts.module.css';
 

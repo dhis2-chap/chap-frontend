@@ -1,16 +1,18 @@
 import i18n from '@dhis2/d2-i18n';
 import { DataTable, DataTableBody, DataTableCell, DataTableColumnHeader, DataTableHead, DataTableRow, NoticeBox } from '@dhis2/ui';
-import { Card, Pill, useRoute } from '@dhis2-chap/ui';
+import { AlertLevelTag, Card, useRoute } from '@dhis2-chap/ui';
 import { format } from 'date-fns';
 import { Link } from 'react-router-dom';
 import { PageHeader } from '../../components/PageHeader';
 import { ErrorNotice, Loading } from '../../components/StateViews';
+import { useAlertLevelDisplay } from '../../hooks/useAlertLevelDisplay';
 import { usePredictionReviews } from '../../hooks/usePredictionReviews';
 import styles from './QueuePage.module.css';
 
 export const QueuePage = () => {
     const { route, isLoading: isRouteLoading, error: routeError } = useRoute();
-    const { reviews, isLoading, error } = usePredictionReviews(!!route);
+    const { reviews, policies, isLoading, error } = usePredictionReviews(!!route);
+    const levelDisplay = useAlertLevelDisplay(policies);
 
     const content = () => {
         if (isRouteLoading) return <Loading />;
@@ -55,8 +57,10 @@ export const QueuePage = () => {
                                 <DataTableCell className={styles.nowrap}>{format(new Date(prediction.created), 'dd.MM.yyyy, HH:mm')}</DataTableCell>
                                 <DataTableCell>
                                     <div className={styles.levels}>
-                                        {levelCounts.map(({ level, count }) => (
-                                            <Pill key={level}>{`${level} ${count}`}</Pill>
+                                        {levelCounts.map(({ level, alertPolicyId, count }) => (
+                                            <AlertLevelTag key={level} display={levelDisplay(level, alertPolicyId)}>
+                                                {`${level} ${count}`}
+                                            </AlertLevelTag>
                                         ))}
                                     </div>
                                 </DataTableCell>

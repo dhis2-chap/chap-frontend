@@ -20,20 +20,6 @@
     font-size: 14px;
 }
 
-.levelTag {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--spacers-dp4);
-}
-
-.colorDot {
-    display: inline-block;
-    inline-size: 10px;
-    block-size: 10px;
-    border-radius: 50%;
-    flex-shrink: 0;
-}
-
 .colorPresets {
     display: flex;
     flex-wrap: wrap;

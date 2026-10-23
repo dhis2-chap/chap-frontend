@@ -23,6 +23,7 @@ export const usePredictionReviews = (enabled: boolean) => {
     });
     const policies = useAlertPolicies(enabled);
     return {
+        policies: policies.data ?? [],
         reviews: summarizePredictionReviews(alerts.data ?? [], predictions.data ?? [], policies.data ?? []),
         isLoading: alerts.isLoading || predictions.isLoading || policies.isLoading,
         error: alerts.error || predictions.error,

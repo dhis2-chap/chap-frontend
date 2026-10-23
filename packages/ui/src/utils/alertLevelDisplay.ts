@@ -1,6 +1,6 @@
 import i18n from '@dhis2/d2-i18n';
 import { z } from 'zod';
-import type { AlertPolicyRead } from '@dhis2-chap/ui';
+import type { AlertPolicyRead } from '../httpfunctions';
 
 // Swatch colours follow the green/yellow/orange/red scale used by public warning systems.
 export const ALERT_COLORS = {

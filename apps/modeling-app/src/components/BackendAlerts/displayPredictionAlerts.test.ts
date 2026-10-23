@@ -1,7 +1,14 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import type { AlertPolicyRead, AlertRead } from '@dhis2-chap/ui';
+import {
+    alertPolicyDisplaySchema,
+    getAlertColor,
+    getAlertLevelDisplay,
+} from '../../../../../packages/ui/src/utils/alertLevelDisplay';
 import { displayPredictionAlerts } from './displayPredictionAlerts';
-import { alertPolicyDisplaySchema, getAlertColor } from './alertLevelDisplay';
+
+// The real barrel pulls in @dhis2/ui, which cannot load in the node test environment.
+vi.mock('@dhis2-chap/ui', () => ({ getAlertLevelDisplay }));
 
 const policies = [
     { id: 1, name: 'Malaria', levels: [{ name: 'Watch' }, { name: 'Action' }] },

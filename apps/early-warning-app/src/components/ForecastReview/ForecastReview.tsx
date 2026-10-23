@@ -10,6 +10,8 @@ import {
     NoticeBox,
 } from '@dhis2/ui';
 import {
+    AlertLevelTag,
+    getAlertColor,
     getPeriodNameFromId,
     getSupportedOutbreakProbabilityBucket,
     OrgUnitMenu,
@@ -26,6 +28,7 @@ import {
     type PredictionInfo,
 } from '@dhis2-chap/ui';
 import { canonicalizePeriodId } from '@dhis2-chap/core';
+import { useAlertLevelDisplay } from '../../hooks/useAlertLevelDisplay';
 import { ErrorNotice, Loading } from '../StateViews';
 import { normalizeAlertPeriod, severity } from '../../utils/reviewData';
 import styles from './ForecastReview.module.css';
@@ -53,6 +56,7 @@ const formatNumber = (value: number | null | undefined) => (
 export const ForecastReview = ({ prediction, alerts, policies }: Props) => {
     const [selectedOrgUnitId, setSelectedOrgUnitId] = useState<string>();
     const { series, predictionTargetName, isLoading, error } = usePredictionSeries({ prediction, historyYears: 1 });
+    const levelDisplay = useAlertLevelDisplay(policies);
 
     // Most severe alert first within each org unit.
     const alertsByOrgUnit = useMemo(() => {
@@ -123,6 +127,18 @@ export const ForecastReview = ({ prediction, alerts, policies }: Props) => {
         return { alert, period, point, alertLevel, threshold, chance };
     });
 
+    // One band per period, shaded with its most severe alert's colour.
+    const mostSevereByPeriod = new Map<string, AlertRead>();
+    for (const alert of selectedAlerts) {
+        const period = normalizeAlertPeriod(alert.timePeriod);
+        if (!mostSevereByPeriod.has(period)) mostSevereByPeriod.set(period, alert);
+    }
+    const alertPeriods = [...mostSevereByPeriod]
+        .map(([period, alert]) => {
+            const display = levelDisplay(alert.level, alert.alertPolicyId);
+            return { period, label: display.label, color: getAlertColor(display.color).background };
+        });
+
     if (isLoading) return <Loading />;
 
     return (
@@ -153,12 +169,7 @@ export const ForecastReview = ({ prediction, alerts, policies }: Props) => {
                                     endemicThresholds={thresholdLines ? undefined : thresholdsFor(levels[0]) || undefined}
                                     thresholdLines={thresholdLines}
                                     alertLines={alertLines}
-                                    outbreakPeriods={rows.map(({ period, chance }) => ({
-                                        period,
-                                        outbreak: true,
-                                        supportedProbability: chance ?? '<10',
-                                        value: '1',
-                                    }))}
+                                    alertPeriods={alertPeriods}
                                 />
                             )}
                             {rows.length === 0 ? <p>{i18n.t('No pending alerts for this organisation unit.')}</p> : (
@@ -178,7 +189,9 @@ export const ForecastReview = ({ prediction, alerts, policies }: Props) => {
                                             {rows.map(({ alert, period, point, alertLevel, threshold, chance }) => (
                                                 <DataTableRow key={alert.id}>
                                                     <DataTableCell>{getPeriodNameFromId(period)}</DataTableCell>
-                                                    <DataTableCell><Pill>{alert.level}</Pill></DataTableCell>
+                                                    <DataTableCell>
+                                                        <AlertLevelTag display={levelDisplay(alert.level, alert.alertPolicyId)} />
+                                                    </DataTableCell>
                                                     <DataTableCell>
                                                         {point ? `${formatNumber(point.quantiles.quantile_low)} – ${formatNumber(point.quantiles.quantile_high)}` : '—'}
                                                     </DataTableCell>

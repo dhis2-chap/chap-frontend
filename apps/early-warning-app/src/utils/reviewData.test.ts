@@ -33,7 +33,10 @@ describe('prediction review queue', () => {
             [prediction(1, '2026-01-01')],
             [policy(1, [['Monitor', 0.5], ['Alert', 0.75]]), policy(2, [['Alert', 0.25], ['Monitor', 0.9]])],
         );
-        expect(result[0].levelCounts).toEqual([{ level: 'Alert', count: 2 }, { level: 'Monitor', count: 2 }]);
+        expect(result[0].levelCounts).toEqual([
+            { level: 'Alert', alertPolicyId: 1, count: 2 },
+            { level: 'Monitor', alertPolicyId: 1, count: 2 },
+        ]);
     });
 
     it('ranks levels by strictness rather than stored order', () => {

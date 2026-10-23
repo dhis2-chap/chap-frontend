@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { Tag } from '@dhis2/ui';
-import { getAlertColor, type AlertLevelDisplay } from './alertLevelDisplay';
-import styles from './BackendAlerts.module.css';
+import { getAlertColor, type AlertLevelDisplay } from '../../../utils/alertLevelDisplay';
+import styles from './AlertLevelTag.module.css';
 
 export const AlertLevelTag = ({ display, children }: { display: AlertLevelDisplay; children?: ReactNode }) => {
     const color = getAlertColor(display.color);

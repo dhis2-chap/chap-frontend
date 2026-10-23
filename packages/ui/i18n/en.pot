@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-21T15:55:37.102Z\n"
-"PO-Revision-Date: 2026-10-21T15:55:37.103Z\n"
+"POT-Creation-Date: 2026-10-23T04:48:23.149Z\n"
+"PO-Revision-Date: 2026-10-23T04:48:23.150Z\n"
 
 msgid "CHAP settings"
 msgstr "CHAP settings"
@@ -407,3 +407,15 @@ msgstr "From period"
 
 msgid "To period"
 msgstr "To period"
+
+msgid "Green"
+msgstr "Green"
+
+msgid "Yellow"
+msgstr "Yellow"
+
+msgid "Orange"
+msgstr "Orange"
+
+msgid "Red"
+msgstr "Red"
