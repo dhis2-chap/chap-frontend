@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import type { AlertRead, AlertsCreate, DataBaseResponse, JobResponse, PredictionEntry, PredictionInfo, RunPredictionSetupRequest } from '@dhis2-chap/ui';
+import type { AlertPolicyRead, AlertRead, AlertsCreate, DataBaseResponse, JobResponse, PredictionEntry, PredictionInfo, RunPredictionSetupRequest } from '@dhis2-chap/ui';
 import { chapUrl, createCompletedNaiveEvaluation, getChap, pollEvaluationJob, readJson } from './helpers/evaluation-fixtures';
 import { selectPeriod } from './helpers/period-picker';
 
@@ -67,7 +67,7 @@ test.describe.serial('alert level presentation', () => {
         await expect(page.getByText(/Saved colours could not be loaded/)).toHaveCount(0);
     });
 
-    test('shows recorded alerts on prediction plots by default and can hide them', async ({ page }) => {
+    test('shows policy thresholds by default and restores them after exploration', async ({ page }) => {
         const evaluation = await createCompletedNaiveEvaluation(page);
         const setup = await readJson<DataBaseResponse>(await page.request.post(chapUrl('/v1/crud/prediction-setups'), {
             data: { backtestId: evaluation.id, name: `E2E alert run ${Date.now()}`, alertPolicyId: policyId },
@@ -83,6 +83,8 @@ test.describe.serial('alert level presentation', () => {
         await pollEvaluationJob(page, job.id);
         const prediction = await readJson<PredictionInfo>(await getChap(page, `/v1/jobs/${job.id}/database_result`), 'Load prediction');
         const alerts = await readJson<AlertRead[]>(await getChap(page, `/v1/crud/alerts?predictionId=${prediction.id}`), 'Load recorded alerts');
+        const policies = await readJson<AlertPolicyRead[]>(await getChap(page, '/v1/crud/alert-policies'), 'Load policies');
+        const policy = policies.find(item => item.id === policyId);
         expect(alerts.length).toBeGreaterThan(0);
         await page.goto(`/#/predictions/${setup.id}/runs/${prediction.id}`);
         const label = alerts.some(alert => alert.level === 'Action') ? 'Action' : 'Watch';
@@ -100,12 +102,31 @@ test.describe.serial('alert level presentation', () => {
         await expect(page.getByText('Raised alerts', { exact: true })).toHaveCount(0);
         await expect(plot.getByText(label, { exact: true }).locator('span')).toHaveCSS('background-color', color);
         await expect(plot.locator('.highcharts-plot-band').first()).toBeVisible();
+        const policyLines = plot.locator('.highcharts-graph[stroke="#11aabb"], .highcharts-graph[stroke="#ffc107"]');
+        await expect(policyLines).toHaveCount(2);
         await alertLevels.uncheck();
         await expect(plot.getByText(label, { exact: true })).toHaveCount(0);
         await expect(plot.locator('.highcharts-plot-band')).toHaveCount(0);
+        await expect(policyLines).toHaveCount(0);
         await alertLevels.check();
         await expect(plot.getByText(label, { exact: true })).toBeVisible();
         await expect(plot.locator('.highcharts-plot-band').first()).toBeVisible();
+        await expect(policyLines).toHaveCount(2);
+
+        await exploreThresholds.check();
+        await expect(policyLines).toHaveCount(0);
+        await expect(plot.getByText(label, { exact: true })).toHaveCount(0);
+        await expect(page.locator('[data-test="alert-level-filter"]')).toHaveCount(0);
+        await expect(plot.locator('.highcharts-graph[stroke="#212934"]')).toHaveCount(1);
+        await expect(page.getByText('Regions exceeding threshold', { exact: true })).toBeVisible();
+        await exploreThresholds.uncheck();
+        await expect(policyLines).toHaveCount(2);
+        await expect(plot.getByText(label, { exact: true })).toBeVisible();
+        await expect(plot.locator('.highcharts-plot-band').first()).toBeVisible();
+        await expect(page.getByText('Regions exceeding threshold', { exact: true })).toHaveCount(0);
+        expect(await readJson<AlertRead[]>(await getChap(page, `/v1/crud/alerts?predictionId=${prediction.id}`), 'Reload alerts')).toEqual(alerts);
+        const savedPolicies = await readJson<AlertPolicyRead[]>(await getChap(page, '/v1/crud/alert-policies'), 'Reload policies');
+        expect(savedPolicies.find(item => item.id === policyId)).toEqual(policy);
     });
 
     test('filters regions by any recorded alert level and combines with region search', async ({ page }) => {

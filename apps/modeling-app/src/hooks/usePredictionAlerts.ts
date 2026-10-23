@@ -23,15 +23,17 @@ export const usePredictionAlerts = (prediction: PredictionInfo, enabled: boolean
         () => displayPredictionAlerts(alerts.data ?? [], policies.data ?? [], displays.data ?? {}),
         [alerts.data, policies.data, displays.data],
     );
+    const status = useMemo(() => getPredictionAlertStatus({
+        alerts: alerts.data ?? [],
+        policies: policies.data ?? [],
+        setupPolicy,
+    }), [alerts.data, policies.data, setupPolicy]);
     return {
         ...alerts,
         isLoading: alerts.isLoading || (setupId !== undefined && setup.isLoading),
         displayedAlerts,
-        status: getPredictionAlertStatus({
-            alerts: alerts.data ?? [],
-            policies: policies.data ?? [],
-            setupPolicy,
-        }),
+        policyDisplays: displays.data,
+        status,
         displayError: policies.error || displays.error,
     };
 };

@@ -17,7 +17,7 @@ import {
     VirtuosoGrid,
     Widget,
 } from '@dhis2-chap/ui';
-import type { OutbreakProbability, ThresholdTileViewModel, ZoomRange } from '@dhis2-chap/ui';
+import type { OutbreakProbability, ThresholdChartLine, ThresholdTileViewModel, ZoomRange } from '@dhis2-chap/ui';
 import { ID_MAIN_LAYOUT } from '../layout/Layout';
 import { getAlertColor } from '@/components/BackendAlerts/alertLevelDisplay';
 import { AlertLevelTag } from '@/components/BackendAlerts/AlertLevelTag';
@@ -97,6 +97,7 @@ const ThresholdTile = memo(function ThresholdTile({
     showThresholds,
     tile,
     raisedAlerts,
+    thresholdLines,
     zoomRange,
     onZoomChange,
 }: {
@@ -105,6 +106,7 @@ const ThresholdTile = memo(function ThresholdTile({
     showThresholds: boolean;
     tile: ThresholdTileViewModel;
     raisedAlerts?: DisplayedPredictionAlert[];
+    thresholdLines?: ThresholdChartLine[];
     zoomRange?: ZoomRange | null;
     onZoomChange?: (range: ZoomRange | null) => void;
 }) {
@@ -115,9 +117,11 @@ const ThresholdTile = memo(function ThresholdTile({
     const maxY = useMemo(() => (
         getStableMaxYForThresholdChart(
             tile.series,
-            showThresholds ? thresholdForMaxY : null,
+            thresholdLines
+                ? thresholdLines.flatMap(line => line.points)
+                : showThresholds ? thresholdForMaxY : null,
         )
-    ), [showThresholds, thresholdForMaxY, tile.series]);
+    ), [showThresholds, thresholdForMaxY, thresholdLines, tile.series]);
     // Zoom-only renders should update the axis, without rebuilding all of the
     // Highcharts options because this array acquired a new identity.
     const outbreakPeriods = useMemo(() => (
@@ -164,6 +168,7 @@ const ThresholdTile = memo(function ThresholdTile({
                     endemicThresholds={showThresholds ? tile.endemicThresholds : undefined}
                     outbreakPeriods={outbreakPeriods}
                     alertPeriods={alertPeriods}
+                    thresholdLines={thresholdLines}
                     outbreakProbability={showThresholds ? selectedProbability : undefined}
                     variant="tile"
                     zoomRange={zoomRange}
@@ -180,6 +185,7 @@ type Props = {
     selectedProbability: OutbreakProbability;
     tiles: ThresholdTileViewModel[];
     raisedAlerts?: DisplayedPredictionAlert[];
+    policyThresholdLines?: Map<string, ThresholdChartLine[]>;
     showThresholds: boolean;
     showStatusFilter?: boolean;
     statusFilterVariant?: StatusFilterVariant;
@@ -194,6 +200,7 @@ export const ThresholdTilesExplorer = ({
     selectedProbability,
     tiles,
     raisedAlerts,
+    policyThresholdLines,
     showThresholds,
     showStatusFilter = true,
     statusFilterVariant = 'clearable',
@@ -471,6 +478,7 @@ export const ThresholdTilesExplorer = ({
                                         showThresholds={showThresholds}
                                         tile={filteredTiles[index]}
                                         raisedAlerts={alertsByOrgUnit ? alertsByOrgUnit.get(filteredTiles[index].orgUnitId) ?? NO_ALERTS : undefined}
+                                        thresholdLines={policyThresholdLines?.get(filteredTiles[index].orgUnitId)}
                                         zoomRange={zoomRange}
                                         onZoomChange={setZoomRange}
                                     />

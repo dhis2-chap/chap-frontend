@@ -51,6 +51,7 @@ const getChartOptions = (
     endemicThresholds?: EndemicThresholdPoint[],
     outbreakProbability?: OutbreakProbability,
     alertPeriods?: AlertPeriodChartInfo[],
+    thresholdLines: ThresholdChartLine[] = [],
 ): Highcharts.Options => {
     const isTile = variant === 'tile';
     const disabledAnimationOptions = getDisabledAnimationOptions();
@@ -247,6 +248,26 @@ const getChartOptions = (
         });
     }
 
+    for (const line of thresholdLines) {
+        const values = new Map(line.points.map(point => [canonicalizePeriodId(point.period), point.value]));
+        chartSeries.push({
+            id: line.id,
+            type: 'line',
+            name: line.label,
+            color: line.color,
+            data: periods.map(period => ({
+                name: period,
+                x: getPeriodIndex(period),
+                y: values.get(canonicalizePeriodId(period)) ?? null,
+            })),
+            dashStyle: 'Dash',
+            zIndex: 5,
+            marker: { enabled: false },
+            lineWidth: 2,
+            connectNulls: false,
+        });
+    }
+
     return {
         title: {
             style: {
@@ -273,7 +294,7 @@ const getChartOptions = (
                         ? `${low.toFixed(2)} - ${high.toFixed(2)}`
                         : point.y?.toFixed(2);
 
-                    return `<span style="color:${point.color}">\u25CF</span> ${point.series.name}: <b>${value}</b>`;
+                    return `<span style="color:${point.color}">\u25CF</span> ${escapeHtml(point.series.name)}: <b>${value}</b>`;
                 });
                 const period = String(points[0]?.point.name ?? this.x);
                 const outbreakInfo = outbreakInfoByPeriod.get(period);
@@ -387,11 +408,19 @@ interface PredicationChartProps {
     outbreakPeriods?: OutbreakPeriodChartInfo[];
     outbreakProbability?: OutbreakProbability;
     alertPeriods?: AlertPeriodChartInfo[];
+    thresholdLines?: ThresholdChartLine[];
     variant?: UncertaintyAreaChartVariant;
     zoomRange?: ZoomRange | null;
     onZoomChange?: (range: ZoomRange | null) => void;
     maxY?: number;
     chartHeight?: Highcharts.ChartOptions['height'];
+}
+
+export interface ThresholdChartLine {
+    id: string;
+    label: string;
+    color: string;
+    points: EndemicThresholdPoint[];
 }
 
 export interface AlertPeriodChartInfo {
@@ -417,6 +446,7 @@ export const UncertaintyAreaChart = ({
     outbreakPeriods = [],
     outbreakProbability,
     alertPeriods,
+    thresholdLines,
     variant = 'default',
     zoomRange,
     onZoomChange,
@@ -485,6 +515,7 @@ export const UncertaintyAreaChart = ({
             endemicThresholds,
             outbreakProbability,
             alertPeriods,
+            thresholdLines,
         );
     }, [
         series,
@@ -494,6 +525,7 @@ export const UncertaintyAreaChart = ({
         outbreakPeriods,
         outbreakProbability,
         alertPeriods,
+        thresholdLines,
         variant,
         handleAfterSetExtremes,
         hasExternalZoomControls,

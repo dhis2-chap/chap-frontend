@@ -23,6 +23,32 @@ const series: PredictionOrgUnitSeries = {
 };
 
 describe('recorded alert chart periods', () => {
+    it('renders each policy threshold with its label and colour, preserving gaps', () => {
+        renderToStaticMarkup(createElement(UncertaintyAreaChart, {
+            series: { ...series, actualCases: [{ period: '2023W52', value: 2 }] },
+            predictionTargetName: 'Cases',
+            thresholdLines: [
+                { id: 'watch', label: 'Policy: Watch', color: '#123456', points: [{ period: '2024W1', value: 10 }] },
+                { id: 'action', label: 'Policy: Action', color: '#654321', points: [{ period: '2023W52', value: 20 }, { period: '2024W01', value: null }] },
+            ],
+        }));
+        expect(captured.options.series?.filter(item => ['watch', 'action'].includes(item.id ?? ''))).toMatchObject([
+            { id: 'watch', type: 'line', name: 'Policy: Watch', color: '#123456', connectNulls: false, data: [{ y: null }, { y: 10 }] },
+            { id: 'action', type: 'line', name: 'Policy: Action', color: '#654321', connectNulls: false, data: [{ y: 20 }, { y: null }] },
+        ]);
+        expect((captured.options.xAxis as Highcharts.XAxisOptions).plotBands).toEqual([]);
+    });
+
+    it('uses exploratory shading when recorded alerts are omitted', () => {
+        renderToStaticMarkup(createElement(UncertaintyAreaChart, {
+            series, predictionTargetName: 'Cases',
+            outbreakPeriods: [{ period: '2024W01', outbreak: true, value: '1', supportedProbability: 90 }],
+        }));
+        expect((captured.options.xAxis as Highcharts.XAxisOptions).plotBands).toEqual([
+            { from: -0.5, to: 0.5, color: 'rgba(212, 64, 64, 0.16)' },
+        ]);
+    });
+
     it('matches canonical periods, uses the configured colour and ignores periods outside the chart', () => {
         renderToStaticMarkup(createElement(UncertaintyAreaChart, {
             series, predictionTargetName: 'Cases',

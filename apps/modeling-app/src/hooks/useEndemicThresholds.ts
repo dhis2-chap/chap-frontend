@@ -24,12 +24,7 @@ type Props = {
 // session of param experimentation cannot grow the query cache unboundedly.
 const THRESHOLDS_CACHE_TIME = 30 * 60 * 1000;
 
-export const useEndemicThresholds = ({
-    datasetId,
-    series,
-    params,
-    enabled = true,
-}: Props) => {
+export const useThresholdScope = (series: PredictionOrgUnitSeries[]) => {
     // Request thresholds for exactly the periods the charts display. Actual
     // cases and predictions can spell the same week differently (2025W3 vs
     // 2025W03), so deduplicate by canonical id while keeping the first spelling.
@@ -46,6 +41,16 @@ export const useEndemicThresholds = ({
     const locations = useMemo(() => (
         series.map(orgUnitSeries => orgUnitSeries.orgUnitId)
     ), [series]);
+    return { periodIds, locations };
+};
+
+export const useEndemicThresholds = ({
+    datasetId,
+    series,
+    params,
+    enabled = true,
+}: Props) => {
+    const { periodIds, locations } = useThresholdScope(series);
     const isQueryEnabled = enabled && !!datasetId && periodIds.length > 0;
 
     const query = useQuery<ThresholdResponse, ApiError>({

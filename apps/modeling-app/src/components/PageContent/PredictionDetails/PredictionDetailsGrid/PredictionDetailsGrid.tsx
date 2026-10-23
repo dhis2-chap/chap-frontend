@@ -11,11 +11,13 @@ import {
 import { convertServerToClientPeriod, PERIOD_TYPES } from '@dhis2-chap/core';
 import { DEFAULT_OUTBREAK_PROBABILITY, getThresholdTileViewModels, Tag } from '@dhis2-chap/ui';
 import type {
+    AlertPolicyRead,
     ModelSpecRead,
     OutbreakProbability,
     PredictionInfo,
 } from '@dhis2-chap/ui';
 import { useMemo } from 'react';
+import { useAlertPolicyThresholds } from '@/hooks/useAlertPolicyThresholds';
 import { usePredictionAlerts } from '@/hooks/usePredictionAlerts';
 import { Features, useIsFeatureAvailable } from '@/hooks/useIsFeatureAvailable';
 import { useEndemicThresholds } from '@/hooks/useEndemicThresholds';
@@ -50,6 +52,8 @@ type Props = {
     settings: PredictionRunAlertSettings;
 };
 
+const NO_POLICIES: AlertPolicyRead[] = [];
+
 const DEFAULT_SETTINGS: PredictionRunAlertSettings = {
     alertsEnabled: true,
     alertProbability: DEFAULT_OUTBREAK_PROBABILITY,
@@ -74,11 +78,18 @@ export const PredictionDetailsGrid = ({
     } = usePredictionSeries({ prediction, model });
     const { isAvailable: isAlertsAvailable } = useIsFeatureAvailable(Features.PREDICTION_ALERTS);
     const alerts = usePredictionAlerts(prediction, isAlertsAvailable);
-    // Recorded alerts replace the threshold outbreak shading only while they are shown.
-    const raisedAlerts = isAlertsAvailable && settings.alertsEnabled && alerts.displayedAlerts.length > 0
+    const showThresholds = settings.thresholdsEnabled;
+    const showPolicy = isAlertsAvailable && settings.alertsEnabled && !showThresholds;
+    const raisedAlerts = showPolicy && alerts.displayedAlerts.length > 0
         ? alerts.displayedAlerts
         : undefined;
-    const showThresholds = settings.thresholdsEnabled;
+    const policyThresholds = useAlertPolicyThresholds({
+        datasetId: prediction.datasetId,
+        series,
+        policies: alerts.status.kind === 'raised' ? alerts.status.policies : NO_POLICIES,
+        displays: alerts.policyDisplays,
+        enabled: showPolicy,
+    });
 
     const {
         thresholdMap,
@@ -102,8 +113,8 @@ export const PredictionDetailsGrid = ({
         summary,
         tiles,
     } = useMemo(() => (
-        getThresholdTileViewModels(series, settings.alertProbability, thresholdMap)
-    ), [series, settings.alertProbability, thresholdMap]);
+        getThresholdTileViewModels(series, settings.alertProbability, showThresholds ? thresholdMap : undefined)
+    ), [series, settings.alertProbability, thresholdMap, showThresholds]);
 
     const predictionPeriods = useMemo(() => {
         const points = series[0]?.points ?? [];
@@ -173,6 +184,14 @@ export const PredictionDetailsGrid = ({
                     alerts={alerts}
                     enabled={settings.alertsEnabled}
                     onEnabledChange={alertsEnabled => updateSettings({ alertsEnabled })}
+                />
+            )}
+            {showPolicy && (
+                <ThresholdCalculationStatus
+                    isLoading={policyThresholds.isLoading}
+                    isPaused={policyThresholds.isPaused}
+                    error={policyThresholds.error}
+                    onRetry={policyThresholds.refetch}
                 />
             )}
             <Switch
@@ -251,6 +270,7 @@ export const PredictionDetailsGrid = ({
             selectedProbability={settings.alertProbability}
             tiles={tiles}
             raisedAlerts={raisedAlerts}
+            policyThresholdLines={showPolicy ? policyThresholds.linesByOrgUnit : undefined}
             showThresholds={thresholdsVisible}
             panel={panelContent}
             panelHeader={i18n.t('Prediction settings')}
@@ -258,6 +278,7 @@ export const PredictionDetailsGrid = ({
             zoomResetDeps={[
                 prediction.id,
                 settings.alertProbability,
+                settings.alertsEnabled,
                 settings.thresholdsEnabled,
                 settings.thresholdParams,
             ]}
