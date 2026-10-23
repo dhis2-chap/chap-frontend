@@ -1,3 +1,4 @@
+import { usePredictionSeries } from '@dhis2-chap/ui';
 import i18n from '@dhis2/d2-i18n';
 import {
     CircularLoader,
@@ -5,7 +6,6 @@ import {
 } from '@dhis2/ui';
 import { useAuthority } from '@/hooks/useAuthority';
 import { usePredictionSetup } from '@/hooks/usePredictionSetup';
-import { usePredictionSeries } from '../../PredictionDetails/hooks/usePredictionSeries';
 import { QuantileMappingFormContent } from './QuantileMappingFormContent';
 import type { QuantileMappingFormProps } from './quantileMappingFormTypes';
 import styles from './QuantileMappingForm.module.css';

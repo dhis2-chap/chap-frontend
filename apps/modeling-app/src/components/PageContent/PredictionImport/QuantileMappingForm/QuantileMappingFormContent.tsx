@@ -5,6 +5,7 @@ import {
     DEFAULT_OUTBREAK_PROBABILITY,
     getForecastThresholdCoverage,
     type OutbreakProbability,
+    useEndemicThresholds,
 } from '@dhis2-chap/ui';
 import {
     Button,
@@ -15,7 +16,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, useWatch } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { NavigationConfirmModal } from '@/components/NavigationConfirmModal';
-import { useEndemicThresholds } from '@/hooks/useEndemicThresholds';
 import { useNavigationBlocker } from '@/hooks/useNavigationBlocker';
 import { useThresholdStrategies } from '@/hooks/useThresholdStrategies';
 import {

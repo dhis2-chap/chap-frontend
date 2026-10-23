@@ -1,23 +1,25 @@
-import type { AlertPolicyRead, AlertRead, PredictionInfo } from '@dhis2-chap/ui';
+import { canonicalizePeriodId } from '@dhis2-chap/core';
+import { sortAlertLevels, type AlertPolicyRead, type AlertRead, type PredictionInfo } from '@dhis2-chap/ui';
 
-// Policies store levels from least to most severe, so a level's index is its severity.
+// A level's index in the strictness order is its severity, the order the backend uses.
 export const severity = (alert: AlertRead, policies: AlertPolicyRead[]) => {
-    const levels = policies.find(policy => policy.id === alert.alertPolicyId)?.levels ?? [];
+    const levels = sortAlertLevels(policies.find(policy => policy.id === alert.alertPolicyId)?.levels ?? []);
     const index = levels.findIndex(level => level.name === alert.level);
     return index === -1 ? levels.length : index;
 };
 
 const countLevels = (alerts: AlertRead[], policies: AlertPolicyRead[]) => {
-    const counts = new Map<string, { level: string; count: number; severity: number }>();
+    const counts = new Map<string, { level: string; alertPolicyId: number; count: number; severity: number }>();
     for (const alert of alerts) {
-        const entry = counts.get(alert.level) ?? { level: alert.level, count: 0, severity: Infinity };
+        const entry = counts.get(alert.level)
+            ?? { level: alert.level, alertPolicyId: alert.alertPolicyId, count: 0, severity: Infinity };
         entry.count++;
         entry.severity = Math.min(entry.severity, severity(alert, policies));
         counts.set(alert.level, entry);
     }
     return [...counts.values()]
         .sort((a, b) => a.severity - b.severity || a.level.localeCompare(b.level))
-        .map(({ level, count }) => ({ level, count }));
+        .map(({ level, alertPolicyId, count }) => ({ level, alertPolicyId, count }));
 };
 
 /** Predictions with pending alerts, newest first, with counts per level from least to most severe. */
@@ -37,3 +39,11 @@ export const summarizePredictionReviews = (
     }).sort((a, b) => Date.parse(b.prediction.created) - Date.parse(a.prediction.created)
         || b.prediction.id - a.prediction.id);
 };
+
+/** Alerts may use CHAP's dashed IDs (2024-07, 2024-07-15, 2024-W02, 2024-S02) while analytics uses DHIS2 period IDs. */
+export const normalizeAlertPeriod = (period: string) => canonicalizePeriodId(
+    period.trim()
+        .replace(/^(\d{4})-S(\d+)$/, '$1SunW$2')
+        .replace(/^(\d{4})-W(\d+)$/, '$1W$2')
+        .replace(/^(\d{4})-(\d{2})(?:-(\d{2}))?$/, '$1$2$3'),
+);

@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-19T08:57:03.120Z\n"
-"PO-Revision-Date: 2026-10-19T08:57:03.121Z\n"
+"POT-Creation-Date: 2026-10-23T05:20:15.588Z\n"
+"PO-Revision-Date: 2026-10-23T05:20:15.589Z\n"
 
 msgid "CHAP settings"
 msgstr "CHAP settings"
@@ -125,8 +125,14 @@ msgstr "Quantile 0.75"
 msgid "Quantile 0.9 (high)"
 msgstr "Quantile 0.9 (high)"
 
+msgid "Median prediction ({{name}} alert line)"
+msgstr "Median prediction ({{name}} alert line)"
+
 msgid "Median prediction (50% alert line)"
 msgstr "Median prediction (50% alert line)"
+
+msgid "{{name}} alert line ({{probability}}%)"
+msgstr "{{name}} alert line ({{probability}}%)"
 
 msgid "Alert line ({{probability}}%)"
 msgstr "Alert line ({{probability}}%)"
@@ -134,8 +140,14 @@ msgstr "Alert line ({{probability}}%)"
 msgid "Actual Cases"
 msgstr "Actual Cases"
 
+msgid "Endemic channel ({{name}})"
+msgstr "Endemic channel ({{name}})"
+
 msgid "Endemic channel"
 msgstr "Endemic channel"
+
+msgid "Endemic threshold ({{name}})"
+msgstr "Endemic threshold ({{name}})"
 
 msgid "Endemic threshold"
 msgstr "Endemic threshold"
@@ -372,6 +384,9 @@ msgstr ""
 "This app does not support setting API tokens on this DHIS2 version. Upgrade "
 "DHIS2 to 2.40.7, 2.41.4, 2.42 or later to store the token encrypted."
 
+msgid "Cases"
+msgstr "Cases"
+
 msgid "More"
 msgstr "More"
 
@@ -398,3 +413,15 @@ msgstr "From period"
 
 msgid "To period"
 msgstr "To period"
+
+msgid "Green"
+msgstr "Green"
+
+msgid "Yellow"
+msgstr "Yellow"
+
+msgid "Orange"
+msgstr "Orange"
+
+msgid "Red"
+msgstr "Red"

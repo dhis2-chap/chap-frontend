@@ -11,6 +11,8 @@ import {
     Tooltip,
 } from '@dhis2/ui';
 import {
+    AlertLevelTag,
+    getAlertColor,
     getStableMaxYForThresholdChart,
     OUTBREAK_PROBABILITY_OPTIONS,
     UncertaintyAreaChart,
@@ -19,8 +21,6 @@ import {
 } from '@dhis2-chap/ui';
 import type { OutbreakProbability, ThresholdTileViewModel, ZoomRange } from '@dhis2-chap/ui';
 import { ID_MAIN_LAYOUT } from '../layout/Layout';
-import { getAlertColor } from '@/components/BackendAlerts/alertLevelDisplay';
-import { AlertLevelTag } from '@/components/BackendAlerts/AlertLevelTag';
 import type { DisplayedPredictionAlert } from '@/components/BackendAlerts/displayPredictionAlerts';
 import styles from './ThresholdTilesExplorer.module.css';
 

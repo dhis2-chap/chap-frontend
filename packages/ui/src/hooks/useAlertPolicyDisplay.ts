@@ -1,6 +1,6 @@
 import { useDataEngine } from '@dhis2/app-runtime';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { alertPolicyDisplaySchema, type AlertPolicyDisplay } from '@/components/BackendAlerts/alertLevelDisplay';
+import { alertPolicyDisplaySchema, type AlertPolicyDisplay } from '../utils/alertLevelDisplay';
 
 // Each policy has its own key, so saving one policy never overwrites another's colours.
 const getResource = (policyId: number) => `dataStore/modeling/alert-policy-display-${policyId}`;

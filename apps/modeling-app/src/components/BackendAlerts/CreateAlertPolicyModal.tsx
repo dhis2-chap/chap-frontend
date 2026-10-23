@@ -18,16 +18,16 @@ import {
     SingleSelectOption,
 } from '@dhis2/ui';
 import {
+    alertColorSchema,
     DEFAULT_OUTBREAK_PROBABILITY,
     OUTBREAK_PROBABILITY_OPTIONS,
+    sortAlertLevels,
+    useSaveAlertPolicyDisplay,
     type AlertLevel,
 } from '@dhis2-chap/ui';
 import { useCreateAlertPolicy } from '@/hooks/useAlertPolicies';
 import { useThresholdStrategies } from '@/hooks/useThresholdStrategies';
 import { getChapErrorMessage } from '@/utils/chapErrors';
-import { sortAlertLevels } from './sortAlertLevels';
-import { useSaveAlertPolicyDisplay } from '@/hooks/useAlertPolicyDisplay';
-import { alertColorSchema } from './alertLevelDisplay';
 import { AlertColorSelect } from './AlertColorSelect';
 import styles from './BackendAlerts.module.css';
 

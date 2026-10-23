@@ -1,8 +1,7 @@
 import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { AlertsService, OpenAPI, type PredictionInfo } from '@dhis2-chap/ui';
+import { AlertsService, OpenAPI, useAlertPolicyDisplays, type PredictionInfo } from '@dhis2-chap/ui';
 import { useAlertPolicies } from './useAlertPolicies';
-import { useAlertPolicyDisplays } from './useAlertPolicyDisplay';
 import { usePredictionSetup } from './usePredictionSetup';
 import { displayPredictionAlerts } from '@/components/BackendAlerts/displayPredictionAlerts';
 import { getPredictionAlertStatus } from '@/components/BackendAlerts/predictionAlertStatus';

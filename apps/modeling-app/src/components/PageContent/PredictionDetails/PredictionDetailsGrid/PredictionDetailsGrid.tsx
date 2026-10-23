@@ -9,7 +9,7 @@ import {
     Switch,
 } from '@dhis2/ui';
 import { convertServerToClientPeriod, PERIOD_TYPES } from '@dhis2-chap/core';
-import { DEFAULT_OUTBREAK_PROBABILITY, getThresholdTileViewModels, Tag } from '@dhis2-chap/ui';
+import { DEFAULT_OUTBREAK_PROBABILITY, getThresholdTileViewModels, Tag, useEndemicThresholds, usePredictionSeries } from '@dhis2-chap/ui';
 import type {
     ModelSpecRead,
     OutbreakProbability,
@@ -18,7 +18,6 @@ import type {
 import { useMemo } from 'react';
 import { usePredictionAlerts } from '@/hooks/usePredictionAlerts';
 import { Features, useIsFeatureAvailable } from '@/hooks/useIsFeatureAvailable';
-import { useEndemicThresholds } from '@/hooks/useEndemicThresholds';
 import {
     DEFAULT_THRESHOLD_STRATEGY,
     getDefaultThresholdParams,
@@ -31,7 +30,6 @@ import {
     ThresholdStrategyControl,
     ThresholdTilesExplorer,
 } from '../../../ThresholdTilesExplorer';
-import { usePredictionSeries } from '../hooks/usePredictionSeries';
 import { AlertLevelsSection } from './AlertLevelsSection';
 import styles from './PredictionDetailsGrid.module.css';
 

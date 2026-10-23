@@ -1,5 +1,10 @@
-import type { AlertPolicyRead, AlertRead } from '@dhis2-chap/ui';
-import { getAlertLevelDisplay, type AlertLevelDisplay, type AlertPolicyDisplay } from './alertLevelDisplay';
+import {
+    getAlertLevelDisplay,
+    type AlertLevelDisplay,
+    type AlertPolicyDisplay,
+    type AlertPolicyRead,
+    type AlertRead,
+} from '@dhis2-chap/ui';
 
 export type DisplayedPredictionAlert = AlertRead & {
     display: AlertLevelDisplay;

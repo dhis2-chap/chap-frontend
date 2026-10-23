@@ -1,5 +1,5 @@
+import { useApiDataQuery } from '@dhis2-chap/ui';
 import { useMemo } from 'react';
-import { useApiDataQuery } from '../../../../../../utils/useApiDataQuery';
 
 type OrgUnitGroupWithLevels = {
     id: string;

@@ -1,9 +1,12 @@
 import { useState } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { Button, ButtonStrip, Modal, ModalActions, ModalContent, ModalTitle, NoticeBox } from '@dhis2/ui';
-import type { AlertPolicyRead } from '@dhis2-chap/ui';
-import { useSaveAlertPolicyDisplay } from '@/hooks/useAlertPolicyDisplay';
-import { getAlertLevelDisplay, type AlertPolicyDisplay } from './alertLevelDisplay';
+import {
+    getAlertLevelDisplay,
+    useSaveAlertPolicyDisplay,
+    type AlertPolicyDisplay,
+    type AlertPolicyRead,
+} from '@dhis2-chap/ui';
 import { AlertColorSelect } from './AlertColorSelect';
 import styles from './BackendAlerts.module.css';
 
