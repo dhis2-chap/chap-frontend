@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-21T15:55:41.350Z\n"
-"PO-Revision-Date: 2026-10-21T15:55:41.350Z\n"
+"POT-Creation-Date: 2026-10-22T18:16:11.343Z\n"
+"PO-Revision-Date: 2026-10-22T18:16:11.344Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -1166,6 +1166,24 @@ msgstr "Cannot run prediction"
 
 msgid "Prediction run name"
 msgstr "Prediction run name"
+
+msgid "Prediction could not run"
+msgstr "Prediction could not run"
+
+msgid ""
+"Check or import the required data for the listed variables and organisation "
+"units, or adjust the training period in the prediction setup before "
+"retrying."
+msgstr ""
+"Check or import the required data for the listed variables and organisation "
+"units, or adjust the training period in the prediction setup before "
+"retrying."
+
+msgid "View rejected data"
+msgstr "View rejected data"
+
+msgid "Prediction data rejected"
+msgstr "Prediction data rejected"
 
 msgid "Loading period settings"
 msgstr "Loading period settings"

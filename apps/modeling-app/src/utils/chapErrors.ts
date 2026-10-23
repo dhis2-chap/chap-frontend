@@ -22,6 +22,10 @@ export const getChapErrorMessage = (error: MaybeApiError) => {
         if (typeof body.detail === 'string' && body.detail) {
             return body.detail;
         }
+        if (body.detail && typeof body.detail === 'object' && 'message' in body.detail &&
+            typeof body.detail.message === 'string' && body.detail.message) {
+            return body.detail.message;
+        }
         if (Array.isArray(body.detail)) {
             const messages = body.detail.flatMap((detail) => {
                 if (!detail || typeof detail.msg !== 'string') return [];
