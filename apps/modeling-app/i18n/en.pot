@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-22T18:16:11.343Z\n"
-"PO-Revision-Date: 2026-10-22T18:16:11.344Z\n"
+"POT-Creation-Date: 2026-10-23T04:59:37.499Z\n"
+"PO-Revision-Date: 2026-10-23T04:59:37.499Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -115,6 +115,9 @@ msgstr ""
 msgid "Colours"
 msgstr "Colours"
 
+msgid "Output codes"
+msgstr "Output codes"
+
 msgid "Enter a level name"
 msgstr "Enter a level name"
 
@@ -204,6 +207,27 @@ msgstr "Please try again."
 
 msgid "Save"
 msgstr "Save"
+
+msgid "Edit alert output codes"
+msgstr "Edit alert output codes"
+
+msgid ""
+"Codes are imported into the outbreak indicator data element. Use distinct "
+"codes matching its value type or option set. Severity follows the policy "
+"level order, not the code value."
+msgstr ""
+"Codes are imported into the outbreak indicator data element. Use distinct "
+"codes matching its value type or option set. Severity follows the policy "
+"level order, not the code value."
+
+msgid "No alert"
+msgstr "No alert"
+
+msgid "Enter a unique, non-empty code for every level and for no alert."
+msgstr "Enter a unique, non-empty code for every level and for no alert."
+
+msgid "Unable to save alert output codes. Please try again."
+msgstr "Unable to save alert output codes. Please try again."
 
 msgid "Green"
 msgstr "Green"
@@ -1995,6 +2019,24 @@ msgstr "Use alert outputs"
 
 msgid "Import outbreak indicator values."
 msgstr "Import outbreak indicator values."
+
+msgid ""
+"Calculate the highest alert level from the forecast using this policy. "
+"Missing results are skipped."
+msgstr ""
+"Calculate the highest alert level from the forecast using this policy. "
+"Missing results are skipped."
+
+msgid "Unable to load policy alert outputs"
+msgstr "Unable to load policy alert outputs"
+
+msgid "Output codes can be changed on the Alert policies page."
+msgstr "Output codes can be changed on the Alert policies page."
+
+msgid "One region-period result is missing and will be skipped."
+msgid_plural "One region-period result is missing and will be skipped."
+msgstr[0] "One region-period result is missing and will be skipped."
+msgstr[1] "{{count}} region-period results are missing and will be skipped."
 
 msgid "Some outbreak indicators will be skipped"
 msgstr "Some outbreak indicators will be skipped"
