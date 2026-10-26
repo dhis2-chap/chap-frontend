@@ -255,7 +255,7 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '', benchmarkContext 
                             </NoticeBox>
                         )}
 
-                        <BacktestParameterFields disabled={createEvaluation.isLoading} />
+                        <BacktestParameterFields periodType={dataset?.periodType} disabled={createEvaluation.isLoading} />
 
                         {isTooShort && (
                             <NoticeBox warning title={i18n.t('Dataset too short')}>

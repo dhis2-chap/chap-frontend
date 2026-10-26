@@ -63,13 +63,13 @@ export const NewDatasetForm = () => {
     const { models, isLoading: isModelsLoading, error: modelsError } = useModels();
     const { suggestions } = useCovariateSuggestions(models);
     const { data: datasets } = useDatasets();
-    const backtestParameters = useBacktestParameters();
     const previousDataItems = useMemo(() => getPreviousDataItems(datasets ?? []), [datasets]);
     const columns = useFieldArray({ control: methods.control, name: 'columns' });
     const [columnValues, periodType, fromPeriodId, toPeriodId] = useWatch({
         control: methods.control,
         name: ['columns', 'periodType', 'fromPeriodId', 'toPeriodId'],
     });
+    const backtestParameters = useBacktestParameters(periodType);
     const covariateNames = columnValues.map(column => column.covariateName.trim());
     const support = getModelSupport(covariateNames, periodType, models ?? []);
     const periodCount = countPeriods(fromPeriodId, toPeriodId, settings.calendar);
