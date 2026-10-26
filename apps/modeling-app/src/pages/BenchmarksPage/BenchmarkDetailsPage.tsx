@@ -36,7 +36,13 @@ const BenchmarkDetails = ({ id }: { id: number }) => {
 
     if (!isValidSpecificationId(id)) return <NoticeBox error title={i18n.t('Invalid benchmark')} />;
     if (query.isLoading) return <div className={styles.loading}><CircularLoader /></div>;
-    if (query.error) return <ChapErrorNotice error={query.error} title={i18n.t('Could not load benchmark')} />;
+    if (query.error) {
+        return (
+            <ChapErrorNotice error={query.error} title={i18n.t('Could not load benchmark')}>
+                {includeArchived && <Button small onClick={() => setIncludeArchived(false)}>{i18n.t('Hide archived models')}</Button>}
+            </ChapErrorNotice>
+        );
+    }
     if (!query.data) return null;
     const specification = query.data;
     const { dataset } = specification;
