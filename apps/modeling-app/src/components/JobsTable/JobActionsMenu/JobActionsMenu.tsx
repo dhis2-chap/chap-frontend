@@ -21,6 +21,7 @@ import { useCopyToClipboard } from '../../../hooks/useCopyToClipboard';
 import { useAlert } from '@dhis2/app-runtime';
 import { useNavigate } from 'react-router-dom';
 import { useDownloadJobRequest } from './hooks/useDownloadJobRequest';
+import { useDownloadJobDiagnostics } from './hooks/useDownloadJobDiagnostics';
 
 type Props = {
     jobId: string;
@@ -48,6 +49,7 @@ export const JobActionsMenu = ({
     const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
     const [cancelModalIsOpen, setCancelModalIsOpen] = useState(false);
     const { downloadRequest, isLoading: isDownloadingRequest } = useDownloadJobRequest();
+    const { downloadDiagnostics, isLoading: isDownloadingDiagnostics } = useDownloadJobDiagnostics();
 
     const { show: showErrorAlert } = useAlert(
         i18n.t('Failed to copy job ID'),
@@ -118,6 +120,16 @@ export const JobActionsMenu = ({
                                 icon={<IconDownload16 />}
                                 disabled={isDownloadingRequest}
                                 onClick={() => downloadRequest(jobId)}
+                            />
+                        )}
+
+                        {status === JOB_STATUSES.FAILED && (
+                            <MenuItem
+                                label={isDownloadingDiagnostics ? i18n.t('Downloading debug info…') : i18n.t('Download debug info')}
+                                dataTest="job-overflow-download-debug-info"
+                                icon={<IconDownload16 />}
+                                disabled={isDownloadingDiagnostics}
+                                onClick={() => downloadDiagnostics(jobId)}
                             />
                         )}
 
