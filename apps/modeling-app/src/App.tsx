@@ -12,6 +12,7 @@ import './locales';
 import './App.module.css';
 import PageWrapper from './components/PageWrapper';
 import { SetChapUrl } from './features/route-api/SetChapUrl';
+import { ModelingDefaults } from './components/ModelingDefaults/ModelingDefaults';
 import { SettingsLayout } from './features/settings/SettingsLayout';
 import { GeneralSettings } from './features/settings/GeneralSettings';
 import { DataPruningCard } from './features/settings/DataPruning';
@@ -272,6 +273,10 @@ const router = createHashRouter([
                     {
                         index: true,
                         element: <GeneralSettings />,
+                    },
+                    {
+                        path: 'modeling-defaults',
+                        element: <ModelingDefaults />,
                     },
                     {
                         path: 'data-pruning',

@@ -15,6 +15,10 @@ export type AlertLevel = {
      */
     name: string;
     /**
+     * Output code for this level. Must be non-empty and unique within the policy, including the no-alert code. For DHIS2 import, it must match the destination data element's value type or option set.
+     */
+    outputCode: string;
+    /**
      * Parameters for the epidemic channel this tier is judged against. Its `type` selects the threshold strategy, exactly as in `POST /v1/analytics/thresholds`. Must describe a single threshold line, so it is unambiguous which line the tier is judged against.
      */
     thresholdParams: (SeasonalParams | PercentileParams);

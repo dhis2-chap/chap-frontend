@@ -21,6 +21,14 @@ export type MetricInfo = {
      */
     description?: string;
     /**
+     * Display and ranking priority, starting at zero; lower comes first.
+     */
+    sortOrder: number;
+    /**
+     * Whether this metric is selected by the installation's settings.
+     */
+    isSelected: boolean;
+    /**
      * Display suffix for the raw score, e.g. '%' for MAPE.
      */
     unit?: (string | null);
@@ -40,5 +48,9 @@ export type MetricInfo = {
      * Name of the operator used to compare a score with a baseline or comparison model's score: 'skill_ratio' (relative improvement, 1 - score / reference for error scores), 'difference' (improvement in the metric's own units) or 'target_distance' (how much closer to ``target``). Positive always means better than the reference. Null when the metric has no comparison.
      */
     comparisonOp?: (string | null);
+    /**
+     * One-line description of what the metric's comparison value means. Null without a comparison.
+     */
+    comparisonDescription?: (string | null);
 };
 

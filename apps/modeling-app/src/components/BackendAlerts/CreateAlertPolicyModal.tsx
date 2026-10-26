@@ -81,8 +81,9 @@ const NEW_LEVEL: LevelValues = {
     probability: String(DEFAULT_OUTBREAK_PROBABILITY),
 };
 
-const toAlertLevel = (level: LevelValues): AlertLevel => ({
+const toAlertLevel = (level: LevelValues, index: number): AlertLevel => ({
     name: level.name.trim(),
+    outputCode: String(index + 1),
     exceedanceThreshold: Number(level.probability) / 100,
     thresholdParams: level.strategy === 'seasonal'
         ? { type: 'seasonal', stdMultiplier: Number(level.value) }
