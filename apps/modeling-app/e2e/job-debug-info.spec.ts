@@ -50,11 +50,10 @@ test('downloads diagnostics and client context for a failed job', async ({ page 
     const diagnostics = await readJson<JobDiagnostics>(await responsePromise, 'Download diagnostics');
     const download = await downloadPromise;
     expect(download.suggestedFilename()).toBe(`job-${jobId}-debug-info.json`);
-    const bundle = JSON.parse(await readFile((await download.path())!, 'utf8'));
-    const { client, ...backendBundle } = bundle;
-    expect(backendBundle).toEqual(diagnostics);
-    expect(backendBundle.job).toMatchObject({ id: jobId, name, status: 'FAILURE' });
-    expect(backendBundle.traceback).toEqual(expect.any(String));
+    const { backend, client } = JSON.parse(await readFile((await download.path())!, 'utf8'));
+    expect(backend).toEqual(diagnostics);
+    expect(backend.job).toMatchObject({ id: jobId, name, status: 'FAILURE' });
+    expect(backend.traceback).toEqual(expect.any(String));
     const appPackage = JSON.parse(await readFile(path.resolve(__dirname, '../package.json'), 'utf8'));
     expect(client.appVersion).toBe(appPackage.version);
     expect(client.dhis2Version).toMatch(/^2\.\d+/);

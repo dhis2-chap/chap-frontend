@@ -19,7 +19,7 @@ export const useDownloadJobDiagnostics = () => {
         mutationFn: async (jobId: string) => {
             const diagnostics = await JobsService.getJobDiagnosticsV1JobsJobIdDiagnosticsGet(jobId);
             const bundle = {
-                ...diagnostics,
+                backend: diagnostics,
                 client: {
                     appVersion: appVersion?.full ?? 'Unknown',
                     dhis2Version: serverVersion?.full ?? systemInfo?.version ?? 'Unknown',
