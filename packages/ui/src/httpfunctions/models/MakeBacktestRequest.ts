@@ -4,6 +4,8 @@
 /* eslint-disable */
 /**
  * Request to backtest an already-imported dataset against a configured model.
+ *
+ * Omitted backtest parameters use the stored defaults for the dataset's period type, not the schema defaults.
  */
 export type MakeBacktestRequest = {
     /**

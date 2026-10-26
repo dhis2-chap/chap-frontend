@@ -33,14 +33,14 @@ const renderMetrics = (metrics: Record<string, number>, catalog?: MetricInfo[]) 
 describe('EvaluationMetricsWidget metadata', () => {
     it('uses backend names and descriptions for existing and newly registered metrics', () => {
         const html = renderMetrics({ mae: 12 }, [
-            { id: 'mae', displayName: 'Backend MAE name', description: 'Updated backend explanation' },
+            { sortOrder: 0, isSelected: true, id: 'mae', displayName: 'Backend MAE name', description: 'Updated backend explanation' },
         ]);
         expect(html).toContain('Backend MAE name');
         expect(html).toContain('title="Updated backend explanation"');
         expect(html).toContain('12');
 
         const newMetric = renderMetrics({ new_backend_metric: 7 }, [
-            { id: 'new_backend_metric', displayName: 'New backend metric name', description: 'New explanation' },
+            { sortOrder: 0, isSelected: true, id: 'new_backend_metric', displayName: 'New backend metric name', description: 'New explanation' },
         ]);
         expect(newMetric).toContain('New backend metric name');
         expect(newMetric).toContain('title="New explanation"');
@@ -55,8 +55,8 @@ describe('EvaluationMetricsWidget metadata', () => {
 
     it('handles incomplete metadata and only displays metrics with evaluation scores', () => {
         const html = renderMetrics({ unknown_metric: 4 }, [
-            { id: 'unknown_metric', displayName: ' ', description: ' ' },
-            { id: 'unscored', displayName: 'Unscored metric' },
+            { sortOrder: 0, isSelected: true, id: 'unknown_metric', displayName: ' ', description: ' ' },
+            { sortOrder: 0, isSelected: true, id: 'unscored', displayName: 'Unscored metric' },
         ]);
         expect(html).toContain('Unknown metric');
         expect(html).not.toContain('title=');
@@ -65,8 +65,8 @@ describe('EvaluationMetricsWidget metadata', () => {
 
     it('preserves percentage units and coverage targets with backend metadata', () => {
         const html = renderMetrics({ mape: 12, coverage_10_90: 0.8 }, [
-            { id: 'mape', displayName: 'Percentage error', unit: '%' },
-            { id: 'coverage_10_90', displayName: 'Interval coverage', target: 0.8, targetBehavior: TargetBehavior.AT_LEAST },
+            { sortOrder: 0, isSelected: true, id: 'mape', displayName: 'Percentage error', unit: '%' },
+            { sortOrder: 0, isSelected: true, id: 'coverage_10_90', displayName: 'Interval coverage', target: 0.8, targetBehavior: TargetBehavior.AT_LEAST },
         ]);
         expect(html).toContain('12 %');
         expect(html).toContain('target 0.8');
@@ -74,7 +74,7 @@ describe('EvaluationMetricsWidget metadata', () => {
 
     it('shows zero targets on raw-unit metrics without judging the score against them', () => {
         const html = renderMetrics({ peak_value_diff: -2 }, [
-            { id: 'peak_value_diff', displayName: 'Peak difference', unit: 'cases', target: 0, targetBehavior: TargetBehavior.CLOSEST },
+            { sortOrder: 0, isSelected: true, id: 'peak_value_diff', displayName: 'Peak difference', unit: 'cases', target: 0, targetBehavior: TargetBehavior.CLOSEST },
         ]);
         expect(html).toContain('-2 cases');
         expect(html).toContain('target 0');
@@ -83,8 +83,8 @@ describe('EvaluationMetricsWidget metadata', () => {
 
     it.each([undefined, null])('omits units and targets when metadata fields are %s', (missing) => {
         const html = renderMetrics({ mape: 12, coverage_10_90: 0.2 }, [
-            { id: 'mape', displayName: 'MAPE', unit: missing },
-            { id: 'coverage_10_90', displayName: 'Coverage', target: missing },
+            { sortOrder: 0, isSelected: true, id: 'mape', displayName: 'MAPE', unit: missing },
+            { sortOrder: 0, isSelected: true, id: 'coverage_10_90', displayName: 'Coverage', target: missing },
         ]);
         expect(html).not.toContain('%');
         expect(html).not.toContain('target ');
@@ -106,7 +106,7 @@ describe('EvaluationMetricsWidget metadata', () => {
         [TargetBehavior.AT_LEAST, Infinity, false],
     ] as const)('judges %s scores of %s against the backend target', (targetBehavior, score, offTarget) => {
         const html = renderMetrics({ custom_metric: score }, [
-            { id: 'custom_metric', displayName: 'Custom metric', target: 0.8, targetBehavior },
+            { sortOrder: 0, isSelected: true, id: 'custom_metric', displayName: 'Custom metric', target: 0.8, targetBehavior },
         ]);
         expect(html.includes(styles.offTarget)).toBe(offTarget);
         if (!Number.isFinite(score)) {
