@@ -28,7 +28,7 @@ const comparePredictionPeriods = (
     locale: periodSettings.locale,
 });
 
-const createNewPredictionFormSchema = ({
+export const createNewPredictionFormSchema = ({
     fromPeriod,
     anchorPeriod,
     periodSettings,
