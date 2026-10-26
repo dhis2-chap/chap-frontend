@@ -18,6 +18,19 @@ Headless run:
 pnpm e2e:ci
 ```
 
+## Pin the chap-core version
+
+```bash
+pnpm e2e:chap-core            # latest chap-core release
+pnpm e2e:chap-core latest     # chap-core master
+pnpm e2e:chap-core v2.1.0     # a specific chap-core release
+```
+
+Boots the stack on that version, then runs the suite. The frontend side is whatever is
+checked out, so check out a release tag first to test a released frontend against a
+released backend. Run `pnpm docker:e2e reset` when switching versions - the CHAP database
+schema differs between them.
+
 ## Stack control
 ```bash
 pnpm docker:e2e down
