@@ -1,19 +1,13 @@
 import {
     BacktestRead,
     BacktestsService,
-    createHighChartsData,
-    DataElement,
     DataList,
     EvaluationEntry,
-    EvaluationEntryExtend,
-    EvaluationForSplitPoint,
     getSplitPeriod,
-    HighChartsData,
-    joinRealAndPredictedData,
 } from '@dhis2-chap/ui';
 import { useMemo } from 'react';
 import { useQueries } from '@tanstack/react-query';
-import { sortPeriods, PERIOD_TYPES } from '@dhis2-chap/core';
+import { plotResultToViewData } from '../utils/evaluationPlotData';
 
 const quantiles = [0.1, 0.25, 0.5, 0.75, 0.9];
 
@@ -35,98 +29,6 @@ const select = (data: PlotDataRequestResult) => {
         splitPeriods,
         evaluation: data.evaluation,
     };
-};
-
-type PlotDataResult = {
-    evaluationEntries: EvaluationEntryExtend[];
-    actualCases: DataElement[];
-    splitPeriods: string[];
-    evaluation: BacktestRead;
-};
-
-const plotResultToViewData = (
-    data: PlotDataResult,
-    orgUnitId: string,
-): EvaluationForSplitPoint[] => {
-    const evaluationData = data.evaluationEntries;
-
-    const periodType = data.evaluation?.dataset?.periodType;
-
-    const uniqueSplitPeriods = Array.from(
-        new Set(evaluationData.map(item => item.splitPeriod)),
-    );
-
-    const allSplitPeriods = periodType
-        ? sortPeriods(uniqueSplitPeriods, periodType as keyof typeof PERIOD_TYPES)
-        : uniqueSplitPeriods;
-
-    const createQuantileFunc = (quantiles: number[]) => {
-        const lowQuantile = quantiles[0];
-        const midLowQuantile = quantiles[1];
-        const midHighQuantile = quantiles[quantiles.length - 2];
-        const highQuantile = quantiles[quantiles.length - 1];
-
-        return (item: EvaluationEntry) => {
-            if (item.quantile === lowQuantile) {
-                return 'quantile_low';
-            } else if (item.quantile === highQuantile) {
-                return 'quantile_high';
-            } else if (item.quantile === 0.5) {
-                return 'median';
-            } else if (item.quantile === midLowQuantile) {
-                return 'quantile_mid_low';
-            } else if (item.quantile === midHighQuantile) {
-                return 'quantile_mid_high';
-            } else {
-                return 'unknown';
-            }
-        };
-    };
-
-    return allSplitPeriods.map((splitPeriod: string) => {
-        return {
-            splitPoint: splitPeriod,
-            evaluation: [
-                {
-                    orgUnitName: orgUnitId,
-                    orgUnitId: orgUnitId,
-                    models: [
-                        {
-                            modelName:
-                                data.evaluation.name
-                                || data.evaluation.modelId,
-                            data: (() => {
-                                const evaluationEntries =
-                                    data.evaluationEntries.filter(
-                                        entry =>
-                                            entry.orgUnit === orgUnitId &&
-                                            entry.splitPeriod === splitPeriod,
-                                    );
-                                const actualCasesForOrgunit =
-                                    data.actualCases.filter(
-                                        item => item.ou === orgUnitId,
-                                    );
-                                const quantiles = evaluationEntries.map(
-                                    item => item.quantile,
-                                );
-
-                                const highChartData = createHighChartsData(
-                                    evaluationEntries,
-                                    createQuantileFunc(quantiles),
-                                );
-                                const joinedRealAndPredictedData: HighChartsData =
-                                    joinRealAndPredictedData(
-                                        highChartData,
-                                        actualCasesForOrgunit,
-                                    );
-                                return joinedRealAndPredictedData;
-                            })(),
-                        },
-                    ],
-                },
-            ],
-        };
-    });
 };
 
 /**
