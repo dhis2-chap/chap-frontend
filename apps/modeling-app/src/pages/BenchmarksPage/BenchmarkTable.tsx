@@ -43,11 +43,7 @@ export const BenchmarkTable = ({ specification, actions, children }: Props) => {
     // Runs keep pointing at archived models, so resolve names against all of them.
     const { models } = useModels({ includeArchived: true });
     const columns = useMemo(() => [
-        columnHelper.accessor((run) => {
-            const model = models?.find(item => item.id === run.configuredModel?.id);
-            const name = model?.displayName || run.configuredModel?.name || run.modelId;
-            return model?.archived ? i18n.t('{{name}} (archived)', { name }) : name;
-        }, {
+        columnHelper.accessor(run => models?.find(model => model.id === run.configuredModel?.id)?.displayName || run.configuredModel?.name || run.modelId, {
             id: 'model',
             header: i18n.t('Model'),
             cell: info => <span className={styles.strong}>{info.getValue()}</span>,
