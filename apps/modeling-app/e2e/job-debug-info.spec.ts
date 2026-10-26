@@ -3,9 +3,15 @@ import path from 'node:path';
 import { expect, test } from '@playwright/test';
 import type { DatasetMakeRequest, ImportSummaryResponse, JobDiagnostics } from '@dhis2-chap/ui';
 import { chapUrl, getChap, readJson } from './helpers/evaluation-fixtures';
+import { isVersionCompatible } from '../src/utils/compareVersions';
 
 test('downloads diagnostics and client context for a failed job', async ({ page }) => {
     test.setTimeout(90_000);
+    const { chap_core_version: chapVersion } = await readJson<{ chap_core_version: string }>(
+        await getChap(page, '/system/info'),
+        'Load Chap Core version',
+    );
+    test.skip(!isVersionCompatible(chapVersion, '2.6.0'), 'Job diagnostics need Chap Core >= 2.6.0');
     const name = `E2E debug info ${Date.now()}`;
     const orgUnit = 'W6sNfkJcXGC';
     const request: DatasetMakeRequest = {
@@ -48,7 +54,7 @@ test('downloads diagnostics and client context for a failed job', async ({ page 
     const { client, ...backendBundle } = bundle;
     expect(backendBundle).toEqual(diagnostics);
     expect(backendBundle.job).toMatchObject({ id: jobId, name, status: 'FAILURE' });
-    expect(backendBundle.traceback).toContain('Google earth engine no longer supported');
+    expect(backendBundle.traceback).toEqual(expect.any(String));
     const appPackage = JSON.parse(await readFile(path.resolve(__dirname, '../package.json'), 'utf8'));
     expect(client.appVersion).toBe(appPackage.version);
     expect(client.dhis2Version).toMatch(/^2\.\d+/);

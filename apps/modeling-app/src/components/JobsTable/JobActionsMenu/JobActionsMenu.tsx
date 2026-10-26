@@ -22,6 +22,7 @@ import { useAlert } from '@dhis2/app-runtime';
 import { useNavigate } from 'react-router-dom';
 import { useDownloadJobRequest } from './hooks/useDownloadJobRequest';
 import { useDownloadJobDiagnostics } from './hooks/useDownloadJobDiagnostics';
+import { Features, useIsFeatureAvailable } from '../../../hooks/useIsFeatureAvailable';
 
 type Props = {
     jobId: string;
@@ -50,6 +51,7 @@ export const JobActionsMenu = ({
     const [cancelModalIsOpen, setCancelModalIsOpen] = useState(false);
     const { downloadRequest, isLoading: isDownloadingRequest } = useDownloadJobRequest();
     const { downloadDiagnostics, isLoading: isDownloadingDiagnostics } = useDownloadJobDiagnostics();
+    const { isAvailable: isDiagnosticsAvailable } = useIsFeatureAvailable(Features.JOB_DIAGNOSTICS);
 
     const { show: showErrorAlert } = useAlert(
         i18n.t('Failed to copy job ID'),
@@ -123,7 +125,7 @@ export const JobActionsMenu = ({
                             />
                         )}
 
-                        {status === JOB_STATUSES.FAILED && (
+                        {status === JOB_STATUSES.FAILED && isDiagnosticsAvailable && (
                             <MenuItem
                                 label={isDownloadingDiagnostics ? i18n.t('Downloading debug info…') : i18n.t('Download debug info')}
                                 dataTest="job-overflow-download-debug-info"
