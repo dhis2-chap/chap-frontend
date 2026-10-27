@@ -19,8 +19,8 @@ export const BacktestDefaultsFields = ({ name, label, parameters, providers, dis
     const provider = providers.find(item => item.id === values.futureWeatherProvider);
 
     return (
-        <fieldset className={styles.section} disabled={disabled}>
-            <legend>{label}</legend>
+        <section className={styles.section}>
+            <h3>{label}</h3>
             <div className={styles.counts}>
                 {(['nPeriods', 'nSplits', 'stride', 'nRetrain'] as const).map((key) => {
                     const parameter = parameters.find(item => item.name === key);
@@ -72,6 +72,6 @@ export const BacktestDefaultsFields = ({ name, label, parameters, providers, dis
                 )}
             />
             {provider?.leaksFutureData && <NoticeBox warning>{i18n.t('This provider uses observed future weather. Its evaluation scores are not comparable to production performance, and it cannot be used for future predictions.')}</NoticeBox>}
-        </fieldset>
+        </section>
     );
 };

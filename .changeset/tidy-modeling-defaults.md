@@ -3,4 +3,4 @@
 "@dhis2-chap/ui": minor
 ---
 
-Add a Modeling defaults settings tab for metric ordering and selection, the default baseline model, and independent weekly and monthly backtest defaults. Load and save defaults through the CHAP settings API. Regenerate the backend client from CHAP Core 2.6.0.dev0.
+Add a Modeling defaults settings tab for selecting and ordering metrics, the default baseline model, and independent weekly and monthly backtest defaults. Benchmarks and evaluation metrics show the selected metrics in the configured order by default, with an option to show all. Regenerate the backend client from CHAP Core 2.6.0.dev0.

@@ -1,4 +1,4 @@
-import { ReactNode, useMemo } from 'react';
+import { ReactNode, useMemo, useState } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { Button, DataTable, DataTableBody, DataTableCell, DataTableColumnHeader, DataTableHead, DataTableRow, IconInfo16, NoticeBox, Tooltip } from '@dhis2/ui';
 import { BacktestRead, BacktestSpecificationRead, VisualizationsService } from '@dhis2-chap/ui';
@@ -9,7 +9,7 @@ import { saveAs } from 'file-saver';
 import { TableActionButton } from '../../components/TableActionButton';
 import { useModels } from '../../hooks/useModels';
 import { benchmarkCsv, getBestRunIds, getMetricIds, metricSortKey } from './benchmarkUtils';
-import { prettifyMetricId } from '../../components/PageContent/EvaluationDetails/EvaluationMetricsWidget/metricCatalog';
+import { getDefaultMetricIds, prettifyMetricId } from '../../components/PageContent/EvaluationDetails/EvaluationMetricsWidget/metricCatalog';
 import styles from './BenchmarksPage.module.css';
 
 const columnHelper = createColumnHelper<BacktestRead>();
@@ -34,12 +34,18 @@ const ViewEvaluationButton = ({ evaluationId }: { evaluationId: number }) => {
 export const BenchmarkTable = ({ specification, actions, children }: Props) => {
     const { backtests } = specification;
     const evaluationId = backtests[0]?.id;
+    // CHAP Core 2.6 lists the configured metrics with the specification; older versions need the catalog.
     const catalog = useQuery({
         queryKey: ['evaluation-metric-catalog', evaluationId],
         queryFn: () => VisualizationsService.getAvailableMetricsV1VisualizationMetricsBacktestIdGet(evaluationId!),
-        enabled: evaluationId != null,
+        enabled: evaluationId != null && !specification.metrics,
         staleTime: 5 * 60 * 1000,
     });
+    const metrics = specification.metrics ?? catalog.data;
+    const [showAllMetrics, setShowAllMetrics] = useState(false);
+    const allMetricIds = useMemo(() => getMetricIds(backtests, metrics), [backtests, metrics]);
+    const defaultMetricIds = useMemo(() => getDefaultMetricIds(allMetricIds, metrics), [allMetricIds, metrics]);
+    const metricIds = showAllMetrics || !defaultMetricIds.length ? allMetricIds : defaultMetricIds;
     // Runs keep pointing at archived models, so resolve names against all of them.
     const { models } = useModels({ includeArchived: true });
     const columns = useMemo(() => [
@@ -48,8 +54,8 @@ export const BenchmarkTable = ({ specification, actions, children }: Props) => {
             header: i18n.t('Model'),
             cell: info => <span className={styles.strong}>{info.getValue()}</span>,
         }),
-        ...getMetricIds(backtests).map((metricId) => {
-            const metric = catalog.data?.find(item => item.id === metricId);
+        ...metricIds.map((metricId) => {
+            const metric = metrics?.find(item => item.id === metricId);
             const bestRunIds = getBestRunIds(backtests, metric);
             const label = metric?.displayName || prettifyMetricId(metricId);
             return columnHelper.accessor(run => Number.isFinite(run.aggregateMetrics[metricId]) ? run.aggregateMetrics[metricId] : undefined, {
@@ -91,7 +97,7 @@ export const BenchmarkTable = ({ specification, actions, children }: Props) => {
             header: i18n.t('Actions'),
             cell: ({ row }) => <ViewEvaluationButton evaluationId={row.original.id} />,
         }),
-    ], [backtests, catalog.data, models]);
+    ], [backtests, metricIds, metrics, models]);
     // Newest runs first until the user sorts by a column.
     const runs = useMemo(() => [...backtests].sort((a, b) => (b.created ?? '').localeCompare(a.created ?? '')), [backtests]);
     const table = useReactTable({
@@ -114,6 +120,11 @@ export const BenchmarkTable = ({ specification, actions, children }: Props) => {
                 </div>
                 <div className={styles.actions}>
                     {actions}
+                    {defaultMetricIds.length > 0 && defaultMetricIds.length < allMetricIds.length && (
+                        <Button small onClick={() => setShowAllMetrics(!showAllMetrics)}>
+                            {showAllMetrics ? i18n.t('Show default metrics') : i18n.t('Show all {{count}} metrics', { count: allMetricIds.length })}
+                        </Button>
+                    )}
                     <Button
                         small
                         disabled={!backtests.length}

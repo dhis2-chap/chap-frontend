@@ -1,10 +1,11 @@
 import type { BacktestRead, BacktestSpecificationRead, BacktestSpecificationSummary, MakeBacktestsRequest, MetricInfo, ModelSpecRead } from '@dhis2-chap/ui';
-import { HIDDEN_METRIC_IDS } from '../../components/PageContent/EvaluationDetails/EvaluationMetricsWidget/metricCatalog';
+import { HIDDEN_METRIC_IDS, sortMetricIds } from '../../components/PageContent/EvaluationDetails/EvaluationMetricsWidget/metricCatalog';
 
-export const getMetricIds = (backtests: BacktestRead[]) =>
-    [...new Set(backtests.flatMap(run => Object.keys(run.aggregateMetrics)))]
-        .filter(id => !HIDDEN_METRIC_IDS.includes(id))
-        .sort();
+/** Every scored metric, in the configured display order. */
+export const getMetricIds = (backtests: BacktestRead[], catalog?: MetricInfo[]) => sortMetricIds(
+    [...new Set(backtests.flatMap(run => Object.keys(run.aggregateMetrics)))].filter(id => !HIDDEN_METRIC_IDS.includes(id)),
+    catalog,
+);
 
 /** Lower rank is better. Unknown metrics are deliberately not ranked. */
 const metricRank = (value: number, metric?: MetricInfo): number | undefined => {
