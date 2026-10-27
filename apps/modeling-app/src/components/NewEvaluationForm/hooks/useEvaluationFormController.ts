@@ -1,6 +1,10 @@
 import { useModelExecutionFormState, ModelExecutionFormValues } from '../../ModelExecutionForm/hooks/useModelExecutionFormState';
 import { useCreateNewBacktest } from './useCreateNewBacktest';
 import { useDhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
+import { useWatch } from 'react-hook-form';
+import { useModels } from '@/hooks/useModels';
+import { getLegacyBacktestParameters } from './backtestDefaults';
+import { useForecastHorizonValidation } from './useForecastHorizonValidation';
 
 export const useEvaluationFormController = (initialValues?: Partial<ModelExecutionFormValues>) => {
     const {
@@ -9,6 +13,15 @@ export const useEvaluationFormController = (initialValues?: Partial<ModelExecuti
         error: periodSettingsError,
     } = useDhis2PeriodSettings();
     const { methods } = useModelExecutionFormState({ initialValues, periodSettings });
+    const { models } = useModels();
+    const [modelId, periodType, backtestParameters] = useWatch({
+        control: methods.control,
+        name: ['modelId', 'periodType', 'backtestParameters'],
+    });
+    const forecastHorizon = useForecastHorizonValidation(
+        models?.filter(model => String(model.id) === modelId) ?? [],
+        (backtestParameters ?? getLegacyBacktestParameters(periodType))?.nPeriods,
+    );
 
     const {
         createNewBacktest,
@@ -27,8 +40,12 @@ export const useEvaluationFormController = (initialValues?: Partial<ModelExecuti
         },
     });
 
-    const handleSubmit = (data: ModelExecutionFormValues) => createNewBacktest(data);
-    const handleDryRunSubmit = (data: ModelExecutionFormValues) => validateAndDryRun(data);
+    const handleSubmit = (data: ModelExecutionFormValues) => {
+        if (!forecastHorizon.isBlocked) createNewBacktest(data);
+    };
+    const handleDryRunSubmit = (data: ModelExecutionFormValues) => {
+        if (!forecastHorizon.isBlocked) validateAndDryRun(data);
+    };
 
     const handleStartJob = () => {
         methods.handleSubmit(handleSubmit)();
@@ -39,6 +56,7 @@ export const useEvaluationFormController = (initialValues?: Partial<ModelExecuti
     };
 
     const handleDownloadRequest = async () => {
+        if (forecastHorizon.isBlocked) return;
         try {
             await methods.handleSubmit(async (data) => {
                 await downloadRequest(data);
@@ -63,5 +81,6 @@ export const useEvaluationFormController = (initialValues?: Partial<ModelExecuti
         periodSettings,
         periodSettingsLoading,
         periodSettingsError,
+        forecastHorizon,
     };
 };

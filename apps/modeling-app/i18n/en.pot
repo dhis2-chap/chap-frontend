@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-22T18:16:11.343Z\n"
-"PO-Revision-Date: 2026-10-22T18:16:11.344Z\n"
+"POT-Creation-Date: 2026-10-27T09:37:10.294Z\n"
+"PO-Revision-Date: 2026-10-27T09:37:10.294Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -1140,6 +1140,15 @@ msgstr "Select models"
 msgid "No models selected"
 msgstr "No models selected"
 
+msgid "Checking model forecast limits…"
+msgstr "Checking model forecast limits…"
+
+msgid "Could not check model forecast limits"
+msgstr "Could not check model forecast limits"
+
+msgid "Unsupported forecast periods"
+msgstr "Unsupported forecast periods"
+
 msgid "Start dry run"
 msgstr "Start dry run"
 
@@ -1160,6 +1169,27 @@ msgstr "Select a future-weather provider"
 
 msgid "Number of training runs must not exceed the number of splits"
 msgstr "Number of training runs must not exceed the number of splits"
+
+msgid ""
+"{{model}} supports {{minimum}}–{{maximum}} forecast periods. The evaluation "
+"uses {{nPeriods}}."
+msgstr ""
+"{{model}} supports {{minimum}}–{{maximum}} forecast periods. The evaluation "
+"uses {{nPeriods}}."
+
+msgid ""
+"{{model}} requires at least {{minimum}} forecast periods. The evaluation "
+"uses {{nPeriods}}."
+msgstr ""
+"{{model}} requires at least {{minimum}} forecast periods. The evaluation "
+"uses {{nPeriods}}."
+
+msgid ""
+"{{model}} supports at most {{maximum}} forecast periods. The evaluation "
+"uses {{nPeriods}}."
+msgstr ""
+"{{model}} supports at most {{maximum}} forecast periods. The evaluation "
+"uses {{nPeriods}}."
 
 msgid "Cannot run prediction"
 msgstr "Cannot run prediction"

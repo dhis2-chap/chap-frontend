@@ -24,6 +24,8 @@ import { useModels } from '@/hooks/useModels';
 import { DatasetOriginFilter, matchesOrigin, useDatasetOriginFilter } from '../../DatasetOriginFilter';
 import { datasetSupportsModel, getBacktestColumns } from '../../NewDatasetForm/utils/datasetModels';
 import { BacktestParameterFields } from '../BacktestParameterFields';
+import { ForecastHorizonNotice } from '../ForecastHorizonNotice';
+import { useForecastHorizonValidation } from '../hooks/useForecastHorizonValidation';
 import { backtestParametersSchema } from '../hooks/backtestParameters';
 import { getLegacyBacktestParameters, getMinimumEvaluationPeriods } from '../hooks/backtestDefaults';
 import { countPeriods } from '@/utils/periods';
@@ -84,8 +86,12 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '', benchmarkContext 
         datasetSupportsModel(getBacktestColumns(columns, selectedTargetColumn), dataset.periodType ?? '', model)
     )) ?? [];
     const selectedModels = compatibleModels.filter(model => modelNames.includes(model.name));
+    const forecastHorizon = useForecastHorizonValidation(
+        selectedModels,
+        (backtestParameters ?? getLegacyBacktestParameters(dataset?.periodType))?.nPeriods,
+    );
     const canSubmit = selectedModels.length > 0 && !!selectedTargetColumn && !selectedModels.some(hasRevisionMismatch) &&
-        !!dataset?.periodType && !isTooShort && dataset?.id != null;
+        !!dataset?.periodType && !isTooShort && dataset?.id != null && !forecastHorizon.isBlocked;
 
     const createEvaluation = useMutation<number | undefined, ApiError | Error, FormValues>({
         mutationFn: async ({ name, backtestParameters }: FormValues) => {
@@ -256,6 +262,7 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '', benchmarkContext 
                         )}
 
                         <BacktestParameterFields disabled={createEvaluation.isLoading} />
+                        <ForecastHorizonNotice validation={forecastHorizon} />
 
                         {isTooShort && (
                             <NoticeBox warning title={i18n.t('Dataset too short')}>
