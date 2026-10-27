@@ -15,7 +15,7 @@ test.afterEach(async ({ page }) => {
 test('saves modeling defaults and reloads independent weekly and monthly values', async ({ page }) => {
     test.setTimeout(90_000);
     const response = await getChap(page, '/v1/settings');
-    test.skip(response.status() === 404, 'This CHAP Core version does not provide settings');
+    test.skip(response.status() === 404, 'This Chap Core version does not provide settings');
     const original = await readJson<Settings>(response, 'Load settings');
     settingsToRestore = original;
     const metrics = await readJson<MetricInfo[]>(await getChap(page, '/v1/visualization/metrics/0'), 'Load metrics');

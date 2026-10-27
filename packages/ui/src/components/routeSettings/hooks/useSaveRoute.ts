@@ -32,7 +32,7 @@ export const useSaveRoute = ({ onSuccess, onError }: UseSaveRouteOptions = {}) =
     const mutation = useMutation<unknown, Error, SaveRouteVariables>(
         async (variables: SaveRouteVariables) => {
             const { id, url, apiToken, ...changes } = variables;
-            // The known CHAP version belongs to the saved URL; a new URL falls back to Bearer, which every CHAP accepts.
+            // The known Chap version belongs to the saved URL; a new URL falls back to Bearer, which every Chap accepts.
             const storage = getRouteTokenStorage(serverVersion, url === route?.url ? status?.chap_core_version : undefined);
 
             if (id) {

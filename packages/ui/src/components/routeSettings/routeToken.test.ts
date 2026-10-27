@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { getRouteTokenStorage, hasPlainTextRouteToken, hasRouteToken, removeRouteToken, supportsEncryptedRouteAuth } from './routeToken';
 
-describe('CHAP route token', () => {
+describe('Chap route token', () => {
     const headers = { 'Content-Type': 'application/json', 'authorization': 'Bearer saved-token', 'X-Custom': 'keep' };
 
     it('detects a bearer token without depending on header or scheme casing', () => {
@@ -38,7 +38,7 @@ describe('CHAP route token', () => {
     it.each([
         ['2.5.0', 'api-token'], ['2.5.0.dev0', 'api-token'], ['3.0.0', 'api-token'],
         ['2.4.0', 'api-headers'], [undefined, 'api-headers'],
-    ])('stores tokens for CHAP %s as %s', (chapVersion, expected) => {
+    ])('stores tokens for Chap %s as %s', (chapVersion, expected) => {
         expect(getRouteTokenStorage({ major: 2, minor: 42, patch: 0 }, chapVersion)).toBe(expected);
     });
 

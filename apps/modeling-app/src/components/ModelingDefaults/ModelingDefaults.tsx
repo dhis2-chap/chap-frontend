@@ -53,15 +53,15 @@ export const ModelingDefaults = () => {
                 <div className={styles.content}>
                     <div className={styles.header}>
                         <h2>{i18n.t('Modeling defaults')}</h2>
-                        <p className={styles.description}>{i18n.t('These defaults apply to everyone using this CHAP server.')}</p>
+                        <p className={styles.description}>{i18n.t('These defaults apply to everyone using this Chap server.')}</p>
                     </div>
                     {routeError ? (
-                        <ChapErrorNotice error={routeError} title={i18n.t('Could not load the CHAP route')} />
+                        <ChapErrorNotice error={routeError} title={i18n.t('Could not load the Chap route')} />
                     ) : routeLoading ? <CircularLoader small /> : !route ? (
-                        <NoticeBox>{i18n.t('Configure a CHAP route in General settings first.')}</NoticeBox>
+                        <NoticeBox>{i18n.t('Configure a Chap route in General settings first.')}</NoticeBox>
                     ) : query.error ? (
                         <ChapErrorNotice error={query.error} title={i18n.t('Could not load modeling defaults')}>
-                            {query.error.status === 404 && <p>{i18n.t('This CHAP server does not support modeling defaults. Upgrade CHAP Core to use these settings.')}</p>}
+                            {query.error.status === 404 && <p>{i18n.t('This Chap server does not support modeling defaults. Upgrade Chap Core to use these settings.')}</p>}
                             <Button small onClick={() => query.refetch()}>{i18n.t('Retry')}</Button>
                         </ChapErrorNotice>
                     ) : query.data ? <DefaultsForm key={route.url} data={query.data} /> : <CircularLoader small />}

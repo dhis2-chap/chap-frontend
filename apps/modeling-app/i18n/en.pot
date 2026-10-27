@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-22T18:16:11.343Z\n"
-"PO-Revision-Date: 2026-10-22T18:16:11.344Z\n"
+"POT-Creation-Date: 2026-10-27T10:55:25.087Z\n"
+"PO-Revision-Date: 2026-10-27T10:55:25.088Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -356,21 +356,21 @@ msgstr "Error renaming evaluation"
 msgid "Breadcrumbs"
 msgstr "Breadcrumbs"
 
-msgid "Could not connect to CHAP"
-msgstr "Could not connect to CHAP"
+msgid "Could not connect to Chap"
+msgstr "Could not connect to Chap"
 
-msgid "The app is not able to connect to the CHAP server."
-msgstr "The app is not able to connect to the CHAP server."
+msgid "The app is not able to connect to the Chap server."
+msgstr "The app is not able to connect to the Chap server."
 
 msgid ""
-"Please check your route configuration and make sure the CHAP server is "
+"Please check your route configuration and make sure the Chap server is "
 "running."
 msgstr ""
-"Please check your route configuration and make sure the CHAP server is "
+"Please check your route configuration and make sure the Chap server is "
 "running."
 
-msgid "Learn more about Modeling and CHAP"
-msgstr "Learn more about Modeling and CHAP"
+msgid "Learn more about Modeling and Chap"
+msgstr "Learn more about Modeling and Chap"
 
 msgid "Configure settings"
 msgstr "Configure settings"
@@ -845,6 +845,92 @@ msgstr "Needs update"
 msgid "This model can't run right now"
 msgstr "This model can't run right now"
 
+msgid "Future-weather provider"
+msgstr "Future-weather provider"
+
+msgid ""
+"This provider uses observed future weather. Its evaluation scores are not "
+"comparable to production performance, and it cannot be used for future "
+"predictions."
+msgstr ""
+"This provider uses observed future weather. Its evaluation scores are not "
+"comparable to production performance, and it cannot be used for future "
+"predictions."
+
+msgid "Select at least one metric"
+msgstr "Select at least one metric"
+
+msgid "Select a baseline model"
+msgstr "Select a baseline model"
+
+msgid "Modeling defaults"
+msgstr "Modeling defaults"
+
+msgid "These defaults apply to everyone using this Chap server."
+msgstr "These defaults apply to everyone using this Chap server."
+
+msgid "Could not load the Chap route"
+msgstr "Could not load the Chap route"
+
+msgid "Configure a Chap route in General settings first."
+msgstr "Configure a Chap route in General settings first."
+
+msgid "Could not load modeling defaults"
+msgstr "Could not load modeling defaults"
+
+msgid ""
+"This Chap server does not support modeling defaults. Upgrade Chap Core to "
+"use these settings."
+msgstr ""
+"This Chap server does not support modeling defaults. Upgrade Chap Core to "
+"use these settings."
+
+msgid "Retry"
+msgstr "Retry"
+
+msgid "Modeling defaults saved"
+msgstr "Modeling defaults saved"
+
+msgid "Metrics"
+msgstr "Metrics"
+
+msgid ""
+"Selected metrics are shown by default on benchmarks and evaluations, and "
+"rank models in the order listed."
+msgstr ""
+"Selected metrics are shown by default on benchmarks and evaluations, and "
+"rank models in the order listed."
+
+msgid "Available metrics"
+msgstr "Available metrics"
+
+msgid "Selected metrics"
+msgstr "Selected metrics"
+
+msgid "Baseline"
+msgstr "Baseline"
+
+msgid "Default baseline model"
+msgstr "Default baseline model"
+
+msgid "Model runs are compared against this baseline."
+msgstr "Model runs are compared against this baseline."
+
+msgid "Weekly backtest defaults"
+msgstr "Weekly backtest defaults"
+
+msgid "Monthly backtest defaults"
+msgstr "Monthly backtest defaults"
+
+msgid "Could not save modeling defaults"
+msgstr "Could not save modeling defaults"
+
+msgid "Discard changes"
+msgstr "Discard changes"
+
+msgid "Save changes"
+msgstr "Save changes"
+
 msgid "Unsaved changes"
 msgstr "Unsaved changes"
 
@@ -892,10 +978,10 @@ msgstr "Some locations were left out"
 msgid "Every location is missing data or a shape, so nothing was imported."
 msgstr "Every location is missing data or a shape, so nothing was imported."
 
-msgid "CHAP left out {{count}} locations because of missing data or shapes."
-msgid_plural "CHAP left out {{count}} locations because of missing data or shapes."
-msgstr[0] "CHAP left out {{count}} location because of missing data or shapes."
-msgstr[1] "CHAP left out {{count}} locations because of missing data or shapes."
+msgid "Chap left out {{count}} locations because of missing data or shapes."
+msgid_plural "Chap left out {{count}} locations because of missing data or shapes."
+msgstr[0] "Chap left out {{count}} location because of missing data or shapes."
+msgstr[1] "Chap left out {{count}} locations because of missing data or shapes."
 
 msgid "Import summary"
 msgstr "Import summary"
@@ -1039,23 +1125,11 @@ msgstr "Backtest parameters"
 msgid "Could not load backtest parameters"
 msgstr "Could not load backtest parameters"
 
-msgid "Retry"
-msgstr "Retry"
-
 msgid "Could not load weather providers"
 msgstr "Could not load weather providers"
 
 msgid "No future-weather providers are available."
 msgstr "No future-weather providers are available."
-
-msgid ""
-"This provider uses observed future weather. Its evaluation scores are not "
-"comparable to production performance, and it cannot be used for future "
-"predictions."
-msgstr ""
-"This provider uses observed future weather. Its evaluation scores are not "
-"comparable to production performance, and it cannot be used for future "
-"predictions."
 
 msgid "Error loading datasets or models"
 msgstr "Error loading datasets or models"
@@ -1354,10 +1428,10 @@ msgid "Delete prediction run"
 msgstr "Delete prediction run"
 
 msgid ""
-"This will permanently delete the prediction run from CHAP. It will not "
+"This will permanently delete the prediction run from Chap. It will not "
 "remove any values previously imported into DHIS2."
 msgstr ""
-"This will permanently delete the prediction run from CHAP. It will not "
+"This will permanently delete the prediction run from Chap. It will not "
 "remove any values previously imported into DHIS2."
 
 msgid "Import"
@@ -1432,11 +1506,11 @@ msgid "About scheduling"
 msgstr "About scheduling"
 
 msgid ""
-"The external CHAP scheduler must be running for scheduled predictions to "
+"The external Chap scheduler must be running for scheduled predictions to "
 "execute. Contact your system administrator to set up the scheduler if you "
 "haven't yet."
 msgstr ""
-"The external CHAP scheduler must be running for scheduled predictions to "
+"The external Chap scheduler must be running for scheduled predictions to "
 "execute. Contact your system administrator to set up the scheduler if you "
 "haven't yet."
 
@@ -2342,10 +2416,10 @@ msgid "Failed to copy report details"
 msgstr "Failed to copy report details"
 
 msgid ""
-"Copy the template and email it to the CHAP team. It includes this page and "
+"Copy the template and email it to the Chap team. It includes this page and "
 "time so we can find the problem faster."
 msgstr ""
-"Copy the template and email it to the CHAP team. It includes this page and "
+"Copy the template and email it to the Chap team. It includes this page and "
 "time so we can find the problem faster."
 
 msgid "Send to"
@@ -2683,8 +2757,8 @@ msgstr[1] ""
 msgid "View jobs and failures"
 msgstr "View jobs and failures"
 
-msgid "Open the benchmark returned by CHAP"
-msgstr "Open the benchmark returned by CHAP"
+msgid "Open the benchmark returned by Chap"
+msgstr "Open the benchmark returned by Chap"
 
 msgid "{{count}} models running"
 msgid_plural "{{count}} models running"
@@ -2705,6 +2779,9 @@ msgstr ""
 "Aggregate scores across all splits and organisation units. The best score "
 "in each column is highlighted, including ties. Best only means best among "
 "these runs, not necessarily a good score."
+
+msgid "Show default metrics"
+msgstr "Show default metrics"
 
 msgid "Metric descriptions unavailable"
 msgstr "Metric descriptions unavailable"
@@ -2736,10 +2813,10 @@ msgid "Benchmarks unavailable"
 msgstr "Benchmarks unavailable"
 
 msgid ""
-"This CHAP server does not support backtest specifications. Update CHAP Core "
+"This Chap server does not support backtest specifications. Update Chap Core "
 "to use benchmarks."
 msgstr ""
-"This CHAP server does not support backtest specifications. Update CHAP Core "
+"This Chap server does not support backtest specifications. Update Chap Core "
 "to use benchmarks."
 
 msgid "Could not load benchmarks"
@@ -2819,8 +2896,8 @@ msgstr ""
 msgid "Get started with the Modeling app"
 msgstr "Get started with the Modeling app"
 
-msgid "To get started, create a route that points to a running CHAP server."
-msgstr "To get started, create a route that points to a running CHAP server."
+msgid "To get started, create a route that points to a running Chap server."
+msgstr "To get started, create a route that points to a running Chap server."
 
 msgid "Route and servers are configured on the settings page."
 msgstr "Route and servers are configured on the settings page."
@@ -2916,33 +2993,33 @@ msgstr ""
 "predictions."
 
 msgid ""
-"The CHAP server refused the request. An administrator can check the API "
+"The Chap server refused the request. An administrator can check the API "
 "token under Settings, in the route configuration."
 msgstr ""
-"The CHAP server refused the request. An administrator can check the API "
+"The Chap server refused the request. An administrator can check the API "
 "token under Settings, in the route configuration."
 
 msgid "An unknown error occurred"
 msgstr "An unknown error occurred"
 
-msgid "Not authorized. Check the CHAP API token in settings."
-msgstr "Not authorized. Check the CHAP API token in settings."
+msgid "Not authorized. Check the Chap API token in settings."
+msgstr "Not authorized. Check the Chap API token in settings."
 
-msgid "Not authorized to access the CHAP server"
-msgstr "Not authorized to access the CHAP server"
+msgid "Not authorized to access the Chap server"
+msgstr "Not authorized to access the Chap server"
 
 msgid "This model's service changed without a new version number, so it can't run."
 msgstr "This model's service changed without a new version number, so it can't run."
 
 msgid ""
 "This model's service now runs different code than version {{version}} was "
-"registered with, so CHAP won't run it. Choose another model, or ask your "
-"CHAP administrator to redeploy that version or release the change as a new "
+"registered with, so Chap won't run it. Choose another model, or ask your "
+"Chap administrator to redeploy that version or release the change as a new "
 "version."
 msgstr ""
 "This model's service now runs different code than version {{version}} was "
-"registered with, so CHAP won't run it. Choose another model, or ask your "
-"CHAP administrator to redeploy that version or release the change as a new "
+"registered with, so Chap won't run it. Choose another model, or ask your "
+"Chap administrator to redeploy that version or release the change as a new "
 "version."
 
 msgid ""

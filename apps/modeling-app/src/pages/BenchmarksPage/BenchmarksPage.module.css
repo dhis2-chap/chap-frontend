@@ -72,6 +72,11 @@
     white-space: nowrap;
 }
 
+/* DHIS2 puts the sort button after the label; lead with it so right-aligned labels line up with the numbers. */
+.numberHeader [data-test='dhis2-uicore-tableheadercellaction'] {
+    order: -1;
+}
+
 /* Blue, not green: best only means best among these runs, not a good score. */
 .best {
     color: var(--colors-blue900);

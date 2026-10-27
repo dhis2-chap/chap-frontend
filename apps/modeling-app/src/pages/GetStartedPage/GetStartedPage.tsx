@@ -40,7 +40,7 @@ export const GetStartedPage = () => {
                 <h1 className={styles.title}>{i18n.t('Get started with the Modeling app')}</h1>
 
                 <div className={styles.text}>
-                    <p>{i18n.t('To get started, create a route that points to a running CHAP server.')}</p>
+                    <p>{i18n.t('To get started, create a route that points to a running Chap server.')}</p>
                     <p>{i18n.t('Route and servers are configured on the settings page.')}</p>
                     <a
                         href="https://github.com/dhis2-chap/chap-core/wiki"
@@ -48,7 +48,7 @@ export const GetStartedPage = () => {
                         rel="noopener noreferrer"
                         className={styles.link}
                     >
-                        {i18n.t('Learn more about Modeling and CHAP')}
+                        {i18n.t('Learn more about Modeling and Chap')}
                     </a>
                 </div>
 

@@ -1,15 +1,20 @@
 import { ApiError, BacktestParameterInfo, BacktestsService, useRoute } from '@dhis2-chap/ui';
 import { useQuery } from '@tanstack/react-query';
+import { PERIOD_TYPES } from '@dhis2-chap/core';
 import { Features, useIsFeatureAvailable } from './useIsFeatureAvailable';
 import { useWeatherProviders } from './useWeatherProviders';
 
-/** Older CHAP Core versions apply their own defaults, so the form leaves the parameters out. */
-export const useBacktestParameters = () => {
+/**
+ * Older Chap Core versions apply their own defaults, so the form leaves the parameters out.
+ * Chap Core stores separate weekly and monthly defaults; anything else gets the monthly ones.
+ */
+export const useBacktestParameters = (periodType?: string | null) => {
     const { route } = useRoute();
     const { isAvailable } = useIsFeatureAvailable(Features.BACKTEST_PARAMETERS);
+    const period = periodType?.toUpperCase() === PERIOD_TYPES.WEEK ? 'week' : 'month';
     const query = useQuery<BacktestParameterInfo[], ApiError>({
-        queryKey: ['backtest-parameters', route?.url],
-        queryFn: () => BacktestsService.listBacktestParametersV1AnalyticsBacktestParametersGet(),
+        queryKey: ['backtest-parameters', route?.url, period],
+        queryFn: () => BacktestsService.listBacktestParametersV1AnalyticsBacktestParametersGet(period),
         staleTime: Infinity,
         retry: false,
         enabled: isAvailable,
@@ -17,7 +22,7 @@ export const useBacktestParameters = () => {
     return { ...query, isAvailable };
 };
 
-/** Stored backtest parameters, labelled by CHAP Core. */
+/** Stored backtest parameters, labelled by Chap Core. */
 export const useBacktestParameterValues = (values: Record<string, unknown>) => {
     const { data: parameters } = useBacktestParameters();
     const { data: providers } = useWeatherProviders();

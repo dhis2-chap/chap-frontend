@@ -63,7 +63,6 @@ export const NewDatasetForm = () => {
     const { models, isLoading: isModelsLoading, error: modelsError } = useModels();
     const { suggestions } = useCovariateSuggestions(models);
     const { data: datasets } = useDatasets();
-    const backtestParameters = useBacktestParameters();
     const previousDataItems = useMemo(() => getPreviousDataItems(datasets ?? []), [datasets]);
     const columns = useFieldArray({ control: methods.control, name: 'columns' });
     const [columnValues, periodType, fromPeriodId, toPeriodId] = useWatch({
@@ -71,6 +70,7 @@ export const NewDatasetForm = () => {
         name: ['columns', 'periodType', 'fromPeriodId', 'toPeriodId'],
     });
     const covariateNames = columnValues.map(column => column.covariateName.trim());
+    const backtestParameters = useBacktestParameters(periodType);
     const support = getModelSupport(covariateNames, periodType, models ?? []);
     const periodCount = countPeriods(fromPeriodId, toPeriodId, settings.calendar);
     const minimumEvaluationPeriods = getMinimumEvaluationPeriods(
@@ -185,10 +185,10 @@ export const NewDatasetForm = () => {
                                 >
                                     {allLeftOut
                                         ? i18n.t('Every location is missing data or a shape, so nothing was imported.')
-                                        : i18n.t('CHAP left out {{count}} locations because of missing data or shapes.', {
+                                        : i18n.t('Chap left out {{count}} locations because of missing data or shapes.', {
                                                 count: leftOutCount,
-                                                defaultValue: 'CHAP left out {{count}} location because of missing data or shapes.',
-                                                defaultValue_plural: 'CHAP left out {{count}} locations because of missing data or shapes.',
+                                                defaultValue: 'Chap left out {{count}} location because of missing data or shapes.',
+                                                defaultValue_plural: 'Chap left out {{count}} locations because of missing data or shapes.',
                                             })}
                                     <ButtonStrip className={styles.noticeActions}>
                                         <Button small onClick={() => setShownSummary({ title: i18n.t('Import summary'), summary })}>{i18n.t('View details')}</Button>

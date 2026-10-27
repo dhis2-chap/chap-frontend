@@ -10,19 +10,20 @@ import { ChapErrorNotice } from '../ChapErrorNotice';
 import styles from './BacktestParameterFields.module.css';
 
 type Props = {
+    periodType?: string | null;
     disabled?: boolean;
 };
 
-export const BacktestParameterFields = ({ disabled }: Props) => {
+export const BacktestParameterFields = ({ periodType, disabled }: Props) => {
     const { control, resetField } = useFormContext<{ backtestParameters: BacktestParameters }>();
     const [nSplits, providerId] = useWatch({ control, name: ['backtestParameters.nSplits', 'backtestParameters.futureWeatherProvider'] });
-    const parameters = useBacktestParameters();
+    const parameters = useBacktestParameters(periodType);
     const providers = useWeatherProviders();
     const provider = providers.data?.find(item => item.id === providerId);
     const counts = parameters.data?.filter(item => item.type === 'integer') ?? [];
     const providerParameter = parameters.data?.find(item => item.name === 'futureWeatherProvider');
 
-    // CHAP Core owns the defaults, so fill them in once they arrive.
+    // Chap Core owns the defaults, so fill them in once they arrive and again when the period type changes.
     useEffect(() => {
         if (parameters.data) {
             resetField('backtestParameters', { defaultValue: toBacktestDefaults(parameters.data) });

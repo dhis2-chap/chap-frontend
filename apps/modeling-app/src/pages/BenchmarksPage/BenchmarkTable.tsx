@@ -34,7 +34,7 @@ const ViewEvaluationButton = ({ evaluationId }: { evaluationId: number }) => {
 export const BenchmarkTable = ({ specification, actions, children }: Props) => {
     const { backtests } = specification;
     const evaluationId = backtests[0]?.id;
-    // CHAP Core 2.6 lists the configured metrics with the specification; older versions need the catalog.
+    // Chap Core 2.6 lists the configured metrics with the specification; older versions need the catalog.
     const catalog = useQuery({
         queryKey: ['evaluation-metric-catalog', evaluationId],
         queryFn: () => VisualizationsService.getAvailableMetricsV1VisualizationMetricsBacktestIdGet(evaluationId!),
@@ -157,7 +157,7 @@ export const BenchmarkTable = ({ specification, actions, children }: Props) => {
                                         <DataTableColumnHeader
                                             key={header.id}
                                             align={isMetricColumn(header.column.id) ? 'right' : undefined}
-                                            className={header.column.id === 'model' ? styles.sticky : undefined}
+                                            className={isMetricColumn(header.column.id) ? styles.numberHeader : header.column.id === 'model' ? styles.sticky : undefined}
                                             {...(header.column.getCanSort() ? {
                                                 sortDirection: header.column.getIsSorted() || 'default',
                                                 sortIconTitle: i18n.t('Sort by {{column}}', { column: header.column.id }),
