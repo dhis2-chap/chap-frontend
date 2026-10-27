@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-27T18:39:06.127Z\n"
-"PO-Revision-Date: 2026-10-27T18:39:06.127Z\n"
+"POT-Creation-Date: 2026-10-27T19:11:57.366Z\n"
+"PO-Revision-Date: 2026-10-27T19:11:57.367Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -2379,14 +2379,17 @@ msgstr "Organisation units without outbreaks"
 msgid "Organisation units with unavailable thresholds"
 msgstr "Organisation units with unavailable thresholds"
 
-msgid "All organisation units"
-msgstr "All organisation units"
+msgid "Remove filter"
+msgstr "Remove filter"
+
+msgid "Filter by alert level"
+msgstr "Filter by alert level"
 
 msgid "Alert level"
 msgstr "Alert level"
 
-msgid "Any alert"
-msgstr "Any alert"
+msgid "Select all"
+msgstr "Select all"
 
 msgid "Status filter"
 msgstr "Status filter"

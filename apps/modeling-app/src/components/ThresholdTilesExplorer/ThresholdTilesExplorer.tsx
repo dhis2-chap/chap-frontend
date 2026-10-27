@@ -3,9 +3,12 @@ import type { HTMLAttributes, ReactNode } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import {
     Button,
+    Divider,
     IconChevronLeft16,
     IconChevronRight16,
     Input,
+    MultiSelect,
+    MultiSelectOption,
     SingleSelect,
     SingleSelectOption,
     Tooltip,
@@ -25,7 +28,6 @@ import type { DisplayedPredictionAlert } from '@/components/BackendAlerts/displa
 import styles from './ThresholdTilesExplorer.module.css';
 
 const NO_ALERTS: DisplayedPredictionAlert[] = [];
-const ANY_ALERT = '__any_alert__';
 
 export type StatusFilterValue = ThresholdTileViewModel['status'] | 'all' | undefined;
 
@@ -216,12 +218,13 @@ export const ThresholdTilesExplorer = ({
     const alertLevels = useMemo(() => (
         [...new Set(raisedAlerts?.map(alert => alert.level))]
     ), [raisedAlerts]);
-    const [alertLevelSelection, setAlertLevelSelection] = useState('');
-    // Refetched alerts can drop the selected level; fall back to all levels.
-    const selectedAlertLevel = alertLevelSelection === ANY_ALERT || alertLevels.includes(alertLevelSelection)
-        ? alertLevelSelection
-        : '';
+    const [alertLevelSelection, setAlertLevelSelection] = useState<string[]>([]);
+    // Refetched alerts can drop a selected level; only keep levels that still exist.
+    const selectedAlertLevels = useMemo(() => (
+        alertLevelSelection.filter(level => alertLevels.includes(level))
+    ), [alertLevelSelection, alertLevels]);
     const isAlertLevelFilterShown = alertLevels.length > 0;
+    const areAllAlertLevelsSelected = selectedAlertLevels.length === alertLevels.length;
     const [regionSearch, setRegionSearch] = useState('');
     const [clearableStatusFilter, setClearableStatusFilter] = useState<
         ThresholdTileViewModel['status'] | undefined
@@ -237,7 +240,7 @@ export const ThresholdTilesExplorer = ({
     }, zoomResetDeps);
 
     useEffect(() => {
-        setAlertLevelSelection('');
+        setAlertLevelSelection([]);
     }, [gridResetKey, isAlertLevelFilterShown]);
 
     useEffect(() => {
@@ -297,15 +300,15 @@ export const ThresholdTilesExplorer = ({
     const filteredTiles = useMemo(() => (
         tiles.filter(tile => (
             (!isStatusFilterShown || !activeStatusFilter || activeStatusFilter === 'all' || tile.status === activeStatusFilter) &&
-            (!selectedAlertLevel || alertsByOrgUnit?.get(tile.orgUnitId)?.some(alert => (
-                selectedAlertLevel === ANY_ALERT || alert.level === selectedAlertLevel
+            (selectedAlertLevels.length === 0 || alertsByOrgUnit?.get(tile.orgUnitId)?.some(alert => (
+                selectedAlertLevels.includes(alert.level)
             ))) &&
             (
                 normalizedRegionSearch.length === 0
                 || tile.orgUnitName.toLocaleLowerCase().includes(normalizedRegionSearch)
             )
         ))
-    ), [activeStatusFilter, isStatusFilterShown, selectedAlertLevel, alertsByOrgUnit, normalizedRegionSearch, tiles]);
+    ), [activeStatusFilter, isStatusFilterShown, selectedAlertLevels, alertsByOrgUnit, normalizedRegionSearch, tiles]);
 
     const shiftZoom = useCallback((direction: 1 | -1) => {
         setZoomRange((prev) => {
@@ -342,22 +345,32 @@ export const ThresholdTilesExplorer = ({
                 />
             </div>
             {isAlertLevelFilterShown && (
-                <div className={styles.statusSelect}>
-                    <SingleSelect
+                <div className={styles.alertSelect}>
+                    <MultiSelect
                         dense
                         clearable
-                        clearText={i18n.t('Clear')}
-                        placeholder={i18n.t('All organisation units')}
-                        prefix={selectedAlertLevel ? i18n.t('Alert level') : undefined}
-                        selected={selectedAlertLevel}
+                        clearText={i18n.t('Remove filter')}
+                        placeholder={i18n.t('Filter by alert level')}
+                        prefix={selectedAlertLevels.length > 0 ? i18n.t('Alert level') : undefined}
+                        selected={selectedAlertLevels}
                         onChange={({ selected }) => setAlertLevelSelection(selected)}
                         dataTest="alert-level-filter"
                     >
-                        <SingleSelectOption value={ANY_ALERT} label={i18n.t('Any alert')} />
+                        {/* Wrapped so the menu leaves this row alone: it toggles every level instead of one value. */}
+                        <div className={styles.selectAll}>
+                            <MultiSelectOption
+                                label={i18n.t('Select all')}
+                                value="select-all"
+                                active={areAllAlertLevelsSelected}
+                                onClick={() => setAlertLevelSelection(areAllAlertLevelsSelected ? [] : alertLevels)}
+                                dataTest="alert-level-filter-select-all"
+                            />
+                            <Divider margin="0" />
+                        </div>
                         {alertLevels.map(level => (
-                            <SingleSelectOption key={level} value={level} label={level} />
+                            <MultiSelectOption key={level} value={level} label={level} />
                         ))}
-                    </SingleSelect>
+                    </MultiSelect>
                 </div>
             )}
             {isStatusFilterShown && (
@@ -465,7 +478,7 @@ export const ThresholdTilesExplorer = ({
                 {filteredTiles.length > 0
                     ? (
                             <VirtuosoGrid
-                                key={`${gridResetKey}-${activeStatusFilter ?? 'all'}-${selectedAlertLevel}-${normalizedRegionSearch}`}
+                                key={`${gridResetKey}-${activeStatusFilter ?? 'all'}-${selectedAlertLevels.join(',')}-${normalizedRegionSearch}`}
                                 components={gridComponents}
                                 computeItemKey={(index: number) => filteredTiles[index]?.orgUnitId ?? index}
                                 customScrollParent={scrollParent ?? undefined}
