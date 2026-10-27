@@ -4,12 +4,14 @@ import { sortAlertLevels } from './sortAlertLevels';
 
 const seasonal = (name: string, stdMultiplier: number, exceedanceThreshold: number): AlertLevel => ({
     name,
+    outputCode: name,
     exceedanceThreshold,
     thresholdParams: { type: 'seasonal', stdMultiplier },
 });
 
 const percentile = (name: string, quantile: number, exceedanceThreshold: number): AlertLevel => ({
     name,
+    outputCode: name,
     exceedanceThreshold,
     thresholdParams: { type: 'percentile', quantile, baselineYears: null },
 });

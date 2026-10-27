@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import i18n from '@dhis2/d2-i18n';
-import { Button, CircularLoader, NoticeBox } from '@dhis2/ui';
+import { Button, Checkbox, CircularLoader, NoticeBox } from '@dhis2/ui';
 import { Card, MakeBacktestsResponse } from '@dhis2-chap/ui';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { PageHeader } from '../../features/common-features/PageHeader/PageHeader';
@@ -30,12 +30,19 @@ const BenchmarkDetails = ({ id }: { id: number }) => {
         return next;
     }, { replace: true });
     const [submitted, setSubmitted] = useState<MakeBacktestsResponse>();
-    const query = useBacktestSpecification(id);
+    const [includeArchived, setIncludeArchived] = useState(false);
+    const query = useBacktestSpecification(id, includeArchived);
     const runningJobs = useRunningBenchmarkJobs();
 
     if (!isValidSpecificationId(id)) return <NoticeBox error title={i18n.t('Invalid benchmark')} />;
     if (query.isLoading) return <div className={styles.loading}><CircularLoader /></div>;
-    if (query.error) return <ChapErrorNotice error={query.error} title={i18n.t('Could not load benchmark')} />;
+    if (query.error) {
+        return (
+            <ChapErrorNotice error={query.error} title={i18n.t('Could not load benchmark')}>
+                {includeArchived && <Button small onClick={() => setIncludeArchived(false)}>{i18n.t('Hide archived models')}</Button>}
+            </ChapErrorNotice>
+        );
+    }
     if (!query.data) return null;
     const specification = query.data;
     const { dataset } = specification;
@@ -65,6 +72,12 @@ const BenchmarkDetails = ({ id }: { id: number }) => {
                         specification={specification}
                         actions={(
                             <>
+                                <Checkbox
+                                    dense
+                                    label={i18n.t('Include archived models')}
+                                    checked={includeArchived}
+                                    onChange={({ checked }) => setIncludeArchived(checked)}
+                                />
                                 <BenchmarkRunsIndicator specification={specification} runningJobs={runningJobs} />
                                 <Button small primary disabled={addingModels} onClick={() => setAddingModels(true)}>{i18n.t('Add models')}</Button>
                             </>

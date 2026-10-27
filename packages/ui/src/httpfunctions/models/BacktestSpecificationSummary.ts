@@ -44,7 +44,7 @@ export type BacktestSpecificationSummary = {
      */
     orgUnitCount: number;
     /**
-     * Number of backtests that ran under this specification.
+     * Number of backtests on this specification's leaderboard: those that ran under it, except backtests of baseline models and of archived models.
      */
     backtestCount: number;
 };

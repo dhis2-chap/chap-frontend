@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-22T18:16:11.343Z\n"
-"PO-Revision-Date: 2026-10-22T18:16:11.344Z\n"
+"POT-Creation-Date: 2026-10-27T10:23:22.925Z\n"
+"PO-Revision-Date: 2026-10-27T10:23:22.926Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -466,6 +466,12 @@ msgstr "Downloading request…"
 msgid "Download request"
 msgstr "Download request"
 
+msgid "Downloading debug info…"
+msgstr "Downloading debug info…"
+
+msgid "Download debug info"
+msgstr "Download debug info"
+
 msgid "Copy Job ID"
 msgstr "Copy Job ID"
 
@@ -489,6 +495,16 @@ msgstr "Job deleted"
 
 msgid "Failed to delete job"
 msgstr "Failed to delete job"
+
+msgid ""
+"Debug info downloaded. Logs may contain data values. Check the file before "
+"sharing."
+msgstr ""
+"Debug info downloaded. Logs may contain data values. Check the file before "
+"sharing."
+
+msgid "Failed to download debug info. Please try again."
+msgstr "Failed to download debug info. Please try again."
 
 msgid "The original request is not available for this job."
 msgstr "The original request is not available for this job."
@@ -1233,6 +1249,9 @@ msgstr "Period must be completed (cannot be later than last completed period)"
 
 msgid "Period is before training start"
 msgstr "Period is before training start"
+
+msgid "Cannot determine a forecast horizon for this prediction setup."
+msgstr "Cannot determine a forecast horizon for this prediction setup."
 
 msgid "{{count}} org units"
 msgid_plural "{{count}} org units"
@@ -2657,6 +2676,9 @@ msgstr "Invalid benchmark"
 msgid "Could not load benchmark"
 msgstr "Could not load benchmark"
 
+msgid "Hide archived models"
+msgstr "Hide archived models"
+
 msgid ""
 "Benchmark {{id}}. Compare model runs that share this dataset and backtest "
 "setup."
@@ -2685,6 +2707,9 @@ msgstr "View jobs and failures"
 
 msgid "Open the benchmark returned by CHAP"
 msgstr "Open the benchmark returned by CHAP"
+
+msgid "Include archived models"
+msgstr "Include archived models"
 
 msgid "{{count}} models running"
 msgid_plural "{{count}} models running"

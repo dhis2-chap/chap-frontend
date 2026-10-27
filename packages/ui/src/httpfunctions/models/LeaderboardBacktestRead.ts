@@ -1,0 +1,97 @@
+/* generated using openapi-typescript-codegen -- do not edit */
+/* istanbul ignore file */
+/* tslint:disable */
+/* eslint-disable */
+import type { ConfiguredModelRead } from './ConfiguredModelRead';
+import type { DataSetMeta } from './DataSetMeta';
+import type { ReferenceComparison } from './ReferenceComparison';
+/**
+ * A backtest row of the leaderboard: `BacktestRead` plus its comparisons with the reference models.
+ */
+export type LeaderboardBacktestRead = {
+    /**
+     * Foreign key to the `DataSet` the backtest evaluates against.
+     */
+    datasetId: number;
+    /**
+     * Name of the configured model that was backtested.
+     */
+    modelId: string;
+    /**
+     * Optional human-friendly name for the backtest.
+     */
+    name?: (string | null);
+    /**
+     * Server-side timestamp when the backtest row was created.
+     */
+    created?: (string | null);
+    /**
+     * Snapshot of the parent template's version at backtest-creation time (may differ from current template version).
+     */
+    modelTemplateVersion?: (string | null);
+    /**
+     * Primary key of the backtest.
+     */
+    id: number;
+    /**
+     * Identifiers of every org unit the backtest scored predictions over.
+     */
+    orgUnits?: Array<string>;
+    /**
+     * Periods at which the rolling backtest's train/test split was advanced.
+     */
+    splitPeriods?: Array<string>;
+    /**
+     * Largest 1-based horizon distance scored in this backtest; horizon coordinates run 1..max_horizon_distance.
+     */
+    maxHorizonDistance?: (number | null);
+    /**
+     * Release version of chap-core that produced the backtest; null for dev checkouts and rows predating the column.
+     */
+    chapVersion?: (string | null);
+    /**
+     * Number of periods to forecast at each split.
+     */
+    nPeriods?: number;
+    /**
+     * Total number of rolling train/test splits.
+     */
+    nSplits?: number;
+    /**
+     * Number of periods to advance between successive splits.
+     */
+    stride?: number;
+    /**
+     * Number of times the model is trained, evenly spaced across the splits. 1 means train once. Cannot exceed the number of splits.
+     */
+    nRetrain?: number;
+    /**
+     * Source of weather data for each forecast window. Use the same provider for backtesting and prediction so scores reflect production conditions.
+     */
+    futureWeatherProvider?: string;
+    /**
+     * Slim dataset summary the backtest evaluated against.
+     */
+    dataset: DataSetMeta;
+    /**
+     * Id of the `BacktestSpecification` this backtest ran under; backtests sharing it are comparable.
+     */
+    specificationId: number;
+    /**
+     * Map of metric id to aggregated score across all splits / org units.
+     */
+    aggregateMetrics: Record<string, number>;
+    /**
+     * Configured model used for the backtest, joined for convenience.
+     */
+    configuredModel: (ConfiguredModelRead | null);
+    /**
+     * Id of the attached `PredictionSetup`, if one exists.
+     */
+    predictionSetupId?: (number | null);
+    /**
+     * One entry per reference model that is done, in the order they are listed.
+     */
+    comparisons?: Array<ReferenceComparison>;
+};
+
