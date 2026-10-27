@@ -1,7 +1,7 @@
 import { ReactNode, useMemo, useState } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { Button, DataTable, DataTableBody, DataTableCell, DataTableColumnHeader, DataTableHead, DataTableRow, IconInfo16, NoticeBox, Tooltip } from '@dhis2/ui';
-import { BacktestRead, BacktestSpecificationRead, VisualizationsService } from '@dhis2-chap/ui';
+import { LeaderboardBacktestRead, BacktestSpecificationRead, VisualizationsService } from '@dhis2-chap/ui';
 import { createColumnHelper, flexRender, getCoreRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
@@ -11,9 +11,12 @@ import { useModels } from '../../hooks/useModels';
 import { benchmarkCsv, getBestRunIds, getMetricIds, metricSortKey } from './benchmarkUtils';
 import { getDefaultMetricIds, prettifyMetricId } from '../../components/PageContent/EvaluationDetails/EvaluationMetricsWidget/metricCatalog';
 import styles from './BenchmarksPage.module.css';
+import { ReferenceModelSelector } from '../../components/ModelComparisons/ReferenceModelSelector';
+import { MetricComparison } from '../../components/ModelComparisons/MetricComparison';
+import { getReferenceModels, getSelectedReference } from '../../components/ModelComparisons/referenceModels';
 
 /* The display name is resolved into the row, because the table caches row values until the data changes. */
-type BenchmarkRun = BacktestRead & { modelName: string };
+type BenchmarkRun = LeaderboardBacktestRead & { modelName: string };
 
 const columnHelper = createColumnHelper<BenchmarkRun>();
 
@@ -21,6 +24,9 @@ type Props = {
     specification: BacktestSpecificationRead;
     actions?: ReactNode;
     children?: ReactNode;
+    includeComparisonModels: boolean;
+    onIncludeComparisonModels: (include: boolean) => void;
+    loading: boolean;
 };
 
 const isMetricColumn = (id: string) => id.startsWith('metric:');
@@ -34,8 +40,11 @@ const ViewEvaluationButton = ({ evaluationId }: { evaluationId: number }) => {
     );
 };
 
-export const BenchmarkTable = ({ specification, actions, children }: Props) => {
+export const BenchmarkTable = ({ specification, actions, children, includeComparisonModels, onIncludeComparisonModels, loading }: Props) => {
     const { backtests } = specification;
+    const [selectedReferenceId, setSelectedReferenceId] = useState<string>();
+    const references = getReferenceModels(specification, includeComparisonModels);
+    const reference = getSelectedReference(references, selectedReferenceId, specification.defaultBaselineModel);
     const evaluationId = backtests[0]?.id;
     // Chap Core 2.6 lists the configured metrics with the specification; older versions need the catalog.
     const catalog = useQuery({
@@ -80,12 +89,14 @@ export const BenchmarkTable = ({ specification, actions, children }: Props) => {
                 sortingFn: (a, b, id) => metricSortKey(a.getValue<number>(id), metric) - metricSortKey(b.getValue<number>(id), metric),
                 cell: (info) => {
                     const value = info.getValue();
-                    if (value === undefined) return '—';
                     const best = bestRunIds.has(info.row.original.id);
                     return (
-                        <span className={best ? styles.best : undefined} title={best ? i18n.t('Best score among these runs') : undefined}>
-                            {value.toLocaleString(undefined, { maximumSignificantDigits: 6 })}
-                        </span>
+                        <>
+                            <span className={best ? styles.best : undefined} title={best ? i18n.t('Best score among these runs') : undefined}>
+                                {value?.toLocaleString(undefined, { maximumSignificantDigits: 6 }) ?? '—'}
+                            </span>
+                            <MetricComparison metricId={metricId} metric={metric} reference={reference} run={info.row.original} />
+                        </>
                     );
                 },
             });
@@ -101,7 +112,7 @@ export const BenchmarkTable = ({ specification, actions, children }: Props) => {
             header: i18n.t('Actions'),
             cell: ({ row }) => <ViewEvaluationButton evaluationId={row.original.id} />,
         }),
-    ], [backtests, metricIds, metrics]);
+    ], [backtests, metricIds, metrics, reference]);
     // Newest runs first until the user sorts by a column.
     const runs = useMemo<BenchmarkRun[]>(() => backtests
         .map(run => ({ ...run, modelName: models?.find(model => model.id === run.configuredModel?.id)?.displayName || run.configuredModel?.name || run.modelId }))
@@ -144,6 +155,16 @@ export const BenchmarkTable = ({ specification, actions, children }: Props) => {
                 </div>
             </div>
             {children}
+            {specification.baselines !== undefined && (
+                <ReferenceModelSelector
+                    references={references}
+                    reference={reference}
+                    onSelect={setSelectedReferenceId}
+                    includeComparisonModels={includeComparisonModels}
+                    onIncludeComparisonModels={onIncludeComparisonModels}
+                    loading={loading}
+                />
+            )}
             {catalog.isError && (
                 <NoticeBox warning title={i18n.t('Metric descriptions unavailable')}>
                     {i18n.t('Scores are still available, but best values cannot be highlighted without metric definitions.')}
