@@ -12,7 +12,10 @@ import { benchmarkCsv, getBestRunIds, getMetricIds, metricSortKey } from './benc
 import { getDefaultMetricIds, prettifyMetricId } from '../../components/PageContent/EvaluationDetails/EvaluationMetricsWidget/metricCatalog';
 import styles from './BenchmarksPage.module.css';
 
-const columnHelper = createColumnHelper<BacktestRead>();
+/* The display name is resolved into the row, because the table caches row values until the data changes. */
+type BenchmarkRun = BacktestRead & { modelName: string };
+
+const columnHelper = createColumnHelper<BenchmarkRun>();
 
 type Props = {
     specification: BacktestSpecificationRead;
@@ -50,7 +53,7 @@ export const BenchmarkTable = ({ specification, actions, children }: Props) => {
     // Runs keep pointing at archived models, so resolve names against all of them.
     const { models } = useModels({ includeArchived: true });
     const columns = useMemo(() => [
-        columnHelper.accessor(run => models?.find(model => model.id === run.configuredModel?.id)?.displayName || run.configuredModel?.name || run.modelId, {
+        columnHelper.accessor('modelName', {
             id: 'model',
             header: i18n.t('Model'),
             cell: info => <span className={styles.strong}>{info.getValue()}</span>,
@@ -98,9 +101,11 @@ export const BenchmarkTable = ({ specification, actions, children }: Props) => {
             header: i18n.t('Actions'),
             cell: ({ row }) => <ViewEvaluationButton evaluationId={row.original.id} />,
         }),
-    ], [backtests, metricIds, metrics, models]);
+    ], [backtests, metricIds, metrics]);
     // Newest runs first until the user sorts by a column.
-    const runs = useMemo(() => [...backtests].sort((a, b) => (b.created ?? '').localeCompare(a.created ?? '')), [backtests]);
+    const runs = useMemo<BenchmarkRun[]>(() => backtests
+        .map(run => ({ ...run, modelName: models?.find(model => model.id === run.configuredModel?.id)?.displayName || run.configuredModel?.name || run.modelId }))
+        .sort((a, b) => (b.created ?? '').localeCompare(a.created ?? '')), [backtests, models]);
     const table = useReactTable({
         data: runs,
         columns,
