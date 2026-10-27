@@ -51,6 +51,11 @@
     letter-spacing: 0.5px;
 }
 
+.link {
+    color: var(--colors-blue700);
+    text-decoration: underline;
+}
+
 .section h3 + .description {
     margin-block-start: -8px;
 }

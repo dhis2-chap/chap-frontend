@@ -156,8 +156,7 @@ export const BenchmarkTable = ({ specification, actions, children }: Props) => {
                                     {group.headers.map(header => (
                                         <DataTableColumnHeader
                                             key={header.id}
-                                            align={isMetricColumn(header.column.id) ? 'right' : undefined}
-                                            className={isMetricColumn(header.column.id) ? styles.numberHeader : header.column.id === 'model' ? styles.sticky : undefined}
+                                            className={header.column.id === 'model' ? styles.sticky : undefined}
                                             {...(header.column.getCanSort() ? {
                                                 sortDirection: header.column.getIsSorted() || 'default',
                                                 sortIconTitle: i18n.t('Sort by {{column}}', { column: header.column.id }),
@@ -176,7 +175,6 @@ export const BenchmarkTable = ({ specification, actions, children }: Props) => {
                                     {row.getVisibleCells().map(cell => (
                                         <DataTableCell
                                             key={cell.id}
-                                            align={isMetricColumn(cell.column.id) ? 'right' : undefined}
                                             className={isMetricColumn(cell.column.id) ? styles.number : cell.column.id === 'model' ? styles.sticky : undefined}
                                         >
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}

@@ -13,6 +13,8 @@ import { ChapErrorNotice } from '../ChapErrorNotice';
 import { BacktestDefaultsFields } from './BacktestDefaultsFields';
 import styles from './ModelingDefaults.module.css';
 
+const CUSTOM_METRICS_GUIDE_URL = 'https://chap.dhis2.org/chap-modeling-platform/contributor/creating_custom_metrics/';
+
 const settingsSchema = z.object({
     metricSortOrder: z.array(z.string()),
     selectedMetrics: z.array(z.string()).min(1, i18n.t('Select at least one metric')),
@@ -98,7 +100,13 @@ const DefaultsForm = ({ data }: { data: Awaited<ReturnType<typeof loadDefaults>>
             <form className={styles.form} onSubmit={handleSubmit(values => save.mutate(values))}>
                 <section className={styles.section}>
                     <h3>{i18n.t('Metrics')}</h3>
-                    <p className={styles.description}>{i18n.t('Selected metrics are shown by default on benchmarks and evaluations, and rank models in the order listed.')}</p>
+                    <p className={styles.description}>
+                        {i18n.t('Selected metrics are shown by default on benchmarks and evaluations, and rank models in the order listed.')}
+                        {' '}
+                        <a className={styles.link} href={CUSTOM_METRICS_GUIDE_URL} target="_blank" rel="noopener noreferrer">
+                            {i18n.t('Learn how to add custom metrics')}
+                        </a>
+                    </p>
                     <Controller
                         name="selectedMetrics"
                         control={control}
