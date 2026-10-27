@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-27T11:06:39.937Z\n"
-"PO-Revision-Date: 2026-10-27T11:06:39.937Z\n"
+"POT-Creation-Date: 2026-10-27T18:39:06.127Z\n"
+"PO-Revision-Date: 2026-10-27T18:39:06.127Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -2043,8 +2043,8 @@ msgstr "Saved alert colours could not be loaded"
 msgid "Alerts are shown with default colours."
 msgstr "Alerts are shown with default colours."
 
-msgid "Regions exceeding threshold"
-msgstr "Regions exceeding threshold"
+msgid "Organisation units exceeding threshold"
+msgstr "Organisation units exceeding threshold"
 
 msgid "Periods exceeding threshold"
 msgstr "Periods exceeding threshold"
@@ -2370,23 +2370,23 @@ msgstr "No outbreak"
 msgid "Unavailable"
 msgstr "Unavailable"
 
-msgid "Outbreak regions"
-msgstr "Outbreak regions"
+msgid "Organisation units with outbreaks"
+msgstr "Organisation units with outbreaks"
 
-msgid "No outbreak regions"
-msgstr "No outbreak regions"
+msgid "Organisation units without outbreaks"
+msgstr "Organisation units without outbreaks"
 
-msgid "Unavailable regions"
-msgstr "Unavailable regions"
+msgid "Organisation units with unavailable thresholds"
+msgstr "Organisation units with unavailable thresholds"
 
-msgid "Search regions"
-msgstr "Search regions"
-
-msgid "All alert levels"
-msgstr "All alert levels"
+msgid "All organisation units"
+msgstr "All organisation units"
 
 msgid "Alert level"
 msgstr "Alert level"
+
+msgid "Any alert"
+msgstr "Any alert"
 
 msgid "Status filter"
 msgstr "Status filter"
@@ -2406,8 +2406,8 @@ msgstr "Shift zoom right"
 msgid "Shift zoom right one period"
 msgstr "Shift zoom right one period"
 
-msgid "No regions match the selected filters."
-msgstr "No regions match the selected filters."
+msgid "No organisation units match the selected filters."
+msgstr "No organisation units match the selected filters."
 
 msgid "Dashboard"
 msgstr "Dashboard"

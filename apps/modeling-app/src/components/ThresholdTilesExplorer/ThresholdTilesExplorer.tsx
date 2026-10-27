@@ -25,6 +25,7 @@ import type { DisplayedPredictionAlert } from '@/components/BackendAlerts/displa
 import styles from './ThresholdTilesExplorer.module.css';
 
 const NO_ALERTS: DisplayedPredictionAlert[] = [];
+const ANY_ALERT = '__any_alert__';
 
 export type StatusFilterValue = ThresholdTileViewModel['status'] | 'all' | undefined;
 
@@ -40,9 +41,9 @@ const clearableStatusFilterOptions: Array<{
     label: string;
     value: ThresholdTileViewModel['status'];
 }> = [
-    { label: i18n.t('Outbreak regions'), value: 'outbreak' },
-    { label: i18n.t('No outbreak regions'), value: 'noOutbreak' },
-    { label: i18n.t('Unavailable regions'), value: 'unavailable' },
+    { label: i18n.t('Organisation units with outbreaks'), value: 'outbreak' },
+    { label: i18n.t('Organisation units without outbreaks'), value: 'noOutbreak' },
+    { label: i18n.t('Organisation units with unavailable thresholds'), value: 'unavailable' },
 ];
 
 const allOptionStatusFilterOptions: Array<{
@@ -217,7 +218,9 @@ export const ThresholdTilesExplorer = ({
     ), [raisedAlerts]);
     const [alertLevelSelection, setAlertLevelSelection] = useState('');
     // Refetched alerts can drop the selected level; fall back to all levels.
-    const selectedAlertLevel = alertLevels.includes(alertLevelSelection) ? alertLevelSelection : '';
+    const selectedAlertLevel = alertLevelSelection === ANY_ALERT || alertLevels.includes(alertLevelSelection)
+        ? alertLevelSelection
+        : '';
     const isAlertLevelFilterShown = alertLevels.length > 0;
     const [regionSearch, setRegionSearch] = useState('');
     const [clearableStatusFilter, setClearableStatusFilter] = useState<
@@ -294,7 +297,9 @@ export const ThresholdTilesExplorer = ({
     const filteredTiles = useMemo(() => (
         tiles.filter(tile => (
             (!isStatusFilterShown || !activeStatusFilter || activeStatusFilter === 'all' || tile.status === activeStatusFilter) &&
-            (!selectedAlertLevel || alertsByOrgUnit?.get(tile.orgUnitId)?.some(alert => alert.level === selectedAlertLevel)) &&
+            (!selectedAlertLevel || alertsByOrgUnit?.get(tile.orgUnitId)?.some(alert => (
+                selectedAlertLevel === ANY_ALERT || alert.level === selectedAlertLevel
+            ))) &&
             (
                 normalizedRegionSearch.length === 0
                 || tile.orgUnitName.toLocaleLowerCase().includes(normalizedRegionSearch)
@@ -331,7 +336,7 @@ export const ThresholdTilesExplorer = ({
             <div className={styles.regionSearch}>
                 <Input
                     dense
-                    placeholder={i18n.t('Search regions')}
+                    placeholder={i18n.t('Search organisation units')}
                     value={regionSearch}
                     onChange={({ value }) => setRegionSearch(value ?? '')}
                 />
@@ -342,12 +347,13 @@ export const ThresholdTilesExplorer = ({
                         dense
                         clearable
                         clearText={i18n.t('Clear')}
-                        placeholder={i18n.t('All alert levels')}
+                        placeholder={i18n.t('All organisation units')}
                         prefix={selectedAlertLevel ? i18n.t('Alert level') : undefined}
                         selected={selectedAlertLevel}
                         onChange={({ selected }) => setAlertLevelSelection(selected)}
                         dataTest="alert-level-filter"
                     >
+                        <SingleSelectOption value={ANY_ALERT} label={i18n.t('Any alert')} />
                         {alertLevels.map(level => (
                             <SingleSelectOption key={level} value={level} label={level} />
                         ))}
@@ -480,7 +486,7 @@ export const ThresholdTilesExplorer = ({
                         )
                     : (
                             <div className={styles.emptyState}>
-                                {i18n.t('No regions match the selected filters.')}
+                                {i18n.t('No organisation units match the selected filters.')}
                             </div>
                         )}
             </div>
