@@ -40,7 +40,7 @@ export const DeletePredictionRunModal = ({
             </ModalTitle>
             <ModalContent>
                 <p>
-                    {i18n.t('This will permanently delete the prediction run from CHAP. It will not remove any values previously imported into DHIS2.')}
+                    {i18n.t('This will permanently delete the prediction run from Chap. It will not remove any values previously imported into DHIS2.')}
                 </p>
             </ModalContent>
             <ModalActions>

@@ -49,7 +49,7 @@ export const NewEvaluationFormComponent = ({ initialValues }: NewEvaluationFormP
 
     const [splitButtonOpen, setSplitButtonOpen] = useState(false);
     const { models } = useModels();
-    const modelId = useWatch({ control: methods.control, name: 'modelId' });
+    const [modelId, periodType] = useWatch({ control: methods.control, name: ['modelId', 'periodType'] });
     const modelUnavailable = hasRevisionMismatch(models?.find(model => String(model.id) === modelId));
 
     const {
@@ -109,7 +109,7 @@ export const NewEvaluationFormComponent = ({ initialValues }: NewEvaluationFormP
                             )}
                         >
                             <div className={styles.backtestParameters}>
-                                <BacktestParameterFields disabled={isSubmitting || isValidationLoading} />
+                                <BacktestParameterFields periodType={periodType} disabled={isSubmitting || isValidationLoading} />
                                 <ForecastHorizonNotice validation={forecastHorizon} />
                             </div>
                         </ModelExecutionFormFields>

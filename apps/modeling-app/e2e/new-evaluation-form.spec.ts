@@ -211,7 +211,7 @@ test('validates period rules with invalid values', async ({ page }) => {
 test('validates backtest parameters, submits chosen values, and shows backend validation errors', async ({ page }) => {
     const parametersResponse = await getChap(page, '/v1/analytics/backtest-parameters');
     expect([200, 404]).toContain(parametersResponse.status());
-    test.skip(!parametersResponse.ok(), 'Stable CHAP releases predate configurable backtest parameters');
+    test.skip(!parametersResponse.ok(), 'Stable Chap releases predate configurable backtest parameters');
     // Override only model limits to exercise client-side rejection without changing the installed model.
     await page.route('**/v1/crud/configured-models/*', async (route) => {
         const response = await route.fetch();

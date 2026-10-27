@@ -261,7 +261,7 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '', benchmarkContext 
                             </NoticeBox>
                         )}
 
-                        <BacktestParameterFields disabled={createEvaluation.isLoading} />
+                        <BacktestParameterFields periodType={dataset?.periodType} disabled={createEvaluation.isLoading} />
                         <ForecastHorizonNotice validation={forecastHorizon} />
 
                         {isTooShort && (

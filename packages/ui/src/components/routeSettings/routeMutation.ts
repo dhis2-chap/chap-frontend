@@ -9,7 +9,7 @@ export type RouteChanges = {
     removeApiToken?: boolean;
 };
 
-export const routeTokenReentryMessage = () => i18n.t('DHIS2 cannot preserve encrypted authentication when updating this route. Re-enter the CHAP API token, or explicitly remove it, before saving. Saving replaces all encrypted authentication on the route, including custom headers.');
+export const routeTokenReentryMessage = () => i18n.t('DHIS2 cannot preserve encrypted authentication when updating this route. Re-enter the Chap API token, or explicitly remove it, before saving. Saving replaces all encrypted authentication on the route, including custom headers.');
 
 export const unsupportedRouteTokenMessage = () => i18n.t('This app does not support setting API tokens on this DHIS2 version. Upgrade DHIS2 to 2.40.7, 2.41.4, 2.42 or later to store the token encrypted.');
 

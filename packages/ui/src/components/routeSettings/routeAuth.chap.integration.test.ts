@@ -6,13 +6,13 @@ import { getRouteTokenSettings, getRouteUpdateMutation } from './routeMutation';
 import { hasPlainTextRouteToken, type RouteTokenStorage } from './routeToken';
 import type { Route } from './useRoute';
 
-// Opt-in: authenticated CHAP reachable from DHIS2, with the URL on its route allowlist.
+// Opt-in: authenticated Chap reachable from DHIS2, with the URL on its route allowlist.
 // Set ROUTE_AUTH_DHIS2_URL, ROUTE_AUTH_CHAP_URL, and CHAP_API_TOKEN.
 const baseUrl = process.env.ROUTE_AUTH_DHIS2_URL;
 const chapUrl = process.env.ROUTE_AUTH_CHAP_URL;
 const token = process.env.CHAP_API_TOKEN;
 
-it.skipIf(!baseUrl || !chapUrl || !token)('uses the generated client through real DHIS2 ApiToken authentication to CHAP', async () => {
+it.skipIf(!baseUrl || !chapUrl || !token)('uses the generated client through real DHIS2 ApiToken authentication to Chap', async () => {
     const username = process.env.E2E_DHIS2_USERNAME ?? 'system';
     const password = process.env.E2E_DHIS2_PASSWORD ?? 'System123';
     const api = (path: string, method = 'GET', data?: unknown) => fetch(`${baseUrl}/api/${path}`, {
@@ -27,7 +27,7 @@ it.skipIf(!baseUrl || !chapUrl || !token)('uses the generated client through rea
     let id: string | undefined;
     try {
         const created = await api('routes', 'POST', {
-            name: `CHAP ApiToken regression ${Date.now()}`,
+            name: `Chap ApiToken regression ${Date.now()}`,
             url: chapUrl,
             sharing: { public: '--------' },
             ...getRouteTokenSettings({}, token!, 'api-token'),

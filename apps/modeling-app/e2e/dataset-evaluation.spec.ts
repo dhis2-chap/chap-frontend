@@ -31,7 +31,7 @@ test.describe('saved dataset evaluations', () => {
         test.setTimeout(180_000);
         const parametersResponse = await getChap(page, '/v1/analytics/backtest-parameters');
         expect([200, 404]).toContain(parametersResponse.status());
-        test.skip(!parametersResponse.ok(), 'Stable CHAP releases predate configurable backtest parameters');
+        test.skip(!parametersResponse.ok(), 'Stable Chap releases predate configurable backtest parameters');
         const evaluation = await createCompletedNaiveEvaluation(page);
         const templates = await readJson<ModelTemplateRead[]>(await getChap(page, '/v1/crud/model-templates'), 'Load templates');
         const alternative = await readJson<ConfiguredModelDB>(await page.request.post(chapUrl('/v1/crud/configured-models'), {
@@ -91,7 +91,7 @@ test.describe('saved dataset evaluations', () => {
 
     test('selects compatible models, resets on dataset change, and queues a job for each', async ({ page }) => {
         test.setTimeout(240_000);
-        // Stable CHAP releases predate configurable backtest parameters and use their own defaults.
+        // Stable Chap releases predate configurable backtest parameters and use their own defaults.
         const parametersResponse = await getChap(page, '/v1/analytics/backtest-parameters');
         expect([200, 404]).toContain(parametersResponse.status());
         const supportsParameters = parametersResponse.ok();

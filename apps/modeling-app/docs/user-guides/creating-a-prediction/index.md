@@ -9,7 +9,7 @@ category: User Guides
 
 A prediction uses a trained model to forecast future disease cases based on your current data. Unlike an evaluation (which tests model accuracy on historical data), a prediction generates forecasts that can be imported into DHIS2 to support decision-making in the field.
 
-Predictions in CHAP follow a two-phase workflow:
+Predictions in Chap follow a two-phase workflow:
 
 1. **Create a prediction setup** - a saved configuration that captures the model, organisation units, data mappings, and period type from a completed evaluation.
 2. **Run predictions** from that setup - a lightweight step where you name the run and select the last training period.

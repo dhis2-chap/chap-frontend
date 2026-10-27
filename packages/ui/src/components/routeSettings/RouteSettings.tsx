@@ -91,7 +91,7 @@ export const RouteSettings = () => {
 
                 {hasPlainTextRouteToken(route) && (
                     <NoticeBox warning title={i18n.t('API token stored in plain text')} dataTest="route-plain-text-token-warning">
-                        {i18n.t('Users who can read this route configuration can read its API token. Edit the route and re-enter the token to store it encrypted on supported DHIS2 versions. If the token may have been exposed, rotate it on the CHAP server and enter the new token here.')}
+                        {i18n.t('Users who can read this route configuration can read its API token. Edit the route and re-enter the token to store it encrypted on supported DHIS2 versions. If the token may have been exposed, rotate it on the Chap server and enter the new token here.')}
                     </NoticeBox>
                 )}
 

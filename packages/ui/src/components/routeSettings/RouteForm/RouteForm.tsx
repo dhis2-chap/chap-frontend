@@ -89,7 +89,7 @@ export const RouteForm = ({
             <form onSubmit={handleSubmit(handleFormSubmit)}>
                 <ModalTitle>{modalTitle}</ModalTitle>
                 <ModalContent>
-                    <Label htmlFor="url">{i18n.t('CHAP Core URL')}</Label>
+                    <Label htmlFor="url">{i18n.t('Chap Core URL')}</Label>
                     <Controller
                         name="url"
                         control={control}
@@ -130,7 +130,7 @@ export const RouteForm = ({
                                 {errorMessage || i18n.t('An unknown error occurred. Please try again.')}
                                 {errorMessage === 'Route URL is not permitted' && (
                                     <p>
-                                        {i18n.t('Contact your DHIS2 server administrator to allow this CHAP Core URL in {{setting}} in dhis.conf and restart DHIS2.', {
+                                        {i18n.t('Contact your DHIS2 server administrator to allow this Chap Core URL in {{setting}} in dhis.conf and restart DHIS2.', {
                                             setting: 'route.remote_servers_allowed',
                                         })}
                                     </p>
