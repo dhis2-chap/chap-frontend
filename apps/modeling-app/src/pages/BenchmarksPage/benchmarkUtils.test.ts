@@ -6,6 +6,7 @@ const run = (id: number, aggregateMetrics: Record<string, number>): BacktestRead
     id, aggregateMetrics, datasetId: 12, modelId: `model-${id}`, configuredModel: null,
     dataset: { id: 12, name: 'Dataset' }, specificationId: 8,
 });
+const metric = (info: Record<string, unknown>) => ({ sortOrder: 0, isSelected: true, id: 'score', displayName: 'Score', ...info }) as MetricInfo;
 const specification: BacktestSpecificationRead = {
     id: 8, dataset: { id: 12, name: 'Dataset, "monthly"', firstPeriod: '202001', lastPeriod: '202412' },
     orgUnits: ['a'], backtests: [], nPeriods: 4, nSplits: 7, stride: 2, nRetrain: 3,
@@ -15,27 +16,27 @@ const specification: BacktestSpecificationRead = {
 describe('benchmark scores', () => {
     it('ranks lower and higher scores, includes ties, and ignores missing/non-finite values', () => {
         const runs = [run(1, { score: 0 }), run(2, { score: 2 }), run(3, { score: 0 }), run(4, {}), run(5, { score: NaN }), run(6, { score: Infinity })];
-        expect(getBestRunIds(runs, { sortOrder: 0, isSelected: true, id: 'score', displayName: 'Score', optimizationDirection: 'minimize' } as MetricInfo)).toEqual(new Set([1, 3]));
-        expect(getBestRunIds(runs, { sortOrder: 0, isSelected: true, id: 'score', displayName: 'Score', optimizationDirection: 'maximize' } as MetricInfo)).toEqual(new Set([2]));
+        expect(getBestRunIds(runs, metric({ optimizationDirection: 'minimize' }))).toEqual(new Set([1, 3]));
+        expect(getBestRunIds(runs, metric({ optimizationDirection: 'maximize' }))).toEqual(new Set([2]));
     });
 
     it('judges target metrics by distance or by meeting the minimum target', () => {
         const runs = [run(1, { score: 0.7 }), run(2, { score: 0.9 }), run(3, { score: 0.95 })];
-        expect(getBestRunIds(runs, { sortOrder: 0, isSelected: true, id: 'score', displayName: 'Score', target: 0.8, targetBehavior: 'closest' } as MetricInfo)).toEqual(new Set([1, 2]));
-        expect(getBestRunIds(runs, { sortOrder: 0, isSelected: true, id: 'score', displayName: 'Score', target: 0.8, targetBehavior: 'at_least' } as MetricInfo)).toEqual(new Set([2, 3]));
-        expect(getBestRunIds([run(1, { score: -3 }), run(2, { score: 1 })], { sortOrder: 0, isSelected: true, id: 'score', displayName: 'Score', target: 0 })).toEqual(new Set([2]));
+        expect(getBestRunIds(runs, metric({ target: 0.8, targetBehavior: 'closest' }))).toEqual(new Set([1, 2]));
+        expect(getBestRunIds(runs, metric({ target: 0.8, targetBehavior: 'at_least' }))).toEqual(new Set([2, 3]));
+        expect(getBestRunIds([run(1, { score: -3 }), run(2, { score: 1 })], metric({ target: 0 }))).toEqual(new Set([2]));
     });
 
     it('does not invent a direction for unknown metrics or mark absent scores as best', () => {
         expect(getBestRunIds([run(1, { score: 2 })])).toEqual(new Set());
-        expect(getBestRunIds([run(1, { score: 2 })], { sortOrder: 0, isSelected: true, id: 'score', displayName: 'Score' })).toEqual(new Set());
-        expect(getBestRunIds([run(1, {})], { sortOrder: 0, isSelected: true, id: 'score', displayName: 'Score', target: 0 })).toEqual(new Set());
+        expect(getBestRunIds([run(1, { score: 2 })], metric({}))).toEqual(new Set());
+        expect(getBestRunIds([run(1, {})], metric({ target: 0 }))).toEqual(new Set());
     });
 
     it('sorts the best scores first, including target metrics', () => {
         const sortBy = (metric?: MetricInfo) => (scores: number[]) => [...scores].sort((a, b) => metricSortKey(a, metric) - metricSortKey(b, metric));
-        expect(sortBy({ sortOrder: 0, isSelected: true, id: 'score', displayName: 'Score', target: 0.8, targetBehavior: 'closest' } as MetricInfo)([0.2, 0.79, 1])).toEqual([0.79, 1, 0.2]);
-        expect(sortBy({ sortOrder: 0, isSelected: true, id: 'score', displayName: 'Score', optimizationDirection: 'maximize' } as MetricInfo)([1, 3, 2])).toEqual([3, 2, 1]);
+        expect(sortBy(metric({ target: 0.8, targetBehavior: 'closest' }))([0.2, 0.79, 1])).toEqual([0.79, 1, 0.2]);
+        expect(sortBy(metric({ optimizationDirection: 'maximize' }))([1, 3, 2])).toEqual([3, 2, 1]);
         expect(sortBy()([3, 1, 2])).toEqual([1, 2, 3]);
     });
 });

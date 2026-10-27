@@ -2,10 +2,11 @@ import { ApiError, BacktestParameterInfo, BacktestsService, useRoute } from '@dh
 import { useQuery } from '@tanstack/react-query';
 import { Features, useIsFeatureAvailable } from './useIsFeatureAvailable';
 import { useWeatherProviders } from './useWeatherProviders';
+import { parseSupportedPeriodType, SUPPORTED_PERIOD_TYPES } from '../utils/supportedPeriodType';
 
 /** CHAP Core stores separate weekly and monthly defaults, and falls back to monthly for anything else. */
 const toParameterPeriodType = (periodType: string | null | undefined) => (
-    periodType?.toLowerCase() === 'week' ? 'week' : 'month'
+    parseSupportedPeriodType(periodType) === SUPPORTED_PERIOD_TYPES.WEEK ? 'week' : 'month'
 );
 
 /** Older CHAP Core versions apply their own defaults, so the form leaves the parameters out. */
@@ -17,6 +18,7 @@ export const useBacktestParameters = (periodType?: string | null) => {
         queryKey: ['backtest-parameters', route?.url, parameterPeriodType],
         queryFn: () => BacktestsService.listBacktestParametersV1AnalyticsBacktestParametersGet(parameterPeriodType),
         staleTime: Infinity,
+        keepPreviousData: true,
         retry: false,
         enabled: isAvailable,
     });

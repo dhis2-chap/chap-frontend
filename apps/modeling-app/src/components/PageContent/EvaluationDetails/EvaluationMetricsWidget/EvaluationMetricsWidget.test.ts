@@ -18,10 +18,10 @@ vi.mock('@dhis2/ui', () => ({
         createElement('span', { title: content }, children),
 }));
 
-const renderMetrics = (metrics: Record<string, number>, catalog?: MetricInfo[]) => {
+const renderMetrics = (metrics: Record<string, number>, catalog?: Omit<MetricInfo, 'sortOrder' | 'isSelected'>[]) => {
     const client = new QueryClient({ defaultOptions: { queries: { retry: false, cacheTime: 0 } } });
     if (catalog) {
-        client.setQueryData(['evaluation-metric-catalog', 42], catalog);
+        client.setQueryData(['evaluation-metric-catalog', 42], catalog.map(info => ({ ...info })));
     }
     const html = renderToStaticMarkup(createElement(QueryClientProvider, { client },
         createElement(EvaluationMetricsWidget, { evaluationId: 42, metrics }),
@@ -33,14 +33,14 @@ const renderMetrics = (metrics: Record<string, number>, catalog?: MetricInfo[]) 
 describe('EvaluationMetricsWidget metadata', () => {
     it('uses backend names and descriptions for existing and newly registered metrics', () => {
         const html = renderMetrics({ mae: 12 }, [
-            { sortOrder: 0, isSelected: true, id: 'mae', displayName: 'Backend MAE name', description: 'Updated backend explanation' },
+            { id: 'mae', displayName: 'Backend MAE name', description: 'Updated backend explanation' },
         ]);
         expect(html).toContain('Backend MAE name');
         expect(html).toContain('title="Updated backend explanation"');
         expect(html).toContain('12');
 
         const newMetric = renderMetrics({ new_backend_metric: 7 }, [
-            { sortOrder: 0, isSelected: true, id: 'new_backend_metric', displayName: 'New backend metric name', description: 'New explanation' },
+            { id: 'new_backend_metric', displayName: 'New backend metric name', description: 'New explanation' },
         ]);
         expect(newMetric).toContain('New backend metric name');
         expect(newMetric).toContain('title="New explanation"');
@@ -55,8 +55,8 @@ describe('EvaluationMetricsWidget metadata', () => {
 
     it('handles incomplete metadata and only displays metrics with evaluation scores', () => {
         const html = renderMetrics({ unknown_metric: 4 }, [
-            { sortOrder: 0, isSelected: true, id: 'unknown_metric', displayName: ' ', description: ' ' },
-            { sortOrder: 0, isSelected: true, id: 'unscored', displayName: 'Unscored metric' },
+            { id: 'unknown_metric', displayName: ' ', description: ' ' },
+            { id: 'unscored', displayName: 'Unscored metric' },
         ]);
         expect(html).toContain('Unknown metric');
         expect(html).not.toContain('title=');
@@ -65,8 +65,8 @@ describe('EvaluationMetricsWidget metadata', () => {
 
     it('preserves percentage units and coverage targets with backend metadata', () => {
         const html = renderMetrics({ mape: 12, coverage_10_90: 0.8 }, [
-            { sortOrder: 0, isSelected: true, id: 'mape', displayName: 'Percentage error', unit: '%' },
-            { sortOrder: 0, isSelected: true, id: 'coverage_10_90', displayName: 'Interval coverage', target: 0.8, targetBehavior: TargetBehavior.AT_LEAST },
+            { id: 'mape', displayName: 'Percentage error', unit: '%' },
+            { id: 'coverage_10_90', displayName: 'Interval coverage', target: 0.8, targetBehavior: TargetBehavior.AT_LEAST },
         ]);
         expect(html).toContain('12 %');
         expect(html).toContain('target 0.8');
@@ -74,7 +74,7 @@ describe('EvaluationMetricsWidget metadata', () => {
 
     it('shows zero targets on raw-unit metrics without judging the score against them', () => {
         const html = renderMetrics({ peak_value_diff: -2 }, [
-            { sortOrder: 0, isSelected: true, id: 'peak_value_diff', displayName: 'Peak difference', unit: 'cases', target: 0, targetBehavior: TargetBehavior.CLOSEST },
+            { id: 'peak_value_diff', displayName: 'Peak difference', unit: 'cases', target: 0, targetBehavior: TargetBehavior.CLOSEST },
         ]);
         expect(html).toContain('-2 cases');
         expect(html).toContain('target 0');
@@ -83,8 +83,8 @@ describe('EvaluationMetricsWidget metadata', () => {
 
     it.each([undefined, null])('omits units and targets when metadata fields are %s', (missing) => {
         const html = renderMetrics({ mape: 12, coverage_10_90: 0.2 }, [
-            { sortOrder: 0, isSelected: true, id: 'mape', displayName: 'MAPE', unit: missing },
-            { sortOrder: 0, isSelected: true, id: 'coverage_10_90', displayName: 'Coverage', target: missing },
+            { id: 'mape', displayName: 'MAPE', unit: missing },
+            { id: 'coverage_10_90', displayName: 'Coverage', target: missing },
         ]);
         expect(html).not.toContain('%');
         expect(html).not.toContain('target ');
@@ -106,7 +106,7 @@ describe('EvaluationMetricsWidget metadata', () => {
         [TargetBehavior.AT_LEAST, Infinity, false],
     ] as const)('judges %s scores of %s against the backend target', (targetBehavior, score, offTarget) => {
         const html = renderMetrics({ custom_metric: score }, [
-            { sortOrder: 0, isSelected: true, id: 'custom_metric', displayName: 'Custom metric', target: 0.8, targetBehavior },
+            { id: 'custom_metric', displayName: 'Custom metric', target: 0.8, targetBehavior },
         ]);
         expect(html.includes(styles.offTarget)).toBe(offTarget);
         if (!Number.isFinite(score)) {
