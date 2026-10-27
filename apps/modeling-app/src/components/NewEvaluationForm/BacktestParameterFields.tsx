@@ -10,7 +10,7 @@ import { ChapErrorNotice } from '../ChapErrorNotice';
 import styles from './BacktestParameterFields.module.css';
 
 type Props = {
-    periodType?: string | null;
+    periodType: string | null | undefined;
     disabled?: boolean;
 };
 
@@ -23,7 +23,7 @@ export const BacktestParameterFields = ({ periodType, disabled }: Props) => {
     const counts = parameters.data?.filter(item => item.type === 'integer') ?? [];
     const providerParameter = parameters.data?.find(item => item.name === 'futureWeatherProvider');
 
-    // Chap Core owns the defaults, so fill them in once they arrive and again when the period type changes.
+    // Chap Core owns the defaults per period type, so fill them in whenever they arrive.
     useEffect(() => {
         if (parameters.data) {
             resetField('backtestParameters', { defaultValue: toBacktestDefaults(parameters.data) });

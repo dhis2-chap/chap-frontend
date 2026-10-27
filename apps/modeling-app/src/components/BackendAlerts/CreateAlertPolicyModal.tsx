@@ -81,9 +81,8 @@ const NEW_LEVEL: LevelValues = {
     probability: String(DEFAULT_OUTBREAK_PROBABILITY),
 };
 
-const toAlertLevel = (level: LevelValues, index: number): AlertLevel => ({
+const toAlertLevel = (level: LevelValues): Omit<AlertLevel, 'outputCode'> => ({
     name: level.name.trim(),
-    outputCode: String(index + 1),
     exceedanceThreshold: Number(level.probability) / 100,
     thresholdParams: level.strategy === 'seasonal'
         ? { type: 'seasonal', stdMultiplier: Number(level.value) }
@@ -119,7 +118,9 @@ export const CreateAlertPolicyModal = ({ onClose }: { onClose: () => void }) => 
             if (policyId === undefined) {
                 const result = await create.mutateAsync({
                     name: values.name.trim(),
-                    levels: sortAlertLevels(values.levels.map(toAlertLevel)),
+                    // Output codes follow severity order, as the backend would default them.
+                    levels: sortAlertLevels(values.levels.map(toAlertLevel))
+                        .map((level, index) => ({ ...level, outputCode: String(index + 1) })),
                 });
                 policyId = result.id;
                 setCreatedPolicyId(policyId);

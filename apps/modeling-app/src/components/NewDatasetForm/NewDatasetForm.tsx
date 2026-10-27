@@ -69,8 +69,8 @@ export const NewDatasetForm = () => {
         control: methods.control,
         name: ['columns', 'periodType', 'fromPeriodId', 'toPeriodId'],
     });
-    const covariateNames = columnValues.map(column => column.covariateName.trim());
     const backtestParameters = useBacktestParameters(periodType);
+    const covariateNames = columnValues.map(column => column.covariateName.trim());
     const support = getModelSupport(covariateNames, periodType, models ?? []);
     const periodCount = countPeriods(fromPeriodId, toPeriodId, settings.calendar);
     const minimumEvaluationPeriods = getMinimumEvaluationPeriods(
