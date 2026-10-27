@@ -11,10 +11,10 @@ import {
 } from '@dhis2-chap/ui';
 import { ModelExecutionFormValues } from '../../ModelExecutionForm/hooks/useModelExecutionFormState';
 import { prepareBacktestData } from '../../ModelExecutionForm/utils/prepareBacktestData';
-import { PERIOD_TYPES } from '@dhis2-chap/core';
 import { buildOrgUnitFeatureCollection } from '../../ModelExecutionForm/utils/orgUnitGeoJson';
 import { getImportSummaryFromApiError } from '../../ModelExecutionForm/utils/importSummaryUtils';
 import { type Dhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
+import { fetchPredictionPeriods } from '../utils/fetchPredictionPeriods';
 
 type Props = {
     predictionSetupId: number;
@@ -22,11 +22,6 @@ type Props = {
     returnTo?: string;
     onSuccess?: () => void;
     onError?: (error: ApiError) => void;
-};
-
-export const N_PERIODS = {
-    [PERIOD_TYPES.MONTH]: 3,
-    [PERIOD_TYPES.WEEK]: 12,
 };
 
 export const useCreatePrediction = ({
@@ -48,7 +43,7 @@ export const useCreatePrediction = ({
     } = useMutation<JobResponse, ApiError, ModelExecutionFormValues>({
         mutationFn: async (formData: ModelExecutionFormValues) => {
             setDataHash(undefined);
-            const nPeriods = N_PERIODS[formData.periodType.toUpperCase() as keyof typeof N_PERIODS];
+            const nPeriods = await fetchPredictionPeriods(predictionSetupId, formData.periodType);
 
             const { observations, orgUnitResponse, hash } = await prepareBacktestData(
                 formData,
