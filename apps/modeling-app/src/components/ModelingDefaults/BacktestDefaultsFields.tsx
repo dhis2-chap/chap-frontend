@@ -17,6 +17,7 @@ export const BacktestDefaultsFields = ({ name, label, parameters, providers, dis
     const { control, watch } = useFormContext<ModelingDefaultsValues>();
     const values = watch(name);
     const provider = providers.find(item => item.id === values.futureWeatherProvider);
+    const providerParameter = parameters.find(item => item.name === 'futureWeatherProvider');
 
     return (
         <section className={styles.section}>
@@ -56,12 +57,12 @@ export const BacktestDefaultsFields = ({ name, label, parameters, providers, dis
                 control={control}
                 render={({ field, fieldState }) => (
                     <SingleSelectField
-                        label={i18n.t('Future-weather provider')}
+                        label={providerParameter?.label ?? i18n.t('Future-weather provider')}
                         selected={field.value}
                         onChange={({ selected }) => field.onChange(selected)}
                         onBlur={field.onBlur}
                         disabled={disabled}
-                        helpText={provider?.description}
+                        helpText={provider?.description ?? providerParameter?.description}
                         error={!!fieldState.error}
                         validationText={fieldState.error?.message}
                         dataTest={`${name}-futureWeatherProvider`}

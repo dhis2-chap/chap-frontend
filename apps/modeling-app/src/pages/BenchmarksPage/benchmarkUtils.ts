@@ -53,7 +53,7 @@ export const makeBenchmarkRequest = (
     futureWeatherProvider: specification.futureWeatherProvider,
 });
 
-// CHAP Core fills in these defaults when a request leaves the parameter out (BacktestParams).
+// Chap Core before 2.6 fills in these schema defaults when a request leaves the parameter out; 2.6 reports the resolved parameters on the job.
 const REQUEST_DEFAULTS = { nPeriods: 3, nSplits: 7, stride: 1, nRetrain: 1, futureWeatherProvider: 'climatology', targetColumn: 'disease_cases' };
 
 export type SpecificationParams = Pick<BacktestSpecificationSummary, 'dataset' | 'nPeriods' | 'nSplits' | 'stride' | 'nRetrain' | 'futureWeatherProvider' | 'targetColumn'>;
@@ -70,7 +70,7 @@ export const requestMatchesSpecification = (request: Partial<MakeBacktestsReques
         params.targetColumn === (specification.targetColumn ?? REQUEST_DEFAULTS.targetColumn);
 };
 
-/** CHAP Core names each job of a multi-model request `<request name>/<model name>`. */
+/** Chap Core names each job of a multi-model request `<request name>/<model name>`. */
 export const getJobModelName = (jobName: string) => jobName.slice(jobName.lastIndexOf('/') + 1);
 
 const csvCell = (value: string | number | null | undefined): string => {
