@@ -44,7 +44,8 @@ export const BenchmarkTable = ({ specification, actions, children }: Props) => {
     const metrics = specification.metrics ?? catalog.data;
     const [showAllMetrics, setShowAllMetrics] = useState(false);
     const allMetricIds = useMemo(() => getMetricIds(backtests, metrics), [backtests, metrics]);
-    const defaultMetricIds = useMemo(() => getDefaultMetricIds(allMetricIds, metrics), [allMetricIds, metrics]);
+    // Older Chap Core versions have no selected metrics, so keep showing every column there.
+    const defaultMetricIds = useMemo(() => specification.metrics ? getDefaultMetricIds(allMetricIds, specification.metrics) : allMetricIds, [allMetricIds, specification.metrics]);
     const metricIds = showAllMetrics || !defaultMetricIds.length ? allMetricIds : defaultMetricIds;
     // Runs keep pointing at archived models, so resolve names against all of them.
     const { models } = useModels({ includeArchived: true });

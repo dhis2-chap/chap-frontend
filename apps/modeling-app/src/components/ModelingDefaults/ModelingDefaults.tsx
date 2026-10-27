@@ -10,6 +10,8 @@ import { z } from 'zod';
 import { backtestParametersSchema } from '../NewEvaluationForm/hooks/backtestParameters';
 import { sortMetricIds } from '../PageContent/EvaluationDetails/EvaluationMetricsWidget/metricCatalog';
 import { ChapErrorNotice } from '../ChapErrorNotice';
+import { NavigationConfirmModal } from '../NavigationConfirmModal/NavigationConfirmModal';
+import { useNavigationBlocker } from '../../hooks/useNavigationBlocker';
 import { BacktestDefaultsFields } from './BacktestDefaultsFields';
 import styles from './ModelingDefaults.module.css';
 
@@ -91,6 +93,7 @@ const DefaultsForm = ({ data }: { data: Awaited<ReturnType<typeof loadDefaults>>
             showSaved();
         },
     });
+    const navigation = useNavigationBlocker({ shouldBlock: isDirty && !save.isLoading });
     const metricOptions = sortMetricIds(data.metrics.map(metric => metric.id), data.metrics)
         .map(id => ({ value: id, label: data.metrics.find(metric => metric.id === id)?.displayName || id }));
     const baselineModels = data.models.filter(model => model.role === ModelTemplateRole.BASELINE);
@@ -176,6 +179,7 @@ const DefaultsForm = ({ data }: { data: Awaited<ReturnType<typeof loadDefaults>>
                     <Button primary type="submit" disabled={!isDirty || save.isLoading} loading={save.isLoading}>{i18n.t('Save changes')}</Button>
                 </div>
             </form>
+            {navigation.showConfirmModal && <NavigationConfirmModal onConfirm={navigation.handleConfirmNavigation} onCancel={navigation.handleCancelNavigation} />}
         </FormProvider>
     );
 };
