@@ -38,55 +38,59 @@ test.describe('saved dataset evaluations', () => {
             data: { name: `e2e_forecast_limits_${Date.now()}`, modelTemplateId: templates.find(model => model.name === 'naive_model')!.id },
         }), 'Create model');
 
-        // Different limits and a failed lookup are controlled here to test frontend validation.
-        let failLookup = true;
-        await page.route('**/v1/crud/configured-models/*', async (route) => {
-            if (failLookup) {
-                await route.fulfill({ status: 503, json: { detail: 'Model details temporarily unavailable' } });
-                return;
-            }
-            const response = await route.fetch();
-            const model = await response.json() as ConfiguredModelInfoRead;
-            await route.fulfill({ response, json: {
-                ...model,
-                displayName: model.name,
-                modelTemplate: {
-                    ...model.modelTemplate,
-                    minPredictionPeriods: model.id === alternative.id ? 4 : 1,
-                    maxPredictionPeriods: model.id === alternative.id ? 6 : 4,
-                },
-            } });
-        });
-        let submissions = 0;
-        page.on('request', (request) => {
-            if (request.method() === 'POST' && /\/analytics\/create-backtests?$/.test(request.url())) submissions++;
-        });
-        await page.goto(`/#/evaluate/from-dataset?datasetId=${evaluation.datasetId}&origin=all`);
-        await page.locator('[data-test="evaluation-name-input"] input').fill('Forecast limit validation');
-        const modal = await selectModels(page, ['naive_model', alternative.name]);
-        await modal.getByRole('button', { name: 'Use selected models (2)', exact: true }).click();
-        const start = page.getByRole('button', { name: 'Start evaluation', exact: true });
-        await expect(page.getByText('Could not check model forecast limits', { exact: true })).toBeVisible();
-        await expect(start).toBeDisabled();
-        failLookup = false;
-        await page.getByRole('button', { name: 'Retry', exact: true }).click();
-        const periods = page.locator('[data-test="backtest-nPeriods"] input');
-        await periods.fill('3');
-        await expect(page.getByText(`${alternative.name} supports 4–6 forecast periods. The evaluation uses 3.`)).toBeVisible();
-        await expect(start).toBeDisabled();
-        await periods.press('Enter');
-        await periods.fill('4');
-        await expect(start).toBeEnabled();
-        await expect(page.getByText('Unsupported forecast periods', { exact: true })).not.toBeVisible();
-        await periods.fill('7');
-        await expect(page.getByText('naive_model supports 1–4 forecast periods. The evaluation uses 7.')).toBeVisible();
-        await expect(page.getByText(`${alternative.name} supports 4–6 forecast periods. The evaluation uses 7.`)).toBeVisible();
-        await expect(start).toBeDisabled();
-        await periods.fill('3');
-        await page.locator(`[data-test="selected-model-${toDataTestKey(alternative.name)}-remove"]`).click();
-        await expect(start).toBeEnabled();
-        await expect(page.getByText('Unsupported forecast periods', { exact: true })).not.toBeVisible();
-        expect(submissions).toBe(0);
+        try {
+            // Different limits and a failed lookup are controlled here to test frontend validation.
+            let failLookup = true;
+            await page.route('**/v1/crud/configured-models/*', async (route) => {
+                if (failLookup) {
+                    await route.fulfill({ status: 503, json: { detail: 'Model details temporarily unavailable' } });
+                    return;
+                }
+                const response = await route.fetch();
+                const model = await response.json() as ConfiguredModelInfoRead;
+                await route.fulfill({ response, json: {
+                    ...model,
+                    displayName: model.name,
+                    modelTemplate: {
+                        ...model.modelTemplate,
+                        minPredictionPeriods: model.id === alternative.id ? 4 : 1,
+                        maxPredictionPeriods: model.id === alternative.id ? 6 : 4,
+                    },
+                } });
+            });
+            let submissions = 0;
+            page.on('request', (request) => {
+                if (request.method() === 'POST' && /\/analytics\/create-backtests?$/.test(request.url())) submissions++;
+            });
+            await page.goto(`/#/evaluate/from-dataset?datasetId=${evaluation.datasetId}&origin=all`);
+            await page.locator('[data-test="evaluation-name-input"] input').fill('Forecast limit validation');
+            const modal = await selectModels(page, ['naive_model', alternative.name]);
+            await modal.getByRole('button', { name: 'Use selected models (2)', exact: true }).click();
+            const start = page.getByRole('button', { name: 'Start evaluation', exact: true });
+            await expect(page.getByText('Could not check model forecast limits', { exact: true })).toBeVisible();
+            await expect(start).toBeDisabled();
+            failLookup = false;
+            await page.getByRole('button', { name: 'Retry', exact: true }).click();
+            const periods = page.locator('[data-test="backtest-nPeriods"] input');
+            await periods.fill('3');
+            await expect(page.getByText(`${alternative.name} supports 4–6 forecast periods. The evaluation uses 3.`)).toBeVisible();
+            await expect(start).toBeDisabled();
+            await periods.press('Enter');
+            await periods.fill('4');
+            await expect(start).toBeEnabled();
+            await expect(page.getByText('Unsupported forecast periods', { exact: true })).not.toBeVisible();
+            await periods.fill('7');
+            await expect(page.getByText('naive_model supports 1–4 forecast periods. The evaluation uses 7.')).toBeVisible();
+            await expect(page.getByText(`${alternative.name} supports 4–6 forecast periods. The evaluation uses 7.`)).toBeVisible();
+            await expect(start).toBeDisabled();
+            await periods.fill('3');
+            await page.locator(`[data-test="selected-model-${toDataTestKey(alternative.name)}-remove"]`).click();
+            await expect(start).toBeEnabled();
+            await expect(page.getByText('Unsupported forecast periods', { exact: true })).not.toBeVisible();
+            expect(submissions).toBe(0);
+        } finally {
+            await page.request.delete(chapUrl(`/v1/crud/configured-models/${alternative.id}`));
+        }
     });
 
     test('selects compatible models, resets on dataset change, and queues a job for each', async ({ page }) => {

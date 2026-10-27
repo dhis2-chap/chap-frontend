@@ -72,10 +72,8 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '', benchmarkContext 
     const savedDatasets = datasets.data?.filter(item => item.id != null) ?? [];
     const datasetOptions = savedDatasets.filter(item => matchesOrigin(item, origin) || item === dataset);
     const periodCount = countPeriods(dataset?.firstPeriod, dataset?.lastPeriod);
-    const requiredPeriodCount = getMinimumEvaluationPeriods(
-        dataset?.periodType,
-        backtestParameters ?? getLegacyBacktestParameters(dataset?.periodType),
-    );
+    const effectiveParameters = backtestParameters ?? getLegacyBacktestParameters(dataset?.periodType);
+    const requiredPeriodCount = getMinimumEvaluationPeriods(dataset?.periodType, effectiveParameters);
     const isTooShort = periodCount != null && !!requiredPeriodCount && periodCount < requiredPeriodCount;
     const columns = dataset?.covariates ?? [];
     const defaultTargetColumn = columns.includes('disease_cases') ? 'disease_cases' : '';
@@ -86,10 +84,7 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '', benchmarkContext 
         datasetSupportsModel(getBacktestColumns(columns, selectedTargetColumn), dataset.periodType ?? '', model)
     )) ?? [];
     const selectedModels = compatibleModels.filter(model => modelNames.includes(model.name));
-    const forecastHorizon = useForecastHorizonValidation(
-        selectedModels,
-        (backtestParameters ?? getLegacyBacktestParameters(dataset?.periodType))?.nPeriods,
-    );
+    const forecastHorizon = useForecastHorizonValidation(selectedModels, effectiveParameters?.nPeriods);
     const canSubmit = selectedModels.length > 0 && !!selectedTargetColumn && !selectedModels.some(hasRevisionMismatch) &&
         !!dataset?.periodType && !isTooShort && dataset?.id != null && !forecastHorizon.isBlocked;
 

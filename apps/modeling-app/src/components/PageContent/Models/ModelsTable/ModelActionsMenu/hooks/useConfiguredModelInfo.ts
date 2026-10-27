@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { ApiError, ConfiguredModelInfoRead, ModelsService } from '@dhis2-chap/ui';
+import { ApiError, ConfiguredModelInfoRead } from '@dhis2-chap/ui';
+import { configuredModelInfoQueryOptions } from '@/hooks/modelsQuery';
 
 type Props = {
     id: number | null;
@@ -8,12 +9,8 @@ type Props = {
 
 export const useConfiguredModelInfo = ({ id, enabled = true }: Props) => {
     const { data, error, isLoading } = useQuery<ConfiguredModelInfoRead, ApiError>({
-        queryKey: ['configuredModelInfo', id],
-        queryFn: () => ModelsService.getConfiguredModelInfoV1CrudConfiguredModelsConfiguredModelIdGet(id as number),
+        ...configuredModelInfoQueryOptions(id as number),
         enabled: enabled && id !== null,
-        staleTime: 300000,
-        cacheTime: 300000,
-        retry: 0,
     });
 
     return {

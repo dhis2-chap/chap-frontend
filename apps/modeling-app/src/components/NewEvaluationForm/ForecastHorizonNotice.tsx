@@ -10,7 +10,7 @@ type Props = {
 export const ForecastHorizonNotice = ({ validation }: Props) => (
     <>
         {validation.isLoading && (
-            <NoticeBox>{i18n.t('Checking model forecast limits…')}</NoticeBox>
+            <NoticeBox>{i18n.t('Checking model forecast limits...')}</NoticeBox>
         )}
         {!!validation.error && (
             <ChapErrorNotice

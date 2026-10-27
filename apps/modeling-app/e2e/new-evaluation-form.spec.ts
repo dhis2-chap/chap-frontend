@@ -222,13 +222,7 @@ test('validates backtest parameters, submits chosen values, and shows backend va
         } });
     });
     await page.goto('/#/evaluate/new');
-    await prepareValidFormData(page, 'Custom backtest parameters', { fromPeriodId: '202001', toPeriodId: '202412' });
-    // Use one known fixture province, rather than every province in the instance.
-    await page.getByRole('button', { name: 'Select organisation units' }).click();
-    const orgUnits = page.getByRole('dialog');
-    await orgUnits.getByRole('button', { name: 'Deselect all' }).click();
-    await orgUnits.locator('input[value="W6sNfkJcXGC"]').check();
-    await orgUnits.getByRole('button', { name: 'Confirm Selection' }).click();
+    await prepareValidFormData(page, 'Custom backtest parameters');
     for (const [name, value] of Object.entries({ nPeriods: 3, nSplits: 7, stride: 1, nRetrain: 1 })) {
         await expect(page.locator(`[data-test="backtest-${name}"] input`)).toHaveValue(String(value));
     }

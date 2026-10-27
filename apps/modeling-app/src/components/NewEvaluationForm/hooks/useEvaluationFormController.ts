@@ -13,7 +13,7 @@ export const useEvaluationFormController = (initialValues?: Partial<ModelExecuti
         error: periodSettingsError,
     } = useDhis2PeriodSettings();
     const { methods } = useModelExecutionFormState({ initialValues, periodSettings });
-    const { models } = useModels();
+    const { models } = useModels({ includeArchived: true });
     const [modelId, periodType, backtestParameters] = useWatch({
         control: methods.control,
         name: ['modelId', 'periodType', 'backtestParameters'],
