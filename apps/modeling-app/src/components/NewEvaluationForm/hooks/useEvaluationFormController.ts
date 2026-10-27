@@ -14,13 +14,14 @@ export const useEvaluationFormController = (initialValues?: Partial<ModelExecuti
     } = useDhis2PeriodSettings();
     const { methods } = useModelExecutionFormState({ initialValues, periodSettings });
     const { models } = useModels({ includeArchived: true });
-    const [modelId, periodType, backtestParameters] = useWatch({
+    // Watch only the horizon, so other parameter fields do not re-render the whole form.
+    const [modelId, periodType, nPeriods] = useWatch({
         control: methods.control,
-        name: ['modelId', 'periodType', 'backtestParameters'],
+        name: ['modelId', 'periodType', 'backtestParameters.nPeriods'],
     });
     const forecastHorizon = useForecastHorizonValidation(
         models?.filter(model => String(model.id) === modelId) ?? [],
-        (backtestParameters ?? getLegacyBacktestParameters(periodType))?.nPeriods,
+        nPeriods ?? getLegacyBacktestParameters(periodType)?.nPeriods,
     );
 
     const {
