@@ -37,7 +37,7 @@ export const BacktestDefaultsFields = ({ name, label, parameters, providers, dis
                                     name={field.name}
                                     type="number"
                                     min={String(parameter?.minimum ?? 1)}
-                                    max={key === 'nRetrain' ? String(values.nSplits) : undefined}
+                                    max={key === 'nRetrain' && Number.isFinite(values.nSplits) ? String(values.nSplits) : undefined}
                                     step="1"
                                     value={Number.isFinite(field.value) ? String(field.value) : ''}
                                     onChange={({ value }) => field.onChange(value === '' ? NaN : Number(value))}

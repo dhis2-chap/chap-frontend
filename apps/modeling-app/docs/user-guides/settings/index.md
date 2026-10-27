@@ -1,15 +1,15 @@
 ---
 title: Settings
-description: Guide to configuring routes, Chap server connection, data pruning, and experimental features
+description: Guide to configuring routes, Chap server connection, modeling defaults, data pruning, and experimental features
 order: 7
 category: User Guides
 ---
 
 ## Settings
 
-The Settings area lets you configure how the Modeling App connects to your Chap backend, manage data, and enable experimental features. Open it by clicking **Settings** in the sidebar navigation.
+The Settings area lets you configure how the Modeling App connects to your Chap backend, set modeling defaults, manage data, and enable experimental features. Open it by clicking **Settings** in the sidebar navigation.
 
-Settings is divided into several sections, each accessible from the left-hand menu: **General** (route and Chap server), **Data pruning**, and **Experimental features**.
+Settings is divided into several sections, each accessible from the left-hand menu: **General** (route and Chap server), **Modeling defaults**, **Data pruning**, and **Experimental features**.
 
 ---
 
@@ -99,6 +99,18 @@ Once enabled, you can toggle individual features:
 Experimental features may change or be removed in future releases. Evaluation plots, including predicted vs actual, are available on the evaluation details page without enabling experimental features.
 
 ![Experimental features page with toggle switches](images/settings-step-6-experimental.png)
+
+---
+
+### Step 7: Set Modeling Defaults
+
+Click **Modeling defaults** in the settings sidebar to change the defaults Chap applies for everyone using the same Chap server. This requires Chap Core 2.6 or later.
+
+- **Metrics**: Move metrics into the **Selected metrics** list and order them with the arrows. Benchmarks and evaluations show the selected metrics by default, in this order, and rank models in this order. Follow the link in this section to learn how to add custom metrics.
+- **Baseline**: Choose the baseline model that model runs are compared against.
+- **Weekly and monthly backtest defaults**: Set the number of periods, splits, stride, training runs and the future-weather provider that new evaluations start from. Weekly and monthly datasets use their own defaults.
+
+Click **Save changes** to store the defaults, or **Discard changes** to go back to the stored values.
 
 ---
 

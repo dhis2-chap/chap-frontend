@@ -5,6 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { MetricInfo, TargetBehavior, VisualizationsService, Widget } from '@dhis2-chap/ui';
 import { Button, IconInfo16, Tooltip } from '@dhis2/ui';
 import {
+    HEADLINE_METRIC_IDS,
     HIDDEN_METRIC_IDS,
     TARGET_TOLERANCE,
     getDefaultMetricIds,
@@ -90,7 +91,7 @@ export const EvaluationMetricsWidget = ({ evaluationId, metrics }: Props) => {
     );
     const defaultIds = getDefaultMetricIds(visibleIds, metricCatalog);
     /* An evaluation can report only metrics outside the defaults, and the collapsed widget must still show rows. */
-    const collapsedIds = defaultIds.length > 0 ? defaultIds : visibleIds.slice(0, 6);
+    const collapsedIds = defaultIds.length > 0 ? defaultIds : visibleIds.slice(0, HEADLINE_METRIC_IDS.length);
     const shownIds = expanded ? visibleIds : collapsedIds;
     const hiddenCount = visibleIds.length - shownIds.length;
 
