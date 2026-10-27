@@ -4,12 +4,12 @@ import { Features, useIsFeatureAvailable } from './useIsFeatureAvailable';
 import { useWeatherProviders } from './useWeatherProviders';
 import { parseSupportedPeriodType, SUPPORTED_PERIOD_TYPES } from '../utils/supportedPeriodType';
 
-/** CHAP Core stores separate weekly and monthly defaults, and falls back to monthly for anything else. */
+/** Chap Core stores separate weekly and monthly defaults, and falls back to monthly for anything else. */
 const toParameterPeriodType = (periodType: string | null | undefined) => (
     parseSupportedPeriodType(periodType) === SUPPORTED_PERIOD_TYPES.WEEK ? 'week' : 'month'
 );
 
-/** Older CHAP Core versions apply their own defaults, so the form leaves the parameters out. */
+/** Older Chap Core versions apply their own defaults, so the form leaves the parameters out. */
 export const useBacktestParameters = (periodType?: string | null) => {
     const { route } = useRoute();
     const { isAvailable } = useIsFeatureAvailable(Features.BACKTEST_PARAMETERS);
@@ -25,7 +25,7 @@ export const useBacktestParameters = (periodType?: string | null) => {
     return { ...query, isAvailable };
 };
 
-/** Stored backtest parameters, labelled by CHAP Core. */
+/** Stored backtest parameters, labelled by Chap Core. */
 export const useBacktestParameterValues = (values: Record<string, unknown>) => {
     const { data: parameters } = useBacktestParameters();
     const { data: providers } = useWeatherProviders();

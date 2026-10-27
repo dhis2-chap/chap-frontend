@@ -80,7 +80,7 @@ it('matches running evaluation requests to the benchmark they file under', () =>
     expect(requestMatchesSpecification({ ...request, datasetId: 13 }, specification)).toBe(false);
     expect(requestMatchesSpecification({ ...request, stride: 1 }, specification)).toBe(false);
     expect(requestMatchesSpecification({ ...request, targetColumn: 'disease_cases' }, specification)).toBe(false);
-    // Omitted parameters take CHAP Core's defaults, as in the saved-dataset evaluation form.
+    // Omitted parameters take Chap Core's defaults, as in the saved-dataset evaluation form.
     const defaults = { ...specification, nPeriods: 3, nSplits: 7, stride: 1, nRetrain: 1, futureWeatherProvider: 'climatology', targetColumn: 'disease_cases' };
     expect(requestMatchesSpecification({ name: 'My evaluation', modelIds: [10], datasetId: 12 }, defaults)).toBe(true);
     expect(requestMatchesSpecification({ name: 'My evaluation', modelIds: [10], datasetId: 12 }, specification)).toBe(false);

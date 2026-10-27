@@ -56,7 +56,7 @@ Helpful details:`,
     `Page: ${getCurrentHashRoute()}`,
     `Time: ${new Date().toISOString()}`,
     `Modeling App version: ${modelingAppVersion}`,
-    `CHAP version: ${chapVersion}`,
+    `Chap version: ${chapVersion}`,
     `DHIS2 version: ${dhis2Version}`,
 ].join('\n');
 
@@ -104,7 +104,7 @@ export const ReportBugDialog = ({ onClose }: Props) => {
             <ModalContent>
                 <div className={styles.content}>
                     <p className={styles.intro}>
-                        {i18n.t('Copy the template and email it to the CHAP team. It includes this page and time so we can find the problem faster.')}
+                        {i18n.t('Copy the template and email it to the Chap team. It includes this page and time so we can find the problem faster.')}
                     </p>
                     <div className={styles.emailSection}>
                         <span className={styles.emailLabel}>

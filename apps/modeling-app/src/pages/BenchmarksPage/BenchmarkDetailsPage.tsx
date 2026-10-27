@@ -63,7 +63,7 @@ const BenchmarkDetails = ({ id }: { id: number }) => {
                         {' '}
                         <Link to="/jobs">{i18n.t('View jobs and failures')}</Link>
                         {submitted.specificationId !== id && (
-                            <p><Link to={`/evaluate/benchmarks/${submitted.specificationId}`}>{i18n.t('Open the benchmark returned by CHAP')}</Link></p>
+                            <p><Link to={`/evaluate/benchmarks/${submitted.specificationId}`}>{i18n.t('Open the benchmark returned by Chap')}</Link></p>
                         )}
                     </NoticeBox>
                 )}

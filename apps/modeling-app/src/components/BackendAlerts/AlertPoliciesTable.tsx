@@ -30,7 +30,7 @@ import styles from './BackendAlerts.module.css';
 
 const CONFLICT = 409;
 
-// CHAP refuses with 409 while a prediction setup or a raised alert still points at the policy.
+// Chap refuses with 409 while a prediction setup or a raised alert still points at the policy.
 const getDeleteErrorMessage = (error: ApiError) => (
     error.status === CONFLICT
         ? i18n.t('This policy is used by a prediction setup or has alerts raised against it, so it cannot be deleted.')

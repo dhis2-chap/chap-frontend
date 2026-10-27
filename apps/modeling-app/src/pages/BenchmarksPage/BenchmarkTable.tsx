@@ -1,4 +1,4 @@
-import { ReactNode, useMemo } from 'react';
+import { ReactNode, useMemo, useState } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { Button, DataTable, DataTableBody, DataTableCell, DataTableColumnHeader, DataTableHead, DataTableRow, IconInfo16, NoticeBox, Tooltip } from '@dhis2/ui';
 import { BacktestRead, BacktestSpecificationRead, VisualizationsService } from '@dhis2-chap/ui';
@@ -9,10 +9,13 @@ import { saveAs } from 'file-saver';
 import { TableActionButton } from '../../components/TableActionButton';
 import { useModels } from '../../hooks/useModels';
 import { benchmarkCsv, getBestRunIds, getMetricIds, metricSortKey } from './benchmarkUtils';
-import { prettifyMetricId } from '../../components/PageContent/EvaluationDetails/EvaluationMetricsWidget/metricCatalog';
+import { getDefaultMetricIds, prettifyMetricId } from '../../components/PageContent/EvaluationDetails/EvaluationMetricsWidget/metricCatalog';
 import styles from './BenchmarksPage.module.css';
 
-const columnHelper = createColumnHelper<BacktestRead>();
+/* The display name is resolved into the row, because the table caches row values until the data changes. */
+type BenchmarkRun = BacktestRead & { modelName: string };
+
+const columnHelper = createColumnHelper<BenchmarkRun>();
 
 type Props = {
     specification: BacktestSpecificationRead;
@@ -34,22 +37,29 @@ const ViewEvaluationButton = ({ evaluationId }: { evaluationId: number }) => {
 export const BenchmarkTable = ({ specification, actions, children }: Props) => {
     const { backtests } = specification;
     const evaluationId = backtests[0]?.id;
+    // Chap Core 2.6 lists the configured metrics with the specification; older versions need the catalog.
     const catalog = useQuery({
         queryKey: ['evaluation-metric-catalog', evaluationId],
         queryFn: () => VisualizationsService.getAvailableMetricsV1VisualizationMetricsBacktestIdGet(evaluationId!),
-        enabled: evaluationId != null,
+        enabled: evaluationId != null && !specification.metrics,
         staleTime: 5 * 60 * 1000,
     });
+    const metrics = specification.metrics ?? catalog.data;
+    const [showAllMetrics, setShowAllMetrics] = useState(false);
+    const allMetricIds = useMemo(() => getMetricIds(backtests, metrics), [backtests, metrics]);
+    // Older Chap Core versions have no selected metrics, so keep showing every column there.
+    const defaultMetricIds = useMemo(() => specification.metrics ? getDefaultMetricIds(allMetricIds, specification.metrics) : allMetricIds, [allMetricIds, specification.metrics]);
+    const metricIds = showAllMetrics || !defaultMetricIds.length ? allMetricIds : defaultMetricIds;
     // Runs keep pointing at archived models, so resolve names against all of them.
     const { models } = useModels({ includeArchived: true });
     const columns = useMemo(() => [
-        columnHelper.accessor(run => models?.find(model => model.id === run.configuredModel?.id)?.displayName || run.configuredModel?.name || run.modelId, {
+        columnHelper.accessor('modelName', {
             id: 'model',
             header: i18n.t('Model'),
             cell: info => <span className={styles.strong}>{info.getValue()}</span>,
         }),
-        ...getMetricIds(backtests).map((metricId) => {
-            const metric = catalog.data?.find(item => item.id === metricId);
+        ...metricIds.map((metricId) => {
+            const metric = metrics?.find(item => item.id === metricId);
             const bestRunIds = getBestRunIds(backtests, metric);
             const label = metric?.displayName || prettifyMetricId(metricId);
             return columnHelper.accessor(run => Number.isFinite(run.aggregateMetrics[metricId]) ? run.aggregateMetrics[metricId] : undefined, {
@@ -91,9 +101,11 @@ export const BenchmarkTable = ({ specification, actions, children }: Props) => {
             header: i18n.t('Actions'),
             cell: ({ row }) => <ViewEvaluationButton evaluationId={row.original.id} />,
         }),
-    ], [backtests, catalog.data, models]);
+    ], [backtests, metricIds, metrics]);
     // Newest runs first until the user sorts by a column.
-    const runs = useMemo(() => [...backtests].sort((a, b) => (b.created ?? '').localeCompare(a.created ?? '')), [backtests]);
+    const runs = useMemo<BenchmarkRun[]>(() => backtests
+        .map(run => ({ ...run, modelName: models?.find(model => model.id === run.configuredModel?.id)?.displayName || run.configuredModel?.name || run.modelId }))
+        .sort((a, b) => (b.created ?? '').localeCompare(a.created ?? '')), [backtests, models]);
     const table = useReactTable({
         data: runs,
         columns,
@@ -114,6 +126,11 @@ export const BenchmarkTable = ({ specification, actions, children }: Props) => {
                 </div>
                 <div className={styles.actions}>
                     {actions}
+                    {defaultMetricIds.length > 0 && defaultMetricIds.length < allMetricIds.length && (
+                        <Button small onClick={() => setShowAllMetrics(!showAllMetrics)}>
+                            {showAllMetrics ? i18n.t('Show default metrics') : i18n.t('Show all {{count}} metrics', { count: allMetricIds.length })}
+                        </Button>
+                    )}
                     <Button
                         small
                         disabled={!backtests.length}
@@ -145,7 +162,6 @@ export const BenchmarkTable = ({ specification, actions, children }: Props) => {
                                     {group.headers.map(header => (
                                         <DataTableColumnHeader
                                             key={header.id}
-                                            align={isMetricColumn(header.column.id) ? 'right' : undefined}
                                             className={header.column.id === 'model' ? styles.sticky : undefined}
                                             {...(header.column.getCanSort() ? {
                                                 sortDirection: header.column.getIsSorted() || 'default',
@@ -165,7 +181,6 @@ export const BenchmarkTable = ({ specification, actions, children }: Props) => {
                                     {row.getVisibleCells().map(cell => (
                                         <DataTableCell
                                             key={cell.id}
-                                            align={isMetricColumn(cell.column.id) ? 'right' : undefined}
                                             className={isMetricColumn(cell.column.id) ? styles.number : cell.column.id === 'model' ? styles.sticky : undefined}
                                         >
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}

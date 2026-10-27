@@ -13,6 +13,10 @@ export const SettingsSidebar = () => {
                     label: i18n.t('General'),
                 },
                 {
+                    to: '/settings/modeling-defaults',
+                    label: i18n.t('Modeling defaults'),
+                },
+                {
                     to: '/settings/data-pruning',
                     label: i18n.t('Data Pruning'),
                     disabled: isLoading || !isSuperUser,

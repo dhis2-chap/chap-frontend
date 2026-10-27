@@ -23,7 +23,7 @@ export const BacktestParameterFields = ({ periodType, disabled }: Props) => {
     const counts = parameters.data?.filter(item => item.type === 'integer') ?? [];
     const providerParameter = parameters.data?.find(item => item.name === 'futureWeatherProvider');
 
-    // CHAP Core owns the defaults per period type, so fill them in whenever they arrive.
+    // Chap Core owns the defaults per period type, so fill them in whenever they arrive.
     useEffect(() => {
         if (parameters.data) {
             resetField('backtestParameters', { defaultValue: toBacktestDefaults(parameters.data) });

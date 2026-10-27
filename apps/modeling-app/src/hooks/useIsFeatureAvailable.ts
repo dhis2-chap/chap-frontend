@@ -3,7 +3,7 @@ import { useChapStatus, useRoute } from '@dhis2-chap/ui';
 
 /**
  * Centralized feature toggle configuration.
- * Maps feature names to their minimum required CHAP backend version.
+ * Maps feature names to their minimum required Chap backend version.
  */
 export const FEATURE_MIN_VERSIONS = {
     datasetDownload: '1.1.5',
@@ -12,7 +12,7 @@ export const FEATURE_MIN_VERSIONS = {
     benchmarks: '2.4.0',
     backtestParameters: '2.4.0',
     backtestTargetColumn: '2.4.0',
-    // CHAP raises alerts when a prediction run finishes from 2.5.0.
+    // Chap raises alerts when a prediction run finishes from 2.5.0.
     predictionAlerts: '2.5.0',
     jobDiagnostics: '2.6.0',
 } as const;

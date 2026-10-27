@@ -4,8 +4,8 @@ import type { Route } from './useRoute';
 
 const route: Route = {
     id: 'a1234567890',
-    name: 'CHAP',
-    displayName: 'CHAP',
+    name: 'Chap',
+    displayName: 'Chap',
     code: 'chap',
     url: 'http://chap:8000/**',
     headers: { 'Content-Type': 'application/json', 'authorization': 'Bearer legacy' },
@@ -26,9 +26,9 @@ describe('route updates', () => {
     it('rejects unrelated edits when DHIS2 cannot preserve write-only credentials', () => {
         const encryptedRoute = { ...route, auth: { type: 'api-headers' } };
         expect(() => getRouteUpdateMutation(encryptedRoute, { responseTimeoutSeconds: 30 }, 'api-token'))
-            .toThrow('Re-enter the CHAP API token');
+            .toThrow('Re-enter the Chap API token');
         expect(() => getRouteUpdateMutation(encryptedRoute, { url: route.url, apiToken: ' ' }, 'api-token'))
-            .toThrow('Re-enter the CHAP API token');
+            .toThrow('Re-enter the Chap API token');
     });
 
     it('stores a replacement encrypted and removes legacy authorization headers', () => {
@@ -67,7 +67,7 @@ describe('route updates', () => {
         ]);
     });
 
-    it('migrates a legacy token to encrypted Bearer headers for CHAP servers without ApiToken support', () => {
+    it('migrates a legacy token to encrypted Bearer headers for Chap servers without ApiToken support', () => {
         expect(getRouteUpdateMutation(route, { apiToken: 'new-token' }, 'api-headers').data).toEqual([
             { op: 'add', path: '/headers', value: { 'Content-Type': 'application/json' } },
             { op: 'add', path: '/auth', value: { type: 'api-headers', headers: { Authorization: 'Bearer new-token' } } },
