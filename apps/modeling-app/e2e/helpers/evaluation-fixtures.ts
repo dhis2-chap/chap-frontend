@@ -5,6 +5,7 @@ import type {
     DataSource,
     FeatureModel,
     ImportSummaryResponse,
+    JobDescription,
     MakeBacktestWithDataRequest,
 } from '@dhis2-chap/ui';
 import type {
@@ -117,11 +118,17 @@ const getOrgUnitGeoJson = async (page: Page, orgUnitIds: string[]) => {
     };
 };
 
+// Older Chap versions return only the status string.
+export const getJobStatus = async (page: Page, jobId: string, action: string) => {
+    const job = await readJson<JobDescription | string>(await getChap(page, `/v1/jobs/${jobId}`), action);
+    return typeof job === 'string' ? job : job.status;
+};
+
 export const pollEvaluationJob = async (page: Page, jobId: string) => {
     const deadline = Date.now() + EVALUATION_TIMEOUT_MS;
 
     while (Date.now() < deadline) {
-        const status = await readJson<string>(await getChap(page, `/v1/jobs/${jobId}`), 'Poll evaluation job status');
+        const status = await getJobStatus(page, jobId, 'Poll evaluation job status');
 
         if (status === 'SUCCESS') {
             return;

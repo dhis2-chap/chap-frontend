@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
 import type { BacktestSpecificationRead, MakeBacktestsRequest, MakeBacktestsResponse, ModelSpecRead } from '@dhis2-chap/ui';
-import { getChap, createCompletedNaiveEvaluation, readJson } from './helpers/evaluation-fixtures';
+import { getChap, getJobStatus, createCompletedNaiveEvaluation, readJson } from './helpers/evaluation-fixtures';
 import { toDataTestKey } from '../src/utils/dataTestKey';
 import { isVersionCompatible } from '../src/utils/compareVersions';
 
@@ -51,7 +51,7 @@ test('starts model runs from New benchmark and groups them by dataset and parame
     expect(result.specificationId).toBe(evaluation.specificationId);
     await expect(page).toHaveURL(`/#/evaluate/benchmarks/${result.specificationId}`);
     await expect.poll(async () => {
-        const status = await readJson<string>(await getChap(page, `/v1/jobs/${result.jobs[0].jobId}`), 'Load benchmark run status');
+        const status = await getJobStatus(page, result.jobs[0].jobId, 'Load benchmark run status');
         if (['FAILURE', 'REVOKED'].includes(status)) {
             throw new Error(`Benchmark run failed: ${await (await getChap(page, `/v1/jobs/${result.jobs[0].jobId}/logs`)).text()}`);
         }
@@ -124,8 +124,7 @@ test('uses benchmark actions to view, add models, export scores and reuse the da
     await expect(page.getByText('Model runs queued', { exact: true })).toBeVisible();
     await expect(page).toHaveURL(`/#/evaluate/benchmarks/${specification.id}`);
     await expect.poll(async () => {
-        const jobResponse = await getChap(page, `/v1/jobs/${result.jobs[0].jobId}`);
-        const status = await readJson<string>(jobResponse, 'Load model run status');
+        const status = await getJobStatus(page, result.jobs[0].jobId, 'Load model run status');
         if (['FAILURE', 'REVOKED'].includes(status)) {
             throw new Error(`Benchmark model failed: ${await (await getChap(page, `/v1/jobs/${result.jobs[0].jobId}/logs`)).text()}`);
         }
