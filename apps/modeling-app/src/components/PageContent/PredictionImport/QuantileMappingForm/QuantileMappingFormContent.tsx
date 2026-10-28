@@ -15,6 +15,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, useWatch } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { NavigationConfirmModal } from '@/components/NavigationConfirmModal';
+import { usePolicyOutbreakIndicators } from '@/hooks/usePolicyOutbreakIndicators';
 import { useEndemicThresholds } from '@/hooks/useEndemicThresholds';
 import { useNavigationBlocker } from '@/hooks/useNavigationBlocker';
 import { useThresholdStrategies } from '@/hooks/useThresholdStrategies';
@@ -138,6 +139,14 @@ export const QuantileMappingFormContent = ({
         endemic_threshold,
     } = useWatch({ control });
     const useAlertOutputs = use_alert_outputs ?? defaultUseAlertOutputs;
+    const policy = predictionSetup.alertPolicy;
+    const policyOutputs = usePolicyOutbreakIndicators({
+        predictionId: prediction.id,
+        datasetId: prediction.datasetId,
+        policy,
+        series,
+        enabled: useAlertOutputs && !!policy,
+    });
     const selectedProbability = alert_probability ?? defaultAlertProbability;
     const {
         thresholdMap,
@@ -150,9 +159,9 @@ export const QuantileMappingFormContent = ({
         datasetId: prediction.datasetId,
         series,
         params: thresholdParams,
-        enabled: useAlertOutputs,
+        enabled: useAlertOutputs && !policy,
     });
-    const canImport = !useAlertOutputs || areThresholdsReady;
+    const canImport = !useAlertOutputs || (policy ? policyOutputs.isReady : areThresholdsReady);
     const unavailableThresholdCount = useMemo(() => (
         series.filter(orgUnitSeries => (
             getForecastThresholdCoverage(
@@ -208,12 +217,12 @@ export const QuantileMappingFormContent = ({
                     outbreakIndicatorId: data.use_alert_outputs
                         ? data.outbreak_indicator
                         : '',
-                    endemicThresholdId: data.use_alert_outputs
+                    endemicThresholdId: data.use_alert_outputs && !policy
                         ? data.endemic_threshold
                         : '',
                 },
                 outbreakIndicators: data.use_alert_outputs
-                    ? buildOutbreakIndicators(series, data.alert_probability, thresholdMap)
+                    ? policy ? policyOutputs.indicators : buildOutbreakIndicators(series, data.alert_probability, thresholdMap)
                     : [],
                 thresholdMap,
             });
@@ -255,6 +264,8 @@ export const QuantileMappingFormContent = ({
 
                     <AlertOutputSection
                         useAlertOutputs={useAlertOutputs}
+                        policy={policy}
+                        policyOutputs={policyOutputs}
                         selectedProbability={selectedProbability}
                         thresholdStrategyName={thresholdStrategyName}
                         thresholdParamsSummary={describeThresholdParams(thresholdParams)}

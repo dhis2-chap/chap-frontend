@@ -10,10 +10,10 @@ import {
 import type { Dhis2Calendar } from '@dhis2-chap/core';
 import type {
     EndemicThresholdPoint,
-    OutbreakIndicator,
     PredictionEntry,
     QuantileKey,
 } from '@dhis2-chap/ui';
+import type { ImportOutbreakIndicator } from './policyOutbreakIndicators';
 
 export const STANDARD_QUANTILES = [0.1, 0.25, 0.5, 0.75, 0.9];
 
@@ -137,7 +137,7 @@ export const transformPredictionEntriesToDataValues = (
 );
 
 export const transformOutbreakIndicatorsToDataValues = (
-    outbreakIndicators: OutbreakIndicator[],
+    outbreakIndicators: ImportOutbreakIndicator[],
     outbreakIndicatorId: string,
 ): PredictionDataValue[] => {
     if (!outbreakIndicatorId) {
