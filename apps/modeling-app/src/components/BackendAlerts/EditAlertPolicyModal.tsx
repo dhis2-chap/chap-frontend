@@ -48,8 +48,8 @@ export const EditAlertPolicyModal = ({ policy, display, onClose }: {
                     <InputField name="policy-name" label={i18n.t('Policy name')} value={policy.name} disabled />
                     <InputField
                         name="no-alert-output-code"
-                        label={i18n.t('Outbreak import code for no alert')}
-                        helpText={i18n.t('Imported into the outbreak indicator data element, so it must match its value type or option set.')}
+                        label={i18n.t('No alert import code')}
+                        helpText={i18n.t('Must match the value type or option set of the outbreak indicator.')}
                         value={noAlertCode}
                         onChange={({ value }) => setNoAlertCode(value ?? '')}
                     />
@@ -66,7 +66,7 @@ export const EditAlertPolicyModal = ({ policy, display, onClose }: {
                                 <InputField
                                     dense
                                     name={`alert-output-code-${index}`}
-                                    label={i18n.t('Outbreak import code')}
+                                    label={i18n.t('Import code')}
                                     value={codes[level.name]}
                                     onChange={({ value }) => setCodes(previous => ({ ...previous, [level.name]: value ?? '' }))}
                                 />

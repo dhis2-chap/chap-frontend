@@ -173,8 +173,8 @@ export const CreateAlertPolicyModal = ({ onClose }: { onClose: () => void }) => 
                         render={({ field }) => (
                             <InputField
                                 name={field.name}
-                                label={i18n.t('Outbreak import code for no alert')}
-                                helpText={i18n.t('Imported into the outbreak indicator data element, so it must match its value type or option set.')}
+                                label={i18n.t('No alert import code')}
+                                helpText={i18n.t('Must match the value type or option set of the outbreak indicator.')}
                                 value={field.value}
                                 onChange={({ value }) => field.onChange(value ?? '')}
                                 error={!!errors.noAlertCode}
@@ -229,7 +229,7 @@ export const CreateAlertPolicyModal = ({ onClose }: { onClose: () => void }) => 
                                         render={({ field: input }) => (
                                             <InputField
                                                 dense
-                                                label={i18n.t('Outbreak import code')}
+                                                label={i18n.t('Import code')}
                                                 name={input.name}
                                                 value={input.value}
                                                 onChange={({ value }) => input.onChange(value ?? '')}
@@ -240,7 +240,6 @@ export const CreateAlertPolicyModal = ({ onClose }: { onClose: () => void }) => 
                                     />
                                 </div>
                                 <div className={styles.policyLevelThreshold}>
-                                    <p className={styles.help}>{i18n.t('Fires when the forecast exceeds this threshold with at least the minimum probability')}</p>
                                     <Controller
                                         name={`levels.${index}.strategy`}
                                         control={control}

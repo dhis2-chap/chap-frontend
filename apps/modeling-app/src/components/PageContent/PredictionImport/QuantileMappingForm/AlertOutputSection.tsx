@@ -97,14 +97,14 @@ export const AlertOutputSection = ({
             </div>
             {useAlertOutputs && (
                 <>
+                    <ThresholdCalculationStatus
+                        isLoading={policy ? policyOutputs.isLoading : isThresholdsLoading}
+                        isPaused={policy ? policyOutputs.isPaused : areThresholdsPaused}
+                        error={policy ? policyOutputs.error : thresholdsError}
+                        onRetry={policy ? policyOutputs.retry : onRetryThresholds}
+                    />
                     {policy ? (
                         <>
-                            <ThresholdCalculationStatus
-                                isLoading={policyOutputs.isLoading}
-                                isPaused={policyOutputs.isPaused}
-                                error={policyOutputs.error}
-                                onRetry={policyOutputs.retry}
-                            />
                             <div className={styles.alertSummary}>
                                 <SummaryItem label={i18n.t('Alert policy')} value={policy.name} />
                                 <SummaryItem label={i18n.t('No alert')} value={policy.noAlertOutputCode ?? '0'} />
@@ -123,12 +123,6 @@ export const AlertOutputSection = ({
                         </>
                     ) : (
                         <>
-                            <ThresholdCalculationStatus
-                                isLoading={isThresholdsLoading}
-                                isPaused={areThresholdsPaused}
-                                error={thresholdsError}
-                                onRetry={onRetryThresholds}
-                            />
                             {!isThresholdsLoading && !thresholdsError && unavailableThresholdCount > 0 && (
                                 <NoticeBox warning title={i18n.t('Some outbreak indicators will be skipped')}>
                                     {i18n.t('One region has forecast periods without thresholds. Only outbreak indicators for those periods will be skipped; indicators for periods with thresholds will still be imported.', {
