@@ -5,6 +5,7 @@ import type {
     DataSource,
     FeatureModel,
     ImportSummaryResponse,
+    JobDescription,
     MakeBacktestWithDataRequest,
 } from '@dhis2-chap/ui';
 import type {
@@ -121,7 +122,8 @@ export const pollEvaluationJob = async (page: Page, jobId: string) => {
     const deadline = Date.now() + EVALUATION_TIMEOUT_MS;
 
     while (Date.now() < deadline) {
-        const status = await readJson<string>(await getChap(page, `/v1/jobs/${jobId}`), 'Poll evaluation job status');
+        const job = await readJson<string | JobDescription>(await getChap(page, `/v1/jobs/${jobId}`), 'Poll evaluation job status');
+        const status = typeof job === 'string' ? job : job.status;
 
         if (status === 'SUCCESS') {
             return;

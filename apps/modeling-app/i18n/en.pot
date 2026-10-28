@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-28T15:01:23.877Z\n"
-"PO-Revision-Date: 2026-10-28T15:01:23.878Z\n"
+"POT-Creation-Date: 2026-10-28T15:28:39.394Z\n"
+"PO-Revision-Date: 2026-10-28T15:28:39.395Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -1826,6 +1826,53 @@ msgstr "All locations"
 msgid "Result"
 msgstr "Result"
 
+msgid "Not defined"
+msgstr "Not defined"
+
+msgid "All forecast horizons"
+msgstr "All forecast horizons"
+
+msgid "Horizon {{horizon}}"
+msgstr "Horizon {{horizon}}"
+
+msgid "{{count}} forecast case scored"
+msgid_plural "{{count}} forecast case scored"
+msgstr[0] "{{count}} forecast case scored"
+msgstr[1] "{{count}} forecast cases scored"
+
+msgid "Alert level"
+msgstr "Alert level"
+
+msgid "Policy overall"
+msgstr "Policy overall"
+
+msgid "Outbreak detection"
+msgstr "Outbreak detection"
+
+msgid "Could not load outbreak scoring"
+msgstr "Could not load outbreak scoring"
+
+msgid "Manage alert policies"
+msgstr "Manage alert policies"
+
+msgid "Select an alert policy"
+msgstr "Select an alert policy"
+
+msgid "Split by forecast horizon"
+msgstr "Split by forecast horizon"
+
+msgid "Calculate thresholds from data before the first forecast only"
+msgstr "Calculate thresholds from data before the first forecast only"
+
+msgid "Could not score outbreak detection"
+msgstr "Could not score outbreak detection"
+
+msgid "No forecast cases to score."
+msgstr "No forecast cases to score."
+
+msgid "Show all metrics"
+msgstr "Show all metrics"
+
 msgid "Start period"
 msgstr "Start period"
 
@@ -2474,9 +2521,6 @@ msgstr "Remove filter"
 
 msgid "Filter by alert level"
 msgstr "Filter by alert level"
-
-msgid "Alert level"
-msgstr "Alert level"
 
 msgid "Select all"
 msgstr "Select all"
