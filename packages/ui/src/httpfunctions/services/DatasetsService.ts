@@ -84,7 +84,11 @@ export class DatasetsService {
     }
     /**
      * Remove an imported dataset
-     * Permanently delete a dataset and every observation in it. Use this to clean up obsolete imports — be aware that backtests and predictions that referenced this dataset will lose their data link. 404 if the id is unknown.
+     * Permanently delete a dataset and every observation in it. Use this to clean up obsolete imports.
+     *
+     * Refused with 409 while a backtest or a prediction still uses the dataset. The baseline
+     * backtests that every backtest queues count too, although backtest listings hide them,
+     * so the error names every backtest and prediction to delete first. 404 if the id is unknown.
      * @param datasetId
      * @returns any Successful Response
      * @throws ApiError

@@ -33,6 +33,8 @@ test.describe.serial('alert level presentation', () => {
         await modal.getByLabel('Percentile (%)', { exact: true }).nth(0).fill('0');
         await modal.getByRole('button', { name: 'Add level', exact: true }).click();
         await names.nth(1).fill('Action');
+        await expect(modal.getByLabel('Import code', { exact: true }).nth(1)).toHaveValue('2');
+        await modal.getByLabel('Import code', { exact: true }).nth(1).fill('RED');
         let creations = 0;
         page.on('request', (request) => {
             if (request.method() === 'POST' && request.url().endsWith('/v1/crud/alert-policies')) creations++;
@@ -49,20 +51,30 @@ test.describe.serial('alert level presentation', () => {
         await page.unroute('**/dataStore/modeling/alert-policy-display-*');
         await modal.getByRole('button', { name: 'Retry saving colours' }).click();
         await expect(modal).not.toBeVisible();
+        await expect(page.getByText('Alert policy created', { exact: true })).toBeVisible();
         expect(creations).toBe(1);
         await page.reload();
         const row = page.getByRole('row').filter({ hasText: policyName });
-        await row.getByRole('button', { name: 'Colours', exact: true }).click();
-        const edit = page.locator('[data-test="edit-alert-policy-display-modal"]');
-        await expect(edit.locator('input[type="text"]')).toHaveCount(0);
+        await row.getByRole('button', { name: 'Edit', exact: true }).click();
+        const edit = page.locator('[data-test="edit-alert-policy-modal"]');
+        await expect(edit.getByLabel('Level name', { exact: true }).nth(1)).toBeDisabled();
         await expect(edit.getByLabel('Custom colour', { exact: true }).nth(0)).toHaveValue('#11aabb');
+        await expect(edit.getByLabel('No alert import code', { exact: true })).toHaveValue('0');
+        await expect(edit.getByLabel('Import code', { exact: true }).nth(1)).toHaveValue('RED');
+        await edit.getByLabel('Import code', { exact: true }).nth(1).fill('ACTION');
         await edit.getByRole('button', { name: 'Yellow', exact: true }).nth(1).click();
         await expect(edit.getByRole('button', { name: 'Yellow', exact: true }).nth(1)).toHaveAttribute('aria-pressed', 'true');
+        const codesSaved = page.waitForResponse(response => response.request().method() === 'PATCH' && response.url().endsWith(`/v1/crud/alert-policies/${policyId}`));
         await edit.getByRole('button', { name: 'Save', exact: true }).click();
+        expect((await codesSaved).request().postDataJSON()).toEqual({ noAlertOutputCode: '0', levelOutputCodes: { Watch: '1', Action: 'ACTION' } });
         await expect(edit).not.toBeVisible();
+        await expect(page.getByText('Alert policy saved', { exact: true })).toBeVisible();
         await page.reload();
         await expect(row.getByText(/Action/).locator('span')).toHaveCSS('background-color', 'rgb(255, 193, 7)');
         await expect(row.getByText(/Watch/).locator('span')).toHaveCSS('background-color', 'rgb(17, 170, 187)');
+        await row.getByRole('button', { name: 'Edit', exact: true }).click();
+        await expect(edit.getByLabel('Import code', { exact: true }).nth(1)).toHaveValue('ACTION');
+        await edit.getByRole('button', { name: 'Cancel', exact: true }).click();
         // Policies without saved colours fall back to defaults instead of erroring.
         await expect(page.getByText(/Saved colours could not be loaded/)).toHaveCount(0);
     });

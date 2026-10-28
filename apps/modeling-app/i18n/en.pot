@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-27T19:11:57.366Z\n"
-"PO-Revision-Date: 2026-10-27T19:11:57.367Z\n"
+"POT-Creation-Date: 2026-10-28T11:50:55.340Z\n"
+"PO-Revision-Date: 2026-10-28T11:50:55.341Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -106,14 +106,17 @@ msgid "No alert policies yet."
 msgstr "No alert policies yet."
 
 msgid ""
-"Saved colours could not be loaded, so default colours are shown. Use "
-"Colours to save them again."
+"Saved colours could not be loaded, so default colours are shown. Use Edit "
+"to save them again."
 msgstr ""
-"Saved colours could not be loaded, so default colours are shown. Use "
-"Colours to save them again."
+"Saved colours could not be loaded, so default colours are shown. Use Edit "
+"to save them again."
 
-msgid "Colours"
-msgstr "Colours"
+msgid "Edit"
+msgstr "Edit"
+
+msgid "Enter a code"
+msgstr "Enter a code"
 
 msgid "Enter a level name"
 msgstr "Enter a level name"
@@ -133,26 +136,41 @@ msgstr "Enter a policy name"
 msgid "Level names must be unique"
 msgstr "Level names must be unique"
 
+msgid "Codes must be unique"
+msgstr "Codes must be unique"
+
+msgid "Alert policy created"
+msgstr "Alert policy created"
+
 msgid "New alert policy"
 msgstr "New alert policy"
 
 msgid "Policy name"
 msgstr "Policy name"
 
-msgid ""
-"Levels are saved from least to most strict, where a higher minimum "
-"probability is stricter. A level fires when the forecast probability of "
-"exceeding its threshold reaches the minimum probability."
-msgstr ""
-"Levels are saved from least to most strict, where a higher minimum "
-"probability is stricter. A level fires when the forecast probability of "
-"exceeding its threshold reaches the minimum probability."
+msgid "No alert import code"
+msgstr "No alert import code"
+
+msgid "Must match the value type or option set of the outbreak indicator."
+msgstr "Must match the value type or option set of the outbreak indicator."
+
+msgid "Levels are saved in this order, from least to most severe."
+msgstr "Levels are saved in this order, from least to most severe."
+
+msgid "Level {{number}}"
+msgstr "Level {{number}}"
+
+msgid "Remove level"
+msgstr "Remove level"
 
 msgid "Level name"
 msgstr "Level name"
 
 msgid "e.g. Monitor"
 msgstr "e.g. Monitor"
+
+msgid "Import code"
+msgstr "Import code"
 
 msgid "Strategy"
 msgstr "Strategy"
@@ -172,9 +190,6 @@ msgstr "All history"
 msgid "Min. probability"
 msgstr "Min. probability"
 
-msgid "Remove level"
-msgstr "Remove level"
-
 msgid "Add level"
 msgstr "Add level"
 
@@ -193,14 +208,17 @@ msgstr "Create policy"
 msgid "Retry saving colours"
 msgstr "Retry saving colours"
 
-msgid "Edit alert colours"
-msgstr "Edit alert colours"
+msgid "Alert policy saved"
+msgstr "Alert policy saved"
 
-msgid "Unable to save alert colours"
-msgstr "Unable to save alert colours"
+msgid "Edit alert policy"
+msgstr "Edit alert policy"
 
-msgid "Please try again."
-msgstr "Please try again."
+msgid "Codes must be unique and non-empty."
+msgstr "Codes must be unique and non-empty."
+
+msgid "Unable to save. Please try again."
+msgstr "Unable to save. Please try again."
 
 msgid "Save"
 msgstr "Save"
@@ -228,8 +246,8 @@ msgstr[1] "{{percentile}}th percentile, {{count}}-year baseline"
 msgid "mean + {{stdMultiplier}} SD"
 msgstr "mean + {{stdMultiplier}} SD"
 
-msgid "{{name}} · {{threshold}} · ≥{{probability}}%"
-msgstr "{{name}} · {{threshold}} · ≥{{probability}}%"
+msgid "{{threshold}} · ≥{{probability}}%"
+msgstr "{{threshold}} · ≥{{probability}}%"
 
 msgid "View"
 msgstr "View"
@@ -2091,6 +2109,14 @@ msgstr "Use alert outputs"
 
 msgid "Import outbreak indicator values."
 msgstr "Import outbreak indicator values."
+
+msgid "No alert"
+msgstr "No alert"
+
+msgid "One region-period result is missing and will be skipped."
+msgid_plural "One region-period result is missing and will be skipped."
+msgstr[0] "One region-period result is missing and will be skipped."
+msgstr[1] "{{count}} region-period results are missing and will be skipped."
 
 msgid "Some outbreak indicators will be skipped"
 msgstr "Some outbreak indicators will be skipped"
