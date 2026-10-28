@@ -1,6 +1,5 @@
 import { canonicalizePeriodId } from '@dhis2-chap/core';
 import type { AlertLevel, AlertPolicyRead, PredictionEntry, PredictionOrgUnitSeries, ThresholdResponse } from '@dhis2-chap/ui';
-import type { AlertPolicyOutputCodes } from '@/components/BackendAlerts/alertPolicyOutputCodes';
 
 export type ImportOutbreakIndicator = { orgUnitId: string; period: string; value: string };
 
@@ -12,7 +11,6 @@ const cellKey = (orgUnit: string, period: string) => JSON.stringify([orgUnit, ca
 export const buildPolicyOutbreakIndicators = (
     series: PredictionOrgUnitSeries[],
     policy: AlertPolicyRead,
-    codes: AlertPolicyOutputCodes,
     entries: PredictionEntry[],
     thresholds: ThresholdResponse[],
 ): ImportOutbreakIndicator[] => {
@@ -30,7 +28,7 @@ export const buildPolicyOutbreakIndicators = (
     ])));
     return series.flatMap(region => region.points.flatMap((point) => {
         const key = cellKey(region.orgUnitId, point.period);
-        let value = codes.noAlert;
+        let value = policy.noAlertOutputCode ?? '0';
         // Once a level fires, missing lower levels cannot change the highest severity.
         for (let index = levels.length - 1; index >= 0; index--) {
             const level = levels[index];
@@ -40,8 +38,7 @@ export const buildPolicyOutbreakIndicators = (
                 return [];
             }
             if (forecast >= threshold) {
-                if (!Object.prototype.hasOwnProperty.call(codes.levels, level.name)) return [];
-                value = codes.levels[level.name];
+                value = level.outputCode;
                 break;
             }
         }

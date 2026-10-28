@@ -25,10 +25,7 @@ import { describeAlertLevel } from './describeAlertLevel';
 import { useAlertPolicyDisplay } from '@/hooks/useAlertPolicyDisplay';
 import { getAlertLevelDisplay } from './alertLevelDisplay';
 import { AlertLevelTag } from './AlertLevelTag';
-import { useAlertPolicyOutputCodes } from '@/hooks/useAlertPolicyOutputCodes';
-import { getDefaultAlertPolicyOutputCodes } from './alertPolicyOutputCodes';
-import { EditAlertPolicyOutputCodesModal } from './EditAlertPolicyOutputCodesModal';
-import { EditAlertPolicyDisplayModal } from './EditAlertPolicyDisplayModal';
+import { EditAlertPolicyModal } from './EditAlertPolicyModal';
 import styles from './BackendAlerts.module.css';
 
 const CONFLICT = 409;
@@ -116,8 +113,6 @@ export const AlertPoliciesTable = () => {
 
 const AlertPolicyRow = ({ policy, onDelete }: { policy: AlertPolicyRead; onDelete: () => void }) => {
     const display = useAlertPolicyDisplay(policy.id);
-    const codes = useAlertPolicyOutputCodes(policy);
-    const [editingCodes, setEditingCodes] = useState(false);
     const [editing, setEditing] = useState(false);
     return (
         <DataTableRow>
@@ -135,7 +130,7 @@ const AlertPolicyRow = ({ policy, onDelete }: { policy: AlertPolicyRead; onDelet
                 </div>
                 {!!display.error && (
                     <p className={styles.help} title={(display.error as Error).message}>
-                        {i18n.t('Saved colours could not be loaded, so default colours are shown. Use Colours to save them again.')}
+                        {i18n.t('Saved colours could not be loaded, so default colours are shown. Use Edit to save them again.')}
                     </p>
                 )}
             </DataTableCell>
@@ -143,22 +138,12 @@ const AlertPolicyRow = ({ policy, onDelete }: { policy: AlertPolicyRead; onDelet
             <DataTableCell>
                 <div className={styles.tags}>
                     <TableActionButton disabled={display.isLoading} onClick={() => setEditing(true)}>
-                        {i18n.t('Colours')}
-                    </TableActionButton>
-                    <TableActionButton disabled={codes.isLoading} onClick={() => setEditingCodes(true)}>
-                        {i18n.t('Output codes')}
+                        {i18n.t('Edit')}
                     </TableActionButton>
                     <TableActionButton destructive onClick={onDelete}>{i18n.t('Delete')}</TableActionButton>
                 </div>
-                {editingCodes && (
-                    <EditAlertPolicyOutputCodesModal
-                        policy={policy}
-                        codes={codes.data ?? getDefaultAlertPolicyOutputCodes(policy)}
-                        onClose={() => setEditingCodes(false)}
-                    />
-                )}
                 {editing && (
-                    <EditAlertPolicyDisplayModal policy={policy} display={display.data ?? {}} onClose={() => setEditing(false)} />
+                    <EditAlertPolicyModal policy={policy} display={display.data ?? {}} onClose={() => setEditing(false)} />
                 )}
             </DataTableCell>
         </DataTableRow>

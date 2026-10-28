@@ -52,17 +52,25 @@ test.describe.serial('alert level presentation', () => {
         expect(creations).toBe(1);
         await page.reload();
         const row = page.getByRole('row').filter({ hasText: policyName });
-        await row.getByRole('button', { name: 'Colours', exact: true }).click();
-        const edit = page.locator('[data-test="edit-alert-policy-display-modal"]');
-        await expect(edit.locator('input[type="text"]')).toHaveCount(0);
+        await row.getByRole('button', { name: 'Edit', exact: true }).click();
+        const edit = page.locator('[data-test="edit-alert-policy-modal"]');
+        await expect(edit.getByLabel('Level name', { exact: true })).toHaveCount(0);
         await expect(edit.getByLabel('Custom colour', { exact: true }).nth(0)).toHaveValue('#11aabb');
+        await expect(edit.getByLabel('No alert code', { exact: true })).toHaveValue('0');
+        await expect(edit.getByLabel('Action code', { exact: true })).toHaveValue('2');
+        await edit.getByLabel('Action code', { exact: true }).fill('RED');
         await edit.getByRole('button', { name: 'Yellow', exact: true }).nth(1).click();
         await expect(edit.getByRole('button', { name: 'Yellow', exact: true }).nth(1)).toHaveAttribute('aria-pressed', 'true');
+        const codesSaved = page.waitForResponse(response => response.request().method() === 'PATCH' && response.url().endsWith(`/v1/crud/alert-policies/${policyId}`));
         await edit.getByRole('button', { name: 'Save', exact: true }).click();
+        expect((await codesSaved).request().postDataJSON()).toEqual({ noAlertOutputCode: '0', levelOutputCodes: { Watch: '1', Action: 'RED' } });
         await expect(edit).not.toBeVisible();
         await page.reload();
         await expect(row.getByText(/Action/).locator('span')).toHaveCSS('background-color', 'rgb(255, 193, 7)');
         await expect(row.getByText(/Watch/).locator('span')).toHaveCSS('background-color', 'rgb(17, 170, 187)');
+        await row.getByRole('button', { name: 'Edit', exact: true }).click();
+        await expect(edit.getByLabel('Action code', { exact: true })).toHaveValue('RED');
+        await edit.getByRole('button', { name: 'Cancel', exact: true }).click();
         // Policies without saved colours fall back to defaults instead of erroring.
         await expect(page.getByText(/Saved colours could not be loaded/)).toHaveCount(0);
     });

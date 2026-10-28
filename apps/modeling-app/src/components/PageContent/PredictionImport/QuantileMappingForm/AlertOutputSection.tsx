@@ -1,5 +1,5 @@
 import i18n from '@dhis2/d2-i18n';
-import { Button, CircularLoader, NoticeBox, Switch } from '@dhis2/ui';
+import { NoticeBox, Switch } from '@dhis2/ui';
 import type { AlertPolicyRead, ApiError, OutbreakProbability } from '@dhis2-chap/ui';
 import type { KeyboardEvent, MouseEvent } from 'react';
 import { ThresholdCalculationStatus } from '../../../ThresholdTilesExplorer';
@@ -99,23 +99,19 @@ export const AlertOutputSection = ({
                 <>
                     {policy ? (
                         <>
-                            <SummaryItem label={i18n.t('Alert policy')} value={policy.name} />
-                            <p>{i18n.t('Calculate the highest alert level from the forecast using this policy. Missing results are skipped.')}</p>
-                            {policyOutputs.isLoading && <CircularLoader small />}
-                            {!!policyOutputs.error && (
-                                <NoticeBox error title={i18n.t('Unable to load policy alert outputs')}>
-                                    <Button small onClick={policyOutputs.retry}>{i18n.t('Retry')}</Button>
-                                </NoticeBox>
-                            )}
-                            {policyOutputs.codes && (
-                                <div className={styles.alertSummary}>
-                                    <SummaryItem label={i18n.t('No alert')} value={policyOutputs.codes.noAlert} />
-                                    {(policy.levels ?? []).map(level => (
-                                        <SummaryItem key={level.name} label={level.name} value={policyOutputs.codes!.levels[level.name]} />
-                                    ))}
-                                </div>
-                            )}
-                            <p>{i18n.t('Output codes can be changed on the Alert policies page.')}</p>
+                            <ThresholdCalculationStatus
+                                isLoading={policyOutputs.isLoading}
+                                isPaused={policyOutputs.isPaused}
+                                error={policyOutputs.error}
+                                onRetry={policyOutputs.retry}
+                            />
+                            <div className={styles.alertSummary}>
+                                <SummaryItem label={i18n.t('Alert policy')} value={policy.name} />
+                                <SummaryItem label={i18n.t('No alert')} value={policy.noAlertOutputCode ?? '0'} />
+                                {(policy.levels ?? []).map(level => (
+                                    <SummaryItem key={level.name} label={level.name} value={level.outputCode} />
+                                ))}
+                            </div>
                             {policyOutputs.isReady && policyOutputs.skippedCount > 0 && (
                                 <NoticeBox warning>
                                     {i18n.t('One region-period result is missing and will be skipped.', {

@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { AlertPoliciesService, type AlertPolicyCreate, type AlertPolicyRead, type ApiError, type DataBaseResponse } from '@dhis2-chap/ui';
+import { AlertPoliciesService, type AlertPolicyCodesUpdate, type AlertPolicyCreate, type AlertPolicyRead, type ApiError, type DataBaseResponse } from '@dhis2-chap/ui';
 
 export const ALERT_POLICIES_QUERY_KEY = ['alert-policies'];
 
@@ -21,6 +21,14 @@ export const useDeleteAlertPolicy = () => {
     const queryClient = useQueryClient();
     return useMutation<unknown, ApiError, number>({
         mutationFn: (id: number) => AlertPoliciesService.deleteAlertPolicyV1CrudAlertPoliciesAlertPolicyIdDelete(id),
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: ALERT_POLICIES_QUERY_KEY }),
+    });
+};
+
+export const useUpdateAlertPolicyCodes = () => {
+    const queryClient = useQueryClient();
+    return useMutation<AlertPolicyRead, ApiError, { policyId: number; codes: AlertPolicyCodesUpdate }>({
+        mutationFn: ({ policyId, codes }) => AlertPoliciesService.updateAlertPolicyCodesV1CrudAlertPoliciesAlertPolicyIdPatch(policyId, codes),
         onSuccess: () => queryClient.invalidateQueries({ queryKey: ALERT_POLICIES_QUERY_KEY }),
     });
 };

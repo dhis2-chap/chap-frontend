@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { canonicalizePeriodId } from '@dhis2-chap/core';
-import { DatasetsService, OpenAPI, PredictionsService, type AlertPolicyRead, type PredictionOrgUnitSeries } from '@dhis2-chap/ui';
+import { DatasetsService, OpenAPI, PredictionsService, type AlertPolicyRead, type ApiError, type PredictionEntry, type PredictionOrgUnitSeries, type ThresholdResponse } from '@dhis2-chap/ui';
 import { buildPolicyOutbreakIndicators, getAlertLevelQuantile } from '@/components/PageContent/PredictionImport/utils/policyOutbreakIndicators';
-import { useAlertPolicyOutputCodes } from './useAlertPolicyOutputCodes';
+import { getThresholdQueryState } from '@/utils/thresholdQueryState';
 
 export const usePolicyOutbreakIndicators = ({ predictionId, datasetId, policy, series, enabled }: {
     predictionId: number;
@@ -12,12 +12,12 @@ export const usePolicyOutbreakIndicators = ({ predictionId, datasetId, policy, s
     series: PredictionOrgUnitSeries[];
     enabled: boolean;
 }) => {
-    const codes = useAlertPolicyOutputCodes(policy);
     const periodIds = [...new Set(series.flatMap(region => region.points.map(point => canonicalizePeriodId(point.period))))];
     const locations = series.map(region => region.orgUnitId);
-    const results = useQuery({
+    const isQueryEnabled = enabled && !!policy;
+    const results = useQuery<{ entries: PredictionEntry[]; thresholds: ThresholdResponse[] }, ApiError>({
         queryKey: ['policy-outbreak-indicators', OpenAPI.BASE, predictionId, datasetId, policy, periodIds, locations],
-        enabled: enabled && !!policy,
+        enabled: isQueryEnabled,
         staleTime: Infinity,
         retry: 0,
         queryFn: async () => {
@@ -33,19 +33,14 @@ export const usePolicyOutbreakIndicators = ({ predictionId, datasetId, policy, s
             return { entries, thresholds };
         },
     });
-    const indicators = useMemo(() => policy && codes.data && results.data
-        ? buildPolicyOutbreakIndicators(series, policy, codes.data, results.data.entries, results.data.thresholds)
-        : [], [series, policy, codes.data, results.data]);
+    const indicators = useMemo(() => policy && results.data
+        ? buildPolicyOutbreakIndicators(series, policy, results.data.entries, results.data.thresholds)
+        : [], [series, policy, results.data]);
     return {
         indicators,
-        codes: codes.data,
-        isReady: codes.isSuccess && codes.fetchStatus === 'idle' && results.isSuccess && results.fetchStatus === 'idle',
-        isLoading: codes.isLoading || results.isLoading,
-        error: codes.error || results.error,
-        retry: () => {
-            void codes.refetch();
-            void results.refetch();
-        },
+        ...getThresholdQueryState(isQueryEnabled, results),
+        error: isQueryEnabled ? results.error : null,
+        retry: () => void results.refetch(),
         skippedCount: series.reduce((count, region) => count + region.points.length, 0) - indicators.length,
     };
 };
