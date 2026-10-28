@@ -11,6 +11,7 @@
     gap: var(--spacers-dp16);
 }
 
+/* Options on the left, buttons on the right. */
 .toolbar {
     display: flex;
     align-items: center;
@@ -70,6 +71,11 @@
 .number {
     font-variant-numeric: tabular-nums;
     white-space: nowrap;
+}
+
+/* The reference keeps its raw score while the other rows show how they compare with it. */
+.referenceScore {
+    color: var(--colors-grey600);
 }
 
 /* Blue, not green: best only means best among these runs, not a good score. */
@@ -139,7 +145,7 @@
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    gap: var(--spacers-dp8);
+    gap: var(--spacers-dp12);
 }
 
 .runs {
@@ -155,10 +161,3 @@
     gap: var(--spacers-dp4);
 }
 
-
-.modelTags {
-    display: flex;
-    gap: var(--spacers-dp4);
-    margin-block-start: var(--spacers-dp4);
-    white-space: nowrap;
-}

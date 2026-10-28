@@ -4,7 +4,7 @@ import { expect, it, vi } from 'vitest';
 import type { BacktestSpecificationRead, LeaderboardBacktestRead, MetricInfo, ReferenceModelResult } from '@dhis2-chap/ui';
 import { MetricComparison } from './MetricComparison';
 import { ReferenceModelSelector } from './ReferenceModelSelector';
-import { getReferenceModels, getSelectedReference } from './referenceModels';
+import { getComparisonValue, getReferenceModels, getSelectedReference, referenceLabel } from './referenceModels';
 
 vi.mock('@dhis2/ui', () => ({
     Tooltip: ({ content, children }: { content: string; children: ReactNode }) => createElement('span', { title: content }, children),
@@ -25,7 +25,7 @@ const render = (props: Partial<Parameters<typeof MetricComparison>[0]>) =>
     renderToStaticMarkup(createElement(MetricComparison, { metricId: 'crps', metric, reference: baseline, run, ...props }));
 
 it('shows a skill ratio as a percentage and other comparisons in the metric units', () => {
-    expect(render({})).toContain('title="Relative improvement over the reference."');
+    expect(render({})).toContain('title="Relative improvement over Global median. +20% means 20% better than it, -20% means 20% worse."');
     expect(render({})).toContain('+76% vs 8.07');
     expect(render({ metric: { ...metric, comparisonOp: 'difference', unit: 'cases' } })).toContain('+0.76 cases vs 8.07');
 });
@@ -53,4 +53,18 @@ it('selects the configured baseline by default, or another reference with scores
     expect(getSelectedReference([{ ...baseline, status: 'pending' } as ReferenceModelResult, comparison], undefined, 'global_median')).toBe(comparison);
     expect(getSelectedReference(references, '60', 'global_median')).toBe(comparison);
     expect(getSelectedReference(references, 'none', 'global_median')).toBeUndefined();
+});
+
+it('reads a run\'s comparison value with one reference', () => {
+    expect(getComparisonValue(run, baseline, 'crps')).toBe(0.76);
+    expect(getComparisonValue(run, baseline, 'mae')).toBeUndefined();
+    expect(getComparisonValue(run, comparison, 'crps')).toBeUndefined();
+    expect(getComparisonValue({ ...run, comparisons: [{ configuredModelId: 59, values: { crps: null } }] }, baseline, 'crps')).toBeUndefined();
+    expect(getComparisonValue(undefined, baseline, 'crps')).toBeUndefined();
+    expect(getComparisonValue(run, undefined, 'crps')).toBeUndefined();
+});
+
+it('labels a reference by display name and status', () => {
+    expect(referenceLabel(baseline)).toBe('Global median');
+    expect(referenceLabel({ ...baseline, status: 'pending' } as ReferenceModelResult)).toBe('Global median (Pending)');
 });

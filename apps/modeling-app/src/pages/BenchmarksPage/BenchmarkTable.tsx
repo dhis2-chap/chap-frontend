@@ -1,7 +1,8 @@
 import { ReactNode, useMemo, useState } from 'react';
+import cx from 'classnames';
 import i18n from '@dhis2/d2-i18n';
-import { Button, DataTable, DataTableBody, DataTableCell, DataTableColumnHeader, DataTableHead, DataTableRow, IconInfo16, NoticeBox, Tooltip } from '@dhis2/ui';
-import { LeaderboardBacktestRead, BacktestSpecificationRead, ReferenceModelResult, Tag, VisualizationsService } from '@dhis2-chap/ui';
+import { Button, Checkbox, DataTable, DataTableBody, DataTableCell, DataTableColumnHeader, DataTableHead, DataTableRow, MenuItem, NoticeBox, SingleSelect, Tooltip } from '@dhis2/ui';
+import { LeaderboardBacktestRead, BacktestSpecificationRead, VisualizationsService } from '@dhis2-chap/ui';
 import { createColumnHelper, flexRender, getCoreRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
@@ -9,22 +10,29 @@ import { saveAs } from 'file-saver';
 import { TableActionButton } from '../../components/TableActionButton';
 import { useModels } from '../../hooks/useModels';
 import { benchmarkCsv, getBestRunIds, getMetricIds, metricSortKey } from './benchmarkUtils';
-import { getDefaultMetricIds, prettifyMetricId } from '../../components/PageContent/EvaluationDetails/EvaluationMetricsWidget/metricCatalog';
-import { statusLabel } from '../../components/ModelComparisons/referenceModels';
+import { formatComparison, getDefaultMetricIds, prettifyMetricId } from '../../components/PageContent/EvaluationDetails/EvaluationMetricsWidget/metricCatalog';
+import { MetricInfoIcon } from '../../components/MetricInfoIcon/MetricInfoIcon';
+import { getComparison, referenceLabel, referenceName, useReferenceModel } from '../../components/ModelComparisons/referenceModels';
+import comparisonStyles from '../../components/ModelComparisons/ModelComparisons.module.css';
 import styles from './BenchmarksPage.module.css';
 
-/* The display name is resolved into the row, because the table caches row values until the data changes. */
-type BenchmarkRun = LeaderboardBacktestRead & { modelName: string; reference?: ReferenceModelResult };
+/* The display name and the comparison with the selected reference are resolved into the row, because the table caches row values until the data changes. */
+type BenchmarkRun = LeaderboardBacktestRead & { modelName: string; comparison?: Record<string, number | null> };
 
 const columnHelper = createColumnHelper<BenchmarkRun>();
 
 type Props = {
     specification: BacktestSpecificationRead;
+    /* Filters and status, shown with the comparison controls. */
+    options?: ReactNode;
+    /* Buttons, shown on the right. */
     actions?: ReactNode;
     children?: ReactNode;
 };
 
 const isMetricColumn = (id: string) => id.startsWith('metric:');
+
+const finite = (value: number | null | undefined) => typeof value === 'number' && Number.isFinite(value) ? value : undefined;
 
 const ViewEvaluationButton = ({ evaluationId }: { evaluationId: number }) => {
     const navigate = useNavigate();
@@ -35,21 +43,7 @@ const ViewEvaluationButton = ({ evaluationId }: { evaluationId: number }) => {
     );
 };
 
-/* Chap Core lists baseline runs with the specification instead of among its backtests. A baseline that has not run keeps its status in the row. */
-const baselineRun = (specification: BacktestSpecificationRead, reference: ReferenceModelResult): BenchmarkRun => ({
-    id: reference.backtestId ?? -reference.configuredModel.id,
-    datasetId: specification.dataset.id,
-    dataset: specification.dataset,
-    specificationId: specification.id,
-    modelId: reference.configuredModel.name,
-    configuredModel: reference.configuredModel,
-    modelTemplateVersion: reference.configuredModel.modelTemplate.version,
-    aggregateMetrics: reference.aggregateMetrics ?? {},
-    modelName: reference.configuredModel.modelTemplate.displayName || reference.configuredModel.name,
-    reference,
-});
-
-export const BenchmarkTable = ({ specification, actions, children }: Props) => {
+export const BenchmarkTable = ({ specification, options, actions, children }: Props) => {
     const { backtests } = specification;
     const evaluationId = backtests[0]?.id;
     // Chap Core 2.6 lists the configured metrics with the specification; older versions need the catalog.
@@ -67,61 +61,61 @@ export const BenchmarkTable = ({ specification, actions, children }: Props) => {
     const metricIds = showAllMetrics || !defaultMetricIds.length ? allMetricIds : defaultMetricIds;
     // Runs keep pointing at archived models, so resolve names against all of them.
     const { models } = useModels({ includeArchived: true });
-    // Newest runs first until the user sorts by a column, then the baselines.
-    const runs = useMemo<BenchmarkRun[]>(() => [
-        ...backtests
-            .map(run => ({ ...run, modelName: models?.find(model => model.id === run.configuredModel?.id)?.displayName || run.configuredModel?.name || run.modelId }))
-            .sort((a, b) => (b.created ?? '').localeCompare(a.created ?? '')),
-        ...(specification.baselines ?? []).map(reference => baselineRun(specification, reference)),
-    ], [backtests, models, specification]);
+    const [comparing, setComparing] = useState(false);
+    const { references, reference: selectedReference, select } = useReferenceModel(specification);
+    const reference = comparing ? selectedReference : undefined;
+    // Newest runs first until the user sorts by a column. Baselines are only shown as the reference to compare with.
+    const runs = useMemo<BenchmarkRun[]>(() => backtests
+        .map(run => ({
+            ...run,
+            modelName: models?.find(model => model.id === run.configuredModel?.id)?.displayName || run.configuredModel?.name || run.modelId,
+            comparison: getComparison(run, reference),
+        }))
+        .sort((a, b) => (b.created ?? '').localeCompare(a.created ?? '')), [backtests, models, reference]);
     const columns = useMemo(() => [
         columnHelper.accessor('modelName', {
             id: 'model',
             header: i18n.t('Model'),
-            cell: (info) => {
-                const reference = info.row.original.reference;
-                return (
-                    <span className={styles.strong}>
-                        {info.getValue()}
-                        {reference && (
-                            <span className={styles.modelTags} title={reference.message ?? undefined}>
-                                <Tag>{i18n.t('Baseline')}</Tag>
-                                {reference.status !== 'done' && (
-                                    <Tag variant={reference.status === 'pending' ? 'info' : 'warning'}>{statusLabel(reference.status)}</Tag>
-                                )}
-                            </span>
-                        )}
-                    </span>
-                );
-            },
+            cell: info => <span className={styles.strong}>{info.getValue()}</span>,
         }),
         ...metricIds.map((metricId) => {
             const metric = metrics?.find(item => item.id === metricId);
             const bestRunIds = getBestRunIds(runs, metric);
             const label = metric?.displayName || prettifyMetricId(metricId);
-            return columnHelper.accessor(run => Number.isFinite(run.aggregateMetrics[metricId]) ? run.aggregateMetrics[metricId] : undefined, {
+            const score = (run: BenchmarkRun) => finite(run.aggregateMetrics[metricId]);
+            // Comparison values are oriented so positive is better, whatever the metric's own direction.
+            return columnHelper.accessor(run => reference ? finite(run.comparison?.[metricId]) : score(run), {
                 id: `metric:${metricId}`,
                 header: () => (
                     <span className={styles.metricHeader}>
-                        {metric?.unit ? `${label} (${metric.unit})` : label}
-                        {metric?.description?.trim() && (
-                            <Tooltip content={metric.description}>
-                                <span className={styles.infoIcon}>
-                                    <IconInfo16 color="var(--colors-grey600)" />
-                                </span>
-                            </Tooltip>
-                        )}
+                        {metric?.unit && !reference ? `${label} (${metric.unit})` : label}
+                        <MetricInfoIcon metric={metric} comparedWith={reference && referenceName(reference)} />
                     </span>
                 ),
                 sortUndefined: 'last',
-                sortingFn: (a, b, id) => metricSortKey(a.getValue<number>(id), metric) - metricSortKey(b.getValue<number>(id), metric),
+                sortingFn: reference
+                    ? (a, b, id) => b.getValue<number>(id) - a.getValue<number>(id)
+                    : (a, b, id) => metricSortKey(a.getValue<number>(id), metric) - metricSortKey(b.getValue<number>(id), metric),
                 cell: (info) => {
+                    const run = info.row.original;
+                    const best = bestRunIds.has(run.id);
+                    // A comparison model run is not compared with itself, so its row keeps the score the others are compared with.
+                    if (reference && run.id === reference.backtestId) {
+                        const referenceScore = score(run);
+                        return referenceScore === undefined ? '—' : (
+                            <span className={cx(styles.referenceScore, { [styles.best]: best })} title={i18n.t('Score of {{reference}}, which the other rows are compared with', { reference: referenceName(reference) })}>
+                                {referenceScore.toLocaleString(undefined, { maximumSignificantDigits: 6 })}
+                            </span>
+                        );
+                    }
                     const value = info.getValue();
                     if (value === undefined) return '—';
-                    const best = bestRunIds.has(info.row.original.id);
                     return (
-                        <span className={best ? styles.best : undefined} title={best ? i18n.t('Best score among these runs') : undefined}>
-                            {value.toLocaleString(undefined, { maximumSignificantDigits: 6 })}
+                        <span
+                            className={cx({ [comparisonStyles.better]: reference && value > 0, [comparisonStyles.worse]: reference && value < 0, [styles.best]: best })}
+                            title={best ? i18n.t('Best score among these runs') : undefined}
+                        >
+                            {reference ? formatComparison(value, metric) : value.toLocaleString(undefined, { maximumSignificantDigits: 6 })}
                         </span>
                     );
                 },
@@ -136,9 +130,9 @@ export const BenchmarkTable = ({ specification, actions, children }: Props) => {
         columnHelper.display({
             id: 'actions',
             header: i18n.t('Actions'),
-            cell: ({ row }) => row.original.id > 0 && <ViewEvaluationButton evaluationId={row.original.id} />,
+            cell: ({ row }) => <ViewEvaluationButton evaluationId={row.original.id} />,
         }),
-    ], [runs, metricIds, metrics]);
+    ], [runs, metricIds, metrics, reference]);
     const table = useReactTable({
         data: runs,
         columns,
@@ -148,14 +142,42 @@ export const BenchmarkTable = ({ specification, actions, children }: Props) => {
         getSortedRowModel: getSortedRowModel(),
     });
 
+    const referenceSelect = selectedReference && (
+        <SingleSelect dense disabled={!comparing} selected={String(selectedReference.configuredModel.id)} onChange={({ selected }) => select(selected)}>
+            {references.map(item => (
+                <MenuItem key={item.configuredModel.id} value={String(item.configuredModel.id)} label={referenceLabel(item)} />
+            ))}
+        </SingleSelect>
+    );
+
     return (
         <>
+            <div>
+                <h2 className={styles.cardTitle}>{i18n.t('Benchmarks')}</h2>
+                <p className={styles.caption}>
+                    {reference
+                        ? i18n.t('Scores compared with {{reference}}, aggregated across all splits and organisation units. Positive means better than {{reference}}, negative means worse. The best score in each column is highlighted, including ties.', { reference: referenceName(reference) })
+                        : i18n.t('Aggregate scores across all splits and organisation units. The best score in each column is highlighted, including ties. Best only means best among these runs, not necessarily a good score.')}
+                </p>
+            </div>
             <div className={styles.toolbar}>
-                <div>
-                    <h2 className={styles.cardTitle}>{i18n.t('Benchmarks')}</h2>
-                    <p className={styles.caption}>
-                        {i18n.t('Aggregate scores across all splits and organisation units. The best score in each column is highlighted, including ties. Best only means best among these runs, not necessarily a good score.')}
-                    </p>
+                <div className={styles.actions}>
+                    {references.length > 0 && (
+                        <>
+                            <Checkbox
+                                dense
+                                label={i18n.t('Compare with baseline')}
+                                checked={comparing}
+                                onChange={({ checked }) => setComparing(checked)}
+                            />
+                            {selectedReference && (comparing ? referenceSelect : (
+                                <Tooltip content={i18n.t('Tick Compare with baseline to choose which model the scores are compared with.')}>
+                                    {referenceSelect}
+                                </Tooltip>
+                            ))}
+                        </>
+                    )}
+                    {options}
                 </div>
                 <div className={styles.actions}>
                     {actions}

@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-27T20:08:59.725Z\n"
-"PO-Revision-Date: 2026-10-27T20:08:59.726Z\n"
+"POT-Creation-Date: 2026-10-28T14:50:58.464Z\n"
+"PO-Revision-Date: 2026-10-28T14:50:58.465Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -560,9 +560,6 @@ msgstr "Cancelled"
 msgid "{{improvement}} vs {{reference}}"
 msgstr "{{improvement}} vs {{reference}}"
 
-msgid "{{name}} ({{status}})"
-msgstr "{{name}} ({{status}})"
-
 msgid "Compare with"
 msgstr "Compare with"
 
@@ -574,6 +571,9 @@ msgstr "No comparison"
 
 msgid "Not applicable"
 msgstr "Not applicable"
+
+msgid "{{name}} ({{status}})"
+msgstr "{{name}} ({{status}})"
 
 msgid "Map Data Items"
 msgstr "Map Data Items"
@@ -1726,6 +1726,37 @@ msgid_plural "Show all {{count}} metrics"
 msgstr[0] "Show all {{count}} metrics"
 msgstr[1] "Show all {{count}} metrics"
 
+msgid ""
+"Relative improvement over {{reference}}. +20% means 20% better than it, "
+"-20% means 20% worse."
+msgstr ""
+"Relative improvement over {{reference}}. +20% means 20% better than it, "
+"-20% means 20% worse."
+
+msgid ""
+"Improvement over {{reference}} in the units of the score. Positive means "
+"better, negative means worse."
+msgstr ""
+"Improvement over {{reference}} in the units of the score. Positive means "
+"better, negative means worse."
+
+msgid ""
+"How much closer to the target of {{target}} than {{reference}}. Positive "
+"means better, negative means worse."
+msgstr ""
+"How much closer to the target of {{target}} than {{reference}}. Positive "
+"means better, negative means worse."
+
+msgid ""
+"How much closer to the target than {{reference}}. Positive means better, "
+"negative means worse."
+msgstr ""
+"How much closer to the target than {{reference}}. Positive means better, "
+"negative means worse."
+
+msgid "Compared with {{reference}}. Positive means better, negative means worse."
+msgstr "Compared with {{reference}}. Positive means better, negative means worse."
+
 msgid "Higher is better, up to the target of {{target}}."
 msgstr "Higher is better, up to the target of {{target}}."
 
@@ -2829,8 +2860,20 @@ msgstr[1] "{{count}} models running"
 msgid "View evaluation"
 msgstr "View evaluation"
 
+msgid "Score of {{reference}}, which the other rows are compared with"
+msgstr "Score of {{reference}}, which the other rows are compared with"
+
 msgid "Best score among these runs"
 msgstr "Best score among these runs"
+
+msgid ""
+"Scores compared with {{reference}}, aggregated across all splits and "
+"organisation units. Positive means better than {{reference}}, negative "
+"means worse. The best score in each column is highlighted, including ties."
+msgstr ""
+"Scores compared with {{reference}}, aggregated across all splits and "
+"organisation units. Positive means better than {{reference}}, negative "
+"means worse. The best score in each column is highlighted, including ties."
 
 msgid ""
 "Aggregate scores across all splits and organisation units. The best score "
@@ -2840,6 +2883,16 @@ msgstr ""
 "Aggregate scores across all splits and organisation units. The best score "
 "in each column is highlighted, including ties. Best only means best among "
 "these runs, not necessarily a good score."
+
+msgid "Compare with baseline"
+msgstr "Compare with baseline"
+
+msgid ""
+"Tick Compare with baseline to choose which model the scores are compared "
+"with."
+msgstr ""
+"Tick Compare with baseline to choose which model the scores are compared "
+"with."
 
 msgid "Show default metrics"
 msgstr "Show default metrics"

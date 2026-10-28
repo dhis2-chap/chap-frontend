@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { MetricInfo } from '@dhis2-chap/ui';
-import { getDefaultMetricIds, getMetricGuidance, sortMetricIds } from './metricCatalog';
+import { formatComparison, getComparisonGuidance, getDefaultMetricIds, getMetricGuidance, sortMetricIds } from './metricCatalog';
 
 const catalog = [
     { id: 'rmse', displayName: 'RMSE', sortOrder: 1, isSelected: false },
@@ -27,5 +27,28 @@ describe('metric guidance', () => {
         expect(guidance({ target: 0.8, targetBehavior: 'closest' })).toBe('Closer to the target of 0.8 is better.');
         expect(guidance({ target: 80, unit: '%', targetBehavior: 'at_least' })).toBe('Higher is better, up to the target of 80 %.');
         expect(guidance({ optimizationDirection: null })).toBeUndefined();
+    });
+});
+
+describe('comparison guidance', () => {
+    const guidance = (metric: object) => getComparisonGuidance(metric as MetricInfo, 'Global median');
+
+    it('explains each comparison operator with the reference by name and the sign convention', () => {
+        expect(guidance({ comparisonOp: 'skill_ratio' })).toBe('Relative improvement over Global median. +20% means 20% better than it, -20% means 20% worse.');
+        expect(guidance({ comparisonOp: 'difference', unit: '%' })).toBe('Improvement over Global median in the units of the score. Positive means better, negative means worse.');
+        expect(guidance({ comparisonOp: 'target_distance', target: 0.8 })).toBe('How much closer to the target of 0.8 than Global median. Positive means better, negative means worse.');
+    });
+
+    it('falls back to the backend description, then to the sign convention', () => {
+        expect(guidance({ comparisonOp: 'new_op', comparisonDescription: 'Backend explanation.' })).toBe('Backend explanation.');
+        expect(guidance({ comparisonOp: 'new_op' })).toBe('Compared with Global median. Positive means better, negative means worse.');
+        expect(guidance({})).toBe('Compared with Global median. Positive means better, negative means worse.');
+    });
+
+    it('formats a skill ratio as a signed percentage and other comparisons in the metric units', () => {
+        expect(formatComparison(0.76, { comparisonOp: 'skill_ratio' } as MetricInfo)).toBe('+76%');
+        expect(formatComparison(-0.5, { comparisonOp: 'skill_ratio' } as MetricInfo)).toBe('-50%');
+        expect(formatComparison(0.76, { comparisonOp: 'difference', unit: 'cases' } as MetricInfo)).toBe('+0.76 cases');
+        expect(formatComparison(0, { comparisonOp: 'difference' } as MetricInfo)).toBe('0');
     });
 });

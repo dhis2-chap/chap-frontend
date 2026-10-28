@@ -9,3 +9,12 @@
     font-variant-numeric: tabular-nums;
     white-space: nowrap;
 }
+
+/* Text colour only: a positive comparison is better than the reference, not necessarily good. */
+.better {
+    color: var(--colors-green800);
+}
+
+.worse {
+    color: var(--colors-red800);
+}

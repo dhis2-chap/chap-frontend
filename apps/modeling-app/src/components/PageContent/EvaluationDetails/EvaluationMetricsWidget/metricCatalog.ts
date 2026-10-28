@@ -39,6 +39,31 @@ export const formatScore = (score: number, unit?: string | null) => {
     return unit ? `${formatted} ${unit}` : formatted;
 };
 
+/* Comparison values are signed because Chap Core orients every operator so positive means better than the reference. */
+export const formatComparison = (value: number, metric?: MetricInfo) => {
+    if (metric?.comparisonOp === 'skill_ratio') {
+        return value.toLocaleString(undefined, { style: 'percent', maximumSignificantDigits: 3, signDisplay: 'exceptZero' });
+    }
+    const formatted = value.toLocaleString(undefined, { maximumSignificantDigits: 3, signDisplay: 'exceptZero' });
+    return metric?.unit ? `${formatted} ${metric.unit}` : formatted;
+};
+
+/* How to read a comparison with the named reference. Unknown operators fall back to the backend's own description. */
+export const getComparisonGuidance = (metric: MetricInfo | undefined, reference: string) => {
+    switch (metric?.comparisonOp) {
+        case 'skill_ratio':
+            return i18n.t('Relative improvement over {{reference}}. +20% means 20% better than it, -20% means 20% worse.', { reference });
+        case 'difference':
+            return i18n.t('Improvement over {{reference}} in the units of the score. Positive means better, negative means worse.', { reference });
+        case 'target_distance':
+            return metric.target != null
+                ? i18n.t('How much closer to the target of {{target}} than {{reference}}. Positive means better, negative means worse.', { target: formatScore(metric.target, metric.unit), reference })
+                : i18n.t('How much closer to the target than {{reference}}. Positive means better, negative means worse.', { reference });
+        default:
+            return metric?.comparisonDescription?.trim() || i18n.t('Compared with {{reference}}. Positive means better, negative means worse.', { reference });
+    }
+};
+
 /* How to read a score, from the direction or target the backend declares for the metric. */
 export const getMetricGuidance = (metric?: MetricInfo) => {
     if (metric?.target != null) {

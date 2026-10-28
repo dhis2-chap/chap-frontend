@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import i18n from '@dhis2/d2-i18n';
-import type { BacktestSpecificationRead, ReferenceModelResult, SpecificationBaselineStatus } from '@dhis2-chap/ui';
+import type { BacktestSpecificationRead, LeaderboardBacktestRead, ReferenceModelResult, SpecificationBaselineStatus } from '@dhis2-chap/ui';
 
 export const statusLabel = (status: SpecificationBaselineStatus) => ({
     done: i18n.t('Done'),
@@ -8,6 +8,21 @@ export const statusLabel = (status: SpecificationBaselineStatus) => ({
     not_applicable: i18n.t('Not applicable'),
     failed: i18n.t('Failed'),
 })[status];
+
+export const referenceName = ({ configuredModel }: ReferenceModelResult) => configuredModel.modelTemplate.displayName || configuredModel.name;
+
+export const referenceLabel = (reference: ReferenceModelResult) => reference.status === 'done'
+    ? referenceName(reference)
+    : i18n.t('{{name}} ({{status}})', { name: referenceName(reference), status: statusLabel(reference.status) });
+
+/* Chap Core only compares a run with references that are done and are not the run's own model, so a missing comparison means none. */
+export const getComparison = (run: LeaderboardBacktestRead | undefined, reference: ReferenceModelResult | undefined) =>
+    reference && run?.comparisons?.find(comparison => comparison.configuredModelId === reference.configuredModel.id)?.values;
+
+export const getComparisonValue = (run: LeaderboardBacktestRead | undefined, reference: ReferenceModelResult | undefined, metricId: string) => {
+    const value = getComparison(run, reference)?.[metricId];
+    return typeof value === 'number' && Number.isFinite(value) ? value : undefined;
+};
 
 export const getReferenceModels = (specification?: BacktestSpecificationRead) => [
     ...specification?.baselines ?? [],
