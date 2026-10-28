@@ -155,9 +155,10 @@
     gap: var(--spacers-dp4);
 }
 
-.infoIcon {
-    display: inline-flex;
-    align-items: center;
-    inline-size: 16px;
-    block-size: 16px;
+
+.modelTags {
+    display: flex;
+    gap: var(--spacers-dp4);
+    margin-block-start: var(--spacers-dp4);
+    white-space: nowrap;
 }

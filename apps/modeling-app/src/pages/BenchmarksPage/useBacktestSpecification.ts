@@ -10,5 +10,4 @@ export const useBacktestSpecification = (id: number, includeArchivedModels = fal
     keepPreviousData: true,
     refetchOnMount: 'always',
     refetchOnWindowFocus: true,
-    refetchInterval: data => data?.baselines?.some(reference => reference.status === 'pending') ? 5000 : false,
 });

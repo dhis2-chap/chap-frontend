@@ -1,36 +1,11 @@
 .controls {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacers-dp8);
     inline-size: 100%;
-    max-inline-size: 560px;
 }
 
-.description {
-    margin: 0;
-    color: var(--colors-grey700);
-    font-size: 12px;
-    line-height: 1.5;
-}
-
-.scores {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacers-dp4);
-    margin-block-start: var(--spacers-dp4);
-    color: var(--colors-grey700);
-    font-size: 12px;
+.comparison {
+    display: block;
+    color: var(--colors-grey600);
+    font-size: 0.7rem;
     font-variant-numeric: tabular-nums;
-    white-space: normal;
-}
-
-.improvement {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--spacers-dp4);
-}
-
-.infoIcon {
-    display: inline-flex;
-    flex-shrink: 0;
+    white-space: nowrap;
 }

@@ -31,8 +31,7 @@ const BenchmarkDetails = ({ id }: { id: number }) => {
     }, { replace: true });
     const [submitted, setSubmitted] = useState<MakeBacktestsResponse>();
     const [includeArchived, setIncludeArchived] = useState(false);
-    const [includeComparisonModels, setIncludeComparisonModels] = useState(false);
-    const query = useBacktestSpecification(id, includeArchived, includeComparisonModels);
+    const query = useBacktestSpecification(id, includeArchived);
     const runningJobs = useRunningBenchmarkJobs();
 
     if (!isValidSpecificationId(id)) return <NoticeBox error title={i18n.t('Invalid benchmark')} />;
@@ -41,7 +40,6 @@ const BenchmarkDetails = ({ id }: { id: number }) => {
         return (
             <ChapErrorNotice error={query.error} title={i18n.t('Could not load benchmark')}>
                 {includeArchived && <Button small onClick={() => setIncludeArchived(false)}>{i18n.t('Hide archived models')}</Button>}
-                {includeComparisonModels && <Button small onClick={() => setIncludeComparisonModels(false)}>{i18n.t('Hide comparison models')}</Button>}
             </ChapErrorNotice>
         );
     }
@@ -72,9 +70,6 @@ const BenchmarkDetails = ({ id }: { id: number }) => {
                 <Card className={styles.card}>
                     <BenchmarkTable
                         specification={specification}
-                        includeComparisonModels={includeComparisonModels}
-                        onIncludeComparisonModels={setIncludeComparisonModels}
-                        loading={query.isFetching}
                         actions={(
                             <>
                                 <Checkbox

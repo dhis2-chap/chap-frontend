@@ -1,3 +1,4 @@
+import i18n from '@dhis2/d2-i18n';
 import type { MetricInfo } from '@dhis2-chap/ui';
 
 /* Demonstration and test metrics from the backend registry, not meant for users. */
@@ -28,4 +29,25 @@ export const sortMetricIds = (metricIds: string[], catalog?: MetricInfo[]) => {
 export const getDefaultMetricIds = (metricIds: string[], catalog?: MetricInfo[]) => {
     const selected = metricIds.filter(metricId => catalog?.find(metric => metric.id === metricId)?.isSelected);
     return selected.length > 0 ? selected : metricIds.filter(metricId => HEADLINE_METRIC_IDS.includes(metricId));
+};
+
+export const formatScore = (score: number, unit?: string | null) => {
+    /* Scores below 1 keep significant digits so small errors stay distinguishable instead of rounding to zero. */
+    const formatted = Math.abs(score) >= 1
+        ? score.toLocaleString(undefined, { maximumFractionDigits: 2 })
+        : score.toLocaleString(undefined, { maximumSignificantDigits: 3 });
+    return unit ? `${formatted} ${unit}` : formatted;
+};
+
+/* How to read a score, from the direction or target the backend declares for the metric. */
+export const getMetricGuidance = (metric?: MetricInfo) => {
+    if (metric?.target != null) {
+        const target = formatScore(metric.target, metric.unit);
+        return metric.targetBehavior === 'at_least'
+            ? i18n.t('Higher is better, up to the target of {{target}}.', { target })
+            : i18n.t('Closer to the target of {{target}} is better.', { target });
+    }
+    if (metric?.optimizationDirection === 'maximize') return i18n.t('Higher is better.');
+    if (metric?.optimizationDirection === 'minimize') return i18n.t('Lower is better.');
+    return undefined;
 };
