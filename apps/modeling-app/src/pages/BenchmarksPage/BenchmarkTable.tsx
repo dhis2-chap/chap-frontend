@@ -162,7 +162,7 @@ export const BenchmarkTable = ({ specification, options, actions, children }: Pr
             </div>
             <div className={styles.toolbar}>
                 <div className={styles.actions}>
-                    {references.length > 0 && (
+                    {referenceSelect && (
                         <>
                             <Checkbox
                                 dense
@@ -170,11 +170,11 @@ export const BenchmarkTable = ({ specification, options, actions, children }: Pr
                                 checked={comparing}
                                 onChange={({ checked }) => setComparing(checked)}
                             />
-                            {selectedReference && (comparing ? referenceSelect : (
-                                <Tooltip content={i18n.t('Tick Compare with baseline to choose which model the scores are compared with.')}>
+                            {comparing ? referenceSelect : (
+                                <Tooltip content={i18n.t('Tick Compare with baseline to choose the reference.')}>
                                     {referenceSelect}
                                 </Tooltip>
-                            ))}
+                            )}
                         </>
                     )}
                     {options}
