@@ -188,6 +188,17 @@ export const CreateAlertPolicyModal = ({ onClose }: { onClose: () => void }) => 
                         const levelErrors = errors.levels?.[index];
                         return (
                             <div key={field.id} className={styles.policyLevel}>
+                                <div className={styles.policyLevelHeader}>
+                                    <span>{i18n.t('Level {{number}}', { number: index + 1 })}</span>
+                                    <Button
+                                        small
+                                        secondary
+                                        icon={<IconDelete16 />}
+                                        title={i18n.t('Remove level')}
+                                        disabled={fields.length === 1}
+                                        onClick={() => remove(index)}
+                                    />
+                                </div>
                                 <div className={styles.policyLevelRow}>
                                     <Controller
                                         name={`levels.${index}.name`}
@@ -226,14 +237,6 @@ export const CreateAlertPolicyModal = ({ onClose }: { onClose: () => void }) => 
                                                 validationText={levelErrors?.code?.message}
                                             />
                                         )}
-                                    />
-                                    <Button
-                                        small
-                                        secondary
-                                        icon={<IconDelete16 />}
-                                        title={i18n.t('Remove level')}
-                                        disabled={fields.length === 1}
-                                        onClick={() => remove(index)}
                                     />
                                 </div>
                                 <div className={styles.policyLevelThreshold}>

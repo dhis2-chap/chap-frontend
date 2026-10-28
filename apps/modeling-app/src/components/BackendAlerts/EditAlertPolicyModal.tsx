@@ -55,6 +55,7 @@ export const EditAlertPolicyModal = ({ policy, display, onClose }: {
                     />
                     {levels.map((level, index) => (
                         <div key={level.name} className={styles.policyLevel}>
+                            <div className={styles.policyLevelHeader}>{i18n.t('Level {{number}}', { number: index + 1 })}</div>
                             <div className={styles.policyLevelRow}>
                                 <InputField dense name={`level-name-${index}`} label={i18n.t('Level name')} value={level.name} disabled />
                                 <AlertColorSelect

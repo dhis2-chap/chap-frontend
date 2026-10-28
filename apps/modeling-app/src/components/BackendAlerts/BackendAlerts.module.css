@@ -84,15 +84,17 @@
     border-radius: 3px;
 }
 
-.policyLevelRow {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr)) auto;
-    gap: var(--spacers-dp12);
+.policyLevelHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: 500;
 }
 
-.policyLevelRow > button {
-    align-self: start;
-    margin-block-start: 26px;
+.policyLevelRow {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--spacers-dp12);
 }
 
 .policyLevelThreshold {
@@ -109,5 +111,4 @@
 
 @media (max-width: 600px) {
     .policyLevelRow { grid-template-columns: minmax(0, 1fr); }
-    .policyLevelRow > button { margin: 0; }
 }

@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-28T10:36:17.931Z\n"
-"PO-Revision-Date: 2026-10-28T10:36:17.932Z\n"
+"POT-Creation-Date: 2026-10-28T10:36:59.113Z\n"
+"PO-Revision-Date: 2026-10-28T10:36:59.114Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -165,6 +165,12 @@ msgstr ""
 "Levels are saved from least to most strict, where a higher minimum "
 "probability is stricter."
 
+msgid "Level {{number}}"
+msgstr "Level {{number}}"
+
+msgid "Remove level"
+msgstr "Remove level"
+
 msgid "Level name"
 msgstr "Level name"
 
@@ -173,9 +179,6 @@ msgstr "e.g. Monitor"
 
 msgid "Outbreak import code"
 msgstr "Outbreak import code"
-
-msgid "Remove level"
-msgstr "Remove level"
 
 msgid ""
 "Fires when the forecast exceeds this threshold with at least the minimum "
