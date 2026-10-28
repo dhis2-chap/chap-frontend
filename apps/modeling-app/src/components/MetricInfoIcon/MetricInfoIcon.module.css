@@ -1,0 +1,14 @@
+.icon {
+    display: inline-flex;
+    align-items: center;
+    inline-size: 16px;
+    block-size: 16px;
+}
+
+.paragraph {
+    margin: 0;
+}
+
+.paragraph + .paragraph {
+    margin-block-start: 4px;
+}

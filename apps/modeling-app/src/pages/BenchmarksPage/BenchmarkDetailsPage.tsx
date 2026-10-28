@@ -31,7 +31,8 @@ const BenchmarkDetails = ({ id }: { id: number }) => {
     }, { replace: true });
     const [submitted, setSubmitted] = useState<MakeBacktestsResponse>();
     const [includeArchived, setIncludeArchived] = useState(false);
-    const query = useBacktestSpecification(id, includeArchived);
+    // Comparison models are offered as references next to the built-in baselines.
+    const query = useBacktestSpecification(id, includeArchived, true);
     const runningJobs = useRunningBenchmarkJobs();
 
     if (!isValidSpecificationId(id)) return <NoticeBox error title={i18n.t('Invalid benchmark')} />;
@@ -70,7 +71,7 @@ const BenchmarkDetails = ({ id }: { id: number }) => {
                 <Card className={styles.card}>
                     <BenchmarkTable
                         specification={specification}
-                        actions={(
+                        options={(
                             <>
                                 <Checkbox
                                     dense
@@ -79,9 +80,9 @@ const BenchmarkDetails = ({ id }: { id: number }) => {
                                     onChange={({ checked }) => setIncludeArchived(checked)}
                                 />
                                 <BenchmarkRunsIndicator specification={specification} runningJobs={runningJobs} />
-                                <Button small primary disabled={addingModels} onClick={() => setAddingModels(true)}>{i18n.t('Add models')}</Button>
                             </>
                         )}
+                        actions={<Button small primary disabled={addingModels} onClick={() => setAddingModels(true)}>{i18n.t('Add models')}</Button>}
                     >
                         {addingModels && (
                             <AddBenchmarkModels

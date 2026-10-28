@@ -57,7 +57,8 @@ test('starts model runs from New benchmark and groups them by dataset and parame
         }
         return status;
     }, { timeout: 180_000, intervals: [3000] }).toBe('SUCCESS');
-    await expect(page.getByRole('button', { name: 'View evaluation', exact: true })).toHaveCount(2, { timeout: 20_000 });
+    // The fixture evaluation and the new run.
+    await expect(page.getByRole('button', { name: 'View evaluation', exact: true }).nth(1)).toBeVisible({ timeout: 20_000 });
 });
 
 test('uses benchmark actions to view, add models, export scores and reuse the dataset', async ({ page }) => {
@@ -131,10 +132,24 @@ test('uses benchmark actions to view, add models, export scores and reuse the da
         return status;
     }, { timeout: 180_000, intervals: [3000] }).toBe('SUCCESS');
     // Job completion must refresh the benchmarks without a manual reload.
-    await expect(page.getByRole('button', { name: 'View evaluation', exact: true })).toHaveCount(2, { timeout: 20_000 });
-    await expect(page.getByRole('cell', { name: modelDisplayName, exact: true })).toHaveCount(2);
+    await expect(page.getByRole('cell', { name: modelDisplayName, exact: true })).toHaveCount(2, { timeout: 20_000 });
     await expect(page.locator('[title="Best score among these runs"]').first()).toBeVisible();
-    await expect(page.getByRole('button', { name: 'View evaluation', exact: true }).last()).toHaveAttribute('data-test', `view-evaluation-${evaluation.id}`);
+    // Newest run first, then the fixture evaluation.
+    await expect(page.getByRole('button', { name: 'View evaluation', exact: true }).nth(1)).toHaveAttribute('data-test', `view-evaluation-${evaluation.id}`);
+
+    // Chap Core 2.6 queues the baselines when the benchmark is first read and compares every run with those that are done.
+    if (isVersionCompatible(chapVersion, '2.6.0')) {
+        await expect.poll(async () => {
+            const current = await readJson<BacktestSpecificationRead>(await getChap(page, `/v1/crud/backtest-specifications/${specification.id}`), 'Load baselines');
+            return current.baselines?.some(baseline => baseline.status === 'done') ?? false;
+        }, { timeout: 120_000, intervals: [3000] }).toBe(true);
+        await page.reload();
+        await page.getByText('Compare with baseline', { exact: true }).click();
+        await expect(page.getByText('Positive means better than', { exact: false })).toBeVisible();
+        await expect(page.getByRole('cell', { name: /^[+-]\d/ }).first()).toBeVisible();
+        await page.getByText('Compare with baseline', { exact: true }).click();
+        await expect(page.getByText('Best only means best among these runs', { exact: false })).toBeVisible();
+    }
 
     const downloadPromise = page.waitForEvent('download');
     await page.getByRole('button', { name: 'Download CSV', exact: true }).click();
