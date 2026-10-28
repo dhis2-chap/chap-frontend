@@ -3,6 +3,7 @@ import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import i18n from '@dhis2/d2-i18n';
+import { useAlert } from '@dhis2/app-runtime';
 import {
     Button,
     ButtonStrip,
@@ -106,6 +107,7 @@ const toAlertLevel = (level: LevelValues): AlertLevel => ({
 export const CreateAlertPolicyModal = ({ onClose }: { onClose: () => void }) => {
     const create = useCreateAlertPolicy();
     const saveDisplay = useSaveAlertPolicyDisplay();
+    const { show: showCreated } = useAlert(i18n.t('Alert policy created'), { success: true });
     const [createdPolicyId, setCreatedPolicyId] = useState<number>();
     const isSaving = create.isLoading || saveDisplay.isLoading;
     // Once created, only the colour save can be retried.
@@ -139,6 +141,7 @@ export const CreateAlertPolicyModal = ({ onClose }: { onClose: () => void }) => 
                 policyId,
                 display: Object.fromEntries(values.levels.map(level => [level.name.trim(), { color: level.color }])),
             });
+            showCreated();
             onClose();
         } catch {
             // Mutation errors are rendered below; keep the form available for retry.

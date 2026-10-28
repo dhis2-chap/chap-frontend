@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-28T10:27:34.818Z\n"
-"PO-Revision-Date: 2026-10-28T10:27:34.819Z\n"
+"POT-Creation-Date: 2026-10-28T10:36:17.931Z\n"
+"PO-Revision-Date: 2026-10-28T10:36:17.932Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -139,6 +139,9 @@ msgstr "Level names must be unique"
 msgid "Codes must be unique"
 msgstr "Codes must be unique"
 
+msgid "Alert policy created"
+msgstr "Alert policy created"
+
 msgid "New alert policy"
 msgstr "New alert policy"
 
@@ -216,6 +219,9 @@ msgstr "Create policy"
 
 msgid "Retry saving colours"
 msgstr "Retry saving colours"
+
+msgid "Alert policy saved"
+msgstr "Alert policy saved"
 
 msgid "Edit alert policy"
 msgstr "Edit alert policy"

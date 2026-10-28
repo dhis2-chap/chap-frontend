@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import i18n from '@dhis2/d2-i18n';
+import { useAlert } from '@dhis2/app-runtime';
 import { Button, ButtonStrip, InputField, Modal, ModalActions, ModalContent, ModalTitle, NoticeBox } from '@dhis2/ui';
 import type { AlertPolicyRead } from '@dhis2-chap/ui';
 import { useUpdateAlertPolicyCodes } from '@/hooks/useAlertPolicies';
@@ -24,6 +25,7 @@ export const EditAlertPolicyModal = ({ policy, display, onClose }: {
     ])));
     const saveCodes = useUpdateAlertPolicyCodes();
     const saveDisplay = useSaveAlertPolicyDisplay();
+    const { show: showSaved } = useAlert(i18n.t('Alert policy saved'), { success: true });
     const isSaving = saveCodes.isLoading || saveDisplay.isLoading;
     // The backend rejects codes with surrounding whitespace.
     const noAlertOutputCode = noAlertCode.trim();
@@ -34,6 +36,7 @@ export const EditAlertPolicyModal = ({ policy, display, onClose }: {
             saveCodes.mutateAsync({ policyId: policy.id, codes: { noAlertOutputCode, levelOutputCodes } }),
             saveDisplay.mutateAsync({ policyId: policy.id, display: colors }),
         ]);
+        showSaved();
         onClose();
     };
 

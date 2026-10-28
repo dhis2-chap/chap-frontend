@@ -51,6 +51,7 @@ test.describe.serial('alert level presentation', () => {
         await page.unroute('**/dataStore/modeling/alert-policy-display-*');
         await modal.getByRole('button', { name: 'Retry saving colours' }).click();
         await expect(modal).not.toBeVisible();
+        await expect(page.getByText('Alert policy created', { exact: true })).toBeVisible();
         expect(creations).toBe(1);
         await page.reload();
         const row = page.getByRole('row').filter({ hasText: policyName });
@@ -67,6 +68,7 @@ test.describe.serial('alert level presentation', () => {
         await edit.getByRole('button', { name: 'Save', exact: true }).click();
         expect((await codesSaved).request().postDataJSON()).toEqual({ noAlertOutputCode: '0', levelOutputCodes: { Watch: '1', Action: 'ACTION' } });
         await expect(edit).not.toBeVisible();
+        await expect(page.getByText('Alert policy saved', { exact: true })).toBeVisible();
         await page.reload();
         await expect(row.getByText(/Action/).locator('span')).toHaveCSS('background-color', 'rgb(255, 193, 7)');
         await expect(row.getByText(/Watch/).locator('span')).toHaveCSS('background-color', 'rgb(17, 170, 187)');
