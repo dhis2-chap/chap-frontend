@@ -26,7 +26,6 @@ import {
 import { useCreateAlertPolicy } from '@/hooks/useAlertPolicies';
 import { useThresholdStrategies } from '@/hooks/useThresholdStrategies';
 import { getChapErrorMessage } from '@/utils/chapErrors';
-import { sortAlertLevels } from './sortAlertLevels';
 import { useSaveAlertPolicyDisplay } from '@/hooks/useAlertPolicyDisplay';
 import { alertColorSchema } from './alertLevelDisplay';
 import { AlertColorSelect } from './AlertColorSelect';
@@ -132,7 +131,8 @@ export const CreateAlertPolicyModal = ({ onClose }: { onClose: () => void }) => 
                 const result = await create.mutateAsync({
                     name: values.name.trim(),
                     noAlertOutputCode: values.noAlertCode.trim(),
-                    levels: sortAlertLevels(values.levels.map(toAlertLevel)),
+                    // Level order is severity order: level 1 is the least severe.
+                    levels: values.levels.map(toAlertLevel),
                 });
                 policyId = result.id;
                 setCreatedPolicyId(policyId);
@@ -182,7 +182,7 @@ export const CreateAlertPolicyModal = ({ onClose }: { onClose: () => void }) => 
                             />
                         )}
                     />
-                    <p className={styles.help}>{i18n.t('Levels are saved from least to most strict, where a higher minimum probability is stricter.')}</p>
+                    <p className={styles.help}>{i18n.t('Levels are saved in this order, from least to most severe.')}</p>
                     {fields.map((field, index) => {
                         const strategy = levels[index]?.strategy;
                         const levelErrors = errors.levels?.[index];
