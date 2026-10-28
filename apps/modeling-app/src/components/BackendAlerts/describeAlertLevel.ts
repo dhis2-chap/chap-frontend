@@ -20,11 +20,9 @@ const describeThreshold = (params: AlertLevel['thresholdParams']) => {
     });
 };
 
-export const describeAlertLevel = (level: AlertLevel) => i18n.t(
-    '{{name}} · {{threshold}} · ≥{{probability}}%',
-    {
-        name: level.name,
-        threshold: describeThreshold(level.thresholdParams),
-        probability: Math.round(level.exceedanceThreshold * 100),
-    },
+export const describeAlertThreshold = (level: Pick<AlertLevel, 'thresholdParams' | 'exceedanceThreshold'>) => i18n.t(
+    '{{threshold}} · ≥{{probability}}%',
+    { threshold: describeThreshold(level.thresholdParams), probability: Math.round(level.exceedanceThreshold * 100) },
 );
+
+export const describeAlertLevel = (level: AlertLevel) => `${level.name} · ${describeAlertThreshold(level)}`;

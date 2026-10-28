@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-28T10:21:03.289Z\n"
-"PO-Revision-Date: 2026-10-28T10:21:03.290Z\n"
+"POT-Creation-Date: 2026-10-28T10:27:34.818Z\n"
+"PO-Revision-Date: 2026-10-28T10:27:34.819Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -115,6 +115,9 @@ msgstr ""
 msgid "Edit"
 msgstr "Edit"
 
+msgid "Enter a code"
+msgstr "Enter a code"
+
 msgid "Enter a level name"
 msgstr "Enter a level name"
 
@@ -133,26 +136,50 @@ msgstr "Enter a policy name"
 msgid "Level names must be unique"
 msgstr "Level names must be unique"
 
+msgid "Codes must be unique"
+msgstr "Codes must be unique"
+
 msgid "New alert policy"
 msgstr "New alert policy"
 
 msgid "Policy name"
 msgstr "Policy name"
 
+msgid "Outbreak import code for no alert"
+msgstr "Outbreak import code for no alert"
+
+msgid ""
+"Imported into the outbreak indicator data element, so it must match its "
+"value type or option set."
+msgstr ""
+"Imported into the outbreak indicator data element, so it must match its "
+"value type or option set."
+
 msgid ""
 "Levels are saved from least to most strict, where a higher minimum "
-"probability is stricter. A level fires when the forecast probability of "
-"exceeding its threshold reaches the minimum probability."
+"probability is stricter."
 msgstr ""
 "Levels are saved from least to most strict, where a higher minimum "
-"probability is stricter. A level fires when the forecast probability of "
-"exceeding its threshold reaches the minimum probability."
+"probability is stricter."
 
 msgid "Level name"
 msgstr "Level name"
 
 msgid "e.g. Monitor"
 msgstr "e.g. Monitor"
+
+msgid "Outbreak import code"
+msgstr "Outbreak import code"
+
+msgid "Remove level"
+msgstr "Remove level"
+
+msgid ""
+"Fires when the forecast exceeds this threshold with at least the minimum "
+"probability"
+msgstr ""
+"Fires when the forecast exceeds this threshold with at least the minimum "
+"probability"
 
 msgid "Strategy"
 msgstr "Strategy"
@@ -172,9 +199,6 @@ msgstr "All history"
 msgid "Min. probability"
 msgstr "Min. probability"
 
-msgid "Remove level"
-msgstr "Remove level"
-
 msgid "Add level"
 msgstr "Add level"
 
@@ -193,21 +217,8 @@ msgstr "Create policy"
 msgid "Retry saving colours"
 msgstr "Retry saving colours"
 
-msgid ""
-"Codes are imported as the outbreak indicator value. Severity follows level "
-"order."
-msgstr ""
-"Codes are imported as the outbreak indicator value. Severity follows level "
-"order."
-
-msgid "No alert code"
-msgstr "No alert code"
-
-msgid "{{level}} code"
-msgstr "{{level}} code"
-
-msgid "{{level}} colour"
-msgstr "{{level}} colour"
+msgid "Edit alert policy"
+msgstr "Edit alert policy"
 
 msgid "Codes must be unique and non-empty."
 msgstr "Codes must be unique and non-empty."
@@ -241,8 +252,8 @@ msgstr[1] "{{percentile}}th percentile, {{count}}-year baseline"
 msgid "mean + {{stdMultiplier}} SD"
 msgstr "mean + {{stdMultiplier}} SD"
 
-msgid "{{name}} · {{threshold}} · ≥{{probability}}%"
-msgstr "{{name}} · {{threshold}} · ≥{{probability}}%"
+msgid "{{threshold}} · ≥{{probability}}%"
+msgstr "{{threshold}} · ≥{{probability}}%"
 
 msgid "View"
 msgstr "View"

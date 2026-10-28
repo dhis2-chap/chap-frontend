@@ -35,9 +35,12 @@ const isNumberIn = (value: string, min: number, max: number) => (
     value.trim() !== '' && Number(value) >= min && Number(value) <= max
 );
 
+const codeSchema = z.string().trim().min(1, i18n.t('Enter a code'));
+
 const levelSchema = z.object({
     name: z.string().trim().min(1, i18n.t('Enter a level name')),
     color: alertColorSchema,
+    code: codeSchema,
     strategy: z.enum(['seasonal', 'percentile']),
     value: z.string(),
     baselineYears: z.string(),
@@ -57,11 +60,16 @@ const levelSchema = z.object({
 
 const formSchema = z.object({
     name: z.string().trim().min(1, i18n.t('Enter a policy name')),
+    noAlertCode: codeSchema,
     levels: z.array(levelSchema).min(1),
-}).superRefine(({ levels }, ctx) => {
+}).superRefine(({ noAlertCode, levels }, ctx) => {
+    const codes = [noAlertCode, ...levels.map(level => level.code)].map(code => code.trim());
     levels.forEach((level, index) => {
         if (levels.findIndex(other => other.name.trim() === level.name.trim()) !== index) {
             ctx.addIssue({ code: 'custom', path: ['levels', index, 'name'], message: i18n.t('Level names must be unique') });
+        }
+        if (codes.indexOf(level.code.trim()) !== index + 1) {
+            ctx.addIssue({ code: 'custom', path: ['levels', index, 'code'], message: i18n.t('Codes must be unique') });
         }
     });
 });
@@ -75,14 +83,16 @@ const DEFAULT_VALUE = { seasonal: '2', percentile: '75' };
 const NEW_LEVEL: LevelValues = {
     name: '',
     color: 'red',
+    code: '',
     strategy: 'seasonal',
     value: DEFAULT_VALUE.seasonal,
     baselineYears: '5',
     probability: String(DEFAULT_OUTBREAK_PROBABILITY),
 };
 
-const toAlertLevel = (level: LevelValues): Omit<AlertLevel, 'outputCode'> => ({
+const toAlertLevel = (level: LevelValues): AlertLevel => ({
     name: level.name.trim(),
+    outputCode: level.code.trim(),
     exceedanceThreshold: Number(level.probability) / 100,
     thresholdParams: level.strategy === 'seasonal'
         ? { type: 'seasonal', stdMultiplier: Number(level.value) }
@@ -105,7 +115,8 @@ export const CreateAlertPolicyModal = ({ onClose }: { onClose: () => void }) => 
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: '',
-            levels: [NEW_LEVEL],
+            noAlertCode: '0',
+            levels: [{ ...NEW_LEVEL, code: '1' }],
         },
     });
     const { fields, append, remove } = useFieldArray({ control, name: 'levels' });
@@ -118,9 +129,8 @@ export const CreateAlertPolicyModal = ({ onClose }: { onClose: () => void }) => 
             if (policyId === undefined) {
                 const result = await create.mutateAsync({
                     name: values.name.trim(),
-                    // Output codes follow severity order, as the backend would default them.
-                    levels: sortAlertLevels(values.levels.map(toAlertLevel))
-                        .map((level, index) => ({ ...level, outputCode: String(index + 1) })),
+                    noAlertOutputCode: values.noAlertCode.trim(),
+                    levels: sortAlertLevels(values.levels.map(toAlertLevel)),
                 });
                 policyId = result.id;
                 setCreatedPolicyId(policyId);
@@ -154,130 +164,163 @@ export const CreateAlertPolicyModal = ({ onClose }: { onClose: () => void }) => 
                             />
                         )}
                     />
-                    <p className={styles.help}>
-                        {i18n.t('Levels are saved from least to most strict, where a higher minimum probability is stricter. A level fires when the forecast probability of exceeding its threshold reaches the minimum probability.')}
-                    </p>
+                    <Controller
+                        name="noAlertCode"
+                        control={control}
+                        render={({ field }) => (
+                            <InputField
+                                name={field.name}
+                                label={i18n.t('Outbreak import code for no alert')}
+                                helpText={i18n.t('Imported into the outbreak indicator data element, so it must match its value type or option set.')}
+                                value={field.value}
+                                onChange={({ value }) => field.onChange(value ?? '')}
+                                error={!!errors.noAlertCode}
+                                validationText={errors.noAlertCode?.message}
+                            />
+                        )}
+                    />
+                    <p className={styles.help}>{i18n.t('Levels are saved from least to most strict, where a higher minimum probability is stricter.')}</p>
                     {fields.map((field, index) => {
                         const strategy = levels[index]?.strategy;
                         const levelErrors = errors.levels?.[index];
                         return (
-                            <div key={field.id} className={styles.policyLevelRow}>
-                                <Controller
-                                    name={`levels.${index}.name`}
-                                    control={control}
-                                    render={({ field: input }) => (
-                                        <InputField
-                                            dense
-                                            label={i18n.t('Level name')}
-                                            placeholder={i18n.t('e.g. Monitor')}
-                                            name={input.name}
-                                            value={input.value}
-                                            onChange={({ value }) => input.onChange(value ?? '')}
-                                            error={!!levelErrors?.name}
-                                            validationText={levelErrors?.name?.message}
-                                        />
-                                    )}
-                                />
-                                <Controller
-                                    name={`levels.${index}.color`}
-                                    control={control}
-                                    render={({ field: input }) => (
-                                        <AlertColorSelect value={input.value} onChange={input.onChange} disabled={isLocked} />
-                                    )}
-                                />
-                                <Controller
-                                    name={`levels.${index}.strategy`}
-                                    control={control}
-                                    render={({ field: input }) => (
-                                        <SingleSelectField
-                                            dense
-                                            label={i18n.t('Strategy')}
-                                            loading={isStrategiesLoading}
-                                            disabled={isLocked}
-                                            // An unmatched selected value makes SingleSelect throw in dev builds.
-                                            selected={thresholdStrategies?.some(item => item.id === input.value) ? input.value : undefined}
-                                            onChange={({ selected }) => {
-                                                input.onChange(selected);
-                                                setValue(`levels.${index}.value`, DEFAULT_VALUE[selected as LevelValues['strategy']]);
-                                            }}
-                                        >
-                                            {thresholdStrategies?.map(item => (
-                                                <SingleSelectOption key={item.id} value={item.id} label={item.displayName} />
-                                            ))}
-                                        </SingleSelectField>
-                                    )}
-                                />
-                                <Controller
-                                    name={`levels.${index}.value`}
-                                    control={control}
-                                    render={({ field: input }) => (
-                                        <InputField
-                                            dense
-                                            type="number"
-                                            label={strategy === 'percentile'
-                                                ? i18n.t('Percentile (%)')
-                                                : i18n.t('SD above mean')}
-                                            name={input.name}
-                                            value={input.value}
-                                            onChange={({ value }) => input.onChange(value ?? '')}
-                                            error={!!levelErrors?.value}
-                                            validationText={levelErrors?.value?.message}
-                                        />
-                                    )}
-                                />
-                                {strategy === 'percentile' && (
+                            <div key={field.id} className={styles.policyLevel}>
+                                <div className={styles.policyLevelRow}>
                                     <Controller
-                                        name={`levels.${index}.baselineYears`}
+                                        name={`levels.${index}.name`}
+                                        control={control}
+                                        render={({ field: input }) => (
+                                            <InputField
+                                                dense
+                                                label={i18n.t('Level name')}
+                                                placeholder={i18n.t('e.g. Monitor')}
+                                                name={input.name}
+                                                value={input.value}
+                                                onChange={({ value }) => input.onChange(value ?? '')}
+                                                error={!!levelErrors?.name}
+                                                validationText={levelErrors?.name?.message}
+                                            />
+                                        )}
+                                    />
+                                    <Controller
+                                        name={`levels.${index}.color`}
+                                        control={control}
+                                        render={({ field: input }) => (
+                                            <AlertColorSelect value={input.value} onChange={input.onChange} disabled={isLocked} />
+                                        )}
+                                    />
+                                    <Controller
+                                        name={`levels.${index}.code`}
+                                        control={control}
+                                        render={({ field: input }) => (
+                                            <InputField
+                                                dense
+                                                label={i18n.t('Outbreak import code')}
+                                                name={input.name}
+                                                value={input.value}
+                                                onChange={({ value }) => input.onChange(value ?? '')}
+                                                error={!!levelErrors?.code}
+                                                validationText={levelErrors?.code?.message}
+                                            />
+                                        )}
+                                    />
+                                    <Button
+                                        small
+                                        secondary
+                                        icon={<IconDelete16 />}
+                                        title={i18n.t('Remove level')}
+                                        disabled={fields.length === 1}
+                                        onClick={() => remove(index)}
+                                    />
+                                </div>
+                                <div className={styles.policyLevelThreshold}>
+                                    <p className={styles.help}>{i18n.t('Fires when the forecast exceeds this threshold with at least the minimum probability')}</p>
+                                    <Controller
+                                        name={`levels.${index}.strategy`}
+                                        control={control}
+                                        render={({ field: input }) => (
+                                            <SingleSelectField
+                                                dense
+                                                label={i18n.t('Strategy')}
+                                                loading={isStrategiesLoading}
+                                                disabled={isLocked}
+                                                // An unmatched selected value makes SingleSelect throw in dev builds.
+                                                selected={thresholdStrategies?.some(item => item.id === input.value) ? input.value : undefined}
+                                                onChange={({ selected }) => {
+                                                    input.onChange(selected);
+                                                    setValue(`levels.${index}.value`, DEFAULT_VALUE[selected as LevelValues['strategy']]);
+                                                }}
+                                            >
+                                                {thresholdStrategies?.map(item => (
+                                                    <SingleSelectOption key={item.id} value={item.id} label={item.displayName} />
+                                                ))}
+                                            </SingleSelectField>
+                                        )}
+                                    />
+                                    <Controller
+                                        name={`levels.${index}.value`}
                                         control={control}
                                         render={({ field: input }) => (
                                             <InputField
                                                 dense
                                                 type="number"
-                                                label={i18n.t('Baseline years')}
-                                                placeholder={i18n.t('All history')}
+                                                label={strategy === 'percentile'
+                                                    ? i18n.t('Percentile (%)')
+                                                    : i18n.t('SD above mean')}
                                                 name={input.name}
                                                 value={input.value}
                                                 onChange={({ value }) => input.onChange(value ?? '')}
-                                                error={!!levelErrors?.baselineYears}
-                                                validationText={levelErrors?.baselineYears?.message}
+                                                error={!!levelErrors?.value}
+                                                validationText={levelErrors?.value?.message}
                                             />
                                         )}
                                     />
-                                )}
-                                <Controller
-                                    name={`levels.${index}.probability`}
-                                    control={control}
-                                    render={({ field: input }) => (
-                                        <SingleSelectField
-                                            dense
-                                            label={i18n.t('Min. probability')}
-                                            disabled={isLocked}
-                                            selected={input.value}
-                                            onChange={({ selected }) => input.onChange(selected)}
-                                        >
-                                            {OUTBREAK_PROBABILITY_OPTIONS.map(probability => (
-                                                <SingleSelectOption
-                                                    key={probability}
-                                                    value={String(probability)}
-                                                    label={`${probability}%`}
+                                    {strategy === 'percentile' && (
+                                        <Controller
+                                            name={`levels.${index}.baselineYears`}
+                                            control={control}
+                                            render={({ field: input }) => (
+                                                <InputField
+                                                    dense
+                                                    type="number"
+                                                    label={i18n.t('Baseline years')}
+                                                    placeholder={i18n.t('All history')}
+                                                    name={input.name}
+                                                    value={input.value}
+                                                    onChange={({ value }) => input.onChange(value ?? '')}
+                                                    error={!!levelErrors?.baselineYears}
+                                                    validationText={levelErrors?.baselineYears?.message}
                                                 />
-                                            ))}
-                                        </SingleSelectField>
+                                            )}
+                                        />
                                     )}
-                                />
-                                <Button
-                                    small
-                                    secondary
-                                    icon={<IconDelete16 />}
-                                    title={i18n.t('Remove level')}
-                                    disabled={fields.length === 1}
-                                    onClick={() => remove(index)}
-                                />
+                                    <Controller
+                                        name={`levels.${index}.probability`}
+                                        control={control}
+                                        render={({ field: input }) => (
+                                            <SingleSelectField
+                                                dense
+                                                label={i18n.t('Min. probability')}
+                                                disabled={isLocked}
+                                                selected={input.value}
+                                                onChange={({ selected }) => input.onChange(selected)}
+                                            >
+                                                {OUTBREAK_PROBABILITY_OPTIONS.map(probability => (
+                                                    <SingleSelectOption
+                                                        key={probability}
+                                                        value={String(probability)}
+                                                        label={`${probability}%`}
+                                                    />
+                                                ))}
+                                            </SingleSelectField>
+                                        )}
+                                    />
+                                </div>
                             </div>
                         );
                     })}
                     <div>
-                        <Button small secondary icon={<IconAdd16 />} onClick={() => append(NEW_LEVEL)}>
+                        <Button small secondary icon={<IconAdd16 />} onClick={() => append({ ...NEW_LEVEL, code: String(fields.length + 1) })}>
                             {i18n.t('Add level')}
                         </Button>
                     </div>
