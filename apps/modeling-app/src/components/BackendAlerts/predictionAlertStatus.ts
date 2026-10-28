@@ -1,6 +1,6 @@
 import type { AlertPolicyRead, AlertRead } from '@dhis2-chap/ui';
 
-// CHAP does not record which policy a prediction ran with: alerts are raised
+// Chap does not record which policy a prediction ran with: alerts are raised
 // against the setup's policy when the run finishes. Without alerts, the setup's
 // current policy may have been attached after this run, so it is only a hint.
 export type PredictionAlertStatus =

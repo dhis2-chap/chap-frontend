@@ -11,8 +11,8 @@ const thresholdValue = (params: AlertLevel['thresholdParams']) => (
  * levels use the same strategy. Lines from different strategies are not comparable, so tied levels are
  * grouped by strategy in the order each strategy was first entered, keeping the comparison transitive.
  */
-export const sortAlertLevels = (levels: AlertLevel[]) => {
-    const strategyRank = (level: AlertLevel) => (
+export const sortAlertLevels = <T extends Pick<AlertLevel, 'exceedanceThreshold' | 'thresholdParams'>>(levels: T[]) => {
+    const strategyRank = (level: T) => (
         levels.findIndex(other => other.thresholdParams.type === level.thresholdParams.type)
     );
     return [...levels].sort((a, b) => (

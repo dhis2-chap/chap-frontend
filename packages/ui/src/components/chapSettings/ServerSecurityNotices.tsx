@@ -18,15 +18,15 @@ export const ServerSecurityNotices = () => {
 
     if (isUnauthorized) {
         return tokenConfigured ? (
-            <NoticeBox error title={i18n.t('The CHAP server rejected the API token')}>
+            <NoticeBox error title={i18n.t('The Chap server rejected the API token')}>
                 <span className={styles.mutedText}>
-                    {i18n.t('The server is reachable, but requests are refused. Check the token for typos, then edit the route settings to enter the token configured on your CHAP server.')}
+                    {i18n.t('The server is reachable, but requests are refused. Check the token for typos, then edit the route settings to enter the token configured on your Chap server.')}
                 </span>
             </NoticeBox>
         ) : (
             <NoticeBox error title={i18n.t('No API token is configured')}>
                 <span className={styles.mutedText}>
-                    {i18n.t('The server is reachable, but it refuses requests without a token. Edit the route settings to add the token configured on your CHAP server.')}
+                    {i18n.t('The server is reachable, but it refuses requests without a token. Edit the route settings to add the token configured on your Chap server.')}
                 </span>
             </NoticeBox>
         );
@@ -37,16 +37,16 @@ export const ServerSecurityNotices = () => {
             return null;
         }
         return (
-            <NoticeBox warning title={i18n.t('CHAP requires an API token')}>
+            <NoticeBox warning title={i18n.t('Chap requires an API token')}>
                 <span className={styles.mutedText}>
-                    {i18n.t('Edit the route settings to add the token configured on your CHAP server.')}
+                    {i18n.t('Edit the route settings to add the token configured on your Chap server.')}
                 </span>
             </NoticeBox>
         );
     }
 
     return (
-        <NoticeBox title={i18n.t('Restrict access to your CHAP server')}>
+        <NoticeBox title={i18n.t('Restrict access to your Chap server')}>
             <span className={styles.mutedText}>
                 {i18n.t('This server does not report API token protection. Keep it on a private network or restrict access with a firewall.')}
             </span>

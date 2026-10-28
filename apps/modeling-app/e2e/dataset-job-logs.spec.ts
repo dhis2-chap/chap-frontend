@@ -10,7 +10,7 @@ test('shows live dataset job logs, final failure logs, and preserves the form fo
     let status = 'STARTED';
     let logs = '';
 
-    // Submit real DHIS2 data to CHAP, then control the first job's status/logs:
+    // Submit real DHIS2 data to Chap, then control the first job's status/logs:
     // dataset imports otherwise finish too quickly to reliably inspect a running job.
     await page.route('**/analytics/make-dataset*', async (route) => {
         const response = await route.fetch();

@@ -8,7 +8,9 @@ import {
     HEADLINE_METRIC_IDS,
     HIDDEN_METRIC_IDS,
     TARGET_TOLERANCE,
+    getDefaultMetricIds,
     prettifyMetricId,
+    sortMetricIds,
 } from './metricCatalog';
 import styles from './EvaluationMetricsWidget.module.css';
 
@@ -29,16 +31,6 @@ const formatTarget = (target: number) => target.toLocaleString(undefined, { maxi
 
 /* Rounded before comparing, so floating point noise (0.8 - 0.65 = 0.15000000000000002) does not push a score exactly at the tolerance over it. */
 const distanceFromTarget = (score: number, target: number) => Math.round(Math.abs(score - target) * 1e6) / 1e6;
-
-const sortMetricIds = (metricIds: string[]) =>
-    [...metricIds].sort((a, b) => {
-        const indexA = HEADLINE_METRIC_IDS.indexOf(a);
-        const indexB = HEADLINE_METRIC_IDS.indexOf(b);
-        if (indexA !== -1 || indexB !== -1) {
-            return (indexA === -1 ? Infinity : indexA) - (indexB === -1 ? Infinity : indexB);
-        }
-        return a.localeCompare(b);
-    });
 
 type MetricRowProps = {
     metricId: string;
@@ -95,10 +87,11 @@ export const EvaluationMetricsWidget = ({ evaluationId, metrics }: Props) => {
 
     const visibleIds = sortMetricIds(
         Object.keys(metrics ?? {}).filter(metricId => !HIDDEN_METRIC_IDS.includes(metricId)),
+        metricCatalog,
     );
-    const headlineIds = visibleIds.filter(metricId => HEADLINE_METRIC_IDS.includes(metricId));
-    /* An evaluation can report only metrics this catalog has no headline for, and the collapsed widget must still show rows. */
-    const collapsedIds = headlineIds.length > 0 ? headlineIds : visibleIds.slice(0, HEADLINE_METRIC_IDS.length);
+    const defaultIds = getDefaultMetricIds(visibleIds, metricCatalog);
+    /* An evaluation can report only metrics outside the defaults, and the collapsed widget must still show rows. */
+    const collapsedIds = defaultIds.length > 0 ? defaultIds : visibleIds.slice(0, HEADLINE_METRIC_IDS.length);
     const shownIds = expanded ? visibleIds : collapsedIds;
     const hiddenCount = visibleIds.length - shownIds.length;
 

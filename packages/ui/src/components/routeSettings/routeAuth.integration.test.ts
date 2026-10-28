@@ -78,7 +78,7 @@ it.skipIf(!baseUrl)('keeps authenticated requests working through guarded route 
         const legacyTimeout = getRouteUpdateMutation(route, { responseTimeoutSeconds: 40 }, 'api-token');
         expect((await api(`routes/${id}`, 'PATCH', legacyTimeout.data)).status).toBe(200);
         expect((await api(`routes/${id}/run/probe`)).status).toBe(200);
-        // CHAP servers without ApiToken support keep Bearer, now encrypted.
+        // Chap servers without ApiToken support keep Bearer, now encrypted.
         const migration = getRouteUpdateMutation(route, { apiToken: token }, 'api-headers');
         expect((await api(`routes/${id}`, 'PATCH', migration.data)).status).toBe(200);
         route = await readRoute();

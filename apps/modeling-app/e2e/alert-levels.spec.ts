@@ -13,7 +13,7 @@ test.describe.serial('alert level presentation', () => {
     test.beforeEach(async ({ page }) => {
         const response = await getChap(page, '/v1/crud/alert-policies');
         expect([200, 404]).toContain(response.status());
-        test.skip(!response.ok(), 'Stable CHAP releases predate alert policies');
+        test.skip(!response.ok(), 'Stable Chap releases predate alert policies');
     });
 
     test('saves editable levels and retries a failed colour save without creating another policy', async ({ page }) => {
@@ -91,7 +91,7 @@ test.describe.serial('alert level presentation', () => {
         const orgUnit = await readJson<{ displayName: string }>(await page.request.get(
             `${process.env.E2E_DHIS2_BASE_URL ?? 'http://localhost:8080'}/api/organisationUnits/${alert.orgUnit}?fields=displayName`,
         ), 'Load alert region');
-        await page.getByPlaceholder('Search regions').fill(orgUnit.displayName);
+        await page.getByPlaceholder('Search organisation units').fill(orgUnit.displayName);
         const plot = page.locator('article');
         const alertLevels = page.getByRole('switch', { name: 'Alert levels', exact: true });
         const exploreThresholds = page.getByRole('switch', { name: 'Explore thresholds', exact: true });
@@ -108,7 +108,7 @@ test.describe.serial('alert level presentation', () => {
         await expect(plot.locator('.highcharts-plot-band').first()).toBeVisible();
     });
 
-    test('filters regions by any recorded alert level and combines with region search', async ({ page }) => {
+    test('filters organisation units by one or more alert levels and combines with search', async ({ page }) => {
         // Run without an automatic policy so we can record a predictable mix of alerts.
         const evaluation = await createCompletedNaiveEvaluation(page);
         const setup = await readJson<DataBaseResponse>(await page.request.post(chapUrl('/v1/crud/prediction-setups'), {
@@ -122,12 +122,13 @@ test.describe.serial('alert level presentation', () => {
         const entries = await readJson<PredictionEntry[]>(await getChap(page, `/v1/analytics/prediction-entry/${prediction.id}?quantiles=0.5`), 'Load forecast periods');
         const periods = [...new Set(entries.map(entry => entry.period))].sort();
         expect(periods.length).toBeGreaterThanOrEqual(2);
-        const [mixedRegion, actionRegion] = ['W6sNfkJcXGC', 'YvLOmtTQD6b'];
+        const [mixedRegion, actionRegion, watchRegion] = ['W6sNfkJcXGC', 'YvLOmtTQD6b', 'XKGgynPS1WZ'];
         const data: AlertsCreate = {
             alerts: [
                 { orgUnit: mixedRegion, timePeriod: periods[0], level: 'Watch', alertPolicyId: policyId, predictionId: prediction.id },
                 { orgUnit: mixedRegion, timePeriod: periods[1], level: 'Action', alertPolicyId: policyId, predictionId: prediction.id },
                 { orgUnit: actionRegion, timePeriod: periods[0], level: 'Action', alertPolicyId: policyId, predictionId: prediction.id },
+                { orgUnit: watchRegion, timePeriod: periods[0], level: 'Watch', alertPolicyId: policyId, predictionId: prediction.id },
             ],
         };
         await readJson(await page.request.post(chapUrl('/v1/crud/alerts'), { data }), 'Record filter test alerts');
@@ -136,30 +137,45 @@ test.describe.serial('alert level presentation', () => {
         ), 'Load alert region');
         await page.goto(`/#/predictions/${setup.id}/runs/${prediction.id}`);
         const filter = page.locator('[data-test="alert-level-filter"]');
-        const input = filter.locator('[data-test="dhis2-uicore-select-input"]');
+        // Open from the input's corner: its centre can land on a chip's remove icon once levels are selected.
+        const openMenu = () => filter.locator('[data-test="dhis2-uicore-select-input"]').click({ position: { x: 8, y: 8 } });
         const plots = page.locator('article');
-        await expect(filter).toContainText('All alert levels');
-        await input.click();
-        await page.locator('[data-test="dhis2-uicore-singleselectoption"]').getByText('Action', { exact: true }).click();
+        const option = (label: string) => page.locator('[data-test="dhis2-uicore-multiselectoption"]').getByText(label, { exact: true });
+        await expect(filter).toContainText('Filter by alert level');
+        const selectAll = page.locator('[data-test="alert-level-filter-select-all"]');
+        await openMenu();
+        await option('Action').click();
         await expect(plots).toHaveCount(2);
-        await input.click();
-        await page.locator('[data-test="dhis2-uicore-singleselectoption"]').getByText('Watch', { exact: true }).click();
+        await selectAll.click();
+        await expect(selectAll.locator('input')).toBeChecked();
+        await page.keyboard.press('Escape');
+        await expect(filter).toContainText('Watch');
+        await expect(plots).toHaveCount(3);
+        await page.getByPlaceholder('Search organisation units').fill(orgUnit.displayName);
         await expect(plots).toHaveCount(1);
+        await expect(plots.getByRole('heading', { name: orgUnit.displayName, exact: true })).toBeVisible();
+        await page.getByPlaceholder('Search organisation units').clear();
+        await openMenu();
+        // Unticking Action leaves only Watch selected.
+        await option('Action').click();
+        await page.keyboard.press('Escape');
+        await expect(plots).toHaveCount(2);
         // A region still matches its lower level even when its badge shows the highest one.
         await expect(plots.getByText('Action', { exact: true })).toBeVisible();
-        await page.getByPlaceholder('Search regions').fill(orgUnit.displayName);
-        await expect(page.getByText('No regions match the selected filters.', { exact: true })).toBeVisible();
+        await page.getByPlaceholder('Search organisation units').fill(orgUnit.displayName);
+        await expect(page.getByText('No organisation units match the selected filters.', { exact: true })).toBeVisible();
         await filter.locator('[data-test="alert-level-filter-clear"]').click();
         await expect(plots.getByRole('heading', { name: orgUnit.displayName, exact: true })).toBeVisible();
-        await input.click();
-        await page.locator('[data-test="dhis2-uicore-singleselectoption"]').getByText('Watch', { exact: true }).click();
+        await openMenu();
+        await option('Watch').click();
+        await page.keyboard.press('Escape');
         await expect(plots).toHaveCount(0);
         const alertLevels = page.getByRole('switch', { name: 'Alert levels', exact: true });
         await alertLevels.uncheck();
         await expect(filter).toHaveCount(0);
         await expect(plots.getByRole('heading', { name: orgUnit.displayName, exact: true })).toBeVisible();
         await alertLevels.check();
-        await expect(filter).toContainText('All alert levels');
+        await expect(filter).toContainText('Filter by alert level');
         await expect(plots.getByRole('heading', { name: orgUnit.displayName, exact: true })).toBeVisible();
     });
 });

@@ -16,7 +16,7 @@ const Wrapper = ({ children }: { children: React.ReactNode }) => {
         <Card>
             <div className={styles.container}>
                 <div className={styles.header}>
-                    <h2>{i18n.t('CHAP settings')}</h2>
+                    <h2>{i18n.t('Chap settings')}</h2>
                 </div>
                 {children}
             </div>
@@ -77,7 +77,7 @@ export const ChapSettings = ({ route }: Props) => {
         return (
             <Wrapper>
                 <div>
-                    <NoticeBox error title={i18n.t('An error occurred while connecting to the CHAP server.')} className={styles.mutedText}>
+                    <NoticeBox error title={i18n.t('An error occurred while connecting to the Chap server.')} className={styles.mutedText}>
                         {i18n.t('Are you sure you have configured your route correctly? See the console for more details.')}
                     </NoticeBox>
                 </div>
@@ -106,7 +106,7 @@ export const ChapSettings = ({ route }: Props) => {
                     <div className={styles.infoGrid}>
                         {status.chap_core_version && (
                             <>
-                                <span className={styles.label}>{i18n.t('CHAP Version')}</span>
+                                <span className={styles.label}>{i18n.t('Chap Version')}</span>
                                 <span className={styles.value}>{status.chap_core_version}</span>
                             </>
                         )}

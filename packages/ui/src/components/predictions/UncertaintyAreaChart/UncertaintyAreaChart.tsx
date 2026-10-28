@@ -349,7 +349,7 @@ const getChartOptions = (
         },
         credits: {
             enabled: !isTile,
-            text: 'CHAP',
+            text: 'Chap',
         },
         legend: {
             enabled: !isTile,

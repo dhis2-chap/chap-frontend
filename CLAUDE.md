@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-CHAP Frontend is a monorepo for the CHAP Modeling platform, enabling predictive modeling and forecasting for health information systems. The application integrates with DHIS2 for disease forecasting and health analytics.
+Chap Frontend is a monorepo for the Chap Modeling platform, enabling predictive modeling and forecasting for health information systems. The application integrates with DHIS2 for disease forecasting and health analytics.
 
 ## Commands
 
@@ -81,11 +81,12 @@ pnpm generate                 # Generate from a running backend at localhost:800
 
 ### Data Flow
 
-The app uses TanStack Query for server state. API calls go through the generated client in `packages/ui/src/httpfunctions/`. The CHAP backend URL is configured via DHIS2 datastore and managed by `SetChapUrl` context.
+The app uses TanStack Query for server state. API calls go through the generated client in `packages/ui/src/httpfunctions/`. The Chap backend URL is configured via DHIS2 datastore and managed by `SetChapUrl` context.
 
 ## Code Style
 
 - ESLint with @stylistic plugin (4-space indent, single quotes, semicolons)
+- Write the product name as `Chap` and `Chap Core`, never `CHAP`, in UI strings, comments, docs and PR text. Identifiers such as `F_CHAP_MODELING_APP` and `CHAP_ROUTE_CODE` stay as they are.
 - TypeScript strict mode
 - Conventional Commits for PR titles (feat:, fix:, chore:, refactor:, docs:)
 - PRs should always be created as drafts

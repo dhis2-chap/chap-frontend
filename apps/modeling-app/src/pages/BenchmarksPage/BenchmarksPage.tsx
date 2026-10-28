@@ -64,7 +64,7 @@ export const BenchmarksPage = () => {
                 {query.isLoading ? <div className={styles.loading}><CircularLoader /></div> : query.error ? (
                     isUnsupported ? (
                         <NoticeBox title={i18n.t('Benchmarks unavailable')}>
-                            {i18n.t('This CHAP server does not support backtest specifications. Update CHAP Core to use benchmarks.')}
+                            {i18n.t('This Chap server does not support backtest specifications. Update Chap Core to use benchmarks.')}
                         </NoticeBox>
                     ) : <ChapErrorNotice error={query.error} title={i18n.t('Could not load benchmarks')} />
                 ) : !specifications.length ? (

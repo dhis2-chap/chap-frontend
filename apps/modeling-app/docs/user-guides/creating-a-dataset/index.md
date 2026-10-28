@@ -7,7 +7,7 @@ category: User Guides
 
 ## Creating a Dataset
 
-A **dataset** is a snapshot of DHIS2 data stored in CHAP: a set of named data columns (for example `disease_cases`, `rainfall` and `population`) for chosen locations and periods. Once a dataset is saved, you can run several evaluations against the same data, for example to compare different models, without importing it from DHIS2 each time.
+A **dataset** is a snapshot of DHIS2 data stored in Chap: a set of named data columns (for example `disease_cases`, `rainfall` and `population`) for chosen locations and periods. Once a dataset is saved, you can run several evaluations against the same data, for example to compare different models, without importing it from DHIS2 each time.
 
 Models find their data by **column name**, so a dataset can only be used by models whose required covariates all match a column in the dataset and whose period type matches the dataset's period type.
 

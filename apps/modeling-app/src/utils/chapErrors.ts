@@ -8,12 +8,12 @@ type MaybeApiError = { status?: number; message?: string; body?: unknown } | nul
 export const isUnauthorizedError = (error: MaybeApiError) => error?.status === UNAUTHORIZED;
 
 /**
- * CHAP answers a rejected or missing API token with a bare "Unauthorized",
+ * Chap answers a rejected or missing API token with a bare "Unauthorized",
  * which tells an administrator nothing about what to fix.
  */
 export const getChapErrorMessage = (error: MaybeApiError) => {
     if (isUnauthorizedError(error)) {
-        return i18n.t('The CHAP server refused the request. An administrator can check the API token under Settings, in the route configuration.');
+        return i18n.t('The Chap server refused the request. An administrator can check the API token under Settings, in the route configuration.');
     }
     // FastAPI's validation response contains the useful explanation in detail;
     // the generated client's message is only "Validation Error".
@@ -43,12 +43,12 @@ export const getChapErrorMessage = (error: MaybeApiError) => {
 /** Short form for compact spots, such as dashboard widgets, where a full sentence does not fit. */
 export const getChapErrorLabel = (error: MaybeApiError, fallback: string) => (
     isUnauthorizedError(error)
-        ? i18n.t('Not authorized. Check the CHAP API token in settings.')
+        ? i18n.t('Not authorized. Check the Chap API token in settings.')
         : fallback
 );
 
 export const getChapErrorTitle = (error: MaybeApiError, fallback: string) => (
     isUnauthorizedError(error)
-        ? i18n.t('Not authorized to access the CHAP server')
+        ? i18n.t('Not authorized to access the Chap server')
         : fallback
 );

@@ -18,10 +18,10 @@ vi.mock('@dhis2/ui', () => ({
         createElement('span', { title: content }, children),
 }));
 
-const renderMetrics = (metrics: Record<string, number>, catalog?: MetricInfo[]) => {
+const renderMetrics = (metrics: Record<string, number>, catalog?: Omit<MetricInfo, 'sortOrder' | 'isSelected'>[]) => {
     const client = new QueryClient({ defaultOptions: { queries: { retry: false, cacheTime: 0 } } });
     if (catalog) {
-        client.setQueryData(['evaluation-metric-catalog', 42], catalog);
+        client.setQueryData(['evaluation-metric-catalog', 42], catalog.map(info => ({ ...info })));
     }
     const html = renderToStaticMarkup(createElement(QueryClientProvider, { client },
         createElement(EvaluationMetricsWidget, { evaluationId: 42, metrics }),

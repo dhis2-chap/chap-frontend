@@ -3,10 +3,11 @@ import { ApiError, BacktestsService, BacktestSpecificationRead } from '@dhis2-ch
 
 export const isValidSpecificationId = (id: number) => Number.isInteger(id) && id > 0;
 
-export const useBacktestSpecification = (id: number) => useQuery<BacktestSpecificationRead, ApiError>({
-    queryKey: ['backtest-specifications', id],
-    queryFn: () => BacktestsService.getBacktestSpecificationV1CrudBacktestSpecificationsSpecificationIdGet(id),
+export const useBacktestSpecification = (id: number, includeArchivedModels = false) => useQuery<BacktestSpecificationRead, ApiError>({
+    queryKey: ['backtest-specifications', id, includeArchivedModels],
+    queryFn: () => BacktestsService.getBacktestSpecificationV1CrudBacktestSpecificationsSpecificationIdGet(id, false, includeArchivedModels),
     enabled: isValidSpecificationId(id),
+    keepPreviousData: true,
     refetchOnMount: 'always',
     refetchOnWindowFocus: true,
 });
