@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
-import type { BacktestSpecificationRead, JobDescription, MakeBacktestsRequest, MakeBacktestsResponse, ModelSpecRead } from '@dhis2-chap/ui';
-import { getChap, createCompletedNaiveEvaluation, readJson } from './helpers/evaluation-fixtures';
+import type { BacktestSpecificationRead, MakeBacktestsRequest, MakeBacktestsResponse, ModelSpecRead } from '@dhis2-chap/ui';
+import { getChap, getJobStatus, createCompletedNaiveEvaluation, readJson } from './helpers/evaluation-fixtures';
 import { toDataTestKey } from '../src/utils/dataTestKey';
 import { isVersionCompatible } from '../src/utils/compareVersions';
 
@@ -124,9 +124,7 @@ test('uses benchmark actions to view, add models, export scores and reuse the da
     await expect(page.getByText('Model runs queued', { exact: true })).toBeVisible();
     await expect(page).toHaveURL(`/#/evaluate/benchmarks/${specification.id}`);
     await expect.poll(async () => {
-        const jobResponse = await getChap(page, `/v1/jobs/${result.jobs[0].jobId}`);
-        const job = await readJson<JobDescription | string>(jobResponse, 'Load model run status');
-        const status = typeof job === 'string' ? job : job.status;
+        const status = await getJobStatus(page, result.jobs[0].jobId, 'Load model run status');
         if (['FAILURE', 'REVOKED'].includes(status)) {
             throw new Error(`Benchmark model failed: ${await (await getChap(page, `/v1/jobs/${result.jobs[0].jobId}/logs`)).text()}`);
         }

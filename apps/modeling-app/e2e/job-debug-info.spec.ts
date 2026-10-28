@@ -1,8 +1,8 @@
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { expect, test } from '@playwright/test';
-import type { DatasetMakeRequest, ImportSummaryResponse, JobDescription, JobDiagnostics } from '@dhis2-chap/ui';
-import { chapUrl, getChap, readJson } from './helpers/evaluation-fixtures';
+import type { DatasetMakeRequest, ImportSummaryResponse, JobDiagnostics } from '@dhis2-chap/ui';
+import { chapUrl, getChap, getJobStatus, readJson } from './helpers/evaluation-fixtures';
 import { isVersionCompatible } from '../src/utils/compareVersions';
 
 test('downloads diagnostics and client context for a failed job', async ({ page }) => {
@@ -36,12 +36,10 @@ test('downloads diagnostics and client context for a failed job', async ({ page 
         'Create failing dataset job',
     );
     expect(jobId).toBeTruthy();
-    await expect.poll(async () => {
-        const job = await readJson<JobDescription | string>(
-            await getChap(page, `/v1/jobs/${jobId}`), 'Poll failed job',
-        );
-        return typeof job === 'string' ? job : job.status;
-    }, { timeout: 45_000, intervals: [1_000] }).toBe('FAILURE');
+    await expect.poll(
+        () => getJobStatus(page, jobId!, 'Poll failed job'),
+        { timeout: 45_000, intervals: [1_000] },
+    ).toBe('FAILURE');
 
     await page.goto(`/#/jobs?search=${encodeURIComponent(name)}`);
     const row = page.getByRole('row').filter({ hasText: name });
