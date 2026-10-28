@@ -7,6 +7,8 @@ export const useBacktestSpecification = (id: number, includeArchivedModels = fal
     queryKey: ['backtest-specifications', id, includeArchivedModels, includeComparisonModels],
     queryFn: () => BacktestsService.getBacktestSpecificationV1CrudBacktestSpecificationsSpecificationIdGet(id, includeComparisonModels, includeArchivedModels),
     enabled: isValidSpecificationId(id),
+    // Chap Core queues missing baselines after the first read, outside the jobs the app already polls.
+    refetchInterval: data => data?.baselines?.some(baseline => baseline.status === 'pending') ? 10_000 : false,
     keepPreviousData: true,
     refetchOnMount: 'always',
     refetchOnWindowFocus: true,
