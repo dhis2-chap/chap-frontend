@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-29T20:00:11.987Z\n"
-"PO-Revision-Date: 2026-10-29T20:00:11.988Z\n"
+"POT-Creation-Date: 2026-10-29T20:58:48.674Z\n"
+"PO-Revision-Date: 2026-10-29T20:58:48.675Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -1269,6 +1269,12 @@ msgstr "Select models"
 msgid "No models selected"
 msgstr "No models selected"
 
+msgid "Could not check model forecast limits"
+msgstr "Could not check model forecast limits"
+
+msgid "Unsupported forecast periods"
+msgstr "Unsupported forecast periods"
+
 msgid "Start dry run"
 msgstr "Start dry run"
 
@@ -1289,6 +1295,15 @@ msgstr "Select a future-weather provider"
 
 msgid "Number of training runs must not exceed the number of splits"
 msgstr "Number of training runs must not exceed the number of splits"
+
+msgid "{{model}} supports {{minimum}}–{{maximum}} forecast periods."
+msgstr "{{model}} supports {{minimum}}–{{maximum}} forecast periods."
+
+msgid "{{model}} requires at least {{minimum}} forecast periods."
+msgstr "{{model}} requires at least {{minimum}} forecast periods."
+
+msgid "{{model}} supports at most {{maximum}} forecast periods."
+msgstr "{{model}} supports at most {{maximum}} forecast periods."
 
 msgid "Cannot run prediction"
 msgstr "Cannot run prediction"
