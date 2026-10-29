@@ -256,6 +256,11 @@ const OutbreakMetricsContent = ({ evaluationId, specificationId }: Props) => {
                                 </ChapErrorNotice>
                             ) : (
                                 <>
+                                    {comparedReference && referenceScores.error && (
+                                        <ChapErrorNotice error={referenceScores.error as ApiError} title={i18n.t('Could not score the baseline model')}>
+                                            <Button small onClick={() => void referenceScores.refetch()}>{i18n.t('Retry')}</Button>
+                                        </ChapErrorNotice>
+                                    )}
                                     {comparedReference && referenceScores.data && (
                                         <p className={styles.intro}>
                                             {i18n.t('Each score is compared with the baseline model {{reference}} under the same policy.', {

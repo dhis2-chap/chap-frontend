@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-29T17:34:52.135Z\n"
-"PO-Revision-Date: 2026-10-29T17:34:52.136Z\n"
+"POT-Creation-Date: 2026-10-29T17:43:30.817Z\n"
+"PO-Revision-Date: 2026-10-29T17:43:30.818Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -1879,6 +1879,9 @@ msgstr "Show all metrics"
 
 msgid "Could not score outbreak detection"
 msgstr "Could not score outbreak detection"
+
+msgid "Could not score the baseline model"
+msgstr "Could not score the baseline model"
 
 msgid ""
 "Each score is compared with the baseline model {{reference}} under the same "
