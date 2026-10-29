@@ -1,5 +1,19 @@
 # @dhis2-chap/ui
 
+## 7.4.0
+
+### Minor Changes
+
+-   98b008f: Add a Download debug info action for failed jobs, saving backend diagnostics with the app version, DHIS2 version, and browser in one JSON file. Remind users to check logs for data values before sharing. Regenerate the API client from the local Chap Core 2.6.0.dev0 backend. Load weekly or monthly backtest defaults for the selected period type, and add an Include archived models toggle to benchmark details. [CLIM-1276]
+-   e9ee87a: Show outbreak detection scores for a selected alert policy on evaluation details, with per-level and overall policy metrics and optional forecast horizon grouping, compared with a baseline model. [CLIM-1137]
+
+### Patch Changes
+
+-   037832c: Support both old and new Chap Core job responses when creating datasets. [CLIM-1634]
+-   c1ca076: Show the threshold lines of the alert policy a prediction ran with, hidden while exploring thresholds, and import that policy's alert codes. With Chap Core 2.6.0 or later, this uses the policy recorded for each run instead of the setup's current policy. Block imports when the outbreak indicator's value type cannot store the imported values.
+-   71ccf38: Add a Modeling defaults settings tab for selecting and ordering metrics, the default baseline model, and independent weekly and monthly backtest defaults. Benchmarks and evaluation metrics show the selected metrics in the configured order by default, with an option to show all. Write the product name as Chap throughout the apps.
+    -   @dhis2-chap/core@7.4.0
+
 ## 7.3.2
 
 ### Patch Changes
