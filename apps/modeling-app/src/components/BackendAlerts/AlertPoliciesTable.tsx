@@ -25,12 +25,12 @@ import { describeAlertLevel } from './describeAlertLevel';
 import { useAlertPolicyDisplay } from '@/hooks/useAlertPolicyDisplay';
 import { getAlertLevelDisplay } from './alertLevelDisplay';
 import { AlertLevelTag } from './AlertLevelTag';
-import { EditAlertPolicyDisplayModal } from './EditAlertPolicyDisplayModal';
+import { EditAlertPolicyModal } from './EditAlertPolicyModal';
 import styles from './BackendAlerts.module.css';
 
 const CONFLICT = 409;
 
-// CHAP refuses with 409 while a prediction setup or a raised alert still points at the policy.
+// Chap refuses with 409 while a prediction setup or a raised alert still points at the policy.
 const getDeleteErrorMessage = (error: ApiError) => (
     error.status === CONFLICT
         ? i18n.t('This policy is used by a prediction setup or has alerts raised against it, so it cannot be deleted.')
@@ -130,7 +130,7 @@ const AlertPolicyRow = ({ policy, onDelete }: { policy: AlertPolicyRead; onDelet
                 </div>
                 {!!display.error && (
                     <p className={styles.help} title={(display.error as Error).message}>
-                        {i18n.t('Saved colours could not be loaded, so default colours are shown. Use Colours to save them again.')}
+                        {i18n.t('Saved colours could not be loaded, so default colours are shown. Use Edit to save them again.')}
                     </p>
                 )}
             </DataTableCell>
@@ -138,12 +138,12 @@ const AlertPolicyRow = ({ policy, onDelete }: { policy: AlertPolicyRead; onDelet
             <DataTableCell>
                 <div className={styles.tags}>
                     <TableActionButton disabled={display.isLoading} onClick={() => setEditing(true)}>
-                        {i18n.t('Colours')}
+                        {i18n.t('Edit')}
                     </TableActionButton>
                     <TableActionButton destructive onClick={onDelete}>{i18n.t('Delete')}</TableActionButton>
                 </div>
                 {editing && (
-                    <EditAlertPolicyDisplayModal policy={policy} display={display.data ?? {}} onClose={() => setEditing(false)} />
+                    <EditAlertPolicyModal policy={policy} display={display.data ?? {}} onClose={() => setEditing(false)} />
                 )}
             </DataTableCell>
         </DataTableRow>

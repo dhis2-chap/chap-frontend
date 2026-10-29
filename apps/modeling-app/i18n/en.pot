@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-23T04:31:41.295Z\n"
-"PO-Revision-Date: 2026-10-23T04:31:41.295Z\n"
+"POT-Creation-Date: 2026-10-28T15:01:23.877Z\n"
+"PO-Revision-Date: 2026-10-28T15:01:23.878Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -106,14 +106,17 @@ msgid "No alert policies yet."
 msgstr "No alert policies yet."
 
 msgid ""
-"Saved colours could not be loaded, so default colours are shown. Use "
-"Colours to save them again."
+"Saved colours could not be loaded, so default colours are shown. Use Edit "
+"to save them again."
 msgstr ""
-"Saved colours could not be loaded, so default colours are shown. Use "
-"Colours to save them again."
+"Saved colours could not be loaded, so default colours are shown. Use Edit "
+"to save them again."
 
-msgid "Colours"
-msgstr "Colours"
+msgid "Edit"
+msgstr "Edit"
+
+msgid "Enter a code"
+msgstr "Enter a code"
 
 msgid "Enter a level name"
 msgstr "Enter a level name"
@@ -133,26 +136,41 @@ msgstr "Enter a policy name"
 msgid "Level names must be unique"
 msgstr "Level names must be unique"
 
+msgid "Codes must be unique"
+msgstr "Codes must be unique"
+
+msgid "Alert policy created"
+msgstr "Alert policy created"
+
 msgid "New alert policy"
 msgstr "New alert policy"
 
 msgid "Policy name"
 msgstr "Policy name"
 
-msgid ""
-"Levels are saved from least to most strict, where a higher minimum "
-"probability is stricter. A level fires when the forecast probability of "
-"exceeding its threshold reaches the minimum probability."
-msgstr ""
-"Levels are saved from least to most strict, where a higher minimum "
-"probability is stricter. A level fires when the forecast probability of "
-"exceeding its threshold reaches the minimum probability."
+msgid "No alert import code"
+msgstr "No alert import code"
+
+msgid "Must match the value type or option set of the outbreak indicator."
+msgstr "Must match the value type or option set of the outbreak indicator."
+
+msgid "Levels are saved in this order, from least to most severe."
+msgstr "Levels are saved in this order, from least to most severe."
+
+msgid "Level {{number}}"
+msgstr "Level {{number}}"
+
+msgid "Remove level"
+msgstr "Remove level"
 
 msgid "Level name"
 msgstr "Level name"
 
 msgid "e.g. Monitor"
 msgstr "e.g. Monitor"
+
+msgid "Import code"
+msgstr "Import code"
 
 msgid "Strategy"
 msgstr "Strategy"
@@ -172,9 +190,6 @@ msgstr "All history"
 msgid "Min. probability"
 msgstr "Min. probability"
 
-msgid "Remove level"
-msgstr "Remove level"
-
 msgid "Add level"
 msgstr "Add level"
 
@@ -193,14 +208,17 @@ msgstr "Create policy"
 msgid "Retry saving colours"
 msgstr "Retry saving colours"
 
-msgid "Edit alert colours"
-msgstr "Edit alert colours"
+msgid "Alert policy saved"
+msgstr "Alert policy saved"
 
-msgid "Unable to save alert colours"
-msgstr "Unable to save alert colours"
+msgid "Edit alert policy"
+msgstr "Edit alert policy"
 
-msgid "Please try again."
-msgstr "Please try again."
+msgid "Codes must be unique and non-empty."
+msgstr "Codes must be unique and non-empty."
+
+msgid "Unable to save. Please try again."
+msgstr "Unable to save. Please try again."
 
 msgid "Save"
 msgstr "Save"
@@ -228,8 +246,8 @@ msgstr[1] "{{percentile}}th percentile, {{count}}-year baseline"
 msgid "mean + {{stdMultiplier}} SD"
 msgstr "mean + {{stdMultiplier}} SD"
 
-msgid "{{name}} · {{threshold}} · ≥{{probability}}%"
-msgstr "{{name}} · {{threshold}} · ≥{{probability}}%"
+msgid "{{threshold}} · ≥{{probability}}%"
+msgstr "{{threshold}} · ≥{{probability}}%"
 
 msgid "View"
 msgstr "View"
@@ -356,21 +374,21 @@ msgstr "Error renaming evaluation"
 msgid "Breadcrumbs"
 msgstr "Breadcrumbs"
 
-msgid "Could not connect to CHAP"
-msgstr "Could not connect to CHAP"
+msgid "Could not connect to Chap"
+msgstr "Could not connect to Chap"
 
-msgid "The app is not able to connect to the CHAP server."
-msgstr "The app is not able to connect to the CHAP server."
+msgid "The app is not able to connect to the Chap server."
+msgstr "The app is not able to connect to the Chap server."
 
 msgid ""
-"Please check your route configuration and make sure the CHAP server is "
+"Please check your route configuration and make sure the Chap server is "
 "running."
 msgstr ""
-"Please check your route configuration and make sure the CHAP server is "
+"Please check your route configuration and make sure the Chap server is "
 "running."
 
-msgid "Learn more about Modeling and CHAP"
-msgstr "Learn more about Modeling and CHAP"
+msgid "Learn more about Modeling and Chap"
+msgstr "Learn more about Modeling and Chap"
 
 msgid "Configure settings"
 msgstr "Configure settings"
@@ -466,6 +484,12 @@ msgstr "Downloading request…"
 msgid "Download request"
 msgstr "Download request"
 
+msgid "Downloading debug info…"
+msgstr "Downloading debug info…"
+
+msgid "Download debug info"
+msgstr "Download debug info"
+
 msgid "Copy Job ID"
 msgstr "Copy Job ID"
 
@@ -489,6 +513,16 @@ msgstr "Job deleted"
 
 msgid "Failed to delete job"
 msgstr "Failed to delete job"
+
+msgid ""
+"Debug info downloaded. Logs may contain data values. Check the file before "
+"sharing."
+msgstr ""
+"Debug info downloaded. Logs may contain data values. Check the file before "
+"sharing."
+
+msgid "Failed to download debug info. Please try again."
+msgstr "Failed to download debug info. Please try again."
 
 msgid "The original request is not available for this job."
 msgstr "The original request is not available for this job."
@@ -540,6 +574,24 @@ msgstr "Create dataset"
 
 msgid "Cancelled"
 msgstr "Cancelled"
+
+msgid "{{improvement}} vs {{reference}}"
+msgstr "{{improvement}} vs {{reference}}"
+
+msgid "Compare with"
+msgstr "Compare with"
+
+msgid "No scores for this model yet."
+msgstr "No scores for this model yet."
+
+msgid "No comparison"
+msgstr "No comparison"
+
+msgid "Not applicable"
+msgstr "Not applicable"
+
+msgid "{{name}} ({{status}})"
+msgstr "{{name}} ({{status}})"
 
 msgid "Map Data Items"
 msgstr "Map Data Items"
@@ -845,6 +897,95 @@ msgstr "Needs update"
 msgid "This model can't run right now"
 msgstr "This model can't run right now"
 
+msgid "Future-weather provider"
+msgstr "Future-weather provider"
+
+msgid ""
+"This provider uses observed future weather. Its evaluation scores are not "
+"comparable to production performance, and it cannot be used for future "
+"predictions."
+msgstr ""
+"This provider uses observed future weather. Its evaluation scores are not "
+"comparable to production performance, and it cannot be used for future "
+"predictions."
+
+msgid "Select at least one metric"
+msgstr "Select at least one metric"
+
+msgid "Select a baseline model"
+msgstr "Select a baseline model"
+
+msgid "Modeling defaults"
+msgstr "Modeling defaults"
+
+msgid "These defaults apply to everyone using this Chap server."
+msgstr "These defaults apply to everyone using this Chap server."
+
+msgid "Could not load the Chap route"
+msgstr "Could not load the Chap route"
+
+msgid "Configure a Chap route in General settings first."
+msgstr "Configure a Chap route in General settings first."
+
+msgid "Could not load modeling defaults"
+msgstr "Could not load modeling defaults"
+
+msgid ""
+"This Chap server does not support modeling defaults. Upgrade Chap Core to "
+"use these settings."
+msgstr ""
+"This Chap server does not support modeling defaults. Upgrade Chap Core to "
+"use these settings."
+
+msgid "Retry"
+msgstr "Retry"
+
+msgid "Modeling defaults saved"
+msgstr "Modeling defaults saved"
+
+msgid "Metrics"
+msgstr "Metrics"
+
+msgid ""
+"Selected metrics are shown by default on benchmarks and evaluations, and "
+"rank models in the order listed."
+msgstr ""
+"Selected metrics are shown by default on benchmarks and evaluations, and "
+"rank models in the order listed."
+
+msgid "Learn how to add custom metrics"
+msgstr "Learn how to add custom metrics"
+
+msgid "Available metrics"
+msgstr "Available metrics"
+
+msgid "Selected metrics"
+msgstr "Selected metrics"
+
+msgid "Baseline"
+msgstr "Baseline"
+
+msgid "Default baseline model"
+msgstr "Default baseline model"
+
+msgid "Model runs are compared against this baseline."
+msgstr "Model runs are compared against this baseline."
+
+msgid "Weekly backtest defaults"
+msgstr "Weekly backtest defaults"
+
+msgid "Monthly backtest defaults"
+msgstr "Monthly backtest defaults"
+
+msgid "Could not save modeling defaults"
+msgstr "Could not save modeling defaults"
+
+msgid "Discard changes"
+msgstr "Discard changes"
+
+msgid "Save changes"
+msgstr "Save changes"
+
 msgid "Unsaved changes"
 msgstr "Unsaved changes"
 
@@ -892,10 +1033,10 @@ msgstr "Some locations were left out"
 msgid "Every location is missing data or a shape, so nothing was imported."
 msgstr "Every location is missing data or a shape, so nothing was imported."
 
-msgid "CHAP left out {{count}} locations because of missing data or shapes."
-msgid_plural "CHAP left out {{count}} locations because of missing data or shapes."
-msgstr[0] "CHAP left out {{count}} location because of missing data or shapes."
-msgstr[1] "CHAP left out {{count}} locations because of missing data or shapes."
+msgid "Chap left out {{count}} locations because of missing data or shapes."
+msgid_plural "Chap left out {{count}} locations because of missing data or shapes."
+msgstr[0] "Chap left out {{count}} location because of missing data or shapes."
+msgstr[1] "Chap left out {{count}} locations because of missing data or shapes."
 
 msgid "Import summary"
 msgstr "Import summary"
@@ -1039,23 +1180,11 @@ msgstr "Backtest parameters"
 msgid "Could not load backtest parameters"
 msgstr "Could not load backtest parameters"
 
-msgid "Retry"
-msgstr "Retry"
-
 msgid "Could not load weather providers"
 msgstr "Could not load weather providers"
 
 msgid "No future-weather providers are available."
 msgstr "No future-weather providers are available."
-
-msgid ""
-"This provider uses observed future weather. Its evaluation scores are not "
-"comparable to production performance, and it cannot be used for future "
-"predictions."
-msgstr ""
-"This provider uses observed future weather. Its evaluation scores are not "
-"comparable to production performance, and it cannot be used for future "
-"predictions."
 
 msgid "Error loading datasets or models"
 msgstr "Error loading datasets or models"
@@ -1234,6 +1363,9 @@ msgstr "Period must be completed (cannot be later than last completed period)"
 msgid "Period is before training start"
 msgstr "Period is before training start"
 
+msgid "Cannot determine a forecast horizon for this prediction setup."
+msgstr "Cannot determine a forecast horizon for this prediction setup."
+
 msgid "{{count}} org units"
 msgid_plural "{{count}} org units"
 msgstr[0] "{{count}} org unit"
@@ -1350,109 +1482,14 @@ msgstr "View all activity"
 msgid "No activity matches the selected filters"
 msgstr "No activity matches the selected filters"
 
-msgid "Unavailable"
-msgstr "Unavailable"
-
-msgid "Reporting period"
-msgstr "Reporting period"
-
-msgid "Available values (%)"
-msgstr "Available values (%)"
-
-msgid "Input-data availability"
-msgstr "Input-data availability"
-
-msgid "From reporting period"
-msgstr "From reporting period"
-
-msgid "For example, 202601 or 2026W01"
-msgstr "For example, 202601 or 2026W01"
-
-msgid "To reporting period"
-msgstr "To reporting period"
-
-msgid "Inclusive; missing periods count as gaps"
-msgstr "Inclusive; missing periods count as gaps"
-
-msgid "Reporting-period range unavailable"
-msgstr "Reporting-period range unavailable"
-
-msgid ""
-"Enter a valid start and end period matching the dataset period type, with "
-"the start no later than the end."
-msgstr ""
-"Enter a valid start and end period matching the dataset period type, with "
-"the start no later than the end."
-
-msgid "Completeness unavailable"
-msgstr "Completeness unavailable"
-
-msgid ""
-"Expected locations or model variables are missing. A zero expected count "
-"cannot establish completeness."
-msgstr ""
-"Expected locations or model variables are missing. A zero expected count "
-"cannot establish completeness."
-
-msgid "Inspect reporting period"
-msgstr "Inspect reporting period"
-
-msgid ""
-"{{available}} available / {{expected}} expected observations "
-"({{percent}}%); {{missing}} missing."
-msgstr ""
-"{{available}} available / {{expected}} expected observations "
-"({{percent}}%); {{missing}} missing."
-
-msgid "Missing values by location and variable"
-msgstr "Missing values by location and variable"
-
-msgid "No missing values in this period."
-msgstr "No missing values in this period."
-
-msgid "Unable to load saved input data"
-msgstr "Unable to load saved input data"
-
-msgid "The dataset may no longer be available."
-msgstr "The dataset may no longer be available."
-
-msgid "Saved input-data completeness"
-msgstr "Saved input-data completeness"
-
-msgid ""
-"Availability of finite numeric values in the saved input dataset, including "
-"zero. This does not indicate whether values are final, partially reported, "
-"or current in the upstream source. Timestamps below describe saved datasets "
-"and runs, not upstream updates."
-msgstr ""
-"Availability of finite numeric values in the saved input dataset, including "
-"zero. This does not indicate whether values are final, partially reported, "
-"or current in the upstream source. Timestamps below describe saved datasets "
-"and runs, not upstream updates."
-
-msgid "Unable to load prediction setup"
-msgstr "Unable to load prediction setup"
-
-msgid "Prediction setup unavailable."
-msgstr "Prediction setup unavailable."
-
-msgid "No saved input datasets yet. Run a prediction to inspect its inputs."
-msgstr "No saved input datasets yet. Run a prediction to inspect its inputs."
-
-msgid "Saved input snapshot"
-msgstr "Saved input snapshot"
-
-msgid "Run {{run}} — created {{created}} — dataset {{dataset}}"
-msgstr "Run {{run}} — created {{created}} — dataset {{dataset}}"
-
 msgid "Delete prediction run"
 msgstr "Delete prediction run"
 
 msgid ""
-"This will permanently delete the prediction run from CHAP. It will not "
+"This will permanently delete the prediction run from Chap. It will not "
 "remove any values previously imported into DHIS2."
 msgstr ""
-"This will permanently delete the prediction run from CHAP. It will not "
+"This will permanently delete the prediction run from Chap. It will not "
 "remove any values previously imported into DHIS2."
 
 msgid "Import"
@@ -1527,11 +1564,11 @@ msgid "About scheduling"
 msgstr "About scheduling"
 
 msgid ""
-"The external CHAP scheduler must be running for scheduled predictions to "
+"The external Chap scheduler must be running for scheduled predictions to "
 "execute. Contact your system administrator to set up the scheduler if you "
 "haven't yet."
 msgstr ""
-"The external CHAP scheduler must be running for scheduled predictions to "
+"The external Chap scheduler must be running for scheduled predictions to "
 "execute. Contact your system administrator to set up the scheduler if you "
 "haven't yet."
 
@@ -1696,6 +1733,9 @@ msgstr "No metrics available for this evaluation."
 msgid "Scores aggregated across all evaluation splits and organisation units."
 msgstr "Scores aggregated across all evaluation splits and organisation units."
 
+msgid "Could not load comparisons"
+msgstr "Could not load comparisons"
+
 msgid "Show fewer metrics"
 msgstr "Show fewer metrics"
 
@@ -1703,6 +1743,49 @@ msgid "Show all {{count}} metrics"
 msgid_plural "Show all {{count}} metrics"
 msgstr[0] "Show all {{count}} metrics"
 msgstr[1] "Show all {{count}} metrics"
+
+msgid ""
+"Relative improvement over {{reference}}. +20% means 20% better than it, "
+"-20% means 20% worse."
+msgstr ""
+"Relative improvement over {{reference}}. +20% means 20% better than it, "
+"-20% means 20% worse."
+
+msgid ""
+"Improvement over {{reference}} in the units of the score. Positive means "
+"better, negative means worse."
+msgstr ""
+"Improvement over {{reference}} in the units of the score. Positive means "
+"better, negative means worse."
+
+msgid ""
+"How much closer to the target of {{target}} than {{reference}}. Positive "
+"means better, negative means worse."
+msgstr ""
+"How much closer to the target of {{target}} than {{reference}}. Positive "
+"means better, negative means worse."
+
+msgid ""
+"How much closer to the target than {{reference}}. Positive means better, "
+"negative means worse."
+msgstr ""
+"How much closer to the target than {{reference}}. Positive means better, "
+"negative means worse."
+
+msgid "Compared with {{reference}}. Positive means better, negative means worse."
+msgstr "Compared with {{reference}}. Positive means better, negative means worse."
+
+msgid "Higher is better, up to the target of {{target}}."
+msgstr "Higher is better, up to the target of {{target}}."
+
+msgid "Closer to the target of {{target}} is better."
+msgstr "Closer to the target of {{target}} is better."
+
+msgid "Higher is better."
+msgstr "Higher is better."
+
+msgid "Lower is better."
+msgstr "Lower is better."
 
 msgid "Summary"
 msgstr "Summary"
@@ -2042,8 +2125,8 @@ msgstr "Saved alert colours could not be loaded"
 msgid "Alerts are shown with default colours."
 msgstr "Alerts are shown with default colours."
 
-msgid "Regions exceeding threshold"
-msgstr "Regions exceeding threshold"
+msgid "Organisation units exceeding threshold"
+msgstr "Organisation units exceeding threshold"
 
 msgid "Periods exceeding threshold"
 msgstr "Periods exceeding threshold"
@@ -2090,6 +2173,14 @@ msgstr "Use alert outputs"
 
 msgid "Import outbreak indicator values."
 msgstr "Import outbreak indicator values."
+
+msgid "No alert"
+msgstr "No alert"
+
+msgid "One region-period result is missing and will be skipped."
+msgid_plural "One region-period result is missing and will be skipped."
+msgstr[0] "One region-period result is missing and will be skipped."
+msgstr[1] "{{count}} region-period results are missing and will be skipped."
 
 msgid "Some outbreak indicators will be skipped"
 msgstr "Some outbreak indicators will be skipped"
@@ -2366,23 +2457,29 @@ msgstr "Outbreak"
 msgid "No outbreak"
 msgstr "No outbreak"
 
-msgid "Outbreak regions"
-msgstr "Outbreak regions"
+msgid "Unavailable"
+msgstr "Unavailable"
 
-msgid "No outbreak regions"
-msgstr "No outbreak regions"
+msgid "Organisation units with outbreaks"
+msgstr "Organisation units with outbreaks"
 
-msgid "Unavailable regions"
-msgstr "Unavailable regions"
+msgid "Organisation units without outbreaks"
+msgstr "Organisation units without outbreaks"
 
-msgid "Search regions"
-msgstr "Search regions"
+msgid "Organisation units with unavailable thresholds"
+msgstr "Organisation units with unavailable thresholds"
 
-msgid "All alert levels"
-msgstr "All alert levels"
+msgid "Remove filter"
+msgstr "Remove filter"
+
+msgid "Filter by alert level"
+msgstr "Filter by alert level"
 
 msgid "Alert level"
 msgstr "Alert level"
+
+msgid "Select all"
+msgstr "Select all"
 
 msgid "Status filter"
 msgstr "Status filter"
@@ -2402,8 +2499,8 @@ msgstr "Shift zoom right"
 msgid "Shift zoom right one period"
 msgstr "Shift zoom right one period"
 
-msgid "No regions match the selected filters."
-msgstr "No regions match the selected filters."
+msgid "No organisation units match the selected filters."
+msgstr "No organisation units match the selected filters."
 
 msgid "Dashboard"
 msgstr "Dashboard"
@@ -2434,10 +2531,10 @@ msgid "Failed to copy report details"
 msgstr "Failed to copy report details"
 
 msgid ""
-"Copy the template and email it to the CHAP team. It includes this page and "
+"Copy the template and email it to the Chap team. It includes this page and "
 "time so we can find the problem faster."
 msgstr ""
-"Copy the template and email it to the CHAP team. It includes this page and "
+"Copy the template and email it to the Chap team. It includes this page and "
 "time so we can find the problem faster."
 
 msgid "Send to"
@@ -2749,6 +2846,9 @@ msgstr "Invalid benchmark"
 msgid "Could not load benchmark"
 msgstr "Could not load benchmark"
 
+msgid "Hide archived models"
+msgstr "Hide archived models"
+
 msgid ""
 "Benchmark {{id}}. Compare model runs that share this dataset and backtest "
 "setup."
@@ -2775,8 +2875,11 @@ msgstr[1] ""
 msgid "View jobs and failures"
 msgstr "View jobs and failures"
 
-msgid "Open the benchmark returned by CHAP"
-msgstr "Open the benchmark returned by CHAP"
+msgid "Open the benchmark returned by Chap"
+msgstr "Open the benchmark returned by Chap"
+
+msgid "Include archived models"
+msgstr "Include archived models"
 
 msgid "{{count}} models running"
 msgid_plural "{{count}} models running"
@@ -2786,8 +2889,20 @@ msgstr[1] "{{count}} models running"
 msgid "View evaluation"
 msgstr "View evaluation"
 
+msgid "Score of {{reference}}, which the other rows are compared with"
+msgstr "Score of {{reference}}, which the other rows are compared with"
+
 msgid "Best score among these runs"
 msgstr "Best score among these runs"
+
+msgid ""
+"Scores compared with {{reference}}, aggregated across all splits and "
+"organisation units. Positive means better than {{reference}}, negative "
+"means worse. The best score in each column is highlighted, including ties."
+msgstr ""
+"Scores compared with {{reference}}, aggregated across all splits and "
+"organisation units. Positive means better than {{reference}}, negative "
+"means worse. The best score in each column is highlighted, including ties."
 
 msgid ""
 "Aggregate scores across all splits and organisation units. The best score "
@@ -2797,6 +2912,15 @@ msgstr ""
 "Aggregate scores across all splits and organisation units. The best score "
 "in each column is highlighted, including ties. Best only means best among "
 "these runs, not necessarily a good score."
+
+msgid "Compare with baseline"
+msgstr "Compare with baseline"
+
+msgid "Tick Compare with baseline to choose the reference."
+msgstr "Tick Compare with baseline to choose the reference."
+
+msgid "Show default metrics"
+msgstr "Show default metrics"
 
 msgid "Metric descriptions unavailable"
 msgstr "Metric descriptions unavailable"
@@ -2828,10 +2952,10 @@ msgid "Benchmarks unavailable"
 msgstr "Benchmarks unavailable"
 
 msgid ""
-"This CHAP server does not support backtest specifications. Update CHAP Core "
+"This Chap server does not support backtest specifications. Update Chap Core "
 "to use benchmarks."
 msgstr ""
-"This CHAP server does not support backtest specifications. Update CHAP Core "
+"This Chap server does not support backtest specifications. Update Chap Core "
 "to use benchmarks."
 
 msgid "Could not load benchmarks"
@@ -2911,8 +3035,8 @@ msgstr ""
 msgid "Get started with the Modeling app"
 msgstr "Get started with the Modeling app"
 
-msgid "To get started, create a route that points to a running CHAP server."
-msgstr "To get started, create a route that points to a running CHAP server."
+msgid "To get started, create a route that points to a running Chap server."
+msgstr "To get started, create a route that points to a running Chap server."
 
 msgid "Route and servers are configured on the settings page."
 msgstr "Route and servers are configured on the settings page."
@@ -3008,33 +3132,33 @@ msgstr ""
 "predictions."
 
 msgid ""
-"The CHAP server refused the request. An administrator can check the API "
+"The Chap server refused the request. An administrator can check the API "
 "token under Settings, in the route configuration."
 msgstr ""
-"The CHAP server refused the request. An administrator can check the API "
+"The Chap server refused the request. An administrator can check the API "
 "token under Settings, in the route configuration."
 
 msgid "An unknown error occurred"
 msgstr "An unknown error occurred"
 
-msgid "Not authorized. Check the CHAP API token in settings."
-msgstr "Not authorized. Check the CHAP API token in settings."
+msgid "Not authorized. Check the Chap API token in settings."
+msgstr "Not authorized. Check the Chap API token in settings."
 
-msgid "Not authorized to access the CHAP server"
-msgstr "Not authorized to access the CHAP server"
+msgid "Not authorized to access the Chap server"
+msgstr "Not authorized to access the Chap server"
 
 msgid "This model's service changed without a new version number, so it can't run."
 msgstr "This model's service changed without a new version number, so it can't run."
 
 msgid ""
 "This model's service now runs different code than version {{version}} was "
-"registered with, so CHAP won't run it. Choose another model, or ask your "
-"CHAP administrator to redeploy that version or release the change as a new "
+"registered with, so Chap won't run it. Choose another model, or ask your "
+"Chap administrator to redeploy that version or release the change as a new "
 "version."
 msgstr ""
 "This model's service now runs different code than version {{version}} was "
-"registered with, so CHAP won't run it. Choose another model, or ask your "
-"CHAP administrator to redeploy that version or release the change as a new "
+"registered with, so Chap won't run it. Choose another model, or ask your "
+"Chap administrator to redeploy that version or release the change as a new "
 "version."
 
 msgid ""

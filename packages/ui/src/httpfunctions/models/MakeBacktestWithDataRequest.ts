@@ -8,6 +8,8 @@ import type { FetchRequest } from './FetchRequest';
 import type { ObservationBase } from './ObservationBase';
 /**
  * Long-path request: build the dataset, then immediately backtest the configured model against it.
+ *
+ * Omitted backtest parameters use the stored defaults for the dataset's period type, not the schema defaults.
  */
 export type MakeBacktestWithDataRequest = {
     /**

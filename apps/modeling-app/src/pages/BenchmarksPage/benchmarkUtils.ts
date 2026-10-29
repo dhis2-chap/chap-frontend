@@ -1,10 +1,11 @@
 import type { BacktestRead, BacktestSpecificationRead, BacktestSpecificationSummary, MakeBacktestsRequest, MetricInfo, ModelSpecRead } from '@dhis2-chap/ui';
-import { HIDDEN_METRIC_IDS } from '../../components/PageContent/EvaluationDetails/EvaluationMetricsWidget/metricCatalog';
+import { HIDDEN_METRIC_IDS, sortMetricIds } from '../../components/PageContent/EvaluationDetails/EvaluationMetricsWidget/metricCatalog';
 
-export const getMetricIds = (backtests: BacktestRead[]) =>
-    [...new Set(backtests.flatMap(run => Object.keys(run.aggregateMetrics)))]
-        .filter(id => !HIDDEN_METRIC_IDS.includes(id))
-        .sort();
+/** Every scored metric, in the configured display order. */
+export const getMetricIds = (backtests: BacktestRead[], catalog?: MetricInfo[]) => sortMetricIds(
+    [...new Set(backtests.flatMap(run => Object.keys(run.aggregateMetrics)))].filter(id => !HIDDEN_METRIC_IDS.includes(id)),
+    catalog,
+);
 
 /** Lower rank is better. Unknown metrics are deliberately not ranked. */
 const metricRank = (value: number, metric?: MetricInfo): number | undefined => {
@@ -52,7 +53,7 @@ export const makeBenchmarkRequest = (
     futureWeatherProvider: specification.futureWeatherProvider,
 });
 
-// CHAP Core fills in these defaults when a request leaves the parameter out (BacktestParams).
+// Chap Core before 2.6 fills in these schema defaults when a request leaves the parameter out; 2.6 reports the resolved parameters on the job.
 const REQUEST_DEFAULTS = { nPeriods: 3, nSplits: 7, stride: 1, nRetrain: 1, futureWeatherProvider: 'climatology', targetColumn: 'disease_cases' };
 
 export type SpecificationParams = Pick<BacktestSpecificationSummary, 'dataset' | 'nPeriods' | 'nSplits' | 'stride' | 'nRetrain' | 'futureWeatherProvider' | 'targetColumn'>;
@@ -69,7 +70,7 @@ export const requestMatchesSpecification = (request: Partial<MakeBacktestsReques
         params.targetColumn === (specification.targetColumn ?? REQUEST_DEFAULTS.targetColumn);
 };
 
-/** CHAP Core names each job of a multi-model request `<request name>/<model name>`. */
+/** Chap Core names each job of a multi-model request `<request name>/<model name>`. */
 export const getJobModelName = (jobName: string) => jobName.slice(jobName.lastIndexOf('/') + 1);
 
 const csvCell = (value: string | number | null | undefined): string => {

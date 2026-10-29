@@ -26,7 +26,7 @@ export const NewBenchmarkPage = () => {
                     <DatasetEvaluationForm benchmarkContext />
                 ) : (
                     <NoticeBox title={i18n.t('Benchmarks unavailable')}>
-                        {i18n.t('This CHAP server does not support backtest specifications. Update CHAP Core to use benchmarks.')}
+                        {i18n.t('This Chap server does not support backtest specifications. Update Chap Core to use benchmarks.')}
                     </NoticeBox>
                 )}
             </div>

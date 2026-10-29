@@ -75,24 +75,40 @@
     cursor: not-allowed;
 }
 
-.policyLevelRow {
-    display: grid;
-    grid-template-columns: 1.4fr 1fr 1.8fr auto;
+.policyLevel {
+    display: flex;
+    flex-direction: column;
     gap: var(--spacers-dp12);
     padding: var(--spacers-dp12);
     border: 1px solid var(--colors-grey300);
     border-radius: 3px;
 }
 
-.policyLevelRow > * { min-inline-size: 0; }
-.policyLevelRow > button {
-    grid-column: 4;
-    grid-row: 1;
-    align-self: start;
-    margin-block-start: 26px;
+.policyLevelHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: 500;
+}
+
+.policyLevelRow {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--spacers-dp12);
+}
+
+.policyLevelThreshold {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: var(--spacers-dp12);
+    padding-block-start: var(--spacers-dp12);
+    border-block-start: 1px solid var(--colors-grey300);
+}
+
+.policyLevelThreshold > p {
+    grid-column: 1 / -1;
 }
 
 @media (max-width: 600px) {
     .policyLevelRow { grid-template-columns: minmax(0, 1fr); }
-    .policyLevelRow > button { grid-column: 1; grid-row: auto; margin: 0; }
 }

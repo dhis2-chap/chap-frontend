@@ -5,11 +5,42 @@
 import type { BacktestRead } from '../models/BacktestRead';
 import type { chap_core__rest_api__v1__jobs__DataBaseResponse } from '../models/chap_core__rest_api__v1__jobs__DataBaseResponse';
 import type { JobDescription } from '../models/JobDescription';
+import type { JobDiagnostics } from '../models/JobDiagnostics';
 import type { PredictionInfo } from '../models/PredictionInfo';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 export class JobsService {
+    /**
+     * Download diagnostics for a failed job
+     * Assemble job information, run parameters, the error and traceback, model provenance,
+     * dataset metadata and environment versions in one JSON bundle.
+     *
+     * Dataset observations, geometry and the submitted request are never included.
+     * Logs are bounded and may contain data values.
+     * Error messages and tracebacks can also contain model output and are not sanitized.
+     * Missing model/dataset references (including older jobs and jobs that create their
+     * dataset in the worker) are returned as null. Only FAILURE jobs are supported.
+     * @param jobId
+     * @returns JobDiagnostics Successful Response
+     * @throws ApiError
+     */
+    public static getJobDiagnosticsV1JobsJobIdDiagnosticsGet(
+        jobId: string,
+    ): CancelablePromise<JobDiagnostics> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/v1/jobs/{job_id}/diagnostics',
+            path: {
+                'job_id': jobId,
+            },
+            errors: {
+                404: `Job not found`,
+                409: `Job has not failed`,
+                422: `Validation Error`,
+            },
+        });
+    }
     /**
      * Track background work
      * See every backtest, prediction, or dataset-import job currently being tracked, so a UI can render a progress dashboard or a script can wait for a batch to finish.
@@ -46,19 +77,20 @@ export class JobsService {
         });
     }
     /**
-     * Check whether a job is done yet
-     * Return the current state of a queued job (``PENDING``, ``STARTED``, ``SUCCESS``, ``FAILURE``, ...).
+     * Get one job
+     * Return one job in the same shape as an entry of ``GET /v1/jobs``: its type, name, status
+     * (``PENDING``, ``STARTED``, ``SUCCESS``, ``FAILURE``, ...), start and end time, result and error.
      *
      * The canonical way to poll a background job started by any of the
      * ``POST /v1/analytics*`` or ``POST /v1/crud*`` endpoints. 404 if the job id is
      * unknown.
      * @param jobId
-     * @returns string Successful Response
+     * @returns JobDescription Successful Response
      * @throws ApiError
      */
-    public static getJobStatusV1JobsJobIdGet(
+    public static getJobV1JobsJobIdGet(
         jobId: string,
-    ): CancelablePromise<string> {
+    ): CancelablePromise<JobDescription> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/v1/jobs/{job_id}',
@@ -66,6 +98,7 @@ export class JobsService {
                 'job_id': jobId,
             },
             errors: {
+                404: `Job not found`,
                 422: `Validation Error`,
             },
         });
