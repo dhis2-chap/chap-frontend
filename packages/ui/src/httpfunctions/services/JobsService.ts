@@ -77,19 +77,20 @@ export class JobsService {
         });
     }
     /**
-     * Check whether a job is done yet
-     * Return the current state of a queued job (``PENDING``, ``STARTED``, ``SUCCESS``, ``FAILURE``, ...).
+     * Get one job
+     * Return one job in the same shape as an entry of ``GET /v1/jobs``: its type, name, status
+     * (``PENDING``, ``STARTED``, ``SUCCESS``, ``FAILURE``, ...), start and end time, result and error.
      *
      * The canonical way to poll a background job started by any of the
      * ``POST /v1/analytics*`` or ``POST /v1/crud*`` endpoints. 404 if the job id is
      * unknown.
      * @param jobId
-     * @returns string Successful Response
+     * @returns JobDescription Successful Response
      * @throws ApiError
      */
-    public static getJobStatusV1JobsJobIdGet(
+    public static getJobV1JobsJobIdGet(
         jobId: string,
-    ): CancelablePromise<string> {
+    ): CancelablePromise<JobDescription> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/v1/jobs/{job_id}',
@@ -97,6 +98,7 @@ export class JobsService {
                 'job_id': jobId,
             },
             errors: {
+                404: `Job not found`,
                 422: `Validation Error`,
             },
         });
