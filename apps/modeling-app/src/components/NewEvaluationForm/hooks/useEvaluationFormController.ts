@@ -44,9 +44,7 @@ export const useEvaluationFormController = (initialValues?: Partial<ModelExecuti
     const handleSubmit = (data: ModelExecutionFormValues) => {
         if (!forecastHorizon.isBlocked) createNewBacktest(data);
     };
-    const handleDryRunSubmit = (data: ModelExecutionFormValues) => {
-        if (!forecastHorizon.isBlocked) validateAndDryRun(data);
-    };
+    const handleDryRunSubmit = (data: ModelExecutionFormValues) => validateAndDryRun(data);
 
     const handleStartJob = () => {
         methods.handleSubmit(handleSubmit)();
@@ -57,7 +55,6 @@ export const useEvaluationFormController = (initialValues?: Partial<ModelExecuti
     };
 
     const handleDownloadRequest = async () => {
-        if (forecastHorizon.isBlocked) return;
         try {
             await methods.handleSubmit(async (data) => {
                 await downloadRequest(data);

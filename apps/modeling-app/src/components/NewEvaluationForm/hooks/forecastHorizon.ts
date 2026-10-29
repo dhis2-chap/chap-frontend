@@ -5,9 +5,7 @@ export const getForecastHorizonError = (model: ConfiguredModelInfoRead, nPeriods
     // Basic number validation is handled by the backtest parameter schema.
     if (nPeriods == null || !Number.isInteger(nPeriods) || nPeriods <= 0) return undefined;
 
-    const template = model.modelTemplate;
-    const minimum = template.minPredictionPeriods ?? template.minPredictionLength;
-    const maximum = template.maxPredictionPeriods ?? template.maxPredictionLength;
+    const { minPredictionPeriods: minimum, maxPredictionPeriods: maximum } = model.modelTemplate;
     if ((minimum == null || nPeriods >= minimum) && (maximum == null || nPeriods <= maximum)) {
         return undefined;
     }
