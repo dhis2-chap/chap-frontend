@@ -40,6 +40,9 @@ export class DatasetsService {
      * (or ``/v1/jobs/{id}/database_result`` once finished) for the resulting dataset id.
      * For a dataset that ships its own covariates, use ``POST /v1/analytics/make-dataset``
      * instead.
+     *
+     * ``maskedRanges`` deletes data: ``disease_cases`` inside the ranges is stored as empty
+     * and the submitted values are not kept. They cannot be recovered or unmasked later.
      * @param requestBody
      * @returns JobResponse Successful Response
      * @throws ApiError
@@ -84,7 +87,11 @@ export class DatasetsService {
     }
     /**
      * Remove an imported dataset
-     * Permanently delete a dataset and every observation in it. Use this to clean up obsolete imports — be aware that backtests and predictions that referenced this dataset will lose their data link. 404 if the id is unknown.
+     * Permanently delete a dataset and every observation in it. Use this to clean up obsolete imports.
+     *
+     * Refused with 409 while a backtest or a prediction still uses the dataset. The baseline
+     * backtests that every backtest queues count too, although backtest listings hide them,
+     * so the error names every backtest and prediction to delete first. 404 if the id is unknown.
      * @param datasetId
      * @returns any Successful Response
      * @throws ApiError
@@ -109,7 +116,8 @@ export class DatasetsService {
      *
      * Use this when you have the files on disk and do not want to round-trip them
      * through DHIS2 or the JSON import endpoints. Inserts inline — no background job —
-     * and returns the new dataset id immediately.
+     * and returns the new dataset id immediately. The dataset has no masked ranges;
+     * a CSV with a ``target_masked`` column gets a 422.
      * @param formData
      * @returns chap_core__rest_api__data_models__DataBaseResponse Successful Response
      * @throws ApiError
@@ -186,6 +194,9 @@ export class DatasetsService {
      * (validation runs synchronously, the harmonise-and-load step async). Poll
      * ``/v1/jobs/{id}`` to know when the dataset is queryable. Pass ``dryRun=true`` to run
      * validation only and get the rejection summary without queuing an import.
+     *
+     * ``maskedRanges`` deletes data: ``disease_cases`` inside the ranges is stored as empty
+     * and the submitted values are not kept. They cannot be recovered or unmasked later.
      * @param requestBody
      * @param dryRun If True, only run validation and do not import the dataset
      * @returns ImportSummaryResponse Successful Response

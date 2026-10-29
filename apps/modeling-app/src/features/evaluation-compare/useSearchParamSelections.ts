@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { z } from 'zod';
 import { BacktestRead } from '@dhis2-chap/ui';
 import { useBacktests } from '../../hooks/useBacktests';
+import { useBaselineBacktests } from '../../hooks/useBaselineBacktests';
 
 const evaluationParamsSchema = z.object({
     baseEvaluation: z.string().optional(),
@@ -147,30 +148,13 @@ export const useSelectedEvaluationsController =
             setComparisonEvaluation,
         } = useSelectedEvaluations();
 
-        // map selected evaluationIds to the actual evaluations
-        const mappedEvaluations = useMemo(() => {
-            if (!backtests || backtests.length === 0) {
-                return {
-                    baseEvaluation: undefined,
-                    comparisonEvaluation: undefined,
-                    comparisonEvaluations: [],
-                };
-            }
-            const backTestMap = new Map(
-                backtests.map(bt => [bt.id.toString(), bt]),
-            );
-            return {
-                baseEvaluation: baseEvaluation
-                    ? backTestMap.get(baseEvaluation)
-                    : undefined,
-                comparisonEvaluation: comparisonEvaluation
-                    ? backTestMap.get(comparisonEvaluation)
-                    : undefined,
-            };
-        }, [backtests, baseEvaluation, comparisonEvaluation]);
+        const selectedBase = backtests?.find(backtest => backtest.id.toString() === baseEvaluation);
+        const { backtests: baselines } = useBaselineBacktests(selectedBase?.specificationId);
 
         return {
-            ...mappedEvaluations,
+            baseEvaluation: selectedBase,
+            comparisonEvaluation: baselines.find(backtest => backtest.id.toString() === comparisonEvaluation)
+                ?? backtests?.find(backtest => backtest.id.toString() === comparisonEvaluation),
             setBaseEvaluation,
             setComparisonEvaluation,
             evaluations: backtests,

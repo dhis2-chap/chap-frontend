@@ -50,7 +50,11 @@ export const useCreateDataset = (periodSettings: Dhis2PeriodSettings) => {
 
     const job = useQuery({
         queryKey: ['datasetJob', jobId],
-        queryFn: () => JobsService.getJobStatusV1JobsJobIdGet(jobId as string),
+        queryFn: async () => {
+            const response = await JobsService.getJobV1JobsJobIdGet(jobId as string);
+            // Older Chap versions return only the status string.
+            return typeof response === 'string' ? response : response.status;
+        },
         enabled: !!jobId,
         refetchInterval: status => (FINISHED_JOB_STATUSES.includes(status ?? '') ? false : 2000),
         onSuccess: (status) => {

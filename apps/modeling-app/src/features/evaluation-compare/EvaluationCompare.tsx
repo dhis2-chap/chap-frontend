@@ -220,6 +220,7 @@ export const EvaluationCompare = () => {
                         }}
                         selected={comparisonEvaluation}
                         compatibleEvaluationId={baseEvaluation?.id}
+                        specificationId={baseEvaluation?.specificationId}
                     />
                     <OrganisationUnitMultiSelect
                         dense

@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-29T20:36:43.803Z\n"
-"PO-Revision-Date: 2026-10-29T20:36:43.804Z\n"
+"POT-Creation-Date: 2026-10-29T20:40:16.759Z\n"
+"PO-Revision-Date: 2026-10-29T20:40:16.759Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -106,14 +106,17 @@ msgid "No alert policies yet."
 msgstr "No alert policies yet."
 
 msgid ""
-"Saved colours could not be loaded, so default colours are shown. Use "
-"Colours to save them again."
+"Saved colours could not be loaded, so default colours are shown. Use Edit "
+"to save them again."
 msgstr ""
-"Saved colours could not be loaded, so default colours are shown. Use "
-"Colours to save them again."
+"Saved colours could not be loaded, so default colours are shown. Use Edit "
+"to save them again."
 
-msgid "Colours"
-msgstr "Colours"
+msgid "Edit"
+msgstr "Edit"
+
+msgid "Enter a code"
+msgstr "Enter a code"
 
 msgid "Enter a level name"
 msgstr "Enter a level name"
@@ -133,26 +136,41 @@ msgstr "Enter a policy name"
 msgid "Level names must be unique"
 msgstr "Level names must be unique"
 
+msgid "Codes must be unique"
+msgstr "Codes must be unique"
+
+msgid "Alert policy created"
+msgstr "Alert policy created"
+
 msgid "New alert policy"
 msgstr "New alert policy"
 
 msgid "Policy name"
 msgstr "Policy name"
 
-msgid ""
-"Levels are saved from least to most strict, where a higher minimum "
-"probability is stricter. A level fires when the forecast probability of "
-"exceeding its threshold reaches the minimum probability."
-msgstr ""
-"Levels are saved from least to most strict, where a higher minimum "
-"probability is stricter. A level fires when the forecast probability of "
-"exceeding its threshold reaches the minimum probability."
+msgid "No alert import code"
+msgstr "No alert import code"
+
+msgid "Must match the value type or option set of the outbreak indicator."
+msgstr "Must match the value type or option set of the outbreak indicator."
+
+msgid "Levels are saved in this order, from least to most severe."
+msgstr "Levels are saved in this order, from least to most severe."
+
+msgid "Level {{number}}"
+msgstr "Level {{number}}"
+
+msgid "Remove level"
+msgstr "Remove level"
 
 msgid "Level name"
 msgstr "Level name"
 
 msgid "e.g. Monitor"
 msgstr "e.g. Monitor"
+
+msgid "Import code"
+msgstr "Import code"
 
 msgid "Strategy"
 msgstr "Strategy"
@@ -172,9 +190,6 @@ msgstr "All history"
 msgid "Min. probability"
 msgstr "Min. probability"
 
-msgid "Remove level"
-msgstr "Remove level"
-
 msgid "Add level"
 msgstr "Add level"
 
@@ -193,14 +208,17 @@ msgstr "Create policy"
 msgid "Retry saving colours"
 msgstr "Retry saving colours"
 
-msgid "Edit alert colours"
-msgstr "Edit alert colours"
+msgid "Alert policy saved"
+msgstr "Alert policy saved"
 
-msgid "Unable to save alert colours"
-msgstr "Unable to save alert colours"
+msgid "Edit alert policy"
+msgstr "Edit alert policy"
 
-msgid "Please try again."
-msgstr "Please try again."
+msgid "Codes must be unique and non-empty."
+msgstr "Codes must be unique and non-empty."
+
+msgid "Unable to save. Please try again."
+msgstr "Unable to save. Please try again."
 
 msgid "Save"
 msgstr "Save"
@@ -228,8 +246,8 @@ msgstr[1] "{{percentile}}th percentile, {{count}}-year baseline"
 msgid "mean + {{stdMultiplier}} SD"
 msgstr "mean + {{stdMultiplier}} SD"
 
-msgid "{{name}} · {{threshold}} · ≥{{probability}}%"
-msgstr "{{name}} · {{threshold}} · ≥{{probability}}%"
+msgid "{{threshold}} · ≥{{probability}}%"
+msgstr "{{threshold}} · ≥{{probability}}%"
 
 msgid "View"
 msgstr "View"
@@ -556,6 +574,24 @@ msgstr "Create dataset"
 
 msgid "Cancelled"
 msgstr "Cancelled"
+
+msgid "{{improvement}} vs {{reference}}"
+msgstr "{{improvement}} vs {{reference}}"
+
+msgid "Compare with"
+msgstr "Compare with"
+
+msgid "No scores for this model yet."
+msgstr "No scores for this model yet."
+
+msgid "No comparison"
+msgstr "No comparison"
+
+msgid "Not applicable"
+msgstr "Not applicable"
+
+msgid "{{name}} ({{status}})"
+msgstr "{{name}} ({{status}})"
 
 msgid "Map Data Items"
 msgstr "Map Data Items"
@@ -1724,6 +1760,9 @@ msgstr "No metrics available for this evaluation."
 msgid "Scores aggregated across all evaluation splits and organisation units."
 msgstr "Scores aggregated across all evaluation splits and organisation units."
 
+msgid "Could not load comparisons"
+msgstr "Could not load comparisons"
+
 msgid "Show fewer metrics"
 msgstr "Show fewer metrics"
 
@@ -1731,6 +1770,49 @@ msgid "Show all {{count}} metrics"
 msgid_plural "Show all {{count}} metrics"
 msgstr[0] "Show all {{count}} metrics"
 msgstr[1] "Show all {{count}} metrics"
+
+msgid ""
+"Relative improvement over {{reference}}. +20% means 20% better than it, "
+"-20% means 20% worse."
+msgstr ""
+"Relative improvement over {{reference}}. +20% means 20% better than it, "
+"-20% means 20% worse."
+
+msgid ""
+"Improvement over {{reference}} in the units of the score. Positive means "
+"better, negative means worse."
+msgstr ""
+"Improvement over {{reference}} in the units of the score. Positive means "
+"better, negative means worse."
+
+msgid ""
+"How much closer to the target of {{target}} than {{reference}}. Positive "
+"means better, negative means worse."
+msgstr ""
+"How much closer to the target of {{target}} than {{reference}}. Positive "
+"means better, negative means worse."
+
+msgid ""
+"How much closer to the target than {{reference}}. Positive means better, "
+"negative means worse."
+msgstr ""
+"How much closer to the target than {{reference}}. Positive means better, "
+"negative means worse."
+
+msgid "Compared with {{reference}}. Positive means better, negative means worse."
+msgstr "Compared with {{reference}}. Positive means better, negative means worse."
+
+msgid "Higher is better, up to the target of {{target}}."
+msgstr "Higher is better, up to the target of {{target}}."
+
+msgid "Closer to the target of {{target}} is better."
+msgstr "Closer to the target of {{target}} is better."
+
+msgid "Higher is better."
+msgstr "Higher is better."
+
+msgid "Lower is better."
+msgstr "Lower is better."
 
 msgid "Summary"
 msgstr "Summary"
@@ -1770,6 +1852,70 @@ msgstr "All locations"
 
 msgid "Result"
 msgstr "Result"
+
+msgid "Not defined"
+msgstr "Not defined"
+
+msgid "vs {{reference}}"
+msgstr "vs {{reference}}"
+
+msgid "All forecast horizons"
+msgstr "All forecast horizons"
+
+msgid "Horizon {{horizon}}"
+msgstr "Horizon {{horizon}}"
+
+msgid "{{count}} forecast case scored"
+msgid_plural "{{count}} forecast case scored"
+msgstr[0] "{{count}} forecast case scored"
+msgstr[1] "{{count}} forecast cases scored"
+
+msgid "Alert level"
+msgstr "Alert level"
+
+msgid "Threshold"
+msgstr "Threshold"
+
+msgid "Policy overall"
+msgstr "Policy overall"
+
+msgid "Outbreak detection"
+msgstr "Outbreak detection"
+
+msgid ""
+"How well a policy's alerts match observed outbreaks, across all splits and "
+"organisation units. Each split's thresholds come from the data before it."
+msgstr ""
+"How well a policy's alerts match observed outbreaks, across all splits and "
+"organisation units. Each split's thresholds come from the data before it."
+
+msgid "Could not load outbreak scoring"
+msgstr "Could not load outbreak scoring"
+
+msgid "Manage alert policies"
+msgstr "Manage alert policies"
+
+msgid "Split by horizon"
+msgstr "Split by horizon"
+
+msgid "Compare with baseline model"
+msgstr "Compare with baseline model"
+
+msgid "Show all metrics"
+msgstr "Show all metrics"
+
+msgid "Could not score outbreak detection"
+msgstr "Could not score outbreak detection"
+
+msgid "Could not score the baseline model"
+msgstr "Could not score the baseline model"
+
+msgid ""
+"Each score is compared with the baseline model {{reference}} under the same "
+"policy."
+msgstr ""
+"Each score is compared with the baseline model {{reference}} under the same "
+"policy."
 
 msgid "Start period"
 msgstr "Start period"
@@ -2033,36 +2179,26 @@ msgstr "Adjust alert output"
 msgid "Apply"
 msgstr "Apply"
 
-msgid "Alert levels"
-msgstr "Alert levels"
-
 msgid "Unable to load raised alerts"
 msgstr "Unable to load raised alerts"
 
-msgid ""
-"No alerts were recorded for this run. The prediction setup has no alert "
-"policy. Add one to raise alerts on future runs."
-msgstr ""
-"No alerts were recorded for this run. The prediction setup has no alert "
-"policy. Add one to raise alerts on future runs."
+msgid "Alert levels"
+msgstr "Alert levels"
 
-msgid ""
-"No alerts were recorded for this run. The prediction setup now uses "
-"{{policy}}, but no level may have been reached, or the policy may have been "
-"added after this run."
-msgstr ""
-"No alerts were recorded for this run. The prediction setup now uses "
-"{{policy}}, but no level may have been reached, or the policy may have been "
-"added after this run."
+msgid "No alert policy was recorded for this run."
+msgstr "No alert policy was recorded for this run."
 
 msgid "No alerts were recorded for this run."
 msgstr "No alerts were recorded for this run."
 
-msgid "Show {{alertCount}} alerts raised by {{policy}} on the plots."
-msgstr "Show {{alertCount}} alerts raised by {{policy}} on the plots."
-
 msgid "Show recorded alerts on the plots."
 msgstr "Show recorded alerts on the plots."
+
+msgid "Show {{alertCount}} alerts from {{policy}} with their thresholds."
+msgstr "Show {{alertCount}} alerts from {{policy}} with their thresholds."
+
+msgid "{{policy}} raised no alerts for this run. Show its thresholds."
+msgstr "{{policy}} raised no alerts for this run. Show its thresholds."
 
 msgid "Saved alert colours could not be loaded"
 msgstr "Saved alert colours could not be loaded"
@@ -2070,8 +2206,8 @@ msgstr "Saved alert colours could not be loaded"
 msgid "Alerts are shown with default colours."
 msgstr "Alerts are shown with default colours."
 
-msgid "Regions exceeding threshold"
-msgstr "Regions exceeding threshold"
+msgid "Organisation units exceeding threshold"
+msgstr "Organisation units exceeding threshold"
 
 msgid "Periods exceeding threshold"
 msgstr "Periods exceeding threshold"
@@ -2082,11 +2218,14 @@ msgstr "Thresholds unavailable"
 msgid "Prediction run"
 msgstr "Prediction run"
 
+msgid "Edit the alert policy to change its thresholds."
+msgstr "Edit the alert policy to change its thresholds."
+
 msgid "Explore thresholds"
 msgstr "Explore thresholds"
 
-msgid "Explore threshold lines for this run."
-msgstr "Explore threshold lines for this run."
+msgid "Try other threshold settings. Hides recorded alerts."
+msgstr "Try other threshold settings. Hides recorded alerts."
 
 msgid ""
 "There was a problem loading the prediction data required for this "
@@ -2116,8 +2255,22 @@ msgstr "Alert output"
 msgid "Use alert outputs"
 msgstr "Use alert outputs"
 
-msgid "Import outbreak indicator values."
-msgstr "Import outbreak indicator values."
+msgid "Import the alert level code from {{policy}}."
+msgstr "Import the alert level code from {{policy}}."
+
+msgid "Import 1 when an outbreak is likely, otherwise 0."
+msgstr "Import 1 when an outbreak is likely, otherwise 0."
+
+msgid "Imported value"
+msgstr "Imported value"
+
+msgid "No alert"
+msgstr "No alert"
+
+msgid "One region-period result is missing and will be skipped."
+msgid_plural "One region-period result is missing and will be skipped."
+msgstr[0] "One region-period result is missing and will be skipped."
+msgstr[1] "{{count}} region-period results are missing and will be skipped."
 
 msgid "Some outbreak indicators will be skipped"
 msgstr "Some outbreak indicators will be skipped"
@@ -2281,6 +2434,12 @@ msgstr "Previous values may have been cleared, but the new import did not comple
 msgid "Prediction data posted successfully"
 msgstr "Prediction data posted successfully"
 
+msgid "{{name}} uses an option set without the codes {{values}}."
+msgstr "{{name}} uses an option set without the codes {{values}}."
+
+msgid "{{name}} has value type {{valueType}} and cannot store {{values}}."
+msgstr "{{name}} has value type {{valueType}} and cannot store {{values}}."
+
 msgid "Error loading prediction configurations"
 msgstr "Error loading prediction configurations"
 
@@ -2348,6 +2507,9 @@ msgstr "There are running jobs in the background"
 msgid "Running jobs"
 msgstr "Running jobs"
 
+msgid "Review the threshold parameters and apply your changes."
+msgstr "Review the threshold parameters and apply your changes."
+
 msgid "Waiting for connection"
 msgstr "Waiting for connection"
 
@@ -2362,9 +2524,6 @@ msgstr "Unable to calculate thresholds"
 
 msgid "There was a problem calculating thresholds for this prediction run."
 msgstr "There was a problem calculating thresholds for this prediction run."
-
-msgid "Review the threshold parameters and apply your changes."
-msgstr "Review the threshold parameters and apply your changes."
 
 msgid "Unable to load threshold strategies"
 msgstr "Unable to load threshold strategies"
@@ -2397,23 +2556,23 @@ msgstr "No outbreak"
 msgid "Unavailable"
 msgstr "Unavailable"
 
-msgid "Outbreak regions"
-msgstr "Outbreak regions"
+msgid "Organisation units with outbreaks"
+msgstr "Organisation units with outbreaks"
 
-msgid "No outbreak regions"
-msgstr "No outbreak regions"
+msgid "Organisation units without outbreaks"
+msgstr "Organisation units without outbreaks"
 
-msgid "Unavailable regions"
-msgstr "Unavailable regions"
+msgid "Organisation units with unavailable thresholds"
+msgstr "Organisation units with unavailable thresholds"
 
-msgid "Search regions"
-msgstr "Search regions"
+msgid "Remove filter"
+msgstr "Remove filter"
 
-msgid "All alert levels"
-msgstr "All alert levels"
+msgid "Filter by alert level"
+msgstr "Filter by alert level"
 
-msgid "Alert level"
-msgstr "Alert level"
+msgid "Select all"
+msgstr "Select all"
 
 msgid "Status filter"
 msgstr "Status filter"
@@ -2433,8 +2592,8 @@ msgstr "Shift zoom right"
 msgid "Shift zoom right one period"
 msgstr "Shift zoom right one period"
 
-msgid "No regions match the selected filters."
-msgstr "No regions match the selected filters."
+msgid "No organisation units match the selected filters."
+msgstr "No organisation units match the selected filters."
 
 msgid "Dashboard"
 msgstr "Dashboard"
@@ -2710,6 +2869,9 @@ msgstr "Requires superuser authority"
 msgid "Model not found"
 msgstr "Model not found"
 
+msgid "{{name}} (baseline)"
+msgstr "{{name}} (baseline)"
+
 msgid "Manage the policies used to raise alerts from forecasts."
 msgstr "Manage the policies used to raise alerts from forecasts."
 
@@ -2823,8 +2985,20 @@ msgstr[1] "{{count}} models running"
 msgid "View evaluation"
 msgstr "View evaluation"
 
+msgid "Score of {{reference}}, which the other rows are compared with"
+msgstr "Score of {{reference}}, which the other rows are compared with"
+
 msgid "Best score among these runs"
 msgstr "Best score among these runs"
+
+msgid ""
+"Scores compared with {{reference}}, aggregated across all splits and "
+"organisation units. Positive means better than {{reference}}, negative "
+"means worse. The best score in each column is highlighted, including ties."
+msgstr ""
+"Scores compared with {{reference}}, aggregated across all splits and "
+"organisation units. Positive means better than {{reference}}, negative "
+"means worse. The best score in each column is highlighted, including ties."
 
 msgid ""
 "Aggregate scores across all splits and organisation units. The best score "
@@ -2834,6 +3008,12 @@ msgstr ""
 "Aggregate scores across all splits and organisation units. The best score "
 "in each column is highlighted, including ties. Best only means best among "
 "these runs, not necessarily a good score."
+
+msgid "Compare with baseline"
+msgstr "Compare with baseline"
+
+msgid "Tick Compare with baseline to choose the reference."
+msgstr "Tick Compare with baseline to choose the reference."
 
 msgid "Show default metrics"
 msgstr "Show default metrics"
