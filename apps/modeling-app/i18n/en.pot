@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-28T15:01:23.877Z\n"
-"PO-Revision-Date: 2026-10-28T15:01:23.878Z\n"
+"POT-Creation-Date: 2026-10-29T10:24:15.411Z\n"
+"PO-Revision-Date: 2026-10-29T10:24:15.412Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -1482,6 +1482,35 @@ msgstr "View all activity"
 msgid "No activity matches the selected filters"
 msgstr "No activity matches the selected filters"
 
+msgid "Run a prediction to check its input data."
+msgstr "Run a prediction to check its input data."
+
+msgid "Unable to load input data."
+msgstr "Unable to load input data."
+
+msgid "Completeness unavailable for this dataset."
+msgstr "Completeness unavailable for this dataset."
+
+msgid "Latest period ({{period}})"
+msgstr "Latest period ({{period}})"
+
+msgid "{{percent}}% complete"
+msgstr "{{percent}}% complete"
+
+msgid "{{count}} locations with gaps"
+msgid_plural "{{count}} locations with gaps"
+msgstr[0] "{{count}} location with gaps"
+msgstr[1] "{{count}} locations with gaps"
+
+msgid "{{gaps}} of {{total}} periods have missing values"
+msgstr "{{gaps}} of {{total}} periods have missing values"
+
+msgid "Latest input data"
+msgstr "Latest input data"
+
+msgid "View dataset"
+msgstr "View dataset"
+
 msgid "Delete prediction run"
 msgstr "Delete prediction run"
 
@@ -1603,6 +1632,61 @@ msgstr "source"
 
 msgid "sources"
 msgstr "sources"
+
+msgid "Unavailable"
+msgstr "Unavailable"
+
+msgid "Completeness unavailable"
+msgstr "Completeness unavailable"
+
+msgid "The dataset has no periods, locations or variables to check."
+msgstr "The dataset has no periods, locations or variables to check."
+
+msgid "Reporting period"
+msgstr "Reporting period"
+
+msgid "Available values (%)"
+msgstr "Available values (%)"
+
+msgid "Available{{colon}} {{available}}<br/>Completeness{{colon}} {{completeness}}"
+msgstr "Available{{colon}} {{available}}<br/>Completeness{{colon}} {{completeness}}"
+
+msgid "Input-data availability"
+msgstr "Input-data availability"
+
+msgid ""
+"Share of finite numeric values, including zero, for each location and "
+"variable in this dataset. Locations with no values at all are not part of "
+"the dataset and are not counted."
+msgstr ""
+"Share of finite numeric values, including zero, for each location and "
+"variable in this dataset. Locations with no values at all are not part of "
+"the dataset and are not counted."
+
+msgid "Inspect reporting period"
+msgstr "Inspect reporting period"
+
+msgid ""
+"{{available}} available / {{expected}} expected observations "
+"({{percent}}%); {{missing}} missing."
+msgstr ""
+"{{available}} available / {{expected}} expected observations "
+"({{percent}}%); {{missing}} missing."
+
+msgid "Missing values by location and variable"
+msgstr "Missing values by location and variable"
+
+msgid "No missing values in this period."
+msgstr "No missing values in this period."
+
+msgid "Error loading dataset"
+msgstr "Error loading dataset"
+
+msgid "Created {{created}} · {{first}} to {{last}} · {{locations}} locations"
+msgstr "Created {{created}} · {{first}} to {{last}} · {{locations}} locations"
+
+msgid "Data completeness"
+msgstr "Data completeness"
 
 msgid "Error loading datasets"
 msgstr "Error loading datasets"
@@ -2457,9 +2541,6 @@ msgstr "Outbreak"
 msgid "No outbreak"
 msgstr "No outbreak"
 
-msgid "Unavailable"
-msgstr "Unavailable"
-
 msgid "Organisation units with outbreaks"
 msgstr "Organisation units with outbreaks"
 
@@ -3011,6 +3092,12 @@ msgstr "No prediction setups yet"
 
 msgid "Error loading prediction setups"
 msgstr "Error loading prediction setups"
+
+msgid "Review the saved data and where values are missing."
+msgstr "Review the saved data and where values are missing."
+
+msgid "Dataset {{id}}"
+msgstr "Dataset {{id}}"
 
 msgid "Import data once and reuse it across evaluations."
 msgstr "Import data once and reuse it across evaluations."

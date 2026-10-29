@@ -1,0 +1,54 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacers-dp16);
+    padding: var(--spacers-dp16);
+    min-width: 0;
+}
+
+.loadingContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-block-size: 300px;
+}
+
+.title,
+.subtitle {
+    margin: 0;
+    color: var(--colors-grey900);
+}
+
+.title {
+    font-size: 18px;
+}
+
+.subtitle {
+    font-size: 16px;
+}
+
+.description {
+    margin: 0;
+    color: var(--colors-grey700);
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.covariates {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacers-dp4);
+}
+
+.chart {
+    min-width: 0;
+}
+
+.gaps {
+    max-height: 320px;
+    overflow: auto;
+    margin: 0;
+    padding-inline-start: var(--spacers-dp24);
+    font-size: 14px;
+    line-height: 1.6;
+}
