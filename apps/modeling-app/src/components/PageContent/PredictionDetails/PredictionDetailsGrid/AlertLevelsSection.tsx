@@ -11,13 +11,6 @@ type Props = {
     onEnabledChange: (enabled: boolean) => void;
 };
 
-const NoAlerts = ({ message }: { message: string }) => (
-    <div className={styles.panelSection}>
-        <h3>{i18n.t('Alert levels')}</h3>
-        <p className={styles.panelHelp}>{message}</p>
-    </div>
-);
-
 export const AlertLevelsSection = ({ alerts, enabled, disabled, onEnabledChange }: Props) => {
     if (alerts.isLoading) {
         return <CircularLoader small />;
@@ -33,27 +26,26 @@ export const AlertLevelsSection = ({ alerts, enabled, disabled, onEnabledChange 
 
     const { status } = alerts;
 
-    if (status.kind === 'noPolicy') {
+    if (status.kind !== 'policy') {
         return (
-            <NoAlerts
-                message={i18n.t('No alerts were recorded for this run. The prediction setup has no alert policy. Add one to raise alerts on future runs.')}
-            />
+            <div className={styles.panelSection}>
+                <h3>{i18n.t('Alert levels')}</h3>
+                <p className={styles.panelHelp}>
+                    {status.kind === 'noPolicy'
+                        ? i18n.t('No alert policy was recorded for this run.')
+                        : i18n.t('No alerts were recorded for this run.')}
+                </p>
+            </div>
         );
     }
 
-    if (status.kind === 'noAlerts') {
-        return (
-            <NoAlerts
-                message={status.setupPolicy
-                    ? i18n.t('No alerts were recorded for this run. The prediction setup now uses {{policy}}, but no level may have been reached, or the policy may have been added after this run.', {
-                            policy: status.setupPolicy.name,
-                        })
-                    : i18n.t('No alerts were recorded for this run.')}
-            />
-        );
+    const policy = status.policies.map(({ name }) => name).join(', ');
+    let description = i18n.t('Show recorded alerts on the plots.');
+    if (policy) {
+        description = status.alertCount > 0
+            ? i18n.t('Show {{alertCount}} alerts from {{policy}} with their thresholds.', { alertCount: status.alertCount, policy })
+            : i18n.t('{{policy}} raised no alerts for this run. Show its thresholds.', { policy });
     }
-
-    const policyNames = status.policies.map(policy => policy.name).join(', ');
 
     return (
         <>
@@ -67,12 +59,7 @@ export const AlertLevelsSection = ({ alerts, enabled, disabled, onEnabledChange 
                     <span className={styles.toggleText}>
                         <span className={styles.toggleTitle}>{i18n.t('Alert levels')}</span>
                         <span className={styles.toggleDescription}>
-                            {policyNames
-                                ? i18n.t('Show {{alertCount}} alerts from {{policy}} with their thresholds.', {
-                                        alertCount: status.alertCount,
-                                        policy: policyNames,
-                                    })
-                                : i18n.t('Show recorded alerts on the plots.')}
+                            {description}
                         </span>
                     </span>
                 )}

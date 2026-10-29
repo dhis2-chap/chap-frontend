@@ -3,4 +3,4 @@
 "@dhis2-chap/ui": patch
 ---
 
-Show alert policy threshold lines on prediction plots, hidden while exploring thresholds. Block imports when the outbreak indicator's value type cannot store the imported values.
+Show the threshold lines of the alert policy a prediction ran with, hidden while exploring thresholds. Chap Core 2.6.0 or later is needed to show the policy for runs without alerts. Block imports when the outbreak indicator's value type cannot store the imported values.

@@ -86,7 +86,7 @@ export const PredictionDetailsGrid = ({
     const policyThresholds = useAlertPolicyThresholds({
         datasetId: prediction.datasetId,
         series,
-        policies: alerts.status.kind === 'raised' ? alerts.status.policies : NO_POLICIES,
+        policies: alerts.status.kind === 'policy' ? alerts.status.policies : NO_POLICIES,
         enabled: showPolicy,
     });
 

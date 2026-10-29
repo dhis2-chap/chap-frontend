@@ -14,6 +14,8 @@ export const FEATURE_MIN_VERSIONS = {
     backtestTargetColumn: '2.4.0',
     // Chap raises alerts when a prediction run finishes from 2.5.0.
     predictionAlerts: '2.5.0',
+    // Chap records the alert policy each prediction ran with from 2.6.0.
+    predictionAlertPolicy: '2.6.0',
     jobDiagnostics: '2.6.0',
     outbreakMetrics: '2.6.0',
 } as const;
@@ -29,6 +31,7 @@ export const Features = {
     BACKTEST_PARAMETERS: 'backtestParameters',
     BACKTEST_TARGET_COLUMN: 'backtestTargetColumn',
     PREDICTION_ALERTS: 'predictionAlerts',
+    PREDICTION_ALERT_POLICY: 'predictionAlertPolicy',
     JOB_DIAGNOSTICS: 'jobDiagnostics',
     OUTBREAK_METRICS: 'outbreakMetrics',
 } as const;
