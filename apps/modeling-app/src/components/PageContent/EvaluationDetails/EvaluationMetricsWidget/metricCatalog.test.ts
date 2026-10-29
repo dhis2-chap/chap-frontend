@@ -53,5 +53,7 @@ describe('comparison guidance', () => {
         expect(formatComparison(-4.06e-17, { comparisonOp: 'difference' } as MetricInfo)).toBe('0');
         expect(formatScore(-4.06e-17)).toBe('0');
         expect(formatScore(0.0000123456)).toBe('0.000012');
+        expect(formatComparison(3.8e19, { comparisonOp: 'skill_ratio' } as MetricInfo)).toBe('+3.8E21%');
+        expect(formatScore(12345678)).toBe('1.23E7');
     });
 });
