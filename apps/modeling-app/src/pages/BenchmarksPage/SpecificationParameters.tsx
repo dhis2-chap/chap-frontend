@@ -27,7 +27,7 @@ export const SpecificationParameters = ({ specification }: { specification: Para
 };
 
 type SummaryProps = {
-    specification: Parameters & { dataset: DataSetMeta };
+    specification: Parameters & Pick<BacktestSpecificationSummary, 'targetColumn'> & { dataset: DataSetMeta };
     orgUnitCount: number;
 };
 
@@ -38,6 +38,7 @@ export const SpecificationSummary = ({ specification, orgUnitCount }: SummaryPro
             {[
                 { label: i18n.t('Period range'), value: formatPeriodRange(specification.dataset) },
                 { label: i18n.t('Organisation units'), value: orgUnitCount },
+                { label: i18n.t('Target column'), value: specification.targetColumn ?? 'disease_cases' },
                 ...parameters,
             ].map(({ label, value }) => (
                 <div key={label}>
