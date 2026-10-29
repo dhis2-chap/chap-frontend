@@ -17,7 +17,6 @@ export const useForecastHorizonValidation = (models: ModelSpecRead[], nPeriods: 
 
     return {
         messages,
-        isLoading,
         error,
         isBlocked: isLoading || !!error || messages.length > 0,
         retry: () => queries.filter(query => query.isError).forEach(query => void query.refetch()),

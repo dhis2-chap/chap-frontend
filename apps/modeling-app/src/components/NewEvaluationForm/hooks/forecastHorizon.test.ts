@@ -16,7 +16,7 @@ describe('forecast horizon validation', () => {
         for (const periods of [2, 3, 4]) expect(getForecastHorizonError(configured, periods)).toBeUndefined();
         for (const periods of [1, 5]) {
             expect(getForecastHorizonError(configured, periods)).toBe(
-                `Configured model supports 2–4 forecast periods. The evaluation uses ${periods}.`,
+                'Configured model supports 2–4 forecast periods.',
             );
         }
     });

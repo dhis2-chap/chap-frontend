@@ -12,16 +12,16 @@ export const getForecastHorizonError = (model: ConfiguredModelInfoRead, nPeriods
 
     const name = model.displayName || model.name;
     if (minimum != null && maximum != null) {
-        return i18n.t('{{model}} supports {{minimum}}–{{maximum}} forecast periods. The evaluation uses {{nPeriods}}.', {
-            model: name, minimum, maximum, nPeriods,
+        return i18n.t('{{model}} supports {{minimum}}–{{maximum}} forecast periods.', {
+            model: name, minimum, maximum,
         });
     }
     if (minimum != null) {
-        return i18n.t('{{model}} requires at least {{minimum}} forecast periods. The evaluation uses {{nPeriods}}.', {
-            model: name, minimum, nPeriods,
+        return i18n.t('{{model}} requires at least {{minimum}} forecast periods.', {
+            model: name, minimum,
         });
     }
-    return i18n.t('{{model}} supports at most {{maximum}} forecast periods. The evaluation uses {{nPeriods}}.', {
-        model: name, maximum, nPeriods,
+    return i18n.t('{{model}} supports at most {{maximum}} forecast periods.', {
+        model: name, maximum,
     });
 };

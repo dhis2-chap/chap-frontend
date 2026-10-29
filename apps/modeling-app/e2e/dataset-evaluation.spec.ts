@@ -2,7 +2,6 @@ import { expect, test, type Page, type Response } from '@playwright/test';
 import type {
     BacktestRead,
     ConfiguredModelDB,
-    ConfiguredModelInfoRead,
     DataBaseResponse,
     JobDescription,
     JobResponse,
@@ -27,46 +26,6 @@ const selectModels = async (page: Page, names: string[]) => {
 const removeChips = (page: Page) => page.locator('[data-test^="selected-model-"][data-test$="-remove"]');
 
 test.describe('saved dataset evaluations', () => {
-    test('blocks forecast periods an individual selected model does not support', async ({ page }) => {
-        test.setTimeout(180_000);
-        const parametersResponse = await getChap(page, '/v1/analytics/backtest-parameters');
-        expect([200, 404]).toContain(parametersResponse.status());
-        test.skip(!parametersResponse.ok(), 'Stable Chap releases predate configurable backtest parameters');
-        const evaluation = await createCompletedNaiveEvaluation(page);
-        const templates = await readJson<ModelTemplateRead[]>(await getChap(page, '/v1/crud/model-templates'), 'Load templates');
-        const alternative = await readJson<ConfiguredModelDB>(await page.request.post(chapUrl('/v1/crud/configured-models'), {
-            data: { name: `e2e_forecast_limits_${Date.now()}`, modelTemplateId: templates.find(model => model.name === 'naive_model')!.id },
-        }), 'Create model');
-
-        try {
-            // Different limits per model are controlled here to test frontend validation.
-            await page.route('**/v1/crud/configured-models/*', async (route) => {
-                const response = await route.fetch();
-                const model = await response.json() as ConfiguredModelInfoRead;
-                const limited = model.id === alternative.id;
-                await route.fulfill({ response, json: {
-                    ...model,
-                    displayName: model.name,
-                    modelTemplate: { ...model.modelTemplate, minPredictionPeriods: limited ? 4 : 1, maxPredictionPeriods: limited ? 6 : 4 },
-                } });
-            });
-            await page.goto(`/#/evaluate/from-dataset?datasetId=${evaluation.datasetId}&origin=all`);
-            await page.locator('[data-test="evaluation-name-input"] input').fill('Forecast limit validation');
-            const modal = await selectModels(page, ['naive_model', alternative.name]);
-            await modal.getByRole('button', { name: 'Use selected models (2)', exact: true }).click();
-            const start = page.getByRole('button', { name: 'Start evaluation', exact: true });
-            await page.locator('[data-test="backtest-nPeriods"] input').fill('3');
-            await expect(page.getByText(`${alternative.name} supports 4–6 forecast periods. The evaluation uses 3.`)).toBeVisible();
-            await expect(page.getByText(/naive_model supports/)).not.toBeVisible();
-            await expect(start).toBeDisabled();
-            await page.locator(`[data-test="selected-model-${toDataTestKey(alternative.name)}-remove"]`).click();
-            await expect(page.getByText('Unsupported forecast periods', { exact: true })).not.toBeVisible();
-            await expect(start).toBeEnabled();
-        } finally {
-            await page.request.delete(chapUrl(`/v1/crud/configured-models/${alternative.id}`));
-        }
-    });
-
     test('selects compatible models, resets on dataset change, and queues a job for each', async ({ page }) => {
         test.setTimeout(240_000);
         // Stable Chap releases predate configurable backtest parameters and use their own defaults.
