@@ -50,10 +50,7 @@ export const EvaluationCompatibleSelector = ({
         cacheTime: 60 * 5 * 1000,
     });
     const baselines = useBaselineBacktests(specificationId);
-    const availableEvaluations = [
-        ...(compatibleEvaluations ?? []).filter(evaluation => !baselines.backtests.some(baseline => baseline.id === evaluation.id)),
-        ...baselines.backtests,
-    ];
+    const availableEvaluations = [...compatibleEvaluations ?? [], ...baselines.backtests];
     const allLoaded = isSuccess && baselines.isSuccess;
     const loadError = error || baselines.error;
     // allow inline onSelect function
@@ -95,7 +92,7 @@ export const EvaluationCompatibleSelector = ({
                 selected={selected}
                 onSelect={onSelect}
                 disabled={compatibleEvaluationId == undefined}
-                error={isError || !!baselines.error}
+                error={isError}
                 loading={isLoading || baselines.isLoading}
                 listMessage={getListMessage()}
                 {...singleSelectProps}

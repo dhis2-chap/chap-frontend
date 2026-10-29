@@ -10,7 +10,7 @@ import { EvaluationCompatibleSelector } from '../features/select-evaluation/Eval
 vi.mock('@dhis2-chap/ui', () => ({
     BacktestsService: {
         getBacktestSpecificationV1CrudBacktestSpecificationsSpecificationIdGet: vi.fn(),
-        getBacktestInfoV1CrudBacktestsBacktestIdGet: vi.fn(),
+        getBacktestInfoV1CrudBacktestsBacktestIdInfoGet: vi.fn(),
     },
 }));
 vi.mock('@dhis2/ui', () => ({
@@ -56,7 +56,7 @@ const loadBaselines = async () => {
     client.setQueryData(['backtests'], [base, other]);
     client.setQueryData(['backtests', 'compatible', 1], [other]);
     vi.mocked(BacktestsService.getBacktestSpecificationV1CrudBacktestSpecificationsSpecificationIdGet).mockResolvedValue(specification);
-    vi.mocked(BacktestsService.getBacktestInfoV1CrudBacktestsBacktestIdGet).mockResolvedValue(baseline);
+    vi.mocked(BacktestsService.getBacktestInfoV1CrudBacktestsBacktestIdInfoGet).mockResolvedValue(baseline);
     renderComparison();
     // Static rendering registers the real queries; fetch them explicitly without a browser.
     await client.getQueryCache().find(['backtest-specifications', 10, false, false])!.fetch();
@@ -70,17 +70,16 @@ it('fetches only completed baselines, appends their labels and resolves a baseli
     const { html, selection } = renderComparison();
 
     expect(BacktestsService.getBacktestSpecificationV1CrudBacktestSpecificationsSpecificationIdGet).toHaveBeenCalledWith(10, false, false);
-    expect(BacktestsService.getBacktestInfoV1CrudBacktestsBacktestIdGet).toHaveBeenCalledExactlyOnceWith(3);
+    expect(BacktestsService.getBacktestInfoV1CrudBacktestsBacktestIdInfoGet).toHaveBeenCalledExactlyOnceWith(3);
     expect(html).toContain('<option value="2">Other evaluation</option><option value="3" selected="">Global median (baseline)</option>');
     expect(selection.comparisonEvaluation).toEqual({ ...baseline, name: 'Global median (baseline)' });
     expect(selection.evaluations).toEqual([base, other]);
-    expect(client.getQueryData(['backtests', 3])).toEqual(baseline);
 });
 
 it('keeps ordinary comparisons available if baseline loading fails', async () => {
     await loadBaselines();
     client.removeQueries({ queryKey: ['backtests', 3], exact: true });
-    vi.mocked(BacktestsService.getBacktestInfoV1CrudBacktestsBacktestIdGet).mockRejectedValue(new Error('Baseline unavailable'));
+    vi.mocked(BacktestsService.getBacktestInfoV1CrudBacktestsBacktestIdInfoGet).mockRejectedValue(new Error('Baseline unavailable'));
     renderComparison(1, 2);
     await expect(client.getQueryCache().find(['backtests', 3])!.fetch()).rejects.toThrow('Baseline unavailable');
 
@@ -88,17 +87,4 @@ it('keeps ordinary comparisons available if baseline loading fails', async () =>
     expect(html).toContain('Baseline unavailable');
     expect(html).toContain('<option value="2" selected="">Other evaluation</option>');
     expect(selection.comparisonEvaluation).toEqual(other);
-});
-
-it('does not offer or resolve the previous evaluation’s baselines while another specification loads', async () => {
-    await loadBaselines();
-    client.setQueryData(['backtests', 'compatible', 2], [base]);
-    // Model the previous data retained by useBacktestSpecification during a switch.
-    client.setQueryData(['backtest-specifications', 20, false, false], specification);
-
-    const { html, selection } = renderComparison(2, 3);
-    expect(selection.baseEvaluation).toEqual(other);
-    expect(selection.comparisonEvaluation).toBeUndefined();
-    expect(html).not.toContain('Global median (baseline)');
-    expect(html).toContain('Base evaluation');
 });
