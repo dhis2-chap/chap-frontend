@@ -52,6 +52,7 @@ export const QuantileMappingFormContent = ({
     model,
     predictionSetupId,
     predictionSetup,
+    policy,
     series,
     canDeleteDataValues,
     isDeleteAuthorityLoading,
@@ -141,7 +142,6 @@ export const QuantileMappingFormContent = ({
         endemic_threshold,
     } = useWatch({ control });
     const useAlertOutputs = use_alert_outputs ?? defaultUseAlertOutputs;
-    const policy = predictionSetup.alertPolicy;
     const policyOutputs = usePolicyOutbreakIndicators({
         predictionId: prediction.id,
         datasetId: prediction.datasetId,
