@@ -19,6 +19,8 @@ const getResolvedParameters = (job: JobDescription): Partial<MakeBacktestsReques
         stride: parameters.stride,
         nRetrain: parameters.n_retrain,
         futureWeatherProvider: parameters.future_weather_provider,
+        // The dataset's saved target when the request left it out.
+        targetColumn: parameters.target_column,
     }).filter(([, value]) => value != null));
 };
 
