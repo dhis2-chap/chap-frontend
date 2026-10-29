@@ -58,11 +58,11 @@ export const EvaluationDetailsComponent = ({ evaluationId }: Props) => {
                 <ModelExecutionResultWidget
                     backtest={backtest}
                 />
-                <OutbreakMetricsWidget evaluationId={evaluationId} />
                 <CustomEvaluationPlotsWidget
                     evaluationId={evaluationId}
                     periodType={backtest.dataset.periodType}
                 />
+                <OutbreakMetricsWidget evaluationId={evaluationId} specificationId={backtest.specificationId} />
             </div>
             <div className={styles.rightColumn}>
                 <QuickActionsWidget

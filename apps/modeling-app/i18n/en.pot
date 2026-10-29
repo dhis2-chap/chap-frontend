@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-29T08:34:50.077Z\n"
-"PO-Revision-Date: 2026-10-29T08:34:50.078Z\n"
+"POT-Creation-Date: 2026-10-29T17:34:52.135Z\n"
+"PO-Revision-Date: 2026-10-29T17:34:52.136Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -1829,6 +1829,9 @@ msgstr "Result"
 msgid "Not defined"
 msgstr "Not defined"
 
+msgid "vs {{reference}}"
+msgstr "vs {{reference}}"
+
 msgid "All forecast horizons"
 msgstr "All forecast horizons"
 
@@ -1868,11 +1871,21 @@ msgstr "Manage alert policies"
 msgid "Split by horizon"
 msgstr "Split by horizon"
 
+msgid "Compare with baseline model"
+msgstr "Compare with baseline model"
+
 msgid "Show all metrics"
 msgstr "Show all metrics"
 
 msgid "Could not score outbreak detection"
 msgstr "Could not score outbreak detection"
+
+msgid ""
+"Each score is compared with the baseline model {{reference}} under the same "
+"policy."
+msgstr ""
+"Each score is compared with the baseline model {{reference}} under the same "
+"policy."
 
 msgid "Start period"
 msgstr "Start period"

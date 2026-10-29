@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { MetricInfo } from '@dhis2-chap/ui';
-import { formatComparison, getComparisonGuidance, getDefaultMetricIds, getMetricGuidance, sortMetricIds } from './metricCatalog';
+import { formatComparison, formatScore, getComparisonGuidance, getDefaultMetricIds, getMetricGuidance, sortMetricIds } from './metricCatalog';
 
 const catalog = [
     { id: 'rmse', displayName: 'RMSE', sortOrder: 1, isSelected: false },
@@ -50,5 +50,8 @@ describe('comparison guidance', () => {
         expect(formatComparison(-0.5, { comparisonOp: 'skill_ratio' } as MetricInfo)).toBe('-50%');
         expect(formatComparison(0.76, { comparisonOp: 'difference', unit: 'cases' } as MetricInfo)).toBe('+0.76 cases');
         expect(formatComparison(0, { comparisonOp: 'difference' } as MetricInfo)).toBe('0');
+        expect(formatComparison(-4.06e-17, { comparisonOp: 'difference' } as MetricInfo)).toBe('0');
+        expect(formatScore(-4.06e-17)).toBe('0');
+        expect(formatScore(0.0000123456)).toBe('0.000012');
     });
 });

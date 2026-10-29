@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import cx from 'classnames';
 import { Link } from 'react-router-dom';
 import i18n from '@dhis2/d2-i18n';
 import { useQuery } from '@tanstack/react-query';
@@ -15,6 +16,10 @@ import { Features, useIsFeatureAvailable } from '@/hooks/useIsFeatureAvailable';
 import { ChapErrorNotice } from '@/components/ChapErrorNotice';
 import { MetricInfoIcon } from '@/components/MetricInfoIcon/MetricInfoIcon';
 import { describeAlertThreshold } from '@/components/BackendAlerts/describeAlertLevel';
+import { ReferenceModelSelector } from '@/components/ModelComparisons/ReferenceModelSelector';
+import { referenceName, useReferenceModel } from '@/components/ModelComparisons/referenceModels';
+import { useBacktestSpecification } from '@/pages/BenchmarksPage/useBacktestSpecification';
+import comparisonStyles from '@/components/ModelComparisons/ModelComparisons.module.css';
 import tableStyles from '@/pages/BenchmarksPage/BenchmarksPage.module.css';
 import styles from './OutbreakMetricsWidget.module.css';
 
@@ -26,6 +31,21 @@ const formatScore = (value: number | null | undefined) => (
         : i18n.t('Not defined')
 );
 
+/* Every outbreak metric is higher-is-better, so the sign of the difference says which model scored better. */
+const Comparison = ({ value, reference }: { value?: number | null; reference?: number | null }) => {
+    if (reference == null || !Number.isFinite(reference)) return null;
+    const difference = value != null && Number.isFinite(value) ? value - reference : 0;
+    return (
+        <span className={cx(comparisonStyles.comparison, {
+            [comparisonStyles.better]: difference > 0,
+            [comparisonStyles.worse]: difference < 0,
+        })}
+        >
+            {i18n.t('vs {{reference}}', { reference: formatScore(reference) })}
+        </span>
+    );
+};
+
 const MetricLabel = ({ metric }: { metric: OutbreakMetricInfo }) => (
     <span className={tableStyles.metricHeader}>
         {metric.displayName}
@@ -35,12 +55,13 @@ const MetricLabel = ({ metric }: { metric: OutbreakMetricInfo }) => (
 
 type ScoresProps = {
     row: OutbreakMetricsRow;
+    referenceRow?: OutbreakMetricsRow;
     levels: AlertLevel[];
     binaryMetrics: OutbreakMetricInfo[];
     categoricalMetrics: OutbreakMetricInfo[];
 };
 
-const Scores = ({ row, levels, binaryMetrics, categoricalMetrics }: ScoresProps) => (
+const Scores = ({ row, referenceRow, levels, binaryMetrics, categoricalMetrics }: ScoresProps) => (
     <div className={styles.result}>
         <div className={styles.resultHeading}>
             <h3>
@@ -71,6 +92,7 @@ const Scores = ({ row, levels, binaryMetrics, categoricalMetrics }: ScoresProps)
                 <DataTableBody>
                     {row.levels.map((level) => {
                         const policyLevel = levels.find(item => item.name === level.level);
+                        const referenceLevel = referenceRow?.levels.find(item => item.level === level.level);
                         return (
                             <DataTableRow key={level.level}>
                                 <DataTableCell className={tableStyles.strong}>{level.level}</DataTableCell>
@@ -80,6 +102,7 @@ const Scores = ({ row, levels, binaryMetrics, categoricalMetrics }: ScoresProps)
                                 {binaryMetrics.map(metric => (
                                     <DataTableCell key={metric.id} align="right" className={tableStyles.number}>
                                         {formatScore(level.metrics[metric.id])}
+                                        <Comparison value={level.metrics[metric.id]} reference={referenceLevel?.metrics[metric.id]} />
                                     </DataTableCell>
                                 ))}
                             </DataTableRow>
@@ -94,18 +117,37 @@ const Scores = ({ row, levels, binaryMetrics, categoricalMetrics }: ScoresProps)
                 <span key={metric.id} className={styles.policyScore}>
                     <MetricLabel metric={metric} />
                     <strong>{formatScore(row.categorical[metric.id])}</strong>
+                    <Comparison value={row.categorical[metric.id]} reference={referenceRow?.categorical[metric.id]} />
                 </span>
             ))}
         </div>
     </div>
 );
 
-export const OutbreakMetricsWidget = ({ evaluationId }: { evaluationId: number }) => {
-    const { isAvailable } = useIsFeatureAvailable(Features.OUTBREAK_METRICS);
-    return isAvailable ? <OutbreakMetricsContent key={evaluationId} evaluationId={evaluationId} /> : null;
+const useOutbreakScores = (backtestId: number | null | undefined, policyId: number | undefined, byHorizon: boolean, enabled: boolean) => useQuery({
+    queryKey: ['outbreak-metrics', OpenAPI.BASE, backtestId, policyId, byHorizon],
+    queryFn: () => MetricsService.getOutbreakMetricsV1AnalyticsBacktestsBacktestIdOutbreakMetricsGet(
+        backtestId!, policyId!,
+        byHorizon ? [DataDimension.HORIZON_DISTANCE] : undefined,
+    ),
+    enabled: enabled && backtestId != null && policyId != null,
+    retry: false,
+    staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
+});
+
+type Props = {
+    evaluationId: number;
+    specificationId?: number;
 };
 
-const OutbreakMetricsContent = ({ evaluationId }: { evaluationId: number }) => {
+export const OutbreakMetricsWidget = ({ evaluationId, specificationId }: Props) => {
+    const { isAvailable } = useIsFeatureAvailable(Features.OUTBREAK_METRICS);
+    return isAvailable ? <OutbreakMetricsContent key={evaluationId} evaluationId={evaluationId} specificationId={specificationId} /> : null;
+};
+
+const OutbreakMetricsContent = ({ evaluationId, specificationId }: Props) => {
+    const [open, setOpen] = useState(true);
     const [policyId, setPolicyId] = useState('');
     const [byHorizon, setByHorizon] = useState(false);
     const [showAll, setShowAll] = useState(false);
@@ -118,17 +160,14 @@ const OutbreakMetricsContent = ({ evaluationId }: { evaluationId: number }) => {
         staleTime: 5 * 60 * 1000,
         refetchOnWindowFocus: false,
     });
-    const scores = useQuery({
-        queryKey: ['outbreak-metrics', OpenAPI.BASE, evaluationId, policy?.id, byHorizon],
-        queryFn: () => MetricsService.getOutbreakMetricsV1AnalyticsBacktestsBacktestIdOutbreakMetricsGet(
-            evaluationId, policy!.id,
-            byHorizon ? [DataDimension.HORIZON_DISTANCE] : undefined,
-        ),
-        enabled: !!policy && !!catalog.data,
-        retry: false,
-        staleTime: 5 * 60 * 1000,
-        refetchOnWindowFocus: false,
-    });
+    // Only baselines: comparison models are not baseline models.
+    const specification = useBacktestSpecification(specificationId ?? 0, true);
+    const { references, reference, select } = useReferenceModel(specification.data);
+    // A reference model's own evaluation has nothing to compare with.
+    const isReferenceRun = references.some(item => item.backtestId === evaluationId);
+    const comparedReference = isReferenceRun ? undefined : reference;
+    const scores = useOutbreakScores(evaluationId, policy?.id, byHorizon, !!catalog.data);
+    const referenceScores = useOutbreakScores(comparedReference?.backtestId, policy?.id, byHorizon, !!catalog.data);
 
     // Development builds can report the next version before the endpoint lands.
     if (catalog.error?.status === 404) return null;
@@ -141,7 +180,12 @@ const OutbreakMetricsContent = ({ evaluationId }: { evaluationId: number }) => {
     const setupError = catalog.error ?? policies.error;
 
     return (
-        <Widget header={i18n.t('Outbreak detection')} noncollapsible>
+        <Widget
+            header={i18n.t('Outbreak detection')}
+            open={open}
+            onOpen={() => setOpen(true)}
+            onClose={() => setOpen(false)}
+        >
             <div className={styles.content} data-test="outbreak-metrics">
                 <p className={styles.intro}>
                     {i18n.t('How well a policy\'s alerts match observed outbreaks, across all splits and organisation units. Each split\'s thresholds come from the data before it.')}
@@ -186,6 +230,16 @@ const OutbreakMetricsContent = ({ evaluationId }: { evaluationId: number }) => {
                                     onChange={({ checked }) => setByHorizon(checked)}
                                     dataTest="outbreak-by-horizon"
                                 />
+                                {specification.data && !isReferenceRun && (
+                                    <div className={styles.policySelect}>
+                                        <ReferenceModelSelector
+                                            label={i18n.t('Compare with baseline model')}
+                                            references={references}
+                                            reference={reference}
+                                            onSelect={select}
+                                        />
+                                    </div>
+                                )}
                             </div>
                             {scores.data && (
                                 <Button small onClick={() => setShowAll(!showAll)}>
@@ -194,21 +248,33 @@ const OutbreakMetricsContent = ({ evaluationId }: { evaluationId: number }) => {
                             )}
                         </div>
                         {policy && (
-                            scores.isFetching ? (
+                            scores.isFetching || referenceScores.isFetching ? (
                                 <CircularLoader small />
                             ) : scores.error ? (
                                 <ChapErrorNotice error={scores.error as ApiError} title={i18n.t('Could not score outbreak detection')}>
                                     <Button small onClick={() => void scores.refetch()}>{i18n.t('Retry')}</Button>
                                 </ChapErrorNotice>
-                            ) : scores.data?.rows.map(row => (
-                                <Scores
-                                    key={row.horizonDistance ?? 'overall'}
-                                    row={row}
-                                    levels={policy.levels ?? []}
-                                    binaryMetrics={binaryMetrics}
-                                    categoricalMetrics={categoricalMetrics}
-                                />
-                            ))
+                            ) : (
+                                <>
+                                    {comparedReference && referenceScores.data && (
+                                        <p className={styles.intro}>
+                                            {i18n.t('Each score is compared with the baseline model {{reference}} under the same policy.', {
+                                                reference: referenceName(comparedReference),
+                                            })}
+                                        </p>
+                                    )}
+                                    {scores.data?.rows.map(row => (
+                                        <Scores
+                                            key={row.horizonDistance ?? 'overall'}
+                                            row={row}
+                                            referenceRow={comparedReference ? referenceScores.data?.rows.find(item => item.horizonDistance === row.horizonDistance) : undefined}
+                                            levels={policy.levels ?? []}
+                                            binaryMetrics={binaryMetrics}
+                                            categoricalMetrics={categoricalMetrics}
+                                        />
+                                    ))}
+                                </>
+                            )
                         )}
                     </>
                 )}

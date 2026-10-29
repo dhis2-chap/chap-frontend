@@ -31,11 +31,15 @@ export const getDefaultMetricIds = (metricIds: string[], catalog?: MetricInfo[])
     return selected.length > 0 ? selected : metricIds.filter(metricId => HEADLINE_METRIC_IDS.includes(metricId));
 };
 
+/* Significant digits alone would print floating point noise like 4e-17 with seventeen decimals. `|| 0` drops the sign of a rounded -0. */
+const MAX_DECIMALS = 6;
+const limitDecimals = (value: number) => Math.round(value * 10 ** MAX_DECIMALS) / 10 ** MAX_DECIMALS || 0;
+
 export const formatScore = (score: number, unit?: string | null) => {
     /* Scores below 1 keep significant digits so small errors stay distinguishable instead of rounding to zero. */
     const formatted = Math.abs(score) >= 1
         ? score.toLocaleString(undefined, { maximumFractionDigits: 2 })
-        : score.toLocaleString(undefined, { maximumSignificantDigits: 3 });
+        : limitDecimals(score).toLocaleString(undefined, { maximumSignificantDigits: 3 });
     return unit ? `${formatted} ${unit}` : formatted;
 };
 
@@ -44,7 +48,7 @@ export const formatComparison = (value: number, metric?: MetricInfo) => {
     if (metric?.comparisonOp === 'skill_ratio') {
         return value.toLocaleString(undefined, { style: 'percent', maximumSignificantDigits: 3, signDisplay: 'exceptZero' });
     }
-    const formatted = value.toLocaleString(undefined, { maximumSignificantDigits: 3, signDisplay: 'exceptZero' });
+    const formatted = limitDecimals(value).toLocaleString(undefined, { maximumSignificantDigits: 3, signDisplay: 'exceptZero' });
     return metric?.unit ? `${formatted} ${metric.unit}` : formatted;
 };
 
