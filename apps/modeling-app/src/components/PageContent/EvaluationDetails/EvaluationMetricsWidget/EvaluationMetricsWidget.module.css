@@ -42,13 +42,6 @@
     overflow-wrap: anywhere;
 }
 
-.infoIcon {
-    display: inline-flex;
-    align-items: center;
-    inline-size: 16px;
-    block-size: 16px;
-}
-
 .valueGroup {
     display: flex;
     flex-direction: column;

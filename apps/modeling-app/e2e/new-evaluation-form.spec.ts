@@ -211,7 +211,7 @@ test('validates period rules with invalid values', async ({ page }) => {
 test('validates backtest parameters, submits chosen values, and shows backend validation errors', async ({ page }) => {
     const parametersResponse = await getChap(page, '/v1/analytics/backtest-parameters');
     expect([200, 404]).toContain(parametersResponse.status());
-    test.skip(!parametersResponse.ok(), 'Stable CHAP releases predate configurable backtest parameters');
+    test.skip(!parametersResponse.ok(), 'Stable Chap releases predate configurable backtest parameters');
     await page.goto('/#/evaluate/new');
     await prepareValidFormData(page, 'Custom backtest parameters');
     for (const [name, value] of Object.entries({ nPeriods: 3, nSplits: 7, stride: 1, nRetrain: 1 })) {

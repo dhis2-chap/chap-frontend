@@ -17,8 +17,8 @@ export const QueuePage = () => {
         if (routeError) return <ErrorNotice error={routeError} />;
         if (!route) {
             return (
-                <NoticeBox warning title={i18n.t('No CHAP route configured')}>
-                    {i18n.t('Add a route to your CHAP server to start using the Early Warning App.')}
+                <NoticeBox warning title={i18n.t('No Chap route configured')}>
+                    {i18n.t('Add a route to your Chap server to start using the Early Warning App.')}
                     {' '}
                     <Link to="/settings">{i18n.t('Go to settings')}</Link>
                 </NoticeBox>
@@ -29,7 +29,7 @@ export const QueuePage = () => {
         if (reviews.length === 0) {
             return (
                 <NoticeBox title={i18n.t('No predictions awaiting review')}>
-                    {i18n.t('Predictions appear here when CHAP raises pending alerts.')}
+                    {i18n.t('Predictions appear here when Chap raises pending alerts.')}
                 </NoticeBox>
             );
         }

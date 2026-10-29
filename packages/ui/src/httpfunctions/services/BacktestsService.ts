@@ -86,7 +86,8 @@ export class BacktestsService {
      * ``datasetId``, ``targetColumn`` and any of the ``BacktestParams`` fields; the full tuple identifies at
      * most one specification, which is how an external system finds a benchmark again
      * without storing the specification id. Rows carry counts only; fetch
-     * ``/backtest-specifications/{id}`` for the backtests themselves.
+     * ``/backtest-specifications/{id}`` for the backtests themselves. The counts leave out
+     * backtests of baseline models and of archived models, like the leaderboard.
      * @param datasetId Only specifications evaluating this dataset.
      * @param targetColumn Only specifications evaluating this column.
      * @param nPeriods Number of periods to forecast at each split.
@@ -130,20 +131,36 @@ export class BacktestsService {
      * This is the benchmark leaderboard: each backtest row is the ``BacktestRead`` shape
      * with aggregate metrics, the configured model and its template, so a client can rank
      * models without a request per backtest. Forecasts and per-org-unit metrics are not
-     * included, and neither are backtests of built-in baseline models. Baselines that have not
-     * run on the specification yet are queued after the response is sent. 404 if the id is unknown.
+     * included, and neither are backtests of built-in baseline models, nor of archived
+     * models unless ``includeArchivedModels`` is set. Baselines are listed under
+     * ``baselines`` with their status and scores instead, and each backtest row
+     * carries the comparison of its scores with every baseline that is done. With
+     * ``includeComparisonModels``, the newest backtest of each comparison model on the
+     * specification is listed and compared with the same way, except that a
+     * backtest is never compared with a run of its own model. Baselines that have not run on
+     * the specification yet are queued after the response is sent. ``metrics`` describes every
+     * metric the scores and comparisons are keyed by, including what its comparison value means.
+     * 404 if the id is unknown.
      * @param specificationId
+     * @param includeComparisonModels
+     * @param includeArchivedModels
      * @returns BacktestSpecificationRead Successful Response
      * @throws ApiError
      */
     public static getBacktestSpecificationV1CrudBacktestSpecificationsSpecificationIdGet(
         specificationId: number,
+        includeComparisonModels: boolean = false,
+        includeArchivedModels: boolean = false,
     ): CancelablePromise<BacktestSpecificationRead> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/v1/crud/backtest-specifications/{specificationId}',
             path: {
                 'specificationId': specificationId,
+            },
+            query: {
+                'includeComparisonModels': includeComparisonModels,
+                'includeArchivedModels': includeArchivedModels,
             },
             errors: {
                 422: `Validation Error`,
@@ -517,13 +534,23 @@ export class BacktestsService {
      * Populate a backtest form from the same field definitions used to validate requests.
      *
      * Use `GET /v1/analytics/weather-providers` to populate the `futureWeatherProvider` picker.
+     * `periodType` selects the stored weekly or monthly defaults; omitted means monthly.
+     * @param periodType
      * @returns BacktestParameterInfo Successful Response
      * @throws ApiError
      */
-    public static listBacktestParametersV1AnalyticsBacktestParametersGet(): CancelablePromise<Array<BacktestParameterInfo>> {
+    public static listBacktestParametersV1AnalyticsBacktestParametersGet(
+        periodType: 'week' | 'month' = 'month',
+    ): CancelablePromise<Array<BacktestParameterInfo>> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/v1/analytics/backtest-parameters',
+            query: {
+                'periodType': periodType,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
         });
     }
     /**

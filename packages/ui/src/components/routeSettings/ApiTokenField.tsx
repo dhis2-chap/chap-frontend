@@ -46,7 +46,7 @@ export const ApiTokenField = ({ value, onChange, configured, reentryRequired, re
         <div className={styles.container}>
             <InputField
                 name="apiToken"
-                label={reentryRequired ? i18n.t('CHAP API token') : i18n.t('CHAP API token (optional)')}
+                label={reentryRequired ? i18n.t('Chap API token') : i18n.t('Chap API token (optional)')}
                 type="password"
                 autoComplete="new-password"
                 value={value}
@@ -58,7 +58,7 @@ export const ApiTokenField = ({ value, onChange, configured, reentryRequired, re
                     ? routeTokenReentryMessage()
                     : configured
                         ? i18n.t('A token is configured. Leave blank to keep it, or enter a new token to replace it.')
-                        : i18n.t('Enter the token configured on your CHAP server. Leave blank if the server does not require one.')}
+                        : i18n.t('Enter the token configured on your Chap server. Leave blank if the server does not require one.')}
                 dataTest="route-api-token-input"
             />
             <p className={styles.help}>

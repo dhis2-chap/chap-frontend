@@ -20,9 +20,9 @@ const percentile = { type: 'percentile', quantile: 0.75, baselineYears: 5 };
 const policies: AlertPolicyRead[] = [{
     id: 3, name: 'Policy', created: null,
     levels: [
-        { name: 'Watch', exceedanceThreshold: 0.5, thresholdParams: seasonal },
-        { name: 'Action', exceedanceThreshold: 0.9, thresholdParams: seasonal },
-        { name: 'Band', exceedanceThreshold: 0.9, thresholdParams: percentile },
+        { name: 'Watch', outputCode: '1', exceedanceThreshold: 0.5, thresholdParams: seasonal },
+        { name: 'Action', outputCode: '2', exceedanceThreshold: 0.9, thresholdParams: seasonal },
+        { name: 'Band', outputCode: '3', exceedanceThreshold: 0.9, thresholdParams: percentile },
     ],
 }];
 const series: PredictionOrgUnitSeries[] = [{

@@ -28,7 +28,7 @@ const removeChips = (page: Page) => page.locator('[data-test^="selected-model-"]
 test.describe('saved dataset evaluations', () => {
     test('selects compatible models, resets on dataset change, and queues a job for each', async ({ page }) => {
         test.setTimeout(240_000);
-        // Stable CHAP releases predate configurable backtest parameters and use their own defaults.
+        // Stable Chap releases predate configurable backtest parameters and use their own defaults.
         const parametersResponse = await getChap(page, '/v1/analytics/backtest-parameters');
         expect([200, 404]).toContain(parametersResponse.status());
         const supportsParameters = parametersResponse.ok();

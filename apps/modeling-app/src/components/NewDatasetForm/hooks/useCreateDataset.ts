@@ -14,8 +14,8 @@ const FINISHED_JOB_STATUSES = ['SUCCESS', 'FAILURE', 'REVOKED'];
 export type DatasetImportSummary = ImportSummaryCorrected & { orgUnitNames: Map<string, string> };
 
 /**
- * Builds the dataset from DHIS2 analytics, hands it to CHAP and follows the resulting import job.
- * CHAP's summary of the locations it left out is kept, including when it rejects all of them.
+ * Builds the dataset from DHIS2 analytics, hands it to Chap and follows the resulting import job.
+ * Chap's summary of the locations it left out is kept, including when it rejects all of them.
  */
 export const useCreateDataset = (periodSettings: Dhis2PeriodSettings) => {
     const dataEngine = useDataEngine();
@@ -50,7 +50,11 @@ export const useCreateDataset = (periodSettings: Dhis2PeriodSettings) => {
 
     const job = useQuery({
         queryKey: ['datasetJob', jobId],
-        queryFn: () => JobsService.getJobStatusV1JobsJobIdGet(jobId as string),
+        queryFn: async () => {
+            const response = await JobsService.getJobV1JobsJobIdGet(jobId as string);
+            // Older Chap versions return only the status string.
+            return typeof response === 'string' ? response : response.status;
+        },
         enabled: !!jobId,
         refetchInterval: status => (FINISHED_JOB_STATUSES.includes(status ?? '') ? false : 2000),
         onSuccess: (status) => {

@@ -139,7 +139,7 @@ export const PredictionDetailsGrid = ({
     const summaryList = (
         <dl className={styles.summaryList}>
             <SummaryRow
-                label={i18n.t('Regions exceeding threshold')}
+                label={i18n.t('Organisation units exceeding threshold')}
                 value={`${summary.regionsWithAlerts} / ${summary.totalRegions}`}
             />
             <SummaryRow

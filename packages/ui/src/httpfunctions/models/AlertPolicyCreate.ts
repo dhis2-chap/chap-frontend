@@ -15,7 +15,11 @@ export type AlertPolicyCreate = {
      */
     name: string;
     /**
-     * The tiers of this policy, e.g. a `monitor` level and an `action` level. Names must be unique within a policy.
+     * Output code for the no-alert state. Must be non-empty and distinct from every level's code. For DHIS2 import, it must match the destination data element's value type or option set.
+     */
+    noAlertOutputCode?: string;
+    /**
+     * The tiers of this policy, e.g. a `monitor` level and an `action` level. Names must be unique within a policy. Omitted output codes default to `1`, `2`, etc. in level order.
      */
     levels: Array<AlertLevel>;
 };
