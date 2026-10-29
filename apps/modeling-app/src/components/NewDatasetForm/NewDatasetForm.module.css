@@ -48,3 +48,15 @@
 .noticeActions {
   margin-block-start: 8px;
 }
+
+.completeness {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.subtitle {
+  margin: 0;
+  font-size: 16px;
+  color: var(--colors-grey900);
+}

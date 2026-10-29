@@ -7,6 +7,7 @@ export const DatasetsPage: React.FC = () => (
         <PageHeader
             pageTitle={i18n.t('Datasets')}
             pageDescription={i18n.t('Import data once and reuse it across evaluations.')}
+            guideSlug="creating-a-dataset"
         />
         <DatasetsContent />
     </>

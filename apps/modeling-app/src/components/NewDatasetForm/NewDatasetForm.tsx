@@ -22,6 +22,7 @@ import { useInspectDataset } from './hooks/useInspectDataset';
 import { SummaryModal } from '../ModelExecutionForm/SummaryModal';
 import { NavigationConfirmModal } from '../NavigationConfirmModal';
 import { ChapErrorNotice } from '../ChapErrorNotice';
+import { InputCompletenessView } from '../InputCompleteness/InputCompletenessView';
 import { ViewJobLogsModal } from '../JobsTable/JobActionsMenu/ViewJobLogsModal';
 import { useNavigationBlocker } from '@/hooks/useNavigationBlocker';
 import { useDhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
@@ -166,6 +167,13 @@ export const NewDatasetForm = () => {
                                     title={i18n.t('Could not check the data')}
                                     className={styles.notice}
                                 />
+                            )}
+
+                            {inspection.data && (
+                                <section className={styles.completeness}>
+                                    <h3 className={styles.subtitle}>{i18n.t('Data completeness')}</h3>
+                                    <InputCompletenessView {...inspection.data.completeness} />
+                                </section>
                             )}
 
                             {!!error && !allLeftOut && (

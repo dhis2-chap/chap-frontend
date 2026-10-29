@@ -39,16 +39,3 @@
     flex-wrap: wrap;
     gap: var(--spacers-dp4);
 }
-
-.chart {
-    min-width: 0;
-}
-
-.gaps {
-    max-height: 320px;
-    overflow: auto;
-    margin: 0;
-    padding-inline-start: var(--spacers-dp24);
-    font-size: 14px;
-    line-height: 1.6;
-}

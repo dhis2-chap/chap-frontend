@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-29T10:24:15.411Z\n"
-"PO-Revision-Date: 2026-10-29T10:24:15.412Z\n"
+"POT-Creation-Date: 2026-10-29T18:09:54.154Z\n"
+"PO-Revision-Date: 2026-10-29T18:09:54.155Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -454,6 +454,27 @@ msgstr "Back to app"
 msgid "Click to expand"
 msgstr "Click to expand"
 
+msgid "No data to check"
+msgstr "No data to check"
+
+msgid "Period"
+msgstr "Period"
+
+msgid "Complete (%)"
+msgstr "Complete (%)"
+
+msgid "{{available}} of {{expected}} values"
+msgstr "{{available}} of {{expected}} values"
+
+msgid "Completeness"
+msgstr "Completeness"
+
+msgid "Share of values present in each period, across all locations and variables."
+msgstr "Share of values present in each period, across all locations and variables."
+
+msgid "{{available}} of {{expected}} values ({{percent}}%)"
+msgstr "{{available}} of {{expected}} values ({{percent}}%)"
+
 msgid "Inspect dataset"
 msgstr "Inspect dataset"
 
@@ -746,9 +767,6 @@ msgstr "Version"
 msgid "Commit"
 msgstr "Commit"
 
-msgid "Period"
-msgstr "Period"
-
 msgid "Covariates"
 msgstr "Covariates"
 
@@ -1023,6 +1041,9 @@ msgstr "Check data"
 
 msgid "Could not check the data"
 msgstr "Could not check the data"
+
+msgid "Data completeness"
+msgstr "Data completeness"
 
 msgid "Could not create dataset"
 msgstr "Could not create dataset"
@@ -1636,57 +1657,11 @@ msgstr "sources"
 msgid "Unavailable"
 msgstr "Unavailable"
 
-msgid "Completeness unavailable"
-msgstr "Completeness unavailable"
-
-msgid "The dataset has no periods, locations or variables to check."
-msgstr "The dataset has no periods, locations or variables to check."
-
-msgid "Reporting period"
-msgstr "Reporting period"
-
-msgid "Available values (%)"
-msgstr "Available values (%)"
-
-msgid "Available{{colon}} {{available}}<br/>Completeness{{colon}} {{completeness}}"
-msgstr "Available{{colon}} {{available}}<br/>Completeness{{colon}} {{completeness}}"
-
-msgid "Input-data availability"
-msgstr "Input-data availability"
-
-msgid ""
-"Share of finite numeric values, including zero, for each location and "
-"variable in this dataset. Locations with no values at all are not part of "
-"the dataset and are not counted."
-msgstr ""
-"Share of finite numeric values, including zero, for each location and "
-"variable in this dataset. Locations with no values at all are not part of "
-"the dataset and are not counted."
-
-msgid "Inspect reporting period"
-msgstr "Inspect reporting period"
-
-msgid ""
-"{{available}} available / {{expected}} expected observations "
-"({{percent}}%); {{missing}} missing."
-msgstr ""
-"{{available}} available / {{expected}} expected observations "
-"({{percent}}%); {{missing}} missing."
-
-msgid "Missing values by location and variable"
-msgstr "Missing values by location and variable"
-
-msgid "No missing values in this period."
-msgstr "No missing values in this period."
-
 msgid "Error loading dataset"
 msgstr "Error loading dataset"
 
 msgid "Created {{created}} · {{first}} to {{last}} · {{locations}} locations"
 msgstr "Created {{created}} · {{first}} to {{last}} · {{locations}} locations"
-
-msgid "Data completeness"
-msgstr "Data completeness"
 
 msgid "Error loading datasets"
 msgstr "Error loading datasets"
@@ -2607,6 +2582,9 @@ msgid ""
 msgstr ""
 "This is an alpha version of the Modeling App. Some features may change or "
 "contain bugs."
+
+msgid "Read the guide"
+msgstr "Read the guide"
 
 msgid "Failed to copy report details"
 msgstr "Failed to copy report details"

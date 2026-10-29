@@ -11,6 +11,7 @@ export const DatasetDetailsPage: React.FC = () => {
             <PageHeader
                 pageTitle={i18n.t('Dataset')}
                 pageDescription={i18n.t('Review the saved data and where values are missing.')}
+                guideSlug="creating-a-dataset"
             />
             <DatasetDetails datasetId={Number(datasetId)} />
         </>
