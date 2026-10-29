@@ -51,7 +51,6 @@ export const EvaluationCompatibleSelector = ({
     });
     const baselines = useBaselineBacktests(specificationId);
     const availableEvaluations = [...compatibleEvaluations ?? [], ...baselines.backtests];
-    const allLoaded = isSuccess && baselines.isSuccess;
     const loadError = error || baselines.error;
     // allow inline onSelect function
     const onSelectRef = useRef(onSelect);
@@ -64,15 +63,15 @@ export const EvaluationCompatibleSelector = ({
         if (
             selected &&
             compatibleEvaluationId != undefined &&
-            allLoaded &&
+            isSuccess &&
             !availableEvaluations.some(e => e.id == selected?.id)
         ) {
             onSelectRef.current(undefined);
         }
-    }, [availableEvaluations, compatibleEvaluationId, allLoaded]);
+    }, [availableEvaluations, compatibleEvaluationId, isSuccess]);
 
     const getListMessage = () => {
-        if (allLoaded && availableEvaluations.length === 0) {
+        if (isSuccess && baselines.isSuccess && availableEvaluations.length === 0) {
             return <Help>{i18n.t('No compatible evaluations found')}</Help>;
         }
         if (loadError) {
