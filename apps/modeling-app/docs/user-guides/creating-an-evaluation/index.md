@@ -30,9 +30,11 @@ Click the **New evaluation** button to start creating a new evaluation. The page
 
 ### Step 2: Choose a Dataset
 
-The **Use saved dataset** tab is selected by default. You can also go straight here from the **Datasets** page by clicking **New evaluation** in a dataset's row, which pre-selects that dataset.
+The **Use saved dataset** tab is selected by default. You can also go straight here from the **Datasets** page by opening the **⋯** menu in a dataset's row and choosing **New evaluation**, which pre-selects that dataset.
 
 Enter a **Name** for the evaluation, then select a **Dataset**. A filter next to the dataset list works like the one on the Datasets page: by default only datasets created on the Datasets page are listed.
+
+**Target column** shows the column the dataset predicts. It is set when the dataset is created, and the models are scored against it.
 
 If you have no saved datasets yet, the tab offers to create one or to import from DHIS2 instead.
 

@@ -133,7 +133,7 @@ export const NewDatasetForm = () => {
                                         previousDataItems={previousDataItems}
                                     />
 
-                                    {isTargetColumnAvailable && (
+                                    {isTargetColumnAvailable && columnNames.length > 0 && (
                                         <SingleSelectField
                                             className={styles.targetColumn}
                                             label={i18n.t('Target column')}

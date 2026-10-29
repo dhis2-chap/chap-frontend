@@ -15,7 +15,7 @@ Models find their data by **column name**, so a dataset can only be used by mode
 
 ### Step 1: Navigate to the Datasets Page
 
-Click **Datasets** in the sidebar. The table lists your saved datasets with their period range, number of locations and data columns (covariates).
+Click **Datasets** in the sidebar. The table lists your saved datasets with their period range, number of locations and data columns (covariates). Click a dataset's name to open it.
 
 By default, the filter above the table is set to **Created manually**, so only datasets created on this page are shown. Evaluations and predictions that import data from DHIS2 also save a dataset. To see those, choose **Created by evaluations or predictions**, or clear the filter to show all datasets.
 
@@ -46,6 +46,8 @@ Each data column pairs a **Column name** with a **DHIS2 data item** (a data elem
 
 Under each column name, a hint shows how many models read a column with that name. If no model reads it, check the spelling or pick a suggested name.
 
+Choose the **Target column**: the column models predict. It defaults to `disease_cases`, and every evaluation of the dataset uses it. To predict a different column, create a new dataset.
+
 ---
 
 ### Step 4: Check Model Support
@@ -62,7 +64,7 @@ Use this panel to make sure the models you want to evaluate can use the dataset 
 
 ### Step 5: Check the Data and Create the Dataset
 
-1. Optionally click **Check data** to preview the import without saving anything. A summary shows which locations have data, and which would be left out because of missing data or missing shapes.
+1. Optionally click **Check data** to preview the import without saving anything. A summary shows which locations would be left out because of missing data or missing shapes, and a chart below the form shows how complete the target column is in each period. Click a point in the chart to list the locations missing a value in that period.
 2. Click **Create dataset** to start the import.
 
 The import runs as a background job, and you can follow it on the **Jobs** page. When it finishes, the new dataset appears on the Datasets page. If some locations were left out, a notice lets you view the details.
@@ -72,6 +74,7 @@ The import runs as a background job, and you can follow it on the **Jobs** page.
 ### Next Steps
 
 After the dataset is created, you can:
-- Click **New evaluation** in the dataset's row to [evaluate a model](/guides/creating-an-evaluation) on it
+- Click the dataset's name to see how complete its target column is and which locations are missing values
+- Open the **⋯** menu in the dataset's row and choose **New evaluation** to [evaluate a model](/guides/creating-an-evaluation) on it
 - Run several evaluations against the same dataset to compare models on identical data
 - [Configure a model](/guides/configuring-a-model) that fits the dataset's columns
