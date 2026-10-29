@@ -1,5 +1,30 @@
 # @dhis2-chap/modeling-app
 
+## 7.4.0
+
+### Minor Changes
+
+-   9212bfb: Import the highest alert level per region and period from the prediction setup's alert policy, with editable output codes.
+-   4f9902f: Compare evaluation predictions side by side with completed baseline models. Baselines appear at the end of the comparison picker and can be selected through shared comparison links. [CLIM-1644]
+-   98b008f: Add a Download debug info action for failed jobs, saving backend diagnostics with the app version, DHIS2 version, and browser in one JSON file. Remind users to check logs for data values before sharing. Regenerate the API client from the local Chap Core 2.6.0.dev0 backend. Load weekly or monthly backtest defaults for the selected period type, and add an Include archived models toggle to benchmark details. [CLIM-1276]
+-   f76ead8: Compare evaluation and benchmark metrics with built-in baselines and comparison models. The evaluation page shows each metric's improvement over the selected reference, and the benchmark table can show every score as its comparison with a baseline. [CLIM-1348]
+-   e9ee87a: Show outbreak detection scores for a selected alert policy on evaluation details, with per-level and overall policy metrics and optional forecast horizon grouping, compared with a baseline model. [CLIM-1137]
+-   f50baf8: Filter prediction charts by one or more alert levels, and use organisation unit terminology in prediction details.
+-   71ccf38: Add a Modeling defaults settings tab for selecting and ordering metrics, the default baseline model, and independent weekly and monthly backtest defaults. Benchmarks and evaluation metrics show the selected metrics in the configured order by default, with an option to show all. Write the product name as Chap throughout the apps.
+
+### Patch Changes
+
+-   44927c1: Prevent evaluations with forecast periods outside any selected model's supported range, and show the incompatible models and their allowed ranges.
+-   037832c: Support both old and new Chap Core job responses when creating datasets. [CLIM-1634]
+-   c1ca076: Show the threshold lines of the alert policy a prediction ran with, hidden while exploring thresholds, and import that policy's alert codes. With Chap Core 2.6.0 or later, this uses the policy recorded for each run instead of the setup's current policy. Block imports when the outbreak indicator's value type cannot store the imported values.
+-   Updated dependencies [037832c]
+-   Updated dependencies [98b008f]
+-   Updated dependencies [e9ee87a]
+-   Updated dependencies [c1ca076]
+-   Updated dependencies [71ccf38]
+    -   @dhis2-chap/ui@7.4.0
+    -   @dhis2-chap/core@7.4.0
+
 ## 7.3.2
 
 ### Patch Changes

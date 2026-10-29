@@ -1,5 +1,17 @@
 # @dhis2-chap/uncertainty-dashboard-plugin
 
+## 0.3.9
+
+### Patch Changes
+
+-   Updated dependencies [037832c]
+-   Updated dependencies [98b008f]
+-   Updated dependencies [e9ee87a]
+-   Updated dependencies [c1ca076]
+-   Updated dependencies [71ccf38]
+    -   @dhis2-chap/ui@7.4.0
+    -   @dhis2-chap/core@7.4.0
+
 ## 0.3.8
 
 ### Patch Changes
