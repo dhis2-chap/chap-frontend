@@ -1,5 +1,14 @@
 import i18n from '@dhis2/d2-i18n';
-import { NoticeBox, Switch } from '@dhis2/ui';
+import {
+    DataTable,
+    DataTableBody,
+    DataTableCell,
+    DataTableColumnHeader,
+    DataTableHead,
+    DataTableRow,
+    NoticeBox,
+    Switch,
+} from '@dhis2/ui';
 import type { AlertPolicyRead, ApiError, OutbreakProbability } from '@dhis2-chap/ui';
 import type { KeyboardEvent, MouseEvent } from 'react';
 import { ThresholdCalculationStatus } from '../../../ThresholdTilesExplorer';
@@ -85,7 +94,9 @@ export const AlertOutputSection = ({
                         {i18n.t('Use alert outputs')}
                     </span>
                     <span className={styles.alertOutputToggleDescription}>
-                        {i18n.t('Import outbreak indicator values.')}
+                        {policy
+                            ? i18n.t('Import the alert level code from {{policy}}.', { policy: policy.name })
+                            : i18n.t('Import 1 when an outbreak is likely, otherwise 0.')}
                     </span>
                 </div>
                 <span onClick={handleSwitchClick}>
@@ -105,13 +116,26 @@ export const AlertOutputSection = ({
                     />
                     {policy ? (
                         <>
-                            <div className={styles.alertSummary}>
-                                <SummaryItem label={i18n.t('Alert policy')} value={policy.name} />
-                                <SummaryItem label={i18n.t('No alert')} value={policy.noAlertOutputCode ?? '0'} />
-                                {(policy.levels ?? []).map(level => (
-                                    <SummaryItem key={level.name} label={level.name} value={level.outputCode} />
-                                ))}
-                            </div>
+                            <DataTable>
+                                <DataTableHead>
+                                    <DataTableRow>
+                                        <DataTableColumnHeader>{i18n.t('Alert level')}</DataTableColumnHeader>
+                                        <DataTableColumnHeader>{i18n.t('Imported value')}</DataTableColumnHeader>
+                                    </DataTableRow>
+                                </DataTableHead>
+                                <DataTableBody>
+                                    <DataTableRow>
+                                        <DataTableCell>{i18n.t('No alert')}</DataTableCell>
+                                        <DataTableCell>{policy.noAlertOutputCode ?? '0'}</DataTableCell>
+                                    </DataTableRow>
+                                    {(policy.levels ?? []).map(level => (
+                                        <DataTableRow key={level.name}>
+                                            <DataTableCell>{level.name}</DataTableCell>
+                                            <DataTableCell>{level.outputCode}</DataTableCell>
+                                        </DataTableRow>
+                                    ))}
+                                </DataTableBody>
+                            </DataTable>
                             {policyOutputs.isReady && policyOutputs.skippedCount > 0 && (
                                 <NoticeBox warning>
                                     {i18n.t('One region-period result is missing and will be skipped.', {
@@ -160,6 +184,7 @@ export const AlertOutputSection = ({
                         <DataItemSelect
                             label={i18n.t('Outbreak indicator')}
                             value={outbreakIndicator}
+                            dataElementsOnly
                             onChange={onChangeOutbreakIndicator}
                             error={outbreakIndicatorError}
                         />
@@ -169,6 +194,7 @@ export const AlertOutputSection = ({
                             <DataItemSelect
                                 label={i18n.t('Endemic threshold (optional)')}
                                 value={endemicThreshold}
+                                dataElementsOnly
                                 onChange={onChangeEndemicThreshold}
                             />
                         </div>

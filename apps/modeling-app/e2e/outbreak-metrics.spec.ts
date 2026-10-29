@@ -47,7 +47,8 @@ test.describe.serial('outbreak detection scores', () => {
         // Check every displayed per-level score against the actual API response, including undefined ratios.
         for (const level of scores.rows[0].levels) {
             const row = widget.getByRole('row').filter({ has: page.getByRole('cell', { name: level.level, exact: true }) });
-            const values = await row.getByRole('cell').allTextContents();
+            // A baseline comparison ("vs …") follows each score when the specification has a baseline run.
+            const values = (await row.getByRole('cell').allTextContents()).map(value => value.replace(/vs .*$/, ''));
             expect(values.slice(2)).toEqual(Object.values(level.metrics).map(value => value == null
                 ? 'Not defined'
                 : value.toLocaleString('en-US', { maximumFractionDigits: 3 })));

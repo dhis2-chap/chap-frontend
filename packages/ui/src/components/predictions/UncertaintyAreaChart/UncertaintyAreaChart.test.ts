@@ -23,6 +23,21 @@ const series: PredictionOrgUnitSeries = {
 };
 
 describe('recorded alert chart periods', () => {
+    it('renders each threshold line with its label, preserving gaps', () => {
+        renderToStaticMarkup(createElement(UncertaintyAreaChart, {
+            series: { ...series, actualCases: [{ period: '2023W52', value: 2 }] },
+            predictionTargetName: 'Cases',
+            thresholdLines: [
+                { label: 'Watch', points: [{ period: '2024W1', value: 10 }] },
+                { label: 'Action', points: [{ period: '2023W52', value: 20 }, { period: '2024W01', value: null }] },
+            ],
+        }));
+        expect(captured.options.series?.filter(item => item.id?.startsWith('threshold-line-'))).toMatchObject([
+            { type: 'line', name: 'Watch', data: [{ y: null }, { y: 10 }] },
+            { type: 'line', name: 'Action', data: [{ y: 20 }, { y: null }] },
+        ]);
+    });
+
     it('matches canonical periods, uses the configured colour and ignores periods outside the chart', () => {
         renderToStaticMarkup(createElement(UncertaintyAreaChart, {
             series, predictionTargetName: 'Cases',

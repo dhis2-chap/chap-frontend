@@ -79,7 +79,7 @@ test.describe.serial('alert level presentation', () => {
         await expect(page.getByText(/Saved colours could not be loaded/)).toHaveCount(0);
     });
 
-    test('shows recorded alerts on prediction plots by default and can hide them', async ({ page }) => {
+    test('shows policy thresholds by default and restores them after exploration', async ({ page }) => {
         const evaluation = await createCompletedNaiveEvaluation(page);
         const setup = await readJson<DataBaseResponse>(await page.request.post(chapUrl('/v1/crud/prediction-setups'), {
             data: { backtestId: evaluation.id, name: `E2E alert run ${Date.now()}`, alertPolicyId: policyId },
@@ -112,12 +112,31 @@ test.describe.serial('alert level presentation', () => {
         await expect(page.getByText('Raised alerts', { exact: true })).toHaveCount(0);
         await expect(plot.getByText(label, { exact: true }).locator('span')).toHaveCSS('background-color', color);
         await expect(plot.locator('.highcharts-plot-band').first()).toBeVisible();
+        // Both saved levels use different parameters, so the policy view draws two
+        // lines; exploration draws a single one in the same colour.
+        const thresholdLines = plot.locator('.highcharts-graph[stroke="#212934"]');
+        await expect(thresholdLines).toHaveCount(2);
         await alertLevels.uncheck();
         await expect(plot.getByText(label, { exact: true })).toHaveCount(0);
         await expect(plot.locator('.highcharts-plot-band')).toHaveCount(0);
+        await expect(thresholdLines).toHaveCount(0);
         await alertLevels.check();
         await expect(plot.getByText(label, { exact: true })).toBeVisible();
         await expect(plot.locator('.highcharts-plot-band').first()).toBeVisible();
+        await expect(thresholdLines).toHaveCount(2);
+
+        await exploreThresholds.check();
+        await expect(alertLevels).toBeDisabled();
+        await expect(plot.getByText(label, { exact: true })).toHaveCount(0);
+        await expect(page.locator('[data-test="alert-level-filter"]')).toHaveCount(0);
+        await expect(thresholdLines).toHaveCount(1);
+        await expect(page.getByText('Organisation units exceeding threshold', { exact: true })).toBeVisible();
+        await exploreThresholds.uncheck();
+        await expect(alertLevels).toBeEnabled();
+        await expect(thresholdLines).toHaveCount(2);
+        await expect(plot.getByText(label, { exact: true })).toBeVisible();
+        await expect(plot.locator('.highcharts-plot-band').first()).toBeVisible();
+        await expect(page.getByText('Organisation units exceeding threshold', { exact: true })).toHaveCount(0);
     });
 
     test('filters organisation units by one or more alert levels and combines with search', async ({ page }) => {
@@ -186,8 +205,9 @@ test.describe.serial('alert level presentation', () => {
         await alertLevels.uncheck();
         await expect(filter).toHaveCount(0);
         await expect(plots.getByRole('heading', { name: orgUnit.displayName, exact: true })).toBeVisible();
+        // The selection survives hiding the alerts.
         await alertLevels.check();
-        await expect(filter).toContainText('Filter by alert level');
-        await expect(plots.getByRole('heading', { name: orgUnit.displayName, exact: true })).toBeVisible();
+        await expect(filter).toContainText('Watch');
+        await expect(plots).toHaveCount(0);
     });
 });

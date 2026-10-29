@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-29T17:43:30.817Z\n"
-"PO-Revision-Date: 2026-10-29T17:43:30.818Z\n"
+"POT-Creation-Date: 2026-10-29T20:00:11.987Z\n"
+"PO-Revision-Date: 2026-10-29T20:00:11.988Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -2152,36 +2152,26 @@ msgstr "Adjust alert output"
 msgid "Apply"
 msgstr "Apply"
 
-msgid "Alert levels"
-msgstr "Alert levels"
-
 msgid "Unable to load raised alerts"
 msgstr "Unable to load raised alerts"
 
-msgid ""
-"No alerts were recorded for this run. The prediction setup has no alert "
-"policy. Add one to raise alerts on future runs."
-msgstr ""
-"No alerts were recorded for this run. The prediction setup has no alert "
-"policy. Add one to raise alerts on future runs."
+msgid "Alert levels"
+msgstr "Alert levels"
 
-msgid ""
-"No alerts were recorded for this run. The prediction setup now uses "
-"{{policy}}, but no level may have been reached, or the policy may have been "
-"added after this run."
-msgstr ""
-"No alerts were recorded for this run. The prediction setup now uses "
-"{{policy}}, but no level may have been reached, or the policy may have been "
-"added after this run."
+msgid "No alert policy was recorded for this run."
+msgstr "No alert policy was recorded for this run."
 
 msgid "No alerts were recorded for this run."
 msgstr "No alerts were recorded for this run."
 
-msgid "Show {{alertCount}} alerts raised by {{policy}} on the plots."
-msgstr "Show {{alertCount}} alerts raised by {{policy}} on the plots."
-
 msgid "Show recorded alerts on the plots."
 msgstr "Show recorded alerts on the plots."
+
+msgid "Show {{alertCount}} alerts from {{policy}} with their thresholds."
+msgstr "Show {{alertCount}} alerts from {{policy}} with their thresholds."
+
+msgid "{{policy}} raised no alerts for this run. Show its thresholds."
+msgstr "{{policy}} raised no alerts for this run. Show its thresholds."
 
 msgid "Saved alert colours could not be loaded"
 msgstr "Saved alert colours could not be loaded"
@@ -2201,11 +2191,14 @@ msgstr "Thresholds unavailable"
 msgid "Prediction run"
 msgstr "Prediction run"
 
+msgid "Edit the alert policy to change its thresholds."
+msgstr "Edit the alert policy to change its thresholds."
+
 msgid "Explore thresholds"
 msgstr "Explore thresholds"
 
-msgid "Explore threshold lines for this run."
-msgstr "Explore threshold lines for this run."
+msgid "Try other threshold settings. Hides recorded alerts."
+msgstr "Try other threshold settings. Hides recorded alerts."
 
 msgid ""
 "There was a problem loading the prediction data required for this "
@@ -2235,8 +2228,14 @@ msgstr "Alert output"
 msgid "Use alert outputs"
 msgstr "Use alert outputs"
 
-msgid "Import outbreak indicator values."
-msgstr "Import outbreak indicator values."
+msgid "Import the alert level code from {{policy}}."
+msgstr "Import the alert level code from {{policy}}."
+
+msgid "Import 1 when an outbreak is likely, otherwise 0."
+msgstr "Import 1 when an outbreak is likely, otherwise 0."
+
+msgid "Imported value"
+msgstr "Imported value"
 
 msgid "No alert"
 msgstr "No alert"
@@ -2408,6 +2407,12 @@ msgstr "Previous values may have been cleared, but the new import did not comple
 msgid "Prediction data posted successfully"
 msgstr "Prediction data posted successfully"
 
+msgid "{{name}} uses an option set without the codes {{values}}."
+msgstr "{{name}} uses an option set without the codes {{values}}."
+
+msgid "{{name}} has value type {{valueType}} and cannot store {{values}}."
+msgstr "{{name}} has value type {{valueType}} and cannot store {{values}}."
+
 msgid "Error loading prediction configurations"
 msgstr "Error loading prediction configurations"
 
@@ -2475,6 +2480,9 @@ msgstr "There are running jobs in the background"
 msgid "Running jobs"
 msgstr "Running jobs"
 
+msgid "Review the threshold parameters and apply your changes."
+msgstr "Review the threshold parameters and apply your changes."
+
 msgid "Waiting for connection"
 msgstr "Waiting for connection"
 
@@ -2489,9 +2497,6 @@ msgstr "Unable to calculate thresholds"
 
 msgid "There was a problem calculating thresholds for this prediction run."
 msgstr "There was a problem calculating thresholds for this prediction run."
-
-msgid "Review the threshold parameters and apply your changes."
-msgstr "Review the threshold parameters and apply your changes."
 
 msgid "Unable to load threshold strategies"
 msgstr "Unable to load threshold strategies"
