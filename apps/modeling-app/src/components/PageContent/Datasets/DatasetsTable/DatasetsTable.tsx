@@ -66,17 +66,22 @@ const columns = [
     columnHelper.display({
         id: 'actions',
         header: i18n.t('Actions'),
-        cell: info => <EvaluateButton datasetId={info.row.original.id} />,
+        cell: info => <DatasetActions datasetId={info.row.original.id} />,
     }),
 ];
 
-const EvaluateButton = ({ datasetId }: { datasetId?: number | null }) => {
+const DatasetActions = ({ datasetId }: { datasetId?: number | null }) => {
     const navigate = useNavigate();
     if (datasetId == null) return null;
     return (
-        <TableActionButton onClick={() => navigate(`/evaluate/from-dataset?datasetId=${datasetId}`)}>
-            {i18n.t('New evaluation')}
-        </TableActionButton>
+        <div className={styles.actions}>
+            <TableActionButton onClick={() => navigate(`/datasets/${datasetId}`)}>
+                {i18n.t('View')}
+            </TableActionButton>
+            <TableActionButton onClick={() => navigate(`/evaluate/from-dataset?datasetId=${datasetId}`)}>
+                {i18n.t('New evaluation')}
+            </TableActionButton>
+        </div>
     );
 };
 

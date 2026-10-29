@@ -1,6 +1,6 @@
 import { DEFAULT_DHIS2_CALENDAR, getPeriodsInRange } from '@dhis2-chap/core';
 import type { ConfiguredModelRead, ObservationBase } from '@dhis2-chap/ui';
-import { parseSupportedPeriodType } from '../../../../utils/supportedPeriodType';
+import { parseSupportedPeriodType } from '../../utils/supportedPeriodType';
 
 // Saved CHAP periods can use either basic or extended ISO notation.
 export const normalizeInputPeriod = (period: string) => period

@@ -2,4 +2,4 @@
 "@dhis2-chap/modeling-app": minor
 ---
 
-Show saved input-data completeness by reporting period on prediction setups, with snapshot selection, expected and available counts, and missing values by location and variable.
+Add a dataset details page showing data completeness by reporting period, with missing values by location and variable. Prediction setups get a small "Latest input data" check linking to the dataset behind the latest run.

@@ -1,9 +1,30 @@
-.content {
+.container {
     display: flex;
     flex-direction: column;
     gap: var(--spacers-dp16);
     padding: var(--spacers-dp16);
     min-width: 0;
+}
+
+.loadingContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-block-size: 300px;
+}
+
+.title,
+.subtitle {
+    margin: 0;
+    color: var(--colors-grey900);
+}
+
+.title {
+    font-size: 18px;
+}
+
+.subtitle {
+    font-size: 16px;
 }
 
 .description {
@@ -13,10 +34,10 @@
     line-height: 1.5;
 }
 
-.range {
+.covariates {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--spacers-dp16);
+    gap: var(--spacers-dp4);
 }
 
 .chart {
