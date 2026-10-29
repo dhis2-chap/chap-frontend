@@ -85,7 +85,9 @@ export const AlertOutputSection = ({
                         {i18n.t('Use alert outputs')}
                     </span>
                     <span className={styles.alertOutputToggleDescription}>
-                        {i18n.t('Import outbreak indicator values.')}
+                        {policy
+                            ? i18n.t('Import the alert level from {{policy}} as a code for each region and period.', { policy: policy.name })
+                            : i18n.t('This prediction setup has no alert policy, so outbreak indicators are calculated from an outbreak probability and thresholds instead.')}
                     </span>
                 </div>
                 <span onClick={handleSwitchClick}>
@@ -105,13 +107,22 @@ export const AlertOutputSection = ({
                     />
                     {policy ? (
                         <>
-                            <div className={styles.alertSummary}>
-                                <SummaryItem label={i18n.t('Alert policy')} value={policy.name} />
-                                <SummaryItem label={i18n.t('No alert')} value={policy.noAlertOutputCode ?? '0'} />
+                            <dl className={styles.alertCodes}>
+                                <div className={styles.alertCodesHeader}>
+                                    <dt>{i18n.t('Alert level')}</dt>
+                                    <dd>{i18n.t('Imported value')}</dd>
+                                </div>
+                                <div>
+                                    <dt>{i18n.t('No alert')}</dt>
+                                    <dd>{policy.noAlertOutputCode ?? '0'}</dd>
+                                </div>
                                 {(policy.levels ?? []).map(level => (
-                                    <SummaryItem key={level.name} label={level.name} value={level.outputCode} />
+                                    <div key={level.name}>
+                                        <dt>{level.name}</dt>
+                                        <dd>{level.outputCode}</dd>
+                                    </div>
                                 ))}
-                            </div>
+                            </dl>
                             {policyOutputs.isReady && policyOutputs.skippedCount > 0 && (
                                 <NoticeBox warning>
                                     {i18n.t('One region-period result is missing and will be skipped.', {
@@ -160,6 +171,7 @@ export const AlertOutputSection = ({
                         <DataItemSelect
                             label={i18n.t('Outbreak indicator')}
                             value={outbreakIndicator}
+                            dataElementsOnly
                             onChange={onChangeOutbreakIndicator}
                             error={outbreakIndicatorError}
                         />
@@ -169,6 +181,7 @@ export const AlertOutputSection = ({
                             <DataItemSelect
                                 label={i18n.t('Endemic threshold (optional)')}
                                 value={endemicThreshold}
+                                dataElementsOnly
                                 onChange={onChangeEndemicThreshold}
                             />
                         </div>

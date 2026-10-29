@@ -18,6 +18,7 @@ import { NavigationConfirmModal } from '@/components/NavigationConfirmModal';
 import { usePolicyOutbreakIndicators } from '@/hooks/usePolicyOutbreakIndicators';
 import { useEndemicThresholds } from '@/hooks/useEndemicThresholds';
 import { useNavigationBlocker } from '@/hooks/useNavigationBlocker';
+import { useOutbreakIndicatorDataElement } from '@/hooks/useOutbreakIndicatorDataElement';
 import { useThresholdStrategies } from '@/hooks/useThresholdStrategies';
 import {
     areThresholdParamsEqual,
@@ -28,6 +29,7 @@ import {
 } from '@/utils/thresholdStrategyParams';
 import { PredictionAlertsDialog } from '../../PredictionAlerts';
 import { usePostPredictionData } from '../hooks/usePostPredictionData';
+import { getOutbreakIndicatorError } from '../utils/outbreakIndicatorCompatibility';
 import { AlertOutputSection } from './AlertOutputSection';
 import { ClearPreviousValuesControl } from './ClearPreviousValuesControl';
 import { ImportConfirmationModal } from './ImportConfirmationModal';
@@ -161,7 +163,24 @@ export const QuantileMappingFormContent = ({
         params: thresholdParams,
         enabled: useAlertOutputs && !policy,
     });
-    const canImport = !useAlertOutputs || (policy ? policyOutputs.isReady : areThresholdsReady);
+    // Policy imports write the policy's codes; threshold imports write 1 or 0.
+    const outbreakValues = useMemo(() => (
+        policy
+            ? [policy.noAlertOutputCode ?? '0', ...(policy.levels ?? []).map(level => level.outputCode)]
+            : ['0', '1']
+    ), [policy]);
+    const {
+        dataElement: outbreakIndicatorDataElement,
+        isLoading: isOutbreakIndicatorLoading,
+    } = useOutbreakIndicatorDataElement(useAlertOutputs ? outbreak_indicator || undefined : undefined);
+    const outbreakIndicatorCompatibilityError = outbreakIndicatorDataElement
+        ? getOutbreakIndicatorError(outbreakIndicatorDataElement, outbreakValues)
+        : undefined;
+    const canImport = !useAlertOutputs || (
+        (policy ? policyOutputs.isReady : areThresholdsReady) &&
+        !isOutbreakIndicatorLoading &&
+        !outbreakIndicatorCompatibilityError
+    );
     const unavailableThresholdCount = useMemo(() => (
         series.filter(orgUnitSeries => (
             getForecastThresholdCoverage(
@@ -274,7 +293,7 @@ export const QuantileMappingFormContent = ({
                         areThresholdsPaused={areThresholdsPaused}
                         thresholdsError={thresholdsError}
                         outbreakIndicator={outbreak_indicator}
-                        outbreakIndicatorError={errors.outbreak_indicator?.message}
+                        outbreakIndicatorError={errors.outbreak_indicator?.message ?? outbreakIndicatorCompatibilityError}
                         endemicThreshold={endemic_threshold}
                         onToggleAlertOutputs={toggleAlertOutputs}
                         onAdjustAlertProbability={() => setIsAlertsDialogOpen(true)}
