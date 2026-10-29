@@ -8,15 +8,17 @@ import {
     ButtonStrip,
     IconArrowRightMulti16,
     NoticeBox,
+    SingleSelectField,
+    SingleSelectOption,
 } from '@dhis2/ui';
 import { NameInput } from '../ModelExecutionForm/Sections/NameInput';
 import { PeriodSelector } from '../ModelExecutionForm/Sections/PeriodSelector';
 import { LocationSelector } from '../ModelExecutionForm/Sections/LocationSelector';
 import { DatasetColumns } from './Sections/DatasetColumns';
 import { ModelSupport } from './Sections/ModelSupport';
-import { EMPTY_COLUMN, useDatasetFormState } from './hooks/useDatasetFormState';
+import { EMPTY_COLUMN, resolveTargetColumn, useDatasetFormState } from './hooks/useDatasetFormState';
 import { useCovariateSuggestions } from './hooks/useCovariateSuggestions';
-import { getModelSupport } from './utils/datasetModels';
+import { getBacktestColumns, getModelSupport } from './utils/datasetModels';
 import { type DatasetImportSummary, useCreateDataset } from './hooks/useCreateDataset';
 import { useInspectDataset } from './hooks/useInspectDataset';
 import { SummaryModal } from '../ModelExecutionForm/SummaryModal';
@@ -31,6 +33,7 @@ import { useDatasets } from '@/hooks/useDatasets';
 import { getPreviousDataItems } from './utils/previousDataItems';
 import { getLegacyBacktestParameters, getMinimumEvaluationPeriods, toBacktestDefaults } from '../NewEvaluationForm/hooks/backtestDefaults';
 import { useBacktestParameters } from '@/hooks/useBacktestParameters';
+import { Features, useIsFeatureAvailable } from '@/hooks/useIsFeatureAvailable';
 import { countPeriods } from '@/utils/periods';
 import styles from './NewDatasetForm.module.css';
 
@@ -66,13 +69,17 @@ export const NewDatasetForm = () => {
     const { data: datasets } = useDatasets();
     const previousDataItems = useMemo(() => getPreviousDataItems(datasets ?? []), [datasets]);
     const columns = useFieldArray({ control: methods.control, name: 'columns' });
-    const [columnValues, periodType, fromPeriodId, toPeriodId] = useWatch({
+    const [columnValues, periodType, fromPeriodId, toPeriodId, chosenTarget] = useWatch({
         control: methods.control,
-        name: ['columns', 'periodType', 'fromPeriodId', 'toPeriodId'],
+        name: ['columns', 'periodType', 'fromPeriodId', 'toPeriodId', 'targetColumn'],
     });
+    const { isAvailable: isTargetColumnAvailable } = useIsFeatureAvailable(Features.DATASET_TARGET_COLUMN);
     const backtestParameters = useBacktestParameters(periodType);
     const covariateNames = columnValues.map(column => column.covariateName.trim());
-    const support = getModelSupport(covariateNames, periodType, models ?? []);
+    const columnNames = [...new Set(covariateNames.filter(Boolean))];
+    const targetColumn = resolveTargetColumn(columnNames, chosenTarget);
+    const support = getModelSupport(targetColumn ? getBacktestColumns(columnNames, targetColumn) : columnNames, periodType, models ?? []);
+    const isMissingTarget = isTargetColumnAvailable && columnNames.length > 0 && !targetColumn;
     const periodCount = countPeriods(fromPeriodId, toPeriodId, settings.calendar);
     const minimumEvaluationPeriods = getMinimumEvaluationPeriods(
         periodType,
@@ -125,6 +132,23 @@ export const NewDatasetForm = () => {
                                         onAddColumn={name => addColumns([name])}
                                         previousDataItems={previousDataItems}
                                     />
+
+                                    {isTargetColumnAvailable && (
+                                        <SingleSelectField
+                                            className={styles.targetColumn}
+                                            label={i18n.t('Target column')}
+                                            helpText={i18n.t('The column models predict. Evaluations of this dataset use it.')}
+                                            selected={targetColumn}
+                                            error={isMissingTarget}
+                                            validationText={isMissingTarget ? i18n.t('Choose the column to predict') : undefined}
+                                            onChange={({ selected }) => methods.setValue('targetColumn', selected, { shouldDirty: true })}
+                                            dataTest="dataset-target-column-select"
+                                        >
+                                            {columnNames.map(name => (
+                                                <SingleSelectOption key={name} value={name} label={name} />
+                                            ))}
+                                        </SingleSelectField>
+                                    )}
                                 </fieldset>
 
                                 {isTooShortToEvaluate && (
@@ -141,7 +165,7 @@ export const NewDatasetForm = () => {
                                         <Button
                                             secondary
                                             loading={inspection.isLoading}
-                                            disabled={isBusy || isSettingsLoading || !!settingsError}
+                                            disabled={isBusy || isSettingsLoading || !!settingsError || isMissingTarget}
                                             onClick={() => checkData()}
                                             dataTest="dataset-check-button"
                                         >
@@ -152,7 +176,7 @@ export const NewDatasetForm = () => {
                                             type="submit"
                                             icon={<IconArrowRightMulti16 />}
                                             loading={isSubmitting}
-                                            disabled={isBusy || isSettingsLoading || !!settingsError}
+                                            disabled={isBusy || isSettingsLoading || !!settingsError || isMissingTarget}
                                             dataTest="dataset-create-button"
                                         >
                                             {i18n.t('Create dataset')}

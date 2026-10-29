@@ -19,6 +19,9 @@ export const DatasetDetails = ({ datasetId }: { datasetId: number }) => {
         [dataset],
     );
 
+    // Chap Core < 2.6.0 does not save a target on the dataset.
+    const targetColumn = dataset?.targetColumn ?? 'disease_cases';
+
     if (isLoading) {
         return (
             <div className={styles.loadingContainer}>
@@ -35,11 +38,12 @@ export const DatasetDetails = ({ datasetId }: { datasetId: number }) => {
         <Card className={styles.container}>
             <h2 className={styles.title}>{dataset.name}</h2>
             <p className={styles.description}>
-                {i18n.t('Created {{created}} · {{first}} to {{last}} · {{locations}} locations', {
+                {i18n.t('Created {{created}} · {{first}} to {{last}} · {{locations}} locations · target {{target}}', {
                     created: formatTimestamp(dataset.created),
                     first: dataset.firstPeriod ?? '-',
                     last: dataset.lastPeriod ?? '-',
                     locations: dataset.orgUnits?.length ?? 0,
+                    target: targetColumn,
                     interpolation: { escapeValue: false },
                 })}
             </p>
@@ -51,7 +55,7 @@ export const DatasetDetails = ({ datasetId }: { datasetId: number }) => {
                 observations={dataset.observations}
                 periods={periods}
                 orgUnits={dataset.orgUnits ?? []}
-                variables={dataset.covariates ?? []}
+                variables={[targetColumn]}
             />
         </Card>
     );

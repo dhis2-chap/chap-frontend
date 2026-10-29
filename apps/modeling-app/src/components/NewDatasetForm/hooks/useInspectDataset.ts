@@ -26,7 +26,7 @@ export const useInspectDataset = (periodSettings: Dhis2PeriodSettings) => {
                     observations,
                     periods,
                     orgUnits: [...new Set(observations.map(observation => observation.orgUnit))],
-                    variables: request.dataSources?.map(source => source.covariate) ?? [],
+                    variables: [request.targetColumn ?? 'disease_cases'],
                 },
             };
         },

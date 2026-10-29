@@ -18,6 +18,7 @@ const formData: DatasetFormValues = {
         { covariateName: 'disease_cases', dataItem },
         { covariateName: 'custom_cases', dataItem },
     ],
+    targetColumn: 'custom_cases',
 };
 
 const periodSettings = { calendar: 'gregory' as const, locale: 'en', timeZone: 'UTC' };
@@ -47,6 +48,7 @@ describe('prepareDataset', () => {
         const { request, orgUnitNames } = await prepareDataset(formData, dataEngine, periodSettings);
 
         expect(request).not.toHaveProperty('modelId');
+        expect(request.targetColumn).toBe('custom_cases');
         expect(request.dataSources).toEqual([
             { covariate: 'disease_cases', dataElementId: 'data1' },
             { covariate: 'custom_cases', dataElementId: 'data1' },

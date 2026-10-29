@@ -60,3 +60,7 @@
   font-size: 16px;
   color: var(--colors-grey900);
 }
+
+.targetColumn {
+  margin-block-start: 24px;
+}

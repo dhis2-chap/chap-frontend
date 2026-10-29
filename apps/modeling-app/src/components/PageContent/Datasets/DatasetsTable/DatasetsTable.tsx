@@ -21,11 +21,11 @@ import {
     useReactTable,
 } from '@tanstack/react-table';
 import { format } from 'date-fns';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { DataSetInfo, getPeriodNameFromId, Tag } from '@dhis2-chap/ui';
 import { useTablePaginationParams } from '../../../../hooks/useTablePaginationParams';
 import { DatasetOriginFilter, matchesOrigin, useDatasetOriginFilter } from '../../../DatasetOriginFilter';
-import { TableActionButton } from '../../../TableActionButton';
+import { DatasetActionsMenu } from './DatasetActionsMenu';
 import styles from './DatasetsTable.module.css';
 
 const columnHelper = createColumnHelper<DataSetInfo>();
@@ -33,6 +33,10 @@ const columnHelper = createColumnHelper<DataSetInfo>();
 const columns = [
     columnHelper.accessor('name', {
         header: i18n.t('Name'),
+        cell: (info) => {
+            const datasetId = info.row.original.id;
+            return datasetId == null ? info.getValue() : <Link to={`/datasets/${datasetId}`}>{info.getValue()}</Link>;
+        },
     }),
     columnHelper.accessor('created', {
         header: i18n.t('Created'),
@@ -66,24 +70,12 @@ const columns = [
     columnHelper.display({
         id: 'actions',
         header: i18n.t('Actions'),
-        cell: info => <DatasetActions datasetId={info.row.original.id} />,
+        cell: (info) => {
+            const datasetId = info.row.original.id;
+            return datasetId == null ? null : <DatasetActionsMenu datasetId={datasetId} />;
+        },
     }),
 ];
-
-const DatasetActions = ({ datasetId }: { datasetId?: number | null }) => {
-    const navigate = useNavigate();
-    if (datasetId == null) return null;
-    return (
-        <div className={styles.actions}>
-            <TableActionButton onClick={() => navigate(`/datasets/${datasetId}`)}>
-                {i18n.t('View')}
-            </TableActionButton>
-            <TableActionButton onClick={() => navigate(`/evaluate/from-dataset?datasetId=${datasetId}`)}>
-                {i18n.t('New evaluation')}
-            </TableActionButton>
-        </div>
-    );
-};
 
 const getSortDirection = (column: Column<DataSetInfo>) => column.getIsSorted() || 'default';
 

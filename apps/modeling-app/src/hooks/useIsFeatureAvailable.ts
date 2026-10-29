@@ -15,6 +15,7 @@ export const FEATURE_MIN_VERSIONS = {
     // Chap raises alerts when a prediction run finishes from 2.5.0.
     predictionAlerts: '2.5.0',
     jobDiagnostics: '2.6.0',
+    datasetTargetColumn: '2.6.0',
 } as const;
 
 /**
@@ -29,6 +30,7 @@ export const Features = {
     BACKTEST_TARGET_COLUMN: 'backtestTargetColumn',
     PREDICTION_ALERTS: 'predictionAlerts',
     JOB_DIAGNOSTICS: 'jobDiagnostics',
+    DATASET_TARGET_COLUMN: 'datasetTargetColumn',
 } as const;
 
 export type Feature = keyof typeof FEATURE_MIN_VERSIONS;

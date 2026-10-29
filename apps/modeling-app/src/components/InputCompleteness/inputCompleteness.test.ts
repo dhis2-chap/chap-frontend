@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import type { ConfiguredModelRead, ObservationBase } from '@dhis2-chap/ui';
-import { calculateInputCompleteness, getExpectedVariables, getInputPeriods } from './inputCompleteness';
+import type { ObservationBase } from '@dhis2-chap/ui';
+import { calculateInputCompleteness, getInputPeriods } from './inputCompleteness';
 
 const observation = (period: string, orgUnit: string, featureName: string, value: number | null): ObservationBase => (
     { period, orgUnit, featureName, value }
@@ -18,7 +18,7 @@ describe('saved input completeness', () => {
             observation('202601', 'a', 'cases', 0),
         ], ['202601', '202602'], ['a', 'b', 'wholly-missing'], ['cases', 'rain', 'absent-variable']);
 
-        expect(rows[0]).toMatchObject({ expected: 9, available: 1, completeness: 1 / 9 });
+        expect(rows[0]).toMatchObject({ expected: 9, available: 1, zeros: 1, completeness: 1 / 9 });
         expect(rows[0].missing).toEqual([
             { orgUnit: 'a', variables: ['rain', 'absent-variable'] },
             { orgUnit: 'b', variables: ['cases', 'rain', 'absent-variable'] },
@@ -32,21 +32,12 @@ describe('saved input completeness', () => {
             observation('2026-W1', 'a', 'cases', 2),
             observation('2026W01', 'a', 'cases', 2),
         ], ['2026W01'], ['a', 'a'], ['cases', 'cases']);
-        expect(rows[0]).toEqual({ period: '2026W01', expected: 1, available: 1, completeness: 1, missing: [] });
+        expect(rows[0]).toEqual({ period: '2026W01', expected: 1, available: 1, zeros: 0, completeness: 1, missing: [] });
     });
 
     it('reports a zero denominator as unavailable', () => {
         expect(calculateInputCompleteness([], ['202601'], [], ['cases'])[0].completeness).toBeNull();
         expect(calculateInputCompleteness([], ['202601'], ['a'], [])[0].completeness).toBeNull();
-    });
-
-    it('uses the configured model target, required covariates and additional covariates', () => {
-        const model: ConfiguredModelRead = {
-            id: 1, name: 'model', configurationDigest: 'digest',
-            modelTemplate: { name: 'template', version: '1', target: 'custom_cases', requiredCovariates: ['rain'] },
-            additionalContinuousCovariates: ['rain', 'temperature'],
-        };
-        expect(getExpectedVariables(model)).toEqual(['custom_cases', 'rain', 'temperature']);
     });
 
     it('includes every month in the selected range, including wholly missing periods', () => {

@@ -4,7 +4,7 @@ import type { DatasetMakeRequest } from '@dhis2-chap/ui';
 import type { useDataEngine } from '@dhis2/app-runtime';
 import { fetchAnalytics, fetchOrgUnits } from '../../ModelExecutionForm/utils/queryUtils';
 import { buildOrgUnitFeatureCollection } from '../../ModelExecutionForm/utils/orgUnitGeoJson';
-import type { DatasetFormValues } from '../hooks/useDatasetFormState';
+import { resolveTargetColumn, type DatasetFormValues } from '../hooks/useDatasetFormState';
 import type { Dhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
 
 export type PreparedDataset = {
@@ -62,6 +62,7 @@ export const prepareDataset = async (
     return {
         request: {
             name: formData.name,
+            targetColumn: resolveTargetColumn(formData.columns.map(column => column.covariateName), formData.targetColumn) || undefined,
             type: 'evaluation',
             geojson: buildOrgUnitFeatureCollection(withGeometry),
             providedData,

@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-29T18:09:54.154Z\n"
-"PO-Revision-Date: 2026-10-29T18:09:54.155Z\n"
+"POT-Creation-Date: 2026-10-29T18:44:24.938Z\n"
+"PO-Revision-Date: 2026-10-29T18:44:24.939Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -469,11 +469,30 @@ msgstr "{{available}} of {{expected}} values"
 msgid "Completeness"
 msgstr "Completeness"
 
-msgid "Share of values present in each period, across all locations and variables."
-msgstr "Share of values present in each period, across all locations and variables."
+msgid "Share of locations with a {{column}} value in each period."
+msgstr "Share of locations with a {{column}} value in each period."
 
-msgid "{{available}} of {{expected}} values ({{percent}}%)"
-msgstr "{{available}} of {{expected}} values ({{percent}}%)"
+msgid "Show values for period"
+msgstr "Show values for period"
+
+msgid "Or click a point in the chart."
+msgstr "Or click a point in the chart."
+
+msgid ""
+"{{available}} of {{expected}} values present ({{percent}}%) · {{zeros}} "
+"zero · {{missing}} missing"
+msgstr ""
+"{{available}} of {{expected}} values present ({{percent}}%) · {{zeros}} "
+"zero · {{missing}} missing"
+
+msgid "Show all locations"
+msgstr "Show all locations"
+
+msgid "Location"
+msgstr "Location"
+
+msgid "Missing"
+msgstr "Missing"
 
 msgid "Inspect dataset"
 msgstr "Inspect dataset"
@@ -1026,6 +1045,15 @@ msgstr "Dataset name"
 msgid "EWARS data 22-24"
 msgstr "EWARS data 22-24"
 
+msgid "Target column"
+msgstr "Target column"
+
+msgid "The column models predict. Evaluations of this dataset use it."
+msgstr "The column models predict. Evaluations of this dataset use it."
+
+msgid "Choose the column to predict"
+msgstr "Choose the column to predict"
+
 msgid "Too short to evaluate"
 msgstr "Too short to evaluate"
 
@@ -1247,8 +1275,8 @@ msgstr "Benchmark model runs"
 msgid "No datasets match the origin filter"
 msgstr "No datasets match the origin filter"
 
-msgid "Target column"
-msgstr "Target column"
+msgid "Set on the dataset."
+msgstr "Set on the dataset."
 
 msgid "The dataset column the models predict and are scored against."
 msgstr "The dataset column the models predict and are scored against."
@@ -1660,8 +1688,12 @@ msgstr "Unavailable"
 msgid "Error loading dataset"
 msgstr "Error loading dataset"
 
-msgid "Created {{created}} · {{first}} to {{last}} · {{locations}} locations"
-msgstr "Created {{created}} · {{first}} to {{last}} · {{locations}} locations"
+msgid ""
+"Created {{created}} · {{first}} to {{last}} · {{locations}} locations · "
+"target {{target}}"
+msgstr ""
+"Created {{created}} · {{first}} to {{last}} · {{locations}} locations · "
+"target {{target}}"
 
 msgid "Error loading datasets"
 msgstr "Error loading datasets"

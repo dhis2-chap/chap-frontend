@@ -1,5 +1,5 @@
 import { DEFAULT_DHIS2_CALENDAR, getPeriodsInRange } from '@dhis2-chap/core';
-import type { ConfiguredModelRead, ObservationBase } from '@dhis2-chap/ui';
+import type { ObservationBase } from '@dhis2-chap/ui';
 import { parseSupportedPeriodType } from '../../utils/supportedPeriodType';
 
 // Saved CHAP periods can use either basic or extended ISO notation.
@@ -23,15 +23,17 @@ export const getInputPeriods = (start: string, end: string, periodType?: string 
     }
 };
 
-export const getExpectedVariables = (model: ConfiguredModelRead) => [...new Set([
-    model.modelTemplate.target ?? 'disease_cases',
-    ...(model.modelTemplate.requiredCovariates ?? []),
-    ...(model.additionalContinuousCovariates ?? []),
-].filter((variable): variable is string => !!variable))];
-
-const observationKey = (period: string, orgUnit: string, variable: string) => (
+export const observationKey = (period: string, orgUnit: string, variable: string) => (
     JSON.stringify([normalizeInputPeriod(period), orgUnit, variable])
 );
+
+/** Finite values (including zero) by period, location and variable. */
+export const indexObservations = (observations: ObservationBase[]) => new Map(observations
+    .filter(observation => observation.featureName && Number.isFinite(observation.value))
+    .map(observation => [
+        observationKey(observation.period, observation.orgUnit, observation.featureName!),
+        observation.value as number,
+    ]));
 
 export const calculateInputCompleteness = (
     observations: ObservationBase[],
@@ -42,16 +44,17 @@ export const calculateInputCompleteness = (
     const locations = [...new Set(orgUnits)];
     const features = [...new Set(variables)];
     const expected = locations.length * features.length;
-    const availableKeys = new Set(observations
-        .filter(observation => observation.featureName && Number.isFinite(observation.value))
-        .map(observation => observationKey(observation.period, observation.orgUnit, observation.featureName!)));
+    const values = indexObservations(observations);
 
     return periods.map((period) => {
         const missing = locations.flatMap((orgUnit) => {
-            const missingVariables = features.filter(variable => !availableKeys.has(observationKey(period, orgUnit, variable)));
+            const missingVariables = features.filter(variable => !values.has(observationKey(period, orgUnit, variable)));
             return missingVariables.length ? [{ orgUnit, variables: missingVariables }] : [];
         });
         const available = expected - missing.reduce((sum, location) => sum + location.variables.length, 0);
-        return { period, expected, available, completeness: expected ? available / expected : null, missing };
+        const zeros = locations.reduce((sum, orgUnit) => (
+            sum + features.filter(variable => values.get(observationKey(period, orgUnit, variable)) === 0).length
+        ), 0);
+        return { period, expected, available, zeros, completeness: expected ? available / expected : null, missing };
     });
 };

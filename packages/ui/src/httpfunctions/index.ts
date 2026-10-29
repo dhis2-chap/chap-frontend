@@ -68,6 +68,7 @@ export type { MakeBacktestsRequest } from './models/MakeBacktestsRequest';
 export type { MakeBacktestsResponse } from './models/MakeBacktestsResponse';
 export type { MakeBacktestWithDataRequest } from './models/MakeBacktestWithDataRequest';
 export type { MakePredictionRequest } from './models/MakePredictionRequest';
+export type { MaskedRange } from './models/MaskedRange';
 export type { MetricInfo } from './models/MetricInfo';
 export type { MLServiceInfo_Input } from './models/MLServiceInfo_Input';
 export type { MLServiceInfo_Output } from './models/MLServiceInfo_Output';

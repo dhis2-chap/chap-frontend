@@ -6,7 +6,7 @@ import type { PredictionSetupReadWithPredictions } from '@dhis2-chap/ui';
 import { useNavigate } from 'react-router-dom';
 import { useDataset } from '../../../../hooks/useDataset';
 import { getChapErrorLabel } from '../../../../utils/chapErrors';
-import { calculateInputCompleteness, getExpectedVariables, getInputPeriods } from '../../../InputCompleteness/inputCompleteness';
+import { calculateInputCompleteness, getInputPeriods } from '../../../InputCompleteness/inputCompleteness';
 import styles from './InputDataCheckWidget.module.css';
 
 type Props = {
@@ -18,8 +18,7 @@ export const InputDataCheckWidget = ({ predictionSetup, latestDatasetId }: Props
     const navigate = useNavigate();
     const { data: dataset, error, isLoading } = useDataset(latestDatasetId);
 
-    // Expected values follow the setup (its locations and model variables), not the dataset,
-    // so locations or variables absent from the saved data still count as gaps.
+    // Expected locations follow the setup, not the dataset, so locations absent from the saved data still count as gaps.
     const completeness = useMemo(() => {
         if (!dataset || !predictionSetup) return [];
         const periods = getInputPeriods(
@@ -31,7 +30,7 @@ export const InputDataCheckWidget = ({ predictionSetup, latestDatasetId }: Props
             dataset.observations,
             periods,
             predictionSetup.orgUnits,
-            getExpectedVariables(predictionSetup.configuredModel),
+            [dataset.targetColumn ?? 'disease_cases'],
         );
     }, [dataset, predictionSetup]);
     const latest = completeness[completeness.length - 1];

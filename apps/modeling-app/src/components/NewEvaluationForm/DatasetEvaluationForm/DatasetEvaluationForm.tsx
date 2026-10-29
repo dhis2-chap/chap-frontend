@@ -77,8 +77,10 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '', benchmarkContext 
     const isTooShort = periodCount != null && !!requiredPeriodCount && periodCount < requiredPeriodCount;
     const columns = dataset?.covariates ?? [];
     const defaultTargetColumn = columns.includes('disease_cases') ? 'disease_cases' : '';
-    // Chap Core < 2.4.0 always evaluates disease_cases.
-    const selectedTargetColumn = isTargetColumnAvailable && columns.includes(targetColumn) ? targetColumn : defaultTargetColumn;
+    // Chap Core 2.6.0+ saves the target on the dataset; older versions take it per evaluation (2.4.0+) or always use disease_cases.
+    const datasetTargetColumn = dataset?.targetColumn;
+    const selectedTargetColumn = datasetTargetColumn
+        ?? (isTargetColumnAvailable && columns.includes(targetColumn) ? targetColumn : defaultTargetColumn);
     const compatibleModels = models?.filter(model => (
         dataset && selectedTargetColumn &&
         datasetSupportsModel(getBacktestColumns(columns, selectedTargetColumn), dataset.periodType ?? '', model)
@@ -95,7 +97,7 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '', benchmarkContext 
             const request = {
                 name,
                 datasetId: dataset!.id!,
-                ...(isTargetColumnAvailable && { targetColumn: selectedTargetColumn }),
+                ...(isTargetColumnAvailable && !datasetTargetColumn && { targetColumn: selectedTargetColumn }),
                 ...(backtestParameters ?? getLegacyBacktestParameters(dataset!.periodType)),
             };
             const modelIds = runnableModels.map(model => model.name);
@@ -215,12 +217,14 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '', benchmarkContext 
                             <DatasetOriginFilter datasets={savedDatasets} dense={false} />
                         </div>
 
-                        {isTargetColumnAvailable && (
+                        {(isTargetColumnAvailable || datasetTargetColumn) && (
                             <SingleSelectField
                                 label={i18n.t('Target column')}
-                                helpText={i18n.t('The dataset column the models predict and are scored against.')}
+                                helpText={datasetTargetColumn
+                                    ? i18n.t('Set on the dataset.')
+                                    : i18n.t('The dataset column the models predict and are scored against.')}
                                 selected={selectedTargetColumn}
-                                disabled={!dataset || createEvaluation.isLoading}
+                                disabled={!dataset || !!datasetTargetColumn || createEvaluation.isLoading}
                                 dataTest="evaluation-target-column-select"
                                 onChange={({ selected }) => {
                                     methods.setValue('targetColumn', selected, { shouldDirty: true });

@@ -3,6 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { DataSource } from './DataSource';
+import type { MaskedRange } from './MaskedRange';
 /**
  * Slim dataset summary embedded inside other read views (e.g. `BacktestRead`).
  */
@@ -12,6 +13,10 @@ export type DataSetMeta = {
      */
     name: string;
     /**
+     * Column to predict. Set when the dataset is created and reused by its runs.
+     */
+    targetColumn?: string;
+    /**
      * A mapping of covariate names to data element IDs from which to source the data
      */
     dataSources?: (Array<DataSource> | null);
@@ -19,6 +24,10 @@ export type DataSetMeta = {
      * Purpose of dataset, e.g., 'forecasting' or 'backtesting'
      */
     type?: (string | null);
+    /**
+     * Inclusive period ranges in which `disease_cases` is masked. Set at creation and never changed. Deletes data: `disease_cases` inside the ranges is stored as empty and the submitted values cannot be recovered.
+     */
+    maskedRanges?: (Array<MaskedRange> | null);
     /**
      * Primary key of the dataset.
      */

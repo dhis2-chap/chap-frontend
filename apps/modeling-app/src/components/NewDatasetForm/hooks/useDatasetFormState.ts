@@ -22,6 +22,7 @@ export const createDatasetFormSchema = (periodSettings: Dhis2PeriodSettings) => 
         columns: z
             .array(datasetColumnSchema)
             .min(1, { message: i18n.t('Add at least one data column') }),
+        targetColumn: z.string(),
     })
         .refine(data => (
             isPeriodRangeValid(data.fromPeriodId, data.toPeriodId, periodSettings)
@@ -37,6 +38,12 @@ export const createDatasetFormSchema = (periodSettings: Dhis2PeriodSettings) => 
 
 export type DatasetFormValues = z.infer<ReturnType<typeof createDatasetFormSchema>>;
 
+/** The chosen target while it names a column, otherwise `disease_cases` if there is one. */
+export const resolveTargetColumn = (columnNames: string[], targetColumn: string) => {
+    if (columnNames.includes(targetColumn)) return targetColumn;
+    return columnNames.includes('disease_cases') ? 'disease_cases' : '';
+};
+
 export const EMPTY_COLUMN = { covariateName: '', dataItem: undefined } as unknown as DatasetFormValues['columns'][number];
 
 export const useDatasetFormState = (periodSettings: Dhis2PeriodSettings) => useForm<DatasetFormValues>({
@@ -48,6 +55,7 @@ export const useDatasetFormState = (periodSettings: Dhis2PeriodSettings) => useF
         toPeriodId: '',
         orgUnits: [],
         columns: [],
+        targetColumn: '',
     },
     shouldFocusError: false,
 });
