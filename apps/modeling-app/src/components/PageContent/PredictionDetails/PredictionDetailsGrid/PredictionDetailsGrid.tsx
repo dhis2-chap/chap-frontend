@@ -277,12 +277,6 @@ export const PredictionDetailsGrid = ({
             panel={panelContent}
             panelHeader={i18n.t('Prediction settings')}
             gridResetKey={String(prediction.id)}
-            zoomResetDeps={[
-                prediction.id,
-                settings.alertProbability,
-                settings.thresholdsEnabled,
-                settings.thresholdParams,
-            ]}
         />
     );
 };

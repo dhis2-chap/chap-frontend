@@ -195,7 +195,6 @@ type Props = {
     panel: ReactNode;
     panelHeader: string;
     gridResetKey?: string;
-    zoomResetDeps?: unknown[];
 };
 
 export const ThresholdTilesExplorer = ({
@@ -210,7 +209,6 @@ export const ThresholdTilesExplorer = ({
     panel,
     panelHeader,
     gridResetKey = '',
-    zoomResetDeps = [],
 }: Props) => {
     const alertsByOrgUnit = useMemo(() => {
         if (!raisedAlerts) return undefined;
@@ -242,13 +240,10 @@ export const ThresholdTilesExplorer = ({
     const isToolbarStuckRef = useRef(false);
     const scrollParent = useMainScrollParent();
 
+    // Only a new prediction resets the zoom and alert filter: changing alert
+    // settings or exploring thresholds keeps both.
     useEffect(() => {
         setZoomRange(null);
-    }, zoomResetDeps);
-
-    // Only a new prediction clears the selection: hiding the filter (for
-    // example while exploring thresholds) keeps it for when alerts return.
-    useEffect(() => {
         setAlertLevelSelection([]);
     }, [gridResetKey]);
 
