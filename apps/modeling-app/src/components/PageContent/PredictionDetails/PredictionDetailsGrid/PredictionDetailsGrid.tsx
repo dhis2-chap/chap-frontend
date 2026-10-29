@@ -205,7 +205,7 @@ export const PredictionDetailsGrid = ({
                     <span className={styles.toggleText}>
                         <span className={styles.toggleTitle}>{i18n.t('Explore thresholds')}</span>
                         <span className={styles.toggleDescription}>
-                            {i18n.t('Try other threshold settings on this run. Recorded alerts are hidden while exploring.')}
+                            {i18n.t('Try other threshold settings. Hides recorded alerts.')}
                         </span>
                     </span>
                 )}

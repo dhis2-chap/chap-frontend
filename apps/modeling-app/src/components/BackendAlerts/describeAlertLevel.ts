@@ -5,7 +5,7 @@ import { fractionToPercentString } from '@/utils/thresholdStrategyParams';
 // Alert levels describe a single threshold line, so list values hold one number.
 export const single = (value?: number | number[]) => (Array.isArray(value) ? value[0] : value);
 
-const describeThreshold = (params: AlertLevel['thresholdParams']) => {
+export const describeThreshold = (params: AlertLevel['thresholdParams']) => {
     if ('quantile' in params) {
         const percentile = fractionToPercentString(single(params.quantile) ?? 0);
         return params.baselineYears == null

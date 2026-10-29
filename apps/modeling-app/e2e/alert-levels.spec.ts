@@ -130,13 +130,13 @@ test.describe.serial('alert level presentation', () => {
         await expect(plot.getByText(label, { exact: true })).toHaveCount(0);
         await expect(page.locator('[data-test="alert-level-filter"]')).toHaveCount(0);
         await expect(thresholdLines).toHaveCount(1);
-        await expect(page.getByText('Regions exceeding threshold', { exact: true })).toBeVisible();
+        await expect(page.getByText('Organisation units exceeding threshold', { exact: true })).toBeVisible();
         await exploreThresholds.uncheck();
         await expect(alertLevels).toBeEnabled();
         await expect(thresholdLines).toHaveCount(2);
         await expect(plot.getByText(label, { exact: true })).toBeVisible();
         await expect(plot.locator('.highcharts-plot-band').first()).toBeVisible();
-        await expect(page.getByText('Regions exceeding threshold', { exact: true })).toHaveCount(0);
+        await expect(page.getByText('Organisation units exceeding threshold', { exact: true })).toHaveCount(0);
     });
 
     test('filters organisation units by one or more alert levels and combines with search', async ({ page }) => {
@@ -205,8 +205,9 @@ test.describe.serial('alert level presentation', () => {
         await alertLevels.uncheck();
         await expect(filter).toHaveCount(0);
         await expect(plots.getByRole('heading', { name: orgUnit.displayName, exact: true })).toBeVisible();
+        // The selection survives hiding the alerts.
         await alertLevels.check();
-        await expect(filter).toContainText('Filter by alert level');
-        await expect(plots.getByRole('heading', { name: orgUnit.displayName, exact: true })).toBeVisible();
+        await expect(filter).toContainText('Watch');
+        await expect(plots).toHaveCount(0);
     });
 });

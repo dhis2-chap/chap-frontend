@@ -1,5 +1,5 @@
-import type { OutbreakIndicatorDataElement } from '@/components/PageContent/PredictionImport/utils/outbreakIndicatorCompatibility';
-import { useApiDataQuery } from '../utils/useApiDataQuery';
+import { useApiDataQuery } from '@/utils/useApiDataQuery';
+import type { OutbreakIndicatorDataElement } from '../utils/outbreakIndicatorCompatibility';
 
 type DataElementsResult = {
     dataElements: OutbreakIndicatorDataElement[];

@@ -113,18 +113,14 @@ const ThresholdTile = memo(function ThresholdTile({
     zoomRange?: ZoomRange | null;
     onZoomChange?: (range: ZoomRange | null) => void;
 }) {
-    const thresholdForMaxY = tile.endemicThresholds.length > 0
-        ? tile.endemicThresholds
-        : tile.endemicThreshold;
-
-    const maxY = useMemo(() => (
-        getStableMaxYForThresholdChart(
-            tile.series,
-            thresholdLines
-                ? thresholdLines.flatMap(line => line.points)
-                : showThresholds ? thresholdForMaxY : null,
-        )
-    ), [showThresholds, thresholdForMaxY, thresholdLines, tile.series]);
+    const maxY = useMemo(() => {
+        const explorationThreshold = tile.endemicThresholds.length > 0
+            ? tile.endemicThresholds
+            : tile.endemicThreshold;
+        const visibleThreshold = thresholdLines?.flatMap(line => line.points)
+            ?? (showThresholds ? explorationThreshold : null);
+        return getStableMaxYForThresholdChart(tile.series, visibleThreshold);
+    }, [showThresholds, thresholdLines, tile.endemicThreshold, tile.endemicThresholds, tile.series]);
     // Zoom-only renders should update the axis, without rebuilding all of the
     // Highcharts options because this array acquired a new identity.
     const outbreakPeriods = useMemo(() => (

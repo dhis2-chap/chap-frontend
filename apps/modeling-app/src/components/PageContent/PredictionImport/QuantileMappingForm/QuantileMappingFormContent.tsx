@@ -18,7 +18,6 @@ import { NavigationConfirmModal } from '@/components/NavigationConfirmModal';
 import { usePolicyOutbreakIndicators } from '@/hooks/usePolicyOutbreakIndicators';
 import { useEndemicThresholds } from '@/hooks/useEndemicThresholds';
 import { useNavigationBlocker } from '@/hooks/useNavigationBlocker';
-import { useOutbreakIndicatorDataElement } from '@/hooks/useOutbreakIndicatorDataElement';
 import { useThresholdStrategies } from '@/hooks/useThresholdStrategies';
 import {
     areThresholdParamsEqual,
@@ -28,6 +27,7 @@ import {
     type ThresholdParams,
 } from '@/utils/thresholdStrategyParams';
 import { PredictionAlertsDialog } from '../../PredictionAlerts';
+import { useOutbreakIndicatorDataElement } from '../hooks/useOutbreakIndicatorDataElement';
 import { usePostPredictionData } from '../hooks/usePostPredictionData';
 import { getOutbreakIndicatorError } from '../utils/outbreakIndicatorCompatibility';
 import { AlertOutputSection } from './AlertOutputSection';

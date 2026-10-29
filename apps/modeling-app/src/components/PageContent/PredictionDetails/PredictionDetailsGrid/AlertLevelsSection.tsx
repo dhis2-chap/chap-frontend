@@ -68,7 +68,7 @@ export const AlertLevelsSection = ({ alerts, enabled, disabled, onEnabledChange 
                         <span className={styles.toggleTitle}>{i18n.t('Alert levels')}</span>
                         <span className={styles.toggleDescription}>
                             {policyNames
-                                ? i18n.t('Show the {{alertCount}} alerts {{policy}} raised for this run, with its threshold lines.', {
+                                ? i18n.t('Show {{alertCount}} alerts from {{policy}} with their thresholds.', {
                                         alertCount: status.alertCount,
                                         policy: policyNames,
                                     })

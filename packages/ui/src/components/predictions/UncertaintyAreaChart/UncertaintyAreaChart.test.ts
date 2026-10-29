@@ -23,20 +23,19 @@ const series: PredictionOrgUnitSeries = {
 };
 
 describe('recorded alert chart periods', () => {
-    it('renders each policy threshold with its label and colour, preserving gaps', () => {
+    it('renders each threshold line with its label, preserving gaps', () => {
         renderToStaticMarkup(createElement(UncertaintyAreaChart, {
             series: { ...series, actualCases: [{ period: '2023W52', value: 2 }] },
             predictionTargetName: 'Cases',
             thresholdLines: [
-                { id: 'watch', label: 'Policy: Watch', color: '#123456', points: [{ period: '2024W1', value: 10 }] },
-                { id: 'action', label: 'Policy: Action', color: '#654321', points: [{ period: '2023W52', value: 20 }, { period: '2024W01', value: null }] },
+                { label: 'Watch', points: [{ period: '2024W1', value: 10 }] },
+                { label: 'Action', points: [{ period: '2023W52', value: 20 }, { period: '2024W01', value: null }] },
             ],
         }));
-        expect(captured.options.series?.filter(item => ['watch', 'action'].includes(item.id ?? ''))).toMatchObject([
-            { id: 'watch', type: 'line', name: 'Policy: Watch', color: '#123456', data: [{ y: null }, { y: 10 }] },
-            { id: 'action', type: 'line', name: 'Policy: Action', color: '#654321', data: [{ y: 20 }, { y: null }] },
+        expect(captured.options.series?.filter(item => item.id?.startsWith('threshold-line-'))).toMatchObject([
+            { type: 'line', name: 'Watch', data: [{ y: null }, { y: 10 }] },
+            { type: 'line', name: 'Action', data: [{ y: 20 }, { y: null }] },
         ]);
-        expect((captured.options.xAxis as Highcharts.XAxisOptions).plotBands).toEqual([]);
     });
 
     it('matches canonical periods, uses the configured colour and ignores periods outside the chart', () => {

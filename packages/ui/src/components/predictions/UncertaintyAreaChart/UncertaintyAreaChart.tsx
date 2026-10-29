@@ -38,6 +38,17 @@ const getDisabledAnimationOptions = (): DisabledAnimationOptions => ({
     },
 });
 
+const THRESHOLD_LINE_STYLE = {
+    color: '#212934',
+    dashStyle: 'Dash',
+    zIndex: 5,
+    marker: {
+        enabled: false,
+    },
+    lineWidth: 2,
+    connectNulls: false,
+} as const;
+
 const getChartOptions = (
     series: PredictionOrgUnitSeries,
     predictionTargetName: string,
@@ -217,14 +228,7 @@ const getChartOptions = (
                 type: 'line',
                 data: thresholdData,
                 name: i18n.t('Endemic threshold'),
-                color: '#212934',
-                dashStyle: 'Dash',
-                zIndex: 5,
-                marker: {
-                    enabled: false,
-                },
-                lineWidth: 2,
-                connectNulls: false,
+                ...THRESHOLD_LINE_STYLE,
             });
         }
     } else if (endemicThreshold !== undefined && endemicThreshold !== null) {
@@ -237,35 +241,24 @@ const getChartOptions = (
                 y: endemicThreshold,
             })),
             name: i18n.t('Endemic threshold'),
-            color: '#212934',
-            dashStyle: 'Dash',
-            zIndex: 5,
-            marker: {
-                enabled: false,
-            },
-            lineWidth: 2,
+            ...THRESHOLD_LINE_STYLE,
         });
     }
 
-    for (const line of thresholdLines) {
+    thresholdLines.forEach((line, index) => {
         const values = new Map(line.points.map(point => [canonicalizePeriodId(point.period), point.value]));
         chartSeries.push({
-            id: line.id,
+            id: `threshold-line-${index}`,
             type: 'line',
             name: line.label,
-            color: line.color,
             data: periods.map(period => ({
                 name: period,
                 x: getPeriodIndex(period),
                 y: values.get(canonicalizePeriodId(period)) ?? null,
             })),
-            dashStyle: 'Dash',
-            zIndex: 5,
-            marker: { enabled: false },
-            lineWidth: 2,
-            connectNulls: false,
+            ...THRESHOLD_LINE_STYLE,
         });
-    }
+    });
 
     return {
         title: {
@@ -416,9 +409,7 @@ interface PredicationChartProps {
 }
 
 export interface ThresholdChartLine {
-    id: string;
     label: string;
-    color: string;
     points: EndemicThresholdPoint[];
 }
 

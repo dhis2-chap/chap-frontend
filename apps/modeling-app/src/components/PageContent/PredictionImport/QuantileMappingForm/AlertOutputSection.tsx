@@ -1,5 +1,14 @@
 import i18n from '@dhis2/d2-i18n';
-import { NoticeBox, Switch } from '@dhis2/ui';
+import {
+    DataTable,
+    DataTableBody,
+    DataTableCell,
+    DataTableColumnHeader,
+    DataTableHead,
+    DataTableRow,
+    NoticeBox,
+    Switch,
+} from '@dhis2/ui';
 import type { AlertPolicyRead, ApiError, OutbreakProbability } from '@dhis2-chap/ui';
 import type { KeyboardEvent, MouseEvent } from 'react';
 import { ThresholdCalculationStatus } from '../../../ThresholdTilesExplorer';
@@ -86,8 +95,8 @@ export const AlertOutputSection = ({
                     </span>
                     <span className={styles.alertOutputToggleDescription}>
                         {policy
-                            ? i18n.t('Import the alert level from {{policy}} as a code for each region and period.', { policy: policy.name })
-                            : i18n.t('This prediction setup has no alert policy, so outbreak indicators are calculated from an outbreak probability and thresholds instead.')}
+                            ? i18n.t('Import the alert level code from {{policy}}.', { policy: policy.name })
+                            : i18n.t('Import 1 when an outbreak is likely, otherwise 0.')}
                     </span>
                 </div>
                 <span onClick={handleSwitchClick}>
@@ -107,22 +116,26 @@ export const AlertOutputSection = ({
                     />
                     {policy ? (
                         <>
-                            <dl className={styles.alertCodes}>
-                                <div className={styles.alertCodesHeader}>
-                                    <dt>{i18n.t('Alert level')}</dt>
-                                    <dd>{i18n.t('Imported value')}</dd>
-                                </div>
-                                <div>
-                                    <dt>{i18n.t('No alert')}</dt>
-                                    <dd>{policy.noAlertOutputCode ?? '0'}</dd>
-                                </div>
-                                {(policy.levels ?? []).map(level => (
-                                    <div key={level.name}>
-                                        <dt>{level.name}</dt>
-                                        <dd>{level.outputCode}</dd>
-                                    </div>
-                                ))}
-                            </dl>
+                            <DataTable>
+                                <DataTableHead>
+                                    <DataTableRow>
+                                        <DataTableColumnHeader>{i18n.t('Alert level')}</DataTableColumnHeader>
+                                        <DataTableColumnHeader>{i18n.t('Imported value')}</DataTableColumnHeader>
+                                    </DataTableRow>
+                                </DataTableHead>
+                                <DataTableBody>
+                                    <DataTableRow>
+                                        <DataTableCell>{i18n.t('No alert')}</DataTableCell>
+                                        <DataTableCell>{policy.noAlertOutputCode ?? '0'}</DataTableCell>
+                                    </DataTableRow>
+                                    {(policy.levels ?? []).map(level => (
+                                        <DataTableRow key={level.name}>
+                                            <DataTableCell>{level.name}</DataTableCell>
+                                            <DataTableCell>{level.outputCode}</DataTableCell>
+                                        </DataTableRow>
+                                    ))}
+                                </DataTableBody>
+                            </DataTable>
                             {policyOutputs.isReady && policyOutputs.skippedCount > 0 && (
                                 <NoticeBox warning>
                                     {i18n.t('One region-period result is missing and will be skipped.', {
