@@ -27,5 +27,6 @@ describe('forecast horizon validation', () => {
         expect(getForecastHorizonError(model({ minPredictionPeriods: 4 }), 100)).toBeUndefined();
         expect(getForecastHorizonError(model({ maxPredictionPeriods: 4 }), 5)).toContain('at most 4');
         expect(getForecastHorizonError(model({ maxPredictionPeriods: 4 }), 1)).toBeUndefined();
+        expect(getForecastHorizonError(model({ maxPredictionLength: 4 }), 5)).toContain('at most 4');
     });
 });
