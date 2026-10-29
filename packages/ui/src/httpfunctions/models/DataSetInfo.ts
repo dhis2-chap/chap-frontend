@@ -3,6 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { DataSource } from './DataSource';
+import type { MaskedRange } from './MaskedRange';
 /**
  * Summary view of a dataset — what was created plus what was derived after import.
  */
@@ -19,6 +20,10 @@ export type DataSetInfo = {
      * Purpose of dataset, e.g., 'forecasting' or 'backtesting'
      */
     type?: (string | null);
+    /**
+     * Inclusive period ranges in which `disease_cases` is masked. Set at creation and never changed. Deletes data: `disease_cases` inside the ranges is stored as empty and the submitted values cannot be recovered.
+     */
+    maskedRanges?: (Array<MaskedRange> | null);
     /**
      * Primary key.
      */

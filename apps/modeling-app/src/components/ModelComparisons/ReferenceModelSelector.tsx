@@ -8,15 +8,16 @@ type Props = {
     references: ReferenceModelResult[];
     reference?: ReferenceModelResult;
     onSelect: (id: string) => void;
+    label?: string;
 };
 
-export const ReferenceModelSelector = ({ references, reference, onSelect }: Props) => {
+export const ReferenceModelSelector = ({ references, reference, onSelect, label = i18n.t('Compare with') }: Props) => {
     const unscored = reference !== undefined && reference.status !== 'done';
     return (
         <SingleSelectField
             dense
             className={styles.controls}
-            label={i18n.t('Compare with')}
+            label={label}
             selected={reference ? String(reference.configuredModel.id) : 'none'}
             onChange={({ selected }) => onSelect(selected)}
             warning={unscored}

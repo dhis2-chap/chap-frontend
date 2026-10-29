@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-28T15:01:23.877Z\n"
-"PO-Revision-Date: 2026-10-28T15:01:23.878Z\n"
+"POT-Creation-Date: 2026-10-29T17:43:30.817Z\n"
+"PO-Revision-Date: 2026-10-29T17:43:30.818Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -1826,6 +1826,70 @@ msgstr "All locations"
 msgid "Result"
 msgstr "Result"
 
+msgid "Not defined"
+msgstr "Not defined"
+
+msgid "vs {{reference}}"
+msgstr "vs {{reference}}"
+
+msgid "All forecast horizons"
+msgstr "All forecast horizons"
+
+msgid "Horizon {{horizon}}"
+msgstr "Horizon {{horizon}}"
+
+msgid "{{count}} forecast case scored"
+msgid_plural "{{count}} forecast case scored"
+msgstr[0] "{{count}} forecast case scored"
+msgstr[1] "{{count}} forecast cases scored"
+
+msgid "Alert level"
+msgstr "Alert level"
+
+msgid "Threshold"
+msgstr "Threshold"
+
+msgid "Policy overall"
+msgstr "Policy overall"
+
+msgid "Outbreak detection"
+msgstr "Outbreak detection"
+
+msgid ""
+"How well a policy's alerts match observed outbreaks, across all splits and "
+"organisation units. Each split's thresholds come from the data before it."
+msgstr ""
+"How well a policy's alerts match observed outbreaks, across all splits and "
+"organisation units. Each split's thresholds come from the data before it."
+
+msgid "Could not load outbreak scoring"
+msgstr "Could not load outbreak scoring"
+
+msgid "Manage alert policies"
+msgstr "Manage alert policies"
+
+msgid "Split by horizon"
+msgstr "Split by horizon"
+
+msgid "Compare with baseline model"
+msgstr "Compare with baseline model"
+
+msgid "Show all metrics"
+msgstr "Show all metrics"
+
+msgid "Could not score outbreak detection"
+msgstr "Could not score outbreak detection"
+
+msgid "Could not score the baseline model"
+msgstr "Could not score the baseline model"
+
+msgid ""
+"Each score is compared with the baseline model {{reference}} under the same "
+"policy."
+msgstr ""
+"Each score is compared with the baseline model {{reference}} under the same "
+"policy."
+
 msgid "Start period"
 msgstr "Start period"
 
@@ -2474,9 +2538,6 @@ msgstr "Remove filter"
 
 msgid "Filter by alert level"
 msgstr "Filter by alert level"
-
-msgid "Alert level"
-msgstr "Alert level"
 
 msgid "Select all"
 msgstr "Select all"

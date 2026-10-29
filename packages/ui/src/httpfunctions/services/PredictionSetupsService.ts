@@ -140,8 +140,10 @@ export class PredictionSetupsService {
      * arrived, a model investigation, etc.). Returns a job id; track it via
      * ``/v1/jobs/{id}`` or filter the jobs list with ``predictionSetupId`` to see every
      * job this setup has launched. Returns 404 if the setup is unknown, 409 if its
-     * configured model has been archived, 422 if ``provided_data`` is empty or missing
-     * the backtest's target column. Forecasts use the same target as the backtest.
+     * configured model has been archived, 422 if ``provided_data`` is empty, missing
+     * the backtest's target column, or of a different period type than the backtest
+     * dataset's masked ranges. Forecasts use the same target, future-weather provider and
+     * masked ranges as the backtest: the ranges are copied onto the run's new dataset.
      * @param predictionSetupId
      * @param requestBody
      * @returns JobResponse Successful Response
