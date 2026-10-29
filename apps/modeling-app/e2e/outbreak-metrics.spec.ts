@@ -15,7 +15,7 @@ test.describe.serial('outbreak detection scores', () => {
         test.skip(response.status() === 404, 'Chap Core predates policy-based outbreak metrics');
     });
 
-    test('scores a selected policy, expands metrics and recomputes by horizon and baseline', async ({ page }) => {
+    test('scores a selected policy, expands metrics and recomputes by horizon', async ({ page }) => {
         evaluation = await createCompletedNaiveEvaluation(page, `E2E outbreak evaluation ${Date.now()}`);
         const policy: AlertPolicyCreate = {
             name: policyName,
@@ -30,14 +30,13 @@ test.describe.serial('outbreak detection scores', () => {
 
         await page.goto(`/#/evaluate/${evaluation.id}`);
         const widget = page.locator('[data-test="outbreak-metrics"]');
-        await expect(widget.getByText('Select an alert policy', { exact: true })).toBeVisible();
+        await expect(widget.getByText('Alert policy', { exact: true })).toBeVisible();
         await expect(widget.getByRole('table')).toHaveCount(0);
         await widget.locator('[data-test="outbreak-policy"]').click();
         const scored = page.waitForResponse(response => response.url().includes(`/backtests/${evaluation.id}/outbreak-metrics?`));
         await page.getByText(policyName, { exact: true }).click();
         const response = await scored;
         expect(new URL(response.url()).searchParams.get('alertPolicyId')).toBe(String(policyId));
-        expect(new URL(response.url()).searchParams.get('baselineBeforeFirstSplit')).toBe('true');
         const scores = await readJson<OutbreakMetricsResponse>(response, 'Score outbreak detection');
         expect(scores.rows[0].nCells).toBeGreaterThan(0);
         await expect(widget.getByRole('heading', { name: 'All forecast horizons' })).toBeVisible();
@@ -49,15 +48,16 @@ test.describe.serial('outbreak detection scores', () => {
         for (const level of scores.rows[0].levels) {
             const row = widget.getByRole('row').filter({ has: page.getByRole('cell', { name: level.level, exact: true }) });
             const values = await row.getByRole('cell').allTextContents();
-            expect(values.slice(1)).toEqual(Object.values(level.metrics).map(value => value == null
+            expect(values.slice(2)).toEqual(Object.values(level.metrics).map(value => value == null
                 ? 'Not defined'
                 : value.toLocaleString('en-US', { maximumFractionDigits: 3 })));
         }
         await expect(widget.getByText('Macro F1', { exact: true })).toBeVisible();
         await expect(widget.getByText('Weighted kappa', { exact: true })).toBeVisible();
+        await expect(widget.getByText('Categorical accuracy', { exact: true })).toBeVisible();
 
         const grouped = page.waitForResponse(response => response.url().includes('/outbreak-metrics?') && response.url().includes('groupBy=horizon_distance'));
-        await widget.getByLabel('Split by forecast horizon', { exact: true }).check();
+        await widget.getByLabel('Split by horizon', { exact: true }).check();
         const horizons = await readJson<OutbreakMetricsResponse>(await grouped, 'Score forecast horizons');
         expect(horizons.rows.length).toBeGreaterThan(1);
         expect(horizons.rows.reduce((total, row) => total + row.nCells, 0)).toBe(scores.rows[0].nCells);
@@ -66,10 +66,6 @@ test.describe.serial('outbreak detection scores', () => {
             await expect(widget.getByRole('heading', { name: `Horizon ${row.horizonDistance}`, exact: true })).toBeVisible();
         }
 
-        const wholeDataset = page.waitForResponse(response => response.url().includes('/outbreak-metrics?') && response.url().includes('baselineBeforeFirstSplit=false'));
-        await widget.getByLabel('Calculate thresholds from data before the first forecast only', { exact: true }).uncheck();
-        await readJson<OutbreakMetricsResponse>(await wholeDataset, 'Score with the whole dataset baseline');
-        await expect(widget.getByRole('table')).toHaveCount(horizons.rows.length);
         await widget.getByRole('button', { name: 'Show fewer metrics', exact: true }).click();
         await expect(widget.getByRole('columnheader', { name: 'MCC', exact: true })).toHaveCount(0);
     });

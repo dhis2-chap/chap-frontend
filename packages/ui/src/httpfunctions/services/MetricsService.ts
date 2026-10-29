@@ -55,24 +55,22 @@ export class MetricsService {
      * Score a backtest's outbreak alerts against an alert policy
      * Judge how well a backtest's forecasts would have raised the alerts of an alert policy.
      *
-     * Each level's threshold is computed by its strategy, as in `POST /v1/analytics/thresholds`.
-     * A cell (location, period, horizon) is an outbreak at a level when observed cases exceed
-     * the threshold, and is alerted when the share of forecast samples above it reaches the
-     * level's `exceedanceThreshold`. Every level gets the binary metrics; the levels together
-     * get the categorical metrics on the most severe level breached. See
-     * `GET /v1/analytics/outbreak-metrics` for the metrics.
+     * Each level's threshold is computed by its strategy, as in `POST /v1/analytics/thresholds`,
+     * per split from the observations before the split's first forecast period: what a live
+     * run with that history would have used. A cell (location, period, horizon) is an outbreak
+     * at a level when observed cases exceed the threshold, and is alerted when the share of
+     * forecast samples above it reaches the level's `exceedanceThreshold`. Every level gets the
+     * binary metrics; the levels together get the categorical metrics on the most severe level
+     * breached. See `GET /v1/analytics/outbreak-metrics` for the metrics.
      *
      * `groupBy` (repeatable: `location`, `time_period`, `horizon_distance`) splits the cells
      * into one row per group; without it every cell is pooled into one row.
      *
-     * Thresholds are computed from the backtest's whole dataset by default. With
-     * `baselineBeforeFirstSplit`, only observations before the first forecast period are used,
-     * so the scored periods cannot raise their own threshold. 404 if the backtest or policy
-     * is unknown; 400 if the policy has no levels or no threshold can be computed.
+     * 404 if the backtest or policy is unknown; 400 if the policy has no levels, no threshold
+     * can be computed, or no cell has both an observation and a threshold at every level.
      * @param backtestId
      * @param alertPolicyId
      * @param groupBy
-     * @param baselineBeforeFirstSplit
      * @returns OutbreakMetricsResponse Successful Response
      * @throws ApiError
      */
@@ -80,7 +78,6 @@ export class MetricsService {
         backtestId: number,
         alertPolicyId: number,
         groupBy?: (Array<DataDimension> | null),
-        baselineBeforeFirstSplit: boolean = false,
     ): CancelablePromise<OutbreakMetricsResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -91,7 +88,6 @@ export class MetricsService {
             query: {
                 'alertPolicyId': alertPolicyId,
                 'groupBy': groupBy,
-                'baselineBeforeFirstSplit': baselineBeforeFirstSplit,
             },
             errors: {
                 422: `Validation Error`,

@@ -49,7 +49,7 @@ export const formatComparison = (value: number, metric?: MetricInfo) => {
 };
 
 /* How to read a comparison with the named reference. Unknown operators fall back to the backend's own description. */
-export const getComparisonGuidance = (metric: MetricInfo | undefined, reference: string) => {
+export const getComparisonGuidance = (metric: Partial<MetricInfo> | undefined, reference: string) => {
     switch (metric?.comparisonOp) {
         case 'skill_ratio':
             return i18n.t('Relative improvement over {{reference}}. +20% means 20% better than it, -20% means 20% worse.', { reference });
@@ -65,7 +65,7 @@ export const getComparisonGuidance = (metric: MetricInfo | undefined, reference:
 };
 
 /* How to read a score, from the direction or target the backend declares for the metric. */
-export const getMetricGuidance = (metric?: MetricInfo) => {
+export const getMetricGuidance = (metric?: Partial<MetricInfo>) => {
     if (metric?.target != null) {
         const target = formatScore(metric.target, metric.unit);
         return metric.targetBehavior === 'at_least'

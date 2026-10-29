@@ -3,7 +3,6 @@
     display: flex;
     flex-direction: column;
     gap: var(--spacers-dp12);
-    align-items: flex-start;
     min-inline-size: 0;
 }
 
@@ -14,12 +13,14 @@
     line-height: 1.5;
 }
 
-.levels {
-    margin: 0;
-    padding-inline-start: var(--spacers-dp16);
+
+.policySelect {
+    min-inline-size: 240px;
+}
+
+.threshold {
     color: var(--colors-grey700);
-    font-size: 0.8rem;
-    line-height: 1.8;
+    white-space: nowrap;
 }
 
 .result {
@@ -47,16 +48,7 @@
     color: var(--colors-grey900);
 }
 
-.table {
-    overflow-x: auto;
-    font-variant-numeric: tabular-nums;
-}
 
-.metricLabel {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--spacers-dp4);
-}
 
 .policyScores {
     display: flex;
