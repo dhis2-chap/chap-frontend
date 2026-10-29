@@ -163,12 +163,10 @@ export const QuantileMappingFormContent = ({
         params: thresholdParams,
         enabled: useAlertOutputs && !policy,
     });
-    // Policy imports write the policy's codes; threshold imports write 1 or 0.
+    // Policy imports write the codes this run produced; threshold imports write 1 or 0.
     const outbreakValues = useMemo(() => (
-        policy
-            ? [policy.noAlertOutputCode ?? '0', ...(policy.levels ?? []).map(level => level.outputCode)]
-            : ['0', '1']
-    ), [policy]);
+        policy ? policyOutputs.indicators.map(indicator => indicator.value) : ['0', '1']
+    ), [policy, policyOutputs.indicators]);
     const {
         dataElement: outbreakIndicatorDataElement,
         isLoading: isOutbreakIndicatorLoading,
