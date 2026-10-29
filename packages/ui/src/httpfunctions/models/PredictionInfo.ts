@@ -17,6 +17,10 @@ export type PredictionInfo = {
      */
     predictionSetupId?: (number | null);
     /**
+     * Alert policy captured when the run started; `None` means no policy was recorded.
+     */
+    alertPolicyId?: (number | null);
+    /**
      * Name of the configured model that produced the prediction.
      */
     modelId: string;
