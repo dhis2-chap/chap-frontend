@@ -12,18 +12,21 @@ import {
 } from '@dhis2-chap/ui';
 import css from './EvaluationSelector.module.css';
 import i18n from '@dhis2/d2-i18n';
+import { useBaselineBacktests } from '../../hooks/useBaselineBacktests';
 
 type EvaluationCompatibleSelector = Omit<
     EvaluationSelectorBaseProps,
     'available'
 > & {
     compatibleEvaluationId?: number;
+    specificationId?: number;
 };
 
 export const EvaluationCompatibleSelector = ({
     onSelect,
     selected,
     compatibleEvaluationId,
+    specificationId,
     ...singleSelectProps
 }: EvaluationCompatibleSelector) => {
     const {
@@ -46,6 +49,13 @@ export const EvaluationCompatibleSelector = ({
         staleTime: 60 * 5 * 1000,
         cacheTime: 60 * 5 * 1000,
     });
+    const baselines = useBaselineBacktests(specificationId);
+    const availableEvaluations = [
+        ...(compatibleEvaluations ?? []).filter(evaluation => !baselines.backtests.some(baseline => baseline.id === evaluation.id)),
+        ...baselines.backtests,
+    ];
+    const allLoaded = isSuccess && baselines.isSuccess;
+    const loadError = error || baselines.error;
     // allow inline onSelect function
     const onSelectRef = useRef(onSelect);
     onSelectRef.current = onSelect;
@@ -57,21 +67,21 @@ export const EvaluationCompatibleSelector = ({
         if (
             selected &&
             compatibleEvaluationId != undefined &&
-            isSuccess &&
-            !compatibleEvaluations.some(e => e.id == selected?.id)
+            allLoaded &&
+            !availableEvaluations.some(e => e.id == selected?.id)
         ) {
             onSelectRef.current(undefined);
         }
-    }, [compatibleEvaluations, compatibleEvaluationId, isSuccess]);
+    }, [availableEvaluations, compatibleEvaluationId, allLoaded]);
 
     const getListMessage = () => {
-        if (isSuccess && compatibleEvaluations?.length === 0) {
+        if (allLoaded && availableEvaluations.length === 0) {
             return <Help>{i18n.t('No compatible evaluations found')}</Help>;
         }
-        if (error) {
+        if (loadError) {
             return (
                 <Help error>
-                    {(error as Error).message ?? error.toString()}
+                    {(loadError as Error).message ?? loadError.toString()}
                 </Help>
             );
         }
@@ -81,12 +91,12 @@ export const EvaluationCompatibleSelector = ({
     return (
         <div className={css.selectorWrapper}>
             <EvaluationSelectorBase
-                available={compatibleEvaluations ?? []}
+                available={availableEvaluations}
                 selected={selected}
                 onSelect={onSelect}
                 disabled={compatibleEvaluationId == undefined}
-                error={isError}
-                loading={isLoading}
+                error={isError || !!baselines.error}
+                loading={isLoading || baselines.isLoading}
                 listMessage={getListMessage()}
                 {...singleSelectProps}
                 placeholder={i18n.t('Select evaluation to compare with')}

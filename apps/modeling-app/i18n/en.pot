@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-28T15:01:23.877Z\n"
-"PO-Revision-Date: 2026-10-28T15:01:23.878Z\n"
+"POT-Creation-Date: 2026-10-29T17:16:44.767Z\n"
+"PO-Revision-Date: 2026-10-29T17:16:44.768Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -2775,6 +2775,9 @@ msgstr "Requires superuser authority"
 
 msgid "Model not found"
 msgstr "Model not found"
+
+msgid "{{name}} (baseline)"
+msgstr "{{name}} (baseline)"
 
 msgid "Manage the policies used to raise alerts from forecasts."
 msgstr "Manage the policies used to raise alerts from forecasts."
