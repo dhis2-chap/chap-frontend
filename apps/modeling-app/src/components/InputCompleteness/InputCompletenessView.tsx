@@ -50,7 +50,7 @@ export const InputCompletenessView = ({ observations, periods, orgUnits, variabl
 
     const locationCount = new Set(orgUnits).size;
     const options: Highcharts.Options = {
-        chart: { type: 'line', height: 280, animation: false },
+        chart: { type: 'line', height: 280, animation: false, zooming: { type: 'x' } },
         title: { text: undefined },
         credits: { enabled: false },
         legend: { enabled: columns.length > 1 },
