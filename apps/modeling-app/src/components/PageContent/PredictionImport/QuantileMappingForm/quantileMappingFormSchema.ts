@@ -8,7 +8,7 @@ import { thresholdParamsSchema } from '@/utils/thresholdStrategyParams';
 
 const outbreakProbabilitySchema = z.custom<OutbreakProbability>(
     value => OUTBREAK_PROBABILITY_OPTIONS.includes(value as OutbreakProbability),
-    { message: i18n.t('Alert probability is required') },
+    { message: i18n.t('Signal probability is required') },
 );
 
 // Each field falls back to undefined on its own, so one stale or invalid

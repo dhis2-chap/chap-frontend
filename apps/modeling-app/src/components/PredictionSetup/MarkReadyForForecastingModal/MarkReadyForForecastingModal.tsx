@@ -153,16 +153,16 @@ export const MarkReadyForForecastingModal = ({
                             render={({ field }) => (
                                 <SingleSelectField
                                     className={styles.alertPolicySelect}
-                                    label={i18n.t('Alert policy')}
+                                    label={i18n.t('Signal policy')}
                                     helpText={hasNoAlertPolicies
-                                        ? i18n.t('No alert policies exist yet. Create one under Alert policies to raise alerts from this setup.')
-                                        : i18n.t('Every prediction run automatically raises pending alerts with this policy, for review before release. Leave empty to run predictions without alerts.')}
-                                    placeholder={i18n.t('No alert policy')}
+                                        ? i18n.t('No signal policies exist yet. Create one under Signal policies to raise signals from this setup.')
+                                        : i18n.t('Every prediction run automatically raises pending signals with this policy, for review before release. Leave empty to run predictions without signals.')}
+                                    placeholder={i18n.t('No signal policy')}
                                     loading={alertPoliciesLoading}
                                     disabled={hasNoAlertPolicies || !!alertPoliciesError}
                                     error={!!alertPoliciesError}
                                     validationText={alertPoliciesError
-                                        ? i18n.t('Unable to load alert policies{{colon}} {{message}}', { colon: ':', message: getChapErrorMessage(alertPoliciesError) })
+                                        ? i18n.t('Unable to load signal policies{{colon}} {{message}}', { colon: ':', message: getChapErrorMessage(alertPoliciesError) })
                                         : undefined}
                                     clearable
                                     // An unmatched selected value makes SingleSelect throw in dev builds.

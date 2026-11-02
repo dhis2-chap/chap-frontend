@@ -46,7 +46,7 @@ import { SyncUrlWithGlobalShell } from './utils/syncUrlWithGlobalShell';
 import { NewPredictionPage } from './pages/NewPredictionPage';
 import { PredictionImportPage } from './pages/PredictionImportPage';
 import { PredictionRunDetailsPage } from './pages/PredictionRunDetailsPage';
-import { AlertsPage } from './pages/AlertsPage/AlertsPage';
+import { SignalsPage } from './pages/SignalsPage/SignalsPage';
 import { PredictionActivityPage } from './pages/PredictionActivityPage';
 import { GuidesPage } from './pages/GuidesPage';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -184,9 +184,13 @@ const router = createHashRouter([
                         element: <JobsPage />,
                     },
                     {
+                        path: '/signals',
+                        handle: { breadcrumb: () => i18n.t('Signal policies') } satisfies RouteHandle,
+                        element: <SignalsPage />,
+                    },
+                    {
                         path: '/alerts',
-                        handle: { breadcrumb: () => i18n.t('Alert policies') } satisfies RouteHandle,
-                        element: <AlertsPage />,
+                        element: <Navigate to="/signals" replace />,
                     },
                     {
                         path: '/predictions',

@@ -350,8 +350,8 @@ export const ThresholdTilesExplorer = ({
                         dense
                         clearable
                         clearText={i18n.t('Remove filter')}
-                        placeholder={i18n.t('Filter by alert level')}
-                        prefix={selectedAlertLevels.length > 0 ? i18n.t('Alert level') : undefined}
+                        placeholder={i18n.t('Filter by signal level')}
+                        prefix={selectedAlertLevels.length > 0 ? i18n.t('Signal level') : undefined}
                         selected={selectedAlertLevels}
                         onChange={({ selected }) => setAlertLevelSelection(selected)}
                         dataTest="alert-level-filter"
