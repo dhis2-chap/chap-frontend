@@ -7,7 +7,7 @@ import { type DatasetFormValues } from './useDatasetFormState';
 import { type DatasetImportSummary } from './useCreateDataset';
 import { type Dhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
 
-/** Fetches the dataset from DHIS2 and has CHAP validate it in a dry run, without saving anything. */
+/** Fetches the dataset from DHIS2 and has Chap validate it in a dry run, without saving anything. */
 export const useInspectDataset = (periodSettings: Dhis2PeriodSettings) => {
     const dataEngine = useDataEngine();
 

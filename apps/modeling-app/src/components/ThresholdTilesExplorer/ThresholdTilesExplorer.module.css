@@ -73,6 +73,19 @@
     max-inline-size: 100%;
 }
 
+/* Sized to its chips so selected levels sit side by side; wraps only when the row is too narrow. */
+.alertSelect {
+    inline-size: max-content;
+    min-inline-size: 220px;
+    max-inline-size: 100%;
+}
+
+/* Flex column so the inline-block Divider gets no line-box spacing. */
+.selectAll {
+    display: flex;
+    flex-direction: column;
+}
+
 .zoomControls {
     display: flex;
     flex-wrap: wrap;
@@ -301,7 +314,8 @@
     }
 
     .regionSearch,
-    .statusSelect {
+    .statusSelect,
+    .alertSelect {
         inline-size: 100%;
         min-inline-size: 0;
     }

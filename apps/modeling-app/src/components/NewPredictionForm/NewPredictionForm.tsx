@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { Controller, FormProvider } from 'react-hook-form';
 import { Card } from '@dhis2-chap/ui';
@@ -17,10 +18,13 @@ import {
 import { PredictionSetupNoticeBox } from './components/PredictionSetupNoticeBox';
 import { PeriodSelectionField } from './components/PeriodSelectionField';
 import styles from './NewPredictionForm.module.css';
+import { SummaryModal } from '../ModelExecutionForm/SummaryModal';
+import { ChapErrorNotice } from '../ChapErrorNotice';
 import { useNavigationBlocker } from '../../hooks/useNavigationBlocker';
 import { NavigationConfirmModal } from '../NavigationConfirmModal';
 import { type Dhis2PeriodSettings, useDhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
 import { useModels } from '@/hooks/useModels';
+import { usePredictionSetup } from '@/hooks/usePredictionSetup';
 import { hasRevisionMismatch } from '@/utils/modelHealth';
 import { ModelHealthNotice } from '@/components/ModelHealth/ModelHealth';
 
@@ -54,6 +58,7 @@ const NewPredictionFormFields = ({
         handleStartPrediction,
         isSubmitting,
         error,
+        importSummary,
         periodType,
         fromPeriod,
         anchorPeriod,
@@ -64,8 +69,10 @@ const NewPredictionFormFields = ({
         returnTo,
     });
 
+    const [showImportSummary, setShowImportSummary] = useState(false);
     const { models } = useModels();
     const model = models?.find(model => String(model.id) === context.initialValues.modelId);
+    const { predictionSetup } = usePredictionSetup(predictionSetupId);
 
     const {
         showConfirmModal,
@@ -85,6 +92,7 @@ const NewPredictionFormFields = ({
                                 modelId={context.initialValues.modelId}
                                 periodType={periodType}
                                 fromPeriod={fromPeriod}
+                                alertPolicyName={predictionSetup?.alertPolicy?.name}
                             />
 
                             <ModelHealthNotice model={model} />
@@ -130,18 +138,35 @@ const NewPredictionFormFields = ({
                             </div>
 
                             {!!error && (
-                                <NoticeBox
-                                    error
-                                    title={i18n.t('There was an error')}
+                                <ChapErrorNotice
+                                    error={error}
+                                    title={i18n.t('Prediction could not run')}
                                     className={styles.errorNotice}
                                 >
-                                    {error.message}
-                                </NoticeBox>
+                                    {!!importSummary?.rejected.length && (
+                                        <>
+                                            <p>
+                                                {i18n.t('Check or import the required data for the listed variables and organisation units, or adjust the training period in the prediction setup before retrying.')}
+                                            </p>
+                                            <Button small onClick={() => setShowImportSummary(true)}>
+                                                {i18n.t('View rejected data')}
+                                            </Button>
+                                        </>
+                                    )}
+                                </ChapErrorNotice>
                             )}
                         </div>
                     </Card>
                 </div>
             </FormProvider>
+
+            {showImportSummary && importSummary && (
+                <SummaryModal
+                    importSummary={importSummary}
+                    title={i18n.t('Prediction data rejected')}
+                    onClose={() => setShowImportSummary(false)}
+                />
+            )}
 
             {showConfirmModal && (
                 <NavigationConfirmModal

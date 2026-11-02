@@ -1,0 +1,29 @@
+import { useQuery } from '@tanstack/react-query';
+import { ApiError, SystemService } from '../../httpfunctions';
+import type { Route } from '../routeSettings';
+
+// Older Chap versions omit this field. Keep the generated client unchanged.
+type ChapStatus = Awaited<ReturnType<typeof SystemService.systemInfoSystemInfoGet>> & {
+    auth_required?: boolean;
+};
+
+type Props = {
+    route: Route | undefined;
+};
+
+export const useChapStatus = ({ route }: Props) => {
+    const { data: status, error, isLoading } = useQuery<ChapStatus, ApiError>({
+        queryKey: ['systemInfo', route?.url],
+        queryFn: () => SystemService.systemInfoSystemInfoGet(),
+        enabled: !!route,
+        staleTime: 5 * 60 * 1000, // 5 minutes
+        cacheTime: 5 * 60 * 1000, // 5 minutes
+        retry: 0, // Don't retry on error
+    });
+
+    return {
+        status,
+        error,
+        isLoading,
+    };
+};

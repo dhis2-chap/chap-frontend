@@ -1,4 +1,3 @@
-import type { KeyboardEvent, MouseEvent } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import {
     Button,
@@ -12,11 +11,15 @@ import {
 import { convertServerToClientPeriod, PERIOD_TYPES } from '@dhis2-chap/core';
 import { DEFAULT_OUTBREAK_PROBABILITY, getThresholdTileViewModels, Tag } from '@dhis2-chap/ui';
 import type {
+    AlertPolicyRead,
     ModelSpecRead,
     OutbreakProbability,
     PredictionInfo,
 } from '@dhis2-chap/ui';
 import { useMemo } from 'react';
+import { useAlertPolicyThresholds } from '@/hooks/useAlertPolicyThresholds';
+import { usePredictionAlerts } from '@/hooks/usePredictionAlerts';
+import { Features, useIsFeatureAvailable } from '@/hooks/useIsFeatureAvailable';
 import { useEndemicThresholds } from '@/hooks/useEndemicThresholds';
 import {
     DEFAULT_THRESHOLD_STRATEGY,
@@ -31,9 +34,11 @@ import {
     ThresholdTilesExplorer,
 } from '../../../ThresholdTilesExplorer';
 import { usePredictionSeries } from '../hooks/usePredictionSeries';
+import { AlertLevelsSection } from './AlertLevelsSection';
 import styles from './PredictionDetailsGrid.module.css';
 
 export type PredictionRunAlertSettings = {
+    alertsEnabled: boolean;
     alertProbability: OutbreakProbability;
     thresholdParams: ThresholdParams;
     thresholdsEnabled: boolean;
@@ -47,7 +52,10 @@ type Props = {
     settings: PredictionRunAlertSettings;
 };
 
+const NO_POLICIES: AlertPolicyRead[] = [];
+
 const DEFAULT_SETTINGS: PredictionRunAlertSettings = {
+    alertsEnabled: true,
     alertProbability: DEFAULT_OUTBREAK_PROBABILITY,
     thresholdParams: getDefaultThresholdParams(DEFAULT_THRESHOLD_STRATEGY),
     thresholdsEnabled: false,
@@ -68,7 +76,19 @@ export const PredictionDetailsGrid = ({
         isLoading: isSeriesLoading,
         error: seriesError,
     } = usePredictionSeries({ prediction, model });
+    const { isAvailable: isAlertsAvailable } = useIsFeatureAvailable(Features.PREDICTION_ALERTS);
+    const alerts = usePredictionAlerts(prediction, isAlertsAvailable);
     const showThresholds = settings.thresholdsEnabled;
+    const showPolicy = isAlertsAvailable && settings.alertsEnabled && !showThresholds;
+    const raisedAlerts = showPolicy && alerts.displayedAlerts.length > 0
+        ? alerts.displayedAlerts
+        : undefined;
+    const policyThresholds = useAlertPolicyThresholds({
+        datasetId: prediction.datasetId,
+        series,
+        policies: alerts.status.kind === 'policy' ? alerts.status.policies : NO_POLICIES,
+        enabled: showPolicy,
+    });
 
     const {
         thresholdMap,
@@ -85,15 +105,16 @@ export const PredictionDetailsGrid = ({
 
     // During a recalculation the previous thresholds stay visible
     // (keepPreviousData), so the grid is not remounted and the status filter
-    // survives a param change.
-    const thresholdsVisible = showThresholds && !!thresholdMap;
+    // survives a param change. Once exploration is off they are ignored.
+    const activeThresholdMap = showThresholds ? thresholdMap : undefined;
+    const thresholdsVisible = !!activeThresholdMap;
 
     const {
         summary,
         tiles,
     } = useMemo(() => (
-        getThresholdTileViewModels(series, settings.alertProbability, thresholdMap)
-    ), [series, settings.alertProbability, thresholdMap]);
+        getThresholdTileViewModels(series, settings.alertProbability, activeThresholdMap)
+    ), [series, settings.alertProbability, activeThresholdMap]);
 
     const predictionPeriods = useMemo(() => {
         const points = series[0]?.points ?? [];
@@ -115,29 +136,14 @@ export const PredictionDetailsGrid = ({
         });
     };
 
-    const toggleThresholds = () => {
-        updateSettings({ thresholdsEnabled: !settings.thresholdsEnabled });
-    };
-
-    const handleThresholdKeyDown = (event: KeyboardEvent) => {
-        if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            toggleThresholds();
-        }
-    };
-
-    const handleSwitchClick = (event: MouseEvent) => {
-        event.stopPropagation();
-    };
-
     const summaryList = (
         <dl className={styles.summaryList}>
             <SummaryRow
-                label={i18n.t('Regions with alerts')}
+                label={i18n.t('Organisation units exceeding threshold')}
                 value={`${summary.regionsWithAlerts} / ${summary.totalRegions}`}
             />
             <SummaryRow
-                label={i18n.t('Alert periods')}
+                label={i18n.t('Periods exceeding threshold')}
                 value={summary.alertPeriods}
             />
             {summary.unavailableThresholds > 0 && (
@@ -173,28 +179,37 @@ export const PredictionDetailsGrid = ({
                 </div>
             )}
 
-            <div
+            {isAlertsAvailable && (
+                <AlertLevelsSection
+                    alerts={alerts}
+                    enabled={settings.alertsEnabled}
+                    disabled={showThresholds}
+                    onEnabledChange={alertsEnabled => updateSettings({ alertsEnabled })}
+                />
+            )}
+            {showPolicy && (
+                <ThresholdCalculationStatus
+                    isLoading={policyThresholds.isLoading}
+                    isPaused={policyThresholds.isPaused}
+                    error={policyThresholds.error}
+                    onRetry={policyThresholds.refetch}
+                    hint={i18n.t('Edit the alert policy to change its thresholds.')}
+                />
+            )}
+            <Switch
                 className={styles.toggleButton}
-                onClick={toggleThresholds}
-                onKeyDown={handleThresholdKeyDown}
-                role="button"
-                tabIndex={0}
-            >
-                <div className={styles.toggleText}>
-                    <span className={styles.toggleTitle}>
-                        {i18n.t('Outbreak thresholds')}
+                aria-label={i18n.t('Explore thresholds')}
+                checked={settings.thresholdsEnabled}
+                onChange={({ checked }) => updateSettings({ thresholdsEnabled: checked })}
+                label={(
+                    <span className={styles.toggleText}>
+                        <span className={styles.toggleTitle}>{i18n.t('Explore thresholds')}</span>
+                        <span className={styles.toggleDescription}>
+                            {i18n.t('Try other threshold settings. Hides recorded alerts.')}
+                        </span>
                     </span>
-                    <span className={styles.toggleDescription}>
-                        {i18n.t('Show outbreak status and threshold overlays for this run.')}
-                    </span>
-                </div>
-                <span onClick={handleSwitchClick}>
-                    <Switch
-                        checked={settings.thresholdsEnabled}
-                        onChange={toggleThresholds}
-                    />
-                </span>
-            </div>
+                )}
+            />
             {showThresholds && (
                 <>
                     <ThresholdStrategyControl
@@ -256,16 +271,12 @@ export const PredictionDetailsGrid = ({
             predictionTargetName={predictionTargetName}
             selectedProbability={settings.alertProbability}
             tiles={tiles}
+            raisedAlerts={raisedAlerts}
+            policyThresholdLines={showPolicy ? policyThresholds.linesByOrgUnit : undefined}
             showThresholds={thresholdsVisible}
             panel={panelContent}
             panelHeader={i18n.t('Prediction settings')}
             gridResetKey={String(prediction.id)}
-            zoomResetDeps={[
-                prediction.id,
-                settings.alertProbability,
-                settings.thresholdsEnabled,
-                settings.thresholdParams,
-            ]}
         />
     );
 };

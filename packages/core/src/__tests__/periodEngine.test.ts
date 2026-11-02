@@ -32,7 +32,7 @@ describe('periodEngine', () => {
         );
     });
 
-    it('maps CHAP period aliases to DHIS2 fixed period types', () => {
+    it('maps Chap period aliases to DHIS2 fixed period types', () => {
         expect(toDhis2FixedPeriodType('MONTH')).toBe('MONTHLY');
         expect(toDhis2FixedPeriodType('WEEK')).toBe('WEEKLY');
         expect(toDhis2FixedPeriodType('MONTHLY')).toBe('MONTHLY');

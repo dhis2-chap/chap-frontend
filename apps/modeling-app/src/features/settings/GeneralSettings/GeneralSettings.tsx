@@ -1,7 +1,5 @@
 import styles from './GeneralSettings.module.css';
-import { RouteSettings } from '../RouteSettings';
-import { ChapSettings } from '../ChapSettings';
-import { useRoute } from '../../../hooks/useRoute';
+import { ChapSettings, RouteSettings, useRoute } from '@dhis2-chap/ui';
 
 export const GeneralSettings = () => {
     const { route } = useRoute();

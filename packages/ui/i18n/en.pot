@@ -5,8 +5,95 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-09-28T09:00:32.060Z\n"
-"PO-Revision-Date: 2026-09-28T09:00:32.062Z\n"
+"POT-Creation-Date: 2026-10-27T10:55:25.269Z\n"
+"PO-Revision-Date: 2026-10-27T10:55:25.269Z\n"
+
+msgid "Chap settings"
+msgstr "Chap settings"
+
+msgid "Checking..."
+msgstr "Checking..."
+
+msgid "API token rejected"
+msgstr "API token rejected"
+
+msgid "No API token configured"
+msgstr "No API token configured"
+
+msgid "Not required by this server"
+msgstr "Not required by this server"
+
+msgid "API token accepted"
+msgstr "API token accepted"
+
+msgid "Could not be verified"
+msgstr "Could not be verified"
+
+msgid "An error occurred while connecting to the Chap server."
+msgstr "An error occurred while connecting to the Chap server."
+
+msgid ""
+"Are you sure you have configured your route correctly? See the console for "
+"more details."
+msgstr ""
+"Are you sure you have configured your route correctly? See the console for "
+"more details."
+
+msgid "Server information"
+msgstr "Server information"
+
+msgid "Chap Version"
+msgstr "Chap Version"
+
+msgid "Python Version"
+msgstr "Python Version"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Connected"
+msgstr "Connected"
+
+msgid "Authentication"
+msgstr "Authentication"
+
+msgid "The Chap server rejected the API token"
+msgstr "The Chap server rejected the API token"
+
+msgid ""
+"The server is reachable, but requests are refused. Check the token for "
+"typos, then edit the route settings to enter the token configured on your "
+"Chap server."
+msgstr ""
+"The server is reachable, but requests are refused. Check the token for "
+"typos, then edit the route settings to enter the token configured on your "
+"Chap server."
+
+msgid "No API token is configured"
+msgstr "No API token is configured"
+
+msgid ""
+"The server is reachable, but it refuses requests without a token. Edit the "
+"route settings to add the token configured on your Chap server."
+msgstr ""
+"The server is reachable, but it refuses requests without a token. Edit the "
+"route settings to add the token configured on your Chap server."
+
+msgid "Chap requires an API token"
+msgstr "Chap requires an API token"
+
+msgid "Edit the route settings to add the token configured on your Chap server."
+msgstr "Edit the route settings to add the token configured on your Chap server."
+
+msgid "Restrict access to your Chap server"
+msgstr "Restrict access to your Chap server"
+
+msgid ""
+"This server does not report API token protection. Keep it on a private "
+"network or restrict access with a firewall."
+msgstr ""
+"This server does not report API token protection. Keep it on a private "
+"network or restrict access with a firewall."
 
 msgid "Median prediction"
 msgstr "Median prediction"
@@ -56,6 +143,9 @@ msgstr "Endemic threshold"
 msgid "Prediction for {{predictionTargetName}} for {{orgUnitName}}"
 msgstr "Prediction for {{predictionTargetName}} for {{orgUnitName}}"
 
+msgid "Alert level"
+msgstr "Alert level"
+
 msgid "Outbreak"
 msgstr "Outbreak"
 
@@ -67,6 +157,220 @@ msgstr "No"
 
 msgid "Number of cases"
 msgstr "Number of cases"
+
+msgid "Remove saved API token"
+msgstr "Remove saved API token"
+
+msgid "Setting API tokens is not supported on this DHIS2 version"
+msgstr "Setting API tokens is not supported on this DHIS2 version"
+
+msgid "Chap API token"
+msgstr "Chap API token"
+
+msgid "Chap API token (optional)"
+msgstr "Chap API token (optional)"
+
+msgid ""
+"A token is configured. Leave blank to keep it, or enter a new token to "
+"replace it."
+msgstr ""
+"A token is configured. Leave blank to keep it, or enter a new token to "
+"replace it."
+
+msgid ""
+"Enter the token configured on your Chap server. Leave blank if the server "
+"does not require one."
+msgstr ""
+"Enter the token configured on your Chap server. Leave blank if the server "
+"does not require one."
+
+msgid ""
+"New tokens are stored encrypted in DHIS2. Existing plain-text tokens remain "
+"readable until replaced."
+msgstr ""
+"New tokens are stored encrypted in DHIS2. Existing plain-text tokens remain "
+"readable until replaced."
+
+msgid "Route configuration"
+msgstr "Route configuration"
+
+msgid "No route found."
+msgstr "No route found."
+
+msgid "Add route"
+msgstr "Add route"
+
+msgid "Add"
+msgstr "Add"
+
+msgid "Delete route"
+msgstr "Delete route"
+
+msgid "Are you sure you want to delete this route?"
+msgstr "Are you sure you want to delete this route?"
+
+msgid "Cancel"
+msgstr "Cancel"
+
+msgid "Delete"
+msgstr "Delete"
+
+msgid "Edit route"
+msgstr "Edit route"
+
+msgid "Increase response timeout to {{timeout}} seconds"
+msgstr "Increase response timeout to {{timeout}} seconds"
+
+msgid "Save"
+msgstr "Save"
+
+msgid "Public access"
+msgstr "Public access"
+
+msgid ""
+"Your route is public and can be accessed by anyone. This can potentially "
+"expose sensitive data. If you want to restrict access, click the "
+"\"Sharing\" button and remove access for \"All users\"."
+msgstr ""
+"Your route is public and can be accessed by anyone. This can potentially "
+"expose sensitive data. If you want to restrict access, click the "
+"\"Sharing\" button and remove access for \"All users\"."
+
+msgid "Sharing"
+msgstr "Sharing"
+
+msgid "Edit"
+msgstr "Edit"
+
+msgid "The token must not contain line breaks"
+msgstr "The token must not contain line breaks"
+
+msgid "Invalid URL format"
+msgstr "Invalid URL format"
+
+msgid "URL is required"
+msgstr "URL is required"
+
+msgid "URL must end with a double wildcard (/**)"
+msgstr "URL must end with a double wildcard (/**)"
+
+msgid "Chap Core URL"
+msgstr "Chap Core URL"
+
+msgid "Error saving route"
+msgstr "Error saving route"
+
+msgid "An unknown error occurred. Please try again."
+msgstr "An unknown error occurred. Please try again."
+
+msgid ""
+"Contact your DHIS2 server administrator to allow this Chap Core URL in "
+"{{setting}} in dhis.conf and restart DHIS2."
+msgstr ""
+"Contact your DHIS2 server administrator to allow this Chap Core URL in "
+"{{setting}} in dhis.conf and restart DHIS2."
+
+msgid "Route settings"
+msgstr "Route settings"
+
+msgid ""
+"There was an error loading the route settings. Please try to reload the "
+"page."
+msgstr ""
+"There was an error loading the route settings. Please try to reload the "
+"page."
+
+msgid "If the problem persists, please contact your system administrator."
+msgstr "If the problem persists, please contact your system administrator."
+
+msgid "You do not have permission to add or modify routes."
+msgstr "You do not have permission to add or modify routes."
+
+msgid "If you think this is an error, please contact your system administrator."
+msgstr "If you think this is an error, please contact your system administrator."
+
+msgid "API token stored in plain text"
+msgstr "API token stored in plain text"
+
+msgid ""
+"Users who can read this route configuration can read its API token. Edit "
+"the route and re-enter the token to store it encrypted on supported DHIS2 "
+"versions. If the token may have been exposed, rotate it on the Chap server "
+"and enter the new token here."
+msgstr ""
+"Users who can read this route configuration can read its API token. Edit "
+"the route and re-enter the token to store it encrypted on supported DHIS2 "
+"versions. If the token may have been exposed, rotate it on the Chap server "
+"and enter the new token here."
+
+msgid "Name"
+msgstr "Name"
+
+msgid "Code"
+msgstr "Code"
+
+msgid "URL"
+msgstr "URL"
+
+msgid "API token"
+msgstr "API token"
+
+msgid "Configured"
+msgstr "Configured"
+
+msgid "Not configured"
+msgstr "Not configured"
+
+msgid "Authorities"
+msgstr "Authorities"
+
+msgid "Low response timeout"
+msgstr "Low response timeout"
+
+msgid ""
+"The response timeout is currently set to {{timeout}} seconds. This may "
+"cause long-running requests to fail before they complete. We recommend "
+"increasing it to {{recommended}} seconds."
+msgstr ""
+"The response timeout is currently set to {{timeout}} seconds. This may "
+"cause long-running requests to fail before they complete. We recommend "
+"increasing it to {{recommended}} seconds."
+
+msgid "Increase to {{recommended}} seconds"
+msgstr "Increase to {{recommended}} seconds"
+
+msgid "Error deleting route"
+msgstr "Error deleting route"
+
+msgid "Route deleted successfully"
+msgstr "Route deleted successfully"
+
+msgid "Route saved successfully"
+msgstr "Route saved successfully"
+
+msgid "Error updating route timeout"
+msgstr "Error updating route timeout"
+
+msgid "Route timeout updated successfully"
+msgstr "Route timeout updated successfully"
+
+msgid ""
+"DHIS2 cannot preserve encrypted authentication when updating this route. "
+"Re-enter the Chap API token, or explicitly remove it, before saving. Saving "
+"replaces all encrypted authentication on the route, including custom "
+"headers."
+msgstr ""
+"DHIS2 cannot preserve encrypted authentication when updating this route. "
+"Re-enter the Chap API token, or explicitly remove it, before saving. Saving "
+"replaces all encrypted authentication on the route, including custom "
+"headers."
+
+msgid ""
+"This app does not support setting API tokens on this DHIS2 version. Upgrade "
+"DHIS2 to 2.40.7, 2.41.4, 2.42 or later to store the token encrypted."
+msgstr ""
+"This app does not support setting API tokens on this DHIS2 version. Upgrade "
+"DHIS2 to 2.40.7, 2.41.4, 2.42 or later to store the token encrypted."
 
 msgid "More"
 msgstr "More"

@@ -1,8 +1,0 @@
-node_modules
-build
-.d2
-.dockerignore
-Dockerfile
-README.md
-.env
-.doc

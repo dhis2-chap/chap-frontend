@@ -1,6 +1,6 @@
 const config = {
     type: 'app',
-    title: 'CHAP Uncertainty Chart',
+    title: 'Chap Uncertainty Chart',
 
     id: '5cdf64e0-d046-4e06-bf2f-c5b783987916',
     minDHIS2Version: '2.40.5',

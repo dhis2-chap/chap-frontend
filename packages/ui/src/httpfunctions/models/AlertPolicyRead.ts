@@ -12,6 +12,10 @@ export type AlertPolicyRead = {
      */
     name: string;
     /**
+     * Output code for the no-alert state. Must be non-empty and distinct from every level's code. For DHIS2 import, it must match the destination data element's value type or option set.
+     */
+    noAlertOutputCode?: string;
+    /**
      * The tiers of this policy, ordered from least to most severe.
      */
     levels?: Array<AlertLevel>;

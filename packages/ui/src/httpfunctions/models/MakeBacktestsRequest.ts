@@ -4,6 +4,8 @@
 /* eslint-disable */
 /**
  * Request to run several configured models on one dataset under one set of evaluation parameters.
+ *
+ * Omitted backtest parameters use the stored defaults for the dataset's period type, not the schema defaults.
  */
 export type MakeBacktestsRequest = {
     /**

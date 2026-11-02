@@ -42,5 +42,21 @@ export type JobDescription = {
      * `PredictionSetup.id` this job belongs to, when applicable.
      */
     prediction_setup_id?: (number | null);
+    /**
+     * Configured model primary key captured at enqueue time.
+     */
+    model_id?: (number | null);
+    /**
+     * Model template version captured at enqueue time.
+     */
+    model_version?: (string | null);
+    /**
+     * Input dataset primary key; None when the job creates its dataset.
+     */
+    dataset_id?: (number | null);
+    /**
+     * Run parameters, including defaults.
+     */
+    parameters?: Record<string, any>;
 };
 

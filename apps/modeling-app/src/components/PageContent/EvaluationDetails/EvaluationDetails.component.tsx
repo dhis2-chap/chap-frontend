@@ -7,6 +7,7 @@ import { useBacktestById } from '@/hooks/useBacktestById';
 import { CircularLoader, NoticeBox } from '@dhis2/ui';
 import { EvaluationSummaryWidget } from './EvaluationSummaryWidget';
 import { EvaluationMetricsWidget } from './EvaluationMetricsWidget/EvaluationMetricsWidget';
+import { OutbreakMetricsWidget } from './OutbreakMetricsWidget/OutbreakMetricsWidget';
 
 type Props = {
     evaluationId: number;
@@ -61,6 +62,7 @@ export const EvaluationDetailsComponent = ({ evaluationId }: Props) => {
                     evaluationId={evaluationId}
                     periodType={backtest.dataset.periodType}
                 />
+                <OutbreakMetricsWidget evaluationId={evaluationId} specificationId={backtest.specificationId} />
             </div>
             <div className={styles.rightColumn}>
                 <QuickActionsWidget
@@ -70,7 +72,7 @@ export const EvaluationDetailsComponent = ({ evaluationId }: Props) => {
                 <EvaluationSummaryWidget
                     evaluationId={evaluationId}
                 />
-                <EvaluationMetricsWidget evaluationId={evaluationId} metrics={backtest.aggregateMetrics} />
+                <EvaluationMetricsWidget evaluationId={evaluationId} specificationId={backtest.specificationId} metrics={backtest.aggregateMetrics} />
             </div>
         </div>
     );

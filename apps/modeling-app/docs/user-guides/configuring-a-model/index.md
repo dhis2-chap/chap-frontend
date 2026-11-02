@@ -7,7 +7,7 @@ category: User Guides
 
 ## Configuring a Model
 
-A **model template** is a generic model uploaded to your CHAP instance by a researcher or model developer. To actually use it against your data, you need to create a **configured model** - a named variant of the template with a specific set of options and covariates tailored to your context.
+A **model template** is a generic model uploaded to your Chap instance by a researcher or model developer. To actually use it against your data, you need to create a **configured model** - a named variant of the template with a specific set of options and covariates tailored to your context.
 
 You can create several configured models from the same template (for example, one with default options and one with a longer training window) and then compare them in an evaluation.
 

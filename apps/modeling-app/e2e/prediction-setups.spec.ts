@@ -41,6 +41,41 @@ test.describe.serial('prediction setup', () => {
         await expect(page.locator('[data-test="quick-action-predict"]')).toBeEnabled();
     });
 
+    test('explains missing prediction data', async ({ page }) => {
+        const periods = ['2025W19', '2025W20', '2025W21', '2025W22', '2026W01'];
+        const orgUnitId = 'W6sNfkJcXGC';
+        const orgUnit = await readJson<{ displayName: string }>(await page.request.get(
+            `${process.env.E2E_DHIS2_BASE_URL ?? 'http://localhost:8080'}/api/organisationUnits/${orgUnitId}?fields=displayName`,
+        ), 'Load organisation-unit name');
+
+        // Reproduce the reported climate-provider rejection while using a real saved setup and DHIS2 data.
+        await page.route(`**/v1/crud/prediction-setups/${setup.id}/run`, route => route.fulfill({
+            status: 400,
+            json: {
+                detail: {
+                    message: 'All regions rejected due to missing values',
+                    imported_count: 0,
+                    rejected: [
+                        { reason: 'Missing value for some/all time periods', featureName: 'mean_temperature', orgUnit: orgUnitId, timePeriods: periods },
+                    ],
+                },
+            },
+        }));
+        await page.goto(`/#/predictions/${setup.id}/new`);
+        await page.locator('[data-test="prediction-name-input"] input').fill('Rejected climate data');
+        await selectPeriod(page, 'prediction-absolute-period-input', evaluation.dataset!.lastPeriod!);
+
+        await page.getByRole('button', { name: 'Run prediction', exact: true }).click();
+        await expect(page.getByText('All regions rejected due to missing values')).toBeVisible();
+        await page.getByRole('button', { name: 'View rejected data' }).click();
+
+        const row = page.locator('[data-test="dhis2-uicore-modal"] tbody tr').filter({ hasText: 'mean_temperature' });
+        await expect(row.getByText(orgUnit.displayName, { exact: true })).toBeVisible();
+        await expect(row.getByText(periods.join(', '), { exact: true })).toBeHidden();
+        await row.locator('summary').click();
+        await expect(row.getByText(periods.join(', '), { exact: true })).toBeVisible();
+    });
+
     test('runs a prediction from the saved setup dashboard', async ({ page }) => {
         const latestEvaluationPeriod = evaluation.dataset?.lastPeriod;
 

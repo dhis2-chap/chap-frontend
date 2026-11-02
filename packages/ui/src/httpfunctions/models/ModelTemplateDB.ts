@@ -4,6 +4,7 @@
 /* eslint-disable */
 import type { AuthorAssessedStatus } from './AuthorAssessedStatus';
 import type { chap_core__model_spec__PeriodType } from './chap_core__model_spec__PeriodType';
+import type { ModelTemplateRole } from './ModelTemplateRole';
 /**
  * Persisted model-template row. Flat composition of metadata + capability mixins.
  *
@@ -118,5 +119,9 @@ export type ModelTemplateDB = {
      * When True, the template is served by a chapkit REST endpoint rather than an MLproject directory.
      */
     usesChapkit?: boolean;
+    /**
+     * 'baseline' or 'comparison' for reference models, null for ordinary models.
+     */
+    role?: (ModelTemplateRole | null);
 };
 

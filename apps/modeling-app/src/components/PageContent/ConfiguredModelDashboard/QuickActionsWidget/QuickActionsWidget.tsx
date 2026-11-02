@@ -72,16 +72,20 @@ export const QuickActionsWidget = ({
             data: {
                 name: values.name,
                 quantileTargets: buildQuantileTargetsFromForm(values),
+                alertPolicyId: values.alert_policy_id ? Number(values.alert_policy_id) : null,
             },
         });
         setConfigurationModalIsOpen(false);
     };
 
     const editSetupDefaultValues = predictionSetup
-        ? formValuesFromQuantileTargets(
-                predictionSetup.name,
-                getPredictionSetupQuantileTargets(predictionSetup),
-            )
+        ? {
+                ...formValuesFromQuantileTargets(
+                    predictionSetup.name,
+                    getPredictionSetupQuantileTargets(predictionSetup),
+                ),
+                alert_policy_id: predictionSetup.alertPolicy ? String(predictionSetup.alertPolicy.id) : '',
+            }
         : undefined;
 
     return (

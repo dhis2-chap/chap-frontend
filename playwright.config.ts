@@ -25,7 +25,17 @@ export default defineConfig({
         {
             name: 'chromium',
             testMatch: '**/*.spec.ts',
+            testIgnore: '**/modeling-defaults.spec.ts',
             dependencies: ['setup'],
+            use: {
+                storageState: authFile,
+            },
+        },
+        {
+            // Installation-wide defaults must not change while other tests use them.
+            name: 'settings',
+            testMatch: '**/modeling-defaults.spec.ts',
+            dependencies: ['chromium'],
             use: {
                 storageState: authFile,
             },

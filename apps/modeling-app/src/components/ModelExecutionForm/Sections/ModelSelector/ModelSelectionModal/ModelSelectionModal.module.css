@@ -118,11 +118,15 @@
     flex-shrink: 0;
 }
 
+.listLabel {
+    flex: 1;
+    min-inline-size: 0;
+}
+
 .listName {
     display: flex;
     align-items: center;
     gap: var(--spacers-dp8);
-    flex: 1;
     min-inline-size: 0;
     font-size: 14px;
     font-weight: 500;
@@ -130,11 +134,19 @@
     color: #212934;
 }
 
-.listNameText {
+.listNameText,
+.listAuthor {
     min-inline-size: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+.listAuthor {
+    display: block;
+    color: var(--colors-grey700);
+    font-size: 12px;
+    line-height: 18px;
 }
 
 .noResults {

@@ -1,7 +1,6 @@
-import { ApiError, BacktestsService, WeatherProviderInfo } from '@dhis2-chap/ui';
+import { ApiError, BacktestsService, WeatherProviderInfo, useRoute } from '@dhis2-chap/ui';
 import { useQuery } from '@tanstack/react-query';
 import { Features, useIsFeatureAvailable } from './useIsFeatureAvailable';
-import { useRoute } from './useRoute';
 
 export const useWeatherProviders = () => {
     const { route } = useRoute();

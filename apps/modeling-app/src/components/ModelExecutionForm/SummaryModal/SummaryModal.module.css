@@ -61,4 +61,17 @@
   color: var(--colors-grey700);
   font-size: 0.75rem;
   letter-spacing: 0.5px;
-} 
+}
+
+.periodDetails summary {
+  cursor: pointer;
+}
+
+.periodDetails > div {
+  max-inline-size: 30rem;
+  max-block-size: 12rem;
+  overflow: auto;
+  overflow-wrap: anywhere;
+  margin-block-start: var(--spacers-dp8);
+  white-space: normal;
+}

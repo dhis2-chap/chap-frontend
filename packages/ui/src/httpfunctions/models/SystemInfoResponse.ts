@@ -27,7 +27,7 @@ export type SystemInfoResponse = {
      */
     revision: string;
     /**
-     * Whether this server requires an API token. When `true`, every endpoint except `/health`, `/health/ready` and `/system/info` needs an `Authorization: Bearer <token>` header.
+     * Whether this server requires an API token. When `true`, every endpoint except `/health`, `/health/ready` and `/system/info` needs an `Authorization: Bearer <token>` or `Authorization: ApiToken <token>` header.
      */
     auth_required: boolean;
 };

@@ -126,10 +126,17 @@ export const SummaryModal: React.FC<SummaryModalProps> = ({
                     return periods.join(', ');
                 }
                 const displayed = periods.slice(0, 3).join(', ');
-                return i18n.t('{{periods}} and {{count}} more', {
-                    periods: displayed,
-                    count: periods.length - 3,
-                });
+                return (
+                    <details className={styles.periodDetails}>
+                        <summary>
+                            {i18n.t('{{periods}} and {{count}} more', {
+                                periods: displayed,
+                                count: periods.length - 3,
+                            })}
+                        </summary>
+                        <div>{periods.join(', ')}</div>
+                    </details>
+                );
             },
             enableSorting: false,
         }),

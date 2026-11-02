@@ -14,7 +14,7 @@ const supportsPeriodType = (model: ModelSpecRead, periodType: string) => {
 
 /**
  * A model can run on a dataset when the dataset has a column for every covariate the model
- * requires (covariates CHAP generates itself, prefixed `gen:`, are exempt) and their period
+ * requires (covariates Chap generates itself, prefixed `gen:`, are exempt) and their period
  * types agree. Extra columns are fine.
  */
 export const datasetSupportsModel = (
@@ -29,7 +29,7 @@ export const datasetSupportsModel = (
 );
 
 /**
- * The columns a backtest sees: CHAP Core evaluates the chosen target column as `disease_cases`,
+ * The columns a backtest sees: Chap Core evaluates the chosen target column as `disease_cases`,
  * replacing any existing `disease_cases` column.
  */
 export const getBacktestColumns = (columns: string[], targetColumn: string): string[] => [

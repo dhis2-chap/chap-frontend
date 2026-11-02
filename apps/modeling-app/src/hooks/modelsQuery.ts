@@ -11,6 +11,14 @@ export const modelsQueryOptions = {
     retry: 0,
 };
 
+export const configuredModelInfoQueryOptions = (id: number) => ({
+    queryKey: ['configuredModelInfo', id],
+    queryFn: () => ModelsService.getConfiguredModelInfoV1CrudConfiguredModelsConfiguredModelIdGet(id),
+    staleTime: 300_000,
+    cacheTime: 300_000,
+    retry: 0,
+});
+
 /**
  * Health can change after selection. Re-read the model right before a job is
  * submitted, even when the form's model cache is still fresh.

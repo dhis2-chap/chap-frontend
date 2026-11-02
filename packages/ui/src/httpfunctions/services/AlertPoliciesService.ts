@@ -2,6 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { AlertPolicyCodesUpdate } from '../models/AlertPolicyCodesUpdate';
 import type { AlertPolicyCreate } from '../models/AlertPolicyCreate';
 import type { AlertPolicyRead } from '../models/AlertPolicyRead';
 import type { chap_core__rest_api__data_models__DataBaseResponse } from '../models/chap_core__rest_api__data_models__DataBaseResponse';
@@ -34,7 +35,9 @@ export class AlertPoliciesService {
      * exceedance probability at or above which that tier fires, so one policy expresses a
      * whole escalation ladder. Levels are ordered from least to most severe. 422 if the
      * policy has no levels, an unnamed level, a level with more than one threshold line,
-     * or two levels sharing a name.
+     * or two levels sharing a name. Output codes must be non-empty and unique across
+     * all levels and the no-alert state. Codes do not affect severity ordering.
+     * Omitted level codes default to `1`, `2`, etc. in level order; no alert defaults to `0`.
      * @param requestBody
      * @returns chap_core__rest_api__data_models__DataBaseResponse Successful Response
      * @throws ApiError
@@ -70,6 +73,37 @@ export class AlertPoliciesService {
             path: {
                 'alertPolicyId': alertPolicyId,
             },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
+     * Update a policy's output codes
+     * ⚠️ **Experimental:** behavior and response shape may change without notice.
+     *
+     * Update codes by level name. Existing alerts resolve to the new codes through their policy.
+     *
+     * Names, order and thresholds cannot change. The resulting codes must be non-empty
+     * and unique, including unchanged codes and no alert. 404 for an unknown policy;
+     * 422 for unknown levels or invalid codes. Invalid updates leave the policy unchanged.
+     * @param alertPolicyId
+     * @param requestBody
+     * @returns AlertPolicyRead Successful Response
+     * @throws ApiError
+     */
+    public static updateAlertPolicyCodesV1CrudAlertPoliciesAlertPolicyIdPatch(
+        alertPolicyId: number,
+        requestBody: AlertPolicyCodesUpdate,
+    ): CancelablePromise<AlertPolicyRead> {
+        return __request(OpenAPI, {
+            method: 'PATCH',
+            url: '/v1/crud/alert-policies/{alertPolicyId}',
+            path: {
+                'alertPolicyId': alertPolicyId,
+            },
+            body: requestBody,
+            mediaType: 'application/json',
             errors: {
                 422: `Validation Error`,
             },

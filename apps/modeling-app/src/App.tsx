@@ -12,6 +12,7 @@ import './locales';
 import './App.module.css';
 import PageWrapper from './components/PageWrapper';
 import { SetChapUrl } from './features/route-api/SetChapUrl';
+import { ModelingDefaults } from './components/ModelingDefaults/ModelingDefaults';
 import { SettingsLayout } from './features/settings/SettingsLayout';
 import { GeneralSettings } from './features/settings/GeneralSettings';
 import { DataPruningCard } from './features/settings/DataPruning';
@@ -44,6 +45,7 @@ import { SyncUrlWithGlobalShell } from './utils/syncUrlWithGlobalShell';
 import { NewPredictionPage } from './pages/NewPredictionPage';
 import { PredictionImportPage } from './pages/PredictionImportPage';
 import { PredictionRunDetailsPage } from './pages/PredictionRunDetailsPage';
+import { AlertsPage } from './pages/AlertsPage/AlertsPage';
 import { PredictionActivityPage } from './pages/PredictionActivityPage';
 import { GuidesPage } from './pages/GuidesPage';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -174,6 +176,11 @@ const router = createHashRouter([
                         element: <JobsPage />,
                     },
                     {
+                        path: '/alerts',
+                        handle: { breadcrumb: () => i18n.t('Alert policies') } satisfies RouteHandle,
+                        element: <AlertsPage />,
+                    },
+                    {
                         path: '/predictions',
                         handle: { breadcrumb: () => i18n.t('Prediction setups') } satisfies RouteHandle,
                         children: [
@@ -266,6 +273,10 @@ const router = createHashRouter([
                     {
                         index: true,
                         element: <GeneralSettings />,
+                    },
+                    {
+                        path: 'modeling-defaults',
+                        element: <ModelingDefaults />,
                     },
                     {
                         path: 'data-pruning',

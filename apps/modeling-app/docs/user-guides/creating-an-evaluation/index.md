@@ -42,6 +42,8 @@ If you have no saved datasets yet, the tab offers to create one or to import fro
 
 The **Model** dropdown only lists configured models that can use the selected dataset: the dataset must have a column for every covariate the model requires, and the same period type. If no model matches, a notice is shown instead. Datasets shorter than 13 months or 49 weeks cannot be evaluated, and a notice says so.
 
+Under **Backtest parameters** you can adjust how the evaluation splits the data: the number of forecast periods, splits, the step between splits, the number of training runs and the future-weather provider. The fields start from the weekly or monthly [modeling defaults](/guides/settings) that match the dataset's period type, so you usually only change them for a one-off experiment.
+
 Select a model and click **Start evaluation**. The evaluation is queued as a background job and you are taken to the **Jobs** page, where you can monitor its progress.
 
 ---
@@ -110,7 +112,7 @@ You can click **Inspect dataset** to preview the actual data that will be used b
 
 Once all fields are configured:
 
-1. Review your selections in the form summary
+1. Review your selections in the form summary, including the **Backtest parameters**. They start from the [modeling defaults](/guides/settings) for the dataset's period type
 2. Optionally click **Start dry run** to validate your configuration and check for missing data
 3. Click **Start import** to submit the evaluation
 

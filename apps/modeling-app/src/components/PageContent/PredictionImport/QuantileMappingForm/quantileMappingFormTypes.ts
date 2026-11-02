@@ -1,4 +1,5 @@
 import type {
+    AlertPolicyRead,
     ModelSpecRead,
     PredictionInfo,
     PredictionOrgUnitSeries,
@@ -13,6 +14,7 @@ export type QuantileMappingFormProps = {
 
 export type LoadedQuantileMappingFormProps = QuantileMappingFormProps & {
     predictionSetup: PredictionSetupReadWithPredictions;
+    policy: AlertPolicyRead | null | undefined;
     series: PredictionOrgUnitSeries[];
     canDeleteDataValues?: boolean;
     isDeleteAuthorityLoading: boolean;

@@ -23,18 +23,6 @@ export type MakePredictionRequest = {
      */
     futureWeatherProvider?: string;
     /**
-     * Name of dataset
-     */
-    name: string;
-    /**
-     * A mapping of covariate names to data element IDs from which to source the data
-     */
-    dataSources?: (Array<DataSource> | null);
-    /**
-     * Purpose of dataset, e.g., 'forecasting' or 'backtesting'
-     */
-    type?: (string | null);
-    /**
      * GeoJSON polygon set for the dataset's org units.
      */
     geojson: FeatureCollectionModel;
@@ -46,6 +34,18 @@ export type MakePredictionRequest = {
      * Features whose observations the server should fetch from a registered source.
      */
     dataToBeFetched: Array<FetchRequest>;
+    /**
+     * Name of dataset
+     */
+    name: string;
+    /**
+     * A mapping of covariate names to data element IDs from which to source the data
+     */
+    dataSources?: (Array<DataSource> | null);
+    /**
+     * Purpose of dataset, e.g., 'forecasting' or 'backtesting'
+     */
+    type?: (string | null);
     /**
      * Free-form metadata bag stored alongside the resulting prediction row.
      */

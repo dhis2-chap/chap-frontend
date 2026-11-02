@@ -9,7 +9,7 @@ import type { Dhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
 
 export type PreparedDataset = {
     request: DatasetMakeRequest;
-    /** Names of every organisation unit the selection resolved to, for CHAP's import summary. */
+    /** Names of every organisation unit the selection resolved to, for Chap's import summary. */
     orgUnitNames: Map<string, string>;
 };
 
@@ -52,7 +52,7 @@ export const prepareDataset = async (
     }
 
     const { geojson } = await fetchOrgUnits(response.metaData.dimensions.ou, dataEngine);
-    // CHAP leaves out locations without a polygon and lists them as rejected, so only fail when that would be all of them.
+    // Chap leaves out locations without a polygon and lists them as rejected, so only fail when that would be all of them.
     const withGeometry = geojson.organisationUnits.filter(orgUnit => orgUnit.geometry);
     if (!withGeometry.length) {
         throw new Error(i18n.t('The selected organisation units must have geometry'));

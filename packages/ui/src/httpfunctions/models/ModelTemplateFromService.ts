@@ -10,5 +10,9 @@ export type ModelTemplateFromService = {
      * Id the service registered under in the v2 service registry.
      */
     serviceId: string;
+    /**
+     * Role from the model's marketplace entry. 'comparison' flags the template as a comparison model; null makes it an ordinary model. Baselines are built into chap-core and cannot be set here.
+     */
+    role?: (string | null);
 };
 

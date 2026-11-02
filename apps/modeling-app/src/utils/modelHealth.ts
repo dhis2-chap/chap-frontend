@@ -9,7 +9,7 @@ export const revisionMismatchTooltip = () => i18n.t(
 );
 
 export const revisionMismatchMessage = (model: ModelSpecRead) => i18n.t(
-    'This model\'s service now runs different code than version {{version}} was registered with, so CHAP won\'t run it. Choose another model, or ask your CHAP administrator to redeploy that version or release the change as a new version.',
+    'This model\'s service now runs different code than version {{version}} was registered with, so Chap won\'t run it. Choose another model, or ask your Chap administrator to redeploy that version or release the change as a new version.',
     { version: model.version },
 );
 

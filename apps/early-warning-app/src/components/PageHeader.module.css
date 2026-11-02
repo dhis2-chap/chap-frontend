@@ -1,0 +1,2 @@
+.header { margin-bottom: var(--spacers-dp24); }
+.header h1 { margin: 0 0 var(--spacers-dp12); color: var(--colors-grey900); font-size: 24px; }

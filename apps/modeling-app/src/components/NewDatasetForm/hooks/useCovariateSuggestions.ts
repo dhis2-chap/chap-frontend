@@ -10,8 +10,8 @@ export type CovariateSuggestion = {
 };
 
 /**
- * Column names to offer, from CHAP's covariate-name suggestions plus the names the configured
- * models read. The model names alone still work on CHAP versions without the suggestion endpoint.
+ * Column names to offer, from Chap's covariate-name suggestions plus the names the configured
+ * models read. The model names alone still work on Chap versions without the suggestion endpoint.
  */
 export const useCovariateSuggestions = (models: ModelSpecRead[] = []) => {
     const { data, isLoading } = useQuery<CovariateNameSuggestion[], ApiError>({

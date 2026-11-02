@@ -1,12 +1,24 @@
 import i18n from '@dhis2/d2-i18n';
-import { NoticeBox, Switch } from '@dhis2/ui';
-import type { ApiError, OutbreakProbability } from '@dhis2-chap/ui';
+import {
+    DataTable,
+    DataTableBody,
+    DataTableCell,
+    DataTableColumnHeader,
+    DataTableHead,
+    DataTableRow,
+    NoticeBox,
+    Switch,
+} from '@dhis2/ui';
+import type { AlertPolicyRead, ApiError, OutbreakProbability } from '@dhis2-chap/ui';
 import type { KeyboardEvent, MouseEvent } from 'react';
 import { ThresholdCalculationStatus } from '../../../ThresholdTilesExplorer';
 import { DataItemSelect } from './DataItemSelect';
 import styles from './QuantileMappingForm.module.css';
+import type { usePolicyOutbreakIndicators } from '@/hooks/usePolicyOutbreakIndicators';
 
 type Props = {
+    policy?: AlertPolicyRead | null;
+    policyOutputs: ReturnType<typeof usePolicyOutbreakIndicators>;
     useAlertOutputs: boolean;
     selectedProbability: OutbreakProbability;
     thresholdStrategyName?: string;
@@ -37,6 +49,8 @@ const SummaryItem = ({ label, value }: { label: string; value: string }) => (
 );
 
 export const AlertOutputSection = ({
+    policy,
+    policyOutputs,
     useAlertOutputs,
     selectedProbability,
     thresholdStrategyName,
@@ -80,7 +94,9 @@ export const AlertOutputSection = ({
                         {i18n.t('Use alert outputs')}
                     </span>
                     <span className={styles.alertOutputToggleDescription}>
-                        {i18n.t('Import outbreak indicator values.')}
+                        {policy
+                            ? i18n.t('Import the alert level code from {{policy}}.', { policy: policy.name })
+                            : i18n.t('Import 1 when an outbreak is likely, otherwise 0.')}
                     </span>
                 </div>
                 <span onClick={handleSwitchClick}>
@@ -93,57 +109,96 @@ export const AlertOutputSection = ({
             {useAlertOutputs && (
                 <>
                     <ThresholdCalculationStatus
-                        isLoading={isThresholdsLoading}
-                        isPaused={areThresholdsPaused}
-                        error={thresholdsError}
-                        onRetry={onRetryThresholds}
+                        isLoading={policy ? policyOutputs.isLoading : isThresholdsLoading}
+                        isPaused={policy ? policyOutputs.isPaused : areThresholdsPaused}
+                        error={policy ? policyOutputs.error : thresholdsError}
+                        onRetry={policy ? policyOutputs.retry : onRetryThresholds}
                     />
-                    {!isThresholdsLoading && !thresholdsError && unavailableThresholdCount > 0 && (
-                        <NoticeBox warning title={i18n.t('Some outbreak indicators will be skipped')}>
-                            {i18n.t('One region has forecast periods without thresholds. Only outbreak indicators for those periods will be skipped; indicators for periods with thresholds will still be imported.', {
-                                count: unavailableThresholdCount,
-                                defaultValue_plural: '{{count}} regions have forecast periods without thresholds. Only outbreak indicators for those periods will be skipped; indicators for periods with thresholds will still be imported.',
-                            })}
-                        </NoticeBox>
+                    {policy ? (
+                        <>
+                            <DataTable>
+                                <DataTableHead>
+                                    <DataTableRow>
+                                        <DataTableColumnHeader>{i18n.t('Alert level')}</DataTableColumnHeader>
+                                        <DataTableColumnHeader>{i18n.t('Imported value')}</DataTableColumnHeader>
+                                    </DataTableRow>
+                                </DataTableHead>
+                                <DataTableBody>
+                                    <DataTableRow>
+                                        <DataTableCell>{i18n.t('No alert')}</DataTableCell>
+                                        <DataTableCell>{policy.noAlertOutputCode ?? '0'}</DataTableCell>
+                                    </DataTableRow>
+                                    {(policy.levels ?? []).map(level => (
+                                        <DataTableRow key={level.name}>
+                                            <DataTableCell>{level.name}</DataTableCell>
+                                            <DataTableCell>{level.outputCode}</DataTableCell>
+                                        </DataTableRow>
+                                    ))}
+                                </DataTableBody>
+                            </DataTable>
+                            {policyOutputs.isReady && policyOutputs.skippedCount > 0 && (
+                                <NoticeBox warning>
+                                    {i18n.t('One region-period result is missing and will be skipped.', {
+                                        count: policyOutputs.skippedCount,
+                                        defaultValue_plural: '{{count}} region-period results are missing and will be skipped.',
+                                    })}
+                                </NoticeBox>
+                            )}
+                        </>
+                    ) : (
+                        <>
+                            {!isThresholdsLoading && !thresholdsError && unavailableThresholdCount > 0 && (
+                                <NoticeBox warning title={i18n.t('Some outbreak indicators will be skipped')}>
+                                    {i18n.t('One region has forecast periods without thresholds. Only outbreak indicators for those periods will be skipped; indicators for periods with thresholds will still be imported.', {
+                                        count: unavailableThresholdCount,
+                                        defaultValue_plural: '{{count}} regions have forecast periods without thresholds. Only outbreak indicators for those periods will be skipped; indicators for periods with thresholds will still be imported.',
+                                    })}
+                                </NoticeBox>
+                            )}
+                            <div className={styles.alertSummary}>
+                                <SummaryItem
+                                    label={i18n.t('Minimum outbreak probability')}
+                                    value={`${selectedProbability}%`}
+                                />
+                                {thresholdStrategyName && (
+                                    <SummaryItem
+                                        label={i18n.t('Threshold strategy')}
+                                        value={thresholdStrategyName}
+                                    />
+                                )}
+                                <SummaryItem
+                                    label={i18n.t('Threshold parameters')}
+                                    value={thresholdParamsSummary}
+                                />
+                                <button
+                                    type="button"
+                                    className={styles.tertiaryActionButton}
+                                    onClick={onAdjustAlertProbability}
+                                >
+                                    {i18n.t('Adjust')}
+                                </button>
+                            </div>
+                        </>
                     )}
-                    <div className={styles.alertSummary}>
-                        <SummaryItem
-                            label={i18n.t('Minimum outbreak probability')}
-                            value={`${selectedProbability}%`}
-                        />
-                        {thresholdStrategyName && (
-                            <SummaryItem
-                                label={i18n.t('Threshold strategy')}
-                                value={thresholdStrategyName}
-                            />
-                        )}
-                        <SummaryItem
-                            label={i18n.t('Threshold parameters')}
-                            value={thresholdParamsSummary}
-                        />
-                        <button
-                            type="button"
-                            className={styles.tertiaryActionButton}
-                            onClick={onAdjustAlertProbability}
-                        >
-                            {i18n.t('Adjust')}
-                        </button>
-                    </div>
                     <div className={styles.outbreakIndicatorField}>
                         <DataItemSelect
                             label={i18n.t('Outbreak indicator')}
                             value={outbreakIndicator}
+                            dataElementsOnly
                             onChange={onChangeOutbreakIndicator}
                             error={outbreakIndicatorError}
                         />
                     </div>
-                    <div className={styles.outbreakIndicatorField}>
-                        <DataItemSelect
-                            label={i18n.t('Endemic threshold (optional)')}
-                            value={endemicThreshold}
-                            onChange={onChangeEndemicThreshold}
-                        />
-                    </div>
+                    {!policy && (
+                        <div className={styles.outbreakIndicatorField}>
+                            <DataItemSelect
+                                label={i18n.t('Endemic threshold (optional)')}
+                                value={endemicThreshold}
+                                dataElementsOnly
+                                onChange={onChangeEndemicThreshold}
+                            />
+                        </div>
+                    )}
                 </>
             )}
         </div>

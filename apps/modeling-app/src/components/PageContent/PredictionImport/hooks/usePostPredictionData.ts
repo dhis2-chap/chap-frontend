@@ -4,11 +4,11 @@ import { useAlert, useDataEngine } from '@dhis2/app-runtime';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
     EndemicThresholdPoint,
-    OutbreakIndicator,
     PredictionEntry,
     PredictionInfo,
     PredictionsService,
 } from '@dhis2-chap/ui';
+import type { ImportOutbreakIndicator } from '../utils/policyOutbreakIndicators';
 import { getPredictionPeriodIds } from '@/utils/predictionRunMetadata';
 import {
     buildClearDataValues,
@@ -29,7 +29,7 @@ import { useDhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
 type PostPredictionDataVariables = {
     prediction: PredictionInfo;
     quantileMapping: QuantileMapping;
-    outbreakIndicators: OutbreakIndicator[];
+    outbreakIndicators: ImportOutbreakIndicator[];
     thresholdMap: Map<string, EndemicThresholdPoint[]> | undefined;
     clearPreviousValues: boolean;
     fallbackOrgUnitIds: string[];

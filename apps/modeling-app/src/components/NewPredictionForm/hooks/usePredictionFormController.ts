@@ -54,6 +54,7 @@ export const usePredictionFormController = ({
         createPrediction,
         isSubmitting,
         error,
+        importSummary,
     } = useCreatePrediction({
         predictionSetupId,
         periodSettings,
@@ -92,6 +93,7 @@ export const usePredictionFormController = ({
         handleStartPrediction,
         isSubmitting,
         error,
+        importSummary,
         periodType,
         fromPeriod,
         anchorPeriod,

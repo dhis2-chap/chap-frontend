@@ -21,7 +21,8 @@
         "e2e:ci": "playwright test",
         "changeset": "changeset",
         "release:publish": "node scripts/publish.js",
-        "release:publish:dry": "node scripts/publish.js --dry-run"
+        "release:publish:dry": "node scripts/publish.js --dry-run",
+        "start:early-warning-app": "turbo start --filter=@dhis2-chap/early-warning-app..."
     },
     "dependencies": {
         "@dhis2/app-runtime": "3.14.6",

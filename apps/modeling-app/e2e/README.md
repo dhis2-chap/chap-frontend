@@ -2,7 +2,9 @@
 
 ## How it works
 - Playwright runs a `setup` project first (`auth.setup.ts`) to log in and save auth state to `playwright/.auth/user.json`.
-- All `*.spec.ts` tests run in the `chromium` project and reuse that auth state.
+- Specs reuse that auth state in the `chromium` project. The `settings` project runs afterward because it temporarily changes installation-wide defaults, restoring them after the test.
+
+To run only the settings test, authenticate with `pnpm exec playwright test --project=setup`, then run `pnpm exec playwright test --project=settings --no-deps`.
 
 ## Run locally
 From repo root:

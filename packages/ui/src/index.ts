@@ -1,4 +1,4 @@
-export { UncertaintyAreaChart } from './components/predictions/UncertaintyAreaChart/UncertaintyAreaChart';
+export { UncertaintyAreaChart, type ThresholdChartLine } from './components/predictions/UncertaintyAreaChart/UncertaintyAreaChart';
 export * from './httpfunctions/index';
 export {
     evaluationResultToViewData,
@@ -96,3 +96,6 @@ export type { FeatureCollection } from './components/maps/utils';
 
 export { getPredictionSetupMonitoring } from './services/predictionMonitoring';
 export type { PredictionSetupMonitoring } from './services/predictionMonitoring';
+export * from './components/sidenav';
+export * from './components/routeSettings';
+export * from './components/chapSettings';

@@ -4,6 +4,7 @@
 /* eslint-disable */
 import type { AuthorAssessedStatus } from './AuthorAssessedStatus';
 import type { chap_core__model_spec__PeriodType } from './chap_core__model_spec__PeriodType';
+import type { ModelTemplateRole } from './ModelTemplateRole';
 /**
  * ModelTemplateRead is a read model for the ModelTemplateDB.
  * It is used to return the model template in a readable format.
@@ -117,6 +118,10 @@ export type ModelTemplateRead = {
      * When True, the template is served by a chapkit REST endpoint.
      */
     usesChapkit?: boolean;
+    /**
+     * 'baseline' for models built into chap-core that every model is compared against, 'comparison' for marketplace models flagged to be compared against on request, null for ordinary models.
+     */
+    role?: (ModelTemplateRole | null);
     /**
      * Deprecated alias for `minPredictionPeriods`.
      * @deprecated

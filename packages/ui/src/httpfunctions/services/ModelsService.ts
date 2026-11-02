@@ -39,9 +39,11 @@ export class ModelsService {
      * This is how ``chap-admin install`` registers a model once its service is up, and how
      * a custom image without a marketplace entry becomes a model in CHAP. A version is
      * write-once, so repeating the call returns the stored row (and shows it again if it
-     * was retired). The service must be registered in the v2 service registry and
+     * was retired). The ``role`` from the model's marketplace entry is set on the stored
+     * template on every call. The service must be registered in the v2 service registry and
      * reachable. 404 if it is not registered, 409 if it reports no git revision or another
-     * revision than the one stored under its version, 502 if it cannot be read.
+     * revision than the one stored under its version, or uses the name of a built-in
+     * baseline, 502 if it cannot be read.
      * @param requestBody
      * @returns ModelTemplateRead Successful Response
      * @throws ApiError

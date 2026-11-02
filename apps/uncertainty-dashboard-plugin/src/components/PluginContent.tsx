@@ -192,7 +192,7 @@ const getDashboardItemTitle = (config: PluginConfig | null): string => {
         return customTitle;
     }
 
-    return config?.targetDataItem.displayName ?? i18n.t('CHAP uncertainty chart');
+    return config?.targetDataItem.displayName ?? i18n.t('Chap uncertainty chart');
 };
 
 const ChartContent = ({

@@ -4,6 +4,7 @@
 /* eslint-disable */
 import type { HealthResponse } from '../models/HealthResponse';
 import type { ReadinessResponse } from '../models/ReadinessResponse';
+import type { Settings } from '../models/Settings';
 import type { SystemInfoResponse } from '../models/SystemInfoResponse';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -74,6 +75,36 @@ export class SystemService {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/system/info',
+        });
+    }
+    /**
+     * Read the installation's benchmark and backtest defaults
+     * @returns Settings Successful Response
+     * @throws ApiError
+     */
+    public static readSettingsV1SettingsGet(): CancelablePromise<Settings> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/v1/settings',
+        });
+    }
+    /**
+     * Replace the installation's benchmark and backtest defaults
+     * @param requestBody
+     * @returns Settings Successful Response
+     * @throws ApiError
+     */
+    public static updateSettingsV1SettingsPut(
+        requestBody: Settings,
+    ): CancelablePromise<Settings> {
+        return __request(OpenAPI, {
+            method: 'PUT',
+            url: '/v1/settings',
+            body: requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: `Validation Error`,
+            },
         });
     }
 }

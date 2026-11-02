@@ -2,7 +2,7 @@ import { createElement, type ReactNode } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { describe, expect, it, vi } from 'vitest';
-import { TargetBehavior, type MetricInfo } from '@dhis2-chap/ui';
+import { OptimizationDirection, TargetBehavior, type BacktestSpecificationRead, type MetricInfo } from '@dhis2-chap/ui';
 import { EvaluationMetricsWidget } from './EvaluationMetricsWidget';
 import styles from './EvaluationMetricsWidget.module.css';
 
@@ -10,21 +10,29 @@ vi.mock('@dhis2-chap/ui', () => ({
     Widget: ({ children }: { children: ReactNode }) => children,
     VisualizationsService: {},
     TargetBehavior: { CLOSEST: 'closest', AT_LEAST: 'at_least' },
+    OptimizationDirection: { MINIMIZE: 'minimize', MAXIMIZE: 'maximize' },
 }));
 vi.mock('@dhis2/ui', () => ({
     Button: ({ children }: { children: ReactNode }) => createElement('button', null, children),
     IconInfo16: () => null,
-    Tooltip: ({ content, children }: { content: string; children: ReactNode }) =>
-        createElement('span', { title: content }, children),
+    Checkbox: () => null,
+    SingleSelectField: ({ children }: { children: ReactNode }) => createElement('select', null, children),
+    SingleSelectOption: ({ value, label }: { value: string; label: string }) => createElement('option', { value }, label),
+    NoticeBox: ({ title, children }: { title: string; children: ReactNode }) => createElement('aside', null, title, children),
+    Tooltip: ({ content, children }: { content: ReactNode; children: ReactNode }) =>
+        createElement('span', null, createElement('span', { role: 'tooltip' }, content), children),
 }));
 
-const renderMetrics = (metrics: Record<string, number>, catalog?: MetricInfo[]) => {
+const renderMetrics = (metrics: Record<string, number>, catalog?: Omit<MetricInfo, 'sortOrder' | 'isSelected'>[], specification?: BacktestSpecificationRead) => {
     const client = new QueryClient({ defaultOptions: { queries: { retry: false, cacheTime: 0 } } });
     if (catalog) {
-        client.setQueryData(['evaluation-metric-catalog', 42], catalog);
+        client.setQueryData(['evaluation-metric-catalog', 42], catalog.map(info => ({ ...info })));
+    }
+    if (specification) {
+        client.setQueryData(['backtest-specifications', specification.id, true, true], specification);
     }
     const html = renderToStaticMarkup(createElement(QueryClientProvider, { client },
-        createElement(EvaluationMetricsWidget, { evaluationId: 42, metrics }),
+        createElement(EvaluationMetricsWidget, { evaluationId: 42, metrics, specificationId: specification?.id }),
     ));
     client.clear();
     return html;
@@ -33,24 +41,25 @@ const renderMetrics = (metrics: Record<string, number>, catalog?: MetricInfo[]) 
 describe('EvaluationMetricsWidget metadata', () => {
     it('uses backend names and descriptions for existing and newly registered metrics', () => {
         const html = renderMetrics({ mae: 12 }, [
-            { id: 'mae', displayName: 'Backend MAE name', description: 'Updated backend explanation' },
+            { id: 'mae', displayName: 'Backend MAE name', description: 'Updated backend explanation', optimizationDirection: OptimizationDirection.MINIMIZE },
         ]);
         expect(html).toContain('Backend MAE name');
-        expect(html).toContain('title="Updated backend explanation"');
+        expect(html).toContain('Updated backend explanation');
+        expect(html).toContain('Lower is better.');
         expect(html).toContain('12');
 
         const newMetric = renderMetrics({ new_backend_metric: 7 }, [
             { id: 'new_backend_metric', displayName: 'New backend metric name', description: 'New explanation' },
         ]);
         expect(newMetric).toContain('New backend metric name');
-        expect(newMetric).toContain('title="New explanation"');
+        expect(newMetric).toContain('New explanation');
     });
 
     it('keeps scores readable without metadata and omits unavailable tooltips', () => {
         const html = renderMetrics({ unknown_metric: 4 });
         expect(html).toContain('Unknown metric');
         expect(html).toContain('4');
-        expect(html).not.toContain('title=');
+        expect(html).not.toContain('role="tooltip"');
     });
 
     it('handles incomplete metadata and only displays metrics with evaluation scores', () => {
@@ -59,7 +68,7 @@ describe('EvaluationMetricsWidget metadata', () => {
             { id: 'unscored', displayName: 'Unscored metric' },
         ]);
         expect(html).toContain('Unknown metric');
-        expect(html).not.toContain('title=');
+        expect(html).not.toContain('role="tooltip"');
         expect(html).not.toContain('Unscored metric');
     });
 
@@ -113,4 +122,23 @@ describe('EvaluationMetricsWidget metadata', () => {
             expect(html).toContain('Not available');
         }
     });
+});
+
+it('uses the specification catalog and comparisons for the current evaluation, including archived runs', () => {
+    const html = renderMetrics({ crps: 1.93 }, [], {
+        id: 8,
+        dataset: { id: 1, name: 'Dataset' },
+        orgUnits: [],
+        defaultBaselineModel: 'global_median',
+        metrics: [{ id: 'crps', displayName: 'CRPS from specification', comparisonOp: 'skill_ratio', comparisonDescription: 'Relative improvement.', isSelected: true, sortOrder: 0 }],
+        baselines: [{ configuredModel: { id: 59, name: 'global_median', configurationDigest: 'baseline', modelTemplate: { name: 'global_median', version: '1.0', displayName: 'Global median' } }, status: 'done', aggregateMetrics: { crps: 8.07 } }],
+        backtests: [
+            { id: 99, datasetId: 1, modelId: 'model', dataset: { id: 1, name: 'Dataset' }, specificationId: 8, configuredModel: null, aggregateMetrics: { crps: 12 }, comparisons: [{ configuredModelId: 59, values: { crps: -0.5 } }] },
+            { id: 42, datasetId: 1, modelId: 'model', dataset: { id: 1, name: 'Dataset' }, specificationId: 8, configuredModel: null, aggregateMetrics: { crps: 1.93 }, comparisons: [{ configuredModelId: 59, values: { crps: 0.76 } }] },
+        ],
+    } as BacktestSpecificationRead);
+    expect(html).toContain('CRPS from specification');
+    expect(html).toContain('Global median');
+    expect(html).toContain('+76% vs 8.07');
+    expect(html).not.toContain('-50%');
 });

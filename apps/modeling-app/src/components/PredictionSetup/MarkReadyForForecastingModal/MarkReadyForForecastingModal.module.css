@@ -87,3 +87,7 @@
     overflow: hidden;
     row-gap: var(--spacers-dp4);
 }
+
+.alertPolicySelect {
+    margin-block-start: var(--spacers-dp12);
+}
