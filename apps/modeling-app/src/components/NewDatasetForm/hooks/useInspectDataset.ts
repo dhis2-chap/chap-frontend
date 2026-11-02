@@ -19,14 +19,14 @@ export const useInspectDataset = (periodSettings: Dhis2PeriodSettings) => {
         mutationFn: async (formData) => {
             const { request, orgUnitNames, periods } = await prepareDataset(formData, dataEngine, periodSettings);
             const response = await DatasetsService.makeDatasetV1AnalyticsMakeDatasetPost(request, true);
-            const observations = request.providedData;
             return {
                 ...(response as unknown as ImportSummaryCorrected),
                 orgUnitNames,
                 completeness: {
-                    observations,
+                    observations: request.providedData,
                     periods,
-                    orgUnits: [...new Set(observations.map(observation => observation.orgUnit))],
+                    // Every selected location, so ones without any data count as gaps.
+                    orgUnits: [...orgUnitNames.keys()],
                     variables: getInputVariables(
                         request.targetColumn ?? 'disease_cases',
                         request.dataSources?.map(source => source.covariate),

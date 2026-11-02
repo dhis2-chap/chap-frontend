@@ -12,6 +12,7 @@ import {
     SingleSelectField,
     SingleSelectOption,
     Switch,
+    colors,
 } from '@dhis2/ui';
 import type { ObservationBase } from '@dhis2-chap/ui';
 import Highcharts from 'highcharts';
@@ -35,10 +36,9 @@ export const InputCompletenessView = ({ observations, periods, orgUnits, variabl
     const { data: orgUnitData } = useOrgUnitsById(orgUnits);
     const locationNames = useMemo(() => new Map(orgUnitData?.organisationUnits.map(unit => [unit.id, unit.displayName])), [orgUnitData]);
     const values = useMemo(() => indexObservations(observations), [observations]);
-    const columns = useMemo(() => [...new Set(variables)], [variables]);
     const completeness = useMemo(
-        () => calculateInputCompleteness(observations, periods, orgUnits, variables),
-        [observations, periods, orgUnits, variables],
+        () => calculateInputCompleteness(values, periods, orgUnits, variables),
+        [values, periods, orgUnits, variables],
     );
     const selected = completeness.find(row => row.period === selectedPeriod) ?? completeness[completeness.length - 1];
 
@@ -48,10 +48,10 @@ export const InputCompletenessView = ({ observations, periods, orgUnits, variabl
 
     const withGaps = new Set(selected.missing.map(location => location.orgUnit));
     const rows = showAll
-        ? [...new Set(orgUnits)].sort((a, b) => Number(withGaps.has(b)) - Number(withGaps.has(a)))
+        ? [...orgUnits].sort((a, b) => Number(withGaps.has(b)) - Number(withGaps.has(a)))
         : [...withGaps];
 
-    const locationCount = new Set(orgUnits).size;
+    const locationCount = orgUnits.length;
     const options: Highcharts.Options = {
         chart: {
             type: 'line',
@@ -73,11 +73,11 @@ export const InputCompletenessView = ({ observations, periods, orgUnits, variabl
         },
         title: { text: undefined },
         credits: { enabled: false },
-        legend: { enabled: columns.length > 1 },
+        legend: { enabled: variables.length > 1 },
         xAxis: {
             categories: periods,
             title: { text: i18n.t('Period') },
-            plotLines: [{ value: periods.indexOf(selected.period), color: '#a0adba', width: 1, dashStyle: 'Dash' }],
+            plotLines: [{ value: periods.indexOf(selected.period), color: colors.grey500, width: 1, dashStyle: 'Dash' }],
         },
         yAxis: { min: 0, max: 100, title: { text: i18n.t('Complete (%)') } },
         plotOptions: {
@@ -96,7 +96,7 @@ export const InputCompletenessView = ({ observations, periods, orgUnits, variabl
                 interpolation: { escapeValue: false },
             }) + '<br/>',
         },
-        series: columns.map((variable, index) => ({
+        series: variables.map((variable, index) => ({
             type: 'line',
             name: variable,
             data: completeness.map(row => ({
@@ -110,12 +110,7 @@ export const InputCompletenessView = ({ observations, periods, orgUnits, variabl
     return (
         <>
             <div className={styles.header}>
-                <div>
-                    <h3 className={styles.title}>{i18n.t('Data completeness')}</h3>
-                    <p className={styles.description}>
-                        {i18n.t('Share of locations with a value in each period, for the target and every covariate.')}
-                    </p>
-                </div>
+                <h3 className={styles.title}>{i18n.t('Data completeness')}</h3>
                 <Button small secondary disabled={!isZoomed} onClick={() => chartRef.current?.chart.zoomOut()}>
                     {i18n.t('Reset zoom')}
                 </Button>
@@ -125,7 +120,6 @@ export const InputCompletenessView = ({ observations, periods, orgUnits, variabl
             </div>
             <SingleSelectField
                 label={i18n.t('Show values for period')}
-                helpText={i18n.t('Or click the chart.')}
                 selected={selected.period}
                 onChange={({ selected }) => setSelectedPeriod(selected)}
                 filterable
@@ -153,7 +147,7 @@ export const InputCompletenessView = ({ observations, periods, orgUnits, variabl
                     <DataTableHead>
                         <DataTableRow>
                             <DataTableColumnHeader fixed top="0">{i18n.t('Location')}</DataTableColumnHeader>
-                            {columns.map(variable => (
+                            {variables.map(variable => (
                                 <DataTableColumnHeader key={variable} fixed top="0">{variable}</DataTableColumnHeader>
                             ))}
                         </DataTableRow>
@@ -162,7 +156,7 @@ export const InputCompletenessView = ({ observations, periods, orgUnits, variabl
                         {rows.map(orgUnit => (
                             <DataTableRow key={orgUnit}>
                                 <DataTableCell>{locationNames.get(orgUnit) ?? orgUnit}</DataTableCell>
-                                {columns.map((variable) => {
+                                {variables.map((variable) => {
                                     const value = values.get(observationKey(selected.period, orgUnit, variable));
                                     return value === undefined
                                         ? <DataTableCell key={variable}><span className={styles.missing}>{i18n.t('Missing')}</span></DataTableCell>

@@ -6,7 +6,7 @@ import type { PredictionSetupReadWithPredictions } from '@dhis2-chap/ui';
 import { useNavigate } from 'react-router-dom';
 import { useDataset } from '../../../../hooks/useDataset';
 import { getChapErrorLabel } from '../../../../utils/chapErrors';
-import { calculateInputCompleteness, getInputPeriods, getInputVariables } from '../../../InputCompleteness/inputCompleteness';
+import { calculateInputCompleteness, getInputVariables, indexObservations } from '../../../InputCompleteness/inputCompleteness';
 import styles from './InputDataCheckWidget.module.css';
 
 type Props = {
@@ -19,22 +19,15 @@ export const InputDataCheckWidget = ({ predictionSetup, latestDatasetId }: Props
     const { data: dataset, error, isLoading } = useDataset(latestDatasetId);
 
     // Expected locations follow the setup, not the dataset, so locations absent from the saved data still count as gaps.
-    const completeness = useMemo(() => {
-        if (!dataset || !predictionSetup) return [];
-        const periods = getInputPeriods(
-            dataset.firstPeriod ?? '',
-            dataset.lastPeriod ?? '',
-            dataset.periodType ?? predictionSetup.periodType,
-        );
+    const latest = useMemo(() => {
+        if (!dataset?.lastPeriod || !predictionSetup) return undefined;
         return calculateInputCompleteness(
-            dataset.observations,
-            periods,
+            indexObservations(dataset.observations),
+            [dataset.lastPeriod],
             predictionSetup.orgUnits,
             getInputVariables(dataset.targetColumn ?? 'disease_cases', dataset.covariates),
-        );
+        )[0];
     }, [dataset, predictionSetup]);
-    const latest = completeness[completeness.length - 1];
-    const periodsWithGaps = completeness.filter(row => row.available < row.expected).length;
 
     const renderContent = () => {
         if (latestDatasetId == null) {
@@ -49,7 +42,7 @@ export const InputDataCheckWidget = ({ predictionSetup, latestDatasetId }: Props
         }
         return (
             <>
-                <span className={styles.label}>
+                <span className={styles.muted}>
                     {i18n.t('Latest period ({{period}})', { period: latest.period })}
                 </span>
                 <span className={styles.value} data-test="input-data-check-latest">
@@ -64,12 +57,6 @@ export const InputDataCheckWidget = ({ predictionSetup, latestDatasetId }: Props
                             })}
                         </span>
                     )}
-                </span>
-                <span className={styles.muted}>
-                    {i18n.t('{{gaps}} of {{total}} periods have missing values', {
-                        gaps: periodsWithGaps,
-                        total: completeness.length,
-                    })}
                 </span>
             </>
         );

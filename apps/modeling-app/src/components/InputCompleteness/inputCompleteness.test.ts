@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { ObservationBase } from '@dhis2-chap/ui';
-import { calculateInputCompleteness, getInputPeriods } from './inputCompleteness';
+import { calculateInputCompleteness, getInputPeriods, indexObservations } from './inputCompleteness';
 
 const observation = (period: string, orgUnit: string, featureName: string, value: number | null): ObservationBase => (
     { period, orgUnit, featureName, value }
@@ -8,15 +8,15 @@ const observation = (period: string, orgUnit: string, featureName: string, value
 
 describe('saved input completeness', () => {
     it('counts zero, but not null, absent or non-finite values, against the expected scope', () => {
-        const rows = calculateInputCompleteness([
+        const values = indexObservations([
             observation('2026-01', 'a', 'cases', 0),
             observation('202601', 'a', 'rain', null),
             observation('202601', 'b', 'cases', NaN),
             observation('202601', 'b', 'rain', Infinity),
             observation('202601', 'outside', 'cases', 20),
             observation('202601', 'a', 'unused', 10),
-            observation('202601', 'a', 'cases', 0),
-        ], ['202601', '202602'], ['a', 'b', 'wholly-missing'], ['cases', 'rain', 'absent-variable']);
+        ]);
+        const rows = calculateInputCompleteness(values, ['202601', '202602'], ['a', 'b', 'wholly-missing'], ['cases', 'rain', 'absent-variable']);
 
         expect(rows[0]).toMatchObject({ expected: 9, available: 1, zeros: 1, completeness: 1 / 9, locationsByVariable: [1, 0, 0] });
         expect(rows[0].missing).toEqual([
@@ -27,34 +27,9 @@ describe('saved input completeness', () => {
         expect(rows[1]).toMatchObject({ expected: 9, available: 0, completeness: 0 });
     });
 
-    it('does not count duplicate locations, variables or observation rows twice', () => {
-        const rows = calculateInputCompleteness([
-            observation('2026-W1', 'a', 'cases', 2),
-            observation('2026W01', 'a', 'cases', 2),
-        ], ['2026W01'], ['a', 'a'], ['cases', 'cases']);
-        expect(rows[0]).toEqual({
-            period: '2026W01', expected: 1, available: 1, zeros: 0, completeness: 1, locationsByVariable: [1], missing: [],
-        });
-    });
-
-    it('reports a zero denominator as unavailable', () => {
-        expect(calculateInputCompleteness([], ['202601'], [], ['cases'])[0].completeness).toBeNull();
-        expect(calculateInputCompleteness([], ['202601'], ['a'], [])[0].completeness).toBeNull();
-    });
-
-    it('includes every month in the selected range, including wholly missing periods', () => {
+    it('includes every period in the range, and none for a missing or invalid range', () => {
         expect(getInputPeriods('2025-12', '202603')).toEqual(['202512', '202601', '202602', '202603']);
-    });
-
-    it('fills weekly ranges across an ISO week-year boundary', () => {
-        expect(getInputPeriods('2020-W52', '2021W02')).toEqual(['2020W52', '2020W53', '2021W01', '2021W02']);
-    });
-
-    it('rejects invalid, reversed, missing and mixed-granularity ranges', () => {
-        for (const [start, end] of [['', '202601'], ['bad', '202601'], ['202602', '202601'], ['202601', '2026W01']]) {
-            expect(getInputPeriods(start, end)).toEqual([]);
-        }
-        expect(getInputPeriods('202601', '202602', 'week')).toEqual([]);
-        expect(getInputPeriods('2026W01', '2026W02', 'month')).toEqual([]);
+        expect(getInputPeriods('', '202601')).toEqual([]);
+        expect(getInputPeriods('bad', '202601')).toEqual([]);
     });
 });

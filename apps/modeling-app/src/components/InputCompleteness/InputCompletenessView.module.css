@@ -1,6 +1,6 @@
 .header {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: space-between;
     gap: 16px;
 }
@@ -22,7 +22,7 @@
     min-width: 0;
 }
 
-/* Clicking anywhere on the plot selects a period. The fill lets the plot area receive the pointer. */
+/* Clicking anywhere on the plot selects a period. */
 .chart :global(.highcharts-plot-background) {
     fill: transparent;
     cursor: pointer;
