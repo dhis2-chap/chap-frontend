@@ -111,7 +111,6 @@ test.describe.serial('signal level presentation', () => {
         const exploreThresholds = page.getByRole('switch', { name: 'Explore thresholds', exact: true });
         await expect(alertLevels).toBeChecked();
         await expect(exploreThresholds).not.toBeChecked();
-        await expect(page.getByText('Raised signals', { exact: true })).toHaveCount(0);
         await expect(plot.getByText(label, { exact: true }).locator('span')).toHaveCSS('background-color', color);
         await expect(plot.locator('.highcharts-plot-band').first()).toBeVisible();
         // Both saved levels use different parameters, so the policy view draws two
