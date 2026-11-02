@@ -40,6 +40,14 @@ jobs:
             - name: Install Playwright browser
               run: pnpm exec playwright install --with-deps chromium
 
+            # The chap-core images are built from source below and can exhaust the
+            # runner's disk, so remove preinstalled toolchains this job never uses.
+            - name: Free disk space
+              run: |
+                  sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL
+                  docker system prune -af
+                  df -h /
+
             - name: Clone chap-core at stable release
               run: |
                   git clone --depth 1 --branch "$CHAP_CORE_STABLE_REF" \
