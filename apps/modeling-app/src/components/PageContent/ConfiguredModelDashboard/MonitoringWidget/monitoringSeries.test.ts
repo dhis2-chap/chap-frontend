@@ -4,6 +4,8 @@ import { monitoringSeries } from './monitoringSeries';
 
 const data: PredictionSetupMonitoring = {
     metricId: 'mae',
+    baselineModel: 'persistence',
+    comparisonDescription: 'Improvement over the reference.',
     evaluationValue: 0,
     points: [
         { period: '202603', source: 'prediction', value: 8, runningValue: 5, nObserved: 3 },
