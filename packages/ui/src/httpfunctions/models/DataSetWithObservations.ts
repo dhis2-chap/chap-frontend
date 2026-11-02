@@ -14,6 +14,10 @@ export type DataSetWithObservations = {
      */
     name: string;
     /**
+     * Column to predict. Set when the dataset is created and reused by its runs.
+     */
+    targetColumn?: string;
+    /**
      * A mapping of covariate names to data element IDs from which to source the data
      */
     dataSources?: (Array<DataSource> | null);

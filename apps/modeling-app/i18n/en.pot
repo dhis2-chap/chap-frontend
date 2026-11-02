@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-29T20:58:48.674Z\n"
-"PO-Revision-Date: 2026-10-29T20:58:48.675Z\n"
+"POT-Creation-Date: 2026-11-02T11:20:40.622Z\n"
+"PO-Revision-Date: 2026-11-02T11:20:40.622Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -454,6 +454,43 @@ msgstr "Back to app"
 msgid "Click to expand"
 msgstr "Click to expand"
 
+msgid "No data to check"
+msgstr "No data to check"
+
+msgid "Period"
+msgstr "Period"
+
+msgid "Complete (%)"
+msgstr "Complete (%)"
+
+msgid "{{column}}{{colon}} {{available}} of {{expected}} locations"
+msgstr "{{column}}{{colon}} {{available}} of {{expected}} locations"
+
+msgid "Data completeness"
+msgstr "Data completeness"
+
+msgid "Reset zoom"
+msgstr "Reset zoom"
+
+msgid "Show values for period"
+msgstr "Show values for period"
+
+msgid ""
+"{{available}} of {{expected}} values present ({{percent}}%) · {{zeros}} "
+"zero · {{missing}} missing"
+msgstr ""
+"{{available}} of {{expected}} values present ({{percent}}%) · {{zeros}} "
+"zero · {{missing}} missing"
+
+msgid "Show all locations"
+msgstr "Show all locations"
+
+msgid "Location"
+msgstr "Location"
+
+msgid "Missing"
+msgstr "Missing"
+
 msgid "Inspect dataset"
 msgstr "Inspect dataset"
 
@@ -746,9 +783,6 @@ msgstr "Version"
 msgid "Commit"
 msgstr "Commit"
 
-msgid "Period"
-msgstr "Period"
-
 msgid "Covariates"
 msgstr "Covariates"
 
@@ -1008,6 +1042,15 @@ msgstr "Dataset name"
 msgid "EWARS data 22-24"
 msgstr "EWARS data 22-24"
 
+msgid "Target column"
+msgstr "Target column"
+
+msgid "The column models predict. Evaluations of this dataset use it."
+msgstr "The column models predict. Evaluations of this dataset use it."
+
+msgid "Choose the column to predict"
+msgstr "Choose the column to predict"
+
 msgid "Too short to evaluate"
 msgstr "Too short to evaluate"
 
@@ -1226,8 +1269,8 @@ msgstr "Benchmark model runs"
 msgid "No datasets match the origin filter"
 msgstr "No datasets match the origin filter"
 
-msgid "Target column"
-msgstr "Target column"
+msgid "Set on the dataset."
+msgstr "Set on the dataset."
 
 msgid "The dataset column the models predict and are scored against."
 msgstr "The dataset column the models predict and are scored against."
@@ -1497,6 +1540,32 @@ msgstr "View all activity"
 msgid "No activity matches the selected filters"
 msgstr "No activity matches the selected filters"
 
+msgid "Run a prediction to check its input data."
+msgstr "Run a prediction to check its input data."
+
+msgid "Unable to load input data."
+msgstr "Unable to load input data."
+
+msgid "Completeness unavailable for this dataset."
+msgstr "Completeness unavailable for this dataset."
+
+msgid "Latest period ({{period}})"
+msgstr "Latest period ({{period}})"
+
+msgid "{{percent}}% complete"
+msgstr "{{percent}}% complete"
+
+msgid "{{count}} locations with gaps"
+msgid_plural "{{count}} locations with gaps"
+msgstr[0] "{{count}} location with gaps"
+msgstr[1] "{{count}} locations with gaps"
+
+msgid "Latest input data"
+msgstr "Latest input data"
+
+msgid "View dataset"
+msgstr "View dataset"
+
 msgid "Delete prediction run"
 msgstr "Delete prediction run"
 
@@ -1618,6 +1687,16 @@ msgstr "source"
 
 msgid "sources"
 msgstr "sources"
+
+msgid "Error loading dataset"
+msgstr "Error loading dataset"
+
+msgid ""
+"Created {{created}} · {{first}} to {{last}} · {{locations}} locations · "
+"target {{target}}"
+msgstr ""
+"Created {{created}} · {{first}} to {{last}} · {{locations}} locations · "
+"target {{target}}"
 
 msgid "Error loading datasets"
 msgstr "Error loading datasets"
@@ -2571,9 +2650,6 @@ msgstr "Shift zoom left"
 msgid "Shift zoom left one period"
 msgstr "Shift zoom left one period"
 
-msgid "Reset zoom"
-msgstr "Reset zoom"
-
 msgid "Shift zoom right"
 msgstr "Shift zoom right"
 
@@ -2607,6 +2683,9 @@ msgid ""
 msgstr ""
 "This is an alpha version of the Modeling App. Some features may change or "
 "contain bugs."
+
+msgid "Read the guide"
+msgstr "Read the guide"
 
 msgid "Failed to copy report details"
 msgstr "Failed to copy report details"
@@ -2909,6 +2988,18 @@ msgstr[1] ""
 "versions. Running them again adds another row for each, so you can see how "
 "much the scores vary between runs."
 
+msgid "Dataset target has changed"
+msgstr "Dataset target has changed"
+
+msgid ""
+"This benchmark predicts {{benchmarkTarget}}, but the dataset now predicts "
+"{{datasetTarget}}. Import the data as a new dataset to run more models "
+"against {{benchmarkTarget}}."
+msgstr ""
+"This benchmark predicts {{benchmarkTarget}}, but the dataset now predicts "
+"{{datasetTarget}}. Import the data as a new dataset to run more models "
+"against {{benchmarkTarget}}."
+
 msgid "Could not start model runs"
 msgstr "Could not start model runs"
 
@@ -3095,6 +3186,12 @@ msgstr "No prediction setups yet"
 
 msgid "Error loading prediction setups"
 msgstr "Error loading prediction setups"
+
+msgid "Review the saved data and where values are missing."
+msgstr "Review the saved data and where values are missing."
+
+msgid "Dataset {{id}}"
+msgstr "Dataset {{id}}"
 
 msgid "Import data once and reuse it across evaluations."
 msgstr "Import data once and reuse it across evaluations."

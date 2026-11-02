@@ -389,7 +389,8 @@ export class BacktestsService {
      *
      * Runs asynchronously; you get a job id and poll ``/v1/jobs/{id}`` (or
      * ``/v1/jobs/{id}/evaluation_result`` once finished) to find the resulting backtest.
-     * 404 if the referenced dataset does not exist; 422 if targetColumn is not a dataset column.
+     * Uses the dataset's saved target. A supplied targetColumn must match it, otherwise returns 422.
+     * Returns 404 if the referenced dataset does not exist.
      * @param requestBody
      * @returns JobResponse Successful Response
      * @throws ApiError
@@ -416,7 +417,8 @@ export class BacktestsService {
      * which every backtest of the run files, so the results can be fetched from
      * ``GET /v1/crud/backtest-specifications/{id}`` without a second lookup, plus one job id
      * per model to poll via ``/v1/jobs/{id}``. 404 if the dataset or a model does not exist,
-     * 422 if targetColumn is not a dataset column or no org unit has target data left to train on.
+     * Uses the dataset's saved target. Returns 422 if a supplied targetColumn differs from it
+     * or no org unit has target data left to train on.
      * @param requestBody
      * @returns MakeBacktestsResponse Successful Response
      * @throws ApiError
@@ -466,12 +468,12 @@ export class BacktestsService {
     }
     /**
      * Read the observed disease cases a backtest was scored against
-     * Pull the actual ``disease_cases`` series from the dataset that backs a backtest, so a plot can show forecast vs. reality on the same axes.
+     * Pull the actual target series from the dataset that backs a backtest, so a plot can show forecast vs. reality on the same axes.
      *
      * Filter to specific regions with ``orgUnits``, or pass ``orgUnits=["adm0"]`` to get
      * one summed series across every region (useful for national-level views). Set
      * ``isDatasetId=true`` to skip the backtest lookup and read directly from a dataset
-     * id. 404 if the backtest is unknown (and ``isDatasetId`` is false).
+     * id. 404 if the backtest, or with ``isDatasetId=true`` the dataset, is unknown.
      * @param backtestId
      * @param orgUnits
      * @param isDatasetId

@@ -13,6 +13,7 @@ export const NewDatasetPage: React.FC = () => {
             <PageHeader
                 pageTitle={i18n.t('New dataset')}
                 pageDescription={i18n.t('Choose the data to import and name its columns so models can use them.')}
+                guideSlug="creating-a-dataset"
             />
 
             <Button

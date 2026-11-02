@@ -43,6 +43,7 @@ export class DatasetsService {
      *
      * ``maskedRanges`` deletes data: ``disease_cases`` inside the ranges is stored as empty
      * and the submitted values are not kept. They cannot be recovered or unmasked later.
+     * ``targetColumn`` must be one of the kept fields and present in the observations.
      * @param requestBody
      * @returns JobResponse Successful Response
      * @throws ApiError
@@ -117,7 +118,10 @@ export class DatasetsService {
      * Use this when you have the files on disk and do not want to round-trip them
      * through DHIS2 or the JSON import endpoints. Inserts inline — no background job —
      * and returns the new dataset id immediately. The dataset has no masked ranges;
-     * a CSV with a ``target_masked`` column gets a 422.
+     * a CSV with a ``target_masked`` column gets a 422. Every numeric column besides
+     * ``time_period`` and ``location`` is stored; text columns such as ``parent`` are ignored.
+     * The optional ``targetColumn`` form field selects the target (default ``disease_cases``)
+     * and must name a stored column.
      * @param formData
      * @returns chap_core__rest_api__data_models__DataBaseResponse Successful Response
      * @throws ApiError
@@ -194,6 +198,9 @@ export class DatasetsService {
      * (validation runs synchronously, the harmonise-and-load step async). Poll
      * ``/v1/jobs/{id}`` to know when the dataset is queryable. Pass ``dryRun=true`` to run
      * validation only and get the rejection summary without queuing an import.
+     *
+     * ``targetColumn`` selects the column to predict (default ``disease_cases``). It is
+     * saved with the dataset and reused by its runs; a different target needs a new dataset.
      *
      * ``maskedRanges`` deletes data: ``disease_cases`` inside the ranges is stored as empty
      * and the submitted values are not kept. They cannot be recovered or unmasked later.
@@ -273,14 +280,14 @@ export class DatasetsService {
     }
     /**
      * Compute thresholds (endemic channel) for a dataset
-     * Compute outbreak threshold lines per (period, org unit) from a dataset's historical disease_cases.
+     * Compute outbreak threshold lines per (period, org unit) from a dataset's historical target values.
      *
      * The `type` field of `params` selects the strategy; the strategy's line parameter
      * (`quantile`, `stdMultiplier`, ...) accepts a scalar or a list, and each entry's `values`
      * array holds one threshold per requested line, in the order of `lines`. Every requested
      * (period, location) gets an entry; cells no threshold could be computed for are `null`.
      * 404 if the dataset has
-     * no `disease_cases` observations. 400 if the requested periods do not match the dataset's
+     * no target observations. 400 if the requested periods do not match the dataset's
      * frequency, or if the dataset has no complete year to compute a baseline from.
      * @param requestBody
      * @returns ThresholdResponse Successful Response

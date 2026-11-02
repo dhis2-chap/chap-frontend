@@ -11,6 +11,7 @@ export type PreparedDataset = {
     request: DatasetMakeRequest;
     /** Names of every organisation unit the selection resolved to, for Chap's import summary. */
     orgUnitNames: Map<string, string>;
+    periods: string[];
 };
 
 export const prepareDataset = async (
@@ -61,6 +62,7 @@ export const prepareDataset = async (
     return {
         request: {
             name: formData.name,
+            targetColumn: formData.targetColumn || undefined,
             type: 'evaluation',
             geojson: buildOrgUnitFeatureCollection(withGeometry),
             providedData,
@@ -71,5 +73,6 @@ export const prepareDataset = async (
             dataToBeFetched: [],
         },
         orgUnitNames: new Map(geojson.organisationUnits.map(orgUnit => [orgUnit.id, orgUnit.displayName])),
+        periods,
     };
 };

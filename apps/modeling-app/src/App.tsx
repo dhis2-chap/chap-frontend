@@ -28,6 +28,7 @@ import { BenchmarksPage } from './pages/BenchmarksPage/BenchmarksPage';
 import { NewBenchmarkPage } from './pages/BenchmarksPage/NewBenchmarkPage';
 import { BenchmarkDetailsPage } from './pages/BenchmarksPage/BenchmarkDetailsPage';
 import { BenchmarkBreadcrumb } from './pages/BenchmarksPage/BenchmarkBreadcrumb';
+import { DatasetBreadcrumb, DatasetDetailsPage } from './pages/DatasetDetailsPage/DatasetDetailsPage';
 import { EvaluationPage } from './pages/EvaluationPage';
 import { EvaluationDetailsPage } from './pages/EvaluationDetailsPage';
 import { ChapValidator } from './components/ChapValidator';
@@ -168,6 +169,13 @@ const router = createHashRouter([
                                 path: 'new',
                                 element: <NewDatasetPage />,
                                 handle: { breadcrumb: () => i18n.t('New dataset') } satisfies RouteHandle,
+                            },
+                            {
+                                path: ':datasetId',
+                                element: <DatasetDetailsPage />,
+                                handle: {
+                                    breadcrumb: match => <DatasetBreadcrumb datasetId={Number(match.params.datasetId)} />,
+                                } satisfies RouteHandle,
                             },
                         ],
                     },

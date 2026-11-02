@@ -1,0 +1,33 @@
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.title {
+    margin: 0;
+    font-size: 16px;
+    color: var(--colors-grey900);
+}
+
+.description {
+    margin: 0;
+    color: var(--colors-grey700);
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.chart {
+    min-width: 0;
+}
+
+/* Clicking anywhere on the plot selects a period. */
+.chart :global(.highcharts-plot-background) {
+    fill: transparent;
+    cursor: pointer;
+}
+
+.missing {
+    color: var(--colors-red700);
+}

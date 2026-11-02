@@ -25,7 +25,7 @@ interface ResultPlotProps {
 const getSeries = (data: HighChartsData): Highcharts.SeriesOptionsType[] => {
     return [
         {
-            name: 'Real Cases',
+            name: i18n.t('Actual values'),
             data: data.realValues,
             zIndex: 4,
             lineWidth: 2.5,
