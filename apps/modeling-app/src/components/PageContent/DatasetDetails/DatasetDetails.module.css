@@ -13,18 +13,10 @@
     min-block-size: 300px;
 }
 
-.title,
-.subtitle {
+.title {
     margin: 0;
     color: var(--colors-grey900);
-}
-
-.title {
     font-size: 18px;
-}
-
-.subtitle {
-    font-size: 16px;
 }
 
 .description {

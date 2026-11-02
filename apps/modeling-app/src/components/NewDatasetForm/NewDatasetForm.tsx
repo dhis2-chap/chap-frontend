@@ -195,7 +195,6 @@ export const NewDatasetForm = () => {
 
                             {inspection.data && (
                                 <section className={styles.completeness}>
-                                    <h3 className={styles.subtitle}>{i18n.t('Data completeness')}</h3>
                                     <InputCompletenessView {...inspection.data.completeness} />
                                 </section>
                             )}

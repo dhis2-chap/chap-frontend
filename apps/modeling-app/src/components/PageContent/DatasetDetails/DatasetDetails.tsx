@@ -50,7 +50,6 @@ export const DatasetDetails = ({ datasetId }: { datasetId: number }) => {
             <div className={styles.covariates}>
                 {dataset.covariates?.map(covariate => <Tag key={covariate}>{covariate}</Tag>)}
             </div>
-            <h3 className={styles.subtitle}>{i18n.t('Data completeness')}</h3>
             <InputCompletenessView
                 observations={dataset.observations}
                 periods={periods}

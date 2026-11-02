@@ -1,3 +1,16 @@
+.header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.title {
+    margin: 0;
+    font-size: 16px;
+    color: var(--colors-grey900);
+}
+
 .description {
     margin: 0;
     color: var(--colors-grey700);

@@ -1,6 +1,7 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import {
+    Button,
     DataTable,
     DataTableBody,
     DataTableCell,
@@ -29,6 +30,8 @@ export type InputCompletenessData = {
 export const InputCompletenessView = ({ observations, periods, orgUnits, variables }: InputCompletenessData) => {
     const [selectedPeriod, setSelectedPeriod] = useState('');
     const [showAll, setShowAll] = useState(false);
+    const [isZoomed, setIsZoomed] = useState(false);
+    const chartRef = useRef<HighchartsReact.RefObject>(null);
     const { data: orgUnitData } = useOrgUnitsById(orgUnits);
     const locationNames = useMemo(() => new Map(orgUnitData?.organisationUnits.map(unit => [unit.id, unit.displayName])), [orgUnitData]);
     const values = useMemo(() => indexObservations(observations), [observations]);
@@ -50,7 +53,19 @@ export const InputCompletenessView = ({ observations, periods, orgUnits, variabl
 
     const locationCount = new Set(orgUnits).size;
     const options: Highcharts.Options = {
-        chart: { type: 'line', height: 280, animation: false, zooming: { type: 'x' } },
+        chart: {
+            type: 'line',
+            height: 280,
+            animation: false,
+            // The header holds the reset button, so hide the one Highcharts draws on the plot.
+            zooming: { type: 'x', resetButton: { theme: { style: { display: 'none' } } } },
+            events: {
+                selection: (event) => {
+                    setIsZoomed(!event.resetSelection);
+                    return true;
+                },
+            },
+        },
         title: { text: undefined },
         credits: { enabled: false },
         legend: { enabled: columns.length > 1 },
@@ -89,11 +104,19 @@ export const InputCompletenessView = ({ observations, periods, orgUnits, variabl
 
     return (
         <>
-            <p className={styles.description}>
-                {i18n.t('Share of locations with a value in each period, for the target and every covariate.')}
-            </p>
+            <div className={styles.header}>
+                <div>
+                    <h3 className={styles.title}>{i18n.t('Data completeness')}</h3>
+                    <p className={styles.description}>
+                        {i18n.t('Share of locations with a value in each period, for the target and every covariate.')}
+                    </p>
+                </div>
+                <Button small secondary disabled={!isZoomed} onClick={() => chartRef.current?.chart.zoomOut()}>
+                    {i18n.t('Reset zoom')}
+                </Button>
+            </div>
             <div className={styles.chart}>
-                <HighchartsReact highcharts={Highcharts} options={options} />
+                <HighchartsReact highcharts={Highcharts} options={options} ref={chartRef} />
             </div>
             <SingleSelectField
                 label={i18n.t('Show values for period')}
