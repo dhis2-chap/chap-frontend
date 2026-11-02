@@ -48,3 +48,13 @@
 .noticeActions {
   margin-block-start: 8px;
 }
+
+.completeness {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.targetColumn {
+  margin-block-start: 24px;
+}

@@ -26,7 +26,10 @@ export const AddBenchmarkModels = ({ specification, onClose, onSuccess }: Props)
     const queryClient = useQueryClient();
     const [selectedIds, setSelectedIds] = useState<number[]>([]);
     const { dataset } = specification;
-    const columns = getBacktestColumns(dataset.covariates ?? [], specification.targetColumn ?? 'disease_cases');
+    const targetColumn = specification.targetColumn ?? 'disease_cases';
+    // Chap Core runs a dataset's backtests against its saved target, so a benchmark on another target cannot get new runs.
+    const hasTargetMismatch = !!dataset.targetColumn && dataset.targetColumn !== targetColumn;
+    const columns = getBacktestColumns(dataset.covariates ?? [], targetColumn);
     const compatibleModels = models?.filter(model => datasetSupportsModel(columns, dataset.periodType ?? '', model)) ?? [];
     const selectedModels = compatibleModels.filter(model => selectedIds.includes(model.id));
     const modelsWithRun = getModelsWithRun(specification.backtests, selectedModels);
@@ -85,13 +88,21 @@ export const AddBenchmarkModels = ({ specification, onClose, onSuccess }: Props)
                     <ForecastHorizonNotice validation={forecastHorizon} />
                 </>
             )}
+            {hasTargetMismatch && (
+                <NoticeBox warning title={i18n.t('Dataset target has changed')}>
+                    {i18n.t('This benchmark predicts {{benchmarkTarget}}, but the dataset now predicts {{datasetTarget}}. Import the data as a new dataset to run more models against {{benchmarkTarget}}.', {
+                        benchmarkTarget: targetColumn,
+                        datasetTarget: dataset.targetColumn,
+                    })}
+                </NoticeBox>
+            )}
             {mutation.error && <ChapErrorNotice error={mutation.error} title={i18n.t('Could not start model runs')} />}
             <ButtonStrip end>
                 <Button disabled={mutation.isLoading} onClick={onClose}>{i18n.t('Cancel')}</Button>
                 <Button
                     primary
                     loading={mutation.isLoading}
-                    disabled={mutation.isLoading || !selectedModels.length || selectedModels.some(hasRevisionMismatch) || forecastHorizon.isBlocked}
+                    disabled={mutation.isLoading || hasTargetMismatch || !selectedModels.length || selectedModels.some(hasRevisionMismatch) || forecastHorizon.isBlocked}
                     onClick={() => mutation.mutate()}
                 >
                     {i18n.t('Run models')}

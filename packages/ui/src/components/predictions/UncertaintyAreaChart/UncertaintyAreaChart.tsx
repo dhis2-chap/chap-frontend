@@ -174,7 +174,7 @@ const getChartOptions = (
             id: 'actual-cases',
             type: 'line',
             data: actualCases,
-            name: i18n.t('Actual Cases'),
+            name: i18n.t('Actual values'),
             color: '#f68000',
             zIndex: 4,
             marker: {

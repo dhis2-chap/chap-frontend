@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-11-02T10:52:01.331Z\n"
-"PO-Revision-Date: 2026-11-02T10:52:01.332Z\n"
+"POT-Creation-Date: 2026-11-02T11:59:23.166Z\n"
+"PO-Revision-Date: 2026-11-02T11:59:23.168Z\n"
 
 msgid "Chap settings"
 msgstr "Chap settings"
@@ -95,6 +95,9 @@ msgstr ""
 "This server does not report API token protection. Keep it on a private "
 "network or restrict access with a firewall."
 
+msgid "Actual values"
+msgstr "Actual values"
+
 msgid "Median prediction"
 msgstr "Median prediction"
 
@@ -130,9 +133,6 @@ msgstr "Median prediction (50% signal line)"
 
 msgid "Signal line ({{probability}}%)"
 msgstr "Signal line ({{probability}}%)"
-
-msgid "Actual Cases"
-msgstr "Actual Cases"
 
 msgid "Endemic channel"
 msgstr "Endemic channel"

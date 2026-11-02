@@ -85,6 +85,12 @@ export const EvaluationSummaryWidget = ({ evaluationId }: Props) => {
                         lastPeriod={backtest.dataset.lastPeriod}
                     />
                     <RegionView orgUnits={backtest.dataset.orgUnits} />
+                    {backtest.dataset.targetColumn && (
+                        <div className={styles.row}>
+                            <span className={styles.label}>{i18n.t('Target column')}</span>
+                            <span className={styles.value}>{backtest.dataset.targetColumn}</span>
+                        </div>
+                    )}
                     {parameterValues.map(({ label, value }) => (
                         <div className={styles.row} key={label} data-test="backtest-parameter-summary">
                             <span className={styles.label}>{label}</span>
