@@ -27,6 +27,11 @@ export const observationKey = (period: string, orgUnit: string, variable: string
     JSON.stringify([normalizeInputPeriod(period), orgUnit, variable])
 );
 
+/** The target first, then every other column, so completeness covers all inputs and not only the target. */
+export const getInputVariables = (targetColumn: string, columns: string[] = []) => (
+    [...new Set([targetColumn, ...columns])]
+);
+
 /** Finite values (including zero) by period, location and variable. */
 export const indexObservations = (observations: ObservationBase[]) => new Map(observations
     .filter(observation => observation.featureName && Number.isFinite(observation.value))
@@ -55,6 +60,17 @@ export const calculateInputCompleteness = (
         const zeros = locations.reduce((sum, orgUnit) => (
             sum + features.filter(variable => values.get(observationKey(period, orgUnit, variable)) === 0).length
         ), 0);
-        return { period, expected, available, zeros, completeness: expected ? available / expected : null, missing };
+        const locationsByVariable = features.map(variable => (
+            locations.filter(orgUnit => values.has(observationKey(period, orgUnit, variable))).length
+        ));
+        return {
+            period,
+            expected,
+            available,
+            zeros,
+            completeness: expected ? available / expected : null,
+            locationsByVariable,
+            missing,
+        };
     });
 };

@@ -4,7 +4,7 @@ import { CircularLoader } from '@dhis2/ui';
 import { Card, Tag } from '@dhis2-chap/ui';
 import { useDataset } from '../../../hooks/useDataset';
 import { ChapErrorNotice } from '../../ChapErrorNotice';
-import { getInputPeriods } from '../../InputCompleteness/inputCompleteness';
+import { getInputPeriods, getInputVariables } from '../../InputCompleteness/inputCompleteness';
 import { InputCompletenessView } from '../../InputCompleteness/InputCompletenessView';
 import styles from './DatasetDetails.module.css';
 
@@ -55,7 +55,7 @@ export const DatasetDetails = ({ datasetId }: { datasetId: number }) => {
                 observations={dataset.observations}
                 periods={periods}
                 orgUnits={dataset.orgUnits ?? []}
-                variables={[targetColumn]}
+                variables={getInputVariables(targetColumn, dataset.covariates)}
             />
         </Card>
     );

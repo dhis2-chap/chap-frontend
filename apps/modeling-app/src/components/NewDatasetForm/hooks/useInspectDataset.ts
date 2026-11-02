@@ -4,6 +4,7 @@ import { ApiError, DatasetsService } from '@dhis2-chap/ui';
 import { prepareDataset } from '../utils/prepareDataset';
 import type { ImportSummaryCorrected } from '../../ModelExecutionForm/types';
 import type { InputCompletenessData } from '../../InputCompleteness/InputCompletenessView';
+import { getInputVariables } from '../../InputCompleteness/inputCompleteness';
 import { type DatasetFormValues } from './useDatasetFormState';
 import { type DatasetImportSummary } from './useCreateDataset';
 import { type Dhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
@@ -26,7 +27,10 @@ export const useInspectDataset = (periodSettings: Dhis2PeriodSettings) => {
                     observations,
                     periods,
                     orgUnits: [...new Set(observations.map(observation => observation.orgUnit))],
-                    variables: [request.targetColumn ?? 'disease_cases'],
+                    variables: getInputVariables(
+                        request.targetColumn ?? 'disease_cases',
+                        request.dataSources?.map(source => source.covariate),
+                    ),
                 },
             };
         },

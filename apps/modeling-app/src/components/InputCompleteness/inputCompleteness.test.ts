@@ -18,7 +18,7 @@ describe('saved input completeness', () => {
             observation('202601', 'a', 'cases', 0),
         ], ['202601', '202602'], ['a', 'b', 'wholly-missing'], ['cases', 'rain', 'absent-variable']);
 
-        expect(rows[0]).toMatchObject({ expected: 9, available: 1, zeros: 1, completeness: 1 / 9 });
+        expect(rows[0]).toMatchObject({ expected: 9, available: 1, zeros: 1, completeness: 1 / 9, locationsByVariable: [1, 0, 0] });
         expect(rows[0].missing).toEqual([
             { orgUnit: 'a', variables: ['rain', 'absent-variable'] },
             { orgUnit: 'b', variables: ['cases', 'rain', 'absent-variable'] },
@@ -32,7 +32,9 @@ describe('saved input completeness', () => {
             observation('2026-W1', 'a', 'cases', 2),
             observation('2026W01', 'a', 'cases', 2),
         ], ['2026W01'], ['a', 'a'], ['cases', 'cases']);
-        expect(rows[0]).toEqual({ period: '2026W01', expected: 1, available: 1, zeros: 0, completeness: 1, missing: [] });
+        expect(rows[0]).toEqual({
+            period: '2026W01', expected: 1, available: 1, zeros: 0, completeness: 1, locationsByVariable: [1], missing: [],
+        });
     });
 
     it('reports a zero denominator as unavailable', () => {

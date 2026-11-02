@@ -6,7 +6,7 @@ import type { PredictionSetupReadWithPredictions } from '@dhis2-chap/ui';
 import { useNavigate } from 'react-router-dom';
 import { useDataset } from '../../../../hooks/useDataset';
 import { getChapErrorLabel } from '../../../../utils/chapErrors';
-import { calculateInputCompleteness, getInputPeriods } from '../../../InputCompleteness/inputCompleteness';
+import { calculateInputCompleteness, getInputPeriods, getInputVariables } from '../../../InputCompleteness/inputCompleteness';
 import styles from './InputDataCheckWidget.module.css';
 
 type Props = {
@@ -30,7 +30,7 @@ export const InputDataCheckWidget = ({ predictionSetup, latestDatasetId }: Props
             dataset.observations,
             periods,
             predictionSetup.orgUnits,
-            [dataset.targetColumn ?? 'disease_cases'],
+            getInputVariables(dataset.targetColumn ?? 'disease_cases', dataset.covariates),
         );
     }, [dataset, predictionSetup]);
     const latest = completeness[completeness.length - 1];

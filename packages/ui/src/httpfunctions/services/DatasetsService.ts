@@ -43,6 +43,7 @@ export class DatasetsService {
      *
      * ``maskedRanges`` deletes data: ``disease_cases`` inside the ranges is stored as empty
      * and the submitted values are not kept. They cannot be recovered or unmasked later.
+     * ``targetColumn`` must be one of the kept fields and present in the observations.
      * @param requestBody
      * @returns JobResponse Successful Response
      * @throws ApiError
@@ -117,9 +118,10 @@ export class DatasetsService {
      * Use this when you have the files on disk and do not want to round-trip them
      * through DHIS2 or the JSON import endpoints. Inserts inline — no background job —
      * and returns the new dataset id immediately. The dataset has no masked ranges;
-     * a CSV with a ``target_masked`` column gets a 422.
+     * a CSV with a ``target_masked`` column gets a 422. Every numeric column besides
+     * ``time_period`` and ``location`` is stored; text columns such as ``parent`` are ignored.
      * The optional ``targetColumn`` form field selects the target (default ``disease_cases``)
-     * and must name a column in the uploaded CSV.
+     * and must name a stored column.
      * @param formData
      * @returns chap_core__rest_api__data_models__DataBaseResponse Successful Response
      * @throws ApiError

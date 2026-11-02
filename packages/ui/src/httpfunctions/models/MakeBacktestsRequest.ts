@@ -29,7 +29,7 @@ export type MakeBacktestsRequest = {
      */
     futureWeatherProvider?: string;
     /**
-     * If supplied, must match the dataset's targetColumn.
+     * Deprecated. If supplied, must match the dataset's targetColumn.
      * @deprecated
      */
     targetColumn?: (string | null);

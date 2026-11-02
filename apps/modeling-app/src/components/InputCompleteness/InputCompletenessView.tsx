@@ -48,11 +48,12 @@ export const InputCompletenessView = ({ observations, periods, orgUnits, variabl
         ? [...new Set(orgUnits)].sort((a, b) => Number(withGaps.has(b)) - Number(withGaps.has(a)))
         : [...withGaps];
 
+    const locationCount = new Set(orgUnits).size;
     const options: Highcharts.Options = {
         chart: { type: 'line', height: 280, animation: false },
         title: { text: undefined },
         credits: { enabled: false },
-        legend: { enabled: false },
+        legend: { enabled: columns.length > 1 },
         xAxis: {
             categories: periods,
             title: { text: i18n.t('Period') },
@@ -66,28 +67,30 @@ export const InputCompletenessView = ({ observations, periods, orgUnits, variabl
             },
         },
         tooltip: {
-            pointFormat: i18n.t('{{available}} of {{expected}} values', {
+            shared: true,
+            pointFormat: i18n.t('{{column}}{{colon}} {{available}} of {{expected}} locations', {
+                column: '{series.name}',
+                colon: ':',
                 available: '{point.custom.available}',
-                expected: '{point.custom.expected}',
+                expected: locationCount,
                 interpolation: { escapeValue: false },
-            }),
+            }) + '<br/>',
         },
-        series: [{
+        series: columns.map((variable, index) => ({
             type: 'line',
-            name: i18n.t('Completeness'),
-            color: '#147cd7',
+            name: variable,
             data: completeness.map(row => ({
-                y: row.completeness === null ? null : row.completeness * 100,
-                custom: { available: row.available, expected: row.expected },
-                marker: row.period === selected.period ? { radius: 6, fillColor: '#093371' } : undefined,
+                y: row.locationsByVariable[index] / locationCount * 100,
+                custom: { available: row.locationsByVariable[index] },
+                marker: row.period === selected.period ? { radius: 6 } : undefined,
             })),
-        }],
+        })),
     };
 
     return (
         <>
             <p className={styles.description}>
-                {i18n.t('Share of locations with a {{column}} value in each period.', { column: columns.join(', ') })}
+                {i18n.t('Share of locations with a value in each period, for the target and every covariate.')}
             </p>
             <div className={styles.chart}>
                 <HighchartsReact highcharts={Highcharts} options={options} />

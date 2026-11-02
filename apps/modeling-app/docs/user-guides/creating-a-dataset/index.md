@@ -64,7 +64,7 @@ Use this panel to make sure the models you want to evaluate can use the dataset 
 
 ### Step 5: Check the Data and Create the Dataset
 
-1. Optionally click **Check data** to preview the import without saving anything. A summary shows which locations would be left out because of missing data or missing shapes, and a chart below the form shows how complete the target column is in each period. Click a point in the chart to list the locations missing a value in that period.
+1. Optionally click **Check data** to preview the import without saving anything. A summary shows which locations would be left out because of missing data or missing shapes, and a chart below the form shows how complete the target and each covariate are in each period. Click a point in the chart to list the locations missing a value in that period.
 2. Click **Create dataset** to start the import.
 
 The import runs as a background job, and you can follow it on the **Jobs** page. When it finishes, the new dataset appears on the Datasets page. If some locations were left out, a notice lets you view the details.
@@ -74,7 +74,7 @@ The import runs as a background job, and you can follow it on the **Jobs** page.
 ### Next Steps
 
 After the dataset is created, you can:
-- Click the dataset's name to see how complete its target column is and which locations are missing values
+- Click the dataset's name to see how complete its target and covariates are and which locations are missing values
 - Open the **⋯** menu in the dataset's row and choose **New evaluation** to [evaluate a model](/guides/creating-an-evaluation) on it
 - Run several evaluations against the same dataset to compare models on identical data
 - [Configure a model](/guides/configuring-a-model) that fits the dataset's columns
