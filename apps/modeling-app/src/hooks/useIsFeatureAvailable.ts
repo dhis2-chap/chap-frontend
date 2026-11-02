@@ -18,6 +18,8 @@ export const FEATURE_MIN_VERSIONS = {
     predictionAlertPolicy: '2.6.0',
     jobDiagnostics: '2.6.0',
     outbreakMetrics: '2.6.0',
+    // Chap compares prediction setups with a baseline model from 2.6.0.
+    predictionMonitoring: '2.6.0',
 } as const;
 
 /**
@@ -34,6 +36,7 @@ export const Features = {
     PREDICTION_ALERT_POLICY: 'predictionAlertPolicy',
     JOB_DIAGNOSTICS: 'jobDiagnostics',
     OUTBREAK_METRICS: 'outbreakMetrics',
+    PREDICTION_MONITORING: 'predictionMonitoring',
 } as const;
 
 export type Feature = keyof typeof FEATURE_MIN_VERSIONS;

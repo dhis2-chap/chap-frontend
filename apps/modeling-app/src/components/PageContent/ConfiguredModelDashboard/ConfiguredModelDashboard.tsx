@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { sortByCreatedDesc } from '../../../utils/sortByCreated';
 import { JOB_STATUSES, useJobs } from '../../../hooks/useJobs';
 import { usePredictionSetup } from '../../../hooks/usePredictionSetup';
+import { Features, useIsFeatureAvailable } from '../../../hooks/useIsFeatureAvailable';
 import { FEATURES, useExperimentalFeature } from '../../../features/settings/Experimental';
 import { ActivityWidget } from './ActivityWidget';
 import { PredictionRunsWidget } from './PredictionRunsWidget';
@@ -22,6 +23,7 @@ export const ConfiguredModelDashboard: React.FC = () => {
         isLoading,
     } = usePredictionSetup(predictionSetupId);
     const { enabled: isSchedulingEnabled } = useExperimentalFeature(FEATURES.SCHEDULING);
+    const { isAvailable: isMonitoringAvailable } = useIsFeatureAvailable(Features.PREDICTION_MONITORING);
     const {
         jobs = [],
         error: jobsError,
@@ -53,7 +55,7 @@ export const ConfiguredModelDashboard: React.FC = () => {
                     jobs={jobs}
                     predictions={predictions}
                 />
-                {predictionSetup && (
+                {predictionSetup && isMonitoringAvailable && (
                     <MonitoringWidget
                         key={predictionSetup.id}
                         predictionSetupId={predictionSetup.id}
