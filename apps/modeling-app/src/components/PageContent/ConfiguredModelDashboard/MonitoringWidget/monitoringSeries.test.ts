@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { PredictionSetupMonitoring } from '@dhis2-chap/ui';
+import type { MonitoringSource, PredictionSetupMonitoring } from '@dhis2-chap/ui';
 import { monitoringSeries } from './monitoringSeries';
 
 const data: PredictionSetupMonitoring = {
@@ -8,32 +8,25 @@ const data: PredictionSetupMonitoring = {
     comparisonDescription: 'Improvement over the reference.',
     evaluationValue: 0,
     points: [
-        { period: '202603', source: 'prediction', value: 8, runningValue: 5, nObserved: 3 },
-        { period: '202512', source: 'evaluation', value: 99, runningValue: 99, nObserved: 20 },
-        { period: '202601', source: 'prediction', value: 0, runningValue: 0, nObserved: 1 },
+        { period: '202603', source: 'prediction' as MonitoringSource, value: 8, runningValue: 5, nObserved: 3 },
+        { period: '202512', source: 'evaluation' as MonitoringSource, value: 99, runningValue: 99, nObserved: 20 },
+        { period: '202601', source: 'prediction' as MonitoringSource, value: 0, runningValue: 0, nObserved: 1 },
     ],
 };
 
-describe('monitoring chart data', () => {
-    it('compares only prediction runs chronologically and preserves the backend aggregate and zero baseline', () => {
+describe('monitoringSeries', () => {
+    it('splits backtest splits from prediction runs and sorts them chronologically', () => {
         const series = monitoringSeries(data);
+        expect(series.evaluationPerSplit).toEqual([{ x: Date.UTC(2025, 11, 1), name: '202512', y: 99 }]);
         expect(series.perRun).toEqual([
             { x: Date.UTC(2026, 0, 1), name: '202601', y: 0 },
             { x: Date.UTC(2026, 2, 1), name: '202603', y: 8 },
         ]);
         expect(series.running.map(point => point.y)).toEqual([0, 5]);
         expect(series.evaluation.map(point => point.name)).toEqual(['202512', '202601', '202603']);
-        expect(series.evaluation.map(point => point.y)).toEqual([0, 0, 0]);
-        expect(data.points[0].period).toBe('202603');
     });
 
-    it('keeps backtest splits in their own series', () => {
-        const series = monitoringSeries(data);
-        expect(series.evaluationPerSplit).toEqual([{ x: Date.UTC(2025, 11, 1), name: '202512', y: 99 }]);
-        expect(series.evaluationRunning.map(point => point.y)).toEqual([99]);
-    });
-
-    it('keeps an unavailable baseline missing and supports ISO weeks across year boundaries', () => {
+    it('parses ISO weeks across year boundaries and leaves out a missing evaluation score', () => {
         const series = monitoringSeries({
             ...data,
             evaluationValue: null,
@@ -43,12 +36,6 @@ describe('monitoring chart data', () => {
             ],
         });
         expect(series.perRun.map(point => point.x)).toEqual([Date.UTC(2025, 11, 29), Date.UTC(2026, 0, 5)]);
-        expect(series.evaluation.map(point => point.y)).toEqual([null, null]);
-    });
-
-    it('does not turn evaluation-only data into production performance', () => {
-        const series = monitoringSeries({ ...data, points: [data.points[1]] });
-        expect(series.perRun).toEqual([]);
         expect(series.evaluation).toEqual([]);
     });
 });

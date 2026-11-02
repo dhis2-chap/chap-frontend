@@ -1,9 +1,7 @@
 import { createFixedPeriodFromPeriodId, DEFAULT_DHIS2_CALENDAR } from '@dhis2-chap/core';
-import type { PredictionSetupMonitoring } from '@dhis2-chap/ui';
+import type { MonitoringPoint, PredictionSetupMonitoring } from '@dhis2-chap/ui';
 
-type Point = PredictionSetupMonitoring['points'][number];
-
-const toChartPoints = (points: Point[]) => points
+const toChartPoints = (points: MonitoringPoint[]) => points
     .map(point => ({
         ...point,
         x: Date.parse(createFixedPeriodFromPeriodId({
@@ -21,7 +19,7 @@ export const monitoringSeries = (monitoring: PredictionSetupMonitoring) => {
         evaluationPerSplit: splits.map(point => ({ x: point.x, name: point.period, y: point.value })),
         evaluationRunning: splits.map(point => ({ x: point.x, name: point.period, y: point.runningValue })),
         // Starts at the last split so the score visibly continues where the evaluation's running aggregate ends
-        evaluation: predictions.length
+        evaluation: predictions.length && monitoring.evaluationValue != null
             ? [...splits.slice(-1), ...predictions].map(point => ({ x: point.x, name: point.period, y: monitoring.evaluationValue }))
             : [],
         perRun: predictions.map(point => ({ x: point.x, name: point.period, y: point.value })),

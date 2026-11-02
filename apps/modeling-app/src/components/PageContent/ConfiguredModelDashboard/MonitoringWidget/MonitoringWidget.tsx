@@ -6,19 +6,19 @@ import {
     ApiError,
     type MetricInfo,
     type PredictionSetupMonitoring,
-    getPredictionSetupMonitoring,
+    PredictionSetupsService,
     VisualizationsService,
     Widget,
 } from '@dhis2-chap/ui';
 import Highcharts from 'highcharts';
-import accessibility from 'highcharts/modules/accessibility';
 import HighchartsReact from 'highcharts-react-official';
-import { getSelectedReference, referenceLabel, referenceName } from '@/components/ModelComparisons/referenceModels';
+import { ReferenceModelSelector } from '@/components/ModelComparisons/ReferenceModelSelector';
+import { getSelectedReference, referenceName } from '@/components/ModelComparisons/referenceModels';
+import { formatComparison, HIDDEN_METRIC_IDS } from '@/components/PageContent/EvaluationDetails/EvaluationMetricsWidget/metricCatalog';
 import { useBacktestById } from '@/hooks/useBacktestById';
+import { PREDICTION_SETUPS_QUERY_KEY } from '@/hooks/usePredictionSetups';
 import { useBacktestSpecification } from '@/pages/BenchmarksPage/useBacktestSpecification';
-import { PREDICTION_SETUPS_QUERY_KEY } from '../../../../hooks/usePredictionSetups';
-import { getChapErrorMessage } from '../../../../utils/chapErrors';
-import { formatComparison, HIDDEN_METRIC_IDS } from '../../EvaluationDetails/EvaluationMetricsWidget/metricCatalog';
+import { getChapErrorMessage } from '@/utils/chapErrors';
 import { monitoringSeries } from './monitoringSeries';
 import styles from './MonitoringWidget.module.css';
 
@@ -28,7 +28,6 @@ type Props = {
 };
 
 export const MonitoringWidget = ({ predictionSetupId, evaluationId }: Props) => {
-    accessibility(Highcharts);
     const [open, setOpen] = useState(true);
     const [selectedMetric, setSelectedMetric] = useState('');
     const [selectedBaseline, setSelectedBaseline] = useState<string>();
@@ -52,7 +51,11 @@ export const MonitoringWidget = ({ predictionSetupId, evaluationId }: Props) => 
 
     const monitoring = useQuery<PredictionSetupMonitoring, ApiError>({
         queryKey: [PREDICTION_SETUPS_QUERY_KEY, predictionSetupId, 'monitoring', metricId, baseline?.configuredModel.name],
-        queryFn: () => getPredictionSetupMonitoring(predictionSetupId, metricId, baseline?.configuredModel.name),
+        queryFn: () => PredictionSetupsService.getPredictionSetupMonitoringV1CrudPredictionSetupsPredictionSetupIdMonitoringGet(
+            predictionSetupId,
+            metricId,
+            baseline?.configuredModel.name,
+        ),
         enabled: !!metricId && isBaselineResolved,
         retry: 0,
     });
@@ -62,15 +65,9 @@ export const MonitoringWidget = ({ predictionSetupId, evaluationId }: Props) => 
     const hasPoints = !!series && (series.evaluationPerSplit.length > 0 || series.perRun.length > 0);
     // Keep both sides of zero in view so the better and worse bands always show, whichever side the scores fall on.
     const extent = Math.max(0, ...(monitoring.data?.points ?? []).flatMap(point => [point.value, point.runningValue]).map(value => Math.abs(value ?? 0)));
-    const verdict = (value: number) => (value > 0
-        ? i18n.t('better than {{baseline}}', { baseline: baselineDisplayName })
-        : value < 0
-            ? i18n.t('worse than {{baseline}}', { baseline: baselineDisplayName })
-            : i18n.t('same as {{baseline}}', { baseline: baselineDisplayName }));
     const options: Highcharts.Options = {
         chart: { type: 'line', height: 320, style: { fontFamily: 'inherit' } },
         title: { text: undefined },
-        accessibility: { description: i18n.t('Evaluation compared with prediction performance over time, relative to a baseline model.') },
         exporting: { enabled: false },
         credits: { enabled: false },
         xAxis: { type: 'datetime', title: { text: i18n.t('Prediction origin period') } },
@@ -124,7 +121,7 @@ export const MonitoringWidget = ({ predictionSetupId, evaluationId }: Props) => 
             pointFormatter() {
                 const value = this.y ?? 0;
                 const color = value > 0 ? colors.green800 : value < 0 ? colors.red800 : colors.grey700;
-                return `<span style="color:${this.color}">●</span> ${this.series.name}: <b style="color:${color}">${formatComparison(value, metric)}</b> (${verdict(value)})<br/>`;
+                return `<span style="color:${this.color}">●</span> ${this.series.name}: <b style="color:${color}">${formatComparison(value, metric)}</b><br/>`;
             },
         },
         plotOptions: { series: { animation: false, marker: { enabled: true, radius: 3 } } },
@@ -133,7 +130,7 @@ export const MonitoringWidget = ({ predictionSetupId, evaluationId }: Props) => 
                 type: 'line',
                 name: i18n.t('Evaluation per backtest split'),
                 data: series?.evaluationPerSplit,
-                color: '#a0adba',
+                color: colors.grey500,
                 lineWidth: 1,
                 showInLegend: !!series?.evaluationPerSplit.length,
             },
@@ -141,7 +138,7 @@ export const MonitoringWidget = ({ predictionSetupId, evaluationId }: Props) => 
                 type: 'line',
                 name: i18n.t('Evaluation running aggregate'),
                 data: series?.evaluationRunning,
-                color: '#6c7787',
+                color: colors.grey600,
                 showInLegend: !!series?.evaluationRunning.length,
             },
             {
@@ -149,29 +146,27 @@ export const MonitoringWidget = ({ predictionSetupId, evaluationId }: Props) => 
                 name: i18n.t('Evaluation score'),
                 marker: { enabled: false },
                 data: series?.evaluation,
-                color: '#6c7787',
+                color: colors.grey600,
                 dashStyle: 'Dash',
-                visible: monitoring.data?.evaluationValue != null,
-                showInLegend: !!series?.evaluation.length && monitoring.data?.evaluationValue != null,
+                showInLegend: !!series?.evaluation.length,
             },
             {
                 type: 'line',
                 name: i18n.t('Prediction per run'),
                 data: series?.perRun,
-                color: '#147cd7',
+                color: colors.blue600,
                 showInLegend: !!series?.perRun.length,
             },
             {
                 type: 'line',
                 name: i18n.t('Prediction running aggregate'),
                 data: series?.running,
-                color: '#277314',
+                color: colors.green700,
                 showInLegend: !!series?.running.length,
             },
         ],
     };
-    const noPredictionOutcomes = i18n.t('No observed prediction outcomes yet. Monitoring becomes available as later prediction runs supply observed values.');
-    const isBaselineUnscored = !!baseline && baseline.status !== 'done';
+    const noPredictionOutcomes = i18n.t('No observed prediction outcomes yet.');
 
     return (
         <Widget
@@ -194,27 +189,18 @@ export const MonitoringWidget = ({ predictionSetupId, evaluationId }: Props) => 
                         </SingleSelectField>
                     )}
                     {baselines.length > 0 && (
-                        <SingleSelectField
-                            dense
+                        <ReferenceModelSelector
+                            hideNone
                             label={i18n.t('Compare with baseline')}
-                            selected={baseline ? String(baseline.configuredModel.id) : undefined}
-                            onChange={({ selected }) => setSelectedBaseline(selected)}
-                            warning={isBaselineUnscored}
-                            validationText={isBaselineUnscored ? baseline.message || i18n.t('No scores for this model yet.') : undefined}
-                        >
-                            {baselines.map(item => (
-                                <SingleSelectOption key={item.configuredModel.id} value={String(item.configuredModel.id)} label={referenceLabel(item)} />
-                            ))}
-                        </SingleSelectField>
+                            references={baselines}
+                            reference={baseline}
+                            onSelect={setSelectedBaseline}
+                        />
                     )}
                 </div>
                 {error ? (
                     <NoticeBox error title={i18n.t('Could not load monitoring')}>
-                        {error instanceof ApiError && error.status === 404
-                            ? i18n.t('Monitoring is unavailable for this prediction setup. Check that the Chap server supports prediction monitoring.')
-                            : error instanceof ApiError && error.status === 422
-                                ? i18n.t('This metric or baseline is not supported for monitoring. Choose another one.')
-                                : getChapErrorMessage(error)}
+                        {getChapErrorMessage(error)}
                     </NoticeBox>
                 ) : catalog.isLoading || !isBaselineResolved || monitoring.isInitialLoading ? (
                     <CircularLoader small />
@@ -224,12 +210,6 @@ export const MonitoringWidget = ({ predictionSetupId, evaluationId }: Props) => 
                     <p>{noPredictionOutcomes}</p>
                 ) : (
                     <>
-                        <p className={styles.explanation}>
-                            {i18n.t('Each point is a backtest split or prediction run, dated by the last period it had data for.')}
-                        </p>
-                        {monitoring.data?.evaluationValue == null && !!series?.perRun.length && (
-                            <NoticeBox>{i18n.t('No evaluation score is available for this metric. Only prediction performance is shown.')}</NoticeBox>
-                        )}
                         <HighchartsReact highcharts={Highcharts} options={options} />
                         {!series?.perRun.length && (
                             <p className={styles.explanation}>{noPredictionOutcomes}</p>

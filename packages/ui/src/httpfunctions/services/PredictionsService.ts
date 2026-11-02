@@ -16,7 +16,8 @@ export class PredictionsService {
      *
      * Predictions whose configured model has been deleted outright are filtered out;
      * predictions whose configured model has only been archived (soft-deleted) still
-     * appear, since the row is still resolvable.
+     * appear, since the row is still resolvable. Baseline forecasts stored alongside
+     * prediction setup runs for monitoring are left out.
      * @returns PredictionInfo Successful Response
      * @throws ApiError
      */
