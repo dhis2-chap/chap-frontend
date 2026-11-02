@@ -4,6 +4,7 @@ import { CircularLoader } from '@dhis2/ui';
 import { Card, getPeriodNameFromId, Tag } from '@dhis2-chap/ui';
 import { format } from 'date-fns';
 import { useDataset } from '../../../hooks/useDataset';
+import { useDhis2PeriodSettings } from '../../../hooks/useDhis2PeriodSettings';
 import { ChapErrorNotice } from '../../ChapErrorNotice';
 import { getInputPeriods, getInputVariables } from '../../InputCompleteness/inputCompleteness';
 import { InputCompletenessView } from '../../InputCompleteness/InputCompletenessView';
@@ -14,7 +15,11 @@ const EMPTY_VALUE = '-';
 export const DatasetDetails = ({ datasetId }: { datasetId: number }) => {
     // isInitialLoading stays false for an invalid id, which disables the query, so it falls through to the error.
     const { data: dataset, error, isInitialLoading } = useDataset(datasetId);
-    const periods = useMemo(() => getInputPeriods(dataset?.firstPeriod, dataset?.lastPeriod), [dataset]);
+    const { settings } = useDhis2PeriodSettings();
+    const periods = useMemo(
+        () => getInputPeriods(dataset?.firstPeriod, dataset?.lastPeriod, settings.calendar),
+        [dataset, settings.calendar],
+    );
 
     if (isInitialLoading) {
         return (

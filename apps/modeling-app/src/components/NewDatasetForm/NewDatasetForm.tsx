@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { FormProvider, useFieldArray, useWatch } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -79,6 +79,11 @@ export const NewDatasetForm = () => {
     const isMissingTarget = isTargetColumnAvailable && columnNames.length > 0 && !targetColumn;
     // Chap Core < 2.6.0 cannot save a target on the dataset.
     const withTarget = (data: DatasetFormValues) => ({ ...data, targetColumn: isTargetColumnAvailable ? targetColumn : '' });
+    // A check describes the inputs it ran on, so clear it once they change.
+    useEffect(() => {
+        const subscription = methods.watch(() => inspection.reset());
+        return () => subscription.unsubscribe();
+    }, [methods, inspection.reset]);
     const checkData = methods.handleSubmit(data => inspection.mutate(withTarget(data), {
         onSuccess: result => setShownSummary({ title: i18n.t('Data check'), summary: result }),
     }));

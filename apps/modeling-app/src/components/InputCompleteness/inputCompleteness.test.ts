@@ -28,8 +28,14 @@ describe('saved input completeness', () => {
     });
 
     it('includes every period in the range, and none for a missing or invalid range', () => {
-        expect(getInputPeriods('2025-12', '202603')).toEqual(['202512', '202601', '202602', '202603']);
-        expect(getInputPeriods('', '202601')).toEqual([]);
-        expect(getInputPeriods('bad', '202601')).toEqual([]);
+        expect(getInputPeriods('2025-12', '202603', 'gregory')).toEqual(['202512', '202601', '202602', '202603']);
+        expect(getInputPeriods('', '202601', 'gregory')).toEqual([]);
+        expect(getInputPeriods('bad', '202601', 'gregory')).toEqual([]);
+    });
+
+    it('matches zero-padded weekly observations to generated weeks', () => {
+        const values = indexObservations([observation('2025W01', 'a', 'cases', 12)]);
+        const [week] = getInputPeriods('2025W01', '2025W01', 'gregory');
+        expect(calculateInputCompleteness(values, [week], ['a'], ['cases'])[0].available).toBe(1);
     });
 });

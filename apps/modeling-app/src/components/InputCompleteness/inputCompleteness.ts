@@ -1,16 +1,16 @@
-import { DEFAULT_DHIS2_CALENDAR, getPeriodsInRange } from '@dhis2-chap/core';
+import { canonicalizePeriodId, type Dhis2Calendar, getPeriodsInRange } from '@dhis2-chap/core';
 import type { ObservationBase } from '@dhis2-chap/ui';
 
-// Saved Chap periods can use either basic or extended ISO notation.
-const normalizeInputPeriod = (period: string) => period.replace(/-/g, '');
+// Saved Chap periods can use extended ISO notation and zero-padded weeks.
+const normalizeInputPeriod = (period: string) => canonicalizePeriodId(period.replace(/-/g, ''));
 
-export const getInputPeriods = (start?: string | null, end?: string | null): string[] => {
+export const getInputPeriods = (start: string | null | undefined, end: string | null | undefined, calendar: Dhis2Calendar): string[] => {
     if (!start || !end) return [];
     try {
         return getPeriodsInRange({
             startPeriodId: normalizeInputPeriod(start),
             endPeriodId: normalizeInputPeriod(end),
-            calendar: DEFAULT_DHIS2_CALENDAR,
+            calendar,
         }).map(period => period.id);
     } catch {
         return [];
