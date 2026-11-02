@@ -22,6 +22,12 @@
     min-width: 0;
 }
 
+/* Clicking anywhere on the plot selects a period. The fill lets the plot area receive the pointer. */
+.chart :global(.highcharts-plot-background) {
+    fill: transparent;
+    cursor: pointer;
+}
+
 .missing {
     color: var(--colors-red700);
 }
