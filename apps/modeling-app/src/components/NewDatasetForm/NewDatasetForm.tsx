@@ -16,7 +16,7 @@ import { PeriodSelector } from '../ModelExecutionForm/Sections/PeriodSelector';
 import { LocationSelector } from '../ModelExecutionForm/Sections/LocationSelector';
 import { DatasetColumns } from './Sections/DatasetColumns';
 import { ModelSupport } from './Sections/ModelSupport';
-import { EMPTY_COLUMN, resolveTargetColumn, useDatasetFormState } from './hooks/useDatasetFormState';
+import { type DatasetFormValues, EMPTY_COLUMN, resolveTargetColumn, useDatasetFormState } from './hooks/useDatasetFormState';
 import { useCovariateSuggestions } from './hooks/useCovariateSuggestions';
 import { getBacktestColumns, getModelSupport } from './utils/datasetModels';
 import { type DatasetImportSummary, useCreateDataset } from './hooks/useCreateDataset';
@@ -60,9 +60,6 @@ export const NewDatasetForm = () => {
     const leftOutCount = new Set(summary?.rejected.map(item => item.orgUnit)).size;
     const allLeftOut = !!summary && leftOutCount > 0 && !summary.importedCount;
     const isBusy = isSubmitting || isImporting || hasSucceeded || inspection.isLoading;
-    const checkData = methods.handleSubmit(data => inspection.mutate(data, {
-        onSuccess: result => setShownSummary({ title: i18n.t('Data check'), summary: result }),
-    }));
 
     const { models, isLoading: isModelsLoading, error: modelsError } = useModels();
     const { suggestions } = useCovariateSuggestions(models);
@@ -80,6 +77,11 @@ export const NewDatasetForm = () => {
     const targetColumn = resolveTargetColumn(columnNames, chosenTarget);
     const support = getModelSupport(targetColumn ? getBacktestColumns(columnNames, targetColumn) : columnNames, periodType, models ?? []);
     const isMissingTarget = isTargetColumnAvailable && columnNames.length > 0 && !targetColumn;
+    // Chap Core < 2.6.0 cannot save a target on the dataset.
+    const withTarget = (data: DatasetFormValues) => ({ ...data, targetColumn: isTargetColumnAvailable ? targetColumn : '' });
+    const checkData = methods.handleSubmit(data => inspection.mutate(withTarget(data), {
+        onSuccess: result => setShownSummary({ title: i18n.t('Data check'), summary: result }),
+    }));
     const periodCount = countPeriods(fromPeriodId, toPeriodId, settings.calendar);
     const minimumEvaluationPeriods = getMinimumEvaluationPeriods(
         periodType,
@@ -111,7 +113,7 @@ export const NewDatasetForm = () => {
                 <div className={styles.container}>
                     <Card className={styles.formCard}>
                         <div className={styles.formWrapper}>
-                            <form onSubmit={methods.handleSubmit(data => createDataset(data))}>
+                            <form onSubmit={methods.handleSubmit(data => createDataset(withTarget(data)))}>
                                 <fieldset className={styles.fields} disabled={isBusy}>
                                     <NameInput
                                         label={i18n.t('Dataset name')}
