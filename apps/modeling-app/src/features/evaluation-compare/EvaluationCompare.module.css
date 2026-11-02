@@ -22,6 +22,7 @@
 
 .stickyBar {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: var(--spacers-dp24);
     padding: var(--spacers-dp8);
@@ -39,14 +40,22 @@
 
 .selectorRow {
     display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
     gap: var(--spacers-dp8);
-    flex: 2;
+    flex: 1 1 560px;
     min-inline-size: 0;
 }
 
+/* Selectors wrap onto their own lines when there is not room for them side by side */
 .selectorRow > * {
-    flex: 1;
+    flex: 3 1 280px;
     min-inline-size: 0;
+}
+
+/* Location select only shows "N selected", give the evaluations the space */
+.selectorRow > :last-child {
+    flex: 1 1 220px;
 }
 
 .zoomButtons {
@@ -54,7 +63,8 @@
     align-items: center;
     justify-content: flex-end;
     gap: 6px;
-    flex: 1;
+    flex: none;
+    margin-inline-start: auto;
 }
 
 .selectionToolbar {

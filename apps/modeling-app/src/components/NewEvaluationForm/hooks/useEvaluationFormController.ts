@@ -1,6 +1,10 @@
 import { useModelExecutionFormState, ModelExecutionFormValues } from '../../ModelExecutionForm/hooks/useModelExecutionFormState';
 import { useCreateNewBacktest } from './useCreateNewBacktest';
 import { useDhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
+import { useWatch } from 'react-hook-form';
+import { useModels } from '@/hooks/useModels';
+import { getLegacyBacktestParameters } from './backtestDefaults';
+import { useForecastHorizonValidation } from './useForecastHorizonValidation';
 
 export const useEvaluationFormController = (initialValues?: Partial<ModelExecutionFormValues>) => {
     const {
@@ -9,6 +13,16 @@ export const useEvaluationFormController = (initialValues?: Partial<ModelExecuti
         error: periodSettingsError,
     } = useDhis2PeriodSettings();
     const { methods } = useModelExecutionFormState({ initialValues, periodSettings });
+    const { models } = useModels({ includeArchived: true });
+    // Watch only the horizon, so other parameter fields do not re-render the whole form.
+    const [modelId, periodType, nPeriods] = useWatch({
+        control: methods.control,
+        name: ['modelId', 'periodType', 'backtestParameters.nPeriods'],
+    });
+    const forecastHorizon = useForecastHorizonValidation(
+        models?.filter(model => String(model.id) === modelId) ?? [],
+        nPeriods ?? getLegacyBacktestParameters(periodType)?.nPeriods,
+    );
 
     const {
         createNewBacktest,
@@ -27,7 +41,9 @@ export const useEvaluationFormController = (initialValues?: Partial<ModelExecuti
         },
     });
 
-    const handleSubmit = (data: ModelExecutionFormValues) => createNewBacktest(data);
+    const handleSubmit = (data: ModelExecutionFormValues) => {
+        if (!forecastHorizon.isBlocked) createNewBacktest(data);
+    };
     const handleDryRunSubmit = (data: ModelExecutionFormValues) => validateAndDryRun(data);
 
     const handleStartJob = () => {
@@ -63,5 +79,6 @@ export const useEvaluationFormController = (initialValues?: Partial<ModelExecuti
         periodSettings,
         periodSettingsLoading,
         periodSettingsError,
+        forecastHorizon,
     };
 };

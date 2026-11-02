@@ -1,33 +1,30 @@
 import type { AlertPolicyRead, AlertRead } from '@dhis2-chap/ui';
 
-// Chap does not record which policy a prediction ran with: alerts are raised
-// against the setup's policy when the run finishes. Without alerts, the setup's
-// current policy may have been attached after this run, so it is only a hint.
+// Chap records the policy a run used from 2.6.0. Older runs still name the
+// policies that raised their alerts.
 export type PredictionAlertStatus =
-    | { kind: 'raised'; policies: AlertPolicyRead[]; alertCount: number }
+    | { kind: 'policy'; policies: AlertPolicyRead[]; alertCount: number }
     | { kind: 'noPolicy' }
-    | { kind: 'noAlerts'; setupPolicy: AlertPolicyRead | undefined };
+    | { kind: 'noAlerts' };
 
 export const getPredictionAlertStatus = ({
     alerts,
     policies,
-    setupPolicy,
+    policyId,
 }: {
     alerts: AlertRead[];
     policies: AlertPolicyRead[];
-    // null when the run has no setup or its setup has no policy; undefined when unknown
-    setupPolicy: AlertPolicyRead | null | undefined;
+    // undefined when this Chap version does not record the policy
+    policyId: number | null | undefined;
 }): PredictionAlertStatus => {
-    if (alerts.length > 0) {
-        const policyIds = new Set(alerts.map(alert => alert.alertPolicyId));
-        return {
-            kind: 'raised',
-            policies: policies.filter(policy => policyIds.has(policy.id)),
-            alertCount: alerts.length,
-        };
+    const policyIds = new Set(alerts.map(alert => alert.alertPolicyId));
+    if (policyId != null) policyIds.add(policyId);
+    if (policyIds.size === 0) {
+        return { kind: policyId === null ? 'noPolicy' : 'noAlerts' };
     }
-    if (setupPolicy === null) {
-        return { kind: 'noPolicy' };
-    }
-    return { kind: 'noAlerts', setupPolicy };
+    return {
+        kind: 'policy',
+        policies: policies.filter(policy => policyIds.has(policy.id)),
+        alertCount: alerts.length,
+    };
 };

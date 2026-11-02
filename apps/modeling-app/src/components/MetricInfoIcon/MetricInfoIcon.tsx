@@ -4,7 +4,8 @@ import { getComparisonGuidance, getMetricGuidance } from '../PageContent/Evaluat
 import styles from './MetricInfoIcon.module.css';
 
 type Props = {
-    metric?: MetricInfo;
+    /* Partial so other metric catalogs, like the outbreak metrics, can show their descriptions too. */
+    metric?: Partial<MetricInfo>;
     /* Name of the reference the scores are compared with; the guidance then explains the comparison instead of the score. */
     comparedWith?: string;
 };

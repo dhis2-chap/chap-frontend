@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import type { MakeBacktestWithDataRequest, ModelSpecRead } from '@dhis2-chap/ui';
+import type { ConfiguredModelInfoRead, MakeBacktestWithDataRequest, ModelSpecRead } from '@dhis2-chap/ui';
 import { getChap, readJson } from './helpers/evaluation-fixtures';
 import { openPeriodPickerAtYear, selectPeriod } from './helpers/period-picker';
 
@@ -212,6 +212,15 @@ test('validates backtest parameters, submits chosen values, and shows backend va
     const parametersResponse = await getChap(page, '/v1/analytics/backtest-parameters');
     expect([200, 404]).toContain(parametersResponse.status());
     test.skip(!parametersResponse.ok(), 'Stable Chap releases predate configurable backtest parameters');
+    // Override only model limits to exercise client-side rejection without changing the installed model.
+    await page.route('**/v1/crud/configured-models/*', async (route) => {
+        const response = await route.fetch();
+        const model = await response.json() as ConfiguredModelInfoRead;
+        await route.fulfill({ response, json: {
+            ...model,
+            modelTemplate: { ...model.modelTemplate, minPredictionPeriods: 1, maxPredictionPeriods: 3 },
+        } });
+    });
     await page.goto('/#/evaluate/new');
     await prepareValidFormData(page, 'Custom backtest parameters');
     for (const [name, value] of Object.entries({ nPeriods: 3, nSplits: 7, stride: 1, nRetrain: 1 })) {
@@ -226,10 +235,22 @@ test('validates backtest parameters, submits chosen values, and shows backend va
     await expect(page.getByText('Number of training runs must not exceed the number of splits')).toBeVisible();
     await retrains.fill('2');
     const periods = page.locator('[data-test="backtest-nPeriods"] input');
+    let submissions = 0;
+    page.on('request', (request) => {
+        if (isBacktestCreateRequest(request.url(), request.method())) submissions++;
+    });
+    await periods.fill('4');
+    await expect(page.getByText(/supports 1–3 forecast periods/)).toBeVisible();
+    await expect(start).toBeDisabled();
+    await expect(page.getByRole('button', { name: 'Start import', exact: true })).toBeDisabled();
+    await periods.press('Enter');
+    await expect(page.getByText(/supports 1–3 forecast periods/)).toBeVisible();
+    expect(submissions).toBe(0);
     await periods.fill('0');
     await start.click();
     await expect(page.getByText('Enter a whole number greater than zero')).toBeVisible();
     await periods.fill('2');
+    await expect(page.getByText('Unsupported forecast periods', { exact: true })).not.toBeVisible();
     await page.locator('[data-test="backtest-nSplits"] input').fill('4');
     await page.locator('[data-test="backtest-stride"] input').fill('2');
     await page.locator('[data-test="backtest-futureWeatherProvider"]').click();

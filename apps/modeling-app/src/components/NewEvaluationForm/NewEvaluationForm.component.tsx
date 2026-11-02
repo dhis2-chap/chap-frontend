@@ -20,6 +20,7 @@ import { NavigationConfirmModal } from '../NavigationConfirmModal';
 import { SummaryModal } from '../ModelExecutionForm/SummaryModal';
 import { useModels } from '@/hooks/useModels';
 import { BacktestParameterFields } from './BacktestParameterFields';
+import { ForecastHorizonNotice } from './ForecastHorizonNotice';
 import { ChapErrorNotice } from '../ChapErrorNotice';
 import { hasRevisionMismatch } from '@/utils/modelHealth';
 
@@ -43,6 +44,7 @@ export const NewEvaluationFormComponent = ({ initialValues }: NewEvaluationFormP
         periodSettings,
         periodSettingsLoading,
         periodSettingsError,
+        forecastHorizon,
     } = useEvaluationFormController(initialValues);
 
     const [splitButtonOpen, setSplitButtonOpen] = useState(false);
@@ -75,7 +77,7 @@ export const NewEvaluationFormComponent = ({ initialValues }: NewEvaluationFormP
                                         <Button
                                             onClick={handleDryRun}
                                             loading={isValidationLoading}
-                                            disabled={modelUnavailable || !!periodSettingsError || periodSettingsLoading}
+                                            disabled={forecastHorizon.isBlocked || modelUnavailable || !!periodSettingsError || periodSettingsLoading}
                                             primary
                                         >
                                             {i18n.t('Start dry run')}
@@ -84,7 +86,7 @@ export const NewEvaluationFormComponent = ({ initialValues }: NewEvaluationFormP
                                         <SplitButton
                                             onClick={handleStartJob}
                                             icon={<IconArrowRightMulti16 />}
-                                            disabled={modelUnavailable || isSubmitting || isValidationLoading || !!periodSettingsError || periodSettingsLoading}
+                                            disabled={forecastHorizon.isBlocked || modelUnavailable || isSubmitting || isValidationLoading || !!periodSettingsError || periodSettingsLoading}
                                             open={splitButtonOpen}
                                             onToggle={() => setSplitButtonOpen(prev => !prev)}
                                             component={(
@@ -108,6 +110,7 @@ export const NewEvaluationFormComponent = ({ initialValues }: NewEvaluationFormP
                         >
                             <div className={styles.backtestParameters}>
                                 <BacktestParameterFields periodType={periodType} disabled={isSubmitting || isValidationLoading} />
+                                <ForecastHorizonNotice validation={forecastHorizon} />
                             </div>
                         </ModelExecutionFormFields>
 

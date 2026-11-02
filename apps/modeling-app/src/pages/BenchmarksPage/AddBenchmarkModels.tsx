@@ -10,6 +10,8 @@ import { ModelHealthNotice } from '../../components/ModelHealth/ModelHealth';
 import { ModelsSelector } from '../../components/NewEvaluationForm/DatasetEvaluationForm/ModelsSelector';
 import { datasetSupportsModel, getBacktestColumns } from '../../components/NewDatasetForm/utils/datasetModels';
 import { ChapErrorNotice } from '../../components/ChapErrorNotice';
+import { ForecastHorizonNotice } from '../../components/NewEvaluationForm/ForecastHorizonNotice';
+import { useForecastHorizonValidation } from '../../components/NewEvaluationForm/hooks/useForecastHorizonValidation';
 import { getModelsWithRun, makeBenchmarkRequest } from './benchmarkUtils';
 import styles from './BenchmarksPage.module.css';
 
@@ -31,6 +33,7 @@ export const AddBenchmarkModels = ({ specification, onClose, onSuccess }: Props)
     const compatibleModels = models?.filter(model => datasetSupportsModel(columns, dataset.periodType ?? '', model)) ?? [];
     const selectedModels = compatibleModels.filter(model => selectedIds.includes(model.id));
     const modelsWithRun = getModelsWithRun(specification.backtests, selectedModels);
+    const forecastHorizon = useForecastHorizonValidation(selectedModels, specification.nPeriods);
     const mutation = useMutation<MakeBacktestsResponse, ApiError | Error>({
         mutationFn: async () => {
             const runnable = await Promise.all(selectedModels.map(model => fetchRunnableModel(queryClient, model.id)));
@@ -82,6 +85,7 @@ export const AddBenchmarkModels = ({ specification, onClose, onSuccess }: Props)
                         </NoticeBox>
                     )}
                     {selectedModels.map(model => <ModelHealthNotice key={model.id} model={model} />)}
+                    <ForecastHorizonNotice validation={forecastHorizon} />
                 </>
             )}
             {hasTargetMismatch && (
@@ -98,7 +102,7 @@ export const AddBenchmarkModels = ({ specification, onClose, onSuccess }: Props)
                 <Button
                     primary
                     loading={mutation.isLoading}
-                    disabled={mutation.isLoading || hasTargetMismatch || !selectedModels.length || selectedModels.some(hasRevisionMismatch)}
+                    disabled={mutation.isLoading || hasTargetMismatch || !selectedModels.length || selectedModels.some(hasRevisionMismatch) || forecastHorizon.isBlocked}
                     onClick={() => mutation.mutate()}
                 >
                     {i18n.t('Run models')}

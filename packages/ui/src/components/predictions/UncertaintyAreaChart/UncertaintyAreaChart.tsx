@@ -38,6 +38,17 @@ const getDisabledAnimationOptions = (): DisabledAnimationOptions => ({
     },
 });
 
+const THRESHOLD_LINE_STYLE = {
+    color: '#212934',
+    dashStyle: 'Dash',
+    zIndex: 5,
+    marker: {
+        enabled: false,
+    },
+    lineWidth: 2,
+    connectNulls: false,
+} as const;
+
 const getChartOptions = (
     series: PredictionOrgUnitSeries,
     predictionTargetName: string,
@@ -51,6 +62,7 @@ const getChartOptions = (
     endemicThresholds?: EndemicThresholdPoint[],
     outbreakProbability?: OutbreakProbability,
     alertPeriods?: AlertPeriodChartInfo[],
+    thresholdLines: ThresholdChartLine[] = [],
 ): Highcharts.Options => {
     const isTile = variant === 'tile';
     const disabledAnimationOptions = getDisabledAnimationOptions();
@@ -216,14 +228,7 @@ const getChartOptions = (
                 type: 'line',
                 data: thresholdData,
                 name: i18n.t('Endemic threshold'),
-                color: '#212934',
-                dashStyle: 'Dash',
-                zIndex: 5,
-                marker: {
-                    enabled: false,
-                },
-                lineWidth: 2,
-                connectNulls: false,
+                ...THRESHOLD_LINE_STYLE,
             });
         }
     } else if (endemicThreshold !== undefined && endemicThreshold !== null) {
@@ -236,16 +241,24 @@ const getChartOptions = (
                 y: endemicThreshold,
             })),
             name: i18n.t('Endemic threshold'),
-            color: '#212934',
-            dashStyle: 'Dash',
-            zIndex: 5,
-            marker: {
-                enabled: false,
-            },
-            lineWidth: 2,
-            connectNulls: false,
+            ...THRESHOLD_LINE_STYLE,
         });
     }
+
+    thresholdLines.forEach((line, index) => {
+        const values = new Map(line.points.map(point => [canonicalizePeriodId(point.period), point.value]));
+        chartSeries.push({
+            id: `threshold-line-${index}`,
+            type: 'line',
+            name: line.label,
+            data: periods.map(period => ({
+                name: period,
+                x: getPeriodIndex(period),
+                y: values.get(canonicalizePeriodId(period)) ?? null,
+            })),
+            ...THRESHOLD_LINE_STYLE,
+        });
+    });
 
     return {
         title: {
@@ -273,7 +286,7 @@ const getChartOptions = (
                         ? `${low.toFixed(2)} - ${high.toFixed(2)}`
                         : point.y?.toFixed(2);
 
-                    return `<span style="color:${point.color}">\u25CF</span> ${point.series.name}: <b>${value}</b>`;
+                    return `<span style="color:${point.color}">\u25CF</span> ${escapeHtml(point.series.name)}: <b>${value}</b>`;
                 });
                 const period = String(points[0]?.point.name ?? this.x);
                 const outbreakInfo = outbreakInfoByPeriod.get(period);
@@ -387,11 +400,17 @@ interface PredicationChartProps {
     outbreakPeriods?: OutbreakPeriodChartInfo[];
     outbreakProbability?: OutbreakProbability;
     alertPeriods?: AlertPeriodChartInfo[];
+    thresholdLines?: ThresholdChartLine[];
     variant?: UncertaintyAreaChartVariant;
     zoomRange?: ZoomRange | null;
     onZoomChange?: (range: ZoomRange | null) => void;
     maxY?: number;
     chartHeight?: Highcharts.ChartOptions['height'];
+}
+
+export interface ThresholdChartLine {
+    label: string;
+    points: EndemicThresholdPoint[];
 }
 
 export interface AlertPeriodChartInfo {
@@ -417,6 +436,7 @@ export const UncertaintyAreaChart = ({
     outbreakPeriods = [],
     outbreakProbability,
     alertPeriods,
+    thresholdLines,
     variant = 'default',
     zoomRange,
     onZoomChange,
@@ -485,6 +505,7 @@ export const UncertaintyAreaChart = ({
             endemicThresholds,
             outbreakProbability,
             alertPeriods,
+            thresholdLines,
         );
     }, [
         series,
@@ -494,6 +515,7 @@ export const UncertaintyAreaChart = ({
         outbreakPeriods,
         outbreakProbability,
         alertPeriods,
+        thresholdLines,
         variant,
         handleAfterSetExtremes,
         hasExternalZoomControls,

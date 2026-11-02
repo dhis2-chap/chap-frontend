@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-10-29T20:19:20.116Z\n"
-"PO-Revision-Date: 2026-10-29T20:19:20.116Z\n"
+"POT-Creation-Date: 2026-11-02T09:43:30.572Z\n"
+"PO-Revision-Date: 2026-11-02T09:43:30.573Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -1318,6 +1318,12 @@ msgstr "Select models"
 msgid "No models selected"
 msgstr "No models selected"
 
+msgid "Could not check model forecast limits"
+msgstr "Could not check model forecast limits"
+
+msgid "Unsupported forecast periods"
+msgstr "Unsupported forecast periods"
+
 msgid "Start dry run"
 msgstr "Start dry run"
 
@@ -1338,6 +1344,15 @@ msgstr "Select a future-weather provider"
 
 msgid "Number of training runs must not exceed the number of splits"
 msgstr "Number of training runs must not exceed the number of splits"
+
+msgid "{{model}} supports {{minimum}}–{{maximum}} forecast periods."
+msgstr "{{model}} supports {{minimum}}–{{maximum}} forecast periods."
+
+msgid "{{model}} requires at least {{minimum}} forecast periods."
+msgstr "{{model}} requires at least {{minimum}} forecast periods."
+
+msgid "{{model}} supports at most {{maximum}} forecast periods."
+msgstr "{{model}} supports at most {{maximum}} forecast periods."
 
 msgid "Cannot run prediction"
 msgstr "Cannot run prediction"
@@ -1917,6 +1932,70 @@ msgstr "All locations"
 msgid "Result"
 msgstr "Result"
 
+msgid "Not defined"
+msgstr "Not defined"
+
+msgid "vs {{reference}}"
+msgstr "vs {{reference}}"
+
+msgid "All forecast horizons"
+msgstr "All forecast horizons"
+
+msgid "Horizon {{horizon}}"
+msgstr "Horizon {{horizon}}"
+
+msgid "{{count}} forecast case scored"
+msgid_plural "{{count}} forecast case scored"
+msgstr[0] "{{count}} forecast case scored"
+msgstr[1] "{{count}} forecast cases scored"
+
+msgid "Alert level"
+msgstr "Alert level"
+
+msgid "Threshold"
+msgstr "Threshold"
+
+msgid "Policy overall"
+msgstr "Policy overall"
+
+msgid "Outbreak detection"
+msgstr "Outbreak detection"
+
+msgid ""
+"How well a policy's alerts match observed outbreaks, across all splits and "
+"organisation units. Each split's thresholds come from the data before it."
+msgstr ""
+"How well a policy's alerts match observed outbreaks, across all splits and "
+"organisation units. Each split's thresholds come from the data before it."
+
+msgid "Could not load outbreak scoring"
+msgstr "Could not load outbreak scoring"
+
+msgid "Manage alert policies"
+msgstr "Manage alert policies"
+
+msgid "Split by horizon"
+msgstr "Split by horizon"
+
+msgid "Compare with baseline model"
+msgstr "Compare with baseline model"
+
+msgid "Show all metrics"
+msgstr "Show all metrics"
+
+msgid "Could not score outbreak detection"
+msgstr "Could not score outbreak detection"
+
+msgid "Could not score the baseline model"
+msgstr "Could not score the baseline model"
+
+msgid ""
+"Each score is compared with the baseline model {{reference}} under the same "
+"policy."
+msgstr ""
+"Each score is compared with the baseline model {{reference}} under the same "
+"policy."
+
 msgid "Start period"
 msgstr "Start period"
 
@@ -2179,36 +2258,26 @@ msgstr "Adjust alert output"
 msgid "Apply"
 msgstr "Apply"
 
-msgid "Alert levels"
-msgstr "Alert levels"
-
 msgid "Unable to load raised alerts"
 msgstr "Unable to load raised alerts"
 
-msgid ""
-"No alerts were recorded for this run. The prediction setup has no alert "
-"policy. Add one to raise alerts on future runs."
-msgstr ""
-"No alerts were recorded for this run. The prediction setup has no alert "
-"policy. Add one to raise alerts on future runs."
+msgid "Alert levels"
+msgstr "Alert levels"
 
-msgid ""
-"No alerts were recorded for this run. The prediction setup now uses "
-"{{policy}}, but no level may have been reached, or the policy may have been "
-"added after this run."
-msgstr ""
-"No alerts were recorded for this run. The prediction setup now uses "
-"{{policy}}, but no level may have been reached, or the policy may have been "
-"added after this run."
+msgid "No alert policy was recorded for this run."
+msgstr "No alert policy was recorded for this run."
 
 msgid "No alerts were recorded for this run."
 msgstr "No alerts were recorded for this run."
 
-msgid "Show {{alertCount}} alerts raised by {{policy}} on the plots."
-msgstr "Show {{alertCount}} alerts raised by {{policy}} on the plots."
-
 msgid "Show recorded alerts on the plots."
 msgstr "Show recorded alerts on the plots."
+
+msgid "Show {{alertCount}} alerts from {{policy}} with their thresholds."
+msgstr "Show {{alertCount}} alerts from {{policy}} with their thresholds."
+
+msgid "{{policy}} raised no alerts for this run. Show its thresholds."
+msgstr "{{policy}} raised no alerts for this run. Show its thresholds."
 
 msgid "Saved alert colours could not be loaded"
 msgstr "Saved alert colours could not be loaded"
@@ -2228,11 +2297,14 @@ msgstr "Thresholds unavailable"
 msgid "Prediction run"
 msgstr "Prediction run"
 
+msgid "Edit the alert policy to change its thresholds."
+msgstr "Edit the alert policy to change its thresholds."
+
 msgid "Explore thresholds"
 msgstr "Explore thresholds"
 
-msgid "Explore threshold lines for this run."
-msgstr "Explore threshold lines for this run."
+msgid "Try other threshold settings. Hides recorded alerts."
+msgstr "Try other threshold settings. Hides recorded alerts."
 
 msgid ""
 "There was a problem loading the prediction data required for this "
@@ -2262,8 +2334,14 @@ msgstr "Alert output"
 msgid "Use alert outputs"
 msgstr "Use alert outputs"
 
-msgid "Import outbreak indicator values."
-msgstr "Import outbreak indicator values."
+msgid "Import the alert level code from {{policy}}."
+msgstr "Import the alert level code from {{policy}}."
+
+msgid "Import 1 when an outbreak is likely, otherwise 0."
+msgstr "Import 1 when an outbreak is likely, otherwise 0."
+
+msgid "Imported value"
+msgstr "Imported value"
 
 msgid "No alert"
 msgstr "No alert"
@@ -2435,6 +2513,12 @@ msgstr "Previous values may have been cleared, but the new import did not comple
 msgid "Prediction data posted successfully"
 msgstr "Prediction data posted successfully"
 
+msgid "{{name}} uses an option set without the codes {{values}}."
+msgstr "{{name}} uses an option set without the codes {{values}}."
+
+msgid "{{name}} has value type {{valueType}} and cannot store {{values}}."
+msgstr "{{name}} has value type {{valueType}} and cannot store {{values}}."
+
 msgid "Error loading prediction configurations"
 msgstr "Error loading prediction configurations"
 
@@ -2502,6 +2586,9 @@ msgstr "There are running jobs in the background"
 msgid "Running jobs"
 msgstr "Running jobs"
 
+msgid "Review the threshold parameters and apply your changes."
+msgstr "Review the threshold parameters and apply your changes."
+
 msgid "Waiting for connection"
 msgstr "Waiting for connection"
 
@@ -2516,9 +2603,6 @@ msgstr "Unable to calculate thresholds"
 
 msgid "There was a problem calculating thresholds for this prediction run."
 msgstr "There was a problem calculating thresholds for this prediction run."
-
-msgid "Review the threshold parameters and apply your changes."
-msgstr "Review the threshold parameters and apply your changes."
 
 msgid "Unable to load threshold strategies"
 msgstr "Unable to load threshold strategies"
@@ -2562,9 +2646,6 @@ msgstr "Remove filter"
 
 msgid "Filter by alert level"
 msgstr "Filter by alert level"
-
-msgid "Alert level"
-msgstr "Alert level"
 
 msgid "Select all"
 msgstr "Select all"
@@ -2866,6 +2947,9 @@ msgstr "Requires superuser authority"
 
 msgid "Model not found"
 msgstr "Model not found"
+
+msgid "{{name}} (baseline)"
+msgstr "{{name}} (baseline)"
 
 msgid "Manage the policies used to raise alerts from forecasts."
 msgstr "Manage the policies used to raise alerts from forecasts."
