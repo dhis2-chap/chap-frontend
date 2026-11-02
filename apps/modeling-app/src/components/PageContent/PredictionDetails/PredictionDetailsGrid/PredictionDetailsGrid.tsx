@@ -193,7 +193,7 @@ export const PredictionDetailsGrid = ({
                     isPaused={policyThresholds.isPaused}
                     error={policyThresholds.error}
                     onRetry={policyThresholds.refetch}
-                    hint={i18n.t('Edit the alert policy to change its thresholds.')}
+                    hint={i18n.t('Edit the signal policy to change its thresholds.')}
                 />
             )}
             <Switch
@@ -205,7 +205,7 @@ export const PredictionDetailsGrid = ({
                     <span className={styles.toggleText}>
                         <span className={styles.toggleTitle}>{i18n.t('Explore thresholds')}</span>
                         <span className={styles.toggleDescription}>
-                            {i18n.t('Try other threshold settings. Hides recorded alerts.')}
+                            {i18n.t('Try other threshold settings. Hides recorded signals.')}
                         </span>
                     </span>
                 )}

@@ -106,7 +106,7 @@ const toAlertLevel = (level: LevelValues): AlertLevel => ({
 export const CreateAlertPolicyModal = ({ onClose }: { onClose: () => void }) => {
     const create = useCreateAlertPolicy();
     const saveDisplay = useSaveAlertPolicyDisplay();
-    const { show: showCreated } = useAlert(i18n.t('Alert policy created'), { success: true });
+    const { show: showCreated } = useAlert(i18n.t('Signal policy created'), { success: true });
     const [createdPolicyId, setCreatedPolicyId] = useState<number>();
     const isSaving = create.isLoading || saveDisplay.isLoading;
     // Once created, only the colour save can be retried.
@@ -150,7 +150,7 @@ export const CreateAlertPolicyModal = ({ onClose }: { onClose: () => void }) => 
 
     return (
         <Modal large onClose={onClose} dataTest="create-alert-policy-modal">
-            <ModalTitle>{i18n.t('New alert policy')}</ModalTitle>
+            <ModalTitle>{i18n.t('New signal policy')}</ModalTitle>
             <ModalContent>
                 <fieldset className={styles.form} disabled={isLocked}>
                     <Controller
@@ -173,7 +173,7 @@ export const CreateAlertPolicyModal = ({ onClose }: { onClose: () => void }) => 
                         render={({ field }) => (
                             <InputField
                                 name={field.name}
-                                label={i18n.t('No alert import code')}
+                                label={i18n.t('No signal import code')}
                                 helpText={i18n.t('Must match the value type or option set of the outbreak indicator.')}
                                 value={field.value}
                                 onChange={({ value }) => field.onChange(value ?? '')}
@@ -335,7 +335,7 @@ export const CreateAlertPolicyModal = ({ onClose }: { onClose: () => void }) => 
                         </NoticeBox>
                     )}
                     {create.error && (
-                        <NoticeBox error title={i18n.t('Unable to create alert policy')}>
+                        <NoticeBox error title={i18n.t('Unable to create signal policy')}>
                             {getChapErrorMessage(create.error)}
                         </NoticeBox>
                     )}

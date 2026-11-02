@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import i18n from '@dhis2/d2-i18n';
 import { useQuery } from '@tanstack/react-query';
 import { canonicalizePeriodId } from '@dhis2-chap/core';
 import { DatasetsService, OpenAPI, PredictionsService, type AlertPolicyRead, type ApiError, type PredictionEntry, type PredictionOrgUnitSeries, type ThresholdResponse } from '@dhis2-chap/ui';
@@ -21,7 +22,7 @@ export const usePolicyOutbreakIndicators = ({ predictionId, datasetId, policy, s
         staleTime: Infinity,
         retry: 0,
         queryFn: async () => {
-            if (!policy?.levels?.length) throw new Error('The alert policy has no levels');
+            if (!policy?.levels?.length) throw new Error(i18n.t('The signal policy has no levels'));
             const [entries, thresholds] = await Promise.all([
                 PredictionsService.getPredictionEntriesV1AnalyticsPredictionEntryPredictionIdGet(
                     predictionId, [...new Set(policy.levels.map(getAlertLevelQuantile))],

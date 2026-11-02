@@ -81,7 +81,7 @@ export const AlertOutputSection = ({
 
     return (
         <div className={styles.alertOutput}>
-            <h3>{i18n.t('Alert output')}</h3>
+            <h3>{i18n.t('Signal output')}</h3>
             <div
                 className={styles.alertOutputToggle}
                 onClick={onToggleAlertOutputs}
@@ -91,11 +91,11 @@ export const AlertOutputSection = ({
             >
                 <div className={styles.alertOutputToggleText}>
                     <span className={styles.alertOutputToggleTitle}>
-                        {i18n.t('Use alert outputs')}
+                        {i18n.t('Use signal outputs')}
                     </span>
                     <span className={styles.alertOutputToggleDescription}>
                         {policy
-                            ? i18n.t('Import the alert level code from {{policy}}.', { policy: policy.name })
+                            ? i18n.t('Import the signal level code from {{policy}}.', { policy: policy.name })
                             : i18n.t('Import 1 when an outbreak is likely, otherwise 0.')}
                     </span>
                 </div>
@@ -119,13 +119,13 @@ export const AlertOutputSection = ({
                             <DataTable>
                                 <DataTableHead>
                                     <DataTableRow>
-                                        <DataTableColumnHeader>{i18n.t('Alert level')}</DataTableColumnHeader>
+                                        <DataTableColumnHeader>{i18n.t('Signal level')}</DataTableColumnHeader>
                                         <DataTableColumnHeader>{i18n.t('Imported value')}</DataTableColumnHeader>
                                     </DataTableRow>
                                 </DataTableHead>
                                 <DataTableBody>
                                     <DataTableRow>
-                                        <DataTableCell>{i18n.t('No alert')}</DataTableCell>
+                                        <DataTableCell>{i18n.t('No signal')}</DataTableCell>
                                         <DataTableCell>{policy.noAlertOutputCode ?? '0'}</DataTableCell>
                                     </DataTableRow>
                                     {(policy.levels ?? []).map(level => (

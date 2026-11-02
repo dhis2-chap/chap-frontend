@@ -47,7 +47,7 @@ export const PredictionAlertsDialog = ({
             onClose={onClose}
             dataTest="prediction-alerts-dialog"
         >
-            <ModalTitle>{i18n.t('Adjust alert output')}</ModalTitle>
+            <ModalTitle>{i18n.t('Adjust signal output')}</ModalTitle>
             <ModalContent className={styles.dialogContent}>
                 <div className={styles.dialogStrategyControl}>
                     <ThresholdStrategyControl

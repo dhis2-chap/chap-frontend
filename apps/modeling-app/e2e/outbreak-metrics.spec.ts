@@ -30,7 +30,7 @@ test.describe.serial('outbreak detection scores', () => {
 
         await page.goto(`/#/evaluate/${evaluation.id}`);
         const widget = page.locator('[data-test="outbreak-metrics"]');
-        await expect(widget.getByText('Alert policy', { exact: true })).toBeVisible();
+        await expect(widget.getByText('Signal policy', { exact: true })).toBeVisible();
         await expect(widget.getByRole('table')).toHaveCount(0);
         await widget.locator('[data-test="outbreak-policy"]').click();
         const scored = page.waitForResponse(response => response.url().includes(`/backtests/${evaluation.id}/outbreak-metrics?`));

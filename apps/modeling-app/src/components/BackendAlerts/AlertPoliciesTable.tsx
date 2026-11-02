@@ -33,7 +33,7 @@ const CONFLICT = 409;
 // Chap refuses with 409 while a prediction setup or a raised alert still points at the policy.
 const getDeleteErrorMessage = (error: ApiError) => (
     error.status === CONFLICT
-        ? i18n.t('This policy is used by a prediction setup or has alerts raised against it, so it cannot be deleted.')
+        ? i18n.t('This policy is used by a prediction setup or has signals raised against it, so it cannot be deleted.')
         : getChapErrorMessage(error)
 );
 
@@ -41,11 +41,11 @@ const DeleteAlertPolicyModal = ({ policy, onClose }: { policy: AlertPolicyRead; 
     const deletePolicy = useDeleteAlertPolicy();
     return (
         <Modal small onClose={onClose} dataTest="delete-alert-policy-modal">
-            <ModalTitle>{i18n.t('Delete alert policy')}</ModalTitle>
+            <ModalTitle>{i18n.t('Delete signal policy')}</ModalTitle>
             <ModalContent>
                 <p>{i18n.t('Delete "{{name}}"? This cannot be undone.', { name: policy.name })}</p>
                 {deletePolicy.error && (
-                    <NoticeBox error title={i18n.t('Unable to delete alert policy')}>
+                    <NoticeBox error title={i18n.t('Unable to delete signal policy')}>
                         {getDeleteErrorMessage(deletePolicy.error)}
                     </NoticeBox>
                 )}
@@ -77,7 +77,7 @@ export const AlertPoliciesTable = () => {
     if (isLoading) return <CircularLoader />;
     if (error) {
         return (
-            <NoticeBox error title={i18n.t('Unable to load alert policies')}>
+            <NoticeBox error title={i18n.t('Unable to load signal policies')}>
                 {getChapErrorMessage(error)}
             </NoticeBox>
         );
@@ -100,7 +100,7 @@ export const AlertPoliciesTable = () => {
                     )) : (
                         <DataTableRow>
                             <DataTableCell colSpan="4" align="center">
-                                {i18n.t('No alert policies yet.')}
+                                {i18n.t('No signal policies yet.')}
                             </DataTableCell>
                         </DataTableRow>
                     )}
