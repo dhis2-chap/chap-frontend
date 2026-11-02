@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-11-02T10:49:59.243Z\n"
-"PO-Revision-Date: 2026-11-02T10:49:59.243Z\n"
+"POT-Creation-Date: 2026-11-02T11:15:54.047Z\n"
+"PO-Revision-Date: 2026-11-02T11:15:54.048Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -466,6 +466,9 @@ msgstr "Complete (%)"
 msgid "{{column}}{{colon}} {{available}} of {{expected}} locations"
 msgstr "{{column}}{{colon}} {{available}} of {{expected}} locations"
 
+msgid "Data completeness"
+msgstr "Data completeness"
+
 msgid ""
 "Share of locations with a value in each period, for the target and every "
 "covariate."
@@ -473,11 +476,14 @@ msgstr ""
 "Share of locations with a value in each period, for the target and every "
 "covariate."
 
+msgid "Reset zoom"
+msgstr "Reset zoom"
+
 msgid "Show values for period"
 msgstr "Show values for period"
 
-msgid "Or click a point in the chart."
-msgstr "Or click a point in the chart."
+msgid "Or click the chart."
+msgstr "Or click the chart."
 
 msgid ""
 "{{available}} of {{expected}} values present ({{percent}}%) · {{zeros}} "
@@ -1070,9 +1076,6 @@ msgstr "Check data"
 
 msgid "Could not check the data"
 msgstr "Could not check the data"
-
-msgid "Data completeness"
-msgstr "Data completeness"
 
 msgid "Could not create dataset"
 msgstr "Could not create dataset"
@@ -2659,9 +2662,6 @@ msgstr "Shift zoom left"
 
 msgid "Shift zoom left one period"
 msgstr "Shift zoom left one period"
-
-msgid "Reset zoom"
-msgstr "Reset zoom"
 
 msgid "Shift zoom right"
 msgstr "Shift zoom right"

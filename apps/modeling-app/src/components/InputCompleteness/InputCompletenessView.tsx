@@ -60,6 +60,11 @@ export const InputCompletenessView = ({ observations, periods, orgUnits, variabl
             // The header holds the reset button, so hide the one Highcharts draws on the plot.
             zooming: { type: 'x', resetButton: { theme: { style: { display: 'none' } } } },
             events: {
+                // Clicking anywhere on the plot selects the nearest period, not only on a point.
+                click: (event) => {
+                    const period = periods[Math.round((event as Highcharts.ChartClickEventObject).xAxis[0].value)];
+                    if (period) setSelectedPeriod(period);
+                },
                 selection: (event) => {
                     setIsZoomed(!event.resetSelection);
                     return true;
@@ -120,7 +125,7 @@ export const InputCompletenessView = ({ observations, periods, orgUnits, variabl
             </div>
             <SingleSelectField
                 label={i18n.t('Show values for period')}
-                helpText={i18n.t('Or click a point in the chart.')}
+                helpText={i18n.t('Or click the chart.')}
                 selected={selected.period}
                 onChange={({ selected }) => setSelectedPeriod(selected)}
                 filterable
