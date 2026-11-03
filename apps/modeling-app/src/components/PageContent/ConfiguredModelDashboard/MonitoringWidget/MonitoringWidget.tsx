@@ -128,7 +128,7 @@ export const MonitoringWidget = ({ predictionSetupId, evaluationId }: Props) => 
         series: [
             {
                 type: 'line',
-                name: i18n.t('Evaluation per backtest split'),
+                name: i18n.t('Evaluation, each split'),
                 data: series?.evaluationPerSplit,
                 color: colors.grey500,
                 lineWidth: 1,
@@ -136,14 +136,14 @@ export const MonitoringWidget = ({ predictionSetupId, evaluationId }: Props) => 
             },
             {
                 type: 'line',
-                name: i18n.t('Evaluation running aggregate'),
+                name: i18n.t('Evaluation, cumulative'),
                 data: series?.evaluationRunning,
                 color: colors.grey600,
                 showInLegend: !!series?.evaluationRunning.length,
             },
             {
                 type: 'line',
-                name: i18n.t('Evaluation score'),
+                name: i18n.t('Evaluation, overall'),
                 marker: { enabled: false },
                 data: series?.evaluation,
                 color: colors.grey600,
@@ -152,14 +152,14 @@ export const MonitoringWidget = ({ predictionSetupId, evaluationId }: Props) => 
             },
             {
                 type: 'line',
-                name: i18n.t('Prediction per run'),
+                name: i18n.t('Predictions, each run'),
                 data: series?.perRun,
                 color: colors.blue600,
                 showInLegend: !!series?.perRun.length,
             },
             {
                 type: 'line',
-                name: i18n.t('Prediction running aggregate'),
+                name: i18n.t('Predictions, cumulative'),
                 data: series?.running,
                 color: colors.green700,
                 showInLegend: !!series?.running.length,
