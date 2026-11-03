@@ -176,6 +176,9 @@ export const MonitoringWidget = ({ predictionSetupId, evaluationId }: Props) => 
             onOpen={() => setOpen(true)}
         >
             <div className={styles.content}>
+                <p className={styles.explanation}>
+                    {i18n.t('How each prediction run scored against a baseline once outcomes were observed, compared with the evaluation.')}
+                </p>
                 <div className={styles.controls}>
                     {metrics.length > 0 && (
                         <SingleSelectField
