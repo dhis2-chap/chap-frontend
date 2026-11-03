@@ -17,12 +17,10 @@ export const monitoringSeries = (monitoring: PredictionSetupMonitoring) => {
 
     return {
         evaluationPerSplit: splits.map(point => ({ x: point.x, name: point.period, y: point.value })),
-        evaluationRunning: splits.map(point => ({ x: point.x, name: point.period, y: point.runningValue })),
-        // Starts at the last split so the score visibly continues where the evaluation's running aggregate ends
+        // Starts at the last split so the evaluation average reaches across the prediction runs
         evaluation: predictions.length && monitoring.evaluationValue != null
             ? [...splits.slice(-1), ...predictions].map(point => ({ x: point.x, name: point.period, y: monitoring.evaluationValue }))
             : [],
         perRun: predictions.map(point => ({ x: point.x, name: point.period, y: point.value })),
-        running: predictions.map(point => ({ x: point.x, name: point.period, y: point.runningValue })),
     };
 };

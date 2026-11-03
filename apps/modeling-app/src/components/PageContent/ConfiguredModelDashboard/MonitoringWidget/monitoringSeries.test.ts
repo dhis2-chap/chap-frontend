@@ -22,7 +22,6 @@ describe('monitoringSeries', () => {
             { x: Date.UTC(2026, 0, 1), name: '202601', y: 0 },
             { x: Date.UTC(2026, 2, 1), name: '202603', y: 8 },
         ]);
-        expect(series.running.map(point => point.y)).toEqual([0, 5]);
         expect(series.evaluation.map(point => point.name)).toEqual(['202512', '202601', '202603']);
     });
 

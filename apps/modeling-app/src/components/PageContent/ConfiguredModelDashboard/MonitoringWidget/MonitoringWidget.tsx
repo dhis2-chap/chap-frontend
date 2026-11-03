@@ -14,7 +14,7 @@ import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import { ReferenceModelSelector } from '@/components/ModelComparisons/ReferenceModelSelector';
 import { getSelectedReference, referenceName } from '@/components/ModelComparisons/referenceModels';
-import { formatComparison, HIDDEN_METRIC_IDS } from '@/components/PageContent/EvaluationDetails/EvaluationMetricsWidget/metricCatalog';
+import { formatComparison, getDefaultMetricIds, HIDDEN_METRIC_IDS, sortMetricIds } from '@/components/PageContent/EvaluationDetails/EvaluationMetricsWidget/metricCatalog';
 import { useBacktestById } from '@/hooks/useBacktestById';
 import { PREDICTION_SETUPS_QUERY_KEY } from '@/hooks/usePredictionSetups';
 import { useBacktestSpecification } from '@/pages/BenchmarksPage/useBacktestSpecification';
@@ -38,8 +38,13 @@ export const MonitoringWidget = ({ predictionSetupId, evaluationId }: Props) => 
         retry: 0,
     });
     // Monitoring compares every run with a baseline, so metrics without a comparison cannot be monitored.
-    const metrics = catalog.data?.filter(metric => !HIDDEN_METRIC_IDS.includes(metric.id) && metric.comparisonOp != null) ?? [];
-    const metricId = selectedMetric || metrics.find(metric => metric.id === 'crps_log1p')?.id || metrics[0]?.id || '';
+    const metricIds = sortMetricIds(
+        catalog.data?.filter(metric => !HIDDEN_METRIC_IDS.includes(metric.id) && metric.comparisonOp != null).map(metric => metric.id) ?? [],
+        catalog.data,
+    );
+    const metrics = metricIds.map(id => catalog.data!.find(metric => metric.id === id)!);
+    // Defaults to the first metric selected in the modeling defaults, in their configured order.
+    const metricId = selectedMetric || getDefaultMetricIds(metricIds, catalog.data)[0] || metricIds[0] || '';
     const metric = metrics.find(item => item.id === metricId);
 
     const { backtest, error: backtestError } = useBacktestById(evaluationId);
@@ -64,9 +69,9 @@ export const MonitoringWidget = ({ predictionSetupId, evaluationId }: Props) => 
     const series = monitoring.data ? monitoringSeries(monitoring.data) : undefined;
     const hasPoints = !!series && (series.evaluationPerSplit.length > 0 || series.perRun.length > 0);
     // Keep both sides of zero in view so the better and worse bands always show, whichever side the scores fall on.
-    const extent = Math.max(0, ...(monitoring.data?.points ?? []).flatMap(point => [point.value, point.runningValue]).map(value => Math.abs(value ?? 0)));
+    const extent = Math.max(0, ...(monitoring.data?.points ?? []).map(point => Math.abs(point.value ?? 0)));
     const options: Highcharts.Options = {
-        chart: { type: 'line', height: 320, style: { fontFamily: 'inherit' } },
+        chart: { type: 'scatter', height: 320, style: { fontFamily: 'inherit' } },
         title: { text: undefined },
         exporting: { enabled: false },
         credits: { enabled: false },
@@ -116,7 +121,6 @@ export const MonitoringWidget = ({ predictionSetupId, evaluationId }: Props) => 
             endOnTick: false,
         },
         tooltip: {
-            shared: true,
             headerFormat: '<b>{point.key}</b><br/>',
             pointFormatter() {
                 const value = this.y ?? 0;
@@ -124,45 +128,31 @@ export const MonitoringWidget = ({ predictionSetupId, evaluationId }: Props) => 
                 return `<span style="color:${this.color}">●</span> ${this.series.name}: <b style="color:${color}">${formatComparison(value, metric)}</b><br/>`;
             },
         },
-        plotOptions: { series: { animation: false, marker: { enabled: true, radius: 3 } } },
+        plotOptions: { series: { animation: false, marker: { enabled: true, radius: 5, symbol: 'circle' } } },
         series: [
             {
-                type: 'line',
-                name: i18n.t('Evaluation, each split'),
+                type: 'scatter',
+                name: i18n.t('Evaluation splits'),
                 data: series?.evaluationPerSplit,
                 color: colors.grey500,
-                lineWidth: 1,
                 showInLegend: !!series?.evaluationPerSplit.length,
             },
             {
                 type: 'line',
-                name: i18n.t('Evaluation, cumulative'),
-                data: series?.evaluationRunning,
-                color: colors.grey600,
-                showInLegend: !!series?.evaluationRunning.length,
-            },
-            {
-                type: 'line',
-                name: i18n.t('Evaluation, overall'),
+                name: i18n.t('Evaluation average'),
                 marker: { enabled: false },
                 data: series?.evaluation,
                 color: colors.grey600,
                 dashStyle: 'Dash',
+                enableMouseTracking: false,
                 showInLegend: !!series?.evaluation.length,
             },
             {
-                type: 'line',
-                name: i18n.t('Predictions, each run'),
+                type: 'scatter',
+                name: i18n.t('Prediction runs'),
                 data: series?.perRun,
                 color: colors.blue600,
                 showInLegend: !!series?.perRun.length,
-            },
-            {
-                type: 'line',
-                name: i18n.t('Predictions, cumulative'),
-                data: series?.running,
-                color: colors.green700,
-                showInLegend: !!series?.running.length,
             },
         ],
     };
@@ -177,7 +167,7 @@ export const MonitoringWidget = ({ predictionSetupId, evaluationId }: Props) => 
         >
             <div className={styles.content}>
                 <p className={styles.explanation}>
-                    {i18n.t('How each prediction run scored against a baseline once outcomes were observed, compared with the evaluation.')}
+                    {i18n.t('Each dot is one run, scored against the baseline once outcomes were observed. Grey dots are the evaluation splits, blue dots the prediction runs.')}
                 </p>
                 <div className={styles.controls}>
                     {metrics.length > 0 && (
