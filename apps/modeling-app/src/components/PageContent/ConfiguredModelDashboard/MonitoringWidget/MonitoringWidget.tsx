@@ -71,7 +71,7 @@ export const MonitoringWidget = ({ predictionSetupId, evaluationId }: Props) => 
     // Keep both sides of zero in view so the better and worse bands always show, whichever side the scores fall on.
     const extent = Math.max(0, ...(monitoring.data?.points ?? []).map(point => Math.abs(point.value ?? 0)));
     const options: Highcharts.Options = {
-        chart: { type: 'scatter', height: 320, style: { fontFamily: 'inherit' } },
+        chart: { type: 'line', height: 320, style: { fontFamily: 'inherit' } },
         title: { text: undefined },
         exporting: { enabled: false },
         credits: { enabled: false },
@@ -125,13 +125,14 @@ export const MonitoringWidget = ({ predictionSetupId, evaluationId }: Props) => 
             pointFormatter() {
                 const value = this.y ?? 0;
                 const color = value > 0 ? colors.green800 : value < 0 ? colors.red800 : colors.grey700;
-                return `<span style="color:${this.color}">●</span> ${this.series.name}: <b style="color:${color}">${formatComparison(value, metric)}</b><br/>`;
+                const scored = i18n.t('{{count}} forecasts scored', { count: this.options.custom?.nObserved ?? 0 });
+                return `<span style="color:${this.color}">●</span> ${this.series.name}: <b style="color:${color}">${formatComparison(value, metric)}</b><br/>${scored}<br/>`;
             },
         },
         plotOptions: { series: { animation: false, marker: { enabled: true, radius: 5, symbol: 'circle' } } },
         series: [
             {
-                type: 'scatter',
+                type: 'line',
                 name: i18n.t('Evaluation splits'),
                 data: series?.evaluationPerSplit,
                 color: colors.grey500,
@@ -148,7 +149,7 @@ export const MonitoringWidget = ({ predictionSetupId, evaluationId }: Props) => 
                 showInLegend: !!series?.evaluation.length,
             },
             {
-                type: 'scatter',
+                type: 'line',
                 name: i18n.t('Prediction runs'),
                 data: series?.perRun,
                 color: colors.blue600,
@@ -204,6 +205,9 @@ export const MonitoringWidget = ({ predictionSetupId, evaluationId }: Props) => 
                 ) : (
                     <>
                         <HighchartsReact highcharts={Highcharts} options={options} />
+                        {monitoring.data?.comparisonDescription && (
+                            <p className={styles.explanation}>{monitoring.data.comparisonDescription}</p>
+                        )}
                         {!series?.perRun.length && (
                             <p className={styles.explanation}>{noPredictionOutcomes}</p>
                         )}

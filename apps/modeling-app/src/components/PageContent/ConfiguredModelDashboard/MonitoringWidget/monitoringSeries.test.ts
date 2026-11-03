@@ -17,10 +17,10 @@ const data: PredictionSetupMonitoring = {
 describe('monitoringSeries', () => {
     it('splits backtest splits from prediction runs and sorts them chronologically', () => {
         const series = monitoringSeries(data);
-        expect(series.evaluationPerSplit).toEqual([{ x: Date.UTC(2025, 11, 1), name: '202512', y: 99 }]);
+        expect(series.evaluationPerSplit).toEqual([{ x: Date.UTC(2025, 11, 1), name: '202512', y: 99, custom: { nObserved: 20 } }]);
         expect(series.perRun).toEqual([
-            { x: Date.UTC(2026, 0, 1), name: '202601', y: 0 },
-            { x: Date.UTC(2026, 2, 1), name: '202603', y: 8 },
+            { x: Date.UTC(2026, 0, 1), name: '202601', y: 0, custom: { nObserved: 1 } },
+            { x: Date.UTC(2026, 2, 1), name: '202603', y: 8, custom: { nObserved: 3 } },
         ]);
         expect(series.evaluation.map(point => point.name)).toEqual(['202512', '202601', '202603']);
     });

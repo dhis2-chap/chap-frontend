@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-11-03T12:39:06.722Z\n"
-"PO-Revision-Date: 2026-11-03T12:39:06.723Z\n"
+"POT-Creation-Date: 2026-11-03T12:45:20.215Z\n"
+"PO-Revision-Date: 2026-11-03T12:45:20.216Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -1508,6 +1508,11 @@ msgstr "Better than {{baseline}}"
 
 msgid "Worse than {{baseline}}"
 msgstr "Worse than {{baseline}}"
+
+msgid "{{count}} forecasts scored"
+msgid_plural "{{count}} forecasts scored"
+msgstr[0] "{{count}} forecasts scored"
+msgstr[1] "{{count}} forecasts scored"
 
 msgid "Evaluation splits"
 msgstr "Evaluation splits"

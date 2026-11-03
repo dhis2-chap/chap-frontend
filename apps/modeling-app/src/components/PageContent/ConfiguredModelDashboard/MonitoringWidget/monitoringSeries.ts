@@ -11,16 +11,24 @@ const toChartPoints = (points: MonitoringPoint[]) => points
     }))
     .sort((a, b) => a.x - b.x);
 
+// nObserved shows how much a run's score can be trusted: few scored forecasts make it noisy.
+const toRunPoint = (point: ReturnType<typeof toChartPoints>[number]) => ({
+    x: point.x,
+    name: point.period,
+    y: point.value,
+    custom: { nObserved: point.nObserved },
+});
+
 export const monitoringSeries = (monitoring: PredictionSetupMonitoring) => {
     const predictions = toChartPoints(monitoring.points.filter(point => point.source === 'prediction'));
     const splits = toChartPoints(monitoring.points.filter(point => point.source === 'evaluation'));
 
     return {
-        evaluationPerSplit: splits.map(point => ({ x: point.x, name: point.period, y: point.value })),
+        evaluationPerSplit: splits.map(toRunPoint),
         // Starts at the last split so the evaluation average reaches across the prediction runs
         evaluation: predictions.length && monitoring.evaluationValue != null
-            ? [...splits.slice(-1), ...predictions].map(point => ({ x: point.x, name: point.period, y: monitoring.evaluationValue }))
+            ? [...splits.slice(-1), ...predictions].sort((a, b) => a.x - b.x).map(point => ({ x: point.x, name: point.period, y: monitoring.evaluationValue }))
             : [],
-        perRun: predictions.map(point => ({ x: point.x, name: point.period, y: point.value })),
+        perRun: predictions.map(toRunPoint),
     };
 };
