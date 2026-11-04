@@ -1,0 +1,106 @@
+name: Bug report
+description: Something in the Modeling App isn't working as expected.
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a problem with the Modeling App.
+
+        - **Not sure if it's a bug?** Report it anyway. If it turns out to be a usage question, we'll answer it or point you to the right place.
+        - **Have a question or need help with setup?** Please ask on the [Community of Practice](https://community.dhis2.org/c/development/chap/84) instead.
+        - **This issue will be public.** Don't include personal data, patient data or passwords in text or screenshots.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Describe the problem in a sentence or two.
+      placeholder: When I open a prediction, the chart is empty for some districts.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: How can we see the problem ourselves?
+      placeholder: |
+        1. Go to ...
+        2. Click on ...
+        3. See ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect to happen?
+    validations:
+      required: true
+
+  - type: input
+    id: app-version
+    attributes:
+      label: Modeling App version
+      description: You can find it in DHIS2 under App Management.
+      placeholder: e.g. 4.2.0
+    validations:
+      required: false
+
+  - type: input
+    id: dhis2-version
+    attributes:
+      label: DHIS2 version
+      placeholder: e.g. 2.41.3
+    validations:
+      required: false
+
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and device
+      placeholder: e.g. Chrome 130 on Windows
+    validations:
+      required: false
+
+  - type: dropdown
+    id: frequency
+    attributes:
+      label: How often does it happen?
+      options:
+        - Every time
+        - Sometimes
+        - It happened once
+    validations:
+      required: false
+
+  - type: dropdown
+    id: impact
+    attributes:
+      label: How much does it affect your work?
+      options:
+        - It blocks my work
+        - There's a workaround
+        - It's cosmetic or minor
+    validations:
+      required: false
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Screenshots or error messages
+      description: Drag images into this box, or paste error text from the browser console.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before you submit
+      options:
+        - label: I searched the open issues and didn't find this problem already reported.
+          required: true
+        - label: I removed any personal or patient data from this report.
+          required: true
