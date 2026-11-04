@@ -17,7 +17,7 @@ body:
     attributes:
       label: What happened?
       description: Describe the problem in a sentence or two.
-      placeholder: When I open a prediction, the chart is empty for some districts.
+      placeholder: Importing prediction results into DHIS2 failed with very small numerical values represented in scientific notation.
     validations:
       required: true
 
@@ -49,19 +49,19 @@ body:
     validations:
       required: false
 
+    - type: input
+    id: chap-version
+    attributes:
+      label: Chap version
+      placeholder: e.g. 2.6.0
+    validations:
+      required: false
+
   - type: input
     id: dhis2-version
     attributes:
       label: DHIS2 version
       placeholder: e.g. 2.41.3
-    validations:
-      required: false
-
-  - type: input
-    id: browser
-    attributes:
-      label: Browser and device
-      placeholder: e.g. Chrome 130 on Windows
     validations:
       required: false
 
@@ -86,6 +86,14 @@ body:
         - It's cosmetic or minor
     validations:
       required: false
+  
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and device
+      placeholder: e.g. Chrome 130 on Windows
+    validations:
+      required: false
 
   - type: textarea
     id: evidence
@@ -100,7 +108,5 @@ body:
     attributes:
       label: Before you submit
       options:
-        - label: I searched the open issues and didn't find this problem already reported.
-          required: true
         - label: I removed any personal or patient data from this report.
           required: true

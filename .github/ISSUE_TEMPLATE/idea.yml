@@ -67,10 +67,3 @@ body:
     validations:
       required: false
 
-  - type: checkboxes
-    id: checks
-    attributes:
-      label: Before you submit
-      options:
-        - label: I searched the open issues and didn't find this idea already suggested.
-          required: true
