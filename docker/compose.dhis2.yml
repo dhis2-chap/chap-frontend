@@ -14,7 +14,10 @@ services:
       - dhis2-db-dump:/opt/dump
 
   dhis2-db:
-    image: ${DHIS2_DB_IMAGE:-ghcr.io/baosystems/postgis:18-3.6}
+    # Pinned by digest: the Nov 2026 rebuild of 18-3.6 ships PostGIS 3.7.0 extension
+    # scripts with a 3.6.4 library, so CREATE EXTENSION postgis fails and the DHIS2
+    # import loses every table with a geometry column. Unpin once upstream is fixed.
+    image: ${DHIS2_DB_IMAGE:-ghcr.io/baosystems/postgis:18-3.6@sha256:4727a569e6d80185d490bad091abcbb9fad344c8c58e7ee547c0098b30b7dcb0}
     restart: unless-stopped
     depends_on:
       dhis2-db-dump:
