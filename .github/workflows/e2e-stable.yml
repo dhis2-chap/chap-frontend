@@ -76,6 +76,14 @@ jobs:
             - name: Run e2e tests
               run: pnpm e2e:ci
 
+            - name: Show stack status and logs
+              if: ${{ failure() }}
+              run: |
+                  pnpm docker:e2e ps --all || true
+                  docker compose --project-name chap-platform \
+                    -f docker/compose.chap.yml -f docker/compose.dhis2.yml \
+                    logs --no-color --tail 200 || true
+
             - name: Upload Playwright artifacts
               if: ${{ !cancelled() }}
               uses: actions/upload-artifact@v4
