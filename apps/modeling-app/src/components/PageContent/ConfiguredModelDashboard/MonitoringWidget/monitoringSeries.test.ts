@@ -23,6 +23,10 @@ describe('monitoringSeries', () => {
             { x: Date.UTC(2026, 2, 1), name: '202603', y: 8, custom: { nObserved: 3 } },
         ]);
         expect(series.evaluation.map(point => point.name)).toEqual(['202512', '202601', '202603']);
+        expect(series.predictionTrend).toEqual([
+            { x: Date.UTC(2026, 0, 1), name: '202601', y: 0, custom: { nObserved: 1 } },
+            { x: Date.UTC(2026, 2, 1), name: '202603', y: 5, custom: { nObserved: 4 } },
+        ]);
     });
 
     it('parses ISO weeks across year boundaries and leaves out a missing evaluation score', () => {

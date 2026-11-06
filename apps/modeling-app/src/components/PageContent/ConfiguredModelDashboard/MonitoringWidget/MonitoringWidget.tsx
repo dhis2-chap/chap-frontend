@@ -61,7 +61,7 @@ export const MonitoringWidget = ({ predictionSetupId, evaluationId }: Props) => 
     const series = monitoring.data ? monitoringSeries(monitoring.data) : undefined;
     const hasPoints = !!series && (series.evaluationPerSplit.length > 0 || series.perRun.length > 0);
     // Keep both sides of zero in view so the better and worse bands always show, whichever side the scores fall on.
-    const extent = Math.max(0, ...(monitoring.data?.points ?? []).map(point => Math.abs(point.value ?? 0)));
+    const extent = Math.max(0, ...[...series?.evaluationPerSplit ?? [], ...series?.perRun ?? [], ...series?.predictionTrend ?? []].map(point => Math.abs(point.y ?? 0)));
     const options: Highcharts.Options = {
         chart: { type: 'line', height: 320, style: { fontFamily: 'inherit' } },
         title: { text: undefined },
@@ -150,6 +150,15 @@ export const MonitoringWidget = ({ predictionSetupId, evaluationId }: Props) => 
                 data: series?.perRun,
                 color: colors.blue600,
                 showInLegend: !!series?.perRun.length,
+            },
+            {
+                type: 'line',
+                name: i18n.t('Prediction trend'),
+                marker: { enabled: false },
+                data: series?.predictionTrend,
+                color: colors.blue800,
+                lineWidth: 3,
+                showInLegend: !!series?.predictionTrend.length,
             },
         ],
     };

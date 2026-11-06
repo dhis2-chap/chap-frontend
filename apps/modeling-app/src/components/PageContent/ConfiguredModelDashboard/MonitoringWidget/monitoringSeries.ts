@@ -30,5 +30,12 @@ export const monitoringSeries = (monitoring: PredictionSetupMonitoring) => {
             ? [...splits.slice(-1), ...predictions].sort((a, b) => a.x - b.x).map(point => ({ x: point.x, name: point.period, y: monitoring.evaluationValue }))
             : [],
         perRun: predictions.map(toRunPoint),
+        // Pools all prediction runs so far, a steadier signal than the noisy single runs.
+        predictionTrend: predictions.map((point, index) => ({
+            x: point.x,
+            name: point.period,
+            y: point.runningValue,
+            custom: { nObserved: predictions.slice(0, index + 1).reduce((sum, run) => sum + run.nObserved, 0) },
+        })),
     };
 };

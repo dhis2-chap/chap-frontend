@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-11-06T09:05:49.764Z\n"
-"PO-Revision-Date: 2026-11-06T09:05:49.765Z\n"
+"POT-Creation-Date: 2026-11-06T13:24:03.754Z\n"
+"PO-Revision-Date: 2026-11-06T13:24:03.755Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -1591,6 +1591,9 @@ msgstr "Evaluation average"
 
 msgid "Prediction runs"
 msgstr "Prediction runs"
+
+msgid "Prediction trend"
+msgstr "Prediction trend"
 
 msgid "No observed prediction outcomes yet."
 msgstr "No observed prediction outcomes yet."
