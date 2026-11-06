@@ -173,7 +173,7 @@ export const MonitoringWidget = ({ predictionSetupId, evaluationId }: Props) => 
         >
             <div className={styles.content}>
                 <p className={styles.explanation}>
-                    {i18n.t('Each dot is one run, scored against the baseline once outcomes were observed.')}
+                    {i18n.t('Each dot is one run, scored against the baseline once outcomes were observed. The prediction trend combines all prediction runs so far.')}
                 </p>
                 <div className={styles.controls}>
                     {metrics.length > 0 && (
