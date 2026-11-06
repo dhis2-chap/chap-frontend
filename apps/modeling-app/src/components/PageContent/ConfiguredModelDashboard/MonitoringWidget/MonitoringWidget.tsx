@@ -46,7 +46,8 @@ export const MonitoringWidget = ({ predictionSetupId, evaluationId }: Props) => 
     const baseline = getSelectedReference(baselines, selectedBaseline, specification.data?.defaultBaselineModel);
 
     const monitoring = useQuery<PredictionSetupMonitoring, ApiError>({
-        queryKey: [PREDICTION_SETUPS_QUERY_KEY, predictionSetupId, 'monitoring', metricId, baseline?.configuredModel.name],
+        // The status refetches once a pending baseline finishes, since evaluation scores only come with a done baseline.
+        queryKey: [PREDICTION_SETUPS_QUERY_KEY, predictionSetupId, 'monitoring', metricId, baseline?.configuredModel.name, baseline?.status],
         queryFn: () => PredictionSetupsService.getPredictionSetupMonitoringV1CrudPredictionSetupsPredictionSetupIdMonitoringGet(
             predictionSetupId,
             metricId,
