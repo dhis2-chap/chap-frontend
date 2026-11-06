@@ -1,0 +1,69 @@
+name: Idea or need
+description: Suggest an improvement to the Modeling App, or tell us about a problem or need in your work.
+title: "[Idea]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for sharing an idea. You don't need to be technical to contribute here.
+
+        **Start with the problem, not the solution.** Tell us what is hard, slow or impossible today, and who it affects. Real examples from your context are the most useful thing you can give us.
+
+        This issue will be public, so don't include personal or patient data.
+
+  - type: input
+    id: who
+    attributes:
+      label: Who are you?
+      description: Optional. Your role, organisation and country help us understand the context.
+      placeholder: e.g. HMIS officer, Ministry of Health, Country X
+    validations:
+      required: false
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: The problem or need
+      description: What is hard, slow or impossible today?
+    validations:
+      required: true
+
+  - type: textarea
+    id: affected
+    attributes:
+      label: Who is affected, and how often?
+    validations:
+      required: false
+
+  - type: textarea
+    id: workaround
+    attributes:
+      label: How do you handle it today?
+      description: Any workaround you use now, if there is one.
+    validations:
+      required: false
+
+  - type: textarea
+    id: success
+    attributes:
+      label: What would success look like?
+    validations:
+      required: false
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Ideas for a solution
+      description: Optional. Welcome, but not required.
+    validations:
+      required: false
+
+  - type: textarea
+    id: links
+    attributes:
+      label: Links, data or examples
+      description: Optional. Screenshots, documents or links that show the need.
+    validations:
+      required: false
+
