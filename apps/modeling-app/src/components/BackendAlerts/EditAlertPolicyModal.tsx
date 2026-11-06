@@ -25,7 +25,7 @@ export const EditAlertPolicyModal = ({ policy, display, onClose }: {
     ])));
     const saveCodes = useUpdateAlertPolicyCodes();
     const saveDisplay = useSaveAlertPolicyDisplay();
-    const { show: showSaved } = useAlert(i18n.t('Alert policy saved'), { success: true });
+    const { show: showSaved } = useAlert(i18n.t('Signal policy saved'), { success: true });
     const isSaving = saveCodes.isLoading || saveDisplay.isLoading;
     // The backend rejects codes with surrounding whitespace.
     const noAlertOutputCode = noAlertCode.trim();
@@ -42,13 +42,13 @@ export const EditAlertPolicyModal = ({ policy, display, onClose }: {
 
     return (
         <Modal large onClose={onClose} dataTest="edit-alert-policy-modal">
-            <ModalTitle>{i18n.t('Edit alert policy')}</ModalTitle>
+            <ModalTitle>{i18n.t('Edit signal policy')}</ModalTitle>
             <ModalContent>
                 <fieldset className={styles.form} disabled={isSaving}>
                     <InputField name="policy-name" label={i18n.t('Policy name')} value={policy.name} disabled />
                     <InputField
                         name="no-alert-output-code"
-                        label={i18n.t('No alert import code')}
+                        label={i18n.t('No signal import code')}
                         helpText={i18n.t('Must match the value type or option set of the outbreak indicator.')}
                         value={noAlertCode}
                         onChange={({ value }) => setNoAlertCode(value ?? '')}

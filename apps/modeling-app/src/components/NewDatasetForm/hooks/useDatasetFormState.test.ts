@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { createDatasetFormSchema, type DatasetFormValues } from './useDatasetFormState';
+import { createDatasetFormSchema, resolveTargetColumn, type DatasetFormValues } from './useDatasetFormState';
 
 const dataItem = { id: 'data1', displayName: 'Cases', dimensionItemType: 'DATA_ELEMENT' as const };
 
@@ -10,6 +10,7 @@ const formData: DatasetFormValues = {
     toPeriodId: '202402',
     orgUnits: [{ id: 'LEVEL-2' }],
     columns: [{ covariateName: 'disease_cases', dataItem }],
+    targetColumn: '',
 };
 
 const schema = createDatasetFormSchema({ calendar: 'gregory', locale: 'en', timeZone: 'UTC' });
@@ -44,5 +45,13 @@ describe('datasetFormSchema', () => {
 
     it('rejects a reversed period range', () => {
         expect(schema.safeParse({ ...formData, fromPeriodId: '202402', toPeriodId: '202401' }).success).toBe(false);
+    });
+});
+
+describe('resolveTargetColumn', () => {
+    it('keeps a chosen column and otherwise falls back to disease_cases', () => {
+        expect(resolveTargetColumn(['disease_cases', 'malaria'], 'malaria')).toBe('malaria');
+        expect(resolveTargetColumn(['disease_cases', 'malaria'], 'removed')).toBe('disease_cases');
+        expect(resolveTargetColumn(['malaria'], '')).toBe('');
     });
 });

@@ -51,11 +51,11 @@ export const PredictionSetupNoticeBox = ({ modelId, periodType, fromPeriod, aler
                     <dd className={styles.metaDefinition}>{formatPeriodId(fromPeriod) ?? fromPeriod}</dd>
                 </div>
                 <div className={styles.metaRow}>
-                    <dt className={styles.metaTerm}>{i18n.t('Alert policy')}</dt>
+                    <dt className={styles.metaTerm}>{i18n.t('Signal policy')}</dt>
                     <dd className={styles.metaDefinition} data-test="new-prediction-alert-policy">
                         {alertPolicyName
-                            ? i18n.t('{{policy}} (raises pending alerts for review)', { policy: alertPolicyName })
-                            : i18n.t('None (this run raises no alerts)')}
+                            ? i18n.t('{{policy}} (raises pending signals for review)', { policy: alertPolicyName })
+                            : i18n.t('None (this run raises no signals)')}
                     </dd>
                 </div>
             </dl>

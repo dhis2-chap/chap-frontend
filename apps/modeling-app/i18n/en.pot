@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-11-06T08:34:34.133Z\n"
-"PO-Revision-Date: 2026-11-06T08:34:34.133Z\n"
+"POT-Creation-Date: 2026-11-06T09:05:49.764Z\n"
+"PO-Revision-Date: 2026-11-06T09:05:49.765Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -32,8 +32,8 @@ msgstr "Datasets"
 msgid "New dataset"
 msgstr "New dataset"
 
-msgid "Alert policies"
-msgstr "Alert policies"
+msgid "Signal policies"
+msgstr "Signal policies"
 
 msgid "Prediction setups"
 msgstr "Prediction setups"
@@ -66,20 +66,20 @@ msgid "Custom colour"
 msgstr "Custom colour"
 
 msgid ""
-"This policy is used by a prediction setup or has alerts raised against it, "
+"This policy is used by a prediction setup or has signals raised against it, "
 "so it cannot be deleted."
 msgstr ""
-"This policy is used by a prediction setup or has alerts raised against it, "
+"This policy is used by a prediction setup or has signals raised against it, "
 "so it cannot be deleted."
 
-msgid "Delete alert policy"
-msgstr "Delete alert policy"
+msgid "Delete signal policy"
+msgstr "Delete signal policy"
 
 msgid "Delete \"{{name}}\"? This cannot be undone."
 msgstr "Delete \"{{name}}\"? This cannot be undone."
 
-msgid "Unable to delete alert policy"
-msgstr "Unable to delete alert policy"
+msgid "Unable to delete signal policy"
+msgstr "Unable to delete signal policy"
 
 msgid "Cancel"
 msgstr "Cancel"
@@ -87,8 +87,8 @@ msgstr "Cancel"
 msgid "Delete"
 msgstr "Delete"
 
-msgid "Unable to load alert policies"
-msgstr "Unable to load alert policies"
+msgid "Unable to load signal policies"
+msgstr "Unable to load signal policies"
 
 msgid "Name"
 msgstr "Name"
@@ -102,8 +102,8 @@ msgstr "Created"
 msgid "Actions"
 msgstr "Actions"
 
-msgid "No alert policies yet."
-msgstr "No alert policies yet."
+msgid "No signal policies yet."
+msgstr "No signal policies yet."
 
 msgid ""
 "Saved colours could not be loaded, so default colours are shown. Use Edit "
@@ -139,17 +139,17 @@ msgstr "Level names must be unique"
 msgid "Codes must be unique"
 msgstr "Codes must be unique"
 
-msgid "Alert policy created"
-msgstr "Alert policy created"
+msgid "Signal policy created"
+msgstr "Signal policy created"
 
-msgid "New alert policy"
-msgstr "New alert policy"
+msgid "New signal policy"
+msgstr "New signal policy"
 
 msgid "Policy name"
 msgstr "Policy name"
 
-msgid "No alert import code"
-msgstr "No alert import code"
+msgid "No signal import code"
+msgstr "No signal import code"
 
 msgid "Must match the value type or option set of the outbreak indicator."
 msgstr "Must match the value type or option set of the outbreak indicator."
@@ -199,8 +199,8 @@ msgstr "Policy created, but colours could not be saved"
 msgid "Retry to save the colours. The policy has already been created."
 msgstr "Retry to save the colours. The policy has already been created."
 
-msgid "Unable to create alert policy"
-msgstr "Unable to create alert policy"
+msgid "Unable to create signal policy"
+msgstr "Unable to create signal policy"
 
 msgid "Create policy"
 msgstr "Create policy"
@@ -208,11 +208,11 @@ msgstr "Create policy"
 msgid "Retry saving colours"
 msgstr "Retry saving colours"
 
-msgid "Alert policy saved"
-msgstr "Alert policy saved"
+msgid "Signal policy saved"
+msgstr "Signal policy saved"
 
-msgid "Edit alert policy"
-msgstr "Edit alert policy"
+msgid "Edit signal policy"
+msgstr "Edit signal policy"
 
 msgid "Codes must be unique and non-empty."
 msgstr "Codes must be unique and non-empty."
@@ -453,6 +453,43 @@ msgstr "Back to app"
 
 msgid "Click to expand"
 msgstr "Click to expand"
+
+msgid "No data to check"
+msgstr "No data to check"
+
+msgid "Period"
+msgstr "Period"
+
+msgid "Complete (%)"
+msgstr "Complete (%)"
+
+msgid "{{column}}{{colon}} {{available}} of {{expected}} locations"
+msgstr "{{column}}{{colon}} {{available}} of {{expected}} locations"
+
+msgid "Data completeness"
+msgstr "Data completeness"
+
+msgid "Reset zoom"
+msgstr "Reset zoom"
+
+msgid "Show values for period"
+msgstr "Show values for period"
+
+msgid ""
+"{{available}} of {{expected}} values present ({{percent}}%) · {{zeros}} "
+"zero · {{missing}} missing"
+msgstr ""
+"{{available}} of {{expected}} values present ({{percent}}%) · {{zeros}} "
+"zero · {{missing}} missing"
+
+msgid "Show all locations"
+msgstr "Show all locations"
+
+msgid "Location"
+msgstr "Location"
+
+msgid "Missing"
+msgstr "Missing"
 
 msgid "Inspect dataset"
 msgstr "Inspect dataset"
@@ -746,9 +783,6 @@ msgstr "Version"
 msgid "Commit"
 msgstr "Commit"
 
-msgid "Period"
-msgstr "Period"
-
 msgid "Covariates"
 msgstr "Covariates"
 
@@ -1008,6 +1042,15 @@ msgstr "Dataset name"
 msgid "EWARS data 22-24"
 msgstr "EWARS data 22-24"
 
+msgid "Target column"
+msgstr "Target column"
+
+msgid "The column models predict. Evaluations of this dataset use it."
+msgstr "The column models predict. Evaluations of this dataset use it."
+
+msgid "Choose the column to predict"
+msgstr "Choose the column to predict"
+
 msgid "Too short to evaluate"
 msgstr "Too short to evaluate"
 
@@ -1226,8 +1269,8 @@ msgstr "Benchmark model runs"
 msgid "No datasets match the origin filter"
 msgstr "No datasets match the origin filter"
 
-msgid "Target column"
-msgstr "Target column"
+msgid "Set on the dataset."
+msgstr "Set on the dataset."
 
 msgid "The dataset column the models predict and are scored against."
 msgstr "The dataset column the models predict and are scored against."
@@ -1360,14 +1403,14 @@ msgstr "Run a new prediction"
 msgid "Training start"
 msgstr "Training start"
 
-msgid "Alert policy"
-msgstr "Alert policy"
+msgid "Signal policy"
+msgstr "Signal policy"
 
-msgid "{{policy}} (raises pending alerts for review)"
-msgstr "{{policy}} (raises pending alerts for review)"
+msgid "{{policy}} (raises pending signals for review)"
+msgstr "{{policy}} (raises pending signals for review)"
 
-msgid "None (this run raises no alerts)"
-msgstr "None (this run raises no alerts)"
+msgid "None (this run raises no signals)"
+msgstr "None (this run raises no signals)"
 
 msgid "Please select a period"
 msgstr "Please select a period"
@@ -1496,6 +1539,32 @@ msgstr "View all activity"
 
 msgid "No activity matches the selected filters"
 msgstr "No activity matches the selected filters"
+
+msgid "Run a prediction to check its input data."
+msgstr "Run a prediction to check its input data."
+
+msgid "Unable to load input data."
+msgstr "Unable to load input data."
+
+msgid "Completeness unavailable for this dataset."
+msgstr "Completeness unavailable for this dataset."
+
+msgid "Latest period ({{period}})"
+msgstr "Latest period ({{period}})"
+
+msgid "{{percent}}% complete"
+msgstr "{{percent}}% complete"
+
+msgid "{{count}} locations with gaps"
+msgid_plural "{{count}} locations with gaps"
+msgstr[0] "{{count}} location with gaps"
+msgstr[1] "{{count}} locations with gaps"
+
+msgid "Latest input data"
+msgstr "Latest input data"
+
+msgid "View dataset"
+msgstr "View dataset"
 
 msgid "Prediction origin period"
 msgstr "Prediction origin period"
@@ -1669,6 +1738,16 @@ msgstr "source"
 
 msgid "sources"
 msgstr "sources"
+
+msgid "Error loading dataset"
+msgstr "Error loading dataset"
+
+msgid ""
+"Created {{created}} · {{first}} to {{last}} · {{locations}} locations · "
+"target {{target}}"
+msgstr ""
+"Created {{created}} · {{first}} to {{last}} · {{locations}} locations · "
+"target {{target}}"
 
 msgid "Error loading datasets"
 msgstr "Error loading datasets"
@@ -1909,8 +1988,8 @@ msgid_plural "{{count}} forecast case scored"
 msgstr[0] "{{count}} forecast case scored"
 msgstr[1] "{{count}} forecast cases scored"
 
-msgid "Alert level"
-msgstr "Alert level"
+msgid "Signal level"
+msgstr "Signal level"
 
 msgid "Threshold"
 msgstr "Threshold"
@@ -1922,17 +2001,17 @@ msgid "Outbreak detection"
 msgstr "Outbreak detection"
 
 msgid ""
-"How well a policy's alerts match observed outbreaks, across all splits and "
+"How well a policy's signals match observed outbreaks, across all splits and "
 "organisation units. Each split's thresholds come from the data before it."
 msgstr ""
-"How well a policy's alerts match observed outbreaks, across all splits and "
+"How well a policy's signals match observed outbreaks, across all splits and "
 "organisation units. Each split's thresholds come from the data before it."
 
 msgid "Could not load outbreak scoring"
 msgstr "Could not load outbreak scoring"
 
-msgid "Manage alert policies"
-msgstr "Manage alert policies"
+msgid "Manage signal policies"
+msgstr "Manage signal policies"
 
 msgid "Split by horizon"
 msgstr "Split by horizon"
@@ -2184,17 +2263,17 @@ msgid "Unable to load prediction data"
 msgstr "Unable to load prediction data"
 
 msgid ""
-"There was a problem loading the prediction data required for alert "
+"There was a problem loading the prediction data required for signal "
 "configuration."
 msgstr ""
-"There was a problem loading the prediction data required for alert "
+"There was a problem loading the prediction data required for signal "
 "configuration."
 
 msgid "No prediction data found"
 msgstr "No prediction data found"
 
-msgid "This prediction has no forecast data to configure alerts for."
-msgstr "This prediction has no forecast data to configure alerts for."
+msgid "This prediction has no forecast data to configure signals for."
+msgstr "This prediction has no forecast data to configure signals for."
 
 msgid "Threshold unavailable"
 msgstr "Threshold unavailable"
@@ -2212,38 +2291,38 @@ msgstr ""
 "Insufficient historical data to compute the endemic threshold for this "
 "location."
 
-msgid "Adjust alert output"
-msgstr "Adjust alert output"
+msgid "Adjust signal output"
+msgstr "Adjust signal output"
 
 msgid "Apply"
 msgstr "Apply"
 
-msgid "Unable to load raised alerts"
-msgstr "Unable to load raised alerts"
+msgid "Unable to load raised signals"
+msgstr "Unable to load raised signals"
 
-msgid "Alert levels"
-msgstr "Alert levels"
+msgid "Signal levels"
+msgstr "Signal levels"
 
-msgid "No alert policy was recorded for this run."
-msgstr "No alert policy was recorded for this run."
+msgid "No signal policy was recorded for this run."
+msgstr "No signal policy was recorded for this run."
 
-msgid "No alerts were recorded for this run."
-msgstr "No alerts were recorded for this run."
+msgid "No signals were recorded for this run."
+msgstr "No signals were recorded for this run."
 
-msgid "Show recorded alerts on the plots."
-msgstr "Show recorded alerts on the plots."
+msgid "Show recorded signals on the plots."
+msgstr "Show recorded signals on the plots."
 
-msgid "Show {{alertCount}} alerts from {{policy}} with their thresholds."
-msgstr "Show {{alertCount}} alerts from {{policy}} with their thresholds."
+msgid "Show {{alertCount}} signals from {{policy}} with their thresholds."
+msgstr "Show {{alertCount}} signals from {{policy}} with their thresholds."
 
-msgid "{{policy}} raised no alerts for this run. Show its thresholds."
-msgstr "{{policy}} raised no alerts for this run. Show its thresholds."
+msgid "{{policy}} raised no signals for this run. Show its thresholds."
+msgstr "{{policy}} raised no signals for this run. Show its thresholds."
 
-msgid "Saved alert colours could not be loaded"
-msgstr "Saved alert colours could not be loaded"
+msgid "Saved signal colours could not be loaded"
+msgstr "Saved signal colours could not be loaded"
 
-msgid "Alerts are shown with default colours."
-msgstr "Alerts are shown with default colours."
+msgid "Signals are shown with default colours."
+msgstr "Signals are shown with default colours."
 
 msgid "Organisation units exceeding threshold"
 msgstr "Organisation units exceeding threshold"
@@ -2257,14 +2336,14 @@ msgstr "Thresholds unavailable"
 msgid "Prediction run"
 msgstr "Prediction run"
 
-msgid "Edit the alert policy to change its thresholds."
-msgstr "Edit the alert policy to change its thresholds."
+msgid "Edit the signal policy to change its thresholds."
+msgstr "Edit the signal policy to change its thresholds."
 
 msgid "Explore thresholds"
 msgstr "Explore thresholds"
 
-msgid "Try other threshold settings. Hides recorded alerts."
-msgstr "Try other threshold settings. Hides recorded alerts."
+msgid "Try other threshold settings. Hides recorded signals."
+msgstr "Try other threshold settings. Hides recorded signals."
 
 msgid ""
 "There was a problem loading the prediction data required for this "
@@ -2288,14 +2367,14 @@ msgstr "Map"
 msgid "No prediction data found."
 msgstr "No prediction data found."
 
-msgid "Alert output"
-msgstr "Alert output"
+msgid "Signal output"
+msgstr "Signal output"
 
-msgid "Use alert outputs"
-msgstr "Use alert outputs"
+msgid "Use signal outputs"
+msgstr "Use signal outputs"
 
-msgid "Import the alert level code from {{policy}}."
-msgstr "Import the alert level code from {{policy}}."
+msgid "Import the signal level code from {{policy}}."
+msgstr "Import the signal level code from {{policy}}."
 
 msgid "Import 1 when an outbreak is likely, otherwise 0."
 msgstr "Import 1 when an outbreak is likely, otherwise 0."
@@ -2303,8 +2382,8 @@ msgstr "Import 1 when an outbreak is likely, otherwise 0."
 msgid "Imported value"
 msgstr "Imported value"
 
-msgid "No alert"
-msgstr "No alert"
+msgid "No signal"
+msgstr "No signal"
 
 msgid "One region-period result is missing and will be skipped."
 msgid_plural "One region-period result is missing and will be skipped."
@@ -2432,8 +2511,8 @@ msgstr "Quantile mid low"
 msgid "Quantile low"
 msgstr "Quantile low"
 
-msgid "Unable to load alert data"
-msgstr "Unable to load alert data"
+msgid "Unable to load signal data"
+msgstr "Unable to load signal data"
 
 msgid ""
 "There was a problem loading the prediction data required for outbreak "
@@ -2458,8 +2537,8 @@ msgstr ""
 "Importing forecasted values into DHIS2 requires you to set up five data "
 "elements for the quantiles outputted by the model."
 
-msgid "Alert probability is required"
-msgstr "Alert probability is required"
+msgid "Signal probability is required"
+msgstr "Signal probability is required"
 
 msgid "Outbreak indicator is required"
 msgstr "Outbreak indicator is required"
@@ -2508,24 +2587,24 @@ msgid "Setup name"
 msgstr "Setup name"
 
 msgid ""
-"No alert policies exist yet. Create one under Alert policies to raise "
-"alerts from this setup."
+"No signal policies exist yet. Create one under Signal policies to raise "
+"signals from this setup."
 msgstr ""
-"No alert policies exist yet. Create one under Alert policies to raise "
-"alerts from this setup."
+"No signal policies exist yet. Create one under Signal policies to raise "
+"signals from this setup."
 
 msgid ""
-"Every prediction run automatically raises pending alerts with this policy, "
-"for review before release. Leave empty to run predictions without alerts."
+"Every prediction run automatically raises pending signals with this policy, "
+"for review before release. Leave empty to run predictions without signals."
 msgstr ""
-"Every prediction run automatically raises pending alerts with this policy, "
-"for review before release. Leave empty to run predictions without alerts."
+"Every prediction run automatically raises pending signals with this policy, "
+"for review before release. Leave empty to run predictions without signals."
 
-msgid "No alert policy"
-msgstr "No alert policy"
+msgid "No signal policy"
+msgstr "No signal policy"
 
-msgid "Unable to load alert policies{{colon}} {{message}}"
-msgstr "Unable to load alert policies{{colon}} {{message}}"
+msgid "Unable to load signal policies{{colon}} {{message}}"
+msgstr "Unable to load signal policies{{colon}} {{message}}"
 
 msgid "You can change this configuration at any point."
 msgstr "You can change this configuration at any point."
@@ -2607,8 +2686,8 @@ msgstr "Organisation units with unavailable thresholds"
 msgid "Remove filter"
 msgstr "Remove filter"
 
-msgid "Filter by alert level"
-msgstr "Filter by alert level"
+msgid "Filter by signal level"
+msgstr "Filter by signal level"
 
 msgid "Select all"
 msgstr "Select all"
@@ -2621,9 +2700,6 @@ msgstr "Shift zoom left"
 
 msgid "Shift zoom left one period"
 msgstr "Shift zoom left one period"
-
-msgid "Reset zoom"
-msgstr "Reset zoom"
 
 msgid "Shift zoom right"
 msgstr "Shift zoom right"
@@ -2658,6 +2734,9 @@ msgid ""
 msgstr ""
 "This is an alpha version of the Modeling App. Some features may change or "
 "contain bugs."
+
+msgid "Read the guide"
+msgstr "Read the guide"
 
 msgid "Failed to copy report details"
 msgstr "Failed to copy report details"
@@ -2911,11 +2990,8 @@ msgstr "Model not found"
 msgid "{{name}} (baseline)"
 msgstr "{{name}} (baseline)"
 
-msgid "Manage the policies used to raise alerts from forecasts."
-msgstr "Manage the policies used to raise alerts from forecasts."
-
-msgid "New policy"
-msgstr "New policy"
+msgid "The signal policy has no levels"
+msgstr "The signal policy has no levels"
 
 msgid ""
 "The selected models are no longer compatible with this dataset. Choose "
@@ -2959,6 +3035,18 @@ msgstr[1] ""
 "{{models}} have already been run in this benchmark with these model "
 "versions. Running them again adds another row for each, so you can see how "
 "much the scores vary between runs."
+
+msgid "Dataset target has changed"
+msgstr "Dataset target has changed"
+
+msgid ""
+"This benchmark predicts {{benchmarkTarget}}, but the dataset now predicts "
+"{{datasetTarget}}. Import the data as a new dataset to run more models "
+"against {{benchmarkTarget}}."
+msgstr ""
+"This benchmark predicts {{benchmarkTarget}}, but the dataset now predicts "
+"{{datasetTarget}}. Import the data as a new dataset to run more models "
+"against {{benchmarkTarget}}."
 
 msgid "Could not start model runs"
 msgstr "Could not start model runs"
@@ -3144,6 +3232,12 @@ msgstr "No prediction setups yet"
 msgid "Error loading prediction setups"
 msgstr "Error loading prediction setups"
 
+msgid "Review the saved data and where values are missing."
+msgstr "Review the saved data and where values are missing."
+
+msgid "Dataset {{id}}"
+msgstr "Dataset {{id}}"
+
 msgid "Import data once and reuse it across evaluations."
 msgstr "Import data once and reuse it across evaluations."
 
@@ -3262,6 +3356,12 @@ msgid ""
 msgstr ""
 "Saved model configurations that are ready to be used to generate "
 "predictions."
+
+msgid "Manage the policies used to raise signals from forecasts."
+msgstr "Manage the policies used to raise signals from forecasts."
+
+msgid "New policy"
+msgstr "New policy"
 
 msgid ""
 "The Chap server refused the request. An administrator can check the API "

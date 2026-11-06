@@ -4,13 +4,13 @@ import { PageHeader } from '@/features/common-features/PageHeader/PageHeader';
 import { AlertPoliciesTable } from '@/components/BackendAlerts/AlertPoliciesTable';
 import { CreateAlertPolicyModal } from '@/components/BackendAlerts/CreateAlertPolicyModal';
 
-export const AlertsPage = () => {
+export const SignalsPage = () => {
     const [creating, setCreating] = useState(false);
     return (
         <>
             <PageHeader
-                pageTitle={i18n.t('Alert policies')}
-                pageDescription={i18n.t('Manage the policies used to raise alerts from forecasts.')}
+                pageTitle={i18n.t('Signal policies')}
+                pageDescription={i18n.t('Manage the policies used to raise signals from forecasts.')}
                 setDrawerOpen={setCreating}
                 setDrawerOpenText={i18n.t('New policy')}
             />

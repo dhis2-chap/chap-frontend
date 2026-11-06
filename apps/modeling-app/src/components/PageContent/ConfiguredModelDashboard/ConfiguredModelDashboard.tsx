@@ -11,6 +11,7 @@ import { QuickActionsWidget } from './QuickActionsWidget';
 import { SchedulingWidget } from './SchedulingWidget';
 import { MonitoringWidget } from './MonitoringWidget/MonitoringWidget';
 import { SummaryWidget } from './SummaryWidget';
+import { InputDataCheckWidget } from './InputDataCheckWidget';
 import styles from './ConfiguredModelDashboard.module.css';
 
 export const ConfiguredModelDashboard: React.FC = () => {
@@ -76,6 +77,10 @@ export const ConfiguredModelDashboard: React.FC = () => {
                     predictionSetup={predictionSetup}
                     isLoading={isLoading}
                     latestPredictionId={predictions[0]?.id}
+                />
+                <InputDataCheckWidget
+                    predictionSetup={predictionSetup}
+                    latestDatasetId={predictions[0]?.datasetId}
                 />
                 {isSchedulingEnabled && (
                     <SchedulingWidget

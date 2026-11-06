@@ -17,6 +17,7 @@ export const FEATURE_MIN_VERSIONS = {
     // Chap records the alert policy each prediction ran with from 2.6.0.
     predictionAlertPolicy: '2.6.0',
     jobDiagnostics: '2.6.0',
+    datasetTargetColumn: '2.6.0',
     outbreakMetrics: '2.6.0',
     // Chap compares prediction setups with a baseline model from 2.6.0.
     predictionMonitoring: '2.6.0',
@@ -35,6 +36,7 @@ export const Features = {
     PREDICTION_ALERTS: 'predictionAlerts',
     PREDICTION_ALERT_POLICY: 'predictionAlertPolicy',
     JOB_DIAGNOSTICS: 'jobDiagnostics',
+    DATASET_TARGET_COLUMN: 'datasetTargetColumn',
     OUTBREAK_METRICS: 'outbreakMetrics',
     PREDICTION_MONITORING: 'predictionMonitoring',
 } as const;

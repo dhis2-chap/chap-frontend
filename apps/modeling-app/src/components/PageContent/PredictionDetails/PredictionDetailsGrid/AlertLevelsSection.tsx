@@ -18,7 +18,7 @@ export const AlertLevelsSection = ({ alerts, enabled, disabled, onEnabledChange 
 
     if (alerts.error) {
         return (
-            <NoticeBox error title={i18n.t('Unable to load raised alerts')}>
+            <NoticeBox error title={i18n.t('Unable to load raised signals')}>
                 <Button small onClick={() => alerts.refetch()}>{i18n.t('Retry')}</Button>
             </NoticeBox>
         );
@@ -29,35 +29,35 @@ export const AlertLevelsSection = ({ alerts, enabled, disabled, onEnabledChange 
     if (status.kind !== 'policy') {
         return (
             <div className={styles.panelSection}>
-                <h3>{i18n.t('Alert levels')}</h3>
+                <h3>{i18n.t('Signal levels')}</h3>
                 <p className={styles.panelHelp}>
                     {status.kind === 'noPolicy'
-                        ? i18n.t('No alert policy was recorded for this run.')
-                        : i18n.t('No alerts were recorded for this run.')}
+                        ? i18n.t('No signal policy was recorded for this run.')
+                        : i18n.t('No signals were recorded for this run.')}
                 </p>
             </div>
         );
     }
 
     const policy = status.policies.map(({ name }) => name).join(', ');
-    let description = i18n.t('Show recorded alerts on the plots.');
+    let description = i18n.t('Show recorded signals on the plots.');
     if (policy) {
         description = status.alertCount > 0
-            ? i18n.t('Show {{alertCount}} alerts from {{policy}} with their thresholds.', { alertCount: status.alertCount, policy })
-            : i18n.t('{{policy}} raised no alerts for this run. Show its thresholds.', { policy });
+            ? i18n.t('Show {{alertCount}} signals from {{policy}} with their thresholds.', { alertCount: status.alertCount, policy })
+            : i18n.t('{{policy}} raised no signals for this run. Show its thresholds.', { policy });
     }
 
     return (
         <>
             <Switch
                 className={styles.toggleButton}
-                aria-label={i18n.t('Alert levels')}
+                aria-label={i18n.t('Signal levels')}
                 checked={enabled}
                 disabled={disabled}
                 onChange={({ checked }) => onEnabledChange(checked)}
                 label={(
                     <span className={styles.toggleText}>
-                        <span className={styles.toggleTitle}>{i18n.t('Alert levels')}</span>
+                        <span className={styles.toggleTitle}>{i18n.t('Signal levels')}</span>
                         <span className={styles.toggleDescription}>
                             {description}
                         </span>
@@ -65,8 +65,8 @@ export const AlertLevelsSection = ({ alerts, enabled, disabled, onEnabledChange 
                 )}
             />
             {enabled && alerts.displayError && (
-                <NoticeBox warning title={i18n.t('Saved alert colours could not be loaded')}>
-                    {i18n.t('Alerts are shown with default colours.')}
+                <NoticeBox warning title={i18n.t('Saved signal colours could not be loaded')}>
+                    {i18n.t('Signals are shown with default colours.')}
                 </NoticeBox>
             )}
         </>

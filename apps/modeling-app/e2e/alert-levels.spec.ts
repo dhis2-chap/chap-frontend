@@ -5,7 +5,7 @@ import { selectPeriod } from './helpers/period-picker';
 
 test.setTimeout(240_000);
 
-test.describe.serial('alert level presentation', () => {
+test.describe.serial('signal level presentation', () => {
     let policyId: number;
     let predictionRequest: RunPredictionSetupRequest;
     const policyName = `E2E alert colours ${Date.now()}`;
@@ -18,6 +18,8 @@ test.describe.serial('alert level presentation', () => {
 
     test('saves editable levels and retries a failed colour save without creating another policy', async ({ page }) => {
         await page.goto('/#/alerts');
+        await expect(page).toHaveURL(/#\/signals$/);
+        await expect(page.getByRole('heading', { name: 'Signal policies', exact: true })).toBeVisible();
         await page.getByRole('button', { name: 'New policy', exact: true }).click();
         const modal = page.locator('[data-test="create-alert-policy-modal"]');
         await modal.getByLabel('Policy name', { exact: true }).fill(policyName);
@@ -51,7 +53,7 @@ test.describe.serial('alert level presentation', () => {
         await page.unroute('**/dataStore/modeling/alert-policy-display-*');
         await modal.getByRole('button', { name: 'Retry saving colours' }).click();
         await expect(modal).not.toBeVisible();
-        await expect(page.getByText('Alert policy created', { exact: true })).toBeVisible();
+        await expect(page.getByText('Signal policy created', { exact: true })).toBeVisible();
         expect(creations).toBe(1);
         await page.reload();
         const row = page.getByRole('row').filter({ hasText: policyName });
@@ -59,7 +61,7 @@ test.describe.serial('alert level presentation', () => {
         const edit = page.locator('[data-test="edit-alert-policy-modal"]');
         await expect(edit.getByLabel('Level name', { exact: true }).nth(1)).toBeDisabled();
         await expect(edit.getByLabel('Custom colour', { exact: true }).nth(0)).toHaveValue('#11aabb');
-        await expect(edit.getByLabel('No alert import code', { exact: true })).toHaveValue('0');
+        await expect(edit.getByLabel('No signal import code', { exact: true })).toHaveValue('0');
         await expect(edit.getByLabel('Import code', { exact: true }).nth(1)).toHaveValue('RED');
         await edit.getByLabel('Import code', { exact: true }).nth(1).fill('ACTION');
         await edit.getByRole('button', { name: 'Yellow', exact: true }).nth(1).click();
@@ -68,7 +70,7 @@ test.describe.serial('alert level presentation', () => {
         await edit.getByRole('button', { name: 'Save', exact: true }).click();
         expect((await codesSaved).request().postDataJSON()).toEqual({ noAlertOutputCode: '0', levelOutputCodes: { Watch: '1', Action: 'ACTION' } });
         await expect(edit).not.toBeVisible();
-        await expect(page.getByText('Alert policy saved', { exact: true })).toBeVisible();
+        await expect(page.getByText('Signal policy saved', { exact: true })).toBeVisible();
         await page.reload();
         await expect(row.getByText(/Action/).locator('span')).toHaveCSS('background-color', 'rgb(255, 193, 7)');
         await expect(row.getByText(/Watch/).locator('span')).toHaveCSS('background-color', 'rgb(17, 170, 187)');
@@ -105,11 +107,10 @@ test.describe.serial('alert level presentation', () => {
         ), 'Load alert region');
         await page.getByPlaceholder('Search organisation units').fill(orgUnit.displayName);
         const plot = page.locator('article');
-        const alertLevels = page.getByRole('switch', { name: 'Alert levels', exact: true });
+        const alertLevels = page.getByRole('switch', { name: 'Signal levels', exact: true });
         const exploreThresholds = page.getByRole('switch', { name: 'Explore thresholds', exact: true });
         await expect(alertLevels).toBeChecked();
         await expect(exploreThresholds).not.toBeChecked();
-        await expect(page.getByText('Raised alerts', { exact: true })).toHaveCount(0);
         await expect(plot.getByText(label, { exact: true }).locator('span')).toHaveCSS('background-color', color);
         await expect(plot.locator('.highcharts-plot-band').first()).toBeVisible();
         // Both saved levels use different parameters, so the policy view draws two
@@ -139,7 +140,7 @@ test.describe.serial('alert level presentation', () => {
         await expect(page.getByText('Organisation units exceeding threshold', { exact: true })).toHaveCount(0);
     });
 
-    test('filters organisation units by one or more alert levels and combines with search', async ({ page }) => {
+    test('filters organisation units by one or more signal levels and combines with search', async ({ page }) => {
         // Run without an automatic policy so we can record a predictable mix of alerts.
         const evaluation = await createCompletedNaiveEvaluation(page);
         const setup = await readJson<DataBaseResponse>(await page.request.post(chapUrl('/v1/crud/prediction-setups'), {
@@ -172,7 +173,7 @@ test.describe.serial('alert level presentation', () => {
         const openMenu = () => filter.locator('[data-test="dhis2-uicore-select-input"]').click({ position: { x: 8, y: 8 } });
         const plots = page.locator('article');
         const option = (label: string) => page.locator('[data-test="dhis2-uicore-multiselectoption"]').getByText(label, { exact: true });
-        await expect(filter).toContainText('Filter by alert level');
+        await expect(filter).toContainText('Filter by signal level');
         const selectAll = page.locator('[data-test="alert-level-filter-select-all"]');
         await openMenu();
         await option('Action').click();
@@ -201,7 +202,7 @@ test.describe.serial('alert level presentation', () => {
         await option('Watch').click();
         await page.keyboard.press('Escape');
         await expect(plots).toHaveCount(0);
-        const alertLevels = page.getByRole('switch', { name: 'Alert levels', exact: true });
+        const alertLevels = page.getByRole('switch', { name: 'Signal levels', exact: true });
         await alertLevels.uncheck();
         await expect(filter).toHaveCount(0);
         await expect(plots.getByRole('heading', { name: orgUnit.displayName, exact: true })).toBeVisible();

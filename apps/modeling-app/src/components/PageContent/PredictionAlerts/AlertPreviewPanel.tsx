@@ -124,7 +124,7 @@ export const AlertPreviewPanel = ({
     if (seriesError) {
         return (
             <NoticeBox error title={i18n.t('Unable to load prediction data')}>
-                {i18n.t('There was a problem loading the prediction data required for alert configuration.')}
+                {i18n.t('There was a problem loading the prediction data required for signal configuration.')}
             </NoticeBox>
         );
     }
@@ -132,7 +132,7 @@ export const AlertPreviewPanel = ({
     if (!selectedSeries || series.length === 0) {
         return (
             <NoticeBox warning title={i18n.t('No prediction data found')}>
-                {i18n.t('This prediction has no forecast data to configure alerts for.')}
+                {i18n.t('This prediction has no forecast data to configure signals for.')}
             </NoticeBox>
         );
     }

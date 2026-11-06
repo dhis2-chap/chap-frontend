@@ -62,7 +62,7 @@ export const QuantileMappingForm = ({
 
     if (error || !predictionSetup) {
         return (
-            <NoticeBox error title={i18n.t('Unable to load alert data')}>
+            <NoticeBox error title={i18n.t('Unable to load signal data')}>
                 {i18n.t('There was a problem loading the prediction data required for outbreak indicator import.')}
             </NoticeBox>
         );

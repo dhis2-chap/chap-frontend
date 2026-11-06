@@ -118,7 +118,7 @@ const getChartOptions = (
             type: 'line',
             data: median,
             name: quantileKey === 'median'
-                ? i18n.t('Median prediction (50% alert line)')
+                ? i18n.t('Median prediction (50% signal line)')
                 : i18n.t('Median prediction'),
             color: '#004bbd',
             lineWidth: 5,
@@ -153,7 +153,7 @@ const getChartOptions = (
         chartSeries.push({
             id: 'prediction-probability',
             type: 'line',
-            name: i18n.t('Alert line ({{probability}}%)', {
+            name: i18n.t('Signal line ({{probability}}%)', {
                 probability: outbreakProbability,
             }),
             data: series.points.map(point => ({
@@ -174,7 +174,7 @@ const getChartOptions = (
             id: 'actual-cases',
             type: 'line',
             data: actualCases,
-            name: i18n.t('Actual Cases'),
+            name: i18n.t('Actual values'),
             color: '#f68000',
             zIndex: 4,
             marker: {
@@ -293,7 +293,7 @@ const getChartOptions = (
 
                 const alertInfo = alertInfoByPeriod.get(canonicalizePeriodId(period));
                 if (alertInfo) {
-                    lines.push(`${i18n.t('Alert level')}: <b>${escapeHtml(alertInfo.label)}</b>`);
+                    lines.push(`${i18n.t('Signal level')}: <b>${escapeHtml(alertInfo.label)}</b>`);
                 } else if (alertPeriods === undefined && outbreakInfo) {
                     lines.push(
                         `${i18n.t('Outbreak')}: <b>${outbreakInfo.outbreak ? i18n.t('Yes') : i18n.t('No')}</b>`,

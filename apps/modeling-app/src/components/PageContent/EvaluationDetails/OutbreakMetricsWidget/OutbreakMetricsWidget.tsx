@@ -80,7 +80,7 @@ const Scores = ({ row, referenceRow, levels, binaryMetrics, categoricalMetrics }
             <DataTable>
                 <DataTableHead>
                     <DataTableRow>
-                        <DataTableColumnHeader>{i18n.t('Alert level')}</DataTableColumnHeader>
+                        <DataTableColumnHeader>{i18n.t('Signal level')}</DataTableColumnHeader>
                         <DataTableColumnHeader>{i18n.t('Threshold')}</DataTableColumnHeader>
                         {binaryMetrics.map(metric => (
                             <DataTableColumnHeader key={metric.id} align="right">
@@ -188,7 +188,7 @@ const OutbreakMetricsContent = ({ evaluationId, specificationId }: Props) => {
         >
             <div className={styles.content} data-test="outbreak-metrics">
                 <p className={styles.intro}>
-                    {i18n.t('How well a policy\'s alerts match observed outbreaks, across all splits and organisation units. Each split\'s thresholds come from the data before it.')}
+                    {i18n.t('How well a policy\'s signals match observed outbreaks, across all splits and organisation units. Each split\'s thresholds come from the data before it.')}
                 </p>
                 {setupError ? (
                     <ChapErrorNotice error={setupError} title={i18n.t('Could not load outbreak scoring')}>
@@ -204,9 +204,9 @@ const OutbreakMetricsContent = ({ evaluationId, specificationId }: Props) => {
                     </ChapErrorNotice>
                 ) : policies.isLoading || catalog.isLoading ? <CircularLoader small /> : !policies.data?.length ? (
                     <p className={styles.intro}>
-                        {i18n.t('No alert policies yet.')}
+                        {i18n.t('No signal policies yet.')}
                         {' '}
-                        <Link to="/alerts">{i18n.t('Manage alert policies')}</Link>
+                        <Link to="/signals">{i18n.t('Manage signal policies')}</Link>
                     </p>
                 ) : (
                     <>
@@ -215,7 +215,7 @@ const OutbreakMetricsContent = ({ evaluationId, specificationId }: Props) => {
                                 <div className={styles.policySelect}>
                                     <SingleSelect
                                         dense
-                                        prefix={i18n.t('Alert policy')}
+                                        prefix={i18n.t('Signal policy')}
                                         selected={policy?.id == null ? '' : String(policy.id)}
                                         onChange={({ selected }) => setPolicyId(selected)}
                                         dataTest="outbreak-policy"

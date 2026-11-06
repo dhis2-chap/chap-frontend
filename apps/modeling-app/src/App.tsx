@@ -28,6 +28,7 @@ import { BenchmarksPage } from './pages/BenchmarksPage/BenchmarksPage';
 import { NewBenchmarkPage } from './pages/BenchmarksPage/NewBenchmarkPage';
 import { BenchmarkDetailsPage } from './pages/BenchmarksPage/BenchmarkDetailsPage';
 import { BenchmarkBreadcrumb } from './pages/BenchmarksPage/BenchmarkBreadcrumb';
+import { DatasetBreadcrumb, DatasetDetailsPage } from './pages/DatasetDetailsPage/DatasetDetailsPage';
 import { EvaluationPage } from './pages/EvaluationPage';
 import { EvaluationDetailsPage } from './pages/EvaluationDetailsPage';
 import { ChapValidator } from './components/ChapValidator';
@@ -45,7 +46,7 @@ import { SyncUrlWithGlobalShell } from './utils/syncUrlWithGlobalShell';
 import { NewPredictionPage } from './pages/NewPredictionPage';
 import { PredictionImportPage } from './pages/PredictionImportPage';
 import { PredictionRunDetailsPage } from './pages/PredictionRunDetailsPage';
-import { AlertsPage } from './pages/AlertsPage/AlertsPage';
+import { SignalsPage } from './pages/SignalsPage/SignalsPage';
 import { PredictionActivityPage } from './pages/PredictionActivityPage';
 import { GuidesPage } from './pages/GuidesPage';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -169,6 +170,13 @@ const router = createHashRouter([
                                 element: <NewDatasetPage />,
                                 handle: { breadcrumb: () => i18n.t('New dataset') } satisfies RouteHandle,
                             },
+                            {
+                                path: ':datasetId',
+                                element: <DatasetDetailsPage />,
+                                handle: {
+                                    breadcrumb: match => <DatasetBreadcrumb datasetId={Number(match.params.datasetId)} />,
+                                } satisfies RouteHandle,
+                            },
                         ],
                     },
                     {
@@ -176,9 +184,13 @@ const router = createHashRouter([
                         element: <JobsPage />,
                     },
                     {
+                        path: '/signals',
+                        handle: { breadcrumb: () => i18n.t('Signal policies') } satisfies RouteHandle,
+                        element: <SignalsPage />,
+                    },
+                    {
                         path: '/alerts',
-                        handle: { breadcrumb: () => i18n.t('Alert policies') } satisfies RouteHandle,
-                        element: <AlertsPage />,
+                        element: <Navigate to="/signals" replace />,
                     },
                     {
                         path: '/predictions',
