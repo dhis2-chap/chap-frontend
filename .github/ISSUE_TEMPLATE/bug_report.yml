@@ -47,15 +47,16 @@ body:
       description: You can find it in DHIS2 under App Management.
       placeholder: e.g. 4.2.0
     validations:
-      required: false
+      required: true
 
-    - type: input
+  - type: input
     id: chap-version
     attributes:
       label: Chap version
+      description: Click "Report a bug" in the Modeling App sidebar to see it.
       placeholder: e.g. 2.6.0
     validations:
-      required: false
+      required: true
 
   - type: input
     id: dhis2-version
@@ -63,7 +64,7 @@ body:
       label: DHIS2 version
       placeholder: e.g. 2.41.3
     validations:
-      required: false
+      required: true
 
   - type: dropdown
     id: frequency
@@ -86,7 +87,7 @@ body:
         - It's cosmetic or minor
     validations:
       required: false
-  
+
   - type: input
     id: browser
     attributes:
