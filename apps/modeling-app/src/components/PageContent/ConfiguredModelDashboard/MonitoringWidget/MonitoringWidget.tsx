@@ -4,10 +4,8 @@ import { CircularLoader, colors, NoticeBox, SingleSelectField, SingleSelectOptio
 import { useQuery } from '@tanstack/react-query';
 import {
     ApiError,
-    type MetricInfo,
     type PredictionSetupMonitoring,
     PredictionSetupsService,
-    VisualizationsService,
     Widget,
 } from '@dhis2-chap/ui';
 import Highcharts from 'highcharts';
@@ -31,28 +29,21 @@ export const MonitoringWidget = ({ predictionSetupId, evaluationId }: Props) => 
     const [open, setOpen] = useState(true);
     const [selectedMetric, setSelectedMetric] = useState('');
     const [selectedBaseline, setSelectedBaseline] = useState<string>();
-    const catalog = useQuery<MetricInfo[], ApiError>({
-        queryKey: ['evaluation-metric-catalog', evaluationId],
-        queryFn: () => VisualizationsService.getAvailableMetricsV1VisualizationMetricsBacktestIdGet(evaluationId),
-        staleTime: 5 * 60 * 1000,
-        retry: 0,
-    });
-    // Monitoring compares every run with a baseline, so metrics without a comparison cannot be monitored.
-    const metricIds = sortMetricIds(
-        catalog.data?.filter(metric => !HIDDEN_METRIC_IDS.includes(metric.id) && metric.comparisonOp != null).map(metric => metric.id) ?? [],
-        catalog.data,
-    );
-    const metrics = metricIds.map(id => catalog.data!.find(metric => metric.id === id)!);
-    // Defaults to the first metric selected in the modeling defaults, in their configured order.
-    const metricId = selectedMetric || getDefaultMetricIds(metricIds, catalog.data)[0] || metricIds[0] || '';
-    const metric = metrics.find(item => item.id === metricId);
-
     const { backtest, error: backtestError } = useBacktestById(evaluationId);
     const specification = useBacktestSpecification(backtest?.specificationId ?? 0);
+    const catalog = specification.data?.metrics ?? [];
+    // Monitoring compares every run with a baseline, so metrics without a comparison cannot be monitored.
+    const metricIds = sortMetricIds(
+        catalog.filter(metric => !HIDDEN_METRIC_IDS.includes(metric.id) && metric.comparisonOp != null).map(metric => metric.id),
+        catalog,
+    );
+    const metrics = metricIds.map(id => catalog.find(metric => metric.id === id)!);
+    // Defaults to the first metric selected in the modeling defaults, in their configured order.
+    const metricId = selectedMetric || getDefaultMetricIds(metricIds, catalog)[0] || metricIds[0] || '';
+    const metric = metrics.find(item => item.id === metricId);
     const baselines = specification.data?.baselines ?? [];
-    const baseline = getSelectedReference(baselines, selectedBaseline, specification.data?.defaultBaselineModel);
     // Without the specification's baselines, Chap Core falls back to its default baseline.
-    const isBaselineResolved = !!baseline || specification.isSuccess || specification.isError || !!backtestError;
+    const baseline = getSelectedReference(baselines, selectedBaseline, specification.data?.defaultBaselineModel);
 
     const monitoring = useQuery<PredictionSetupMonitoring, ApiError>({
         queryKey: [PREDICTION_SETUPS_QUERY_KEY, predictionSetupId, 'monitoring', metricId, baseline?.configuredModel.name],
@@ -61,11 +52,11 @@ export const MonitoringWidget = ({ predictionSetupId, evaluationId }: Props) => 
             metricId,
             baseline?.configuredModel.name,
         ),
-        enabled: !!metricId && isBaselineResolved,
+        enabled: !!metricId,
         retry: 0,
     });
     const baselineDisplayName = baseline ? referenceName(baseline) : monitoring.data?.baselineModel ?? '';
-    const error = catalog.error || monitoring.error;
+    const error = backtestError || specification.error || monitoring.error;
     const series = monitoring.data ? monitoringSeries(monitoring.data) : undefined;
     const hasPoints = !!series && (series.evaluationPerSplit.length > 0 || series.perRun.length > 0);
     // Keep both sides of zero in view so the better and worse bands always show, whichever side the scores fall on.
@@ -125,7 +116,11 @@ export const MonitoringWidget = ({ predictionSetupId, evaluationId }: Props) => 
             pointFormatter() {
                 const value = this.y ?? 0;
                 const color = value > 0 ? colors.green800 : value < 0 ? colors.red800 : colors.grey700;
-                const scored = i18n.t('{{count}} forecasts scored', { count: this.options.custom?.nObserved ?? 0 });
+                const scored = i18n.t('{{count}} forecasts scored', {
+                    count: this.options.custom?.nObserved ?? 0,
+                    defaultValue: '{{count}} forecast scored',
+                    defaultValue_plural: '{{count}} forecasts scored',
+                });
                 return `<span style="color:${this.color}">●</span> ${this.series.name}: <b style="color:${color}">${formatComparison(value, metric)}</b><br/>${scored}<br/>`;
             },
         },
@@ -168,7 +163,7 @@ export const MonitoringWidget = ({ predictionSetupId, evaluationId }: Props) => 
         >
             <div className={styles.content}>
                 <p className={styles.explanation}>
-                    {i18n.t('Each dot is one run, scored against the baseline once outcomes were observed. Grey dots are the evaluation splits, blue dots the prediction runs.')}
+                    {i18n.t('Each dot is one run, scored against the baseline once outcomes were observed.')}
                 </p>
                 <div className={styles.controls}>
                     {metrics.length > 0 && (
@@ -196,7 +191,7 @@ export const MonitoringWidget = ({ predictionSetupId, evaluationId }: Props) => 
                     <NoticeBox error title={i18n.t('Could not load monitoring')}>
                         {getChapErrorMessage(error)}
                     </NoticeBox>
-                ) : catalog.isLoading || !isBaselineResolved || monitoring.isInitialLoading ? (
+                ) : !specification.data || monitoring.isInitialLoading ? (
                     <CircularLoader small />
                 ) : metrics.length === 0 ? (
                     <p>{i18n.t('No metrics available for monitoring.')}</p>
@@ -205,9 +200,6 @@ export const MonitoringWidget = ({ predictionSetupId, evaluationId }: Props) => 
                 ) : (
                     <>
                         <HighchartsReact highcharts={Highcharts} options={options} />
-                        {monitoring.data?.comparisonDescription && (
-                            <p className={styles.explanation}>{monitoring.data.comparisonDescription}</p>
-                        )}
                         {!series?.perRun.length && (
                             <p className={styles.explanation}>{noPredictionOutcomes}</p>
                         )}

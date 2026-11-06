@@ -3,4 +3,4 @@
 "@dhis2-chap/ui": minor
 ---
 
-Add prediction setup monitoring that compares each backtest split and prediction run with a selectable baseline model, coloured by whether the model did better or worse than the baseline [CLIM-1386]. Backtest splits show before any prediction has observed outcomes. Requires Chap Core 2.6.0 or newer.
+Add model performance monitoring to prediction setups, comparing evaluation splits and prediction runs with a baseline. Requires Chap Core 2.6.0 [CLIM-1386].
