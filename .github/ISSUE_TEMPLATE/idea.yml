@@ -1,16 +1,22 @@
-name: Idea or need
-description: Suggest an improvement to the Modeling App, or tell us about a problem or need in your work.
+name: Idea, need, use case or user story
+description: Share an idea, need, use case or user story to help shape the Modeling App.
 title: "[Idea]: "
 labels: ["enhancement"]
 body:
   - type: markdown
     attributes:
       value: |
-        Thanks for sharing an idea. You don't need to be technical to contribute here.
+        Thanks for sharing. You don't need to be technical to contribute here, and every perspective helps us build a better Modeling App.
 
-        **Start with the problem, not the solution.** Tell us what is hard, slow or impossible today, and who it affects. Real examples from your context are the most useful thing you can give us.
+        Use this template to tell us about:
+        - **An idea** for something new or improved
+        - **A need** in your work that the app could help with
+        - **A use case** — a real scenario where the app could add value
+        - **A user story** — "As a [role], I want [capability], so that [benefit]"
 
-        This issue will be public, so don't include personal or patient data.
+        Share as much or as little as you like. Real examples from your context are the most valuable thing you can give us.
+
+        This issue will be public, so please don't include personal or patient data.
 
   - type: input
     id: who
@@ -22,25 +28,28 @@ body:
       required: false
 
   - type: textarea
-    id: problem
+    id: idea
     attributes:
-      label: The problem or need
-      description: What is hard, slow or impossible today?
+      label: Your idea, need, use case or user story
+      description: |
+        Describe what you'd like to see, the need you have, the scenario you have in mind, or your user story.
+        For user stories, a helpful format is: "As a [role], I want [capability], so that [benefit]".
     validations:
       required: true
 
   - type: textarea
-    id: affected
+    id: value
     attributes:
-      label: Who is affected, and how often?
+      label: What value would this bring?
+      description: Who would benefit, and how would it improve their work or outcomes?
     validations:
       required: false
 
   - type: textarea
-    id: workaround
+    id: today
     attributes:
-      label: How do you handle it today?
-      description: Any workaround you use now, if there is one.
+      label: How is this handled today?
+      description: Optional. Any current approach or workaround, if there is one.
     validations:
       required: false
 
@@ -48,14 +57,15 @@ body:
     id: success
     attributes:
       label: What would success look like?
+      description: Optional. How would you know this is working well?
     validations:
       required: false
 
   - type: textarea
     id: solution
     attributes:
-      label: Ideas for a solution
-      description: Optional. Welcome, but not required.
+      label: Ideas for how it could work
+      description: Optional. Any thoughts on an approach are welcome, but not required.
     validations:
       required: false
 
@@ -63,7 +73,7 @@ body:
     id: links
     attributes:
       label: Links, data or examples
-      description: Optional. Screenshots, documents or links that show the need.
+      description: Optional. Screenshots, documents or links that bring the idea to life.
     validations:
       required: false
 
