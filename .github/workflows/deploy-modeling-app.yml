@@ -1,0 +1,48 @@
+name: deploy-modeling-app
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Finish an upload before starting the next deployment.
+concurrency:
+  group: deploy-modeling-app
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: github.ref == 'refs/heads/main' && !github.event.repository.fork
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Manual runs and retries also deploy the latest main.
+          ref: main
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          check-latest: true
+          cache: 'pnpm'
+          cache-dependency-path: 'pnpm-lock.yaml'
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Build Modeling App and its workspace dependencies
+        run: pnpm build --filter=@dhis2-chap/modeling-app...
+
+      - name: Deploy Modeling App
+        id: deploy
+        working-directory: apps/modeling-app
+        env:
+          DHIS2_BASE_URL: https://climate.im.dhis2.org/climate-demo-dev
+          D2_USERNAME: ${{ secrets.CLIMATE_DEMO_DEV_USERNAME }}
+          D2_PASSWORD: ${{ secrets.CLIMATE_DEMO_DEV_PASSWORD }}
+        run: pnpm run deploy "$DHIS2_BASE_URL" --username "$D2_USERNAME"
