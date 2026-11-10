@@ -1,5 +1,16 @@
 # @dhis2-chap/ui
 
+## 7.5.0
+
+### Minor Changes
+
+-   806d344: Add model performance monitoring to prediction setups, comparing evaluation splits and prediction runs with a baseline. Requires Chap Core 2.6.0 [CLIM-1386].
+
+### Patch Changes
+
+-   3595b4c: Send dataset observations in the smaller columnar format on Chap Core 2.7.0 and later, while keeping data checks and imports compatible with older versions. [CLIM-1805]
+    -   @dhis2-chap/core@7.5.0
+
 ## 7.4.0
 
 ### Minor Changes
