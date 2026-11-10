@@ -57,25 +57,25 @@ export const useOrgUnitsById = (orgUnitIds: string[]) => {
         queryKey: ['organisationUnits', orgUnitIds],
         initialData,
         queryFn: async () => {
-            const organisationUnits: OrganisationUnit[] = [];
             // Keep each request below the server's request-line length limit.
+            const batches: string[][] = [];
             for (let start = 0; start < orgUnitIds.length; start += ORG_UNIT_BATCH_SIZE) {
-                const ids = orgUnitIds.slice(start, start + ORG_UNIT_BATCH_SIZE);
-                const response = await dataEngine.query({
-                    apiDataQuery: {
-                        resource: 'organisationUnits',
-                        params: {
-                            paging: false,
-                            fields: ['id', 'displayName', 'path', 'level'],
-                            filter: `id:in:[${ids.join(',')}]`,
-                            order: 'displayName:asc',
-                        },
-                    },
-                });
-                organisationUnits.push(...(response.apiDataQuery as OrgUnitResult).organisationUnits);
+                batches.push(orgUnitIds.slice(start, start + ORG_UNIT_BATCH_SIZE));
             }
-            organisationUnits.sort((a, b) => a.displayName.localeCompare(b.displayName));
-            return { organisationUnits };
+            // The data engine runs the batch queries in parallel.
+            const response = await dataEngine.query(Object.fromEntries(batches.map((ids, index) => [index, {
+                resource: 'organisationUnits',
+                params: {
+                    paging: false,
+                    fields: ['id', 'displayName'],
+                    filter: `id:in:[${ids.join(',')}]`,
+                },
+            }])));
+            return {
+                organisationUnits: Object.values(response)
+                    .flatMap(result => (result as OrgUnitResult).organisationUnits)
+                    .sort((a, b) => a.displayName.localeCompare(b.displayName)),
+            };
         },
         enabled: orgUnitIds.length > 0,
         select: useCallback(
