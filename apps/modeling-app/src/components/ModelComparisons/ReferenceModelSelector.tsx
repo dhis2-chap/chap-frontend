@@ -9,21 +9,22 @@ type Props = {
     reference?: ReferenceModelResult;
     onSelect: (id: string) => void;
     label?: string;
+    hideNone?: boolean;
 };
 
-export const ReferenceModelSelector = ({ references, reference, onSelect, label = i18n.t('Compare with') }: Props) => {
+export const ReferenceModelSelector = ({ references, reference, onSelect, label = i18n.t('Compare with'), hideNone }: Props) => {
     const unscored = reference !== undefined && reference.status !== 'done';
     return (
         <SingleSelectField
             dense
             className={styles.controls}
             label={label}
-            selected={reference ? String(reference.configuredModel.id) : 'none'}
+            selected={reference ? String(reference.configuredModel.id) : hideNone ? undefined : 'none'}
             onChange={({ selected }) => onSelect(selected)}
             warning={unscored}
             validationText={unscored ? reference.message || i18n.t('No scores for this model yet.') : undefined}
         >
-            <SingleSelectOption value="none" label={i18n.t('No comparison')} />
+            {!hideNone && <SingleSelectOption value="none" label={i18n.t('No comparison')} />}
             {references.map(item => (
                 <SingleSelectOption key={item.configuredModel.id} value={String(item.configuredModel.id)} label={referenceLabel(item)} />
             ))}

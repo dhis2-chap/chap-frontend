@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-11-02T11:59:15.165Z\n"
-"PO-Revision-Date: 2026-11-02T11:59:15.165Z\n"
+"POT-Creation-Date: 2026-11-10T07:57:53.749Z\n"
+"PO-Revision-Date: 2026-11-10T07:57:53.749Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -1566,6 +1566,67 @@ msgstr "Latest input data"
 msgid "View dataset"
 msgstr "View dataset"
 
+msgid "Prediction origin period"
+msgstr "Prediction origin period"
+
+msgid "{{metric}} improvement over {{baseline}}"
+msgstr "{{metric}} improvement over {{baseline}}"
+
+msgid "Better than {{baseline}}"
+msgstr "Better than {{baseline}}"
+
+msgid "Worse than {{baseline}}"
+msgstr "Worse than {{baseline}}"
+
+msgid "{{count}} forecasts scored"
+msgid_plural "{{count}} forecasts scored"
+msgstr[0] "{{count}} forecast scored"
+msgstr[1] "{{count}} forecasts scored"
+
+msgid "Evaluation splits"
+msgstr "Evaluation splits"
+
+msgid "Evaluation average"
+msgstr "Evaluation average"
+
+msgid "Prediction runs"
+msgstr "Prediction runs"
+
+msgid "Prediction trend"
+msgstr "Prediction trend"
+
+msgid "No observed prediction outcomes yet."
+msgstr "No observed prediction outcomes yet."
+
+msgid "Model performance monitoring"
+msgstr "Model performance monitoring"
+
+msgid ""
+"Each dot is one run, scored against the baseline once outcomes were "
+"observed. The prediction trend combines all prediction runs so far."
+msgstr ""
+"Each dot is one run, scored against the baseline once outcomes were "
+"observed. The prediction trend combines all prediction runs so far."
+
+msgid "Metric"
+msgstr "Metric"
+
+msgid "Compare with baseline"
+msgstr "Compare with baseline"
+
+msgid "Could not load monitoring"
+msgstr "Could not load monitoring"
+
+msgid "No metrics available for monitoring."
+msgstr "No metrics available for monitoring."
+
+msgid ""
+"The comparison with {{baseline}} is undefined for these runs, for example "
+"when the baseline scores zero."
+msgstr ""
+"The comparison with {{baseline}} is undefined for these runs, for example "
+"when the baseline scores zero."
+
 msgid "Delete prediction run"
 msgstr "Delete prediction run"
 
@@ -3084,9 +3145,6 @@ msgstr ""
 "Aggregate scores across all splits and organisation units. The best score "
 "in each column is highlighted, including ties. Best only means best among "
 "these runs, not necessarily a good score."
-
-msgid "Compare with baseline"
-msgstr "Compare with baseline"
 
 msgid "Tick Compare with baseline to choose the reference."
 msgstr "Tick Compare with baseline to choose the reference."
