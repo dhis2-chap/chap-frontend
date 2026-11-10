@@ -31,7 +31,7 @@ const InfoAboutReportingBugs = () => {
 
     return (
         <>
-            {!isWarningDismissed && (
+            {process.env.DHIS2_APP_RELEASE !== 'true' && !isWarningDismissed && (
                 <div className={styles.infoAboutReportingBugs}>
                     <div className={styles.infoAboutReportingBugsInner}>
                         <div className={styles.message}>
