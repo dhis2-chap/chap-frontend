@@ -1,6 +1,6 @@
 import i18n from '@dhis2/d2-i18n';
 import { getPeriodsInRange } from '@dhis2-chap/core';
-import type { DatasetMakeRequest, ObservationColumns } from '@dhis2-chap/ui';
+import type { DatasetMakeRequest, ObservationBase, ObservationColumns } from '@dhis2-chap/ui';
 import type { useDataEngine } from '@dhis2/app-runtime';
 import { fetchAnalytics, fetchOrgUnits } from '../../ModelExecutionForm/utils/queryUtils';
 import { buildOrgUnitFeatureCollection } from '../../ModelExecutionForm/utils/orgUnitGeoJson';
@@ -12,6 +12,29 @@ export type PreparedDataset = {
     /** Names of every organisation unit the selection resolved to, for Chap's import summary. */
     orgUnitNames: Map<string, string>;
     periods: string[];
+};
+
+/** One row per (org unit, period), with `null` where a feature has no value. */
+const toObservationColumns = (observations: ObservationBase[], features: string[]): ObservationColumns => {
+    const columns: ObservationColumns = {
+        orgUnit: [],
+        period: [],
+        values: Object.fromEntries(features.map(feature => [feature, []])),
+    };
+    const rowIndexes = new Map<string, number>();
+    for (const { orgUnit, period, featureName, value } of observations) {
+        const key = JSON.stringify([orgUnit, period]);
+        let index = rowIndexes.get(key);
+        if (index === undefined) {
+            index = columns.orgUnit.length;
+            rowIndexes.set(key, index);
+            columns.orgUnit.push(orgUnit);
+            columns.period.push(period);
+            features.forEach(feature => columns.values[feature].push(null));
+        }
+        columns.values[featureName!][index] = value;
+    }
+    return columns;
 };
 
 export const prepareDataset = async (
@@ -34,57 +57,23 @@ export const prepareDataset = async (
         dataEngine,
     );
 
-    const observedItems = new Set(response.rows.map(row => row[0]));
-    const emptyColumn = formData.columns.find(column => !observedItems.has(column.dataItem.id));
+    // A data item may be imported under several covariate names, so map per column rather than per row.
+    const providedData = formData.columns.flatMap(column => response.rows
+        .filter(row => row[0] === column.dataItem.id)
+        .map(row => ({
+            featureName: column.covariateName,
+            orgUnit: row[1],
+            period: row[2],
+            value: row[3] === '' || !Number.isFinite(Number(row[3])) ? null : Number(row[3]),
+        })));
+
+    const emptyColumn = formData.columns.find(column => (
+        !providedData.some(observation => observation.featureName === column.covariateName)
+    ));
     if (emptyColumn) {
         throw new Error(i18n.t('{{covariate}} has no observations for these periods and organisation units', {
             covariate: emptyColumn.covariateName,
         }));
-    }
-
-    const parseValue = (value: string) => value === '' || !Number.isFinite(Number(value)) ? null : Number(value);
-    let observations: Pick<DatasetMakeRequest, 'providedData' | 'providedDataColumns'>;
-    if (supportsColumnar) {
-        const columns: ObservationColumns = {
-            orgUnit: [],
-            period: [],
-            values: Object.fromEntries(formData.columns.map(column => [column.covariateName, []])),
-        };
-        // One data item can supply several named features.
-        const featuresByItem = new Map<string, string[]>();
-        for (const column of formData.columns) {
-            featuresByItem.set(column.dataItem.id, [...(featuresByItem.get(column.dataItem.id) ?? []), column.covariateName]);
-        }
-        const rowIndexes = new Map<string, number>();
-        const valueColumns = Object.values(columns.values);
-        for (const [dataItem, orgUnit, period, value] of response.rows) {
-            const features = featuresByItem.get(dataItem);
-            if (!features) continue;
-            const key = JSON.stringify([orgUnit, period]);
-            let index = rowIndexes.get(key);
-            if (index === undefined) {
-                index = columns.orgUnit.length;
-                rowIndexes.set(key, index);
-                columns.orgUnit.push(orgUnit);
-                columns.period.push(period);
-                // Analytics omits missing cells; keep all feature arrays aligned.
-                valueColumns.forEach(values => values.push(null));
-            }
-            const parsedValue = parseValue(value);
-            features.forEach(feature => columns.values[feature][index] = parsedValue);
-        }
-        observations = { providedDataColumns: columns };
-    } else {
-        observations = {
-            providedData: formData.columns.flatMap(column => response.rows
-                .filter(row => row[0] === column.dataItem.id)
-                .map(row => ({
-                    featureName: column.covariateName,
-                    orgUnit: row[1],
-                    period: row[2],
-                    value: parseValue(row[3]),
-                }))),
-        };
     }
 
     const { geojson } = await fetchOrgUnits(response.metaData.dimensions.ou, dataEngine);
@@ -100,7 +89,9 @@ export const prepareDataset = async (
             targetColumn: formData.targetColumn || undefined,
             type: 'evaluation',
             geojson: buildOrgUnitFeatureCollection(withGeometry),
-            ...observations,
+            ...(supportsColumnar
+                ? { providedDataColumns: toObservationColumns(providedData, formData.columns.map(column => column.covariateName)) }
+                : { providedData }),
             dataSources: formData.columns.map(column => ({
                 covariate: column.covariateName,
                 dataElementId: column.dataItem.id,

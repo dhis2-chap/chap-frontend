@@ -98,16 +98,15 @@ describe('prepareDataset', () => {
         const { request } = await prepareDataset(form, dataEngine, periodSettings, true);
         const { request: legacy } = await prepareDataset(form, dataEngine, periodSettings, false);
         expect(request.providedDataColumns).toEqual({
-            orgUnit: ['a', 'b', 'a', 'b'],
-            period: ['202402', '202401', '202401', '202402'],
+            orgUnit: ['a', 'a', 'b', 'b'],
+            period: ['202402', '202401', '202402', '202401'],
             values: {
                 disease_cases: [0, null, null, null],
                 custom_cases: [0, null, null, null],
-                rainfall: [null, 2.5, null, null],
+                rainfall: [null, null, null, 2.5],
             },
         });
         expect(indexObservations(request.providedDataColumns!)).toEqual(indexObservations(legacy.providedData!));
-        expect(indexObservations(request.providedDataColumns!).size).toBe(3);
     });
 
     it('does not silently create a dataset that is missing a chosen column', async () => {
