@@ -8,6 +8,7 @@ import { getImportSummaryFromApiError } from '../../ModelExecutionForm/utils/imp
 import type { ImportSummaryCorrected } from '../../ModelExecutionForm/types';
 import { type DatasetFormValues } from './useDatasetFormState';
 import { type Dhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
+import { Features, useIsFeatureAvailable } from '@/hooks/useIsFeatureAvailable';
 
 const FINISHED_JOB_STATUSES = ['SUCCESS', 'FAILURE', 'REVOKED'];
 
@@ -19,6 +20,7 @@ export type DatasetImportSummary = ImportSummaryCorrected & { orgUnitNames: Map<
  */
 export const useCreateDataset = (periodSettings: Dhis2PeriodSettings) => {
     const dataEngine = useDataEngine();
+    const { isAvailable: supportsColumnar } = useIsFeatureAvailable(Features.DATASET_OBSERVATION_COLUMNS);
     const queryClient = useQueryClient();
     const [jobId, setJobId] = useState<string>();
     const [summary, setSummary] = useState<DatasetImportSummary>();
@@ -26,7 +28,7 @@ export const useCreateDataset = (periodSettings: Dhis2PeriodSettings) => {
     const createDataset = useMutation<string, Error | ApiError, DatasetFormValues>({
         onMutate: () => setSummary(undefined),
         mutationFn: async (formData) => {
-            const { request, orgUnitNames } = await prepareDataset(formData, dataEngine, periodSettings);
+            const { request, orgUnitNames } = await prepareDataset(formData, dataEngine, periodSettings, supportsColumnar);
             try {
                 const response = await DatasetsService.makeDatasetV1AnalyticsMakeDatasetPost(request);
                 setSummary({ ...(response as unknown as ImportSummaryCorrected), orgUnitNames });

@@ -18,6 +18,7 @@ export const FEATURE_MIN_VERSIONS = {
     predictionAlertPolicy: '2.6.0',
     jobDiagnostics: '2.6.0',
     datasetTargetColumn: '2.6.0',
+    datasetObservationColumns: '2.7.0',
     outbreakMetrics: '2.6.0',
 } as const;
 
@@ -35,6 +36,7 @@ export const Features = {
     PREDICTION_ALERT_POLICY: 'predictionAlertPolicy',
     JOB_DIAGNOSTICS: 'jobDiagnostics',
     DATASET_TARGET_COLUMN: 'datasetTargetColumn',
+    DATASET_OBSERVATION_COLUMNS: 'datasetObservationColumns',
     OUTBREAK_METRICS: 'outbreakMetrics',
 } as const;
 

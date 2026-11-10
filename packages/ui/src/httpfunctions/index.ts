@@ -86,6 +86,7 @@ export type { MultiLineString } from './models/MultiLineString';
 export type { MultiPoint } from './models/MultiPoint';
 export type { MultiPolygon } from './models/MultiPolygon';
 export type { ObservationBase } from './models/ObservationBase';
+export type { ObservationColumns } from './models/ObservationColumns';
 export { OptimizationDirection } from './models/OptimizationDirection';
 export type { OutbreakMetricInfo } from './models/OutbreakMetricInfo';
 export { OutbreakMetricKind } from './models/OutbreakMetricKind';
