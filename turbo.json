@@ -15,6 +15,7 @@
       },
       "build": {
         "dependsOn": ["^build"],
+        "env": ["DHIS2_APP_RELEASE"],
         "outputs": ["build/**"]
       }
     }

@@ -103,7 +103,10 @@ const main = async () => {
     }
 
     log('Building...');
-    execSync('pnpm build', { stdio: 'inherit' });
+    execSync('pnpm build', {
+        stdio: 'inherit',
+        env: { ...process.env, DHIS2_APP_RELEASE: 'true' },
+    });
 
     if (!fs.existsSync(BUNDLE_DIR)) {
         throw new Error('Bundle directory not found in build/bundle');
