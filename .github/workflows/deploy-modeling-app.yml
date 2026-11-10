@@ -39,10 +39,9 @@ jobs:
         run: pnpm build --filter=@dhis2-chap/modeling-app...
 
       - name: Deploy Modeling App
-        id: deploy
         working-directory: apps/modeling-app
         env:
-          DHIS2_BASE_URL: https://climate.im.dhis2.org/climate-demo-dev
+          DHIS2_BASE_URL: ${{ secrets.CLIMATE_DEMO_DEV_URL }}
           D2_USERNAME: ${{ secrets.CLIMATE_DEMO_DEV_USERNAME }}
           D2_PASSWORD: ${{ secrets.CLIMATE_DEMO_DEV_PASSWORD }}
         run: pnpm run deploy "$DHIS2_BASE_URL" --username "$D2_USERNAME"
