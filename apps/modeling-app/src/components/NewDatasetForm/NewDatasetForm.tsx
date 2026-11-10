@@ -79,8 +79,8 @@ export const NewDatasetForm = () => {
     const targetColumn = resolveTargetColumn(columnNames, chosenTarget);
     const support = getModelSupport(targetColumn ? getBacktestColumns(columnNames, targetColumn) : columnNames, periodType, models ?? []);
     const isMissingTarget = isTargetColumnAvailable && columnNames.length > 0 && !targetColumn;
-    // Chap masks only `disease_cases`.
-    const canMask = isMaskingAvailable && columnNames.includes('disease_cases');
+    // Chap masks only `disease_cases`, so it must be the target.
+    const canMask = isMaskingAvailable && targetColumn === 'disease_cases';
     // Chap Core < 2.6.0 cannot save a target on the dataset.
     const toRequestValues = (data: DatasetFormValues) => ({
         ...data,
