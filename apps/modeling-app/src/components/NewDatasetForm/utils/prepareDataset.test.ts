@@ -45,8 +45,8 @@ beforeEach(() => {
 });
 
 describe('prepareDataset', () => {
-    it.each([true, false])('keeps every chosen covariate name, even when one data item is reused (columnar: %s)', async (supportsColumnar) => {
-        const { request, orgUnitNames } = await prepareDataset(formData, dataEngine, periodSettings, supportsColumnar);
+    it('keeps every chosen covariate name, even when one data item is reused', async () => {
+        const { request, orgUnitNames } = await prepareDataset(formData, dataEngine, periodSettings, true);
 
         expect(request).not.toHaveProperty('modelId');
         expect(request.targetColumn).toBe('custom_cases');
@@ -54,22 +54,12 @@ describe('prepareDataset', () => {
             { covariate: 'disease_cases', dataElementId: 'data1' },
             { covariate: 'custom_cases', dataElementId: 'data1' },
         ]);
-        if (supportsColumnar) {
-            expect(request).not.toHaveProperty('providedData');
-            expect(request.providedDataColumns).toEqual({
-                orgUnit: ['resolved-unit', 'resolved-unit'],
-                period: ['202401', '202402'],
-                values: { disease_cases: [12, null], custom_cases: [12, null] },
-            });
-        } else {
-            expect(request).not.toHaveProperty('providedDataColumns');
-            expect(request.providedData).toEqual([
-                { featureName: 'disease_cases', orgUnit: 'resolved-unit', period: '202401', value: 12 },
-                { featureName: 'disease_cases', orgUnit: 'resolved-unit', period: '202402', value: null },
-                { featureName: 'custom_cases', orgUnit: 'resolved-unit', period: '202401', value: 12 },
-                { featureName: 'custom_cases', orgUnit: 'resolved-unit', period: '202402', value: null },
-            ]);
-        }
+        expect(request).not.toHaveProperty('providedData');
+        expect(request.providedDataColumns).toEqual({
+            orgUnit: ['resolved-unit', 'resolved-unit'],
+            period: ['202401', '202402'],
+            values: { disease_cases: [12, null], custom_cases: [12, null] },
+        });
         expect(fetchAnalytics).toHaveBeenCalledWith(['data1'], ['202401', '202402'], ['LEVEL-2'], dataEngine);
         expect(fetchOrgUnits).toHaveBeenCalledWith(['resolved-unit'], dataEngine);
         expect(request.geojson.features[0].id).toBe('resolved-unit');
@@ -97,6 +87,7 @@ describe('prepareDataset', () => {
 
         const { request } = await prepareDataset(form, dataEngine, periodSettings, true);
         const { request: legacy } = await prepareDataset(form, dataEngine, periodSettings, false);
+        expect(legacy).not.toHaveProperty('providedDataColumns');
         expect(request.providedDataColumns).toEqual({
             orgUnit: ['a', 'a', 'b', 'b'],
             period: ['202402', '202401', '202402', '202401'],
