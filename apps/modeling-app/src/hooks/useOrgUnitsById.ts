@@ -1,6 +1,8 @@
 import { useCallback, useMemo } from 'react';
-import { Query, useQueryClient } from '@tanstack/react-query';
-import { useApiDataQuery } from '../utils/useApiDataQuery';
+import { useDataEngine } from '@dhis2/app-runtime';
+import { Query, useQuery, useQueryClient } from '@tanstack/react-query';
+
+const ORG_UNIT_BATCH_SIZE = 200;
 
 type OrganisationUnit = {
     id: string;
@@ -20,6 +22,7 @@ const isOrgUnitQuery = (query: Query<any>): query is Query<OrgUnitResult> => {
 
 export const useOrgUnitsById = (orgUnitIds: string[]) => {
     const queryClient = useQueryClient();
+    const dataEngine = useDataEngine();
 
     const initialData = useMemo(() => {
         const idsSet = new Set(orgUnitIds);
@@ -50,17 +53,29 @@ export const useOrgUnitsById = (orgUnitIds: string[]) => {
             : undefined;
     }, [orgUnitIds, queryClient]);
 
-    return useApiDataQuery({
+    return useQuery<OrgUnitResult, Error>({
         queryKey: ['organisationUnits', orgUnitIds],
         initialData,
-        query: {
-            resource: 'organisationUnits',
-            params: {
-                paging: false,
-                fields: ['id', 'displayName', 'path', 'level'],
-                filter: `id:in:[${orgUnitIds.join(',')}]`,
-                order: 'displayName:asc',
-            },
+        queryFn: async () => {
+            const organisationUnits: OrganisationUnit[] = [];
+            // Keep each request below the server's request-line length limit.
+            for (let start = 0; start < orgUnitIds.length; start += ORG_UNIT_BATCH_SIZE) {
+                const ids = orgUnitIds.slice(start, start + ORG_UNIT_BATCH_SIZE);
+                const response = await dataEngine.query({
+                    apiDataQuery: {
+                        resource: 'organisationUnits',
+                        params: {
+                            paging: false,
+                            fields: ['id', 'displayName', 'path', 'level'],
+                            filter: `id:in:[${ids.join(',')}]`,
+                            order: 'displayName:asc',
+                        },
+                    },
+                });
+                organisationUnits.push(...(response.apiDataQuery as OrgUnitResult).organisationUnits);
+            }
+            organisationUnits.sort((a, b) => a.displayName.localeCompare(b.displayName));
+            return { organisationUnits };
         },
         enabled: orgUnitIds.length > 0,
         select: useCallback(
