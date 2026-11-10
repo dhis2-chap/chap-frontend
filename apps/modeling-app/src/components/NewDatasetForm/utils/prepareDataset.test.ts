@@ -20,6 +20,7 @@ const formData: DatasetFormValues = {
         { covariateName: 'custom_cases', dataItem },
     ],
     targetColumn: 'custom_cases',
+    maskedRanges: [],
 };
 
 const periodSettings = { calendar: 'gregory' as const, locale: 'en', timeZone: 'UTC' };
@@ -49,6 +50,7 @@ describe('prepareDataset', () => {
         const { request, orgUnitNames } = await prepareDataset(formData, dataEngine, periodSettings, true);
 
         expect(request).not.toHaveProperty('modelId');
+        expect(request).not.toHaveProperty('maskedRanges');
         expect(request.targetColumn).toBe('custom_cases');
         expect(request.dataSources).toEqual([
             { covariate: 'disease_cases', dataElementId: 'data1' },
@@ -64,6 +66,16 @@ describe('prepareDataset', () => {
         expect(fetchOrgUnits).toHaveBeenCalledWith(['resolved-unit'], dataEngine);
         expect(request.geojson.features[0].id).toBe('resolved-unit');
         expect(orgUnitNames).toEqual(new Map([['resolved-unit', 'District']]));
+    });
+
+    it.each(['MONTH', 'WEEK'] as const)('passes named and unnamed %s masks through to Chap', async (periodType) => {
+        const [start, end] = periodType === 'MONTH' ? ['202401', '202402'] : ['2024W1', '2024W2'];
+        const maskedRanges = [{ start, end: start, name: 'Excluded' }, { start: end, end }];
+        const { request } = await prepareDataset({
+            ...formData, targetColumn: 'disease_cases', periodType, fromPeriodId: start, toPeriodId: end, maskedRanges,
+        }, dataEngine, periodSettings, false);
+
+        expect(request.maskedRanges).toEqual(maskedRanges);
     });
 
     it('aligns sparse, unordered features by location and period and preserves the same completeness values', async () => {

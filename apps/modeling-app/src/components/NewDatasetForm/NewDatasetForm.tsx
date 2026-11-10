@@ -15,6 +15,7 @@ import { NameInput } from '../ModelExecutionForm/Sections/NameInput';
 import { PeriodSelector } from '../ModelExecutionForm/Sections/PeriodSelector';
 import { LocationSelector } from '../ModelExecutionForm/Sections/LocationSelector';
 import { DatasetColumns } from './Sections/DatasetColumns';
+import { MaskedRanges } from './Sections/MaskedRanges/MaskedRanges';
 import { ModelSupport } from './Sections/ModelSupport';
 import { type DatasetFormValues, EMPTY_COLUMN, resolveTargetColumn, useDatasetFormState } from './hooks/useDatasetFormState';
 import { useCovariateSuggestions } from './hooks/useCovariateSuggestions';
@@ -71,6 +72,7 @@ export const NewDatasetForm = () => {
         name: ['columns', 'periodType', 'fromPeriodId', 'toPeriodId', 'targetColumn'],
     });
     const { isAvailable: isTargetColumnAvailable } = useIsFeatureAvailable(Features.DATASET_TARGET_COLUMN);
+    const { isAvailable: isMaskingAvailable } = useIsFeatureAvailable(Features.DATASET_MASKED_RANGES);
     const backtestParameters = useBacktestParameters(periodType);
     const covariateNames = columnValues.map(column => column.covariateName.trim());
     const columnNames = [...new Set(covariateNames.filter(Boolean))];
@@ -155,6 +157,12 @@ export const NewDatasetForm = () => {
                                                 <SingleSelectOption key={name} value={name} label={name} />
                                             ))}
                                         </SingleSelectField>
+                                    )}
+                                    {isMaskingAvailable && (
+                                        <MaskedRanges
+                                            periodSettings={settings}
+                                            disabled={isBusy || isSettingsLoading || !!settingsError}
+                                        />
                                     )}
                                 </fieldset>
 

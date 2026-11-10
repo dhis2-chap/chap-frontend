@@ -11,6 +11,7 @@ const formData: DatasetFormValues = {
     orgUnits: [{ id: 'LEVEL-2' }],
     columns: [{ covariateName: 'disease_cases', dataItem }],
     targetColumn: '',
+    maskedRanges: [],
 };
 
 const schema = createDatasetFormSchema({ calendar: 'gregory', locale: 'en', timeZone: 'UTC' });

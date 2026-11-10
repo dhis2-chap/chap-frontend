@@ -23,6 +23,11 @@ export const createDatasetFormSchema = (periodSettings: Dhis2PeriodSettings) => 
             .array(datasetColumnSchema)
             .min(1, { message: i18n.t('Add at least one data column') }),
         targetColumn: z.string(),
+        maskedRanges: z.array(z.object({
+            start: z.string().min(1, { message: i18n.t('Select a start period') }),
+            end: z.string().min(1, { message: i18n.t('Select an end period') }),
+            name: z.string().trim().optional(),
+        })),
     })
         .refine(data => (
             isPeriodRangeValid(data.fromPeriodId, data.toPeriodId, periodSettings)
@@ -56,6 +61,7 @@ export const useDatasetFormState = (periodSettings: Dhis2PeriodSettings) => useF
         orgUnits: [],
         columns: [],
         targetColumn: '',
+        maskedRanges: [],
     },
     shouldFocusError: false,
 });

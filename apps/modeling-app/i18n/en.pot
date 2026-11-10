@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-11-10T07:57:53.749Z\n"
-"PO-Revision-Date: 2026-11-10T07:57:53.749Z\n"
+"POT-Creation-Date: 2026-11-10T17:54:14.118Z\n"
+"PO-Revision-Date: 2026-11-10T17:54:14.118Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -1147,6 +1147,43 @@ msgstr "Add column"
 msgid "Suggested"
 msgstr "Suggested"
 
+msgid "Masked ranges"
+msgstr "Masked ranges"
+
+msgid ""
+"Exclude periods from model training, including both the start and end "
+"periods."
+msgstr ""
+"Exclude periods from model training, including both the start and end "
+"periods."
+
+msgid "Masking permanently removes data"
+msgstr "Masking permanently removes data"
+
+msgid ""
+"Disease case values in these ranges are stored as empty in the saved "
+"dataset and cannot be recovered. To change the ranges later, create a new "
+"dataset."
+msgstr ""
+"Disease case values in these ranges are stored as empty in the saved "
+"dataset and cannot be recovered. To change the ranges later, create a new "
+"dataset."
+
+msgid "Start period"
+msgstr "Start period"
+
+msgid "End period"
+msgstr "End period"
+
+msgid "Name (optional)"
+msgstr "Name (optional)"
+
+msgid "Remove range"
+msgstr "Remove range"
+
+msgid "Add masked range"
+msgstr "Add masked range"
+
 msgid "Weekly data"
 msgstr "Weekly data"
 
@@ -1207,6 +1244,12 @@ msgstr "Covariate name is required"
 
 msgid "Add at least one data column"
 msgstr "Add at least one data column"
+
+msgid "Select a start period"
+msgstr "Select a start period"
+
+msgid "Select an end period"
+msgstr "Select an end period"
 
 msgid "Covariate names must be unique"
 msgstr "Covariate names must be unique"
@@ -1759,6 +1802,16 @@ msgstr ""
 "Created {{created}} · {{first}} to {{last}} · {{locations}} locations · "
 "target {{target}}"
 
+msgid ""
+"Disease case values in these inclusive ranges were removed from this "
+"dataset. To change the ranges, create a new dataset."
+msgstr ""
+"Disease case values in these inclusive ranges were removed from this "
+"dataset. To change the ranges, create a new dataset."
+
+msgid "{{start}} to {{end}}"
+msgstr "{{start}} to {{end}}"
+
 msgid "Error loading datasets"
 msgstr "Error loading datasets"
 
@@ -2044,12 +2097,6 @@ msgid ""
 msgstr ""
 "Each score is compared with the baseline model {{reference}} under the same "
 "policy."
-
-msgid "Start period"
-msgstr "Start period"
-
-msgid "End period"
-msgstr "End period"
 
 msgid "Predict"
 msgstr "Predict"

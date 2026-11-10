@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import i18n from '@dhis2/d2-i18n';
-import { CircularLoader } from '@dhis2/ui';
+import { CircularLoader, NoticeBox } from '@dhis2/ui';
 import { Card, getPeriodNameFromId, Tag } from '@dhis2-chap/ui';
 import { format } from 'date-fns';
 import { useDataset } from '../../../hooks/useDataset';
@@ -51,6 +51,22 @@ export const DatasetDetails = ({ datasetId }: { datasetId: number }) => {
             <div className={styles.covariates}>
                 {dataset.covariates?.map(covariate => <Tag key={covariate}>{covariate}</Tag>)}
             </div>
+            {!!dataset.maskedRanges?.length && (
+                <NoticeBox title={i18n.t('Masked ranges')} dataTest="dataset-masked-ranges">
+                    <p>{i18n.t('Disease case values in these inclusive ranges were removed from this dataset. To change the ranges, create a new dataset.')}</p>
+                    <ul>
+                        {dataset.maskedRanges.map((range, index) => (
+                            <li key={index}>
+                                {range.name && <strong>{`${range.name} — `}</strong>}
+                                {i18n.t('{{start}} to {{end}}', {
+                                    start: getPeriodNameFromId(range.start, 'short'),
+                                    end: getPeriodNameFromId(range.end, 'short'),
+                                })}
+                            </li>
+                        ))}
+                    </ul>
+                </NoticeBox>
+            )}
             <InputCompletenessView
                 observations={dataset.observations}
                 periods={periods}
