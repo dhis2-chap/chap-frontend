@@ -53,7 +53,6 @@ export const DatasetDetails = ({ datasetId }: { datasetId: number }) => {
             </div>
             {!!dataset.maskedRanges?.length && (
                 <NoticeBox title={i18n.t('Masked ranges')} dataTest="dataset-masked-ranges">
-                    <p>{i18n.t('Disease case values in these inclusive ranges were removed from this dataset. To change the ranges, create a new dataset.')}</p>
                     <ul>
                         {dataset.maskedRanges.map((range, index) => (
                             <li key={index}>

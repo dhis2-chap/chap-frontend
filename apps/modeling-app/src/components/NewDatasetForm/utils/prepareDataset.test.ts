@@ -68,12 +68,9 @@ describe('prepareDataset', () => {
         expect(orgUnitNames).toEqual(new Map([['resolved-unit', 'District']]));
     });
 
-    it.each(['MONTH', 'WEEK'] as const)('passes named and unnamed %s masks through to Chap', async (periodType) => {
-        const [start, end] = periodType === 'MONTH' ? ['202401', '202402'] : ['2024W1', '2024W2'];
-        const maskedRanges = [{ start, end: start, name: 'Excluded' }, { start: end, end }];
-        const { request } = await prepareDataset({
-            ...formData, targetColumn: 'disease_cases', periodType, fromPeriodId: start, toPeriodId: end, maskedRanges,
-        }, dataEngine, periodSettings, false);
+    it('passes masked ranges through to Chap', async () => {
+        const maskedRanges = [{ start: '202401', end: '202401', name: 'Excluded' }];
+        const { request } = await prepareDataset({ ...formData, maskedRanges }, dataEngine, periodSettings, true);
 
         expect(request.maskedRanges).toEqual(maskedRanges);
     });

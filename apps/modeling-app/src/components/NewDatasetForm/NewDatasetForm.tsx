@@ -79,8 +79,14 @@ export const NewDatasetForm = () => {
     const targetColumn = resolveTargetColumn(columnNames, chosenTarget);
     const support = getModelSupport(targetColumn ? getBacktestColumns(columnNames, targetColumn) : columnNames, periodType, models ?? []);
     const isMissingTarget = isTargetColumnAvailable && columnNames.length > 0 && !targetColumn;
+    // Chap masks only `disease_cases`.
+    const canMask = isMaskingAvailable && columnNames.includes('disease_cases');
     // Chap Core < 2.6.0 cannot save a target on the dataset.
-    const withTarget = (data: DatasetFormValues) => ({ ...data, targetColumn: isTargetColumnAvailable ? targetColumn : '' });
+    const withTarget = (data: DatasetFormValues) => ({
+        ...data,
+        targetColumn: isTargetColumnAvailable ? targetColumn : '',
+        maskedRanges: canMask ? data.maskedRanges : [],
+    });
     // A check describes the inputs it ran on, so clear it once they change.
     useEffect(() => {
         const subscription = methods.watch(() => inspection.reset());
@@ -158,7 +164,7 @@ export const NewDatasetForm = () => {
                                             ))}
                                         </SingleSelectField>
                                     )}
-                                    {isMaskingAvailable && (
+                                    {canMask && (
                                         <MaskedRanges
                                             periodSettings={settings}
                                             disabled={isBusy || isSettingsLoading || !!settingsError}

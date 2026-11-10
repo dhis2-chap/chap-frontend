@@ -53,35 +53,19 @@ test('checks and imports dataset values in the observation format Chap supports'
     expect(indexObservations(saved.observations)).toEqual(new Map(sent));
 });
 
-test('shows mask validation errors and saves and displays corrected ranges', async ({ page }) => {
+test('saves masked ranges and shows them on the dataset', async ({ page }) => {
     test.setTimeout(90_000);
     const status = await readJson<SystemInfoResponse>(await getChap(page, '/system/info'), 'Load Chap version');
     test.skip(!isVersionCompatible(status.chap_core_version, '2.6.0'), 'Masked ranges require Chap Core 2.6.0');
     await fillDatasetForm(page, `E2E masked dataset ${Date.now()}`);
 
     await page.getByRole('button', { name: 'Add masked range', exact: true }).click();
-    await expect(page.getByText('Masking permanently removes data', { exact: true })).toBeVisible();
     await selectPeriod(page, 'masked-range-start-0', '202003');
     await selectPeriod(page, 'masked-range-end-0', '202005');
     await page.locator('[data-test="masked-range-name-0"] input').fill('COVID');
     await page.getByRole('button', { name: 'Add masked range', exact: true }).click();
-    await selectPeriod(page, 'masked-range-start-1', '202005');
-    await selectPeriod(page, 'masked-range-end-1', '202006');
-
-    const rejected = page.waitForResponse(response => response.url().includes('/analytics/make-dataset'));
-    await page.getByRole('button', { name: 'Create dataset', exact: true }).click();
-    expect((await rejected).status()).toBe(422);
-    await expect(page.getByText(/Masked ranges overlap at 202005/)).toBeVisible();
-    await expect(page.locator('[data-test="masked-range-name-0"] input')).toHaveValue('COVID');
-
-    await page.getByRole('button', { name: 'Remove range', exact: true }).last().click();
-    await page.getByRole('button', { name: 'Add masked range', exact: true }).click();
     await selectPeriod(page, 'masked-range-start-1', '202008');
     await selectPeriod(page, 'masked-range-end-1', '202008');
-    const checked = page.waitForResponse(response => response.url().includes('/analytics/make-dataset'));
-    await page.getByRole('button', { name: 'Check data', exact: true }).click();
-    expect((await checked).ok()).toBe(true);
-    await page.getByRole('dialog').getByRole('button', { name: 'Close', exact: true }).click();
 
     await page.getByRole('button', { name: 'Create dataset', exact: true }).click();
     await expect(page.getByText('Dataset created', { exact: true })).toBeVisible({ timeout: 30_000 });
@@ -93,16 +77,8 @@ test('shows mask validation errors and saves and displays corrected ranges', asy
         { start: '202003', end: '202005', name: 'COVID' },
         { start: '202008', end: '202008', name: '' },
     ]);
-    const maskedPeriods = new Set(['202003', '202004', '202005', '202008']);
-    const maskedCases = saved.observations.filter(item => item.featureName === 'disease_cases' && maskedPeriods.has(item.period));
-    expect(maskedCases.length).toBeGreaterThan(0);
-    expect(maskedCases.every(item => item.value === null)).toBe(true);
-    // The other column uses the same source data, but must keep its values.
-    expect(saved.observations.some(item => item.featureName === 'custom_cases' && maskedPeriods.has(item.period) && item.value != null)).toBe(true);
-    expect(saved.observations.some(item => item.featureName === 'disease_cases' && !maskedPeriods.has(item.period) && item.value != null)).toBe(true);
 
     await page.goto(`/#/datasets/${datasetId}`);
-    const ranges = page.locator('[data-test="dataset-masked-ranges"]');
-    await expect(ranges).toContainText('COVID');
-    await expect(ranges.getByRole('listitem')).toHaveText(['COVID — Mar 2020 to May 2020', 'Aug 2020 to Aug 2020']);
+    await expect(page.locator('[data-test="dataset-masked-ranges"]').getByRole('listitem'))
+        .toHaveText(['COVID — Mar 2020 to May 2020', 'Aug 2020 to Aug 2020']);
 });

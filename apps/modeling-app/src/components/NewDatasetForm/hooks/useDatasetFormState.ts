@@ -26,7 +26,7 @@ export const createDatasetFormSchema = (periodSettings: Dhis2PeriodSettings) => 
         maskedRanges: z.array(z.object({
             start: z.string().min(1, { message: i18n.t('Select a start period') }),
             end: z.string().min(1, { message: i18n.t('Select an end period') }),
-            name: z.string().trim().optional(),
+            name: z.string().trim(),
         })),
     })
         .refine(data => (

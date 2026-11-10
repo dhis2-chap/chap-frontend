@@ -1,5 +1,6 @@
+import { useEffect } from 'react';
 import i18n from '@dhis2/d2-i18n';
-import { Button, IconAdd16, InputField, NoticeBox } from '@dhis2/ui';
+import { Button, IconAdd16, IconDelete16, InputField, NoticeBox } from '@dhis2/ui';
 import { Controller, useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 import { toDhis2FixedPeriodType } from '@dhis2-chap/core';
 import { PeriodRangeField } from '@dhis2-chap/ui';
@@ -14,16 +15,16 @@ type Props = {
 
 export const MaskedRanges = ({ periodSettings, disabled }: Props) => {
     const { control, setValue, formState: { errors } } = useFormContext<DatasetFormValues>();
-    const { fields, append, remove } = useFieldArray({ control, name: 'maskedRanges' });
+    const { fields, append, remove, replace } = useFieldArray({ control, name: 'maskedRanges' });
     const [ranges, periodType] = useWatch({ control, name: ['maskedRanges', 'periodType'] });
     const fixedPeriodType = toDhis2FixedPeriodType(periodType);
+
+    // Ranges use the dataset's period type, so clear them when it changes.
+    useEffect(() => replace([]), [periodType, replace]);
 
     return (
         <section className={styles.section}>
             <h3 className={styles.title}>{i18n.t('Masked ranges')}</h3>
-            <p className={styles.description}>
-                {i18n.t('Exclude periods from model training, including both the start and end periods.')}
-            </p>
             {fields.length > 0 && (
                 <NoticeBox warning title={i18n.t('Masking permanently removes data')}>
                     {i18n.t('Disease case values in these ranges are stored as empty in the saved dataset and cannot be recovered. To change the ranges later, create a new dataset.')}
@@ -49,24 +50,31 @@ export const MaskedRanges = ({ periodSettings, disabled }: Props) => {
                             onToChange={period => setValue(`maskedRanges.${index}.end`, period.id, { shouldDirty: true, shouldValidate: true })}
                         />
                     )}
-                    <Controller
-                        control={control}
-                        name={`maskedRanges.${index}.name`}
-                        render={({ field }) => (
-                            <InputField
-                                name={field.name}
-                                label={i18n.t('Name (optional)')}
-                                value={field.value ?? ''}
-                                onChange={({ value }) => field.onChange(value ?? '')}
-                                disabled={disabled}
-                                dataTest={`masked-range-name-${index}`}
-                            />
-                        )}
-                    />
-                    <div>
-                        <Button small disabled={disabled} onClick={() => remove(index)}>
-                            {i18n.t('Remove range')}
-                        </Button>
+                    <div className={styles.nameRow}>
+                        <Controller
+                            control={control}
+                            name={`maskedRanges.${index}.name`}
+                            render={({ field }) => (
+                                <InputField
+                                    className={styles.name}
+                                    name={field.name}
+                                    label={i18n.t('Name (optional)')}
+                                    value={field.value}
+                                    onChange={({ value }) => field.onChange(value)}
+                                    disabled={disabled}
+                                    dataTest={`masked-range-name-${index}`}
+                                />
+                            )}
+                        />
+                        <Button
+                            small
+                            secondary
+                            icon={<IconDelete16 />}
+                            disabled={disabled}
+                            onClick={() => remove(index)}
+                            aria-label={i18n.t('Remove range')}
+                            title={i18n.t('Remove range')}
+                        />
                     </div>
                 </div>
             ))}
