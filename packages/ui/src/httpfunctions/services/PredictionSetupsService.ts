@@ -5,6 +5,7 @@
 import type { chap_core__rest_api__data_models__DataBaseResponse } from '../models/chap_core__rest_api__data_models__DataBaseResponse';
 import type { JobResponse } from '../models/JobResponse';
 import type { PredictionSetupCreate } from '../models/PredictionSetupCreate';
+import type { PredictionSetupMonitoring } from '../models/PredictionSetupMonitoring';
 import type { PredictionSetupRead } from '../models/PredictionSetupRead';
 import type { PredictionSetupReadWithPredictions } from '../models/PredictionSetupReadWithPredictions';
 import type { PredictionSetupUpdate } from '../models/PredictionSetupUpdate';
@@ -126,6 +127,46 @@ export class PredictionSetupsService {
             url: '/v1/crud/prediction-setups/{predictionSetupId}',
             path: {
                 'predictionSetupId': predictionSetupId,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
+     * Compare a prediction setup's live and backtest performance with a baseline model
+     * Compare the setup's model with a baseline model on one metric, run by run, for both its backtest splits and its stored predictions.
+     *
+     * Every built-in baseline forecasts alongside each setup run, so any of them can be
+     * compared with. Each value is the metric's comparison with the baseline over the forecasts both
+     * models made, positive meaning better than the baseline. Backtest splits are compared
+     * with the baseline's backtest on the same specification, and each stored prediction
+     * with the baseline forecast made in the same run. Observed cases come from the setup's
+     * later runs, so a prediction is scored once a run after it has uploaded the observed
+     * values. Org units and horizons are pooled. Each point has the comparison for that run
+     * and the running comparison over all runs of the same source up to it. 404 if the
+     * setup is unknown, 422 if the metric is unknown, has no comparison operator, or cannot
+     * be computed for the setup's data, or if the baseline is not a built-in baseline model.
+     * @param predictionSetupId
+     * @param metric Id of a metric with a comparison operator, as listed by the metrics endpoint.
+     * @param baseline Name of the baseline model to compare with, e.g. 'persistence'. Defaults to the installation's default baseline model.
+     * @returns PredictionSetupMonitoring Successful Response
+     * @throws ApiError
+     */
+    public static getPredictionSetupMonitoringV1CrudPredictionSetupsPredictionSetupIdMonitoringGet(
+        predictionSetupId: number,
+        metric: string,
+        baseline?: (string | null),
+    ): CancelablePromise<PredictionSetupMonitoring> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/v1/crud/prediction-setups/{predictionSetupId}/monitoring',
+            path: {
+                'predictionSetupId': predictionSetupId,
+            },
+            query: {
+                'metric': metric,
+                'baseline': baseline,
             },
             errors: {
                 422: `Validation Error`,

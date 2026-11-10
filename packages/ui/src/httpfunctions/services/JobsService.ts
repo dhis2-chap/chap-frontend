@@ -12,7 +12,7 @@ import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 export class JobsService {
     /**
-     * Download diagnostics for a failed job
+     * Download diagnostics for a finished job
      * Assemble job information, run parameters, the error and traceback, model provenance,
      * dataset metadata and environment versions in one JSON bundle.
      *
@@ -20,7 +20,7 @@ export class JobsService {
      * Logs are bounded and may contain data values.
      * Error messages and tracebacks can also contain model output and are not sanitized.
      * Missing model/dataset references (including older jobs and jobs that create their
-     * dataset in the worker) are returned as null. Only FAILURE jobs are supported.
+     * dataset in the worker) are returned as null. SUCCESS, FAILURE and REVOKED jobs are supported.
      * @param jobId
      * @returns JobDiagnostics Successful Response
      * @throws ApiError
@@ -36,7 +36,7 @@ export class JobsService {
             },
             errors: {
                 404: `Job not found`,
-                409: `Job has not failed`,
+                409: `Job has not finished`,
                 422: `Validation Error`,
             },
         });

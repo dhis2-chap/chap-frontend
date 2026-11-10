@@ -52,6 +52,7 @@ export const JobActionsMenu = ({
     const { downloadRequest, isLoading: isDownloadingRequest } = useDownloadJobRequest();
     const { downloadDiagnostics, isLoading: isDownloadingDiagnostics } = useDownloadJobDiagnostics();
     const { isAvailable: isDiagnosticsAvailable } = useIsFeatureAvailable(Features.JOB_DIAGNOSTICS);
+    const { isAvailable: isCompletedJobDiagnosticsAvailable } = useIsFeatureAvailable(Features.COMPLETED_JOB_DIAGNOSTICS);
 
     const { show: showErrorAlert } = useAlert(
         i18n.t('Failed to copy job ID'),
@@ -85,6 +86,8 @@ export const JobActionsMenu = ({
     const canDelete = status === JOB_STATUSES.FAILED
         || status === JOB_STATUSES.REVOKED
         || (allowDeleteSuccess && status === JOB_STATUSES.SUCCESS);
+    const canDownloadDiagnostics = (status === JOB_STATUSES.FAILED && isDiagnosticsAvailable)
+        || ((status === JOB_STATUSES.SUCCESS || status === JOB_STATUSES.REVOKED) && isCompletedJobDiagnosticsAvailable);
 
     return (
         <>
@@ -125,7 +128,7 @@ export const JobActionsMenu = ({
                             />
                         )}
 
-                        {status === JOB_STATUSES.FAILED && isDiagnosticsAvailable && (
+                        {canDownloadDiagnostics && (
                             <MenuItem
                                 label={isDownloadingDiagnostics ? i18n.t('Downloading debug info…') : i18n.t('Download debug info')}
                                 dataTest="job-overflow-download-debug-info"
