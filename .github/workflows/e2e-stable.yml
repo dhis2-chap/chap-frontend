@@ -21,6 +21,7 @@ jobs:
         timeout-minutes: 90
         permissions:
             contents: read
+            packages: read
 
         steps:
             - uses: actions/checkout@v4
@@ -60,12 +61,24 @@ jobs:
                     -f /tmp/chap-core/Dockerfile \
                     /tmp/chap-core
 
+            # Dockerfile.worker builds on the private ghcr.io/dhis2-chap/chap-worker-with-inla image.
+            - name: Log in to GitHub Container Registry
+              uses: docker/login-action@8aa5831fb8d48d8f76594c7ddde61ae58019f550 # v4.8.0
+              with:
+                  registry: ghcr.io
+                  username: ${{ github.actor }}
+                  password: ${{ secrets.GITHUB_TOKEN }}
+
             - name: Build stable chap-worker image
               run: |
                   docker build \
                     -t ghcr.io/dhis2-chap/chap-worker:${{ env.CHAP_CORE_STABLE_REF }} \
                     -f /tmp/chap-core/Dockerfile.worker \
                     /tmp/chap-core
+
+            # Don't keep the registry credential around while PR code runs.
+            - name: Log out of GitHub Container Registry
+              run: docker logout ghcr.io
 
             - name: Start CHAP + DHIS2 stack and wait for readiness
               env:
