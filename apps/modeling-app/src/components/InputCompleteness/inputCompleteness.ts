@@ -1,5 +1,5 @@
 import { canonicalizePeriodId, type Dhis2Calendar, getPeriodsInRange } from '@dhis2-chap/core';
-import type { ObservationBase } from '@dhis2-chap/ui';
+import type { ObservationBase, ObservationColumns } from '@dhis2-chap/ui';
 
 // Saved Chap periods can use extended ISO notation and zero-padded weeks.
 const normalizeInputPeriod = (period: string) => canonicalizePeriodId(period.replace(/-/g, ''));
@@ -27,12 +27,25 @@ export const getInputVariables = (targetColumn: string, columns: string[] = []) 
 );
 
 /** Finite values (including zero) by period, location and variable. */
-export const indexObservations = (observations: ObservationBase[]) => new Map(observations
-    .filter(observation => observation.featureName && Number.isFinite(observation.value))
-    .map(observation => [
-        observationKey(observation.period, observation.orgUnit, observation.featureName!),
-        observation.value as number,
-    ]));
+export const indexObservations = (observations: ObservationBase[] | ObservationColumns) => {
+    const values = new Map<string, number>();
+    if (Array.isArray(observations)) {
+        for (const observation of observations) {
+            if (observation.featureName && Number.isFinite(observation.value)) {
+                values.set(observationKey(observation.period, observation.orgUnit, observation.featureName), observation.value as number);
+            }
+        }
+    } else {
+        for (const [feature, column] of Object.entries(observations.values)) {
+            column.forEach((value, index) => {
+                if (Number.isFinite(value)) {
+                    values.set(observationKey(observations.period[index], observations.orgUnit[index], feature), value as number);
+                }
+            });
+        }
+    }
+    return values;
+};
 
 export const calculateInputCompleteness = (
     values: Map<string, number>,

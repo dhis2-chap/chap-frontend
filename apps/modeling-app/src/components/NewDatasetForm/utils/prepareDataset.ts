@@ -1,6 +1,6 @@
 import i18n from '@dhis2/d2-i18n';
 import { getPeriodsInRange } from '@dhis2-chap/core';
-import type { DatasetMakeRequest } from '@dhis2-chap/ui';
+import type { DatasetMakeRequest, ObservationBase, ObservationColumns } from '@dhis2-chap/ui';
 import type { useDataEngine } from '@dhis2/app-runtime';
 import { fetchAnalytics, fetchOrgUnits } from '../../ModelExecutionForm/utils/queryUtils';
 import { buildOrgUnitFeatureCollection } from '../../ModelExecutionForm/utils/orgUnitGeoJson';
@@ -14,10 +14,34 @@ export type PreparedDataset = {
     periods: string[];
 };
 
+/** One row per (org unit, period), with `null` where a feature has no value. */
+const toObservationColumns = (observations: ObservationBase[], features: string[]): ObservationColumns => {
+    const columns: ObservationColumns = {
+        orgUnit: [],
+        period: [],
+        values: Object.fromEntries(features.map(feature => [feature, []])),
+    };
+    const rowIndexes = new Map<string, number>();
+    for (const { orgUnit, period, featureName, value } of observations) {
+        const key = JSON.stringify([orgUnit, period]);
+        let index = rowIndexes.get(key);
+        if (index === undefined) {
+            index = columns.orgUnit.length;
+            rowIndexes.set(key, index);
+            columns.orgUnit.push(orgUnit);
+            columns.period.push(period);
+            features.forEach(feature => columns.values[feature].push(null));
+        }
+        columns.values[featureName!][index] = value;
+    }
+    return columns;
+};
+
 export const prepareDataset = async (
     formData: DatasetFormValues,
     dataEngine: ReturnType<typeof useDataEngine>,
     periodSettings: Dhis2PeriodSettings,
+    supportsColumnar: boolean,
 ): Promise<PreparedDataset> => {
     const periods = getPeriodsInRange({
         startPeriodId: formData.fromPeriodId,
@@ -65,7 +89,9 @@ export const prepareDataset = async (
             targetColumn: formData.targetColumn || undefined,
             type: 'evaluation',
             geojson: buildOrgUnitFeatureCollection(withGeometry),
-            providedData,
+            ...(supportsColumnar
+                ? { providedDataColumns: toObservationColumns(providedData, formData.columns.map(column => column.covariateName)) }
+                : { providedData }),
             dataSources: formData.columns.map(column => ({
                 covariate: column.covariateName,
                 dataElementId: column.dataItem.id,

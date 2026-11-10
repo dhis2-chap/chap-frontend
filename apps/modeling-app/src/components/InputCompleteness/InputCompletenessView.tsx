@@ -14,7 +14,7 @@ import {
     Switch,
     colors,
 } from '@dhis2/ui';
-import type { ObservationBase } from '@dhis2-chap/ui';
+import type { ObservationBase, ObservationColumns } from '@dhis2-chap/ui';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import { useOrgUnitsById } from '../../hooks/useOrgUnitsById';
@@ -22,7 +22,7 @@ import { calculateInputCompleteness, indexObservations, observationKey } from '.
 import styles from './InputCompletenessView.module.css';
 
 export type InputCompletenessData = {
-    observations: ObservationBase[];
+    observations: ObservationBase[] | ObservationColumns;
     periods: string[];
     orgUnits: string[];
     variables: string[];
