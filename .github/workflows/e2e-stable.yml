@@ -76,6 +76,10 @@ jobs:
                     -f /tmp/chap-core/Dockerfile.worker \
                     /tmp/chap-core
 
+            # Don't keep the registry credential around while PR code runs.
+            - name: Log out of GitHub Container Registry
+              run: docker logout ghcr.io
+
             - name: Start CHAP + DHIS2 stack and wait for readiness
               env:
                   CHAP_CORE_TAG: ${{ env.CHAP_CORE_STABLE_REF }}
