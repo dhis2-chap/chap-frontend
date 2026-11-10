@@ -87,6 +87,7 @@ export const prepareDataset = async (
         request: {
             name: formData.name,
             targetColumn: formData.targetColumn || undefined,
+            ...(formData.maskedRanges.length > 0 && { maskedRanges: formData.maskedRanges }),
             type: 'evaluation',
             geojson: buildOrgUnitFeatureCollection(withGeometry),
             ...(supportsColumnar

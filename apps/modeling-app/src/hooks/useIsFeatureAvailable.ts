@@ -19,6 +19,7 @@ export const FEATURE_MIN_VERSIONS = {
     jobDiagnostics: '2.6.0',
     completedJobDiagnostics: '2.7.0',
     datasetTargetColumn: '2.6.0',
+    datasetMaskedRanges: '2.6.0',
     datasetObservationColumns: '2.7.0',
     outbreakMetrics: '2.6.0',
     // Chap compares prediction setups with a baseline model from 2.6.0.
@@ -40,6 +41,7 @@ export const Features = {
     JOB_DIAGNOSTICS: 'jobDiagnostics',
     COMPLETED_JOB_DIAGNOSTICS: 'completedJobDiagnostics',
     DATASET_TARGET_COLUMN: 'datasetTargetColumn',
+    DATASET_MASKED_RANGES: 'datasetMaskedRanges',
     DATASET_OBSERVATION_COLUMNS: 'datasetObservationColumns',
     OUTBREAK_METRICS: 'outbreakMetrics',
     PREDICTION_MONITORING: 'predictionMonitoring',

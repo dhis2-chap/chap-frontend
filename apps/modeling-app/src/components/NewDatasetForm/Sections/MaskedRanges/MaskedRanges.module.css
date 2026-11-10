@@ -1,0 +1,35 @@
+.section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-block-start: 24px;
+    margin-block-start: 24px;
+    border-block-start: 1px solid var(--colors-grey300);
+}
+
+.title {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--colors-grey900);
+}
+
+.range {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 12px;
+    border: 1px solid var(--colors-grey300);
+    border-radius: 4px;
+    background-color: var(--colors-grey050);
+}
+
+.nameRow {
+    display: flex;
+    gap: 12px;
+    align-items: end;
+}
+
+.name {
+    flex: 1;
+}

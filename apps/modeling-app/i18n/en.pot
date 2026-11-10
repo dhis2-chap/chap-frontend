@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-11-10T07:57:53.749Z\n"
-"PO-Revision-Date: 2026-11-10T07:57:53.749Z\n"
+"POT-Creation-Date: 2026-11-10T18:21:19.010Z\n"
+"PO-Revision-Date: 2026-11-10T18:21:19.011Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -1147,6 +1147,34 @@ msgstr "Add column"
 msgid "Suggested"
 msgstr "Suggested"
 
+msgid "Masked ranges"
+msgstr "Masked ranges"
+
+msgid "Masked values are not saved in this dataset"
+msgstr "Masked values are not saved in this dataset"
+
+msgid ""
+"Disease case values in these ranges are stored as empty. Data in DHIS2 is "
+"not changed."
+msgstr ""
+"Disease case values in these ranges are stored as empty. Data in DHIS2 is "
+"not changed."
+
+msgid "Start period"
+msgstr "Start period"
+
+msgid "End period"
+msgstr "End period"
+
+msgid "Name (optional)"
+msgstr "Name (optional)"
+
+msgid "Remove range"
+msgstr "Remove range"
+
+msgid "Add masked range"
+msgstr "Add masked range"
+
 msgid "Weekly data"
 msgstr "Weekly data"
 
@@ -1207,6 +1235,12 @@ msgstr "Covariate name is required"
 
 msgid "Add at least one data column"
 msgstr "Add at least one data column"
+
+msgid "Select a start period"
+msgstr "Select a start period"
+
+msgid "Select an end period"
+msgstr "Select an end period"
 
 msgid "Covariate names must be unique"
 msgstr "Covariate names must be unique"
@@ -1759,6 +1793,9 @@ msgstr ""
 "Created {{created}} · {{first}} to {{last}} · {{locations}} locations · "
 "target {{target}}"
 
+msgid "{{start}} to {{end}}"
+msgstr "{{start}} to {{end}}"
+
 msgid "Error loading datasets"
 msgstr "Error loading datasets"
 
@@ -2044,12 +2081,6 @@ msgid ""
 msgstr ""
 "Each score is compared with the baseline model {{reference}} under the same "
 "policy."
-
-msgid "Start period"
-msgstr "Start period"
-
-msgid "End period"
-msgstr "End period"
 
 msgid "Predict"
 msgstr "Predict"

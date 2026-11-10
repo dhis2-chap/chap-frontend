@@ -15,6 +15,7 @@ import { NameInput } from '../ModelExecutionForm/Sections/NameInput';
 import { PeriodSelector } from '../ModelExecutionForm/Sections/PeriodSelector';
 import { LocationSelector } from '../ModelExecutionForm/Sections/LocationSelector';
 import { DatasetColumns } from './Sections/DatasetColumns';
+import { MaskedRanges } from './Sections/MaskedRanges';
 import { ModelSupport } from './Sections/ModelSupport';
 import { type DatasetFormValues, EMPTY_COLUMN, resolveTargetColumn, useDatasetFormState } from './hooks/useDatasetFormState';
 import { useCovariateSuggestions } from './hooks/useCovariateSuggestions';
@@ -71,20 +72,27 @@ export const NewDatasetForm = () => {
         name: ['columns', 'periodType', 'fromPeriodId', 'toPeriodId', 'targetColumn'],
     });
     const { isAvailable: isTargetColumnAvailable } = useIsFeatureAvailable(Features.DATASET_TARGET_COLUMN);
+    const { isAvailable: isMaskingAvailable } = useIsFeatureAvailable(Features.DATASET_MASKED_RANGES);
     const backtestParameters = useBacktestParameters(periodType);
     const covariateNames = columnValues.map(column => column.covariateName.trim());
     const columnNames = [...new Set(covariateNames.filter(Boolean))];
     const targetColumn = resolveTargetColumn(columnNames, chosenTarget);
     const support = getModelSupport(targetColumn ? getBacktestColumns(columnNames, targetColumn) : columnNames, periodType, models ?? []);
     const isMissingTarget = isTargetColumnAvailable && columnNames.length > 0 && !targetColumn;
+    // Chap masks only `disease_cases`, so it must be the target.
+    const canMask = isMaskingAvailable && targetColumn === 'disease_cases';
     // Chap Core < 2.6.0 cannot save a target on the dataset.
-    const withTarget = (data: DatasetFormValues) => ({ ...data, targetColumn: isTargetColumnAvailable ? targetColumn : '' });
+    const toRequestValues = (data: DatasetFormValues) => ({
+        ...data,
+        targetColumn: isTargetColumnAvailable ? targetColumn : '',
+        maskedRanges: canMask ? data.maskedRanges : [],
+    });
     // A check describes the inputs it ran on, so clear it once they change.
     useEffect(() => {
         const subscription = methods.watch(() => inspection.reset());
         return () => subscription.unsubscribe();
     }, [methods, inspection.reset]);
-    const checkData = methods.handleSubmit(data => inspection.mutate(withTarget(data), {
+    const checkData = methods.handleSubmit(data => inspection.mutate(toRequestValues(data), {
         onSuccess: result => setShownSummary({ title: i18n.t('Data check'), summary: result }),
     }));
     const periodCount = countPeriods(fromPeriodId, toPeriodId, settings.calendar);
@@ -118,7 +126,7 @@ export const NewDatasetForm = () => {
                 <div className={styles.container}>
                     <Card className={styles.formCard}>
                         <div className={styles.formWrapper}>
-                            <form onSubmit={methods.handleSubmit(data => createDataset(withTarget(data)))}>
+                            <form onSubmit={methods.handleSubmit(data => createDataset(toRequestValues(data)))}>
                                 <fieldset className={styles.fields} disabled={isBusy}>
                                     <NameInput
                                         label={i18n.t('Dataset name')}
@@ -155,6 +163,9 @@ export const NewDatasetForm = () => {
                                                 <SingleSelectOption key={name} value={name} label={name} />
                                             ))}
                                         </SingleSelectField>
+                                    )}
+                                    {canMask && (
+                                        <MaskedRanges periodSettings={settings} />
                                     )}
                                 </fieldset>
 
