@@ -48,8 +48,7 @@
         "turbo": "^2.5.6",
         "typescript": "^5.7.2",
         "typescript-eslint": "^8.43.0",
-        "vitest": "^4.0.16",
-        "yaml": "^2.8.2"
+        "vitest": "^4.0.16"
     },
     "resolutions": {
         "i18next": "20.5.0",

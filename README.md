@@ -50,25 +50,6 @@ cd packages/ui
 pnpm generate              # Generate from a running backend at http://localhost:8000
 ```
 
-## Development instance deployment
-
-The `deploy-modeling-app` GitHub Actions workflow builds and deploys the latest
-`main` to [climate-demo-dev](https://climate.im.dhis2.org/climate-demo-dev/apps/dashboard)
-on each push to `main`. It can also be run manually from the Actions tab on `main`.
-Deployments run one at a time, and retries check out the latest `main`.
-
-Before enabling deployment, add these repository Actions secrets for a DHIS2
-account with permission to install and update apps on that instance:
-
-- `CLIMATE_DEMO_DEV_USERNAME`
-- `CLIMATE_DEMO_DEV_PASSWORD`
-
-The workflow reuses the Modeling App's [DHIS2 deploy command](https://developers.dhis2.org/docs/app-platform/scripts/deploy/)
-to upload its build ZIP and verify that the installed app responds. The destination
-is the DHIS2 instance root (`/climate-demo-dev`); `/apps/dashboard` is its dashboard,
-not the upload endpoint. Missing credentials or a failed upload fail the workflow.
-This workflow deploys only the Modeling App; Chap Core is managed separately.
-
 ## Commit Standards
 
 This project follows Conventional Commits:
