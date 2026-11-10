@@ -25,8 +25,8 @@ export const MaskedRanges = ({ periodSettings }: Props) => {
         <section className={styles.section}>
             <h3 className={styles.title}>{i18n.t('Masked ranges')}</h3>
             {fields.length > 0 && (
-                <NoticeBox warning title={i18n.t('Masking permanently removes data')}>
-                    {i18n.t('Disease case values in these ranges are stored as empty in the saved dataset and cannot be recovered. To change the ranges later, create a new dataset.')}
+                <NoticeBox warning title={i18n.t('Masked values are not saved in this dataset')}>
+                    {i18n.t('Disease case values in these ranges are stored as empty. Data in DHIS2 is not changed.')}
                 </NoticeBox>
             )}
             {fields.map((range, index) => (
