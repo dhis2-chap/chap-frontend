@@ -41,4 +41,19 @@ describe('monitoringSeries', () => {
         expect(series.perRun.map(point => point.x)).toEqual([Date.UTC(2025, 11, 29), Date.UTC(2026, 0, 5)]);
         expect(series.evaluation).toEqual([]);
     });
+
+    it('shows the evaluation average across the splits before any prediction run', () => {
+        const series = monitoringSeries({
+            ...data,
+            evaluationValue: 0.12,
+            points: [
+                { ...data.points[1], period: '202512' },
+                { ...data.points[1], period: '202511' },
+            ],
+        });
+        expect(series.evaluation).toEqual([
+            { x: Date.UTC(2025, 10, 1), name: '202511', y: 0.12 },
+            { x: Date.UTC(2025, 11, 1), name: '202512', y: 0.12 },
+        ]);
+    });
 });

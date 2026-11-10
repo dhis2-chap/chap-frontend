@@ -25,10 +25,12 @@ export const monitoringSeries = (monitoring: PredictionSetupMonitoring) => {
 
     return {
         evaluationPerSplit: splits.map(toRunPoint),
-        // Starts at the last split so the evaluation average reaches across the prediction runs
-        evaluation: predictions.length && monitoring.evaluationValue != null
-            ? [...splits.slice(-1), ...predictions].sort((a, b) => a.x - b.x).map(point => ({ x: point.x, name: point.period, y: monitoring.evaluationValue }))
-            : [],
+        // Spans the splits until there are prediction runs, then starts at the last split to reach across the runs.
+        evaluation: monitoring.evaluationValue == null
+            ? []
+            : (predictions.length ? [...splits.slice(-1), ...predictions] : splits)
+                    .sort((a, b) => a.x - b.x)
+                    .map(point => ({ x: point.x, name: point.period, y: monitoring.evaluationValue })),
         perRun: predictions.map(toRunPoint),
         // Pools all prediction runs so far, a steadier signal than the noisy single runs.
         predictionTrend: predictions.map((point, index) => ({

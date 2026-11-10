@@ -59,7 +59,9 @@ export const MonitoringWidget = ({ predictionSetupId, evaluationId }: Props) => 
     const baselineDisplayName = baseline ? referenceName(baseline) : monitoring.data?.baselineModel ?? '';
     const error = backtestError || specification.error || monitoring.error;
     const series = monitoring.data ? monitoringSeries(monitoring.data) : undefined;
-    const hasPoints = !!series && (series.evaluationPerSplit.length > 0 || series.perRun.length > 0);
+    const hasRuns = !!series && (series.evaluationPerSplit.length > 0 || series.perRun.length > 0);
+    // A comparison is null when it is undefined, e.g. a skill ratio against a baseline that scored zero.
+    const hasPoints = !!series && [...series.evaluationPerSplit, ...series.perRun].some(point => point.y != null);
     // Keep both sides of zero in view so the better and worse bands always show, whichever side the scores fall on.
     const extent = Math.max(0, ...[...series?.evaluationPerSplit ?? [], ...series?.perRun ?? [], ...series?.predictionTrend ?? []].map(point => Math.abs(point.y ?? 0)));
     const options: Highcharts.Options = {
@@ -205,8 +207,10 @@ export const MonitoringWidget = ({ predictionSetupId, evaluationId }: Props) => 
                     <CircularLoader small />
                 ) : metrics.length === 0 ? (
                     <p>{i18n.t('No metrics available for monitoring.')}</p>
-                ) : !hasPoints ? (
+                ) : !hasRuns ? (
                     <p>{noPredictionOutcomes}</p>
+                ) : !hasPoints ? (
+                    <p>{i18n.t('The comparison with {{baseline}} is undefined for these runs, for example when the baseline scores zero.', { baseline: baselineDisplayName })}</p>
                 ) : (
                     <>
                         <HighchartsReact highcharts={Highcharts} options={options} />
