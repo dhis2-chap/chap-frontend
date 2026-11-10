@@ -10,10 +10,9 @@ import styles from './MaskedRanges.module.css';
 
 type Props = {
     periodSettings: Dhis2PeriodSettings;
-    disabled: boolean;
 };
 
-export const MaskedRanges = ({ periodSettings, disabled }: Props) => {
+export const MaskedRanges = ({ periodSettings }: Props) => {
     const { control, setValue, formState: { errors } } = useFormContext<DatasetFormValues>();
     const { fields, append, remove, replace } = useFieldArray({ control, name: 'maskedRanges' });
     const [ranges, periodType] = useWatch({ control, name: ['maskedRanges', 'periodType'] });
@@ -45,7 +44,6 @@ export const MaskedRanges = ({ periodSettings, disabled }: Props) => {
                             toError={errors.maskedRanges?.[index]?.end?.message}
                             fromDataTest={`masked-range-start-${index}`}
                             toDataTest={`masked-range-end-${index}`}
-                            disabled={disabled}
                             onFromChange={period => setValue(`maskedRanges.${index}.start`, period.id, { shouldDirty: true, shouldValidate: true })}
                             onToChange={period => setValue(`maskedRanges.${index}.end`, period.id, { shouldDirty: true, shouldValidate: true })}
                         />
@@ -61,7 +59,6 @@ export const MaskedRanges = ({ periodSettings, disabled }: Props) => {
                                     label={i18n.t('Name (optional)')}
                                     value={field.value}
                                     onChange={({ value }) => field.onChange(value)}
-                                    disabled={disabled}
                                     dataTest={`masked-range-name-${index}`}
                                 />
                             )}
@@ -70,7 +67,6 @@ export const MaskedRanges = ({ periodSettings, disabled }: Props) => {
                             small
                             secondary
                             icon={<IconDelete16 />}
-                            disabled={disabled}
                             onClick={() => remove(index)}
                             aria-label={i18n.t('Remove range')}
                             title={i18n.t('Remove range')}
@@ -79,7 +75,7 @@ export const MaskedRanges = ({ periodSettings, disabled }: Props) => {
                 </div>
             ))}
             <div>
-                <Button small icon={<IconAdd16 />} disabled={disabled} onClick={() => append({ start: '', end: '', name: '' })}>
+                <Button small icon={<IconAdd16 />} onClick={() => append({ start: '', end: '', name: '' })}>
                     {i18n.t('Add masked range')}
                 </Button>
             </div>

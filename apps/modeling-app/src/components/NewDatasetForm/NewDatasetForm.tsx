@@ -15,7 +15,7 @@ import { NameInput } from '../ModelExecutionForm/Sections/NameInput';
 import { PeriodSelector } from '../ModelExecutionForm/Sections/PeriodSelector';
 import { LocationSelector } from '../ModelExecutionForm/Sections/LocationSelector';
 import { DatasetColumns } from './Sections/DatasetColumns';
-import { MaskedRanges } from './Sections/MaskedRanges/MaskedRanges';
+import { MaskedRanges } from './Sections/MaskedRanges';
 import { ModelSupport } from './Sections/ModelSupport';
 import { type DatasetFormValues, EMPTY_COLUMN, resolveTargetColumn, useDatasetFormState } from './hooks/useDatasetFormState';
 import { useCovariateSuggestions } from './hooks/useCovariateSuggestions';
@@ -82,7 +82,7 @@ export const NewDatasetForm = () => {
     // Chap masks only `disease_cases`.
     const canMask = isMaskingAvailable && columnNames.includes('disease_cases');
     // Chap Core < 2.6.0 cannot save a target on the dataset.
-    const withTarget = (data: DatasetFormValues) => ({
+    const toRequestValues = (data: DatasetFormValues) => ({
         ...data,
         targetColumn: isTargetColumnAvailable ? targetColumn : '',
         maskedRanges: canMask ? data.maskedRanges : [],
@@ -92,7 +92,7 @@ export const NewDatasetForm = () => {
         const subscription = methods.watch(() => inspection.reset());
         return () => subscription.unsubscribe();
     }, [methods, inspection.reset]);
-    const checkData = methods.handleSubmit(data => inspection.mutate(withTarget(data), {
+    const checkData = methods.handleSubmit(data => inspection.mutate(toRequestValues(data), {
         onSuccess: result => setShownSummary({ title: i18n.t('Data check'), summary: result }),
     }));
     const periodCount = countPeriods(fromPeriodId, toPeriodId, settings.calendar);
@@ -126,7 +126,7 @@ export const NewDatasetForm = () => {
                 <div className={styles.container}>
                     <Card className={styles.formCard}>
                         <div className={styles.formWrapper}>
-                            <form onSubmit={methods.handleSubmit(data => createDataset(withTarget(data)))}>
+                            <form onSubmit={methods.handleSubmit(data => createDataset(toRequestValues(data)))}>
                                 <fieldset className={styles.fields} disabled={isBusy}>
                                     <NameInput
                                         label={i18n.t('Dataset name')}
@@ -165,10 +165,7 @@ export const NewDatasetForm = () => {
                                         </SingleSelectField>
                                     )}
                                     {canMask && (
-                                        <MaskedRanges
-                                            periodSettings={settings}
-                                            disabled={isBusy || isSettingsLoading || !!settingsError}
-                                        />
+                                        <MaskedRanges periodSettings={settings} />
                                     )}
                                 </fieldset>
 
