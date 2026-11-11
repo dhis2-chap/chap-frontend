@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-11-10T07:57:53.749Z\n"
-"PO-Revision-Date: 2026-11-10T07:57:53.749Z\n"
+"POT-Creation-Date: 2026-11-11T10:07:45.127Z\n"
+"PO-Revision-Date: 2026-11-11T10:07:45.127Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -223,6 +223,28 @@ msgstr "Unable to save. Please try again."
 msgid "Save"
 msgstr "Save"
 
+msgid "Signal approved"
+msgstr "Signal approved"
+
+msgid "Review signals"
+msgstr "Review signals"
+
+msgid ""
+"Approve a signal to clear it for dissemination. Signals you do not approve "
+"stay pending."
+msgstr ""
+"Approve a signal to clear it for dissemination. Signals you do not approve "
+"stay pending."
+
+msgid "Unable to load the signed-in user. Close and reopen this review to retry."
+msgstr "Unable to load the signed-in user. Close and reopen this review to retry."
+
+msgid "Unable to approve the signal. Please try again."
+msgstr "Unable to approve the signal. Please try again."
+
+msgid "Close"
+msgstr "Close"
+
 msgid "Green"
 msgstr "Green"
 
@@ -272,9 +294,6 @@ msgstr "Create new based on..."
 
 msgid "Failed to load evaluation data. Please try again."
 msgstr "Failed to load evaluation data. Please try again."
-
-msgid "Close"
-msgstr "Close"
 
 msgid "Select which attributes to copy to the new run{{escape}}"
 msgstr "Select which attributes to copy to the new run{{escape}}"

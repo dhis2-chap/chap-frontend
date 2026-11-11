@@ -8,6 +8,8 @@ test.setTimeout(240_000);
 test.describe.serial('signal level presentation', () => {
     let policyId: number;
     let predictionRequest: RunPredictionSetupRequest;
+    let reviewRunUrl: string;
+    let reviewAlerts: AlertRead[];
     const policyName = `E2E alert colours ${Date.now()}`;
 
     test.beforeEach(async ({ page }) => {
@@ -98,6 +100,8 @@ test.describe.serial('signal level presentation', () => {
         const prediction = await readJson<PredictionInfo>(await getChap(page, `/v1/jobs/${job.id}/database_result`), 'Load prediction');
         const alerts = await readJson<AlertRead[]>(await getChap(page, `/v1/crud/alerts?predictionId=${prediction.id}`), 'Load recorded alerts');
         expect(alerts.length).toBeGreaterThan(0);
+        reviewRunUrl = `/#/predictions/${setup.id}/runs/${prediction.id}`;
+        reviewAlerts = alerts;
         await page.goto(`/#/predictions/${setup.id}/runs/${prediction.id}`);
         const label = alerts.some(alert => alert.level === 'Action') ? 'Action' : 'Watch';
         const color = label === 'Action' ? 'rgb(255, 193, 7)' : 'rgb(17, 170, 187)';
@@ -138,6 +142,40 @@ test.describe.serial('signal level presentation', () => {
         await expect(plot.getByText(label, { exact: true })).toBeVisible();
         await expect(plot.locator('.highcharts-plot-band').first()).toBeVisible();
         await expect(page.getByText('Organisation units exceeding threshold', { exact: true })).toHaveCount(0);
+    });
+
+    test('approves one signal, retries a failed save and keeps the decision after reload', async ({ page }) => {
+        await page.goto(reviewRunUrl);
+        await page.getByRole('button', { name: 'Review signals', exact: true }).click();
+        const modal = page.locator('[data-test="review-signals-modal"]');
+        const alert = reviewAlerts[0];
+        const row = modal.locator(`[data-test="signal-review-${alert.id}"]`);
+        await expect(row.getByText('Pending', { exact: true })).toBeVisible();
+
+        // Only the failed write is mocked; the retry and persistence use the real backend.
+        await page.route('**/v1/crud/alerts/$approve', route => route.fulfill({ status: 503, json: { detail: 'Temporary failure' } }), { times: 1 });
+        await row.getByRole('button', { name: 'Approve', exact: true }).click();
+        await expect(modal.getByText('Unable to approve the signal. Please try again.', { exact: true })).toBeVisible();
+        await expect(row.getByText('Pending', { exact: true })).toBeVisible();
+
+        const saved = page.waitForResponse(response => response.request().method() === 'POST' && response.url().endsWith('/v1/crud/alerts/$approve'));
+        await row.getByRole('button', { name: 'Approve', exact: true }).click();
+        const response = await saved;
+        const reviewer = await readJson<{ username: string }>(await page.request.get(
+            `${process.env.E2E_DHIS2_BASE_URL ?? 'http://localhost:8080'}/api/me?fields=username`,
+        ), 'Load reviewer');
+        expect(response.request().postDataJSON()).toEqual({ alertIds: [alert.id], approved: 'approved', approvedBy: reviewer.username });
+        const [approved] = await readJson<AlertRead[]>(response, 'Approve signal');
+        expect(approved.approvedAt).toBeTruthy();
+        await expect(row.getByText('Approved', { exact: true })).toBeVisible();
+        await expect(modal.getByText('Unable to approve the signal. Please try again.', { exact: true })).toHaveCount(0);
+
+        await page.reload();
+        await page.getByRole('button', { name: 'Review signals', exact: true }).click();
+        await expect(row.getByText('Approved', { exact: true })).toBeVisible();
+        await expect(row.getByText(reviewer.username, { exact: true })).toBeVisible();
+        await expect(row.getByRole('button', { name: 'Approve', exact: true })).toHaveCount(0);
+        await expect(modal.getByRole('button', { name: 'Approve', exact: true })).toHaveCount(reviewAlerts.length - 1);
     });
 
     test('filters organisation units by one or more signal levels and combines with search', async ({ page }) => {

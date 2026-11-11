@@ -1,6 +1,8 @@
 import i18n from '@dhis2/d2-i18n';
+import { useState } from 'react';
 import { Button, CircularLoader, NoticeBox, Switch } from '@dhis2/ui';
 import type { usePredictionAlerts } from '@/hooks/usePredictionAlerts';
+import { ReviewSignalsModal } from '@/components/BackendAlerts/ReviewSignalsModal';
 import styles from './PredictionDetailsGrid.module.css';
 
 type Props = {
@@ -9,9 +11,12 @@ type Props = {
     // Exploration takes precedence over the policy view, so the switch has no effect while it is on.
     disabled?: boolean;
     onEnabledChange: (enabled: boolean) => void;
+    orgUnitNames: ReadonlyMap<string, string>;
+    formatPeriod: (period: string) => string;
 };
 
-export const AlertLevelsSection = ({ alerts, enabled, disabled, onEnabledChange }: Props) => {
+export const AlertLevelsSection = ({ alerts, enabled, disabled, onEnabledChange, orgUnitNames, formatPeriod }: Props) => {
+    const [isReviewOpen, setIsReviewOpen] = useState(false);
     if (alerts.isLoading) {
         return <CircularLoader small />;
     }
@@ -68,6 +73,17 @@ export const AlertLevelsSection = ({ alerts, enabled, disabled, onEnabledChange 
                 <NoticeBox warning title={i18n.t('Saved signal colours could not be loaded')}>
                     {i18n.t('Signals are shown with default colours.')}
                 </NoticeBox>
+            )}
+            {alerts.displayedAlerts.length > 0 && (
+                <Button small onClick={() => setIsReviewOpen(true)}>{i18n.t('Review signals')}</Button>
+            )}
+            {isReviewOpen && (
+                <ReviewSignalsModal
+                    alerts={alerts.displayedAlerts}
+                    orgUnitNames={orgUnitNames}
+                    formatPeriod={formatPeriod}
+                    onClose={() => setIsReviewOpen(false)}
+                />
             )}
         </>
     );
