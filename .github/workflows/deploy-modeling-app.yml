@@ -47,5 +47,11 @@ jobs:
         # d2-app-scripts deploy cannot upload bundles over 10 MiB.
         run: |
             bundle=$(ls build/bundle/*.zip)
-            curl --fail-with-body -sS -u "$D2_USERNAME:$D2_PASSWORD" \
-                -F "file=@$bundle" "${DHIS2_BASE_URL%/}/api/apps"
+            status=$(curl -sS -o response.txt -w '%{http_code}' \
+                -u "$D2_USERNAME:$D2_PASSWORD" \
+                -F "file=@$bundle" "${DHIS2_BASE_URL%/}/api/apps")
+            if [[ "$status" != 2* ]]; then
+                echo "Upload failed with HTTP $status"
+                cat response.txt
+                exit 1
+            fi
