@@ -10,9 +10,10 @@ import {
     type AlertPolicyRead,
     type EndemicThresholdPoint,
     type PredictionOrgUnitSeries,
+    type SeasonalParams,
     type ThresholdChartLine,
 } from '@dhis2-chap/ui';
-import { describeThreshold } from '@/components/BackendAlerts/describeAlertLevel';
+import { describeThreshold, single } from '@/components/BackendAlerts/describeAlertLevel';
 import { getThresholdQueryState } from '@/utils/thresholdQueryState';
 import { THRESHOLDS_CACHE_TIME, useThresholdScope } from './useEndemicThresholds';
 
@@ -33,18 +34,36 @@ const getDistinctThresholdParams = (policies: AlertPolicyRead[]) => {
     return [...byParams.values()];
 };
 
+const getSeasonalMultiplier = (params: SeasonalParams) => single(params.stdMultiplier) ?? 2;
+
 export const useAlertPolicyThresholds = ({ datasetId, series, policies, enabled }: Props) => {
     const { periodIds, locations } = useThresholdScope(series);
     const paramsList = useMemo(() => getDistinctThresholdParams(policies), [policies]);
     const isQueryEnabled = enabled && paramsList.length > 0 && periodIds.length > 0;
     const query = useQuery<Map<string, EndemicThresholdPoint[]>[], ApiError>({
         queryKey: ['alert-policy-thresholds', OpenAPI.BASE, datasetId, periodIds, locations, paramsList],
-        queryFn: () => Promise.all(paramsList.map(async (params) => {
-            const response = await DatasetsService.computeThresholdsV1AnalyticsThresholdsPost({
-                datasetId, periodIds, locations, params,
-            });
-            return buildEndemicThresholdMap(response.entries, getThresholdLineRoles(response.lines));
-        })),
+        queryFn: () => {
+            const seasonalParams = paramsList.filter(params => params.type === 'seasonal');
+            const seasonalResponse = seasonalParams.length > 1
+                ? DatasetsService.computeThresholdsV1AnalyticsThresholdsPost({
+                        datasetId,
+                        periodIds,
+                        locations,
+                        params: { type: 'seasonal', stdMultiplier: seasonalParams.map(getSeasonalMultiplier) },
+                    })
+                : undefined;
+
+            return Promise.all(paramsList.map(async (params) => {
+                const batchedResponse = params.type === 'seasonal' ? seasonalResponse : undefined;
+                const response = await (batchedResponse ?? DatasetsService.computeThresholdsV1AnalyticsThresholdsPost({
+                    datasetId, periodIds, locations, params,
+                }));
+                const lineRoles = batchedResponse
+                    ? { upperIndex: response.lines.indexOf(getSeasonalMultiplier(params)) }
+                    : getThresholdLineRoles(response.lines);
+                return buildEndemicThresholdMap(response.entries, lineRoles);
+            }));
+        },
         enabled: isQueryEnabled,
         staleTime: Infinity,
         cacheTime: THRESHOLDS_CACHE_TIME,
