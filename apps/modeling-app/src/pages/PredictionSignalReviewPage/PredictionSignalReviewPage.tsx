@@ -61,7 +61,8 @@ export const PredictionSignalReviewPage: React.FC = () => {
                 pageDescription={i18n.t('Approve signals to clear them for dissemination. Expand an organisation unit to see the forecast behind its signals.')}
             />
             <div className={styles.content}>
-                <SignalReview prediction={prediction} model={model} />
+                {/* Keyed so a selection never carries over to another run. */}
+                <SignalReview key={prediction.id} prediction={prediction} model={model} />
             </div>
         </>
     );

@@ -39,7 +39,8 @@ export const SignalReview = ({ prediction, model }: Props) => {
     if (alerts.isLoading || isSeriesLoading) {
         return <CircularLoader />;
     }
-    if (alerts.error || seriesError) {
+    // A failed refresh after a save keeps the signals that are already loaded.
+    if ((alerts.error && !alerts.data) || seriesError) {
         return <NoticeBox error title={i18n.t('Unable to load raised signals')} />;
     }
     if (alerts.displayedAlerts.length === 0) {
@@ -67,7 +68,8 @@ export const SignalReview = ({ prediction, model }: Props) => {
             ))}
             <SignalReviewTable
                 alerts={alerts.displayedAlerts}
-                getSeverity={getSeverity}
+                // Levels cannot be ranked when their policies failed to load.
+                getSeverity={alerts.displayError ? undefined : getSeverity}
                 orgUnitNames={orgUnitNames}
                 formatPeriod={period => convertServerToClientPeriod(period, prediction.dataset.periodType as keyof typeof PERIOD_TYPES)}
                 disabled={!review.isUserLoaded}
