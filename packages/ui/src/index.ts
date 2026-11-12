@@ -97,4 +97,4 @@ export type { FeatureCollection } from './components/maps/utils';
 export * from './components/sidenav';
 export * from './components/routeSettings';
 export * from './components/chapSettings';
-export { SignalReviewTable, type SignalReviewTableProps } from './components/signals/SignalReviewTable';
+export { SignalReviewTable, type SignalReview, type SignalReviewTableProps } from './components/signals/SignalReviewTable';

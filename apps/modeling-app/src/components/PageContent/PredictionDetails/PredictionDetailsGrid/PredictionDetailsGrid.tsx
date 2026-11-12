@@ -129,12 +129,6 @@ export const PredictionDetailsGrid = ({
         return { first, last };
     }, [series, prediction.dataset.periodType]);
 
-    const orgUnitNames = useMemo(() => new Map(tiles.map(tile => [tile.orgUnitId, tile.orgUnitName])), [tiles]);
-    const formatPeriod = (period: string) => convertServerToClientPeriod(
-        period,
-        prediction.dataset.periodType as keyof typeof PERIOD_TYPES,
-    );
-
     const updateSettings = (nextSettings: Partial<PredictionRunAlertSettings>) => {
         onSettingsChange({
             ...settings,
@@ -187,13 +181,10 @@ export const PredictionDetailsGrid = ({
 
             {isAlertsAvailable && (
                 <AlertLevelsSection
-                    key={prediction.id}
                     alerts={alerts}
                     enabled={settings.alertsEnabled}
                     disabled={showThresholds}
                     onEnabledChange={alertsEnabled => updateSettings({ alertsEnabled })}
-                    orgUnitNames={orgUnitNames}
-                    formatPeriod={formatPeriod}
                 />
             )}
             {showPolicy && (

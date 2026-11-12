@@ -1,9 +1,41 @@
 import i18n from '@dhis2/d2-i18n';
-import { useState } from 'react';
-import { Button, CircularLoader, NoticeBox, Switch } from '@dhis2/ui';
+import { useNavigate } from 'react-router-dom';
+import { Button, CircularLoader, IconArrowRight16, NoticeBox, Switch } from '@dhis2/ui';
+import { AlertApproval } from '@dhis2-chap/ui';
 import type { usePredictionAlerts } from '@/hooks/usePredictionAlerts';
-import { ReviewSignalsModal } from '@/components/BackendAlerts/ReviewSignalsModal';
 import styles from './PredictionDetailsGrid.module.css';
+
+const countReview = (alerts: { approved?: AlertApproval }[]) => ({
+    // A signal without a decision is pending.
+    pending: alerts.filter(alert => (alert.approved ?? AlertApproval.PENDING) === AlertApproval.PENDING).length,
+    approved: alerts.filter(alert => alert.approved === AlertApproval.APPROVED).length,
+    declined: alerts.filter(alert => alert.approved === AlertApproval.DECLINED).length,
+    total: alerts.length,
+});
+
+// The review lives on its own page, so this card is the way in: it says what is left to do and leads there.
+const SignalReviewCard = ({ alerts }: { alerts: { approved?: AlertApproval }[] }) => {
+    const navigate = useNavigate();
+    const { pending, approved, declined, total } = countReview(alerts);
+    return (
+        <div className={pending > 0 ? `${styles.reviewCard} ${styles.reviewCardPending}` : styles.reviewCard}>
+            <span className={styles.toggleTitle}>{i18n.t('Signal review')}</span>
+            <p className={styles.panelHelp} data-test="signal-review-status">
+                {pending === 0
+                    ? i18n.t('All signals reviewed{{colon}} {{approved}} approved, {{declined}} declined.', { colon: ':', approved, declined })
+                    : i18n.t('{{pending}} of {{total}} signals awaiting review ({{approved}} approved, {{declined}} declined).', {
+                            pending, total, approved, declined,
+                        })}
+            </p>
+            <Button small primary={pending > 0} onClick={() => navigate('signals')}>
+                <span className={styles.reviewButtonLabel}>
+                    {i18n.t('Review signals')}
+                    <IconArrowRight16 />
+                </span>
+            </Button>
+        </div>
+    );
+};
 
 type Props = {
     alerts: ReturnType<typeof usePredictionAlerts>;
@@ -11,12 +43,9 @@ type Props = {
     // Exploration takes precedence over the policy view, so the switch has no effect while it is on.
     disabled?: boolean;
     onEnabledChange: (enabled: boolean) => void;
-    orgUnitNames: ReadonlyMap<string, string>;
-    formatPeriod: (period: string) => string;
 };
 
-export const AlertLevelsSection = ({ alerts, enabled, disabled, onEnabledChange, orgUnitNames, formatPeriod }: Props) => {
-    const [isReviewOpen, setIsReviewOpen] = useState(false);
+export const AlertLevelsSection = ({ alerts, enabled, disabled, onEnabledChange }: Props) => {
     if (alerts.isLoading) {
         return <CircularLoader small />;
     }
@@ -54,6 +83,7 @@ export const AlertLevelsSection = ({ alerts, enabled, disabled, onEnabledChange,
 
     return (
         <>
+            {alerts.displayedAlerts.length > 0 && <SignalReviewCard alerts={alerts.data ?? []} />}
             <Switch
                 className={styles.toggleButton}
                 aria-label={i18n.t('Signal levels')}
@@ -73,17 +103,6 @@ export const AlertLevelsSection = ({ alerts, enabled, disabled, onEnabledChange,
                 <NoticeBox warning title={i18n.t('Saved signal colours could not be loaded')}>
                     {i18n.t('Signals are shown with default colours.')}
                 </NoticeBox>
-            )}
-            {alerts.displayedAlerts.length > 0 && (
-                <Button small onClick={() => setIsReviewOpen(true)}>{i18n.t('Review signals')}</Button>
-            )}
-            {isReviewOpen && (
-                <ReviewSignalsModal
-                    alerts={alerts.displayedAlerts}
-                    orgUnitNames={orgUnitNames}
-                    formatPeriod={formatPeriod}
-                    onClose={() => setIsReviewOpen(false)}
-                />
             )}
         </>
     );

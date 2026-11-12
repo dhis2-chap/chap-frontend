@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-11-11T10:07:45.127Z\n"
-"PO-Revision-Date: 2026-11-11T10:07:45.127Z\n"
+"POT-Creation-Date: 2026-11-12T14:39:05.638Z\n"
+"PO-Revision-Date: 2026-11-12T14:39:05.638Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -49,6 +49,9 @@ msgstr "Prediction details"
 
 msgid "Import prediction"
 msgstr "Import prediction"
+
+msgid "Review signals"
+msgstr "Review signals"
 
 msgid "Activity"
 msgstr "Activity"
@@ -223,27 +226,36 @@ msgstr "Unable to save. Please try again."
 msgid "Save"
 msgstr "Save"
 
-msgid "Signal approved"
-msgstr "Signal approved"
+msgid "Signal review saved"
+msgstr "Signal review saved"
 
-msgid "Review signals"
-msgstr "Review signals"
+msgid "Unable to load raised signals"
+msgstr "Unable to load raised signals"
+
+msgid "No signals were recorded for this run."
+msgstr "No signals were recorded for this run."
+
+msgid "Unable to load the signed-in user. Reload the page to retry."
+msgstr "Unable to load the signed-in user. Reload the page to retry."
+
+msgid "Unable to save the review. Please try again."
+msgstr "Unable to save the review. Please try again."
+
+msgid "Edit the signal policy to change its thresholds."
+msgstr "Edit the signal policy to change its thresholds."
+
+msgid "Could not load the evaluation scores"
+msgstr "Could not load the evaluation scores"
 
 msgid ""
-"Approve a signal to clear it for dissemination. Signals you do not approve "
-"stay pending."
+"How well this policy's signals matched observed outbreaks when the model "
+"was evaluated on past data, across all splits and organisation units."
 msgstr ""
-"Approve a signal to clear it for dissemination. Signals you do not approve "
-"stay pending."
+"How well this policy's signals matched observed outbreaks when the model "
+"was evaluated on past data, across all splits and organisation units."
 
-msgid "Unable to load the signed-in user. Close and reopen this review to retry."
-msgstr "Unable to load the signed-in user. Close and reopen this review to retry."
-
-msgid "Unable to approve the signal. Please try again."
-msgstr "Unable to approve the signal. Please try again."
-
-msgid "Close"
-msgstr "Close"
+msgid "View evaluation"
+msgstr "View evaluation"
 
 msgid "Green"
 msgstr "Green"
@@ -294,6 +306,9 @@ msgstr "Create new based on..."
 
 msgid "Failed to load evaluation data. Please try again."
 msgstr "Failed to load evaluation data. Please try again."
+
+msgid "Close"
+msgstr "Close"
 
 msgid "Select which attributes to copy to the new run{{escape}}"
 msgstr "Select which attributes to copy to the new run{{escape}}"
@@ -2042,6 +2057,16 @@ msgstr "Could not load outbreak scoring"
 msgid "Manage signal policies"
 msgstr "Manage signal policies"
 
+msgid ""
+"These signals were raised with this policy. Open the evaluation to explore "
+"other signal policies."
+msgstr ""
+"These signals were raised with this policy. Open the evaluation to explore "
+"other signal policies."
+
+msgid "Signal policy{{colon}} {{policy}}"
+msgstr "Signal policy{{colon}} {{policy}}"
+
 msgid "Split by horizon"
 msgstr "Split by horizon"
 
@@ -2326,17 +2351,24 @@ msgstr "Adjust signal output"
 msgid "Apply"
 msgstr "Apply"
 
-msgid "Unable to load raised signals"
-msgstr "Unable to load raised signals"
+msgid "Signal review"
+msgstr "Signal review"
+
+msgid "All signals reviewed{{colon}} {{approved}} approved, {{declined}} declined."
+msgstr "All signals reviewed{{colon}} {{approved}} approved, {{declined}} declined."
+
+msgid ""
+"{{pending}} of {{total}} signals awaiting review ({{approved}} approved, "
+"{{declined}} declined)."
+msgstr ""
+"{{pending}} of {{total}} signals awaiting review ({{approved}} approved, "
+"{{declined}} declined)."
 
 msgid "Signal levels"
 msgstr "Signal levels"
 
 msgid "No signal policy was recorded for this run."
 msgstr "No signal policy was recorded for this run."
-
-msgid "No signals were recorded for this run."
-msgstr "No signals were recorded for this run."
 
 msgid "Show recorded signals on the plots."
 msgstr "Show recorded signals on the plots."
@@ -2364,9 +2396,6 @@ msgstr "Thresholds unavailable"
 
 msgid "Prediction run"
 msgstr "Prediction run"
-
-msgid "Edit the signal policy to change its thresholds."
-msgstr "Edit the signal policy to change its thresholds."
 
 msgid "Explore thresholds"
 msgstr "Explore thresholds"
@@ -3138,9 +3167,6 @@ msgid_plural "{{count}} models running"
 msgstr[0] "{{count}} model running"
 msgstr[1] "{{count}} models running"
 
-msgid "View evaluation"
-msgstr "View evaluation"
-
 msgid "Score of {{reference}}, which the other rows are compared with"
 msgstr "Score of {{reference}}, which the other rows are compared with"
 
@@ -3375,6 +3401,13 @@ msgstr "Import the forecasted values of this prediction into DHIS2."
 
 msgid "Unnamed prediction"
 msgstr "Unnamed prediction"
+
+msgid ""
+"Approve signals to clear them for dissemination. Expand an organisation "
+"unit to see the forecast behind its signals."
+msgstr ""
+"Approve signals to clear them for dissemination. Expand an organisation "
+"unit to see the forecast behind its signals."
 
 msgid "Ready to predict"
 msgstr "Ready to predict"

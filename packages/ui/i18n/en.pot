@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-11-11T10:06:31.183Z\n"
-"PO-Revision-Date: 2026-11-11T10:06:31.183Z\n"
+"POT-Creation-Date: 2026-11-12T12:17:58.279Z\n"
+"PO-Revision-Date: 2026-11-12T12:17:58.280Z\n"
 
 msgid "Chap settings"
 msgstr "Chap settings"
@@ -372,11 +372,23 @@ msgstr ""
 "This app does not support setting API tokens on this DHIS2 version. Upgrade "
 "DHIS2 to 2.40.7, 2.41.4, 2.42 or later to store the token encrypted."
 
+msgid "{{selected}} of {{pending}} pending signals selected"
+msgstr "{{selected}} of {{pending}} pending signals selected"
+
+msgid "Select by level"
+msgstr "Select by level"
+
+msgid "Decline selected"
+msgstr "Decline selected"
+
+msgid "Approve selected"
+msgstr "Approve selected"
+
 msgid "Organisation unit"
 msgstr "Organisation unit"
 
-msgid "Period"
-msgstr "Period"
+msgid "Signals"
+msgstr "Signals"
 
 msgid "Reviewed by"
 msgstr "Reviewed by"
@@ -395,6 +407,12 @@ msgstr "Pending"
 
 msgid "Approve"
 msgstr "Approve"
+
+msgid "Decline"
+msgstr "Decline"
+
+msgid "Reset to pending"
+msgstr "Reset to pending"
 
 msgid "More"
 msgstr "More"

@@ -111,3 +111,24 @@
     font-size: 13px;
     line-height: 1.4;
 }
+
+.reviewCard {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: var(--spacers-dp12) var(--spacers-dp16);
+    border: 1px solid var(--colors-grey300);
+    border-radius: 4px;
+}
+
+.reviewCardPending {
+    border-color: var(--colors-blue300);
+    background-color: var(--colors-blue050);
+}
+
+.reviewButtonLabel {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}

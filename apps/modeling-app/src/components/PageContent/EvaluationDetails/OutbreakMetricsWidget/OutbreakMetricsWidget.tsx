@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import cx from 'classnames';
 import { Link } from 'react-router-dom';
 import i18n from '@dhis2/d2-i18n';
@@ -9,10 +9,11 @@ import {
 } from '@dhis2-chap/ui';
 import {
     Button, Checkbox, CircularLoader, DataTable, DataTableBody, DataTableCell,
-    DataTableColumnHeader, DataTableHead, DataTableRow, SingleSelect, SingleSelectOption,
+    DataTableColumnHeader, DataTableHead, DataTableRow, SingleSelect, SingleSelectOption, Tooltip,
 } from '@dhis2/ui';
 import { useAlertPolicies } from '@/hooks/useAlertPolicies';
 import { Features, useIsFeatureAvailable } from '@/hooks/useIsFeatureAvailable';
+import { useOutbreakMetrics } from '@/hooks/useOutbreakMetrics';
 import { ChapErrorNotice } from '@/components/ChapErrorNotice';
 import { MetricInfoIcon } from '@/components/MetricInfoIcon/MetricInfoIcon';
 import { describeAlertThreshold } from '@/components/BackendAlerts/describeAlertLevel';
@@ -124,31 +125,23 @@ const Scores = ({ row, referenceRow, levels, binaryMetrics, categoricalMetrics }
     </div>
 );
 
-const useOutbreakScores = (backtestId: number | null | undefined, policyId: number | undefined, byHorizon: boolean, enabled: boolean) => useQuery({
-    queryKey: ['outbreak-metrics', OpenAPI.BASE, backtestId, policyId, byHorizon],
-    queryFn: () => MetricsService.getOutbreakMetricsV1AnalyticsBacktestsBacktestIdOutbreakMetricsGet(
-        backtestId!, policyId!,
-        byHorizon ? [DataDimension.HORIZON_DISTANCE] : undefined,
-    ),
-    enabled: enabled && backtestId != null && policyId != null,
-    retry: false,
-    staleTime: 5 * 60 * 1000,
-    refetchOnWindowFocus: false,
-});
-
 type Props = {
     evaluationId: number;
     specificationId?: number;
+    // Scores with this policy only, for a page about the signals that policy raised.
+    policyId?: number;
+    // Replaces the introduction on a page that is not the evaluation's own.
+    intro?: ReactNode;
 };
 
-export const OutbreakMetricsWidget = ({ evaluationId, specificationId }: Props) => {
+export const OutbreakMetricsWidget = (props: Props) => {
     const { isAvailable } = useIsFeatureAvailable(Features.OUTBREAK_METRICS);
-    return isAvailable ? <OutbreakMetricsContent key={evaluationId} evaluationId={evaluationId} specificationId={specificationId} /> : null;
+    return isAvailable ? <OutbreakMetricsContent key={props.evaluationId} {...props} /> : null;
 };
 
-const OutbreakMetricsContent = ({ evaluationId, specificationId }: Props) => {
+const OutbreakMetricsContent = ({ evaluationId, specificationId, policyId: fixedPolicyId, intro }: Props) => {
     const [open, setOpen] = useState(true);
-    const [policyId, setPolicyId] = useState('');
+    const [policyId, setPolicyId] = useState(fixedPolicyId == null ? '' : String(fixedPolicyId));
     const [byHorizon, setByHorizon] = useState(false);
     const [showAll, setShowAll] = useState(false);
     const policies = useAlertPolicies();
@@ -166,8 +159,9 @@ const OutbreakMetricsContent = ({ evaluationId, specificationId }: Props) => {
     // A reference model's own evaluation has nothing to compare with.
     const isReferenceRun = references.some(item => item.backtestId === evaluationId);
     const comparedReference = isReferenceRun ? undefined : reference;
-    const scores = useOutbreakScores(evaluationId, policy?.id, byHorizon, !!catalog.data);
-    const referenceScores = useOutbreakScores(comparedReference?.backtestId, policy?.id, byHorizon, !!catalog.data);
+    const groupBy = byHorizon ? DataDimension.HORIZON_DISTANCE : undefined;
+    const scores = useOutbreakMetrics(evaluationId, policy?.id, groupBy, !!catalog.data);
+    const referenceScores = useOutbreakMetrics(comparedReference?.backtestId, policy?.id, groupBy, !!catalog.data);
 
     // Development builds can report the next version before the endpoint lands.
     if (catalog.error?.status === 404) return null;
@@ -188,7 +182,7 @@ const OutbreakMetricsContent = ({ evaluationId, specificationId }: Props) => {
         >
             <div className={styles.content} data-test="outbreak-metrics">
                 <p className={styles.intro}>
-                    {i18n.t('How well a policy\'s signals match observed outbreaks, across all splits and organisation units. Each split\'s thresholds come from the data before it.')}
+                    {intro ?? i18n.t('How well a policy\'s signals match observed outbreaks, across all splits and organisation units. Each split\'s thresholds come from the data before it.')}
                 </p>
                 {setupError ? (
                     <ChapErrorNotice error={setupError} title={i18n.t('Could not load outbreak scoring')}>
@@ -212,17 +206,25 @@ const OutbreakMetricsContent = ({ evaluationId, specificationId }: Props) => {
                     <>
                         <div className={tableStyles.toolbar}>
                             <div className={tableStyles.actions}>
-                                <div className={styles.policySelect}>
-                                    <SingleSelect
-                                        dense
-                                        prefix={i18n.t('Signal policy')}
-                                        selected={policy?.id == null ? '' : String(policy.id)}
-                                        onChange={({ selected }) => setPolicyId(selected)}
-                                        dataTest="outbreak-policy"
-                                    >
-                                        {policies.data.map(item => <SingleSelectOption key={item.id} value={String(item.id)} label={item.name} />)}
-                                    </SingleSelect>
-                                </div>
+                                {fixedPolicyId != null ? (
+                                    <Tooltip content={i18n.t('These signals were raised with this policy. Open the evaluation to explore other signal policies.')}>
+                                        <Button small disabled dataTest="outbreak-policy">
+                                            {i18n.t('Signal policy{{colon}} {{policy}}', { colon: ':', policy: policy?.name ?? fixedPolicyId })}
+                                        </Button>
+                                    </Tooltip>
+                                ) : (
+                                    <div className={styles.policySelect}>
+                                        <SingleSelect
+                                            dense
+                                            prefix={i18n.t('Signal policy')}
+                                            selected={policy?.id == null ? '' : String(policy.id)}
+                                            onChange={({ selected }) => setPolicyId(selected)}
+                                            dataTest="outbreak-policy"
+                                        >
+                                            {policies.data.map(item => <SingleSelectOption key={item.id} value={String(item.id)} label={item.name} />)}
+                                        </SingleSelect>
+                                    </div>
+                                )}
                                 <Checkbox
                                     dense
                                     label={i18n.t('Split by horizon')}
