@@ -9,7 +9,7 @@ import {
 } from '@dhis2-chap/ui';
 import {
     Button, Checkbox, CircularLoader, DataTable, DataTableBody, DataTableCell,
-    DataTableColumnHeader, DataTableHead, DataTableRow, SingleSelect, SingleSelectOption, Tooltip,
+    DataTableColumnHeader, DataTableHead, DataTableRow, SingleSelect, SingleSelectOption,
 } from '@dhis2/ui';
 import { useAlertPolicies } from '@/hooks/useAlertPolicies';
 import { Features, useIsFeatureAvailable } from '@/hooks/useIsFeatureAvailable';
@@ -206,25 +206,18 @@ const OutbreakMetricsContent = ({ evaluationId, specificationId, policyId: fixed
                     <>
                         <div className={tableStyles.toolbar}>
                             <div className={tableStyles.actions}>
-                                {fixedPolicyId != null ? (
-                                    <Tooltip content={i18n.t('These signals were raised with this policy. Open the evaluation to explore other signal policies.')}>
-                                        <Button small disabled dataTest="outbreak-policy">
-                                            {i18n.t('Signal policy{{colon}} {{policy}}', { colon: ':', policy: policy?.name ?? fixedPolicyId })}
-                                        </Button>
-                                    </Tooltip>
-                                ) : (
-                                    <div className={styles.policySelect}>
-                                        <SingleSelect
-                                            dense
-                                            prefix={i18n.t('Signal policy')}
-                                            selected={policy?.id == null ? '' : String(policy.id)}
-                                            onChange={({ selected }) => setPolicyId(selected)}
-                                            dataTest="outbreak-policy"
-                                        >
-                                            {policies.data.map(item => <SingleSelectOption key={item.id} value={String(item.id)} label={item.name} />)}
-                                        </SingleSelect>
-                                    </div>
-                                )}
+                                <div className={styles.policySelect}>
+                                    <SingleSelect
+                                        dense
+                                        prefix={i18n.t('Signal policy')}
+                                        selected={policy?.id == null ? '' : String(policy.id)}
+                                        disabled={fixedPolicyId != null}
+                                        onChange={({ selected }) => setPolicyId(selected)}
+                                        dataTest="outbreak-policy"
+                                    >
+                                        {policies.data.map(item => <SingleSelectOption key={item.id} value={String(item.id)} label={item.name} />)}
+                                    </SingleSelect>
+                                </div>
                                 <Checkbox
                                     dense
                                     label={i18n.t('Split by horizon')}

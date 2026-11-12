@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-11-12T14:39:05.638Z\n"
-"PO-Revision-Date: 2026-11-12T14:39:05.638Z\n"
+"POT-Creation-Date: 2026-11-12T15:11:29.450Z\n"
+"PO-Revision-Date: 2026-11-12T15:11:29.451Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -2056,16 +2056,6 @@ msgstr "Could not load outbreak scoring"
 
 msgid "Manage signal policies"
 msgstr "Manage signal policies"
-
-msgid ""
-"These signals were raised with this policy. Open the evaluation to explore "
-"other signal policies."
-msgstr ""
-"These signals were raised with this policy. Open the evaluation to explore "
-"other signal policies."
-
-msgid "Signal policy{{colon}} {{policy}}"
-msgstr "Signal policy{{colon}} {{policy}}"
 
 msgid "Split by horizon"
 msgstr "Split by horizon"
