@@ -1,0 +1,41 @@
+.toolbar {
+    /* Stays in reach while a long list of signals scrolls underneath. */
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 2;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacers-dp8);
+    background: var(--colors-white);
+    font-size: 14px;
+}
+
+.selection {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--spacers-dp8) var(--spacers-dp24);
+}
+
+.levels {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--spacers-dp8);
+    color: var(--colors-grey700);
+}
+
+.list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--spacers-dp4) var(--spacers-dp12);
+}
+
+.signal {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacers-dp4);
+    white-space: nowrap;
+}

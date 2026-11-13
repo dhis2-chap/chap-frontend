@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 import type { AlertRead, AlertsCreate, DataBaseResponse, JobResponse, PredictionEntry, PredictionInfo, RunPredictionSetupRequest } from '@dhis2-chap/ui';
 import { chapUrl, createCompletedNaiveEvaluation, getChap, pollEvaluationJob, readJson } from './helpers/evaluation-fixtures';
 import { selectPeriod } from './helpers/period-picker';
@@ -8,7 +8,12 @@ test.setTimeout(240_000);
 test.describe.serial('signal level presentation', () => {
     let policyId: number;
     let predictionRequest: RunPredictionSetupRequest;
+    let reviewRunUrl: string;
+    let reviewAlerts: AlertRead[];
     const policyName = `E2E alert colours ${Date.now()}`;
+    const sorted = (ids: number[]) => [...ids].sort((a, b) => a - b);
+    const alertIdsOf = (orgUnit: string) => sorted(reviewAlerts.filter(alert => alert.orgUnit === orgUnit).map(alert => alert.id));
+    const waitForReview = (page: Page) => page.waitForResponse(response => response.request().method() === 'POST' && response.url().endsWith('/v1/crud/alerts/$approve'));
 
     test.beforeEach(async ({ page }) => {
         const response = await getChap(page, '/v1/crud/alert-policies');
@@ -98,6 +103,8 @@ test.describe.serial('signal level presentation', () => {
         const prediction = await readJson<PredictionInfo>(await getChap(page, `/v1/jobs/${job.id}/database_result`), 'Load prediction');
         const alerts = await readJson<AlertRead[]>(await getChap(page, `/v1/crud/alerts?predictionId=${prediction.id}`), 'Load recorded alerts');
         expect(alerts.length).toBeGreaterThan(0);
+        reviewRunUrl = `/#/predictions/${setup.id}/runs/${prediction.id}`;
+        reviewAlerts = alerts;
         await page.goto(`/#/predictions/${setup.id}/runs/${prediction.id}`);
         const label = alerts.some(alert => alert.level === 'Action') ? 'Action' : 'Watch';
         const color = label === 'Action' ? 'rgb(255, 193, 7)' : 'rgb(17, 170, 187)';
@@ -140,7 +147,94 @@ test.describe.serial('signal level presentation', () => {
         await expect(page.getByText('Organisation units exceeding threshold', { exact: true })).toHaveCount(0);
     });
 
-    test('filters organisation units by one or more signal levels and combines with search', async ({ page }) => {
+    test('approves an organisation unit\'s signals, retries a failed save and keeps the decision after reload', async ({ page }) => {
+        await page.goto(reviewRunUrl);
+        await expect(page.locator('[data-test="signal-review-status"]')).toHaveText(
+            `${reviewAlerts.length} of ${reviewAlerts.length} signals awaiting review (0 approved, 0 declined).`,
+        );
+        await page.getByRole('button', { name: 'Review signals', exact: true }).click();
+        await expect(page).toHaveURL(url => url.hash === `${reviewRunUrl.slice(1)}/signals`);
+        const { orgUnit } = reviewAlerts[0];
+        const row = page.locator(`[data-test="signal-review-${orgUnit}"]`);
+        await expect(row.getByText('Pending', { exact: true })).toBeVisible();
+
+        // Only the failed write is mocked; the retry and persistence use the real backend.
+        await page.route('**/v1/crud/alerts/$approve', route => route.fulfill({ status: 503, json: { detail: 'Temporary failure' } }), { times: 1 });
+        await row.getByRole('button', { name: 'Approve', exact: true }).click();
+        await expect(page.getByText('Unable to save the review. Please try again.', { exact: true })).toBeVisible();
+        await expect(row.getByText('Pending', { exact: true })).toBeVisible();
+
+        const saved = waitForReview(page);
+        await row.getByRole('button', { name: 'Approve', exact: true }).click();
+        const response = await saved;
+        const reviewer = await readJson<{ username: string }>(await page.request.get(
+            `${process.env.E2E_DHIS2_BASE_URL ?? 'http://localhost:8080'}/api/me?fields=username`,
+        ), 'Load reviewer');
+        const request = response.request().postDataJSON();
+        expect({ ...request, alertIds: sorted(request.alertIds) }).toEqual({ alertIds: alertIdsOf(orgUnit), approved: 'approved', approvedBy: reviewer.username });
+        const [approved] = await readJson<AlertRead[]>(response, 'Approve signals');
+        expect(approved.approvedAt).toBeTruthy();
+        await expect(row.getByText('Approved', { exact: true })).toBeVisible();
+        await expect(page.getByText('Unable to save the review. Please try again.', { exact: true })).toHaveCount(0);
+
+        // The review has its own address, so a reload stays on it.
+        await page.reload();
+        await expect(row.getByText('Approved', { exact: true })).toBeVisible();
+        await expect(row.getByText(reviewer.username, { exact: true })).toBeVisible();
+        await expect(row.getByRole('button', { name: 'Approve', exact: true })).toHaveCount(0);
+    });
+
+    test('shows the evidence behind signals, bulk-approves only pending signals and reopens a decision', async ({ page }) => {
+        await page.goto(`${reviewRunUrl}/signals`);
+        // The first organisation unit was approved by the previous test.
+        const [approved, declined] = [...new Set(reviewAlerts.map(alert => alert.orgUnit))];
+        const pendingIds = sorted(reviewAlerts.filter(alert => alert.orgUnit !== approved && alert.orgUnit !== declined).map(alert => alert.id));
+        expect(pendingIds.length).toBeGreaterThan(0);
+        const row = page.locator(`[data-test="signal-review-${declined}"]`);
+
+        await row.locator('td').first().click();
+        const evidence = page.locator(`[data-test="signal-review-${declined}-expandedrow"]`);
+        await expect(evidence.locator('.highcharts-plot-band').first()).toBeVisible();
+        await expect(evidence.locator('.highcharts-graph[stroke="#212934"]')).toHaveCount(2);
+        // The evaluation's scores for the policy that raised the signals cover every organisation unit, so they sit above the table.
+        const scores = page.locator('[data-test="outbreak-metrics"]');
+        await expect(scores.locator('[data-test="outbreak-policy"]')).toContainText(policyName);
+        await expect(scores.getByRole('heading', { name: 'All forecast horizons' })).toBeVisible();
+
+        let saved = waitForReview(page);
+        await row.getByRole('button', { name: 'Decline', exact: true }).click();
+        let request = (await saved).request().postDataJSON();
+        expect(request.approved).toBe('declined');
+        expect(sorted(request.alertIds)).toEqual(alertIdsOf(declined));
+        await expect(row.getByText('Declined', { exact: true })).toBeVisible();
+
+        // Selecting everything must leave the approved and the declined organisation unit alone.
+        await page.locator('[data-test="signal-review-select-all"]').click();
+        await expect(page.getByText(`${pendingIds.length} of ${pendingIds.length} pending signals selected`, { exact: true })).toBeVisible();
+        saved = waitForReview(page);
+        await page.getByRole('button', { name: 'Approve selected', exact: true }).click();
+        request = (await saved).request().postDataJSON();
+        expect(request.approved).toBe('approved');
+        expect(sorted(request.alertIds)).toEqual(pendingIds);
+        await expect(page.getByText('0 of 0 pending signals selected', { exact: true })).toBeVisible();
+        await expect(row.getByText('Declined', { exact: true })).toBeVisible();
+
+        saved = waitForReview(page);
+        await row.getByRole('button', { name: 'Reset to pending', exact: true }).click();
+        request = (await saved).request().postDataJSON();
+        expect(request.approved).toBe('pending');
+        expect(sorted(request.alertIds)).toEqual(alertIdsOf(declined));
+        await expect(row.getByText('Pending', { exact: true })).toBeVisible();
+        await expect(page.getByText(`0 of ${alertIdsOf(declined).length} pending signals selected`, { exact: true })).toBeVisible();
+
+        // The run page counts the decisions made here.
+        await page.goto(reviewRunUrl);
+        await expect(page.locator('[data-test="signal-review-status"]')).toHaveText(
+            `${alertIdsOf(declined).length} of ${reviewAlerts.length} signals awaiting review (${reviewAlerts.length - alertIdsOf(declined).length} approved, 0 declined).`,
+        );
+    });
+
+    test('filters organisation units by one or more signal levels, combines with search and selects them for review by level', async ({ page }) => {
         // Run without an automatic policy so we can record a predictable mix of alerts.
         const evaluation = await createCompletedNaiveEvaluation(page);
         const setup = await readJson<DataBaseResponse>(await page.request.post(chapUrl('/v1/crud/prediction-setups'), {
@@ -210,5 +304,13 @@ test.describe.serial('signal level presentation', () => {
         await alertLevels.check();
         await expect(filter).toContainText('Watch');
         await expect(plots).toHaveCount(0);
+
+        // In the review, an organisation unit is selected by its most severe signal, so Watch leaves the mixed one out.
+        await page.goto(`/#/predictions/${setup.id}/runs/${prediction.id}/signals`);
+        await page.locator('[data-test="signal-review-select-level-Watch"]').click();
+        await expect(page.getByText('1 of 4 pending signals selected', { exact: true })).toBeVisible();
+        await expect(page.locator(`[data-test="signal-review-${watchRegion}"] input[type="checkbox"]`)).toBeChecked();
+        await page.locator('[data-test="signal-review-select-level-Action"]').click();
+        await expect(page.getByText('4 of 4 pending signals selected', { exact: true })).toBeVisible();
     });
 });

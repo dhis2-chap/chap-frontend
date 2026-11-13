@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-11-10T07:57:53.749Z\n"
-"PO-Revision-Date: 2026-11-10T07:57:53.749Z\n"
+"POT-Creation-Date: 2026-11-13T13:27:32.762Z\n"
+"PO-Revision-Date: 2026-11-13T13:27:32.763Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -49,6 +49,9 @@ msgstr "Prediction details"
 
 msgid "Import prediction"
 msgstr "Import prediction"
+
+msgid "Review signals"
+msgstr "Review signals"
 
 msgid "Activity"
 msgstr "Activity"
@@ -222,6 +225,43 @@ msgstr "Unable to save. Please try again."
 
 msgid "Save"
 msgstr "Save"
+
+msgid "Signal review saved"
+msgstr "Signal review saved"
+
+msgid "Unable to load raised signals"
+msgstr "Unable to load raised signals"
+
+msgid "No signals were recorded for this run."
+msgstr "No signals were recorded for this run."
+
+msgid "Unable to load prediction data"
+msgstr "Unable to load prediction data"
+
+msgid "Signals can still be reviewed, but their evidence may be incomplete."
+msgstr "Signals can still be reviewed, but their evidence may be incomplete."
+
+msgid "Unable to load the signed-in user. Reload the page to retry."
+msgstr "Unable to load the signed-in user. Reload the page to retry."
+
+msgid "Unable to save the review. Please try again."
+msgstr "Unable to save the review. Please try again."
+
+msgid "Edit the signal policy to change its thresholds."
+msgstr "Edit the signal policy to change its thresholds."
+
+msgid "Could not load the evaluation scores"
+msgstr "Could not load the evaluation scores"
+
+msgid ""
+"How well this policy's signals matched observed outbreaks when the model "
+"was evaluated on past data, across all splits and organisation units."
+msgstr ""
+"How well this policy's signals matched observed outbreaks when the model "
+"was evaluated on past data, across all splits and organisation units."
+
+msgid "View evaluation"
+msgstr "View evaluation"
 
 msgid "Green"
 msgstr "Green"
@@ -2269,9 +2309,6 @@ msgstr "Error loading prediction setup"
 msgid "Prediction setup not found."
 msgstr "Prediction setup not found."
 
-msgid "Unable to load prediction data"
-msgstr "Unable to load prediction data"
-
 msgid ""
 "There was a problem loading the prediction data required for signal "
 "configuration."
@@ -2307,17 +2344,24 @@ msgstr "Adjust signal output"
 msgid "Apply"
 msgstr "Apply"
 
-msgid "Unable to load raised signals"
-msgstr "Unable to load raised signals"
+msgid "Signal review"
+msgstr "Signal review"
+
+msgid "All signals reviewed{{colon}} {{approved}} approved, {{declined}} declined."
+msgstr "All signals reviewed{{colon}} {{approved}} approved, {{declined}} declined."
+
+msgid ""
+"{{pending}} of {{total}} signals awaiting review ({{approved}} approved, "
+"{{declined}} declined)."
+msgstr ""
+"{{pending}} of {{total}} signals awaiting review ({{approved}} approved, "
+"{{declined}} declined)."
 
 msgid "Signal levels"
 msgstr "Signal levels"
 
 msgid "No signal policy was recorded for this run."
 msgstr "No signal policy was recorded for this run."
-
-msgid "No signals were recorded for this run."
-msgstr "No signals were recorded for this run."
 
 msgid "Show recorded signals on the plots."
 msgstr "Show recorded signals on the plots."
@@ -2345,9 +2389,6 @@ msgstr "Thresholds unavailable"
 
 msgid "Prediction run"
 msgstr "Prediction run"
-
-msgid "Edit the signal policy to change its thresholds."
-msgstr "Edit the signal policy to change its thresholds."
 
 msgid "Explore thresholds"
 msgstr "Explore thresholds"
@@ -2592,6 +2633,25 @@ msgstr "Prediction setup deleted"
 
 msgid "Failed to delete prediction setup"
 msgstr "Failed to delete prediction setup"
+
+msgid "Error loading prediction"
+msgstr "Error loading prediction"
+
+msgid "Prediction not found"
+msgstr "Prediction not found"
+
+msgid ""
+"The prediction you are looking for does not exist or you do not have "
+"permission to access it."
+msgstr ""
+"The prediction you are looking for does not exist or you do not have "
+"permission to access it."
+
+msgid "Model not found"
+msgstr "Model not found"
+
+msgid "The model for this prediction could not be loaded."
+msgstr "The model for this prediction could not be loaded."
 
 msgid "Setup name"
 msgstr "Setup name"
@@ -2994,9 +3054,6 @@ msgstr "Data Pruning"
 msgid "Requires superuser authority"
 msgstr "Requires superuser authority"
 
-msgid "Model not found"
-msgstr "Model not found"
-
 msgid "{{name}} (baseline)"
 msgstr "{{name}} (baseline)"
 
@@ -3118,9 +3175,6 @@ msgid "{{count}} models running"
 msgid_plural "{{count}} models running"
 msgstr[0] "{{count}} model running"
 msgstr[1] "{{count}} models running"
-
-msgid "View evaluation"
-msgstr "View evaluation"
 
 msgid "Score of {{reference}}, which the other rows are compared with"
 msgstr "Score of {{reference}}, which the other rows are compared with"
@@ -3335,27 +3389,18 @@ msgstr "View and manage jobs for this prediction setup."
 msgid "The prediction setup id in the URL is not valid."
 msgstr "The prediction setup id in the URL is not valid."
 
-msgid "Error loading prediction"
-msgstr "Error loading prediction"
-
-msgid "Prediction not found"
-msgstr "Prediction not found"
-
-msgid ""
-"The prediction you are looking for does not exist or you do not have "
-"permission to access it."
-msgstr ""
-"The prediction you are looking for does not exist or you do not have "
-"permission to access it."
-
-msgid "The model for this prediction could not be loaded."
-msgstr "The model for this prediction could not be loaded."
-
 msgid "Import the forecasted values of this prediction into DHIS2."
 msgstr "Import the forecasted values of this prediction into DHIS2."
 
 msgid "Unnamed prediction"
 msgstr "Unnamed prediction"
+
+msgid ""
+"Approve signals to clear them for dissemination. Expand an organisation "
+"unit to see the forecast behind its signals."
+msgstr ""
+"Approve signals to clear them for dissemination. Expand an organisation "
+"unit to see the forecast behind its signals."
 
 msgid "Ready to predict"
 msgstr "Ready to predict"
