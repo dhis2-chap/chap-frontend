@@ -40,7 +40,7 @@ export const SignalReview = ({ prediction, model }: Props) => {
         return <CircularLoader />;
     }
     // A failed refresh after a save keeps the signals that are already loaded.
-    if ((alerts.error && !alerts.data) || seriesError) {
+    if (alerts.error && !alerts.data) {
         return <NoticeBox error title={i18n.t('Unable to load raised signals')} />;
     }
     if (alerts.displayedAlerts.length === 0) {
@@ -49,6 +49,12 @@ export const SignalReview = ({ prediction, model }: Props) => {
 
     return (
         <div className={styles.form}>
+            {/* Signals are decided by their own ids, so a missing forecast only costs the evidence. */}
+            {seriesError && (
+                <NoticeBox warning title={i18n.t('Unable to load prediction data')}>
+                    {i18n.t('Signals can still be reviewed, but their evidence may be incomplete.')}
+                </NoticeBox>
+            )}
             {review.userError && (
                 <NoticeBox error>{i18n.t('Unable to load the signed-in user. Reload the page to retry.')}</NoticeBox>
             )}

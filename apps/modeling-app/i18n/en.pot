@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-11-12T18:30:19.905Z\n"
-"PO-Revision-Date: 2026-11-12T18:30:19.907Z\n"
+"POT-Creation-Date: 2026-11-13T13:27:32.762Z\n"
+"PO-Revision-Date: 2026-11-13T13:27:32.763Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -234,6 +234,12 @@ msgstr "Unable to load raised signals"
 
 msgid "No signals were recorded for this run."
 msgstr "No signals were recorded for this run."
+
+msgid "Unable to load prediction data"
+msgstr "Unable to load prediction data"
+
+msgid "Signals can still be reviewed, but their evidence may be incomplete."
+msgstr "Signals can still be reviewed, but their evidence may be incomplete."
 
 msgid "Unable to load the signed-in user. Reload the page to retry."
 msgstr "Unable to load the signed-in user. Reload the page to retry."
@@ -2302,9 +2308,6 @@ msgstr "Error loading prediction setup"
 
 msgid "Prediction setup not found."
 msgstr "Prediction setup not found."
-
-msgid "Unable to load prediction data"
-msgstr "Unable to load prediction data"
 
 msgid ""
 "There was a problem loading the prediction data required for signal "
