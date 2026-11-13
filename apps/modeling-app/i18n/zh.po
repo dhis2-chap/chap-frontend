@@ -1,0 +1,1287 @@
+# Translators:
+# Viktor Varland <viktor@dhis2.org>, 2025
+# 晓东 林 <13981924470@126.com>, 2025
+# Philip Larsen Donnelly, 2025
+# easylin <lin_xd@126.com>, 2025
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: i18next-conv\n"
+"POT-Creation-Date: 2025-11-01T14:32:32.298Z\n"
+"PO-Revision-Date: 2025-12-03 08:49+0000\n"
+"Last-Translator: easylin <lin_xd@126.com>, 2025\n"
+"Language-Team: Chinese (https://app.transifex.com/hisp-uio/teams/100509/zh/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Create new..."
+msgstr "创建新的..."
+
+msgid "Compare"
+msgstr "比较"
+
+msgid "Rename"
+msgstr "改名"
+
+msgid "Delete"
+msgstr "删除"
+
+msgid "{{name}} (Copy)"
+msgstr "{{name}} （副本）"
+
+msgid "Create new based on..."
+msgstr "根据..."
+
+msgid "Cancel"
+msgstr "取消"
+
+msgid "Failed to load evaluation data. Please try again."
+msgstr "加载评估数据失败。请重试。"
+
+msgid "Close"
+msgstr "关闭"
+
+msgid "Select which attributes to copy to the new run{{escape}}"
+msgstr "选择要复制到新运行的属性{{escape}}"
+
+msgid "Name"
+msgstr "名称"
+
+msgid "Untitled"
+msgstr "无标题"
+
+msgid "Organisation units"
+msgstr "组织机构"
+
+msgid "Model"
+msgstr "模型"
+
+msgid "Data sources"
+msgstr "数据来源"
+
+msgid "Period type"
+msgstr "期间类型"
+
+msgid "Period range"
+msgstr "周期范围"
+
+msgid "Create"
+msgstr "创建"
+
+msgid "Delete evaluation"
+msgstr "删除评价"
+
+msgid ""
+"Are you sure you want to delete this evaluation? This action cannot be "
+"undone."
+msgstr "您确定要删除此评估吗？此操作无法撤销。"
+
+msgid "Name is required"
+msgstr "需要名称"
+
+msgid "Rename evaluation"
+msgstr "重新命名评估"
+
+msgid "Save"
+msgstr "保存"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Created"
+msgstr "已创建"
+
+msgid "Locations"
+msgstr "地点"
+
+msgid "Evaluated on {{count}} locations"
+msgid_plural "Evaluated on {{count}} locations"
+msgstr[0] "在{{count}} 网站上进行评估"
+
+msgid "Actions"
+msgstr "行动"
+
+msgid "New evaluation"
+msgstr "新评估"
+
+msgid "Sort by {{column}}"
+msgstr "按{{column}}排序"
+
+msgid "No evaluations available"
+msgstr "没有评估结果"
+
+msgid "Search"
+msgstr "搜索"
+
+msgid "No models found"
+msgstr "未找到型号"
+
+msgid "Clear"
+msgstr "清除"
+
+msgid "{{count}} evaluations selected"
+msgid_plural "{{count}} evaluations selected"
+msgstr[0] "{{count}} 选定的评估"
+
+msgid "Evaluations deleted"
+msgstr "评价已删除"
+
+msgid "Failed to delete evaluations"
+msgstr "删除评估失败"
+
+msgid "Evaluation deleted"
+msgstr "评价已删除"
+
+msgid "Failed to delete evaluation"
+msgstr "删除评估失败"
+
+msgid "Error renaming evaluation"
+msgstr "重新命名评估错误"
+
+msgid "Could not connect to CHAP"
+msgstr "无法连接 CHAP"
+
+msgid "The app is not able to connect to the CHAP server."
+msgstr "应用程序无法连接 CHAP 服务器。"
+
+msgid ""
+"Please check your route configuration and make sure the CHAP server is "
+"running."
+msgstr "请检查路由配置，并确保 CHAP 服务器正在运行。"
+
+msgid "Learn more about Modeling and CHAP"
+msgstr "了解更多建模和 CHAP 信息"
+
+msgid "Configure settings"
+msgstr "配置设置"
+
+msgid "Oops!"
+msgstr "哎呀"
+
+msgid "Sorry, an unexpected error has occurred."
+msgstr "对不起，发生了意外错误。"
+
+msgid "Inspect dataset"
+msgstr "检查数据集"
+
+msgid "Cancel job"
+msgstr "取消职位"
+
+msgid ""
+"Are you sure you want to cancel this job? This action cannot be undone."
+msgstr "您确定要取消这项工作吗？此操作无法取消。"
+
+msgid "Delete job"
+msgstr "删除作业"
+
+msgid ""
+"Are you sure you want to delete this job? This action cannot be undone."
+msgstr "您确定要删除此任务吗？此操作无法撤销。"
+
+msgid "Failed to copy job ID"
+msgstr "复制作业 ID 失败"
+
+msgid "Go to result"
+msgstr "转到结果"
+
+msgid "View Logs"
+msgstr "查看日志"
+
+msgid "Copy Job ID"
+msgstr "复制工作编号"
+
+msgid "Job Logs"
+msgstr "工作日志"
+
+msgid "An error occurred while loading the logs."
+msgstr "加载日志时发生错误。"
+
+msgid "No logs reported for this job"
+msgstr "此工作无日志报告"
+
+msgid "Job cancelled"
+msgstr "取消的工作"
+
+msgid "Failed to cancel job"
+msgstr "取消工作失败"
+
+msgid "Job deleted"
+msgstr "职位已删除"
+
+msgid "Failed to delete job"
+msgstr "删除作业失败"
+
+msgid "Status"
+msgstr "状态"
+
+msgid "Type"
+msgstr "类型"
+
+msgid "Start date"
+msgstr "开始日期"
+
+msgid "End date"
+msgstr "结束日期"
+
+msgid "Duration"
+msgstr "期间"
+
+msgid "No jobs available"
+msgstr "没有职位"
+
+msgid "Pending"
+msgstr "悬吊中"
+
+msgid "Running"
+msgstr "在运行"
+
+msgid "Success"
+msgstr "成功"
+
+msgid "Failed"
+msgstr "失败"
+
+msgid "Revoked"
+msgstr "已撤销"
+
+msgid "Create evaluation"
+msgstr "创建评估"
+
+msgid "Make prediction"
+msgstr "进行预测"
+
+msgid "Create dataset (deprecated)"
+msgstr "创建数据集（已弃用）"
+
+msgid "Create evaluation (deprecated)"
+msgstr "创建评估（已弃用）"
+
+msgid "Create evaluation (Legacy)"
+msgstr "创建评估（遗产）"
+
+msgid "Create dataset"
+msgstr "创建数据集"
+
+msgid "Cancelled"
+msgstr "已取消"
+
+msgid "Map Data Items"
+msgstr "地图数据项"
+
+msgid "Map the model features to corresponding data items in DHIS2"
+msgstr "将模型特征映射到 DHIS2 中的相应数据项"
+
+msgid "Target"
+msgstr "目标"
+
+msgid "Map the model target to the corresponding data item in DHIS2"
+msgstr "将模型目标映射到 DHIS2 中的相应数据项"
+
+msgid "Map each model covariate to the corresponding data item in DHIS2"
+msgstr "将每个模型协变量映射到 DHIS2 中的相应数据项"
+
+msgid "No model selected"
+msgstr "未选择型号"
+
+msgid "All data items mapped"
+msgstr "映射所有数据项"
+
+msgid "{{mapped}}/{{total}} data items mapped"
+msgstr "{{mapped}}/{{total}} 映射的数据项"
+
+msgid "Dataset Configuration"
+msgstr "数据集配置"
+
+msgid "Configure sources"
+msgstr "配置资源"
+
+msgid ""
+"The Data Visualizer app is not compatible with this feature. Please update "
+"to a newer version."
+msgstr "数据展示台应用程序与此功能不兼容。请更新至更新版本。"
+
+msgid "Please map all model covariates to valid data items"
+msgstr "请将所有模型协变量映射为有效数据项"
+
+msgid "Target \"{{targetName}}\" must be mapped to a data item"
+msgstr "目标 \"{{targetName}}\" 必须映射到数据项"
+
+msgid "Covariate \"{{covariateName}}\" must be mapped to a data item"
+msgstr "协变量 \"{{covariateName}}\" 必须映射到一个数据项"
+
+msgid "Select organisation units"
+msgstr "选择机构"
+
+msgid "Select Organisation Units"
+msgstr "选择组织单位"
+
+msgid "Organisation unit levels"
+msgstr "机构等级"
+
+msgid ""
+"Some models require you to only select organisation units from the same "
+"level."
+msgstr "有些模式要求您只能从同一级别中选择组织单位。"
+
+msgid "All org units must be at the same level"
+msgstr "所有组织单位必须处于同一级别"
+
+msgid "Confirm Selection"
+msgstr "确认选择"
+
+msgid "Monthly"
+msgstr "每月"
+
+msgid "Yearly"
+msgstr "每年"
+
+msgid "Weekly"
+msgstr "每周"
+
+msgid "Daily"
+msgstr "每日"
+
+msgid "Any"
+msgstr "任何"
+
+msgid "Deprecated"
+msgstr "已停用"
+
+msgid "This model is not intended for use or has been deprecated."
+msgstr "该模型不打算使用或已被弃用。"
+
+msgid "Experimental"
+msgstr "试验性的"
+
+msgid ""
+"An early prototype with no formal validation - only for initial "
+"experimentation."
+msgstr "早期原型未经正式验证，仅用于初步实验。"
+
+msgid "Limited"
+msgstr "限定的"
+
+msgid ""
+"Tested on a small dataset. Requires manual tuning and close monitoring."
+msgstr "在小型数据集上进行了测试。需要手动调整和密切监控。"
+
+msgid "Testing"
+msgstr "测试"
+
+msgid "Prepared for more extensive testing; not yet approved for production."
+msgstr "准备进行更广泛的测试；尚未批准用于生产。"
+
+msgid "Production"
+msgstr "生产"
+
+msgid "Approved for general use."
+msgstr "批准用于一般用途。"
+
+msgid "{{count}} covariates"
+msgid_plural "{{count}} covariates"
+msgstr[0] "{{count}} 辅变量"
+
+msgid "Author note"
+msgstr "作者说明"
+
+msgid "Selected"
+msgstr "选择的"
+
+msgid "Select Model"
+msgstr "选择型号"
+
+msgid "Search by title"
+msgstr "按标题搜索"
+
+msgid "Period Type"
+msgstr "周期类型"
+
+msgid "Assessment Status"
+msgstr "评估状况"
+
+msgid "Select model"
+msgstr "选择型号"
+
+msgid "EWARS Evaluation 22-24"
+msgstr "EWARS 评估 22-24"
+
+msgid "From period"
+msgstr "从时间段"
+
+msgid "To period"
+msgstr "至期间"
+
+msgid "Reason"
+msgstr "原因"
+
+msgid "Feature"
+msgstr "特征"
+
+msgid "Org unit"
+msgstr "机构"
+
+msgid "Period"
+msgstr "期间"
+
+msgid "Import Summary"
+msgstr "导入摘要"
+
+msgid "Valid import"
+msgstr "有效进口"
+
+msgid "All {{count}} locations can be successfully imported"
+msgid_plural "All {{count}} locations can be successfully imported"
+msgstr[0] "所有{{count}} 位置均可成功导入"
+
+msgid "Partial import"
+msgstr "部分进口"
+
+msgid ""
+"{{count}} locations could be successfully imported, but some were rejected"
+msgid_plural ""
+"{{count}} locations could be successfully imported, but some were rejected"
+msgstr[0] "{{count}} 可成功导入地点，但有些地点被拒绝"
+
+msgid "No locations imported"
+msgstr "没有进口地点"
+
+msgid ""
+"None of the provided locations could be imported. Please check the data "
+"items and the period type."
+msgstr "所提供的位置均无法导入。请检查数据项目和时期类型。"
+
+msgid "Valid"
+msgstr "有效"
+
+msgid "Rejected"
+msgstr "拒绝"
+
+msgid "Total"
+msgstr "总共"
+
+msgid "Filter by Feature"
+msgstr "按功能筛选"
+
+msgid "Clear filter"
+msgstr "清除过滤器"
+
+msgid "All features"
+msgstr "所有功能"
+
+msgid "Filter by Org Unit"
+msgstr "按机关单位筛选"
+
+msgid "All org units"
+msgstr "所有组织单位"
+
+msgid "No rejected items match the current filters"
+msgstr "没有符合当前筛选条件的被拒项目"
+
+msgid "No items to display"
+msgstr "无条目可显示"
+
+msgid "Missing id for org unit"
+msgstr "组织单位标识缺失"
+
+msgid "Period type is required"
+msgstr "需要期间类型"
+
+msgid "Start date is required"
+msgstr "要求提供开始日期"
+
+msgid "End date is required"
+msgstr "必须填写结束日期"
+
+msgid "End date cannot be in the future"
+msgstr "结束日期不能在未来"
+
+msgid "At least one org unit is required"
+msgstr "至少需要一个 org 单元"
+
+msgid "Please select a model"
+msgstr "请选择型号"
+
+msgid "Please map the covariates to valid data items"
+msgstr "请将协变量映射到有效数据项"
+
+msgid "Please map the target to a valid data item"
+msgstr "请将目标映射到有效的数据项"
+
+msgid "End period must be after start period"
+msgstr "结束期必须在开始期之后"
+
+msgid "Model not found"
+msgstr "未找到模型"
+
+msgid ""
+"The following org units have no geometry{{escape}} "
+"{{orgUnitsWithoutGeometry}}"
+msgstr "下列组织单位没有几何图形{{escape}} {{orgUnitsWithoutGeometry}}"
+
+msgid "Data layer not found for data item id{{escape}} {{dataItemId}}"
+msgstr "未找到数据项 id{{escape}} 的数据层{{dataItemId}}"
+
+msgid "Unsaved changes"
+msgstr "未保存的更改"
+
+msgid ""
+"You have unsaved changes that will be lost if you leave this page. Are you "
+"sure you want to continue?"
+msgstr "如果您离开此页面，您尚未保存的更改将丢失。您确定要继续吗？"
+
+msgid "Leave page"
+msgstr "离开页面"
+
+msgid "Start dry run"
+msgstr "开始空运行"
+
+msgid "Start import"
+msgstr "开始导入"
+
+msgid "There was an error"
+msgstr "出现错误"
+
+msgid "Error loading models"
+msgstr "错误加载模型"
+
+msgid "An unknown error occurred"
+msgstr "发生一个未知错误"
+
+msgid "Missing data for covariate"
+msgstr "协变量缺失数据"
+
+msgid "{{count}} org units"
+msgid_plural "{{count}} org units"
+msgstr[0] "{{count}} 个组织单位"
+
+msgid "{{count}} levels"
+msgid_plural "{{count}} levels"
+msgstr[0] "{{count}} 级"
+
+msgid "{{count}} groups"
+msgid_plural "{{count}} groups"
+msgstr[0] "{{count}} 组"
+
+msgid "Selected: {{commaSeparatedListOfOrganisationUnits}}"
+msgstr "已选择：{{commaSeparatedListOfOrganisationUnits}}"
+
+msgid "Nothing selected"
+msgstr "未选择任何内容"
+
+msgid "User organisation unit"
+msgstr "用户所在机构"
+
+msgid "User sub-units"
+msgstr "我的下属机构"
+
+msgid "User sub-x2-units"
+msgstr "用户二级下属机构"
+
+msgid "Select a level"
+msgstr "选择一个等级"
+
+msgid "Select a group"
+msgstr "选择一个组"
+
+msgid "Deselect all"
+msgstr "取消全选"
+
+msgid "Organisation Units"
+msgstr "组织机构管理"
+
+msgid "Search organisation units"
+msgstr "搜索组织单位"
+
+msgid "Clear all organisation units"
+msgstr "清除所有组织单位"
+
+msgid "No organisation units match your search"
+msgstr "没有与您的搜索匹配的组织单位"
+
+msgid "You cannot select more than {{max}} organisation units at a time"
+msgstr "每次选择的组织单位不能超过{{max}} "
+
+msgid "Please select a visualization."
+msgstr "请选择一种可视化方式。"
+
+msgid ""
+"This plot has encountered an unexpected error and could not be displayed."
+msgstr "该绘图遇到意外错误，无法显示。"
+
+msgid ""
+"This visualization is provided by external contributors and may occasionally"
+" fail due to issues in the contributed plot definition."
+msgstr "该可视化由外部贡献者提供，有时可能会因贡献的绘图定义中的问题而失败。"
+
+msgid "No visualization found"
+msgstr "未找到可视化"
+
+msgid "Click to view actions"
+msgstr "点击查看行动"
+
+msgid "View Compiled Vega"
+msgstr "查看织女星汇编"
+
+msgid "Open in Vega Editor"
+msgstr "在 Vega 编辑器中打开"
+
+msgid "Save as PNG"
+msgstr "保存为 PNG"
+
+msgid "View Source"
+msgstr "查看来源"
+
+msgid "Save as SVG"
+msgstr "保存为 SVG"
+
+msgid "Evaluation plots"
+msgstr "评价图"
+
+msgid ""
+"Evaluation plots are configured system-wide and defined by system "
+"administrators / model developers. If you experience issues, please contact "
+"your system administrator."
+msgstr "评估图由系统管理员/模型开发人员在全系统范围内配置和定义。如果遇到问题，请联系系统管理员。"
+
+msgid "Unable to load data"
+msgstr "无法加载数据"
+
+msgid ""
+"There was a problem loading required data. See the browser console for "
+"details."
+msgstr "加载所需数据时出现问题。详情请查看浏览器控制台。"
+
+msgid "Select visualization"
+msgstr "选择可视化"
+
+msgid "No data available"
+msgstr "没有值"
+
+msgid ""
+"The evaluation you are looking for does not exist or you do not have "
+"permission to access it."
+msgstr "您要查找的评估不存在，或者您没有访问该评估的权限。"
+
+msgid "Invalid evaluation ID"
+msgstr "评估 ID 无效"
+
+msgid "The evaluation ID is invalid. Please try again."
+msgstr "评估 ID 无效。请重试。"
+
+msgid "Summary"
+msgstr "概括"
+
+msgid ""
+"There was an error loading the evaluation summary. Please try again later."
+msgstr "加载评估摘要时出现错误。请稍后再试。"
+
+msgid "Model updated"
+msgstr "型号更新"
+
+msgid ""
+"The model used to run this evaluation has been updated. You can still view "
+"the results of the run, but the metadata may not be accurate."
+msgstr "用于运行此评估的模型已更新。您仍然可以查看运行结果，但元数据可能不准确。"
+
+msgid "Training period"
+msgstr "培训期"
+
+msgid "{{count}} locations"
+msgid_plural "{{count}} locations"
+msgstr[0] "{{count}} 地点"
+
+msgid "Please select a visualization and metric."
+msgstr "请选择可视化和度量标准。"
+
+msgid ""
+"Keep in mind that this is advanced functionality and may not be suitable for"
+" all users."
+msgstr "请注意，这是高级功能，可能不适合所有用户。"
+
+msgid "Metric plot"
+msgstr "公制图"
+
+msgid ""
+"Metric plots are advanced functionality and may be misinterpreted. Use with "
+"caution."
+msgstr "公制图是高级功能，可能会被误解。请谨慎使用。"
+
+msgid "Select metric"
+msgstr "选择公制"
+
+msgid "Evaluation result"
+msgstr "评估结果"
+
+msgid "Evaluation"
+msgstr "评估"
+
+msgid "There was an error loading the data."
+msgstr "加载数据时出现错误。"
+
+msgid "No data available for the selected organization unit and split period."
+msgstr "所选组织单位和拆分期间无数据。"
+
+msgid "All locations"
+msgstr "所有地点"
+
+msgid "Result"
+msgstr "结果"
+
+msgid "Start period"
+msgstr "开始时间"
+
+msgid "End period"
+msgstr "期末"
+
+msgid "Create prediction"
+msgstr "创建预测"
+
+msgid ""
+"You should only do predictions on well-tested and reliable models that have "
+"shown promise when evaluated. Do you still want to continue?"
+msgstr "您应该只对经过充分测试的可靠模型进行预测，这些模型在评估时已显示出前景。您还想继续吗？"
+
+msgid "Continue"
+msgstr "继续"
+
+msgid "Quick actions"
+msgstr "快速行动"
+
+msgid "Compare with..."
+msgstr "与..."
+
+msgid "Predict..."
+msgstr "预测..."
+
+msgid "Error loading jobs"
+msgstr "加载工作时出错"
+
+msgid "Are you sure you want to archive this model?"
+msgstr "您确定要将此模型存档吗？"
+
+msgid ""
+"You will still be able to view evaluations for this model, but you will not "
+"be able to create new evaluations or predictions."
+msgstr "您仍然可以查看该模型的评估，但无法创建新的评估或预测。"
+
+msgid "Archive"
+msgstr "存档"
+
+msgid "View evaluations"
+msgstr "查看评价"
+
+msgid "Model archived"
+msgstr "模型存档"
+
+msgid "Failed to archive model"
+msgstr "模型存档失败"
+
+msgid "Author"
+msgstr "作者"
+
+msgid "Covariates"
+msgstr "变量"
+
+msgid "No covariate names available"
+msgstr "无协变量名"
+
+msgid "Archived"
+msgstr "存档"
+
+msgid "Active"
+msgstr "活跃的"
+
+msgid "New model"
+msgstr "新模式"
+
+msgid "No models available"
+msgstr "无型号"
+
+msgid "Include archived"
+msgstr "包括存档"
+
+msgid "Error loading model templates"
+msgstr "加载模型模板出错"
+
+msgid "No model templates found"
+msgstr "未找到模型模板"
+
+msgid ""
+"We could not find any available model templates. Please create templates or "
+"try again later."
+msgstr "我们找不到任何可用的模型模板。请创建模板或稍后再试。"
+
+msgid "This covariate has already been added."
+msgstr "已添加该协变量。"
+
+msgid "Additional continuous covariates"
+msgstr "其他连续协变量"
+
+msgid "Enter covariate name"
+msgstr "输入协变量名称"
+
+msgid "Add"
+msgstr "添加"
+
+msgid "Required"
+msgstr "必须的"
+
+msgid "Remove"
+msgstr "移除"
+
+msgid "Model template"
+msgstr "模型模板"
+
+msgid "Select the base model template"
+msgstr "选择基本模式模板"
+
+msgid "Select a model template"
+msgstr "选择模型模板"
+
+msgid "Deprecated model"
+msgstr "已废弃的模型"
+
+msgid "This model is deprecated and may be removed in the future."
+msgstr "该模式已过时，将来可能会被移除。"
+
+msgid "Type a value"
+msgstr "键入数值"
+
+msgid "The model name will be \"{{displayName}} [{{variantName}}]\""
+msgstr "型号名称将是 \"{{displayName}} [{{variantName}}]\""
+
+msgid "Provide a descriptive name for this variant"
+msgstr "为该变体提供一个描述性名称"
+
+msgid "Variant name"
+msgstr "变体名称"
+
+msgid "Model template is required"
+msgstr "需要模型模板"
+
+msgid "Model created successfully"
+msgstr "模型创建成功"
+
+msgid "Failed to create model"
+msgstr "创建模型失败"
+
+msgid "Error loading prediction"
+msgstr "误差加载预测"
+
+msgid "Prediction not found"
+msgstr "未找到预测"
+
+msgid ""
+"The prediction you are looking for does not exist or you do not have "
+"permission to access it."
+msgstr "您要查找的预测不存在，或者您没有权限访问该预测。"
+
+msgid ""
+"The model you are looking for does not exist or you do not have permission "
+"to access it."
+msgstr "您要查找的模型不存在，或者您没有访问该模型的权限。"
+
+msgid "Prediction result"
+msgstr "预测结果"
+
+msgid "Chart"
+msgstr "图表"
+
+msgid "Table"
+msgstr "表"
+
+msgid "Map"
+msgstr "地图"
+
+msgid "No prediction data found."
+msgstr "未找到预测数据。"
+
+msgid ""
+"There was an error loading the prediction summary. Please try again later."
+msgstr "加载预测摘要时出现错误。请稍后再试。"
+
+msgid "Predicted periods"
+msgstr "预测期间"
+
+msgid "Import"
+msgstr "导入"
+
+msgid "Guide"
+msgstr "指南"
+
+msgid "Loading"
+msgstr "载入"
+
+msgid "Start typing to search for data items"
+msgstr "开始键入以搜索数据项"
+
+msgid "No matches found"
+msgstr "没有发现匹配的"
+
+msgid "Select a data item..."
+msgstr "选择一个数据项..."
+
+msgid "Clear selection"
+msgstr "清空选项"
+
+msgid "Search for indicators, data elements, or program indicators"
+msgstr "搜索指标、数据元素或计划指标"
+
+msgid "Import forecasted values"
+msgstr "进口预测值"
+
+msgid ""
+"Importing forecasted values into DHIS2 requires you to set up five data "
+"elements for the quantiles outputted by the model."
+msgstr "将预测值导入 DHIS2 需要为模型输出的量化值设置五个数据元素。"
+
+msgid "Quantile high"
+msgstr "定量高"
+
+msgid "Quantile mid high"
+msgstr "定量中高"
+
+msgid "Median"
+msgstr "中位数"
+
+msgid "Quantile mid low"
+msgstr "定量中低"
+
+msgid "Quantile low"
+msgstr "定量低"
+
+msgid "Failed to post prediction data"
+msgstr "未能发布预测数据"
+
+msgid "Prediction data posted successfully"
+msgstr "预测数据发布成功"
+
+msgid "Delete prediction"
+msgstr "删除预测"
+
+msgid ""
+"Are you sure you want to delete this prediction? This action cannot be "
+"undone."
+msgstr "您确定要删除此预测吗？此操作无法撤销。"
+
+msgid "View"
+msgstr "查看"
+
+msgid "Periods"
+msgstr "期间"
+
+msgid "New prediction"
+msgstr "新预测"
+
+msgid "No predictions available"
+msgstr "没有预测"
+
+msgid "Prediction deleted"
+msgstr "预测已删除"
+
+msgid "Failed to delete prediction"
+msgstr "删除预测失败"
+
+msgid "There are running jobs in the background"
+msgstr "后台有正在运行的工作"
+
+msgid "Running jobs"
+msgstr "运行工作"
+
+msgid "Evaluate"
+msgstr "评估"
+
+msgid "Overview"
+msgstr "概要"
+
+msgid "Predict"
+msgstr "预测"
+
+msgid "Models"
+msgstr "机型"
+
+msgid "Jobs"
+msgstr "工作机会"
+
+msgid "Settings"
+msgstr "设置"
+
+msgid ""
+"The version of the Modeling App is not compatible with the backend (Chap "
+"core)."
+msgstr "建模应用程序的版本与后台（Chap core）不兼容。"
+
+msgid ""
+"The Chap Core version {{chapVersion}} is too old. The Modeling App specifies"
+" minimum Chap core version{{escape}} {{chapMinVersion}}"
+msgstr ""
+"Chap Core 版本{{chapVersion}} 太旧。建模应用程序规定的 Chap 核心最低版本为{{escape}} "
+"。{{chapMinVersion}}"
+
+msgid "Compare evaluations"
+msgstr "评估比较"
+
+msgid "Compare evaluations to assess model, co-variates and data performance."
+msgstr "比较评估结果，以评估模型、共变数和数据性能。"
+
+msgid "Select base evaluation"
+msgstr "选择基准评估"
+
+msgid ""
+"Selected evaluations do not have any split periods in common. Please select "
+"evaluations with overlapping split periods."
+msgstr "所选评估没有共同的分割期。请选择有重叠分割期的评估。"
+
+msgid "An error occurred while fetching chart data "
+msgstr "获取图表数据时发生错误 "
+
+msgid ""
+"Select two evaluations to compare their results. The\n"
+"                    selected evaluations must be compatible."
+msgstr ""
+"选择两项评估，比较其结果。选择的\n"
+"                    所选评估必须是兼容的。"
+
+msgid ""
+"Compatible evaluations have overlapping organisation units and split "
+"periods."
+msgstr "兼容的评估有重叠的组织单位和分裂的时期。"
+
+msgid "Split period"
+msgstr "分割期"
+
+msgid "Organisation unit level"
+msgstr "组织机构等级"
+
+msgid "Organisation unit level to import data to"
+msgstr "将数据导入的组织单位级别"
+
+msgid "Data Element"
+msgstr "数据元"
+
+msgid "Indicator"
+msgstr "指标"
+
+msgid "Program Indicator"
+msgstr "项目指标"
+
+msgid "No compatible evaluations found"
+msgstr "未找到兼容的评估"
+
+msgid "Select evaluation to compare with"
+msgstr "选择要与之比较的评估"
+
+msgid "No evaluations found"
+msgstr "未找到评价"
+
+msgid "CHAP settings"
+msgstr "CHAP 设置"
+
+msgid "An error occurred while connecting to the CHAP server."
+msgstr "连接 CHAP 服务器时发生错误。"
+
+msgid ""
+"Are you sure you have configured your route correctly? See the console for "
+"more details."
+msgstr "您确定路由配置正确吗？详情请查看控制台。"
+
+msgid "Server information"
+msgstr "服务器信息"
+
+msgid "CHAP Version"
+msgstr "CHAP 版本"
+
+msgid "Python Version"
+msgstr "Python 版本"
+
+msgid "Operating System"
+msgstr "操作系统"
+
+msgid "Connected"
+msgstr "已连接"
+
+msgid "Your server might not be secure"
+msgstr "您的服务器可能不安全"
+
+msgid ""
+"CHAP currently does not have it's own authentication service. Make sure to "
+"secure it by blocking public access on your server firewall."
+msgstr "CHAP 目前没有自己的身份验证服务。请确保在服务器防火墙上阻止公共访问，以确保其安全性。"
+
+msgid "Your server is not secure"
+msgstr "您的服务器不安全"
+
+msgid "Route configuration"
+msgstr "路线配置"
+
+msgid "No route found."
+msgstr "未找到路线。"
+
+msgid "Add route"
+msgstr "添加路线"
+
+msgid "Delete route"
+msgstr "删除路线"
+
+msgid "Are you sure you want to delete this route?"
+msgstr "您确定要删除这条路线吗？"
+
+msgid "Edit route"
+msgstr "编辑路线"
+
+msgid "Public access"
+msgstr "公开访问"
+
+msgid ""
+"Your route is public and can be accessed by anyone. This can potentially "
+"expose sensitive data. If you want to restrict access, click the \"Sharing\""
+" button and remove access for \"All users\"."
+msgstr "您的路由是公开的，任何人都可以访问。这可能会暴露敏感数据。如果要限制访问权限，请单击 \"共享 \"按钮并删除 \"所有用户 \"的访问权限。"
+
+msgid "Sharing"
+msgstr "共享"
+
+msgid "Edit"
+msgstr "编辑"
+
+msgid "Invalid URL format"
+msgstr "URL 格式无效"
+
+msgid "URL is required"
+msgstr "需要 URL"
+
+msgid "URL must end with a double wildcard (/**)"
+msgstr "URL 必须以双通配符 (/**) 结尾"
+
+msgid "CHAP Core URL"
+msgstr "CHAP 核心 URL"
+
+msgid "Route settings"
+msgstr "路线设置"
+
+msgid ""
+"There was an error loading the route settings. Please try to reload the "
+"page."
+msgstr "加载路线设置时出现错误。请尝试重新加载页面。"
+
+msgid "If the problem persists, please contact your system administrator."
+msgstr "如果问题仍然存在，请联系系统管理员。"
+
+msgid "You do not have permission to add or modify routes."
+msgstr "您没有添加或修改路由的权限。"
+
+msgid ""
+"If you think this is an error, please contact your system administrator."
+msgstr "如果您认为这是一个错误，请联系您的系统管理员。"
+
+msgid "Code"
+msgstr "代码"
+
+msgid "URL"
+msgstr "URL"
+
+msgid "Authorities"
+msgstr "授权"
+
+msgid "Error deleting route"
+msgstr "删除路由出错"
+
+msgid "Route deleted successfully"
+msgstr "路由已成功删除"
+
+msgid "Error saving route"
+msgstr "保存路径出错"
+
+msgid "Route saved successfully"
+msgstr "成功保存路线"
+
+msgid "Evaluation details"
+msgstr "评估细节"
+
+msgid ""
+"Deep dive into a specific evaluation run to assess its performance and "
+"reliability."
+msgstr "深入研究特定的评估运行，以评估其性能和可靠性。"
+
+msgid "Back to evaluations"
+msgstr "返回评估"
+
+msgid "Error loading evaluations"
+msgstr "评估加载出错"
+
+msgid "Evaluations"
+msgstr "评估"
+
+msgid ""
+"Evaluates the accuracy of a predictive model using historical data. Compares"
+" actual outcomes with predicted values to assess model performance."
+msgstr "利用历史数据评估预测模型的准确性。将实际结果与预测值进行比较，以评估模型性能。"
+
+msgid "Get started with the Modeling app"
+msgstr "开始使用建模应用程序"
+
+msgid "To get started, create a route that points to a running CHAP server."
+msgstr "要开始使用，请创建一条指向正在运行的 CHAP 服务器的路由。"
+
+msgid "Route and servers are configured on the settings page."
+msgstr "路由和服务器在设置页面进行配置。"
+
+msgid "Active jobs"
+msgstr "活跃职位"
+
+msgid "View and manage currently running jobs and their status."
+msgstr "查看和管理当前运行的工作及其状态。"
+
+msgid "Manage configured models available in your system."
+msgstr "管理系统中可用的已配置型号。"
+
+msgid ""
+"Configure a new model with custom settings or parameters based on a model "
+"template."
+msgstr "根据模型模板，使用自定义设置或参数配置新模型。"
+
+msgid "Back to models"
+msgstr "返回模型"
+
+msgid "Create a new evaluation to assess the performance of a model"
+msgstr "创建新的评估，以评估模型的性能"
+
+msgid "Create a new prediction to forecast outcomes using a model"
+msgstr "创建新的预测，利用模型预测结果"
+
+msgid "Back to predictions"
+msgstr "返回预测"
+
+msgid "Prediction details"
+msgstr "预测详情"
+
+msgid "View the details of a prediction."
+msgstr "查看预测详情。"
+
+msgid "Import prediction"
+msgstr "进口预测"
+
+msgid "Import the forecasted values of this prediction into DHIS2."
+msgstr "将预测值导入 DHIS2。"
+
+msgid "Back to prediction details"
+msgstr "返回预测详情"
+
+msgid "Error loading predictions"
+msgstr "加载预测结果出错"
+
+msgid "Predictions"
+msgstr "预测"
+
+msgid ""
+"Forecasted trends generated by applying a predictive model to current data. "
+"These can be reviewed and imported into DHIS2 to support decision-making in "
+"the field."
+msgstr "通过对当前数据应用预测模型生成的预测趋势。这些数据可进行审查并导入 DHIS2，以支持实地决策。"
+
+msgctxt ") instead."
+msgid "Spaces are not allowed. Use dashes (-) or underscores ("
+msgstr "不允许使用空格。请使用破折号 (-) 或下划线 (_) 代替。"
