@@ -1,0 +1,54 @@
+name: extract-i18n
+
+on:
+  push:
+    branches-ignore:
+      - main
+      # Changesets uses temporary branches when creating signed release commits.
+      - 'changesets-ghcommit-temp/**'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    # Skip when the push is the bot's own i18n commit, otherwise we loop.
+    if: >-
+      ${{
+        !contains(github.event.head_commit.message, '[skip ci]') &&
+        !contains(github.event.head_commit.message, 'chore: update i18n translation strings')
+      }}
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.DHIS2_BOT_GITHUB_TOKEN }}
+          ref: ${{ github.ref }}
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          check-latest: true
+          cache: 'pnpm'
+          cache-dependency-path: 'pnpm-lock.yaml'
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm i18n:extract
+
+      - name: Commit and push en.pot changes
+        run: |
+          if git diff --quiet -- '**/i18n/en.pot'; then
+            echo "No i18n string changes to commit."
+            exit 0
+          fi
+          git config user.name "dhis2-bot"
+          git config user.email "apps@dhis2.org"
+          git add '**/i18n/en.pot'
+          git commit -m "chore: update i18n translation strings [skip ci]"
+          git push origin HEAD:${{ github.ref }}
