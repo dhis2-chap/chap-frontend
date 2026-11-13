@@ -5,8 +5,7 @@ import {
     type PredictionOrgUnitSeries,
     type ThresholdChartLine,
 } from '@dhis2-chap/ui';
-import { getAlertColor } from './alertLevelDisplay';
-import type { DisplayedPredictionAlert } from './displayPredictionAlerts';
+import { getAlertPeriods, type DisplayedPredictionAlert } from './displayPredictionAlerts';
 
 type Props = {
     // The signals raised in one organisation unit.
@@ -18,11 +17,7 @@ type Props = {
 
 // What a reviewer needs to judge an organisation unit's signals: the forecast they were raised from.
 export const SignalEvidence = ({ alerts, predictionTargetName, series, thresholdLines }: Props) => {
-    const alertPeriods = useMemo(() => alerts.map(alert => ({
-        period: alert.timePeriod,
-        label: alert.display.label,
-        color: getAlertColor(alert.display.color).background,
-    })), [alerts]);
+    const alertPeriods = useMemo(() => getAlertPeriods(alerts), [alerts]);
     const maxY = useMemo(() => (
         series ? getStableMaxYForThresholdChart(series, thresholdLines?.flatMap(line => line.points) ?? null) : undefined
     ), [series, thresholdLines]);
