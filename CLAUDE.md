@@ -90,7 +90,23 @@ The app uses TanStack Query for server state. API calls go through the generated
 - TypeScript strict mode
 - Conventional Commits for PR titles (feat:, fix:, chore:, refactor:, docs:)
 - PRs should always be created as drafts
-- Include a changeset when creating PRs unless the user explicitly asks not to.
+
+## Changesets
+
+- Every PR needs a changeset file under `.changeset/`, unless the user explicitly asks not to. CI will nag the PR until one is present.
+- File name: a short kebab-case slug describing the change (e.g. `.changeset/batch-prediction-thresholds.md`). No date or PR number.
+- Format:
+  ```md
+  ---
+  '@dhis2-chap/modeling-app': patch
+  '@dhis2-chap/ui': patch
+  ---
+
+  One-sentence summary written for the changelog (user-facing, past-tense-ish).
+  ```
+- Available packages: `@dhis2-chap/modeling-app`, `@dhis2-chap/ui`, `@dhis2-chap/core`, `@dhis2-chap/early-warning-app`, `@dhis2-chap/uncertainty-dashboard-plugin`. The first three are version-locked (bumping one bumps all three); the two apps version independently.
+- Picking packages: list every workspace whose shipped code changes. For pure CI/tooling/docs changes with no runtime impact, still include a changeset but list only the workspaces whose artifacts (e.g. generated `.pot` files, build output) are affected.
+- Bump type: `patch` for fixes and chores, `minor` for user-visible features, `major` only on explicit request.
 
 ## DHIS2 Integration
 
