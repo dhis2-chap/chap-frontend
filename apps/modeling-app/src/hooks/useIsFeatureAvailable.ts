@@ -17,7 +17,8 @@ export const FEATURE_MIN_VERSIONS = {
     // Chap records the alert policy each prediction ran with from 2.6.0.
     predictionAlertPolicy: '2.6.0',
     jobDiagnostics: '2.6.0',
-    completedJobDiagnostics: '2.7.0',
+    // Chap 2.7.0 still answers 409 for jobs that did not fail.
+    completedJobDiagnostics: '2.8.0',
     datasetTargetColumn: '2.6.0',
     datasetObservationColumns: '2.7.0',
     outbreakMetrics: '2.6.0',
