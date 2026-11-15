@@ -1,0 +1,11 @@
+.loading,
+.error {
+    margin-block-start: 24px;
+}
+
+.loading {
+    display: flex;
+    min-block-size: 240px;
+    align-items: center;
+    justify-content: center;
+}

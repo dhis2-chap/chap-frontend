@@ -1,5 +1,5 @@
 import type { AlertPolicyRead, AlertRead } from '@dhis2-chap/ui';
-import { getAlertLevelDisplay, type AlertLevelDisplay, type AlertPolicyDisplay } from './alertLevelDisplay';
+import { getAlertColor, getAlertLevelDisplay, type AlertLevelDisplay, type AlertPolicyDisplay } from './alertLevelDisplay';
 
 export type DisplayedPredictionAlert = AlertRead & {
     display: AlertLevelDisplay;
@@ -18,3 +18,10 @@ export const displayPredictionAlerts = (
         severity: policy?.levels?.findIndex(level => level.name === alert.level) ?? -1,
     };
 }).sort((a, b) => b.severity - a.severity || a.orgUnit.localeCompare(b.orgUnit) || a.timePeriod.localeCompare(b.timePeriod));
+
+// The periods a forecast chart marks as having raised a signal.
+export const getAlertPeriods = (alerts: DisplayedPredictionAlert[]) => alerts.map(alert => ({
+    period: alert.timePeriod,
+    label: alert.display.label,
+    color: getAlertColor(alert.display.color).background,
+}));

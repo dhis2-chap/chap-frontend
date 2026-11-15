@@ -18,6 +18,18 @@
     min-inline-size: 240px;
 }
 
+.fixedPolicy {
+    display: inline-flex;
+    gap: var(--spacers-dp8);
+    font-size: 14px;
+    color: var(--colors-grey700);
+}
+
+.fixedPolicy strong {
+    font-weight: 500;
+    color: var(--colors-grey900);
+}
+
 .threshold {
     color: var(--colors-grey700);
     white-space: nowrap;

@@ -22,9 +22,8 @@ import {
 } from '@dhis2-chap/ui';
 import type { OutbreakProbability, ThresholdChartLine, ThresholdTileViewModel, ZoomRange } from '@dhis2-chap/ui';
 import { ID_MAIN_LAYOUT } from '../layout/Layout';
-import { getAlertColor } from '@/components/BackendAlerts/alertLevelDisplay';
 import { AlertLevelTag } from '@/components/BackendAlerts/AlertLevelTag';
-import type { DisplayedPredictionAlert } from '@/components/BackendAlerts/displayPredictionAlerts';
+import { getAlertPeriods, type DisplayedPredictionAlert } from '@/components/BackendAlerts/displayPredictionAlerts';
 import styles from './ThresholdTilesExplorer.module.css';
 
 const NO_ALERTS: DisplayedPredictionAlert[] = [];
@@ -134,11 +133,7 @@ const ThresholdTile = memo(function ThresholdTile({
             : []
     ), [showThresholds, tile.indicators]);
 
-    const alertPeriods = useMemo(() => raisedAlerts?.map(alert => ({
-        period: alert.timePeriod,
-        label: alert.display.label,
-        color: getAlertColor(alert.display.color).background,
-    })), [raisedAlerts]);
+    const alertPeriods = useMemo(() => raisedAlerts && getAlertPeriods(raisedAlerts), [raisedAlerts]);
 
     return (
         <article className={styles.tile}>
