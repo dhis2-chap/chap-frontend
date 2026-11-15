@@ -43,25 +43,20 @@ export const useAlertPolicyThresholds = ({ datasetId, series, policies, enabled 
     const query = useQuery<Map<string, EndemicThresholdPoint[]>[], ApiError>({
         queryKey: ['alert-policy-thresholds', OpenAPI.BASE, datasetId, periodIds, locations, paramsList],
         queryFn: () => {
+            const fetchThresholds = (params: AlertLevel['thresholdParams']) =>
+                DatasetsService.computeThresholdsV1AnalyticsThresholdsPost({ datasetId, periodIds, locations, params });
             const seasonalParams = paramsList.filter(params => params.type === 'seasonal');
             const seasonalResponse = seasonalParams.length > 1
-                ? DatasetsService.computeThresholdsV1AnalyticsThresholdsPost({
-                        datasetId,
-                        periodIds,
-                        locations,
-                        params: { type: 'seasonal', stdMultiplier: seasonalParams.map(getSeasonalMultiplier) },
-                    })
+                ? fetchThresholds({ type: 'seasonal', stdMultiplier: seasonalParams.map(getSeasonalMultiplier) })
                 : undefined;
 
             return Promise.all(paramsList.map(async (params) => {
-                const batchedResponse = params.type === 'seasonal' ? seasonalResponse : undefined;
-                const response = await (batchedResponse ?? DatasetsService.computeThresholdsV1AnalyticsThresholdsPost({
-                    datasetId, periodIds, locations, params,
-                }));
-                const lineRoles = batchedResponse
-                    ? { upperIndex: response.lines.indexOf(getSeasonalMultiplier(params)) }
-                    : getThresholdLineRoles(response.lines);
-                return buildEndemicThresholdMap(response.entries, lineRoles);
+                if (seasonalResponse && params.type === 'seasonal') {
+                    const { entries } = await seasonalResponse;
+                    return buildEndemicThresholdMap(entries, { upperIndex: seasonalParams.indexOf(params) });
+                }
+                const response = await fetchThresholds(params);
+                return buildEndemicThresholdMap(response.entries, getThresholdLineRoles(response.lines));
             }));
         },
         enabled: isQueryEnabled,

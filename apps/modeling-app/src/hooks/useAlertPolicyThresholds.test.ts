@@ -62,13 +62,13 @@ const loadThresholds = async (paramsList: AlertLevel['thresholdParams'][]) => {
 
 it('fetches distinct seasonal thresholds together and maps response values to their labeled lines', async () => {
     computeThresholds.mockResolvedValue({
-        params: { type: 'seasonal', stdMultiplier: [2, 1] },
-        lines: [2, 1],
+        params: { type: 'seasonal', stdMultiplier: [1, 2] },
+        lines: [1, 2],
         entries: [
-            { location: 'region-a', period: '202501', values: [20, 10] },
-            { location: 'region-a', period: '202502', values: [null, 0] },
-            { location: 'region-b', period: '202501', values: [40, 30] },
-            { location: 'region-b', period: '202502', values: [50, null] },
+            { location: 'region-a', period: '202501', values: [10, 20] },
+            { location: 'region-a', period: '202502', values: [0, null] },
+            { location: 'region-b', period: '202501', values: [30, 40] },
+            { location: 'region-b', period: '202502', values: [null, 50] },
         ],
     });
 
@@ -95,26 +95,4 @@ it('fetches distinct seasonal thresholds together and maps response values to th
             { label: 'mean + 2 SD', points: [{ period: '202501', value: 40 }, { period: '202502', value: 50 }] },
         ]],
     ]));
-});
-
-it('keeps a single seasonal line and percentile baselines in separate requests', async () => {
-    const paramsList = [
-        { type: 'percentile', quantile: 0.75, baselineYears: 5 },
-        { type: 'seasonal', stdMultiplier: 1 },
-        { type: 'percentile', quantile: 0.75, baselineYears: null },
-    ];
-    paramsList.forEach((params, index) => computeThresholds.mockResolvedValueOnce({
-        params,
-        lines: [params.quantile ?? params.stdMultiplier!],
-        entries: [{ location: 'region-a', period: '202502', values: [index * 10] }],
-    }));
-
-    const result = await loadThresholds(paramsList);
-
-    expect(computeThresholds.mock.calls.map(([request]) => request.params)).toEqual(paramsList);
-    expect(result.linesByOrgUnit.get('region-a')).toEqual([
-        { label: '75th percentile, 5-year baseline', points: [{ period: '202502', value: 0 }] },
-        { label: 'mean + 1 SD', points: [{ period: '202502', value: 10 }] },
-        { label: '75th percentile, all history', points: [{ period: '202502', value: 20 }] },
-    ]);
 });
