@@ -112,3 +112,8 @@
 @media (max-width: 600px) {
     .policyLevelRow { grid-template-columns: minmax(0, 1fr); }
 }
+
+.link {
+    color: var(--colors-blue700);
+    text-decoration: underline;
+}

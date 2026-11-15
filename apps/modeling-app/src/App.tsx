@@ -45,6 +45,7 @@ import { NewConfiguredModelPage } from './pages/NewConfiguredModelPage';
 import { SyncUrlWithGlobalShell } from './utils/syncUrlWithGlobalShell';
 import { NewPredictionPage } from './pages/NewPredictionPage';
 import { PredictionImportPage } from './pages/PredictionImportPage';
+import { PredictionSignalReviewPage } from './pages/PredictionSignalReviewPage';
 import { PredictionRunDetailsPage } from './pages/PredictionRunDetailsPage';
 import { SignalsPage } from './pages/SignalsPage/SignalsPage';
 import { PredictionActivityPage } from './pages/PredictionActivityPage';
@@ -239,6 +240,13 @@ const router = createHashRouter([
                                                     breadcrumb: () => i18n.t('Import prediction'),
                                                 } satisfies RouteHandle,
                                                 element: <PredictionImportPage />,
+                                            },
+                                            {
+                                                path: 'signals',
+                                                handle: {
+                                                    breadcrumb: () => i18n.t('Review signals'),
+                                                } satisfies RouteHandle,
+                                                element: <PredictionSignalReviewPage />,
                                             },
                                         ],
                                     },
