@@ -52,8 +52,8 @@ export const useAlertPolicyThresholds = ({ datasetId, series, policies, enabled 
 
             return Promise.all(paramsList.map(async (params) => {
                 if (seasonalResponse && params.type === 'seasonal') {
-                    const { entries } = await seasonalResponse;
-                    return buildEndemicThresholdMap(entries, { upperIndex: seasonalParams.indexOf(params) });
+                    const { entries, lines } = await seasonalResponse;
+                    return buildEndemicThresholdMap(entries, { upperIndex: lines.indexOf(getSeasonalMultiplier(params)) });
                 }
                 const response = await fetchThresholds(params);
                 return buildEndemicThresholdMap(response.entries, getThresholdLineRoles(response.lines));
