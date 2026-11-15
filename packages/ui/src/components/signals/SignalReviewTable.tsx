@@ -247,7 +247,7 @@ export const SignalReviewTable = <T extends AlertRead = AlertRead>({
                                 <DataTableCell>
                                     {[...new Set(signals.flatMap(signal => signal.approvedBy ?? []))].join(', ') || '–'}
                                 </DataTableCell>
-                                <DataTableCell>
+                                <DataTableCell className={styles.actions}>
                                     {isPending
                                         ? (
                                                 <ButtonStrip>

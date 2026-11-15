@@ -206,18 +206,24 @@ const OutbreakMetricsContent = ({ evaluationId, specificationId, policyId: fixed
                     <>
                         <div className={tableStyles.toolbar}>
                             <div className={tableStyles.actions}>
-                                <div className={styles.policySelect}>
-                                    <SingleSelect
-                                        dense
-                                        prefix={i18n.t('Signal policy')}
-                                        selected={policy?.id == null ? '' : String(policy.id)}
-                                        disabled={fixedPolicyId != null}
-                                        onChange={({ selected }) => setPolicyId(selected)}
-                                        dataTest="outbreak-policy"
-                                    >
-                                        {policies.data.map(item => <SingleSelectOption key={item.id} value={String(item.id)} label={item.name} />)}
-                                    </SingleSelect>
-                                </div>
+                                {fixedPolicyId != null ? (
+                                    <span className={styles.fixedPolicy} data-test="outbreak-policy">
+                                        {i18n.t('Signal policy')}
+                                        <strong>{policy?.name}</strong>
+                                    </span>
+                                ) : (
+                                    <div className={styles.policySelect}>
+                                        <SingleSelect
+                                            dense
+                                            prefix={i18n.t('Signal policy')}
+                                            selected={policy?.id == null ? '' : String(policy.id)}
+                                            onChange={({ selected }) => setPolicyId(selected)}
+                                            dataTest="outbreak-policy"
+                                        >
+                                            {policies.data.map(item => <SingleSelectOption key={item.id} value={String(item.id)} label={item.name} />)}
+                                        </SingleSelect>
+                                    </div>
+                                )}
                                 <Checkbox
                                     dense
                                     label={i18n.t('Split by horizon')}

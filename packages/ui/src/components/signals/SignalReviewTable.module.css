@@ -39,3 +39,8 @@
     gap: var(--spacers-dp4);
     white-space: nowrap;
 }
+
+.actions button {
+    /* A narrow table squeezes this column, and a wrapped label spills out of the fixed-height button. */
+    white-space: nowrap;
+}
