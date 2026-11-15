@@ -6,7 +6,7 @@ import {
     DEFAULT_DHIS2_TIME_ZONE,
     type Dhis2Calendar,
     normalizeDhis2CalendarSetting,
-} from '@dhis2-chap/core';
+} from '@chap-blocks/core';
 
 export type Dhis2PeriodSettings = {
     calendar: Dhis2Calendar;

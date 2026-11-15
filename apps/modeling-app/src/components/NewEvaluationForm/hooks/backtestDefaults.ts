@@ -1,4 +1,4 @@
-import { PERIOD_TYPES } from '@dhis2-chap/core';
+import { PERIOD_TYPES } from '@chap-blocks/core';
 import type { BacktestParameterInfo } from '@dhis2-chap/ui';
 import type { BacktestParameters } from './backtestParameters';
 

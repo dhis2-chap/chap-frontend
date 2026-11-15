@@ -1,5 +1,6 @@
 import { CircularLoader } from '@dhis2/ui';
-import { PredictionOrgUnitSeries, PredictionMap } from '@dhis2-chap/ui';
+import { PredictionOrgUnitSeries } from '@chap-blocks/ui/utils';
+import { PredictionMap } from '@chap-blocks/ui/maps';
 import { useOrgUnitGeometry } from '../../../../../hooks/useOrgUnitGeometry';
 
 type Props = {
@@ -24,6 +25,10 @@ export const PredictionMapWrapper = ({ series, predictionTargetName }: Props) =>
             series={series}
             predictionTargetName={predictionTargetName}
             orgUnits={orgUnits}
+            basemap={{
+                url: 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png',
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://cartodb.com/attributions">CartoDB</a>',
+            }}
         />
     );
 };

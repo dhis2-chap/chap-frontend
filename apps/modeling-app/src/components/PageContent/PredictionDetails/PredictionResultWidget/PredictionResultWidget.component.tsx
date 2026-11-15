@@ -2,12 +2,10 @@ import { useState } from 'react';
 import styles from './PredictionResultWidget.module.css';
 import i18n from '@dhis2/d2-i18n';
 import { TabBar, Tab, Menu, MenuItem } from '@dhis2/ui';
-import {
-    UncertaintyAreaChart,
-    PredictionTable,
-    PredictionOrgUnitSeries,
-    Widget,
-} from '@dhis2-chap/ui';
+import { UncertaintyAreaChart } from '@chap-blocks/ui/charts';
+import { PredictionTable } from '@chap-blocks/ui/tables';
+import { PredictionOrgUnitSeries } from '@chap-blocks/ui/utils';
+import { Widget } from '@chap-blocks/ui/layout';
 import { PredictionMapWrapper } from './PredictionMapWrapper/PredictionMapWrapper';
 
 type Props = {

@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import i18n from '@dhis2/d2-i18n';
-import { comparePeriodIds } from '@dhis2-chap/core';
+import { comparePeriodIds } from '@chap-blocks/core';
 import { type Dhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
 
 export type NewPredictionFormValues = {

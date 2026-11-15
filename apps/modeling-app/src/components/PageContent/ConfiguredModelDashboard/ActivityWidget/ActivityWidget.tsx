@@ -11,7 +11,7 @@ import {
     MenuItem,
     SingleSelect,
 } from '@dhis2/ui';
-import { Widget } from '@dhis2-chap/ui';
+import { Widget } from '@chap-blocks/ui/layout';
 import type { JobDescription } from '@dhis2-chap/ui';
 import { Link } from 'react-router-dom';
 import {

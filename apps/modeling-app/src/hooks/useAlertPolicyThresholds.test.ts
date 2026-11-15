@@ -1,13 +1,12 @@
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { DatasetsService, type AlertLevel, type PredictionOrgUnitSeries } from '@dhis2-chap/ui';
+import { DatasetsService, type AlertLevel } from '@dhis2-chap/ui';
+import type { PredictionOrgUnitSeries } from '@chap-blocks/ui/utils';
 import { afterEach, expect, it, vi } from 'vitest';
 import { useAlertPolicyThresholds } from './useAlertPolicyThresholds';
 
-vi.mock('@dhis2-chap/ui', async () => ({
-    ...await import('../../../../packages/ui/src/utils/outbreakAlerts'),
-    ...await import('../../../../packages/ui/src/utils/chartPeriods'),
+vi.mock('@dhis2-chap/ui', () => ({
     OpenAPI: { BASE: 'http://chap.test' },
     DatasetsService: { computeThresholdsV1AnalyticsThresholdsPost: vi.fn() },
 }));

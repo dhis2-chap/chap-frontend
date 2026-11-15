@@ -1,7 +1,8 @@
 import { useMemo } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { CircularLoader } from '@dhis2/ui';
-import { Card, getPeriodNameFromId, Tag } from '@dhis2-chap/ui';
+import { Card, Tag } from '@chap-blocks/ui/layout';
+import { getPeriodNameFromId } from '@chap-blocks/ui/utils';
 import { format } from 'date-fns';
 import { useDataset } from '../../../hooks/useDataset';
 import { useDhis2PeriodSettings } from '../../../hooks/useDhis2PeriodSettings';

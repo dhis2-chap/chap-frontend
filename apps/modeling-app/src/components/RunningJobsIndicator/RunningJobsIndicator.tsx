@@ -1,5 +1,5 @@
 import { Tooltip } from '@dhis2/ui';
-import { StatusIndicator } from '@dhis2-chap/ui';
+import { StatusIndicator } from '@chap-blocks/ui/layout';
 import i18n from '@dhis2/d2-i18n';
 import { useJobs, JOB_STATUSES, JOB_TYPES } from '../../hooks/useJobs';
 

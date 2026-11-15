@@ -12,7 +12,7 @@ import {
     IconDownload16,
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
-import { OverflowButton } from '@dhis2-chap/ui';
+import { OverflowButton } from '@chap-blocks/ui/layout';
 import { ViewJobLogsModal } from './ViewJobLogsModal/ViewJobLogsModal';
 import { DeleteJobModal } from './DeleteJobModal/DeleteJobModal';
 import { CancelJobModal } from './CancelJobModal/CancelJobModal';

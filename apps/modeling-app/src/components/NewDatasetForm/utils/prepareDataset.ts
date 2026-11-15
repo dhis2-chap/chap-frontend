@@ -1,5 +1,5 @@
 import i18n from '@dhis2/d2-i18n';
-import { getPeriodsInRange } from '@dhis2-chap/core';
+import { getPeriodsInRange } from '@chap-blocks/core';
 import type { DatasetMakeRequest, ObservationBase, ObservationColumns } from '@dhis2-chap/ui';
 import type { useDataEngine } from '@dhis2/app-runtime';
 import { fetchAnalytics, fetchOrgUnits } from '../../ModelExecutionForm/utils/queryUtils';

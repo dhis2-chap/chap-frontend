@@ -22,7 +22,9 @@ import {
 } from '@tanstack/react-table';
 import { format } from 'date-fns';
 import { Link, useNavigate } from 'react-router-dom';
-import { DataSetInfo, getPeriodNameFromId, Tag } from '@dhis2-chap/ui';
+import { DataSetInfo } from '@dhis2-chap/ui';
+import { getPeriodNameFromId } from '@chap-blocks/ui/utils';
+import { Tag } from '@chap-blocks/ui/layout';
 import { useTablePaginationParams } from '../../../../hooks/useTablePaginationParams';
 import { DatasetOriginFilter, matchesOrigin, useDatasetOriginFilter } from '../../../DatasetOriginFilter';
 import { DatasetActionsMenu } from './DatasetActionsMenu';

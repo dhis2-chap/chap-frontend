@@ -1,6 +1,6 @@
 import { useOrgUnitsById } from '@/hooks/useOrgUnitsById';
 import { MenuItem, SingleSelect } from '@dhis2/ui';
-import { getPeriodNameFromId } from '@dhis2-chap/ui';
+import { getPeriodNameFromId } from '@chap-blocks/ui/utils';
 import { useMemo } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import styles from './CustomEvaluationPlotsWidget.module.css';

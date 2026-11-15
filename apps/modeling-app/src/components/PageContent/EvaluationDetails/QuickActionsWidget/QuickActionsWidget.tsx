@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Button, IconCheckmarkCircle16, IconVisualizationLineMulti16, IconDuplicate16, IconExportItems24 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { useNavigate } from 'react-router-dom';
-import { Widget } from '@dhis2-chap/ui';
+import { Widget } from '@chap-blocks/ui/layout';
 import { CopyBacktestModal } from '../../../BacktestsTable/BacktestActionsMenu/CopyBacktestModal';
 import {
     MarkReadyForForecastingModal,

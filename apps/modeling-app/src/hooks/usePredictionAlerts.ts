@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { AlertsService, OpenAPI, type PredictionInfo } from '@dhis2-chap/ui';
+import { AlertsService, OpenAPI } from '@dhis2-chap/ui';
+import { type PredictionInfo } from '@chap-blocks/ui/utils';
 import { useAlertPolicies } from './useAlertPolicies';
 import { useAlertPolicyDisplays } from './useAlertPolicyDisplay';
 import { Features, useIsFeatureAvailable } from './useIsFeatureAvailable';

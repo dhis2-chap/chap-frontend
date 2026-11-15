@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { ApiError, PredictionsService, type PredictionInfo } from '@dhis2-chap/ui';
+import { ApiError, PredictionsService } from '@dhis2-chap/ui';
+import { type PredictionInfo } from '@chap-blocks/ui/utils';
 
 export const usePredictions = () => {
     const { data, error, isLoading } = useQuery<PredictionInfo[], ApiError>({

@@ -9,7 +9,8 @@ import {
     NoticeBox,
     Switch,
 } from '@dhis2/ui';
-import type { AlertPolicyRead, ApiError, OutbreakProbability } from '@dhis2-chap/ui';
+import type { AlertPolicyRead, ApiError } from '@dhis2-chap/ui';
+import type { OutbreakProbability } from '@chap-blocks/ui/utils';
 import type { KeyboardEvent, MouseEvent } from 'react';
 import { ThresholdCalculationStatus } from '../../../ThresholdTilesExplorer';
 import { DataItemSelect } from './DataItemSelect';

@@ -1,4 +1,4 @@
-import { canonicalizePeriodId, type Dhis2Calendar, getPeriodsInRange } from '@dhis2-chap/core';
+import { canonicalizePeriodId, type Dhis2Calendar, getPeriodsInRange } from '@chap-blocks/core';
 import type { ObservationBase, ObservationColumns } from '@dhis2-chap/ui';
 
 // Saved Chap periods can use extended ISO notation and zero-padded weeks.

@@ -2,7 +2,7 @@ import i18n from '@dhis2/d2-i18n';
 import { Modal, Button, ModalTitle, ModalContent, ButtonStrip, ModalActions } from '@dhis2/ui';
 import { VisualizationPlugin } from '../VisualizationPlugin';
 import { OrganisationUnit } from '../OrganisationUnitSelector';
-import { getPeriodsInRange, PERIOD_TYPES, toDhis2FixedPeriodType } from '@dhis2-chap/core';
+import { getPeriodsInRange, PERIOD_TYPES, toDhis2FixedPeriodType } from '@chap-blocks/core';
 import { useConfig } from '@dhis2/app-runtime';
 import { CovariateMapping } from '../ModelExecutionForm/hooks/useModelExecutionFormState';
 import { type Dhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';

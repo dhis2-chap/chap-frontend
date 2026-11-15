@@ -2,7 +2,7 @@ import i18n from '@dhis2/d2-i18n';
 import {
     OUTBREAK_PROBABILITY_OPTIONS,
     type OutbreakProbability,
-} from '@dhis2-chap/ui';
+} from '@chap-blocks/ui/utils';
 import * as z from 'zod';
 import { thresholdParamsSchema } from '@/utils/thresholdStrategyParams';
 

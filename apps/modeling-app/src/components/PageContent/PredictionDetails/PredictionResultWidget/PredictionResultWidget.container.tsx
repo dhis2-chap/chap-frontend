@@ -3,7 +3,9 @@ import { CircularLoader, NoticeBox } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { PredictionResultWidgetComponent } from './PredictionResultWidget.component';
 import styles from './PredictionResultWidget.module.css';
-import { Widget, PredictionInfo, ModelSpecRead } from '@dhis2-chap/ui';
+import { Widget } from '@chap-blocks/ui/layout';
+import { PredictionInfo } from '@chap-blocks/ui/utils';
+import { ModelSpecRead } from '@dhis2-chap/ui';
 import { usePredictionSeries } from '../hooks/usePredictionSeries';
 
 type Props = {

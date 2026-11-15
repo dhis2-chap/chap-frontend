@@ -1,4 +1,4 @@
-import { Input } from '@dhis2/ui';
+import { SearchField } from '@chap-blocks/ui/search';
 import i18n from '@dhis2/d2-i18n';
 import styles from './ReadyToPredictTableFilters.module.css';
 import { useReadyToPredictTableFilters } from '../hooks/useReadyToPredictTableFilters';
@@ -8,11 +8,11 @@ export const ReadyToPredictTableFilters = () => {
 
     return (
         <div className={styles.inputContainer}>
-            <Input
-                dense
+            <SearchField
+                label={i18n.t('Search prediction setups')}
                 placeholder={i18n.t('Search')}
-                value={search}
-                onChange={e => setSearch(e.value || undefined)}
+                value={search ?? ''}
+                onChange={value => setSearch(value || undefined)}
             />
         </div>
     );

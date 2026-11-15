@@ -8,7 +8,7 @@ import {
 import {
     getLastCompletedPeriodId,
     toDhis2FixedPeriodType,
-} from '@dhis2-chap/core';
+} from '@chap-blocks/core';
 import {
     isSupportedPeriodType,
     type SupportedPeriodType,

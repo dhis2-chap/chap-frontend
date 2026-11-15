@@ -21,7 +21,7 @@ import {
 } from '@dhis2/ui';
 import { IconFlag16 } from '@dhis2/ui-icons';
 import i18n from '@dhis2/d2-i18n';
-import { PERIOD_TYPES } from '@dhis2-chap/core';
+import { PERIOD_TYPES } from '@chap-blocks/core';
 import cn from 'classnames';
 import { AuthorAssessedStatus, type ModelSpecRead } from '@dhis2-chap/ui';
 import { toDataTestKey } from '@/utils/dataTestKey';

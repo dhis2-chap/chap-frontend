@@ -8,7 +8,8 @@ import {
     ModalContent,
     ModalTitle,
 } from '@dhis2/ui';
-import type { ModelSpecRead, OutbreakProbability, PredictionInfo } from '@dhis2-chap/ui';
+import type { ModelSpecRead } from '@dhis2-chap/ui';
+import type { OutbreakProbability, PredictionInfo } from '@chap-blocks/ui/utils';
 import { ThresholdStrategyControl } from '@/components/ThresholdTilesExplorer';
 import type { ThresholdParams } from '@/utils/thresholdStrategyParams';
 import { AlertPreviewPanel } from './AlertPreviewPanel';

@@ -11,7 +11,7 @@ import i18n from '@dhis2/d2-i18n';
 import styles from './CustomEvaluationPlotsWidget.module.css';
 import { CustomEvaluationPlotsWidgetComponent } from './CustomEvaluationPlotsWidget.component';
 import { useCustomEvaluationPlotTypes } from './hooks/useCustomEvaluationPlotTypes';
-import { Widget } from '@dhis2-chap/ui';
+import { Widget } from '@chap-blocks/ui/layout';
 import { useFacetCoordinates } from '../../../BacktestsTable/hooks/useFacetCoordinates';
 import { BackTestFilter } from './BackTestFilter';
 

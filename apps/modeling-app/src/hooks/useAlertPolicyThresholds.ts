@@ -2,17 +2,14 @@ import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import {
     ApiError,
-    buildEndemicThresholdMap,
     DatasetsService,
-    getThresholdLineRoles,
     OpenAPI,
     type AlertLevel,
     type AlertPolicyRead,
-    type EndemicThresholdPoint,
-    type PredictionOrgUnitSeries,
     type SeasonalParams,
-    type ThresholdChartLine,
 } from '@dhis2-chap/ui';
+import { type ThresholdChartLine } from '@chap-blocks/ui';
+import { buildEndemicThresholdMap, getThresholdLineRoles, type EndemicThresholdPoint, type PredictionOrgUnitSeries } from '@chap-blocks/ui/utils';
 import { describeThreshold, single } from '@/components/BackendAlerts/describeAlertLevel';
 import { getThresholdQueryState } from '@/utils/thresholdQueryState';
 import { THRESHOLDS_CACHE_TIME, useThresholdScope } from './useEndemicThresholds';

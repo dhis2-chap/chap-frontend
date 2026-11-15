@@ -22,7 +22,8 @@ import {
     getPaginationRowModel,
     Column,
 } from '@tanstack/react-table';
-import { ModelSpecRead, Pill } from '@dhis2-chap/ui';
+import { ModelSpecRead } from '@dhis2-chap/ui';
+import { Pill } from '@chap-blocks/ui/layout';
 import styles from './ModelsTable.module.css';
 import { ModelActionsMenu } from './ModelActionsMenu';
 import { ModelsTableFilters } from './ModelsTableFilters';

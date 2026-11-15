@@ -1,19 +1,21 @@
 import {
     BacktestRead,
     BacktestsService,
-    createHighChartsData,
     DataElement,
     DataList,
     EvaluationEntry,
+} from '@dhis2-chap/ui';
+import {
+    createHighChartsData,
     EvaluationEntryExtend,
     EvaluationForSplitPoint,
     getSplitPeriod,
     HighChartsData,
     joinRealAndPredictedData,
-} from '@dhis2-chap/ui';
+} from '@chap-blocks/ui/utils';
 import { useMemo } from 'react';
 import { useQueries } from '@tanstack/react-query';
-import { sortPeriods, PERIOD_TYPES } from '@dhis2-chap/core';
+import { sortPeriods, PERIOD_TYPES } from '@chap-blocks/core';
 
 const quantiles = [0.1, 0.25, 0.5, 0.75, 0.9];
 

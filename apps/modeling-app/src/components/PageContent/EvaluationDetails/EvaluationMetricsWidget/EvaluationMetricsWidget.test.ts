@@ -7,10 +7,12 @@ import { EvaluationMetricsWidget } from './EvaluationMetricsWidget';
 import styles from './EvaluationMetricsWidget.module.css';
 
 vi.mock('@dhis2-chap/ui', () => ({
-    Widget: ({ children }: { children: ReactNode }) => children,
     VisualizationsService: {},
     TargetBehavior: { CLOSEST: 'closest', AT_LEAST: 'at_least' },
     OptimizationDirection: { MINIMIZE: 'minimize', MAXIMIZE: 'maximize' },
+}));
+vi.mock('@chap-blocks/ui/layout', () => ({
+    Widget: ({ children }: { children: ReactNode }) => children,
 }));
 vi.mock('@dhis2/ui', () => ({
     Button: ({ children }: { children: ReactNode }) => createElement('button', null, children),

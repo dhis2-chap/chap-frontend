@@ -4,8 +4,9 @@ import i18n from '@dhis2/d2-i18n';
 import { useOrgUnitsById } from '../../../../hooks/useOrgUnitsById';
 import { ModelExecutionResultWidgetComponent } from './ModelExecutionResultWidget.component';
 import styles from './ModelExecutionResultWidget.module.css';
-import { sortPeriods, PERIOD_TYPES } from '@dhis2-chap/core';
-import { BacktestRead, Widget } from '@dhis2-chap/ui';
+import { sortPeriods, PERIOD_TYPES } from '@chap-blocks/core';
+import { BacktestRead } from '@dhis2-chap/ui';
+import { Widget } from '@chap-blocks/ui/layout';
 
 type Props = {
     backtest: BacktestRead;

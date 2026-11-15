@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import { z } from 'zod';
-import { PERIOD_TYPES } from '@dhis2-chap/core';
+import { PERIOD_TYPES } from '@chap-blocks/core';
 import { ModelSpecRead } from '@dhis2-chap/ui';
 import { useOrgUnitsById } from '../../../hooks/useOrgUnitsById';
 import { ModelExecutionFormValues } from '../../../components/ModelExecutionForm/hooks/useModelExecutionFormState';

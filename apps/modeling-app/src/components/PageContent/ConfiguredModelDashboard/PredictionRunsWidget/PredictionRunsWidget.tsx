@@ -19,8 +19,9 @@ import {
     SortingState,
     useReactTable,
 } from '@tanstack/react-table';
-import type { JobDescription, PredictionInfo } from '@dhis2-chap/ui';
-import { StatusIndicator, Widget } from '@dhis2-chap/ui';
+import type { JobDescription } from '@dhis2-chap/ui';
+import type { PredictionInfo } from '@chap-blocks/ui/utils';
+import { StatusIndicator, Widget } from '@chap-blocks/ui/layout';
 import { Link, useNavigate } from 'react-router-dom';
 import { format, formatDistanceToNow } from 'date-fns';
 import { useMemo, useState } from 'react';

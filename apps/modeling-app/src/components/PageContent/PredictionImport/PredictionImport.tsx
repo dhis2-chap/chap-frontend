@@ -1,4 +1,5 @@
-import { ModelSpecRead, PredictionInfo } from '@dhis2-chap/ui';
+import { ModelSpecRead } from '@dhis2-chap/ui';
+import { PredictionInfo } from '@chap-blocks/ui/utils';
 import { QuantileMappingFormContainer } from './QuantileMappingForm/QuantileMappingFormContainer';
 import styles from './PredictionImport.module.css';
 

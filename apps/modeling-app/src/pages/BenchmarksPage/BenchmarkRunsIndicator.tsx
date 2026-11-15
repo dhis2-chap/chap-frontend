@@ -1,6 +1,6 @@
 import i18n from '@dhis2/d2-i18n';
 import { Tooltip } from '@dhis2/ui';
-import { StatusIndicator } from '@dhis2-chap/ui';
+import { StatusIndicator } from '@chap-blocks/ui/layout';
 import { useModels } from '../../hooks/useModels';
 import { SpecificationParams, getJobModelName, requestMatchesSpecification } from './benchmarkUtils';
 import { RunningBenchmarkJob } from './useRunningBenchmarkJobs';

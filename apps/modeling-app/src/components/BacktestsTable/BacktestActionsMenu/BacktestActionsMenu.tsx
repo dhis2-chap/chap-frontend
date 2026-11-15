@@ -11,7 +11,7 @@ import {
     IconView16,
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
-import { OverflowButton } from '@dhis2-chap/ui';
+import { OverflowButton } from '@chap-blocks/ui/layout';
 import { EditBacktestModal } from './EditBacktestModal';
 import { DeleteBacktestModal } from './DeleteBacktestModal/DeleteBacktestModal';
 import { CopyBacktestModal } from './CopyBacktestModal';

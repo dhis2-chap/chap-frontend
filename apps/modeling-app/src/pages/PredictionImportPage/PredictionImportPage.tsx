@@ -1,4 +1,4 @@
-import { Card } from '@dhis2-chap/ui';
+import { Card } from '@chap-blocks/ui/layout';
 import i18n from '@dhis2/d2-i18n';
 import styles from './PredictionImportPage.module.css';
 import { PageHeader } from '../../features/common-features/PageHeader/PageHeader';

@@ -5,7 +5,7 @@ import {
     DEFAULT_OUTBREAK_PROBABILITY,
     getForecastThresholdCoverage,
     type OutbreakProbability,
-} from '@dhis2-chap/ui';
+} from '@chap-blocks/ui/utils';
 import {
     Button,
     ButtonStrip,

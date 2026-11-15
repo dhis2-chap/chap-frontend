@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import type { AlertPolicyRead, PredictionEntry, PredictionOrgUnitSeries, ThresholdResponse } from '@dhis2-chap/ui';
+import type { AlertPolicyRead, PredictionEntry, ThresholdResponse } from '@dhis2-chap/ui';
+import type { PredictionOrgUnitSeries } from '@chap-blocks/ui/utils';
 import { buildPolicyOutbreakIndicators, getAlertLevelQuantile } from './policyOutbreakIndicators';
 import { transformOutbreakIndicatorsToDataValues } from './predictionImportDataValues';
 

@@ -1,5 +1,5 @@
 import i18n from '@dhis2/d2-i18n';
-import { Card } from '@dhis2-chap/ui';
+import { Card } from '@chap-blocks/ui/layout';
 import { useJobs } from '../../../hooks/useJobs';
 import { CircularLoader } from '@dhis2/ui';
 import styles from './JobsContent.module.css';

@@ -1,7 +1,10 @@
 import { useMemo, useState } from 'react';
 import { CircularLoader, Menu, MenuItem } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
-import { Widget, ResultPlot, BacktestRead, getStableMaxYByOrgUnitId } from '@dhis2-chap/ui';
+import { Widget } from '@chap-blocks/ui/layout';
+import { ResultPlot } from '@chap-blocks/ui/charts';
+import { BacktestRead } from '@dhis2-chap/ui';
+import { getStableMaxYByOrgUnitId } from '@chap-blocks/ui/utils';
 import { SplitPeriodSlider } from '../../../../features/evaluation-compare/SplitPeriodSlider';
 import styles from './ModelExecutionResultWidget.module.css';
 import { usePlotDataForEvaluationsByOrgUnit } from '@/hooks/usePlotDataForEvaluationsByOrgUnit';
