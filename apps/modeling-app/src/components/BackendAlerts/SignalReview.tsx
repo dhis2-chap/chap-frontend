@@ -81,12 +81,7 @@ export const SignalReview = ({ prediction, model }: Props) => {
                 disabled={!review.isUserLoaded}
                 saving={review.isLoading ? review.variables : undefined}
                 onReview={decision => review.mutate(decision, { onSuccess: () => showSaved() })}
-                renderLevel={alert => (
-                    <>
-                        <AlertLevelTag display={alert.display} />
-                        {alert.responseAction && <span className={styles.responseAction}>{alert.responseAction}</span>}
-                    </>
-                )}
+                renderLevel={alert => <AlertLevelTag display={alert.display} />}
                 renderDetails={orgUnitAlerts => (
                     <SignalEvidence
                         alerts={orgUnitAlerts}

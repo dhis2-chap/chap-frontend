@@ -1,10 +1,10 @@
-import type { AlertPolicyRead, AlertRead } from '@dhis2-chap/ui';
+import type { AlertLevel, AlertPolicyRead, AlertRead } from '@dhis2-chap/ui';
 import { getAlertColor, getAlertLevelDisplay, type AlertLevelDisplay, type AlertPolicyDisplay } from './alertLevelDisplay';
 
 export type DisplayedPredictionAlert = AlertRead & {
     display: AlertLevelDisplay;
     severity: number;
-    responseAction?: string | null;
+    responseAction: AlertLevel['responseAction'];
 };
 
 export const displayPredictionAlerts = (

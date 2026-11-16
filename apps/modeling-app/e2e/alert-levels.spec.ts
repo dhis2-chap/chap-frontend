@@ -328,11 +328,9 @@ test.describe.serial('signal level presentation', () => {
 
         // In the review, an organisation unit is selected by its most severe signal, so Watch leaves the mixed one out.
         await page.goto(`/#/predictions/${setup.id}/runs/${prediction.id}/signals`);
-        // Each signal uses its own level's action, including mixed levels in one organisation unit.
-        await expect(page.locator(`[data-test="signal-review-${mixedRegion}"]`).getByText(responseAction, { exact: true })).toHaveCount(1);
-        await expect(page.locator(`[data-test="signal-review-${actionRegion}"]`).getByText(responseAction, { exact: true })).toBeVisible();
-        await expect(page.locator(`[data-test="signal-review-${watchRegion}"]`).getByText(responseAction, { exact: true })).toHaveCount(0);
-        await expect(page.getByText('Review case reports daily.', { exact: true })).toHaveCount(0);
+        // The evidence lists the action of each level an organisation unit reached.
+        await page.locator(`[data-test="signal-review-${mixedRegion}"] td`).first().click();
+        await expect(page.locator(`[data-test="signal-review-${mixedRegion}-expandedrow"]`).getByText(responseAction, { exact: true })).toBeVisible();
         await page.locator('[data-test="signal-review-select-level-Watch"]').click();
         await expect(page.getByText('1 of 4 pending signals selected', { exact: true })).toBeVisible();
         await expect(page.locator(`[data-test="signal-review-${watchRegion}"] input[type="checkbox"]`)).toBeChecked();
