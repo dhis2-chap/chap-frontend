@@ -1,0 +1,109 @@
+name: e2e-resilience
+
+run-name: e2e-resilience (${{ inputs.profile }}) on ${{ github.ref_name }}
+
+on:
+    workflow_dispatch:
+        inputs:
+            profile:
+                description: Degraded runtime profile
+                required: true
+                default: combined
+                type: choice
+                options:
+                    - combined
+                    - poor-network
+                    - constrained-compute
+            retries:
+                description: Retries per failed test
+                required: true
+                default: '1'
+                type: choice
+                options:
+                    - '0'
+                    - '1'
+                    - '2'
+            workers:
+                description: Parallel Playwright workers
+                required: true
+                default: '1'
+                type: choice
+                options:
+                    - '1'
+                    - '2'
+            timeout_ms:
+                description: Default timeout per test in milliseconds
+                required: true
+                default: '300000'
+                type: choice
+                options:
+                    - '120000'
+                    - '180000'
+                    - '300000'
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}-${{ inputs.profile }}
+    cancel-in-progress: false
+
+jobs:
+    e2e-resilience:
+        runs-on: ubuntu-latest
+        timeout-minutes: 120
+        permissions:
+            contents: read
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - uses: pnpm/action-setup@v4
+
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+                  cache: pnpm
+                  cache-dependency-path: pnpm-lock.yaml
+
+            - name: Install dependencies
+              run: pnpm install --frozen-lockfile
+
+            - name: Install Playwright browser
+              run: pnpm exec playwright install --with-deps chromium
+
+            - name: Start CHAP + DHIS2 stack and wait for readiness
+              run: pnpm docker:e2e up --wait
+
+            - name: Run e2e suite under degraded conditions
+              env:
+                  E2E_RESILIENCE_PROFILE: ${{ inputs.profile }}
+                  E2E_RESILIENCE_RETRIES: ${{ inputs.retries }}
+                  E2E_RESILIENCE_WORKERS: ${{ inputs.workers }}
+                  E2E_RESILIENCE_TIMEOUT_MS: ${{ inputs.timeout_ms }}
+              run: ./scripts/ci/run-e2e-resilience.sh
+
+            - name: Collect runtime diagnostics
+              if: ${{ !cancelled() }}
+              run: |
+                  mkdir -p resilience-diagnostics
+                  pnpm docker:e2e ps > resilience-diagnostics/docker-compose-ps.txt
+                  docker compose \
+                    --project-name "${COMPOSE_PROJECT_NAME:-chap-platform}" \
+                    --env-file docker/.env.example \
+                    -f docker/compose.chap.yml \
+                    -f docker/compose.dhis2.yml \
+                    logs --no-color > resilience-diagnostics/docker-compose.log
+
+            - name: Upload resilience diagnostics
+              if: ${{ !cancelled() }}
+              uses: actions/upload-artifact@v4
+              with:
+                  name: e2e-resilience-${{ inputs.profile }}-${{ github.run_attempt }}
+                  path: |
+                      playwright-report/
+                      test-results/
+                      resilience-diagnostics/
+                  if-no-files-found: warn
+                  retention-days: 14
+
+            - name: Stop CHAP + DHIS2 stack
+              if: ${{ always() }}
+              run: pnpm docker:e2e down
