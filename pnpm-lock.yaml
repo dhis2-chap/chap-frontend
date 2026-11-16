@@ -275,11 +275,11 @@ importers:
         specifier: ^2.5.1
         version: 2.5.1
       highcharts:
-        specifier: 11.4.8
-        version: 11.4.8
+        specifier: 11.4.9
+        version: 11.4.9
       highcharts-react-official:
         specifier: ^3.2.1
-        version: 3.2.2(highcharts@11.4.8)(react@18.3.1)
+        version: 3.2.2(highcharts@11.4.9)(react@18.3.1)
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -308,12 +308,9 @@ importers:
 
   packages/core:
     dependencies:
-      '@dhis2/multi-calendar-dates':
-        specifier: ^2.1.2
-        version: 2.1.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      date-fns:
-        specifier: ^4.1.0
-        version: 4.1.0
+      '@chap-blocks/core':
+        specifier: workspace:*
+        version: link:../../vendor/chap-blocks/packages/core
     devDependencies:
       '@dhis2/cli-app-scripts':
         specifier: 12.11.1
@@ -327,45 +324,24 @@ importers:
 
   packages/ui:
     dependencies:
-      '@dhis2-chap/core':
+      '@chap-blocks/ui':
         specifier: workspace:*
-        version: link:../core
+        version: link:../../vendor/chap-blocks/packages/ui
       '@dhis2/d2-i18n':
         specifier: 1.2.0
         version: 1.2.0
-      '@dhis2/maps-gl':
-        specifier: ^4.1.2
-        version: 4.1.2
-      '@dhis2/multi-calendar-dates':
-        specifier: ^2.1.2
-        version: 2.1.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@dhis2/ui':
         specifier: ^10.13.0
         version: 10.13.0(@dhis2/app-runtime@3.14.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@dhis2/d2-i18n@1.2.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(styled-jsx@4.0.1(@babel/core@7.28.5)(react@18.3.1))
       '@hookform/resolvers':
         specifier: ^5.0.1
         version: 5.2.1(react-hook-form@7.62.0(react@18.3.1))
-      classnames:
-        specifier: ^2.5.1
-        version: 2.5.1
-      date-fns:
-        specifier: ^4.1.0
-        version: 4.1.0
-      highcharts:
-        specifier: 11.4.8
-        version: 11.4.8
-      highcharts-react-official:
-        specifier: ^3.2.1
-        version: 3.2.2(highcharts@11.4.8)(react@18.3.1)
       p-queue:
         specifier: ^8.1.0
         version: 8.1.0
       react-hook-form:
         specifier: ^7.51.5
         version: 7.62.0(react@18.3.1)
-      react-virtuoso:
-        specifier: ^4.6.2
-        version: 4.14.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       styled-jsx:
         specifier: ^4.0.1
         version: 4.0.1(@babel/core@7.28.5)(react@18.3.1)
@@ -373,6 +349,9 @@ importers:
         specifier: ^3.23.8
         version: 3.25.76
     devDependencies:
+      '@chap-blocks/core':
+        specifier: workspace:*
+        version: link:../../vendor/chap-blocks/packages/core
       '@dhis2/app-runtime':
         specifier: 3.14.6
         version: 3.14.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -385,9 +364,6 @@ importers:
       '@types/css-modules':
         specifier: ^1.0.5
         version: 1.0.5
-      '@types/highcharts':
-        specifier: ^5.0.44
-        version: 5.0.44
       '@types/node':
         specifier: ^22.10.1
         version: 22.18.0
@@ -397,6 +373,12 @@ importers:
       '@types/react-dom':
         specifier: ^18.3.0
         version: 18.3.7(@types/react@18.3.24)
+      highcharts:
+        specifier: 11.4.9
+        version: 11.4.9
+      highcharts-react-official:
+        specifier: ^3.2.1
+        version: 3.2.2(highcharts@11.4.9)(react@18.3.1)
       openapi-typescript-codegen:
         specifier: ^0.29.0
         version: 0.29.0
@@ -4883,9 +4865,6 @@ packages:
     peerDependencies:
       highcharts: '>=6.0.0'
       react: '>=16.8.0'
-
-  highcharts@11.4.8:
-    resolution: {integrity: sha512-5Tke9LuzZszC4osaFisxLIcw7xgNGz4Sy3Jc9pRMV+ydm6sYqsPYdU8ELOgpzGNrbrRNDRBtveoR5xS3SzneEA==}
 
   highcharts@11.4.9:
     resolution: {integrity: sha512-LSFxFZBeffm45OUiTDntYfzZPCbMTs0oyg6lxsE6EHhdIWhlq/8WTYkHlEUHl3+vabdgWP7+EQx0DkoaaE/4rg==}
@@ -13896,17 +13875,10 @@ snapshots:
 
   he@1.2.0: {}
 
-  highcharts-react-official@3.2.2(highcharts@11.4.8)(react@18.3.1):
-    dependencies:
-      highcharts: 11.4.8
-      react: 18.3.1
-
   highcharts-react-official@3.2.2(highcharts@11.4.9)(react@18.3.1):
     dependencies:
       highcharts: 11.4.9
       react: 18.3.1
-
-  highcharts@11.4.8: {}
 
   highcharts@11.4.9: {}
 

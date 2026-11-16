@@ -11,7 +11,7 @@ import {
     normalizeDhis2CalendarSetting,
     sortPeriodIds,
     toDhis2FixedPeriodType,
-} from '../periodEngine';
+} from '../index';
 
 const gregoryOptions = {
     calendar: 'gregory',

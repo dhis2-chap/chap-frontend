@@ -4,7 +4,7 @@ The UI/core layer is a modest migration because Chap blocks already contains ext
 app's components. Moving the full workflows needs more work: the two repositories have diverged since extraction,
 and their connection, cache and settings behavior differs.
 
-This draft uses blocks in 111 modeling-app source files. It consumes the public repository as a pinned submodule,
+This draft uses blocks in 107 modeling-app source files. It consumes the public repository as a pinned submodule,
 following its source-workspace distribution model. The pin includes the additive changes in
 [chap-blocks #1](https://github.com/dhis2-chap/chap-blocks/pull/1); merge that PR and update this pin to the resulting
 main commit before merging this draft if the companion is squash-merged.
@@ -16,19 +16,25 @@ main commit before merging this draft if the companion is squash-merged.
 | Layout and navigation | Card, Widget, Pill, Tag, StatusIndicator, OverflowButton, Sidenav family | Routes, breadcrumbs, feature flags, sidebar state |
 | Period selection | PeriodPicker, PeriodRangeField, core calendar/period helpers | DHIS2 calendar settings, form state and validation |
 | Evaluation and forecast charts | ResultPlot, ComparisonPlotList, UncertaintyAreaChart | Fetching, filters, selected locations and signal evidence |
-| Prediction maps and tables | PredictionMap, PredictionTable, geometry parsing | DHIS2 geometry query and explicit existing basemap configuration |
+| Legacy shared API | PredictionMap, PredictionTable and other original UI exports forwarded to Chap blocks | Compatibility entry points, including the existing default basemap |
 | Performance monitoring | MonitoringChart and monitoringSeries | Metric/baseline selection, query, loading and errors |
 | Outbreak scores | OutbreakMetricsTable | Policy selection, scores/catalog queries, baseline comparison and metric-help tooltips |
 | Search | SearchField on models and prediction setups | URL filters and archived-model selection |
 | Transformations | Public DOM-free `@chap-blocks/ui/utils` | Current generated API services and workflow hooks |
 
-The app no longer directly depends on `@dhis2-chap/core`. `@dhis2-chap/ui` remains for the current generated API,
-DHIS2 route/settings integration and the recent signal-review table. Other applications in this monorepo still use
-the existing shared packages, so their implementation is retained. This is a consumption migration, not deletion of
-all duplicated code across both repositories.
+The app no longer directly depends on `@dhis2-chap/core`. The old core package is now a two-line compatibility
+entry point re-exporting Chap blocks. The old UI package forwards its shared components to Chap blocks and keeps
+only the generated API, DHIS2 route/settings integration, the recent signal-review table and a small map adapter
+preserving its default basemap. The early-warning app and dashboard plugin keep their import paths while also using
+the shared implementation.
+
+The duplicate charts, period engine, utilities, layout/sidebar components, maps, view-model types and styles have
+been deleted. Existing regression tests are retained and run against the public shared exports. The unused legacy
+prediction-result widget and its geometry hook are also removed; the active prediction grid and signal review remain.
+This removes roughly 6,000 net lines from the frontend instead of leaving a second implementation to maintain.
 
 The host keeps its DHIS2 App Platform shell and Vite/MDX configuration. React, ReactDOM, React Query and Highcharts
-are deduplicated; the modeling app uses Highcharts 11.4.9 to match the blocks. Map workers stay out of development
+are deduplicated; the modeling app and dashboard plugin use Highcharts 11.4.9 to match the blocks. Map workers stay out of development
 prebundling. Every install/build CI checkout initializes submodules. Turbo's dependency graph includes the source
 inputs of the three imported block packages even though those packages have no build script. The root
 `package.json` workspaces remain limited to host apps/packages, so Changesets does not version the vendored packages.
@@ -55,7 +61,8 @@ client also lacks the host's adaptive Route API request queue. The host must ret
 
 ## Useful additions to Chap blocks
 
-The companion PR adds a DOM-free utilities export and `renderMetricLabel` to the outbreak table, and carries forward
+The companion PR adds a DOM-free utilities export (including chart-period helpers for consumer tests) and
+`renderMetricLabel` to the outbreak table, and carries forward
 the stable default outbreak-period array so shared charts do not reset on unrelated parent renders.
 
 Next candidates are the new `SignalReviewTable` and signal-evidence compositions; props-only dataset/model/job tables;
@@ -102,8 +109,9 @@ update the pin here. See [its reuse guide](https://github.com/dhis2-chap/chap-bl
 - Monorepo lint, production builds and type checks pass (existing lint and bundle-size warnings remain).
 - Unit tests: 341 passed, 2 previously skipped. Existing period, forecast/export, threshold and monitoring tests now
   exercise the imported utilities. The schema test no longer mocks probability constants from the UI barrel.
-- Local browser check: DHIS2 shell, navigation, model search and the shared monitoring chart render with real API data.
-- Targeted Playwright suites: 19 scenario tests plus two authentication setup executions passed against the local
+- Local browser checks include the modeling shell/navigation, search, monitoring/forecast charts and the early-warning
+  review queue and prediction details with real API data.
+- Targeted Playwright suites: 19 scenario tests plus one authentication setup execution passed against the local
   DHIS2/Chap stack. They cover model filtering, evaluation forms, outbreak scores/retry, prediction setup/run/logs,
   signal evidence and approval. Maps were typechecked/built but not exercised in this browser run.
 - Companion chap-blocks PR: typecheck, lint, 350 tests and all four reference-app builds pass.

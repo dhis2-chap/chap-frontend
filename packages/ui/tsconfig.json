@@ -4,6 +4,6 @@
         "declaration": true,
         "emitDeclarationOnly": true,
     },
-    "include": ["src/**/*"],
+    "include": ["src/**/*", "../../vendor/chap-blocks/packages/ui/src/Globals.d.tsx"],
     "exclude": ["node_modules", "build", "dist", "src/queuedRequest.ts"]
 }

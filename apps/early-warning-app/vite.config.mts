@@ -7,5 +7,6 @@ export default defineConfig({
             allow: [path.resolve(__dirname, '../..')],
         },
     },
+    resolve: { dedupe: ['react', 'react-dom', '@tanstack/react-query'] },
     clearScreen: true,
 });

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import type { PredictionOrgUnitSeries } from '../../interfaces/Prediction';
-import { buildChartPeriods, buildPeriodIndexLookup, getSeriesPeriods } from '../chartPeriods';
+import type { PredictionOrgUnitSeries } from '@chap-blocks/ui/utils';
+import { buildChartPeriods, buildPeriodIndexLookup, getSeriesPeriods } from '@chap-blocks/ui/utils';
 
 describe('buildChartPeriods', () => {
     it('merges padded and unpadded weekly period ids into one category', () => {

@@ -1,6 +1,6 @@
 import i18n from '@dhis2/d2-i18n';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { getPeriodNameFromId } from '../Time';
+import { getPeriodNameFromId } from '@chap-blocks/ui/utils';
 
 describe('getPeriodNameFromId', () => {
     beforeAll(async () => {

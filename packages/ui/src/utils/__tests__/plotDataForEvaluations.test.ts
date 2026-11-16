@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { PERIOD_TYPES } from '@dhis2-chap/core';
+import { PERIOD_TYPES } from '@chap-blocks/core';
 import type { BacktestRead, EvaluationEntry } from '../../httpfunctions';
 import {
     getStableMaxYByOrgUnitId,
     plotResultsToViewData,
-} from '../plotDataForEvaluations';
+} from '@chap-blocks/ui/utils';
 
 const createViewData = ({
     orgUnitId = 'ou-1',

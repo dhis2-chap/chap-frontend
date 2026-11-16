@@ -5,7 +5,7 @@ import {
     comparePeriods,
     sortPeriods,
     getLastNPeriods,
-} from '../timePeriodUtils';
+} from '../index';
 
 describe('PERIOD_TYPES', () => {
     it('should have the correct period type values', () => {
