@@ -19,6 +19,10 @@ export type AlertLevel = {
      */
     outputCode: string;
     /**
+     * Free-text action to take when an alert reaches this level. Existing alerts use the policy's current text; `None` means no action is specified.
+     */
+    responseAction?: (string | null);
+    /**
      * Parameters for the epidemic channel this tier is judged against. Its `type` selects the threshold strategy, exactly as in `POST /v1/analytics/thresholds`. Must describe a single threshold line, so it is unambiguous which line the tier is judged against.
      */
     thresholdParams: (SeasonalParams | PercentileParams);

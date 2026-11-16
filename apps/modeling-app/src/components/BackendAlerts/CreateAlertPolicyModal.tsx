@@ -17,6 +17,7 @@ import {
     NoticeBox,
     SingleSelectField,
     SingleSelectOption,
+    TextAreaField,
 } from '@dhis2/ui';
 import {
     DEFAULT_OUTBREAK_PROBABILITY,
@@ -41,6 +42,7 @@ const levelSchema = z.object({
     name: z.string().trim().min(1, i18n.t('Enter a level name')),
     color: alertColorSchema,
     code: codeSchema,
+    responseAction: z.string(),
     strategy: z.enum(['seasonal', 'percentile']),
     value: z.string(),
     baselineYears: z.string(),
@@ -84,6 +86,7 @@ const NEW_LEVEL: LevelValues = {
     name: '',
     color: 'red',
     code: '',
+    responseAction: '',
     strategy: 'seasonal',
     value: DEFAULT_VALUE.seasonal,
     baselineYears: '5',
@@ -93,6 +96,7 @@ const NEW_LEVEL: LevelValues = {
 const toAlertLevel = (level: LevelValues): AlertLevel => ({
     name: level.name.trim(),
     outputCode: level.code.trim(),
+    responseAction: level.responseAction.trim() || null,
     exceedanceThreshold: Number(level.probability) / 100,
     thresholdParams: level.strategy === 'seasonal'
         ? { type: 'seasonal', stdMultiplier: Number(level.value) }
@@ -239,6 +243,19 @@ export const CreateAlertPolicyModal = ({ onClose }: { onClose: () => void }) => 
                                         )}
                                     />
                                 </div>
+                                <Controller
+                                    name={`levels.${index}.responseAction`}
+                                    control={control}
+                                    render={({ field: input }) => (
+                                        <TextAreaField
+                                            label={i18n.t('Response action (optional)')}
+                                            name={input.name}
+                                            value={input.value}
+                                            rows={2}
+                                            onChange={({ value }) => input.onChange(value ?? '')}
+                                        />
+                                    )}
+                                />
                                 <div className={styles.policyLevelThreshold}>
                                     <Controller
                                         name={`levels.${index}.strategy`}

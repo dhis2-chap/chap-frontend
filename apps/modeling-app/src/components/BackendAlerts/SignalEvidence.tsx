@@ -5,7 +5,9 @@ import {
     type PredictionOrgUnitSeries,
     type ThresholdChartLine,
 } from '@dhis2-chap/ui';
+import { AlertLevelTag } from './AlertLevelTag';
 import { getAlertPeriods, type DisplayedPredictionAlert } from './displayPredictionAlerts';
+import styles from './BackendAlerts.module.css';
 
 type Props = {
     // The signals raised in one organisation unit.
@@ -15,23 +17,34 @@ type Props = {
     thresholdLines?: ThresholdChartLine[];
 };
 
-// What a reviewer needs to judge an organisation unit's signals: the forecast they were raised from.
+// What a reviewer needs to judge an organisation unit's signals: each level's response action and the forecast they were raised from.
 export const SignalEvidence = ({ alerts, predictionTargetName, series, thresholdLines }: Props) => {
     const alertPeriods = useMemo(() => getAlertPeriods(alerts), [alerts]);
     const maxY = useMemo(() => (
         series ? getStableMaxYForThresholdChart(series, thresholdLines?.flatMap(line => line.points) ?? null) : undefined
     ), [series, thresholdLines]);
-
-    if (!series) return null;
+    // Signals over several periods share their level's action, so it is listed once per policy level.
+    const levelKey = (alert: DisplayedPredictionAlert) => `${alert.alertPolicyId}:${alert.level}`;
+    const responseActions = [...new Map(alerts.filter(alert => alert.responseAction).map(alert => [levelKey(alert), alert])).values()];
 
     return (
-        <UncertaintyAreaChart
-            predictionTargetName={predictionTargetName}
-            series={series}
-            alertPeriods={alertPeriods}
-            thresholdLines={thresholdLines}
-            variant="tile"
-            maxY={maxY}
-        />
+        <div className={styles.form}>
+            {responseActions.map(alert => (
+                <div key={levelKey(alert)} className={styles.levelTag}>
+                    <AlertLevelTag display={alert.display} />
+                    <span className={styles.responseAction}>{alert.responseAction}</span>
+                </div>
+            ))}
+            {series && (
+                <UncertaintyAreaChart
+                    predictionTargetName={predictionTargetName}
+                    series={series}
+                    alertPeriods={alertPeriods}
+                    thresholdLines={thresholdLines}
+                    variant="tile"
+                    maxY={maxY}
+                />
+            )}
+        </div>
     );
 };

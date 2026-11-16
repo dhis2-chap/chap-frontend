@@ -38,6 +38,7 @@ export class AlertPoliciesService {
      * or two levels sharing a name. Output codes must be non-empty and unique across
      * all levels and the no-alert state. Codes do not affect severity ordering.
      * Omitted level codes default to `1`, `2`, etc. in level order; no alert defaults to `0`.
+     * Each level may include a free-text `responseAction` describing what to do when it fires.
      * @param requestBody
      * @returns chap_core__rest_api__data_models__DataBaseResponse Successful Response
      * @throws ApiError
@@ -59,7 +60,10 @@ export class AlertPoliciesService {
      * View one alert policy and its levels
      * ⚠️ **Experimental:** behavior and response shape may change without notice.
      *
-     * Read a policy's levels, each with its channel parameters and the probability at which it fires. 404 if the id is unknown.
+     * Read a policy's levels, including their current response actions.
+     *
+     * Resolve an alert's action using its `alertPolicyId` and `level` name.
+     * 404 if the id is unknown.
      * @param alertPolicyId
      * @returns AlertPolicyRead Successful Response
      * @throws ApiError
@@ -79,10 +83,12 @@ export class AlertPoliciesService {
         });
     }
     /**
-     * Update a policy's output codes
+     * Update a policy's output codes and response actions
      * ⚠️ **Experimental:** behavior and response shape may change without notice.
      *
-     * Update codes by level name. Existing alerts resolve to the new codes through their policy.
+     * Update codes and response actions by level name. Existing alerts resolve to the current values through their policy.
+     *
+     * Omitted actions stay unchanged; null clears an action.
      *
      * Names, order and thresholds cannot change. The resulting codes must be non-empty
      * and unique, including unchanged codes and no alert. 404 for an unknown policy;

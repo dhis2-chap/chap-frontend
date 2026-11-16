@@ -25,8 +25,8 @@ export type RunPredictionSetupRequest = {
      */
     type?: (string | null);
     /**
-     * Number of future periods to forecast.
+     * Number of future periods to forecast. Defaults to the horizon of the setup's backtest, kept within the range the model supports.
      */
-    nPeriods?: number;
+    nPeriods?: (number | null);
 };
 

@@ -1,9 +1,10 @@
-import type { AlertPolicyRead, AlertRead } from '@dhis2-chap/ui';
+import type { AlertLevel, AlertPolicyRead, AlertRead } from '@dhis2-chap/ui';
 import { getAlertColor, getAlertLevelDisplay, type AlertLevelDisplay, type AlertPolicyDisplay } from './alertLevelDisplay';
 
 export type DisplayedPredictionAlert = AlertRead & {
     display: AlertLevelDisplay;
     severity: number;
+    responseAction: AlertLevel['responseAction'];
 };
 
 export const displayPredictionAlerts = (
@@ -16,6 +17,7 @@ export const displayPredictionAlerts = (
         ...alert,
         display: getAlertLevelDisplay(alert.level, policy, displays[alert.alertPolicyId]),
         severity: policy?.levels?.findIndex(level => level.name === alert.level) ?? -1,
+        responseAction: policy?.levels?.find(level => level.name === alert.level)?.responseAction,
     };
 }).sort((a, b) => b.severity - a.severity || a.orgUnit.localeCompare(b.orgUnit) || a.timePeriod.localeCompare(b.timePeriod));
 

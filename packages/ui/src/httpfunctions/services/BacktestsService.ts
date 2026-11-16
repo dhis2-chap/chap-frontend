@@ -390,7 +390,7 @@ export class BacktestsService {
      * Runs asynchronously; you get a job id and poll ``/v1/jobs/{id}`` (or
      * ``/v1/jobs/{id}/evaluation_result`` once finished) to find the resulting backtest.
      * Uses the dataset's saved target. A supplied targetColumn must match it, otherwise returns 422.
-     * Returns 404 if the referenced dataset does not exist.
+     * Returns 404 if the referenced dataset does not exist, and 409 if the configured model has been deleted.
      * @param requestBody
      * @returns JobResponse Successful Response
      * @throws ApiError
@@ -473,7 +473,8 @@ export class BacktestsService {
      * Filter to specific regions with ``orgUnits``, or pass ``orgUnits=["adm0"]`` to get
      * one summed series across every region (useful for national-level views). Set
      * ``isDatasetId=true`` to skip the backtest lookup and read directly from a dataset
-     * id. 404 if the backtest, or with ``isDatasetId=true`` the dataset, is unknown.
+     * id. 404 if the backtest, or with ``isDatasetId=true`` the dataset, is unknown, or if
+     * the dataset has no observations of the target for the requested regions.
      * @param backtestId
      * @param orgUnits
      * @param isDatasetId
