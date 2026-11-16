@@ -1,6 +1,7 @@
 const config = {
     type: 'app',
     title: 'Modeling',
+    description: 'Disease forecasting and early warning with Chap',
 
     id: 'a29851f9-82a7-4ecd-8b2c-58e0f220bc75',
     minDHIS2Version: '2.40',
