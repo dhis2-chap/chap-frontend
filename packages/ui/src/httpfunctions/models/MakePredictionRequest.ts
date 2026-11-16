@@ -15,9 +15,9 @@ export type MakePredictionRequest = {
      */
     modelId: string;
     /**
-     * Number of future periods to forecast.
+     * Number of future periods to forecast. Defaults to the stored default for the data's period type.
      */
-    nPeriods?: number;
+    nPeriods?: (number | null);
     /**
      * Id of the registered future-weather provider supplying climate covariates for the forecast window. Should match the provider the model was backtested with. Providers that read the forecast window's own observations cannot be used here. See GET /v1/analytics/weather-providers.
      */

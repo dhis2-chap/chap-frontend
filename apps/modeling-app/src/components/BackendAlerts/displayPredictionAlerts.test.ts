@@ -37,6 +37,21 @@ describe('recorded alert presentation', () => {
         });
     });
 
+    it('resolves response actions by policy and level, leaving missing actions empty', () => {
+        const policiesWithActions = [
+            { id: 1, levels: [{ name: 'Watch', responseAction: 'Review case reports' }, { name: 'Action', responseAction: null }] },
+            { id: 2, levels: [{ name: 'Watch', responseAction: 'Notify the district team' }, { name: 'Action' }] },
+        ] as AlertPolicyRead[];
+        const result = displayPredictionAlerts([
+            alert(1, 1, 'Watch'), alert(2, 2, 'Watch'), alert(3, 1, 'Action'),
+            alert(4, 2, 'Action'), alert(5, 1, 'Unknown'), alert(6, 99, 'Watch'),
+        ], policiesWithActions, {});
+        expect(Object.fromEntries(result.map(item => [item.id, item.responseAction]))).toEqual({
+            1: 'Review case reports', 2: 'Notify the district team', 3: null,
+            4: undefined, 5: undefined, 6: undefined,
+        });
+    });
+
     it('rejects invalid colours from stored settings', () => {
         expect(alertPolicyDisplaySchema.safeParse({ Watch: { color: '<script>' } }).success).toBe(false);
         expect(alertPolicyDisplaySchema.safeParse({ Watch: { color: '#12345' } }).success).toBe(false);

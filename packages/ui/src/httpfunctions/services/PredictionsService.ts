@@ -115,7 +115,8 @@ export class PredictionsService {
      *
      * Forecasting happens in the background; the response carries a job id you poll via
      * ``/v1/jobs/{id}`` for the result. The legacy ``data_to_be_fetched`` field is
-     * rejected — supply the observations directly.
+     * rejected — supply the observations directly. Without ``nPeriods``, the stored default
+     * for the data's period type is used, kept within the range the model supports.
      * @param requestBody
      * @returns JobResponse Successful Response
      * @throws ApiError

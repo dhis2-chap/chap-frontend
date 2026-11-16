@@ -4,6 +4,7 @@ import { getAlertColor, getAlertLevelDisplay, type AlertLevelDisplay, type Alert
 export type DisplayedPredictionAlert = AlertRead & {
     display: AlertLevelDisplay;
     severity: number;
+    responseAction?: string | null;
 };
 
 export const displayPredictionAlerts = (
@@ -16,6 +17,7 @@ export const displayPredictionAlerts = (
         ...alert,
         display: getAlertLevelDisplay(alert.level, policy, displays[alert.alertPolicyId]),
         severity: policy?.levels?.findIndex(level => level.name === alert.level) ?? -1,
+        responseAction: policy?.levels?.find(level => level.name === alert.level)?.responseAction,
     };
 }).sort((a, b) => b.severity - a.severity || a.orgUnit.localeCompare(b.orgUnit) || a.timePeriod.localeCompare(b.timePeriod));
 

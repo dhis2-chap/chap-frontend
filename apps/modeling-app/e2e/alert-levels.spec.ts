@@ -11,6 +11,7 @@ test.describe.serial('signal level presentation', () => {
     let reviewRunUrl: string;
     let reviewAlerts: AlertRead[];
     const policyName = `E2E alert colours ${Date.now()}`;
+    const responseAction = 'Notify the district response team.\nPrepare supplies.';
     const sorted = (ids: number[]) => [...ids].sort((a, b) => a - b);
     const alertIdsOf = (orgUnit: string) => sorted(reviewAlerts.filter(alert => alert.orgUnit === orgUnit).map(alert => alert.id));
     const waitForReview = (page: Page) => page.waitForResponse(response => response.request().method() === 'POST' && response.url().endsWith('/v1/crud/alerts/$approve'));
@@ -32,6 +33,7 @@ test.describe.serial('signal level presentation', () => {
         await expect(names).toHaveCount(1);
         await expect(names.nth(0)).toHaveValue('');
         await names.nth(0).fill('Watch');
+        await modal.getByLabel('Response action (optional)', { exact: true }).nth(0).fill('Review case reports.');
         await modal.getByLabel('Custom colour', { exact: true }).nth(0).fill('#11aabb');
         await modal.locator('[data-test="dhis2-uiwidgets-singleselectfield"]').filter({ hasText: 'Strategy' }).nth(0)
             .locator('[data-test="dhis2-uicore-select-input"]').click();
@@ -68,12 +70,20 @@ test.describe.serial('signal level presentation', () => {
         await expect(edit.getByLabel('Custom colour', { exact: true }).nth(0)).toHaveValue('#11aabb');
         await expect(edit.getByLabel('No signal import code', { exact: true })).toHaveValue('0');
         await expect(edit.getByLabel('Import code', { exact: true }).nth(1)).toHaveValue('RED');
+        const responseActions = edit.getByLabel('Response action (optional)', { exact: true });
+        await expect(responseActions.nth(0)).toHaveValue('Review case reports.');
+        await expect(responseActions.nth(1)).toHaveValue('');
+        await responseActions.nth(0).fill('Review case reports daily.');
+        await responseActions.nth(1).fill(responseAction);
         await edit.getByLabel('Import code', { exact: true }).nth(1).fill('ACTION');
         await edit.getByRole('button', { name: 'Yellow', exact: true }).nth(1).click();
         await expect(edit.getByRole('button', { name: 'Yellow', exact: true }).nth(1)).toHaveAttribute('aria-pressed', 'true');
         const codesSaved = page.waitForResponse(response => response.request().method() === 'PATCH' && response.url().endsWith(`/v1/crud/alert-policies/${policyId}`));
         await edit.getByRole('button', { name: 'Save', exact: true }).click();
-        expect((await codesSaved).request().postDataJSON()).toEqual({ noAlertOutputCode: '0', levelOutputCodes: { Watch: '1', Action: 'ACTION' } });
+        expect((await codesSaved).request().postDataJSON()).toEqual({
+            noAlertOutputCode: '0', levelOutputCodes: { Watch: '1', Action: 'ACTION' },
+            levelResponseActions: { Watch: 'Review case reports daily.', Action: responseAction },
+        });
         await expect(edit).not.toBeVisible();
         await expect(page.getByText('Signal policy saved', { exact: true })).toBeVisible();
         await page.reload();
@@ -81,6 +91,17 @@ test.describe.serial('signal level presentation', () => {
         await expect(row.getByText(/Watch/).locator('span')).toHaveCSS('background-color', 'rgb(17, 170, 187)');
         await row.getByRole('button', { name: 'Edit', exact: true }).click();
         await expect(edit.getByLabel('Import code', { exact: true }).nth(1)).toHaveValue('ACTION');
+        await expect(responseActions.nth(0)).toHaveValue('Review case reports daily.');
+        await expect(responseActions.nth(1)).toHaveValue(responseAction);
+        await responseActions.nth(0).fill('   ');
+        const cleared = page.waitForResponse(response => response.request().method() === 'PATCH' && response.url().endsWith(`/v1/crud/alert-policies/${policyId}`));
+        await edit.getByRole('button', { name: 'Save', exact: true }).click();
+        expect((await cleared).request().postDataJSON().levelResponseActions).toEqual({ Watch: null, Action: responseAction });
+        await expect(edit).not.toBeVisible();
+        await page.reload();
+        await row.getByRole('button', { name: 'Edit', exact: true }).click();
+        await expect(responseActions.nth(0)).toHaveValue('');
+        await expect(responseActions.nth(1)).toHaveValue(responseAction);
         await edit.getByRole('button', { name: 'Cancel', exact: true }).click();
         // Policies without saved colours fall back to defaults instead of erroring.
         await expect(page.getByText(/Saved colours could not be loaded/)).toHaveCount(0);
@@ -307,6 +328,11 @@ test.describe.serial('signal level presentation', () => {
 
         // In the review, an organisation unit is selected by its most severe signal, so Watch leaves the mixed one out.
         await page.goto(`/#/predictions/${setup.id}/runs/${prediction.id}/signals`);
+        // Each signal uses its own level's action, including mixed levels in one organisation unit.
+        await expect(page.locator(`[data-test="signal-review-${mixedRegion}"]`).getByText(responseAction, { exact: true })).toHaveCount(1);
+        await expect(page.locator(`[data-test="signal-review-${actionRegion}"]`).getByText(responseAction, { exact: true })).toBeVisible();
+        await expect(page.locator(`[data-test="signal-review-${watchRegion}"]`).getByText(responseAction, { exact: true })).toHaveCount(0);
+        await expect(page.getByText('Review case reports daily.', { exact: true })).toHaveCount(0);
         await page.locator('[data-test="signal-review-select-level-Watch"]').click();
         await expect(page.getByText('1 of 4 pending signals selected', { exact: true })).toBeVisible();
         await expect(page.locator(`[data-test="signal-review-${watchRegion}"] input[type="checkbox"]`)).toBeChecked();

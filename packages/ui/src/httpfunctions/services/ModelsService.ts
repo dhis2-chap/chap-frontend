@@ -161,10 +161,11 @@ export class ModelsService {
     }
     /**
      * Retire a configured model
-     * Soft-delete a configured model so it stops showing up in pickers, while keeping the underlying row intact so historical backtests / predictions that reference it still resolve.
+     * Soft-delete a configured model so pickers can hide it, while keeping the underlying row intact so historical backtests / predictions that reference it still resolve.
      *
-     * The row stays in the database with ``archived=True``; existing references remain
-     * valid. 404 if the id is unknown.
+     * The row stays in the database with ``archived=True`` and is still listed by
+     * ``GET /v1/crud/configured-models`` with that flag, so clients can name old runs. New
+     * backtests and predictions on it are rejected with 409. 404 if the id is unknown.
      * @param configuredModelId
      * @returns any Successful Response
      * @throws ApiError
