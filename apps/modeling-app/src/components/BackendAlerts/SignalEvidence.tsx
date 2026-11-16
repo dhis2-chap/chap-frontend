@@ -23,13 +23,14 @@ export const SignalEvidence = ({ alerts, predictionTargetName, series, threshold
     const maxY = useMemo(() => (
         series ? getStableMaxYForThresholdChart(series, thresholdLines?.flatMap(line => line.points) ?? null) : undefined
     ), [series, thresholdLines]);
-    // Signals over several periods share their level's action, so it is listed once per level.
-    const responseActions = [...new Map(alerts.filter(alert => alert.responseAction).map(alert => [alert.level, alert])).values()];
+    // Signals over several periods share their level's action, so it is listed once per policy level.
+    const levelKey = (alert: DisplayedPredictionAlert) => `${alert.alertPolicyId}:${alert.level}`;
+    const responseActions = [...new Map(alerts.filter(alert => alert.responseAction).map(alert => [levelKey(alert), alert])).values()];
 
     return (
         <div className={styles.form}>
             {responseActions.map(alert => (
-                <div key={alert.level} className={styles.levelTag}>
+                <div key={levelKey(alert)} className={styles.levelTag}>
                     <AlertLevelTag display={alert.display} />
                     <span className={styles.responseAction}>{alert.responseAction}</span>
                 </div>
