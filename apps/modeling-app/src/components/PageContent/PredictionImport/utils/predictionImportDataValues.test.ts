@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { EndemicThresholdPoint } from '@dhis2-chap/ui';
+import type { EndemicThresholdPoint } from '@chap-blocks/ui/utils';
 import {
     buildClearDataValues,
     buildClearPeriodIds,

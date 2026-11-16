@@ -5,7 +5,7 @@ import {
     getLastCompletedPeriodId,
     PERIOD_TYPES,
     toDhis2FixedPeriodType,
-} from '@dhis2-chap/core';
+} from '@chap-blocks/core';
 import { type Dhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
 
 export const dimensionItemTypeSchema = z.enum(['DATA_ELEMENT', 'PROGRAM_DATA_ELEMENT', 'INDICATOR', 'PROGRAM_INDICATOR']);

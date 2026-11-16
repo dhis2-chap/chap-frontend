@@ -1,6 +1,7 @@
 import { NoticeBox, Tooltip } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
-import { Pill, type ModelSpecRead } from '@dhis2-chap/ui';
+import { Pill } from '@chap-blocks/ui/layout';
+import { type ModelSpecRead } from '@dhis2-chap/ui';
 import {
     hasRevisionMismatch,
     revisionMismatchMessage,

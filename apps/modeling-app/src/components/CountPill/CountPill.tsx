@@ -1,5 +1,5 @@
 import { Tooltip } from '@dhis2/ui';
-import { Pill } from '@dhis2-chap/ui';
+import { Pill } from '@chap-blocks/ui/layout';
 import styles from './CountPill.module.css';
 
 type Props = {

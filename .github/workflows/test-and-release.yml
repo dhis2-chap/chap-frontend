@@ -20,6 +20,8 @@ jobs:
     if: ${{ !contains(github.event.head_commit.message, '[skip ci]') }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: recursive
       - uses: pnpm/action-setup@v4
 
       - uses: actions/setup-node@v4
@@ -37,6 +39,8 @@ jobs:
     needs: [install]
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: recursive
 
       - uses: pnpm/action-setup@v4
 
@@ -56,6 +60,8 @@ jobs:
     needs: [install]
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: recursive
 
       - uses: pnpm/action-setup@v4
 
@@ -75,6 +81,8 @@ jobs:
     needs: [install]
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: recursive
 
       - uses: pnpm/action-setup@v4
 
@@ -103,6 +111,8 @@ jobs:
     needs: [install, build]
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: recursive
 
       - uses: pnpm/action-setup@v4
 
@@ -137,6 +147,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          submodules: recursive
           fetch-depth: 0
           token: ${{ secrets.DHIS2_BOT_GITHUB_TOKEN }}
 

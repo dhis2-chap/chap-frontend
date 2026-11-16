@@ -1,11 +1,5 @@
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { importLocationStateSchema } from './quantileMappingFormSchema';
-
-// The schema only needs the probability options; the real barrel pulls in
-// @dhis2/ui, which cannot load in the node test environment.
-vi.mock('@dhis2-chap/ui', () => ({
-    OUTBREAK_PROBABILITY_OPTIONS: [10, 25, 50, 75, 90],
-}));
 
 describe('importLocationStateSchema', () => {
     const validState = {

@@ -1,10 +1,5 @@
-import type {
-    AlertPolicyRead,
-    ModelSpecRead,
-    PredictionInfo,
-    PredictionOrgUnitSeries,
-    PredictionSetupReadWithPredictions,
-} from '@dhis2-chap/ui';
+import type { AlertPolicyRead, ModelSpecRead, PredictionSetupReadWithPredictions } from '@dhis2-chap/ui';
+import type { PredictionInfo, PredictionOrgUnitSeries } from '@chap-blocks/ui/utils';
 
 export type QuantileMappingFormProps = {
     prediction: PredictionInfo;

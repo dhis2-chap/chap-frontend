@@ -8,14 +8,11 @@ import {
     NoticeBox,
     Switch,
 } from '@dhis2/ui';
-import { convertServerToClientPeriod, PERIOD_TYPES } from '@dhis2-chap/core';
-import { DEFAULT_OUTBREAK_PROBABILITY, getThresholdTileViewModels, Tag } from '@dhis2-chap/ui';
-import type {
-    AlertPolicyRead,
-    ModelSpecRead,
-    OutbreakProbability,
-    PredictionInfo,
-} from '@dhis2-chap/ui';
+import { convertServerToClientPeriod, PERIOD_TYPES } from '@chap-blocks/core';
+import { DEFAULT_OUTBREAK_PROBABILITY, getThresholdTileViewModels } from '@chap-blocks/ui/utils';
+import { Tag } from '@chap-blocks/ui/layout';
+import type { AlertPolicyRead, ModelSpecRead } from '@dhis2-chap/ui';
+import type { OutbreakProbability, PredictionInfo } from '@chap-blocks/ui/utils';
 import { useMemo } from 'react';
 import { useAlertPolicyThresholds } from '@/hooks/useAlertPolicyThresholds';
 import { usePredictionAlerts } from '@/hooks/usePredictionAlerts';

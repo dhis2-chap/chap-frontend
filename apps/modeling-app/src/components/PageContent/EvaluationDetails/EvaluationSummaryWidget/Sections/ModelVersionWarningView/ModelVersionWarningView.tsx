@@ -1,5 +1,5 @@
 import i18n from '@dhis2/d2-i18n';
-import { Widget } from '@dhis2-chap/ui';
+import { Widget } from '@chap-blocks/ui/layout';
 import { IconWarning16 } from '@dhis2/ui';
 import styles from '../../EvaluationSummaryWidget.module.css';
 

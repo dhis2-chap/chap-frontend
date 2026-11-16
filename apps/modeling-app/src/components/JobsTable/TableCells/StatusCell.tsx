@@ -1,4 +1,4 @@
-import { StatusIndicator, PillVariant } from '@dhis2-chap/ui';
+import { StatusIndicator, PillVariant } from '@chap-blocks/ui/layout';
 import i18n from '@dhis2/d2-i18n';
 import { JOB_STATUSES } from '../../../hooks/useJobs';
 

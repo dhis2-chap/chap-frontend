@@ -1,4 +1,4 @@
-import { PERIOD_TYPES } from '@dhis2-chap/core';
+import { PERIOD_TYPES } from '@chap-blocks/core';
 
 /**
  * chap-core reports split period facet coordinates as the ISO start date of the

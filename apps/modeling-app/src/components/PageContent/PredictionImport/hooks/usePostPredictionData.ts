@@ -2,12 +2,8 @@ import { useState } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { useAlert, useDataEngine } from '@dhis2/app-runtime';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import {
-    EndemicThresholdPoint,
-    PredictionEntry,
-    PredictionInfo,
-    PredictionsService,
-} from '@dhis2-chap/ui';
+import { EndemicThresholdPoint, PredictionInfo } from '@chap-blocks/ui/utils';
+import { PredictionEntry, PredictionsService } from '@dhis2-chap/ui';
 import type { ImportOutbreakIndicator } from '../utils/policyOutbreakIndicators';
 import { getPredictionPeriodIds } from '@/utils/predictionRunMetadata';
 import {

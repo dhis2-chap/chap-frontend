@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { ThresholdEntry } from '../../httpfunctions';
-import type { PredictionOrgUnitSeries, PredictionPointVM } from '../../interfaces/Prediction';
+import type { PredictionOrgUnitSeries, PredictionPointVM } from '@chap-blocks/ui/utils';
 import {
     buildEndemicThresholdMap,
     buildOutbreakIndicatorsForSeries,
@@ -9,7 +9,7 @@ import {
     getThresholdLineRoles,
     isOutbreakAtProbability,
     parseOutbreakProbability,
-} from '../outbreakAlerts';
+} from '@chap-blocks/ui/utils';
 
 const point = (
     quantiles: PredictionPointVM['quantiles'],

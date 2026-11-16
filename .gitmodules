@@ -1,0 +1,4 @@
+[submodule "vendor/chap-blocks"]
+	path = vendor/chap-blocks
+	url = https://github.com/dhis2-chap/chap-blocks.git
+	branch = main

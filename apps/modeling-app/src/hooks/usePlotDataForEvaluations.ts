@@ -4,10 +4,8 @@ import {
     BacktestsService,
     DataList,
     EvaluationEntry,
-    getSplitPeriod,
-    plotResultsToViewData,
-    PlotDataResult,
 } from '@dhis2-chap/ui';
+import { getSplitPeriod, plotResultsToViewData, PlotDataResult } from '@chap-blocks/ui/utils';
 import { useCallback, useMemo } from 'react';
 import {
     Query,

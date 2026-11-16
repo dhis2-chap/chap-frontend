@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { PredictionInfo } from '@dhis2-chap/ui';
+import type { PredictionInfo } from '@chap-blocks/ui/utils';
 import {
     buildPredictionRunMetaData,
     formatPeriodId,

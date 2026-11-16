@@ -16,7 +16,7 @@ import { useDatasetValidation } from './useDatasetValidation';
 import styles from './DatasetConfiguration.module.css';
 import { OrganisationUnit } from '../../../OrganisationUnitSelector';
 import { InspectDatasetModal } from '../../../InspectDatasetModal';
-import { PERIOD_TYPES } from '@dhis2-chap/core';
+import { PERIOD_TYPES } from '@chap-blocks/core';
 import { useInstalledDVVersion } from '../../../../utils/useInstalledDVVersion';
 import { ConditionalTooltip } from '../../../ConditionalTooltip';
 import { type Dhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';

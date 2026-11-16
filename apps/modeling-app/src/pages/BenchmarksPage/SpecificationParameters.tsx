@@ -1,5 +1,6 @@
 import i18n from '@dhis2/d2-i18n';
-import { Tag, getPeriodNameFromId } from '@dhis2-chap/ui';
+import { Tag } from '@chap-blocks/ui/layout';
+import { getPeriodNameFromId } from '@chap-blocks/ui/utils';
 import type { BacktestSpecificationSummary, DataSetMeta } from '@dhis2-chap/ui';
 import { useBacktestParameterValues } from '@/hooks/useBacktestParameters';
 import styles from './BenchmarksPage.module.css';

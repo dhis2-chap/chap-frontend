@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { PERIOD_TYPES } from '@dhis2-chap/core';
+import { PERIOD_TYPES } from '@chap-blocks/core';
 import type { DataElement, PredictionEntry } from '../../httpfunctions';
-import { buildPredictionSeries } from '../PredictionViewModel';
+import { buildPredictionSeries } from '@chap-blocks/ui/utils';
 
 const createPredictionEntry = (period: string): PredictionEntry => ({
     orgUnit: 'adm0',

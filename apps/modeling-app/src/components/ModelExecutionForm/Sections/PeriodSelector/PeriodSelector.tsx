@@ -12,8 +12,8 @@ import {
     getLastCompletedPeriodId,
     PERIOD_TYPES,
     toDhis2FixedPeriodType,
-} from '@dhis2-chap/core';
-import { PeriodRangeField } from '@dhis2-chap/ui';
+} from '@chap-blocks/core';
+import { PeriodRangeField } from '@chap-blocks/ui/layout';
 import { type Dhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
 import styles from './PeriodSelector.module.css';
 

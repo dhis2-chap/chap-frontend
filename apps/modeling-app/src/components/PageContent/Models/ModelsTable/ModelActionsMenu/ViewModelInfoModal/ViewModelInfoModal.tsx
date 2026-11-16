@@ -7,7 +7,7 @@ import {
     CircularLoader,
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
-import { Pill } from '@dhis2-chap/ui';
+import { Pill } from '@chap-blocks/ui/layout';
 import { ModelCommit } from '@/components/ModelCommit';
 import { useConfiguredModelInfo } from '../hooks/useConfiguredModelInfo';
 import styles from './ViewModelInfoModal.module.css';

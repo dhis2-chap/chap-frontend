@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { Button, Checkbox, CircularLoader, NoticeBox } from '@dhis2/ui';
-import { Card, MakeBacktestsResponse } from '@dhis2-chap/ui';
+import { Card } from '@chap-blocks/ui/layout';
+import { MakeBacktestsResponse } from '@dhis2-chap/ui';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { PageHeader } from '../../features/common-features/PageHeader/PageHeader';
 import { ChapErrorNotice } from '../../components/ChapErrorNotice';

@@ -13,6 +13,9 @@ publicHoistPattern:
 packages:
   - apps/*
   - packages/*
+  - vendor/chap-blocks/packages/api
+  - vendor/chap-blocks/packages/core
+  - vendor/chap-blocks/packages/ui
 
 onlyBuiltDependencies:
   - '@dhis2/cli-helpers-engine'

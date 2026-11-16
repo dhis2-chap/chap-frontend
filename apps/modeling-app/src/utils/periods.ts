@@ -8,7 +8,7 @@ import {
     parse,
     startOfISOWeek,
 } from 'date-fns';
-import { DEFAULT_DHIS2_CALENDAR, getPeriodsInRange, type Dhis2Calendar } from '@dhis2-chap/core';
+import { DEFAULT_DHIS2_CALENDAR, getPeriodsInRange, type Dhis2Calendar } from '@chap-blocks/core';
 import {
     isSupportedPeriodType,
     parseSupportedPeriodType,

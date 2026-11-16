@@ -1,8 +1,9 @@
 import { useMemo } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { useQuery } from '@tanstack/react-query';
-import { canonicalizePeriodId } from '@dhis2-chap/core';
-import { DatasetsService, OpenAPI, PredictionsService, type AlertPolicyRead, type ApiError, type PredictionEntry, type PredictionOrgUnitSeries, type ThresholdResponse } from '@dhis2-chap/ui';
+import { canonicalizePeriodId } from '@chap-blocks/core';
+import { DatasetsService, OpenAPI, PredictionsService, type AlertPolicyRead, type ApiError, type PredictionEntry, type ThresholdResponse } from '@dhis2-chap/ui';
+import { type PredictionOrgUnitSeries } from '@chap-blocks/ui/utils';
 import { buildPolicyOutbreakIndicators, getAlertLevelQuantile } from '@/components/PageContent/PredictionImport/utils/policyOutbreakIndicators';
 import { getThresholdQueryState } from '@/utils/thresholdQueryState';
 

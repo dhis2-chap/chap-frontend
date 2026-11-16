@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { Button, CircularLoader } from '@dhis2/ui';
-import { Widget } from '@dhis2-chap/ui';
+import { Widget } from '@chap-blocks/ui/layout';
 import type { PredictionSetupReadWithPredictions } from '@dhis2-chap/ui';
 import { useNavigate } from 'react-router-dom';
 import { useDataset } from '../../../../hooks/useDataset';

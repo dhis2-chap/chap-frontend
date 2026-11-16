@@ -14,7 +14,8 @@
     "include": [
         "src/**/*",
         "docs/**/*",
-        "e2e/**/*"
+        "e2e/**/*",
+        "../../vendor/chap-blocks/packages/ui/src/Globals.d.tsx"
     ],
     "exclude": [
         "node_modules",

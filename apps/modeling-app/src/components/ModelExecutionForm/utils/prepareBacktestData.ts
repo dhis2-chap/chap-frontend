@@ -1,7 +1,7 @@
 import { QueryClient } from '@tanstack/react-query';
 import i18n from '@dhis2/d2-i18n';
 import { ModelExecutionFormValues } from '../hooks/useModelExecutionFormState';
-import { getPeriodsInRange, PERIOD_TYPES, toDhis2FixedPeriodType } from '@dhis2-chap/core';
+import { getPeriodsInRange, PERIOD_TYPES, toDhis2FixedPeriodType } from '@chap-blocks/core';
 import { DataSource, ModelSpecRead, ObservationBase } from '@dhis2-chap/ui';
 import { useDataEngine } from '@dhis2/app-runtime';
 import { AnalyticsResponse, OrgUnitResponse, fetchAnalytics, fetchOrgUnits } from './queryUtils';

@@ -6,13 +6,10 @@ import {
     getPeriodsInRange,
     sortPeriodIds,
     toDhis2FixedPeriodType,
-} from '@dhis2-chap/core';
-import type { Dhis2Calendar } from '@dhis2-chap/core';
-import type {
-    EndemicThresholdPoint,
-    PredictionEntry,
-    QuantileKey,
-} from '@dhis2-chap/ui';
+} from '@chap-blocks/core';
+import type { Dhis2Calendar } from '@chap-blocks/core';
+import type { EndemicThresholdPoint, QuantileKey } from '@chap-blocks/ui/utils';
+import type { PredictionEntry } from '@dhis2-chap/ui';
 import type { ImportOutbreakIndicator } from './policyOutbreakIndicators';
 
 export const STANDARD_QUANTILES = [0.1, 0.25, 0.5, 0.75, 0.9];

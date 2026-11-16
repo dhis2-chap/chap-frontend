@@ -1,8 +1,8 @@
 import i18n from '@dhis2/d2-i18n';
 import { Controller, useFormContext } from 'react-hook-form';
 import { Label } from '@dhis2/ui';
-import { PeriodPicker } from '@dhis2-chap/ui';
-import { toDhis2FixedPeriodType } from '@dhis2-chap/core';
+import { PeriodPicker } from '@chap-blocks/ui/layout';
+import { toDhis2FixedPeriodType } from '@chap-blocks/core';
 import { NewPredictionFormValues } from '../hooks/useNewPredictionFormState';
 import { SupportedPeriodType } from '../utils/predictionPeriods';
 import { type Dhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';

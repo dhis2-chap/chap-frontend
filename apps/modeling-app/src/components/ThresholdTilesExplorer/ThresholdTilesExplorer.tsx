@@ -13,14 +13,12 @@ import {
     SingleSelectOption,
     Tooltip,
 } from '@dhis2/ui';
-import {
-    getStableMaxYForThresholdChart,
-    OUTBREAK_PROBABILITY_OPTIONS,
-    UncertaintyAreaChart,
-    VirtuosoGrid,
-    Widget,
-} from '@dhis2-chap/ui';
-import type { OutbreakProbability, ThresholdChartLine, ThresholdTileViewModel, ZoomRange } from '@dhis2-chap/ui';
+import { VirtuosoGrid } from '@chap-blocks/ui';
+import { getStableMaxYForThresholdChart, OUTBREAK_PROBABILITY_OPTIONS } from '@chap-blocks/ui/utils';
+import { UncertaintyAreaChart } from '@chap-blocks/ui/charts';
+import { Widget } from '@chap-blocks/ui/layout';
+import type { ThresholdChartLine, ZoomRange } from '@chap-blocks/ui';
+import type { OutbreakProbability, ThresholdTileViewModel } from '@chap-blocks/ui/utils';
 import { ID_MAIN_LAYOUT } from '../layout/Layout';
 import { AlertLevelTag } from '@/components/BackendAlerts/AlertLevelTag';
 import { getAlertPeriods, type DisplayedPredictionAlert } from '@/components/BackendAlerts/displayPredictionAlerts';

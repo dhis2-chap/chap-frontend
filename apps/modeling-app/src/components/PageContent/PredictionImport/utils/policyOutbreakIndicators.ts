@@ -1,5 +1,6 @@
-import { canonicalizePeriodId } from '@dhis2-chap/core';
-import type { AlertLevel, AlertPolicyRead, PredictionEntry, PredictionOrgUnitSeries, ThresholdResponse } from '@dhis2-chap/ui';
+import { canonicalizePeriodId } from '@chap-blocks/core';
+import type { AlertLevel, AlertPolicyRead, PredictionEntry, ThresholdResponse } from '@dhis2-chap/ui';
+import type { PredictionOrgUnitSeries } from '@chap-blocks/ui/utils';
 
 export type ImportOutbreakIndicator = { orgUnitId: string; period: string; value: string };
 

@@ -1,129 +1,32 @@
 import { useState, type ReactNode } from 'react';
-import cx from 'classnames';
 import { Link } from 'react-router-dom';
 import i18n from '@dhis2/d2-i18n';
 import { useQuery } from '@tanstack/react-query';
 import {
-    type AlertLevel, type ApiError, DataDimension, MetricsService, OpenAPI, Widget,
-    type OutbreakMetricInfo, type OutbreakMetricsRow,
+    type ApiError,
+    DataDimension,
+    MetricsService,
+    OpenAPI,
+    type OutbreakMetricInfo,
 } from '@dhis2-chap/ui';
+import { Widget } from '@chap-blocks/ui/layout';
 import {
-    Button, Checkbox, CircularLoader, DataTable, DataTableBody, DataTableCell,
-    DataTableColumnHeader, DataTableHead, DataTableRow, SingleSelect, SingleSelectOption,
+    Button, Checkbox, CircularLoader, SingleSelect, SingleSelectOption,
 } from '@dhis2/ui';
 import { useAlertPolicies } from '@/hooks/useAlertPolicies';
 import { Features, useIsFeatureAvailable } from '@/hooks/useIsFeatureAvailable';
 import { useOutbreakMetrics } from '@/hooks/useOutbreakMetrics';
 import { ChapErrorNotice } from '@/components/ChapErrorNotice';
 import { MetricInfoIcon } from '@/components/MetricInfoIcon/MetricInfoIcon';
+import { OutbreakMetricsTable } from '@chap-blocks/ui/tables';
 import { describeAlertThreshold } from '@/components/BackendAlerts/describeAlertLevel';
 import { ReferenceModelSelector } from '@/components/ModelComparisons/ReferenceModelSelector';
 import { referenceName, useReferenceModel } from '@/components/ModelComparisons/referenceModels';
 import { useBacktestSpecification } from '@/pages/BenchmarksPage/useBacktestSpecification';
-import comparisonStyles from '@/components/ModelComparisons/ModelComparisons.module.css';
 import tableStyles from '@/pages/BenchmarksPage/BenchmarksPage.module.css';
 import styles from './OutbreakMetricsWidget.module.css';
 
 const HEADLINE_METRIC_IDS = ['sensitivity', 'ppv', 'specificity', 'f1'];
-
-const formatScore = (value: number | null | undefined) => (
-    value != null && Number.isFinite(value)
-        ? value.toLocaleString(undefined, { maximumFractionDigits: 3 })
-        : i18n.t('Not defined')
-);
-
-/* Every outbreak metric is higher-is-better, so the sign of the difference says which model scored better. */
-const Comparison = ({ value, reference }: { value?: number | null; reference?: number | null }) => {
-    if (reference == null || !Number.isFinite(reference)) return null;
-    const difference = value != null && Number.isFinite(value) ? value - reference : 0;
-    return (
-        <span className={cx(comparisonStyles.comparison, {
-            [comparisonStyles.better]: difference > 0,
-            [comparisonStyles.worse]: difference < 0,
-        })}
-        >
-            {i18n.t('vs {{reference}}', { reference: formatScore(reference) })}
-        </span>
-    );
-};
-
-const MetricLabel = ({ metric }: { metric: OutbreakMetricInfo }) => (
-    <span className={tableStyles.metricHeader}>
-        {metric.displayName}
-        <MetricInfoIcon metric={metric} />
-    </span>
-);
-
-type ScoresProps = {
-    row: OutbreakMetricsRow;
-    referenceRow?: OutbreakMetricsRow;
-    levels: AlertLevel[];
-    binaryMetrics: OutbreakMetricInfo[];
-    categoricalMetrics: OutbreakMetricInfo[];
-};
-
-const Scores = ({ row, referenceRow, levels, binaryMetrics, categoricalMetrics }: ScoresProps) => (
-    <div className={styles.result}>
-        <div className={styles.resultHeading}>
-            <h3>
-                {row.horizonDistance == null
-                    ? i18n.t('All forecast horizons')
-                    : i18n.t('Horizon {{horizon}}', { horizon: row.horizonDistance })}
-            </h3>
-            <span>
-                {i18n.t('{{count}} forecast case scored', {
-                    count: row.nCells,
-                    defaultValue_plural: '{{count}} forecast cases scored',
-                })}
-            </span>
-        </div>
-        <div className={tableStyles.table}>
-            <DataTable>
-                <DataTableHead>
-                    <DataTableRow>
-                        <DataTableColumnHeader>{i18n.t('Signal level')}</DataTableColumnHeader>
-                        <DataTableColumnHeader>{i18n.t('Threshold')}</DataTableColumnHeader>
-                        {binaryMetrics.map(metric => (
-                            <DataTableColumnHeader key={metric.id} align="right">
-                                <MetricLabel metric={metric} />
-                            </DataTableColumnHeader>
-                        ))}
-                    </DataTableRow>
-                </DataTableHead>
-                <DataTableBody>
-                    {row.levels.map((level) => {
-                        const policyLevel = levels.find(item => item.name === level.level);
-                        const referenceLevel = referenceRow?.levels.find(item => item.level === level.level);
-                        return (
-                            <DataTableRow key={level.level}>
-                                <DataTableCell className={tableStyles.strong}>{level.level}</DataTableCell>
-                                <DataTableCell className={styles.threshold}>
-                                    {policyLevel ? describeAlertThreshold(policyLevel) : '—'}
-                                </DataTableCell>
-                                {binaryMetrics.map(metric => (
-                                    <DataTableCell key={metric.id} align="right" className={tableStyles.number}>
-                                        {formatScore(level.metrics[metric.id])}
-                                        <Comparison value={level.metrics[metric.id]} reference={referenceLevel?.metrics[metric.id]} />
-                                    </DataTableCell>
-                                ))}
-                            </DataTableRow>
-                        );
-                    })}
-                </DataTableBody>
-            </DataTable>
-        </div>
-        <div className={styles.policyScores}>
-            <strong>{i18n.t('Policy overall')}</strong>
-            {categoricalMetrics.map(metric => (
-                <span key={metric.id} className={styles.policyScore}>
-                    <MetricLabel metric={metric} />
-                    <strong>{formatScore(row.categorical[metric.id])}</strong>
-                    <Comparison value={row.categorical[metric.id]} reference={referenceRow?.categorical[metric.id]} />
-                </span>
-            ))}
-        </div>
-    </div>
-);
 
 type Props = {
     evaluationId: number;
@@ -270,13 +173,18 @@ const OutbreakMetricsContent = ({ evaluationId, specificationId, policyId: fixed
                                         </p>
                                     )}
                                     {scores.data?.rows.map(row => (
-                                        <Scores
+                                        <OutbreakMetricsTable
                                             key={row.horizonDistance ?? 'overall'}
                                             row={row}
                                             referenceRow={comparedReference ? referenceScores.data?.rows.find(item => item.horizonDistance === row.horizonDistance) : undefined}
-                                            levels={policy.levels ?? []}
-                                            binaryMetrics={binaryMetrics}
-                                            categoricalMetrics={categoricalMetrics}
+                                            thresholds={Object.fromEntries((policy.levels ?? []).map(level => [level.name, describeAlertThreshold(level)]))}
+                                            metrics={[...binaryMetrics, ...categoricalMetrics]}
+                                            renderMetricLabel={metric => (
+                                                <span className={tableStyles.metricHeader}>
+                                                    {metric.displayName}
+                                                    <MetricInfoIcon metric={metric} />
+                                                </span>
+                                            )}
                                         />
                                     ))}
                                 </>

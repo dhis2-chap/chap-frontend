@@ -1,4 +1,4 @@
-import type { PredictionInfo } from '@dhis2-chap/ui';
+import type { PredictionInfo } from '@chap-blocks/ui/utils';
 import { formatPeriodId, getNextPeriods } from './periods';
 
 const PREDICTION_PERIOD_METADATA_KEYS = [

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { MonitoringSource, PredictionSetupMonitoring } from '@dhis2-chap/ui';
-import { monitoringSeries } from './monitoringSeries';
+import { monitoringSeries } from '@chap-blocks/ui/utils';
 
 const data: PredictionSetupMonitoring = {
     metricId: 'mae',

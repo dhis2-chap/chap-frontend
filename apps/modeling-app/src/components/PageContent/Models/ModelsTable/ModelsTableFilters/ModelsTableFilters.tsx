@@ -1,4 +1,5 @@
-import { Input, Checkbox } from '@dhis2/ui';
+import { SearchField } from '@chap-blocks/ui/search';
+import { Checkbox } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import styles from './ModelsTableFilters.module.css';
 import { useModelsTableFilters } from '../hooks/useModelsTableFilters';
@@ -14,11 +15,11 @@ export const ModelsTableFilters = () => {
     return (
         <div className={styles.container}>
             <div className={styles.inputContainer}>
-                <Input
-                    dense
+                <SearchField
+                    label={i18n.t('Search models')}
                     placeholder={i18n.t('Search')}
-                    value={search}
-                    onChange={e => handleSearchChange(e.value)}
+                    value={search ?? ''}
+                    onChange={handleSearchChange}
                 />
             </div>
             <Checkbox

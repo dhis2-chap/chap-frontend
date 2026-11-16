@@ -1,6 +1,7 @@
 import i18n from '@dhis2/d2-i18n';
 import { Button, CircularLoader, DataTable, DataTableBody, DataTableCell, DataTableColumnHeader, DataTableHead, DataTableRow, IconAdd16, NoticeBox } from '@dhis2/ui';
-import { ApiError, BacktestsService, BacktestSpecificationSummary, Card } from '@dhis2-chap/ui';
+import { ApiError, BacktestsService, BacktestSpecificationSummary } from '@dhis2-chap/ui';
+import { Card } from '@chap-blocks/ui/layout';
 import { useQuery } from '@tanstack/react-query';
 import { Link, useNavigate } from 'react-router-dom';
 import { PageHeader } from '../../features/common-features/PageHeader/PageHeader';

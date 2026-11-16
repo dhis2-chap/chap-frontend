@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { FormProvider, useWatch } from 'react-hook-form';
-import { Card } from '@dhis2-chap/ui';
+import { Card } from '@chap-blocks/ui/layout';
 import { useEvaluationFormController } from './hooks/useEvaluationFormController';
 import { ModelExecutionFormValues } from '../ModelExecutionForm/hooks/useModelExecutionFormState';
 import styles from './NewEvaluationForm.module.css';

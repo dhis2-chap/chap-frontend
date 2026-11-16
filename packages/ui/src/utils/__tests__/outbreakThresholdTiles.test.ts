@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import type { PredictionOrgUnitSeries, PredictionPointVM } from '../../interfaces/Prediction';
+import type { PredictionOrgUnitSeries, PredictionPointVM } from '@chap-blocks/ui/utils';
 import {
     getStableMaxYForThresholdChart,
     getThresholdTileViewModels,
-} from '../outbreakThresholdTiles';
-import type { EndemicThresholdPoint } from '../outbreakAlerts';
+} from '@chap-blocks/ui/utils';
+import type { EndemicThresholdPoint } from '@chap-blocks/ui/utils';
 
 const point = (
     period: string,

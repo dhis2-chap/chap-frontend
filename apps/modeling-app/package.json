@@ -27,7 +27,8 @@
         "react-dom": ">=18"
     },
     "dependencies": {
-        "@dhis2-chap/core": "workspace:*",
+        "@chap-blocks/core": "workspace:*",
+        "@chap-blocks/ui": "workspace:*",
         "@dhis2-chap/ui": "workspace:*",
         "@dhis2/app-runtime": "3.14.6",
         "@dhis2/d2-i18n": "1.2.0",
@@ -41,7 +42,7 @@
         "classnames": "^2.5.1",
         "date-fns": "^4.1.0",
         "file-saver": "^2.0.5",
-        "highcharts": "11.4.8",
+        "highcharts": "11.4.9",
         "highcharts-react-official": "^3.2.1",
         "jszip": "^3.10.1",
         "motion": "^12.24.0",

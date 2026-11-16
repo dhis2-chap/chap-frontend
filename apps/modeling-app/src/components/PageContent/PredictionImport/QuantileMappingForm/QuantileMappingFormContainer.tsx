@@ -1,5 +1,6 @@
 import i18n from '@dhis2/d2-i18n';
-import { ModelSpecRead, PredictionInfo } from '@dhis2-chap/ui';
+import { ModelSpecRead } from '@dhis2-chap/ui';
+import { PredictionInfo } from '@chap-blocks/ui/utils';
 import { NoticeBox } from '@dhis2/ui';
 import { useParams } from 'react-router-dom';
 import { QuantileMappingForm } from './QuantileMappingForm';

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { Button, CircularLoader } from '@dhis2/ui';
 import type { PredictionSetupReadWithPredictions } from '@dhis2-chap/ui';
-import { Widget } from '@dhis2-chap/ui';
+import { Widget } from '@chap-blocks/ui/layout';
 import { EditScheduleModal } from './EditScheduleModal';
 import styles from './SchedulingWidget.module.css';
 

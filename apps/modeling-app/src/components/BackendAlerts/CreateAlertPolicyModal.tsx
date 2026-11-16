@@ -18,11 +18,8 @@ import {
     SingleSelectField,
     SingleSelectOption,
 } from '@dhis2/ui';
-import {
-    DEFAULT_OUTBREAK_PROBABILITY,
-    OUTBREAK_PROBABILITY_OPTIONS,
-    type AlertLevel,
-} from '@dhis2-chap/ui';
+import { DEFAULT_OUTBREAK_PROBABILITY, OUTBREAK_PROBABILITY_OPTIONS } from '@chap-blocks/ui/utils';
+import { type AlertLevel } from '@dhis2-chap/ui';
 import { useCreateAlertPolicy } from '@/hooks/useAlertPolicies';
 import { useThresholdStrategies } from '@/hooks/useThresholdStrategies';
 import { getChapErrorMessage } from '@/utils/chapErrors';

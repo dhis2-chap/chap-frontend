@@ -1,15 +1,13 @@
 import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { canonicalizePeriodId } from '@dhis2-chap/core';
+import { canonicalizePeriodId } from '@chap-blocks/core';
+import { ApiError, DatasetsService, type ThresholdResponse } from '@dhis2-chap/ui';
 import {
-    ApiError,
     buildEndemicThresholdMap,
-    DatasetsService,
     getSeriesPeriods,
     getThresholdLineRoles,
     type PredictionOrgUnitSeries,
-    type ThresholdResponse,
-} from '@dhis2-chap/ui';
+} from '@chap-blocks/ui/utils';
 import type { ThresholdParams } from '@/utils/thresholdStrategyParams';
 import { getThresholdQueryState } from '@/utils/thresholdQueryState';
 

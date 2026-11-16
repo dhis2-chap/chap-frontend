@@ -5,18 +5,11 @@ import {
     NoticeBox,
     Tooltip,
 } from '@dhis2/ui';
-import {
-    buildOutbreakIndicatorsForSeries,
-    getStableMaxYForThresholdChart,
-    UncertaintyAreaChart,
-    Widget,
-} from '@dhis2-chap/ui';
-import type {
-    EndemicThresholdPoint,
-    ModelSpecRead,
-    OutbreakProbability,
-    PredictionInfo,
-} from '@dhis2-chap/ui';
+import { buildOutbreakIndicatorsForSeries, getStableMaxYForThresholdChart } from '@chap-blocks/ui/utils';
+import { UncertaintyAreaChart } from '@chap-blocks/ui/charts';
+import { Widget } from '@chap-blocks/ui/layout';
+import type { EndemicThresholdPoint, OutbreakProbability, PredictionInfo } from '@chap-blocks/ui/utils';
+import type { ModelSpecRead } from '@dhis2-chap/ui';
 import { useEndemicThresholds } from '@/hooks/useEndemicThresholds';
 import type { ThresholdParams } from '@/utils/thresholdStrategyParams';
 import {

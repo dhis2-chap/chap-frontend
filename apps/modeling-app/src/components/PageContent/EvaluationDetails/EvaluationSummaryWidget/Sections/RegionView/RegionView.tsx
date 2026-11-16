@@ -1,5 +1,5 @@
 import i18n from '@dhis2/d2-i18n';
-import { Tag } from '@dhis2-chap/ui';
+import { Tag } from '@chap-blocks/ui/layout';
 import styles from '../../EvaluationSummaryWidget.module.css';
 
 type Props = {

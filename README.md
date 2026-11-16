@@ -23,8 +23,11 @@ chap-frontend/
 ### Installation and Development
 
 ```bash
+# Initialize pinned Chap blocks sources (also required after pulling a changed pin)
+git submodule update --init --recursive
+
 # Install dependencies
-pnpm install
+pnpm install --frozen-lockfile
 
 # Build all packages
 pnpm build
@@ -33,7 +36,10 @@ pnpm build
 pnpm start
 ```
 
-### Code Quality
+#The modeling app consumes [Chap blocks](https://github.com/dhis2-chap/chap-blocks) through a pinned git submodule.
+See [the migration and update guide](docs/chap-blocks-migration.md) for coverage, remaining work and updating the pin.
+
+## Code Quality
 
 ```bash
 pnpm linter:check    # Run linting

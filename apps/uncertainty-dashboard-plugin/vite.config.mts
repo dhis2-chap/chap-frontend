@@ -8,6 +8,7 @@ export default defineConfig({
         },
     },
     resolve: {
+        dedupe: ['react', 'react-dom', '@tanstack/react-query', 'highcharts'],
         alias: {
             '@': path.resolve(__dirname, 'src'),
         },

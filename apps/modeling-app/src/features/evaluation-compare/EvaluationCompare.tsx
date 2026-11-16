@@ -1,5 +1,6 @@
-import { ComparisonPlotList, getStableMaxYByOrgUnitId } from '@dhis2-chap/ui';
-import type { ZoomRange } from '@dhis2-chap/ui';
+import { ComparisonPlotList } from '@chap-blocks/ui';
+import { getStableMaxYByOrgUnitId } from '@chap-blocks/ui/utils';
+import type { ZoomRange } from '@chap-blocks/ui';
 import {
     EvaluationCompatibleSelector,
     EvaluationSelectorBase,

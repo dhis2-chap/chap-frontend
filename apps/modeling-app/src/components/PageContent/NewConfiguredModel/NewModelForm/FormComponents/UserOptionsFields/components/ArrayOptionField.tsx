@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { Button, InputField } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
-import { Tag } from '@dhis2-chap/ui';
+import { Tag } from '@chap-blocks/ui/layout';
 import { FieldProps } from '../types';
 import styles from '../UserOptionsFields.module.css';
 

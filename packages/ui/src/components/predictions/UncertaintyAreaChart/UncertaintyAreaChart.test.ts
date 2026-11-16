@@ -2,8 +2,8 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
 import type Highcharts from 'highcharts';
-import type { PredictionOrgUnitSeries } from '../../../interfaces/Prediction';
-import { UncertaintyAreaChart } from './UncertaintyAreaChart';
+import type { PredictionOrgUnitSeries } from '@chap-blocks/ui/utils';
+import { UncertaintyAreaChart } from '@chap-blocks/ui/charts';
 
 const captured = vi.hoisted(() => ({ options: {} as Highcharts.Options }));
 vi.mock('highcharts-react-official', () => ({
@@ -12,7 +12,12 @@ vi.mock('highcharts-react-official', () => ({
         return null;
     },
 }));
-vi.mock('../../../utils/registerHighchartsModules', () => ({ registerHighchartsModules: vi.fn() }));
+// Test chart options through the public block while leaving browser-only module setup out of SSR.
+vi.mock('@dhis2/ui', () => ({}));
+vi.mock('highcharts/modules/accessibility', () => ({ default: vi.fn() }));
+vi.mock('highcharts/modules/exporting', () => ({ default: vi.fn() }));
+vi.mock('highcharts/modules/offline-exporting', () => ({ default: vi.fn() }));
+vi.mock('highcharts/highcharts-more', () => ({ default: vi.fn() }));
 
 const series: PredictionOrgUnitSeries = {
     targetId: 'cases', orgUnitId: 'region', orgUnitName: 'Region',

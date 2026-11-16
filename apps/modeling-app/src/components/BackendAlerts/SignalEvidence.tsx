@@ -1,10 +1,7 @@
 import { useMemo } from 'react';
-import {
-    getStableMaxYForThresholdChart,
-    UncertaintyAreaChart,
-    type PredictionOrgUnitSeries,
-    type ThresholdChartLine,
-} from '@dhis2-chap/ui';
+import { type ThresholdChartLine } from '@chap-blocks/ui';
+import { getStableMaxYForThresholdChart, type PredictionOrgUnitSeries } from '@chap-blocks/ui/utils';
+import { UncertaintyAreaChart } from '@chap-blocks/ui/charts';
 import { getAlertPeriods, type DisplayedPredictionAlert } from './displayPredictionAlerts';
 
 type Props = {

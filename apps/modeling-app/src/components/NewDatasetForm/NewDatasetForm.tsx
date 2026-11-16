@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { FormProvider, useFieldArray, useWatch } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { Card } from '@dhis2-chap/ui';
+import { Card } from '@chap-blocks/ui/layout';
 import {
     Button,
     ButtonStrip,
