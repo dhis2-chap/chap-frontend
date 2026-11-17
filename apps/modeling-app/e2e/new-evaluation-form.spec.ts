@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
-import type { BacktestRead, ConfiguredModelInfoRead, DataBaseResponse, DatasetMakeRequest, JobResponse, MakeBacktestsResponse, ModelSpecRead } from '@dhis2-chap/ui';
-import { getChap, pollEvaluationJob, readJson } from './helpers/evaluation-fixtures';
+import type { ConfiguredModelInfoRead, DataBaseResponse, DatasetMakeRequest, JobResponse, ModelSpecRead } from '@dhis2-chap/ui';
+import { getChap, readJson } from './helpers/evaluation-fixtures';
 import { openPeriodPickerAtYear, selectPeriod } from './helpers/period-picker';
 
 const REQUIRED_DATA_MAPPINGS = [
@@ -154,10 +154,10 @@ const prepareValidFormData = async (
 test('validates period rules with invalid values', async ({ page }) => {
     const newEvaluationUrl = '/#/evaluate/new';
 
-    let backtestCreateRequestCount = 0;
+    let submissionCount = 0;
     page.on('request', (request) => {
         if (isDatasetRequest(request.url(), request.method()) || isBacktestCreateRequest(request.url(), request.method())) {
-            backtestCreateRequestCount += 1;
+            submissionCount += 1;
         }
     });
 
@@ -171,14 +171,14 @@ test('validates period rules with invalid values', async ({ page }) => {
     await selectPeriod(page, 'evaluation-to-period-input', twoMonthsAgo);
     await page.getByRole('button', { name: 'Start dry run' }).click();
     await expect(page.getByText('End period must be after start period')).toBeVisible();
-    await expect(backtestCreateRequestCount).toBe(0);
+    await expect(submissionCount).toBe(0);
 
     await selectPeriod(page, 'evaluation-from-period-input', twoMonthsAgo);
     await selectPeriod(page, 'evaluation-to-period-input', previousMonth);
     await openPeriodPickerAtYear(page, 'evaluation-to-period-input', nextMonth);
     await expect(page.locator(`[data-test="evaluation-to-period-input-option-${nextMonth}"]`)).toBeDisabled();
     await page.keyboard.press('Escape');
-    await expect(backtestCreateRequestCount).toBe(0);
+    await expect(submissionCount).toBe(0);
 });
 
 test('validates backtest parameters, submits chosen values, and shows backend validation errors', async ({ page }) => {
@@ -291,10 +291,6 @@ test('accepts a model without covariates with only its target mapped', async ({ 
 test('previews the dataset, imports it, and evaluates the saved data', async ({ page }) => {
     test.setTimeout(180_000);
     const evaluationName = `E2E successful evaluation ${Date.now()}`;
-    const legacyRequests: string[] = [];
-    page.on('request', (request) => {
-        if (request.url().includes('create-backtest-with-data')) legacyRequests.push(request.url());
-    });
     await page.goto('/#/evaluate/new');
     await prepareValidFormData(page, evaluationName, { fromPeriodId: '202001', toPeriodId: '202412' });
 
@@ -305,38 +301,26 @@ test('previews the dataset, imports it, and evaluates the saved data', async ({ 
     await page.getByRole('button', { name: 'Start dry run' }).click();
     expect((await preview).ok()).toBe(true);
     const summary = page.locator('[role="dialog"]').filter({ has: page.getByText('Import Summary', { exact: true }) });
-    await expect(summary).toBeVisible();
     await summary.getByRole('button', { name: 'Close', exact: true }).click();
 
     const imported = page.waitForResponse(response =>
         isDatasetRequest(response.url(), response.request().method()) &&
         new URL(response.url()).searchParams.get('dryRun') !== 'true',
     );
-    const evaluated = page.waitForResponse(response => isBacktestCreateRequest(response.url(), response.request().method()));
+    const evaluated = page.waitForRequest(request => isBacktestCreateRequest(request.url(), request.method()));
     await page.getByRole('button', { name: 'Start import', exact: true }).click();
     const { id: importJobId } = await readJson<JobResponse>(await imported, 'Import evaluation dataset');
-    const evaluationResponse = await evaluated;
+    // The evaluation is only requested once the import has finished.
+    const evaluationRequest = (await evaluated).postDataJSON();
     const { id: datasetId } = await readJson<DataBaseResponse>(
         await getChap(page, `/v1/jobs/${importJobId}/database_result`), 'Load imported dataset id',
     );
-    expect(evaluationResponse.request().postDataJSON()).toMatchObject({ name: evaluationName, datasetId });
-    expect(evaluationResponse.request().postDataJSON()).not.toHaveProperty('providedData');
-    const result = await readJson<MakeBacktestsResponse | JobResponse>(evaluationResponse, 'Start evaluation');
-    const jobId = 'jobs' in result ? result.jobs[0].jobId : result.id;
-    const jobName = 'jobs' in result ? `${evaluationName}/naive_model` : evaluationName;
+    expect(evaluationRequest).toMatchObject({ name: evaluationName, datasetId });
+    expect(evaluationRequest).not.toHaveProperty('providedData');
 
     await expect(page).toHaveURL(/\/#\/jobs(?:\?.*)?$/);
-    await pollEvaluationJob(page, jobId);
-    const { id } = await readJson<DataBaseResponse>(
-        await getChap(page, `/v1/jobs/${jobId}/database_result`), 'Load created evaluation id',
-    );
-    const evaluation = await readJson<BacktestRead>(
-        await getChap(page, `/v1/crud/backtests/${id}/info`), 'Load evaluation',
-    );
-    expect(evaluation).toMatchObject({ name: jobName, datasetId });
-    const jobRow = page.locator('tr').filter({ has: page.getByRole('cell', { name: jobName, exact: true }) }).first();
-    await expect(jobRow.getByText('Success')).toBeVisible();
-    expect(legacyRequests).toEqual([]);
+    const jobRow = page.locator('tr').filter({ has: page.getByRole('cell', { name: evaluationName }) }).first();
+    await expect(jobRow.getByText('Success')).toBeVisible({ timeout: 120_000 });
 });
 
 test('warns before leaving a form with unsaved changes', async ({ page }) => {

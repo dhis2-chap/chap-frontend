@@ -11,7 +11,7 @@ import { getImportSummaryFromApiError } from '@/components/ModelExecutionForm/ut
 import { buildOrgUnitFeatureCollection } from '@/components/ModelExecutionForm/utils/orgUnitGeoJson';
 import { DEFAULT_PERIOD_SETTINGS, type Dhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
 import { Features, useIsFeatureAvailable } from '@/hooks/useIsFeatureAvailable';
-import { waitForDatasetImport } from '../../NewDatasetForm/utils/waitForDatasetImport';
+import { waitForDatasetImport } from './waitForDatasetImport';
 
 type Props = {
     periodSettings?: Dhis2PeriodSettings;
@@ -46,6 +46,7 @@ export const useCreateNewBacktest = ({
 
         const datasetRequest: DatasetMakeRequest = {
             name: formData.name,
+            targetColumn: model.target.name,
             type: 'evaluation',
             geojson: filteredGeoJson,
             providedData: observations,
@@ -136,8 +137,6 @@ export const useCreateNewBacktest = ({
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['jobs'] });
             queryClient.removeQueries({ queryKey: ['new-backtest-data'] });
-            onSuccess?.();
-            navigate('/jobs');
         },
         onError: (error) => {
             if (error instanceof ApiError && error.status === 400) {
@@ -166,7 +165,13 @@ export const useCreateNewBacktest = ({
     };
 
     return {
-        createNewBacktest,
+        // Per-call callbacks are skipped if the user has left the form while the import ran.
+        createNewBacktest: (formData: ModelExecutionFormValues) => createNewBacktest(formData, {
+            onSuccess: () => {
+                onSuccess?.();
+                navigate('/jobs');
+            },
+        }),
         validateAndDryRun,
         downloadRequest,
         isSubmitting: isLoading,
