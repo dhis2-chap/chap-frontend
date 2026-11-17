@@ -1,0 +1,1342 @@
+# Translators:
+# Philip Larsen Donnelly, 2025
+# Jiří Podhorecký <jirka.p@volny.cz>, 2025
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: i18next-conv\n"
+"POT-Creation-Date: 2025-11-01T14:32:32.298Z\n"
+"PO-Revision-Date: 2025-12-03 08:49+0000\n"
+"Last-Translator: Jiří Podhorecký <jirka.p@volny.cz>, 2025\n"
+"Language-Team: Czech (https://app.transifex.com/hisp-uio/teams/100509/cs/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: cs\n"
+"Plural-Forms: nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;\n"
+
+msgid "Create new..."
+msgstr "Vytvořit nový..."
+
+msgid "Compare"
+msgstr "Porovnat"
+
+msgid "Rename"
+msgstr "Přejmenovat"
+
+msgid "Delete"
+msgstr "Vymazat"
+
+msgid "{{name}} (Copy)"
+msgstr "{{name}} (Kopie)"
+
+msgid "Create new based on..."
+msgstr "Vytvořit nový na základě..."
+
+msgid "Cancel"
+msgstr "Zrušit"
+
+msgid "Failed to load evaluation data. Please try again."
+msgstr "Nepodařilo se načíst vyhodnocovací data. Zkuste to znovu."
+
+msgid "Close"
+msgstr "Zavřít"
+
+msgid "Select which attributes to copy to the new run{{escape}}"
+msgstr "Vyberte atributy, které se mají zkopírovat do nové série {{escape}}"
+
+msgid "Name"
+msgstr "název"
+
+msgid "Untitled"
+msgstr "Nepojmenované"
+
+msgid "Organisation units"
+msgstr "Organizační jednotky"
+
+msgid "Model"
+msgstr "Model"
+
+msgid "Data sources"
+msgstr "Zdroje dat"
+
+msgid "Period type"
+msgstr "Typ období"
+
+msgid "Period range"
+msgstr "Rozsah období"
+
+msgid "Create"
+msgstr "Vytvořit"
+
+msgid "Delete evaluation"
+msgstr "Vymazat hodnocení"
+
+msgid ""
+"Are you sure you want to delete this evaluation? This action cannot be "
+"undone."
+msgstr "Opravdu chcete toto hodnocení odstranit? Tuto akci nelze vzít zpět."
+
+msgid "Name is required"
+msgstr "Název je povinný"
+
+msgid "Rename evaluation"
+msgstr "Přejmenovat hodnocení"
+
+msgid "Save"
+msgstr "Uložit"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Created"
+msgstr "Vytvořeno"
+
+msgid "Locations"
+msgstr "Lokality"
+
+msgid "Evaluated on {{count}} locations"
+msgid_plural "Evaluated on {{count}} locations"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+msgid "Actions"
+msgstr "Akce"
+
+msgid "New evaluation"
+msgstr "Nové hodnocení"
+
+msgid "Sort by {{column}}"
+msgstr "Řadit podle {{column}}"
+
+msgid "No evaluations available"
+msgstr "Žádná hodnocení nejsou k dispozici"
+
+msgid "Search"
+msgstr "Hledat"
+
+msgid "No models found"
+msgstr "Nenalezeny žádné modely"
+
+msgid "Clear"
+msgstr "Vyčistit"
+
+msgid "{{count}} evaluations selected"
+msgid_plural "{{count}} evaluations selected"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+msgid "Evaluations deleted"
+msgstr "Hodnocení smazána"
+
+msgid "Failed to delete evaluations"
+msgstr "Nepodařilo se smazat hodnocení"
+
+msgid "Evaluation deleted"
+msgstr "Hodnocení smazáno"
+
+msgid "Failed to delete evaluation"
+msgstr "Nepodařilo se smazat hodnocení"
+
+msgid "Error renaming evaluation"
+msgstr "Chyba přejmenování hodnocení"
+
+msgid "Could not connect to CHAP"
+msgstr "Nelze se připojit ke službě CHAP"
+
+msgid "The app is not able to connect to the CHAP server."
+msgstr "Aplikace se nemůže připojit k serveru CHAP."
+
+msgid ""
+"Please check your route configuration and make sure the CHAP server is "
+"running."
+msgstr ""
+"Zkontrolujte konfiguraci trasy a ujistěte se, že je spuštěn server CHAP."
+
+msgid "Learn more about Modeling and CHAP"
+msgstr "Další informace o modelování a CHAP"
+
+msgid "Configure settings"
+msgstr "Konfigurace nastavení"
+
+msgid "Oops!"
+msgstr "Ups!"
+
+msgid "Sorry, an unexpected error has occurred."
+msgstr "Omlouváme se, došlo k neočekávané chybě."
+
+msgid "Inspect dataset"
+msgstr "Kontrola datové sady"
+
+msgid "Cancel job"
+msgstr "Zrušit úlohu"
+
+msgid ""
+"Are you sure you want to cancel this job? This action cannot be undone."
+msgstr ""
+"Jste si jisti, že chcete tuto práci zrušit? Tuto akci nelze vzít zpět."
+
+msgid "Delete job"
+msgstr "Smazat úlohu"
+
+msgid ""
+"Are you sure you want to delete this job? This action cannot be undone."
+msgstr "Opravdu chcete tuto úlohu odstranit? Tuto akci nelze vzít zpět."
+
+msgid "Failed to copy job ID"
+msgstr "Nepodařilo se zkopírovat ID úlohy"
+
+msgid "Go to result"
+msgstr "Přejít na výsledek"
+
+msgid "View Logs"
+msgstr "Zobrazit protokoly"
+
+msgid "Copy Job ID"
+msgstr "Kopírovat ID úlohy"
+
+msgid "Job Logs"
+msgstr "Protokoly úlohy"
+
+msgid "An error occurred while loading the logs."
+msgstr "Při načítání protokolů došlo k chybě."
+
+msgid "No logs reported for this job"
+msgstr "Pro tuto úlohu nebyly nahlášeny žádné protokoly"
+
+msgid "Job cancelled"
+msgstr "Úloha zrušena"
+
+msgid "Failed to cancel job"
+msgstr "Nepodařilo se zrušit úlohu"
+
+msgid "Job deleted"
+msgstr "Úloha smazána"
+
+msgid "Failed to delete job"
+msgstr "Selhalo smazání úlohy"
+
+msgid "Status"
+msgstr "Stav"
+
+msgid "Type"
+msgstr "Typ"
+
+msgid "Start date"
+msgstr "Datum začátku"
+
+msgid "End date"
+msgstr "Datum ukončení"
+
+msgid "Duration"
+msgstr "Doba trvání"
+
+msgid "No jobs available"
+msgstr "Žádná dostupné úlohy"
+
+msgid "Pending"
+msgstr "Čekající"
+
+msgid "Running"
+msgstr "Běžící"
+
+msgid "Success"
+msgstr "Úspěch"
+
+msgid "Failed"
+msgstr "Selhalo"
+
+msgid "Revoked"
+msgstr "Odvoláno"
+
+msgid "Create evaluation"
+msgstr "Vytvořit hodnocení"
+
+msgid "Make prediction"
+msgstr "Provést předpověď"
+
+msgid "Create dataset (deprecated)"
+msgstr "Vytvořit datovou sadu (zastaralé)"
+
+msgid "Create evaluation (deprecated)"
+msgstr "Vytvořit hodnocení (zastaralé)"
+
+msgid "Create evaluation (Legacy)"
+msgstr "Vytvořit hodnocení (Legacy)"
+
+msgid "Create dataset"
+msgstr "Vytvořit datovou sadu"
+
+msgid "Cancelled"
+msgstr "Zrušeno"
+
+msgid "Map Data Items"
+msgstr "Datové položky mapy"
+
+msgid "Map the model features to corresponding data items in DHIS2"
+msgstr "Mapování prvků modelu na odpovídající datové položky v DHIS2"
+
+msgid "Target"
+msgstr "Cíl"
+
+msgid "Map the model target to the corresponding data item in DHIS2"
+msgstr "Mapování cíle modelu na odpovídající datovou položku v DHIS2"
+
+msgid "Map each model covariate to the corresponding data item in DHIS2"
+msgstr ""
+"Mapování každé modelové kovariáty na odpovídající datovou položku v DHIS2."
+
+msgid "No model selected"
+msgstr "Není vybrán žádný model"
+
+msgid "All data items mapped"
+msgstr "Všechny mapované datové položky"
+
+msgid "{{mapped}}/{{total}} data items mapped"
+msgstr "{{mapped}}/{{total}} mapované datové položky"
+
+msgid "Dataset Configuration"
+msgstr "Konfigurace datové sady"
+
+msgid "Configure sources"
+msgstr "Konfigurace zdrojů"
+
+msgid ""
+"The Data Visualizer app is not compatible with this feature. Please update "
+"to a newer version."
+msgstr ""
+"Aplikace Vizualizér dat není s touto funkcí kompatibilní. Aktualizujte ji na"
+" novější verzi."
+
+msgid "Please map all model covariates to valid data items"
+msgstr "Namapujte všechny kovariáty modelu na platné datové položky."
+
+msgid "Target \"{{targetName}}\" must be mapped to a data item"
+msgstr "Cíl \"{{targetName}}\" musí být mapován na datovou položku"
+
+msgid "Covariate \"{{covariateName}}\" must be mapped to a data item"
+msgstr "Kovariát \"{{covariateName}}\" musí být mapován na datovou položku"
+
+msgid "Select organisation units"
+msgstr "Vybrat organizační jednotky"
+
+msgid "Select Organisation Units"
+msgstr "Vyberte organizační jednotky"
+
+msgid "Organisation unit levels"
+msgstr "Úrovně organizačních jednotek"
+
+msgid ""
+"Some models require you to only select organisation units from the same "
+"level."
+msgstr ""
+"Některé modely vyžadují výběr pouze organizačních jednotek ze stejné úrovně."
+
+msgid "All org units must be at the same level"
+msgstr "Všechny organizační jednotky musí být na stejné úrovni"
+
+msgid "Confirm Selection"
+msgstr "Potvrďte výběr"
+
+msgid "Monthly"
+msgstr "Měsíčně"
+
+msgid "Yearly"
+msgstr "Ročně"
+
+msgid "Weekly"
+msgstr "Týdně"
+
+msgid "Daily"
+msgstr "Denně"
+
+msgid "Any"
+msgstr "Jakýkoliv"
+
+msgid "Deprecated"
+msgstr "Vyřazené"
+
+msgid "This model is not intended for use or has been deprecated."
+msgstr "Tento model není určen k použití nebo byl vyřazen."
+
+msgid "Experimental"
+msgstr "Experimentální"
+
+msgid ""
+"An early prototype with no formal validation - only for initial "
+"experimentation."
+msgstr ""
+"Raný prototyp bez formálního ověření - pouze pro počáteční experimentování."
+
+msgid "Limited"
+msgstr "Omezený"
+
+msgid ""
+"Tested on a small dataset. Requires manual tuning and close monitoring."
+msgstr ""
+"Testováno na malém souboru dat. Vyžaduje ruční ladění a pečlivé sledování."
+
+msgid "Testing"
+msgstr "Testování"
+
+msgid "Prepared for more extensive testing; not yet approved for production."
+msgstr "Připraveno k rozsáhlejšímu testování; zatím neschváleno pro výrobu."
+
+msgid "Production"
+msgstr "Produkce"
+
+msgid "Approved for general use."
+msgstr "Schváleno pro všeobecné použití."
+
+msgid "{{count}} covariates"
+msgid_plural "{{count}} covariates"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+msgid "Author note"
+msgstr "Poznámka autora"
+
+msgid "Selected"
+msgstr "Vybráno"
+
+msgid "Select Model"
+msgstr "Zvolte model"
+
+msgid "Search by title"
+msgstr "Vyhledávání podle názvu"
+
+msgid "Period Type"
+msgstr "Typ období"
+
+msgid "Assessment Status"
+msgstr "Stav hodnocení"
+
+msgid "Select model"
+msgstr "Zvolte model"
+
+msgid "EWARS Evaluation 22-24"
+msgstr "Hodnocení EWARS 22-24"
+
+msgid "From period"
+msgstr "Od období"
+
+msgid "To period"
+msgstr "Do období"
+
+msgid "Reason"
+msgstr "Důvod"
+
+msgid "Feature"
+msgstr "Prvek"
+
+msgid "Org unit"
+msgstr "Organizační jednotka"
+
+msgid "Period"
+msgstr "Období"
+
+msgid "Import Summary"
+msgstr "Souhrn importu"
+
+msgid "Valid import"
+msgstr "Platný import"
+
+msgid "All {{count}} locations can be successfully imported"
+msgid_plural "All {{count}} locations can be successfully imported"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+msgid "Partial import"
+msgstr "Částečný import"
+
+msgid ""
+"{{count}} locations could be successfully imported, but some were rejected"
+msgid_plural ""
+"{{count}} locations could be successfully imported, but some were rejected"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+msgid "No locations imported"
+msgstr "Nebyly importované žádné lokality"
+
+msgid ""
+"None of the provided locations could be imported. Please check the data "
+"items and the period type."
+msgstr ""
+"Žádné z poskytnutých míst nebylo možné importovat. Zkontrolujte prosím "
+"datové položky a typ období."
+
+msgid "Valid"
+msgstr "Platné"
+
+msgid "Rejected"
+msgstr "Odmítnuto"
+
+msgid "Total"
+msgstr "Celkem"
+
+msgid "Filter by Feature"
+msgstr "Filtrování podle prvku"
+
+msgid "Clear filter"
+msgstr "Vymazat filtr"
+
+msgid "All features"
+msgstr "Všechny prvky"
+
+msgid "Filter by Org Unit"
+msgstr "Filtrovat podle organizační jednotky"
+
+msgid "All org units"
+msgstr "Všechny organizační jednotky"
+
+msgid "No rejected items match the current filters"
+msgstr "Žádné odmítnuté položky neodpovídají aktuálním filtrům"
+
+msgid "No items to display"
+msgstr "Žádné položky k zobrazení"
+
+msgid "Missing id for org unit"
+msgstr "Chybějící id pro organizační jednotku"
+
+msgid "Period type is required"
+msgstr "Je vyžadován typ období"
+
+msgid "Start date is required"
+msgstr "Datum zahájení je vyžadován"
+
+msgid "End date is required"
+msgstr "Datum ukončení je vyžadován"
+
+msgid "End date cannot be in the future"
+msgstr "Datum ukončení nesmí být v budoucnosti"
+
+msgid "At least one org unit is required"
+msgstr "Je vyžadována alespoň jedna org. jednotka"
+
+msgid "Please select a model"
+msgstr "Vyberte model"
+
+msgid "Please map the covariates to valid data items"
+msgstr "Namapujte kovariáty na platné datové položky"
+
+msgid "Please map the target to a valid data item"
+msgstr "Namapujte cíl na platnou datovou položku"
+
+msgid "End period must be after start period"
+msgstr "Konec období musí být po počátečním období"
+
+msgid "Model not found"
+msgstr "Model nebyl nalezen"
+
+msgid ""
+"The following org units have no geometry{{escape}} "
+"{{orgUnitsWithoutGeometry}}"
+msgstr ""
+"Následující organizační jednotky nemají žádnou geometrii{{escape}} "
+"{{orgUnitsWithoutGeometry}}"
+
+msgid "Data layer not found for data item id{{escape}} {{dataItemId}}"
+msgstr ""
+"Datová vrstva nebyla nalezena pro id datové položky{{escape}} {{dataItemId}}"
+
+msgid "Unsaved changes"
+msgstr "Neuložené změny"
+
+msgid ""
+"You have unsaved changes that will be lost if you leave this page. Are you "
+"sure you want to continue?"
+msgstr ""
+"Máte neuložené změny, které budou ztraceny, pokud opustíte tuto stránku. "
+"Určitě chcete pokračovat?"
+
+msgid "Leave page"
+msgstr "Opustit stránku"
+
+msgid "Start dry run"
+msgstr "Spustit nanečisto"
+
+msgid "Start import"
+msgstr "Zahájit import"
+
+msgid "There was an error"
+msgstr "Došlo k chybě"
+
+msgid "Error loading models"
+msgstr "Chyba načítání modelů"
+
+msgid "An unknown error occurred"
+msgstr "Nastala neznámá chyba"
+
+msgid "Missing data for covariate"
+msgstr "Chybí data pro kovariát"
+
+msgid "{{count}} org units"
+msgid_plural "{{count}} org units"
+msgstr[0] "{{count}} organizační jednotka"
+msgstr[1] "{{count}} organizační jednotky"
+msgstr[2] "{{count}} organizačních jednotek"
+msgstr[3] "{{count}} organizačních jednotek"
+
+msgid "{{count}} levels"
+msgid_plural "{{count}} levels"
+msgstr[0] "{{count}} úroveň"
+msgstr[1] "{{count}} úrovně"
+msgstr[2] "{{count}} úrovní"
+msgstr[3] "{{count}} úrovní"
+
+msgid "{{count}} groups"
+msgid_plural "{{count}} groups"
+msgstr[0] "{{count}} skupina"
+msgstr[1] "{{count}} skupiny"
+msgstr[2] "{{count}} skupin"
+msgstr[3] "{{count}} skupin"
+
+msgid "Selected: {{commaSeparatedListOfOrganisationUnits}}"
+msgstr "Vybráno: {{commaSeparatedListOfOrganisationUnits}}"
+
+msgid "Nothing selected"
+msgstr "Není vybráno nic"
+
+msgid "User organisation unit"
+msgstr "Organizační jednotka uživatele"
+
+msgid "User sub-units"
+msgstr "Podjednotky uživatele"
+
+msgid "User sub-x2-units"
+msgstr "Jednotky 2. řádu uživatele"
+
+msgid "Select a level"
+msgstr "Vybrat úroveň"
+
+msgid "Select a group"
+msgstr "Vybrat skupinu"
+
+msgid "Deselect all"
+msgstr "Odznačit vše"
+
+msgid "Organisation Units"
+msgstr "Organizační jednotky"
+
+msgid "Search organisation units"
+msgstr "Vyhledávání organizačních jednotek"
+
+msgid "Clear all organisation units"
+msgstr "Vymazat všechny organizační jednotky"
+
+msgid "No organisation units match your search"
+msgstr "Vašemu hledání neodpovídají žádné organizační jednotky"
+
+msgid "You cannot select more than {{max}} organisation units at a time"
+msgstr "Nelze vybrat více než {{max}} organizačních jednotek najednou"
+
+msgid "Please select a visualization."
+msgstr "Vyberte prosím vizualizaci."
+
+msgid ""
+"This plot has encountered an unexpected error and could not be displayed."
+msgstr "Tento graf narazil na neočekávanou chybu a nemohl být zobrazen."
+
+msgid ""
+"This visualization is provided by external contributors and may occasionally"
+" fail due to issues in the contributed plot definition."
+msgstr ""
+"Tato vizualizace je poskytována externími přispěvateli a může občas selhat "
+"kvůli problémům v definici přispěvatele."
+
+msgid "No visualization found"
+msgstr "Nebyla nalezena žádná vizualizace"
+
+msgid "Click to view actions"
+msgstr "Klikněte pro zobrazení akcí"
+
+msgid "View Compiled Vega"
+msgstr "Zobrazit sestavené Vega"
+
+msgid "Open in Vega Editor"
+msgstr "Otevřít v editoru Vega"
+
+msgid "Save as PNG"
+msgstr "Uložit jako PNG"
+
+msgid "View Source"
+msgstr "Zobrazit zdroj"
+
+msgid "Save as SVG"
+msgstr "Uložit jako SVG"
+
+msgid "Evaluation plots"
+msgstr "Vyhodnocovací grafy"
+
+msgid ""
+"Evaluation plots are configured system-wide and defined by system "
+"administrators / model developers. If you experience issues, please contact "
+"your system administrator."
+msgstr ""
+"Vyhodnocovací grafy jsou konfigurovány v rámci celého systému a definovány "
+"správci systému / vývojáři modelů. V případě problémů se obraťte na správce "
+"systému."
+
+msgid "Unable to load data"
+msgstr "Nelze načíst data"
+
+msgid ""
+"There was a problem loading required data. See the browser console for "
+"details."
+msgstr ""
+"Došlo k problému při načítání požadovaných dat. Podrobnosti naleznete v "
+"konzoli prohlížeče."
+
+msgid "Select visualization"
+msgstr "Výběr vizualizace"
+
+msgid "No data available"
+msgstr "Údaje nejsou k dispozici"
+
+msgid ""
+"The evaluation you are looking for does not exist or you do not have "
+"permission to access it."
+msgstr "Hledané hodnocení neexistuje nebo k němu nemáte oprávnění."
+
+msgid "Invalid evaluation ID"
+msgstr "Neplatné ID hodnocení"
+
+msgid "The evaluation ID is invalid. Please try again."
+msgstr "ID hodnocení je neplatné. Zkuste to znovu."
+
+msgid "Summary"
+msgstr "souhrn"
+
+msgid ""
+"There was an error loading the evaluation summary. Please try again later."
+msgstr ""
+"Při načítání shrnutí hodnocení došlo k chybě. Zkuste to prosím později."
+
+msgid "Model updated"
+msgstr "Model aktualizován"
+
+msgid ""
+"The model used to run this evaluation has been updated. You can still view "
+"the results of the run, but the metadata may not be accurate."
+msgstr ""
+"Model použitý pro toto hodnocení byl aktualizován. Výsledky běhu můžete "
+"stále zobrazit, ale metadata nemusí být přesná."
+
+msgid "Training period"
+msgstr "Období školení"
+
+msgid "{{count}} locations"
+msgid_plural "{{count}} locations"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+msgid "Please select a visualization and metric."
+msgstr "Vyberte vizualizaci a metriku."
+
+msgid ""
+"Keep in mind that this is advanced functionality and may not be suitable for"
+" all users."
+msgstr ""
+"Mějte na paměti, že se jedná o pokročilou funkci, která nemusí být vhodná "
+"pro všechny uživatele."
+
+msgid "Metric plot"
+msgstr ""
+
+msgid ""
+"Metric plots are advanced functionality and may be misinterpreted. Use with "
+"caution."
+msgstr ""
+
+msgid "Select metric"
+msgstr "Zvolte metriku"
+
+msgid "Evaluation result"
+msgstr "Výsledek hodnocení"
+
+msgid "Evaluation"
+msgstr "Hodnocení"
+
+msgid "There was an error loading the data."
+msgstr "Při načítání dat došlo k chybě."
+
+msgid "No data available for the selected organization unit and split period."
+msgstr ""
+"Pro vybranou organizační jednotku a rozdělené období nejsou k dispozici "
+"žádná data."
+
+msgid "All locations"
+msgstr "Všechny lokality"
+
+msgid "Result"
+msgstr "Výsledek"
+
+msgid "Start period"
+msgstr "Počátek období"
+
+msgid "End period"
+msgstr "Konec období"
+
+msgid "Create prediction"
+msgstr "Vytvořit předpověď"
+
+msgid ""
+"You should only do predictions on well-tested and reliable models that have "
+"shown promise when evaluated. Do you still want to continue?"
+msgstr ""
+"Předpovědi byste měli provádět pouze na základě dobře prověřených a "
+"spolehlivých modelů, které se při hodnocení ukázaly jako slibné. Chcete "
+"ještě pokračovat?"
+
+msgid "Continue"
+msgstr "Pokračovat"
+
+msgid "Quick actions"
+msgstr "Rychlé akce"
+
+msgid "Compare with..."
+msgstr "Porovnejte s..."
+
+msgid "Predict..."
+msgstr "Předpověď..."
+
+msgid "Error loading jobs"
+msgstr "Chyba při načítání úloh"
+
+msgid "Are you sure you want to archive this model?"
+msgstr "Opravdu chcete tento model archivovat?"
+
+msgid ""
+"You will still be able to view evaluations for this model, but you will not "
+"be able to create new evaluations or predictions."
+msgstr ""
+"Hodnocení tohoto modelu si budete moci i nadále prohlížet, ale nebudete moci"
+" vytvářet nová hodnocení nebo předpovědi."
+
+msgid "Archive"
+msgstr "Archiv"
+
+msgid "View evaluations"
+msgstr "Zobrazit hodnocení"
+
+msgid "Model archived"
+msgstr "Model archivován"
+
+msgid "Failed to archive model"
+msgstr "Nepodařilo se archivovat model"
+
+msgid "Author"
+msgstr "Autor"
+
+msgid "Covariates"
+msgstr "Kovariáty"
+
+msgid "No covariate names available"
+msgstr "Nejsou k dispozici žádné názvy kovariát"
+
+msgid "Archived"
+msgstr "Archivováno"
+
+msgid "Active"
+msgstr "Aktivní"
+
+msgid "New model"
+msgstr "Nový model"
+
+msgid "No models available"
+msgstr ""
+
+msgid "Include archived"
+msgstr ""
+
+msgid "Error loading model templates"
+msgstr ""
+
+msgid "No model templates found"
+msgstr ""
+
+msgid ""
+"We could not find any available model templates. Please create templates or "
+"try again later."
+msgstr ""
+
+msgid "This covariate has already been added."
+msgstr ""
+
+msgid "Additional continuous covariates"
+msgstr ""
+
+msgid "Enter covariate name"
+msgstr ""
+
+msgid "Add"
+msgstr "Přidat"
+
+msgid "Required"
+msgstr "Vyžadováno"
+
+msgid "Remove"
+msgstr "Odstranit"
+
+msgid "Model template"
+msgstr ""
+
+msgid "Select the base model template"
+msgstr ""
+
+msgid "Select a model template"
+msgstr ""
+
+msgid "Deprecated model"
+msgstr ""
+
+msgid "This model is deprecated and may be removed in the future."
+msgstr ""
+
+msgid "Type a value"
+msgstr ""
+
+msgid "The model name will be \"{{displayName}} [{{variantName}}]\""
+msgstr ""
+
+msgid "Provide a descriptive name for this variant"
+msgstr ""
+
+msgid "Variant name"
+msgstr ""
+
+msgid "Model template is required"
+msgstr ""
+
+msgid "Model created successfully"
+msgstr ""
+
+msgid "Failed to create model"
+msgstr ""
+
+msgid "Error loading prediction"
+msgstr ""
+
+msgid "Prediction not found"
+msgstr ""
+
+msgid ""
+"The prediction you are looking for does not exist or you do not have "
+"permission to access it."
+msgstr ""
+
+msgid ""
+"The model you are looking for does not exist or you do not have permission "
+"to access it."
+msgstr ""
+
+msgid "Prediction result"
+msgstr ""
+
+msgid "Chart"
+msgstr "Schéma"
+
+msgid "Table"
+msgstr "Tabulka"
+
+msgid "Map"
+msgstr "Mapa"
+
+msgid "No prediction data found."
+msgstr ""
+
+msgid ""
+"There was an error loading the prediction summary. Please try again later."
+msgstr ""
+
+msgid "Predicted periods"
+msgstr ""
+
+msgid "Import"
+msgstr "Import"
+
+msgid "Guide"
+msgstr ""
+
+msgid "Loading"
+msgstr "načítání"
+
+msgid "Start typing to search for data items"
+msgstr ""
+
+msgid "No matches found"
+msgstr "Nenalezeny žádné shody"
+
+msgid "Select a data item..."
+msgstr ""
+
+msgid "Clear selection"
+msgstr "Vymazat výběr"
+
+msgid "Search for indicators, data elements, or program indicators"
+msgstr ""
+
+msgid "Import forecasted values"
+msgstr ""
+
+msgid ""
+"Importing forecasted values into DHIS2 requires you to set up five data "
+"elements for the quantiles outputted by the model."
+msgstr ""
+
+msgid "Quantile high"
+msgstr ""
+
+msgid "Quantile mid high"
+msgstr ""
+
+msgid "Median"
+msgstr "Medián"
+
+msgid "Quantile mid low"
+msgstr ""
+
+msgid "Quantile low"
+msgstr ""
+
+msgid "Failed to post prediction data"
+msgstr ""
+
+msgid "Prediction data posted successfully"
+msgstr ""
+
+msgid "Delete prediction"
+msgstr ""
+
+msgid ""
+"Are you sure you want to delete this prediction? This action cannot be "
+"undone."
+msgstr ""
+
+msgid "View"
+msgstr "Zobrazit"
+
+msgid "Periods"
+msgstr "Období"
+
+msgid "New prediction"
+msgstr ""
+
+msgid "No predictions available"
+msgstr ""
+
+msgid "Prediction deleted"
+msgstr ""
+
+msgid "Failed to delete prediction"
+msgstr ""
+
+msgid "There are running jobs in the background"
+msgstr ""
+
+msgid "Running jobs"
+msgstr ""
+
+msgid "Evaluate"
+msgstr ""
+
+msgid "Overview"
+msgstr "Přehled"
+
+msgid "Predict"
+msgstr ""
+
+msgid "Models"
+msgstr ""
+
+msgid "Jobs"
+msgstr ""
+
+msgid "Settings"
+msgstr "Nastavení"
+
+msgid ""
+"The version of the Modeling App is not compatible with the backend (Chap "
+"core)."
+msgstr ""
+
+msgid ""
+"The Chap Core version {{chapVersion}} is too old. The Modeling App specifies"
+" minimum Chap core version{{escape}} {{chapMinVersion}}"
+msgstr ""
+
+msgid "Compare evaluations"
+msgstr ""
+
+msgid "Compare evaluations to assess model, co-variates and data performance."
+msgstr ""
+
+msgid "Select base evaluation"
+msgstr ""
+
+msgid ""
+"Selected evaluations do not have any split periods in common. Please select "
+"evaluations with overlapping split periods."
+msgstr ""
+
+msgid "An error occurred while fetching chart data "
+msgstr ""
+
+msgid ""
+"Select two evaluations to compare their results. The\n"
+"                    selected evaluations must be compatible."
+msgstr ""
+
+msgid ""
+"Compatible evaluations have overlapping organisation units and split "
+"periods."
+msgstr ""
+
+msgid "Split period"
+msgstr ""
+
+msgid "Organisation unit level"
+msgstr "Úroveň organizační jednotky"
+
+msgid "Organisation unit level to import data to"
+msgstr "Úroveň organizační jednotky pro import dat"
+
+msgid "Data Element"
+msgstr "Datový prvek"
+
+msgid "Indicator"
+msgstr "Indikátor"
+
+msgid "Program Indicator"
+msgstr "Indikátor programu"
+
+msgid "No compatible evaluations found"
+msgstr ""
+
+msgid "Select evaluation to compare with"
+msgstr ""
+
+msgid "No evaluations found"
+msgstr ""
+
+msgid "CHAP settings"
+msgstr ""
+
+msgid "An error occurred while connecting to the CHAP server."
+msgstr ""
+
+msgid ""
+"Are you sure you have configured your route correctly? See the console for "
+"more details."
+msgstr ""
+
+msgid "Server information"
+msgstr ""
+
+msgid "CHAP Version"
+msgstr ""
+
+msgid "Python Version"
+msgstr ""
+
+msgid "Operating System"
+msgstr ""
+
+msgid "Connected"
+msgstr ""
+
+msgid "Your server might not be secure"
+msgstr ""
+
+msgid ""
+"CHAP currently does not have it's own authentication service. Make sure to "
+"secure it by blocking public access on your server firewall."
+msgstr ""
+
+msgid "Your server is not secure"
+msgstr ""
+
+msgid "Route configuration"
+msgstr ""
+
+msgid "No route found."
+msgstr ""
+
+msgid "Add route"
+msgstr ""
+
+msgid "Delete route"
+msgstr ""
+
+msgid "Are you sure you want to delete this route?"
+msgstr ""
+
+msgid "Edit route"
+msgstr ""
+
+msgid "Public access"
+msgstr "Veřejný přístup"
+
+msgid ""
+"Your route is public and can be accessed by anyone. This can potentially "
+"expose sensitive data. If you want to restrict access, click the \"Sharing\""
+" button and remove access for \"All users\"."
+msgstr ""
+
+msgid "Sharing"
+msgstr "Sdílení"
+
+msgid "Edit"
+msgstr "Upravit"
+
+msgid "Invalid URL format"
+msgstr ""
+
+msgid "URL is required"
+msgstr ""
+
+msgid "URL must end with a double wildcard (/**)"
+msgstr ""
+
+msgid "CHAP Core URL"
+msgstr ""
+
+msgid "Route settings"
+msgstr ""
+
+msgid ""
+"There was an error loading the route settings. Please try to reload the "
+"page."
+msgstr ""
+
+msgid "If the problem persists, please contact your system administrator."
+msgstr ""
+
+msgid "You do not have permission to add or modify routes."
+msgstr ""
+
+msgid ""
+"If you think this is an error, please contact your system administrator."
+msgstr ""
+
+msgid "Code"
+msgstr "Kód"
+
+msgid "URL"
+msgstr "URL"
+
+msgid "Authorities"
+msgstr "Autority"
+
+msgid "Error deleting route"
+msgstr ""
+
+msgid "Route deleted successfully"
+msgstr ""
+
+msgid "Error saving route"
+msgstr ""
+
+msgid "Route saved successfully"
+msgstr ""
+
+msgid "Evaluation details"
+msgstr ""
+
+msgid ""
+"Deep dive into a specific evaluation run to assess its performance and "
+"reliability."
+msgstr ""
+
+msgid "Back to evaluations"
+msgstr ""
+
+msgid "Error loading evaluations"
+msgstr ""
+
+msgid "Evaluations"
+msgstr ""
+
+msgid ""
+"Evaluates the accuracy of a predictive model using historical data. Compares"
+" actual outcomes with predicted values to assess model performance."
+msgstr ""
+
+msgid "Get started with the Modeling app"
+msgstr ""
+
+msgid "To get started, create a route that points to a running CHAP server."
+msgstr ""
+
+msgid "Route and servers are configured on the settings page."
+msgstr ""
+
+msgid "Active jobs"
+msgstr ""
+
+msgid "View and manage currently running jobs and their status."
+msgstr ""
+
+msgid "Manage configured models available in your system."
+msgstr ""
+
+msgid ""
+"Configure a new model with custom settings or parameters based on a model "
+"template."
+msgstr ""
+
+msgid "Back to models"
+msgstr ""
+
+msgid "Create a new evaluation to assess the performance of a model"
+msgstr ""
+
+msgid "Create a new prediction to forecast outcomes using a model"
+msgstr ""
+
+msgid "Back to predictions"
+msgstr ""
+
+msgid "Prediction details"
+msgstr ""
+
+msgid "View the details of a prediction."
+msgstr ""
+
+msgid "Import prediction"
+msgstr ""
+
+msgid "Import the forecasted values of this prediction into DHIS2."
+msgstr ""
+
+msgid "Back to prediction details"
+msgstr ""
+
+msgid "Error loading predictions"
+msgstr ""
+
+msgid "Predictions"
+msgstr ""
+
+msgid ""
+"Forecasted trends generated by applying a predictive model to current data. "
+"These can be reviewed and imported into DHIS2 to support decision-making in "
+"the field."
+msgstr ""
+
+msgctxt ") instead."
+msgid "Spaces are not allowed. Use dashes (-) or underscores ("
+msgstr ""

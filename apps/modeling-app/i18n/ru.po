@@ -1,0 +1,1313 @@
+# Translators:
+# Wanda <wanda@frontlineaids.org>, 2025
+# Valeriu Plesca <vplesca@gmail.com>, 2025
+# Ulanbek Abakirov <ulans@mail.ru>, 2025
+# Nadiia <semchuk@aph.org.ua>, 2025
+# Yury Rogachev <yury@dhis2.org>, 2025
+# Viktor Varland <viktor@dhis2.org>, 2025
+# Philip Larsen Donnelly, 2025
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: i18next-conv\n"
+"POT-Creation-Date: 2025-11-01T14:32:32.298Z\n"
+"PO-Revision-Date: 2025-12-03 08:49+0000\n"
+"Last-Translator: Philip Larsen Donnelly, 2025\n"
+"Language-Team: Russian (https://app.transifex.com/hisp-uio/teams/100509/ru/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ru\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
+
+msgid "Create new..."
+msgstr ""
+
+msgid "Compare"
+msgstr ""
+
+msgid "Rename"
+msgstr "Переименовать"
+
+msgid "Delete"
+msgstr "Удалить"
+
+msgid "{{name}} (Copy)"
+msgstr ""
+
+msgid "Create new based on..."
+msgstr ""
+
+msgid "Cancel"
+msgstr "Отменить"
+
+msgid "Failed to load evaluation data. Please try again."
+msgstr ""
+
+msgid "Close"
+msgstr "Закрыть"
+
+msgid "Select which attributes to copy to the new run{{escape}}"
+msgstr ""
+
+msgid "Name"
+msgstr "Название"
+
+msgid "Untitled"
+msgstr "Без названия"
+
+msgid "Organisation units"
+msgstr "Организационные единицы"
+
+msgid "Model"
+msgstr "Модель"
+
+msgid "Data sources"
+msgstr ""
+
+msgid "Period type"
+msgstr "Виды периода"
+
+msgid "Period range"
+msgstr ""
+
+msgid "Create"
+msgstr "Создать"
+
+msgid "Delete evaluation"
+msgstr ""
+
+msgid ""
+"Are you sure you want to delete this evaluation? This action cannot be "
+"undone."
+msgstr ""
+
+msgid "Name is required"
+msgstr "Имя обязательно"
+
+msgid "Rename evaluation"
+msgstr ""
+
+msgid "Save"
+msgstr "Сохранить"
+
+msgid "ID"
+msgstr "Ид"
+
+msgid "Created"
+msgstr "Создан"
+
+msgid "Locations"
+msgstr ""
+
+msgid "Evaluated on {{count}} locations"
+msgid_plural "Evaluated on {{count}} locations"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+msgid "Actions"
+msgstr "Действия"
+
+msgid "New evaluation"
+msgstr ""
+
+msgid "Sort by {{column}}"
+msgstr ""
+
+msgid "No evaluations available"
+msgstr ""
+
+msgid "Search"
+msgstr "Поиск"
+
+msgid "No models found"
+msgstr ""
+
+msgid "Clear"
+msgstr "Очистить"
+
+msgid "{{count}} evaluations selected"
+msgid_plural "{{count}} evaluations selected"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+msgid "Evaluations deleted"
+msgstr ""
+
+msgid "Failed to delete evaluations"
+msgstr ""
+
+msgid "Evaluation deleted"
+msgstr ""
+
+msgid "Failed to delete evaluation"
+msgstr ""
+
+msgid "Error renaming evaluation"
+msgstr ""
+
+msgid "Could not connect to CHAP"
+msgstr ""
+
+msgid "The app is not able to connect to the CHAP server."
+msgstr ""
+
+msgid ""
+"Please check your route configuration and make sure the CHAP server is "
+"running."
+msgstr ""
+
+msgid "Learn more about Modeling and CHAP"
+msgstr ""
+
+msgid "Configure settings"
+msgstr ""
+
+msgid "Oops!"
+msgstr ""
+
+msgid "Sorry, an unexpected error has occurred."
+msgstr ""
+
+msgid "Inspect dataset"
+msgstr ""
+
+msgid "Cancel job"
+msgstr ""
+
+msgid ""
+"Are you sure you want to cancel this job? This action cannot be undone."
+msgstr ""
+
+msgid "Delete job"
+msgstr ""
+
+msgid ""
+"Are you sure you want to delete this job? This action cannot be undone."
+msgstr ""
+
+msgid "Failed to copy job ID"
+msgstr ""
+
+msgid "Go to result"
+msgstr ""
+
+msgid "View Logs"
+msgstr ""
+
+msgid "Copy Job ID"
+msgstr ""
+
+msgid "Job Logs"
+msgstr ""
+
+msgid "An error occurred while loading the logs."
+msgstr ""
+
+msgid "No logs reported for this job"
+msgstr ""
+
+msgid "Job cancelled"
+msgstr ""
+
+msgid "Failed to cancel job"
+msgstr ""
+
+msgid "Job deleted"
+msgstr ""
+
+msgid "Failed to delete job"
+msgstr ""
+
+msgid "Status"
+msgstr "Статус"
+
+msgid "Type"
+msgstr "Тип"
+
+msgid "Start date"
+msgstr "Дата начала"
+
+msgid "End date"
+msgstr "Дата окончания"
+
+msgid "Duration"
+msgstr ""
+
+msgid "No jobs available"
+msgstr ""
+
+msgid "Pending"
+msgstr ""
+
+msgid "Running"
+msgstr ""
+
+msgid "Success"
+msgstr "Успешный результат"
+
+msgid "Failed"
+msgstr "Сбой"
+
+msgid "Revoked"
+msgstr ""
+
+msgid "Create evaluation"
+msgstr ""
+
+msgid "Make prediction"
+msgstr ""
+
+msgid "Create dataset (deprecated)"
+msgstr ""
+
+msgid "Create evaluation (deprecated)"
+msgstr ""
+
+msgid "Create evaluation (Legacy)"
+msgstr ""
+
+msgid "Create dataset"
+msgstr ""
+
+msgid "Cancelled"
+msgstr "Отменен/а/о"
+
+msgid "Map Data Items"
+msgstr ""
+
+msgid "Map the model features to corresponding data items in DHIS2"
+msgstr ""
+
+msgid "Target"
+msgstr "Цель"
+
+msgid "Map the model target to the corresponding data item in DHIS2"
+msgstr ""
+
+msgid "Map each model covariate to the corresponding data item in DHIS2"
+msgstr ""
+
+msgid "No model selected"
+msgstr ""
+
+msgid "All data items mapped"
+msgstr ""
+
+msgid "{{mapped}}/{{total}} data items mapped"
+msgstr ""
+
+msgid "Dataset Configuration"
+msgstr ""
+
+msgid "Configure sources"
+msgstr ""
+
+msgid ""
+"The Data Visualizer app is not compatible with this feature. Please update "
+"to a newer version."
+msgstr ""
+
+msgid "Please map all model covariates to valid data items"
+msgstr ""
+
+msgid "Target \"{{targetName}}\" must be mapped to a data item"
+msgstr ""
+
+msgid "Covariate \"{{covariateName}}\" must be mapped to a data item"
+msgstr ""
+
+msgid "Select organisation units"
+msgstr "Выбрать организационные единицы"
+
+msgid "Select Organisation Units"
+msgstr ""
+
+msgid "Organisation unit levels"
+msgstr "Уровни организационных единиц"
+
+msgid ""
+"Some models require you to only select organisation units from the same "
+"level."
+msgstr ""
+
+msgid "All org units must be at the same level"
+msgstr ""
+
+msgid "Confirm Selection"
+msgstr ""
+
+msgid "Monthly"
+msgstr "Ежемесячно"
+
+msgid "Yearly"
+msgstr "Ежегодно"
+
+msgid "Weekly"
+msgstr "Еженедельно"
+
+msgid "Daily"
+msgstr "Ежедневно"
+
+msgid "Any"
+msgstr "Любой"
+
+msgid "Deprecated"
+msgstr ""
+
+msgid "This model is not intended for use or has been deprecated."
+msgstr ""
+
+msgid "Experimental"
+msgstr "Експериментальный"
+
+msgid ""
+"An early prototype with no formal validation - only for initial "
+"experimentation."
+msgstr ""
+
+msgid "Limited"
+msgstr "Ограниченный"
+
+msgid ""
+"Tested on a small dataset. Requires manual tuning and close monitoring."
+msgstr ""
+
+msgid "Testing"
+msgstr ""
+
+msgid "Prepared for more extensive testing; not yet approved for production."
+msgstr ""
+
+msgid "Production"
+msgstr ""
+
+msgid "Approved for general use."
+msgstr ""
+
+msgid "{{count}} covariates"
+msgid_plural "{{count}} covariates"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+msgid "Author note"
+msgstr ""
+
+msgid "Selected"
+msgstr "Выбранный"
+
+msgid "Select Model"
+msgstr ""
+
+msgid "Search by title"
+msgstr ""
+
+msgid "Period Type"
+msgstr "Виды периода"
+
+msgid "Assessment Status"
+msgstr ""
+
+msgid "Select model"
+msgstr ""
+
+msgid "EWARS Evaluation 22-24"
+msgstr ""
+
+msgid "From period"
+msgstr ""
+
+msgid "To period"
+msgstr ""
+
+msgid "Reason"
+msgstr ""
+
+msgid "Feature"
+msgstr ""
+
+msgid "Org unit"
+msgstr "Организационная единица"
+
+msgid "Period"
+msgstr "Период"
+
+msgid "Import Summary"
+msgstr "Импортировать сводную информацию"
+
+msgid "Valid import"
+msgstr ""
+
+msgid "All {{count}} locations can be successfully imported"
+msgid_plural "All {{count}} locations can be successfully imported"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+msgid "Partial import"
+msgstr ""
+
+msgid ""
+"{{count}} locations could be successfully imported, but some were rejected"
+msgid_plural ""
+"{{count}} locations could be successfully imported, but some were rejected"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+msgid "No locations imported"
+msgstr ""
+
+msgid ""
+"None of the provided locations could be imported. Please check the data "
+"items and the period type."
+msgstr ""
+
+msgid "Valid"
+msgstr "Верный"
+
+msgid "Rejected"
+msgstr ""
+
+msgid "Total"
+msgstr "Итог"
+
+msgid "Filter by Feature"
+msgstr ""
+
+msgid "Clear filter"
+msgstr ""
+
+msgid "All features"
+msgstr ""
+
+msgid "Filter by Org Unit"
+msgstr ""
+
+msgid "All org units"
+msgstr ""
+
+msgid "No rejected items match the current filters"
+msgstr ""
+
+msgid "No items to display"
+msgstr "Нет элементов для отображения"
+
+msgid "Missing id for org unit"
+msgstr ""
+
+msgid "Period type is required"
+msgstr ""
+
+msgid "Start date is required"
+msgstr ""
+
+msgid "End date is required"
+msgstr ""
+
+msgid "End date cannot be in the future"
+msgstr ""
+
+msgid "At least one org unit is required"
+msgstr ""
+
+msgid "Please select a model"
+msgstr ""
+
+msgid "Please map the covariates to valid data items"
+msgstr ""
+
+msgid "Please map the target to a valid data item"
+msgstr ""
+
+msgid "End period must be after start period"
+msgstr ""
+
+msgid "Model not found"
+msgstr ""
+
+msgid ""
+"The following org units have no geometry{{escape}} "
+"{{orgUnitsWithoutGeometry}}"
+msgstr ""
+
+msgid "Data layer not found for data item id{{escape}} {{dataItemId}}"
+msgstr ""
+
+msgid "Unsaved changes"
+msgstr "Не сохраненные изменения"
+
+msgid ""
+"You have unsaved changes that will be lost if you leave this page. Are you "
+"sure you want to continue?"
+msgstr ""
+
+msgid "Leave page"
+msgstr ""
+
+msgid "Start dry run"
+msgstr ""
+
+msgid "Start import"
+msgstr ""
+
+msgid "There was an error"
+msgstr ""
+
+msgid "Error loading models"
+msgstr ""
+
+msgid "An unknown error occurred"
+msgstr "Произошла неизвестная ошибка"
+
+msgid "Missing data for covariate"
+msgstr ""
+
+msgid "{{count}} org units"
+msgid_plural "{{count}} org units"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+msgid "{{count}} levels"
+msgid_plural "{{count}} levels"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+msgid "{{count}} groups"
+msgid_plural "{{count}} groups"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+msgid "Selected: {{commaSeparatedListOfOrganisationUnits}}"
+msgstr ""
+
+msgid "Nothing selected"
+msgstr ""
+
+msgid "User organisation unit"
+msgstr "Организационная единица пользователя"
+
+msgid "User sub-units"
+msgstr "Пользовательские подразделения"
+
+msgid "User sub-x2-units"
+msgstr "Пользовательские подразделения на два уровня ниже"
+
+msgid "Select a level"
+msgstr "Выбрать уровень"
+
+msgid "Select a group"
+msgstr "Выбрать группу"
+
+msgid "Deselect all"
+msgstr "Отменить выбор всего"
+
+msgid "Organisation Units"
+msgstr "Организации"
+
+msgid "Search organisation units"
+msgstr ""
+
+msgid "Clear all organisation units"
+msgstr ""
+
+msgid "No organisation units match your search"
+msgstr ""
+
+msgid "You cannot select more than {{max}} organisation units at a time"
+msgstr ""
+
+msgid "Please select a visualization."
+msgstr ""
+
+msgid ""
+"This plot has encountered an unexpected error and could not be displayed."
+msgstr ""
+
+msgid ""
+"This visualization is provided by external contributors and may occasionally"
+" fail due to issues in the contributed plot definition."
+msgstr ""
+
+msgid "No visualization found"
+msgstr ""
+
+msgid "Click to view actions"
+msgstr ""
+
+msgid "View Compiled Vega"
+msgstr ""
+
+msgid "Open in Vega Editor"
+msgstr ""
+
+msgid "Save as PNG"
+msgstr ""
+
+msgid "View Source"
+msgstr ""
+
+msgid "Save as SVG"
+msgstr ""
+
+msgid "Evaluation plots"
+msgstr ""
+
+msgid ""
+"Evaluation plots are configured system-wide and defined by system "
+"administrators / model developers. If you experience issues, please contact "
+"your system administrator."
+msgstr ""
+
+msgid "Unable to load data"
+msgstr ""
+
+msgid ""
+"There was a problem loading required data. See the browser console for "
+"details."
+msgstr ""
+
+msgid "Select visualization"
+msgstr ""
+
+msgid "No data available"
+msgstr ""
+
+msgid ""
+"The evaluation you are looking for does not exist or you do not have "
+"permission to access it."
+msgstr ""
+
+msgid "Invalid evaluation ID"
+msgstr ""
+
+msgid "The evaluation ID is invalid. Please try again."
+msgstr ""
+
+msgid "Summary"
+msgstr "Сводная информация"
+
+msgid ""
+"There was an error loading the evaluation summary. Please try again later."
+msgstr ""
+
+msgid "Model updated"
+msgstr ""
+
+msgid ""
+"The model used to run this evaluation has been updated. You can still view "
+"the results of the run, but the metadata may not be accurate."
+msgstr ""
+
+msgid "Training period"
+msgstr ""
+
+msgid "{{count}} locations"
+msgid_plural "{{count}} locations"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+msgid "Please select a visualization and metric."
+msgstr ""
+
+msgid ""
+"Keep in mind that this is advanced functionality and may not be suitable for"
+" all users."
+msgstr ""
+
+msgid "Metric plot"
+msgstr ""
+
+msgid ""
+"Metric plots are advanced functionality and may be misinterpreted. Use with "
+"caution."
+msgstr ""
+
+msgid "Select metric"
+msgstr ""
+
+msgid "Evaluation result"
+msgstr ""
+
+msgid "Evaluation"
+msgstr ""
+
+msgid "There was an error loading the data."
+msgstr ""
+
+msgid "No data available for the selected organization unit and split period."
+msgstr ""
+
+msgid "All locations"
+msgstr ""
+
+msgid "Result"
+msgstr "Результат"
+
+msgid "Start period"
+msgstr ""
+
+msgid "End period"
+msgstr ""
+
+msgid "Create prediction"
+msgstr ""
+
+msgid ""
+"You should only do predictions on well-tested and reliable models that have "
+"shown promise when evaluated. Do you still want to continue?"
+msgstr ""
+
+msgid "Continue"
+msgstr "Продолжить"
+
+msgid "Quick actions"
+msgstr "Быстрые действия"
+
+msgid "Compare with..."
+msgstr ""
+
+msgid "Predict..."
+msgstr ""
+
+msgid "Error loading jobs"
+msgstr ""
+
+msgid "Are you sure you want to archive this model?"
+msgstr ""
+
+msgid ""
+"You will still be able to view evaluations for this model, but you will not "
+"be able to create new evaluations or predictions."
+msgstr ""
+
+msgid "Archive"
+msgstr "Архивировать"
+
+msgid "View evaluations"
+msgstr ""
+
+msgid "Model archived"
+msgstr ""
+
+msgid "Failed to archive model"
+msgstr ""
+
+msgid "Author"
+msgstr ""
+
+msgid "Covariates"
+msgstr ""
+
+msgid "No covariate names available"
+msgstr ""
+
+msgid "Archived"
+msgstr ""
+
+msgid "Active"
+msgstr "Активный/ая/ое"
+
+msgid "New model"
+msgstr ""
+
+msgid "No models available"
+msgstr ""
+
+msgid "Include archived"
+msgstr ""
+
+msgid "Error loading model templates"
+msgstr ""
+
+msgid "No model templates found"
+msgstr ""
+
+msgid ""
+"We could not find any available model templates. Please create templates or "
+"try again later."
+msgstr ""
+
+msgid "This covariate has already been added."
+msgstr ""
+
+msgid "Additional continuous covariates"
+msgstr ""
+
+msgid "Enter covariate name"
+msgstr ""
+
+msgid "Add"
+msgstr "Добавить"
+
+msgid "Required"
+msgstr "Обязательный"
+
+msgid "Remove"
+msgstr "Убрать"
+
+msgid "Model template"
+msgstr ""
+
+msgid "Select the base model template"
+msgstr ""
+
+msgid "Select a model template"
+msgstr ""
+
+msgid "Deprecated model"
+msgstr ""
+
+msgid "This model is deprecated and may be removed in the future."
+msgstr ""
+
+msgid "Type a value"
+msgstr ""
+
+msgid "The model name will be \"{{displayName}} [{{variantName}}]\""
+msgstr ""
+
+msgid "Provide a descriptive name for this variant"
+msgstr ""
+
+msgid "Variant name"
+msgstr ""
+
+msgid "Model template is required"
+msgstr ""
+
+msgid "Model created successfully"
+msgstr ""
+
+msgid "Failed to create model"
+msgstr ""
+
+msgid "Error loading prediction"
+msgstr ""
+
+msgid "Prediction not found"
+msgstr ""
+
+msgid ""
+"The prediction you are looking for does not exist or you do not have "
+"permission to access it."
+msgstr ""
+
+msgid ""
+"The model you are looking for does not exist or you do not have permission "
+"to access it."
+msgstr ""
+
+msgid "Prediction result"
+msgstr ""
+
+msgid "Chart"
+msgstr "Диаграмма"
+
+msgid "Table"
+msgstr "Таблица"
+
+msgid "Map"
+msgstr "Карты"
+
+msgid "No prediction data found."
+msgstr ""
+
+msgid ""
+"There was an error loading the prediction summary. Please try again later."
+msgstr ""
+
+msgid "Predicted periods"
+msgstr ""
+
+msgid "Import"
+msgstr "Импорт"
+
+msgid "Guide"
+msgstr ""
+
+msgid "Loading"
+msgstr "Загрузка"
+
+msgid "Start typing to search for data items"
+msgstr ""
+
+msgid "No matches found"
+msgstr "Ничего не найдено"
+
+msgid "Select a data item..."
+msgstr ""
+
+msgid "Clear selection"
+msgstr "Очистить выбор"
+
+msgid "Search for indicators, data elements, or program indicators"
+msgstr ""
+
+msgid "Import forecasted values"
+msgstr ""
+
+msgid ""
+"Importing forecasted values into DHIS2 requires you to set up five data "
+"elements for the quantiles outputted by the model."
+msgstr ""
+
+msgid "Quantile high"
+msgstr ""
+
+msgid "Quantile mid high"
+msgstr ""
+
+msgid "Median"
+msgstr ""
+
+msgid "Quantile mid low"
+msgstr ""
+
+msgid "Quantile low"
+msgstr ""
+
+msgid "Failed to post prediction data"
+msgstr ""
+
+msgid "Prediction data posted successfully"
+msgstr ""
+
+msgid "Delete prediction"
+msgstr ""
+
+msgid ""
+"Are you sure you want to delete this prediction? This action cannot be "
+"undone."
+msgstr ""
+
+msgid "View"
+msgstr "Просмотр"
+
+msgid "Periods"
+msgstr "Периоды"
+
+msgid "New prediction"
+msgstr ""
+
+msgid "No predictions available"
+msgstr ""
+
+msgid "Prediction deleted"
+msgstr ""
+
+msgid "Failed to delete prediction"
+msgstr ""
+
+msgid "There are running jobs in the background"
+msgstr ""
+
+msgid "Running jobs"
+msgstr ""
+
+msgid "Evaluate"
+msgstr ""
+
+msgid "Overview"
+msgstr "Обзор"
+
+msgid "Predict"
+msgstr ""
+
+msgid "Models"
+msgstr ""
+
+msgid "Jobs"
+msgstr ""
+
+msgid "Settings"
+msgstr "Настройки"
+
+msgid ""
+"The version of the Modeling App is not compatible with the backend (Chap "
+"core)."
+msgstr ""
+
+msgid ""
+"The Chap Core version {{chapVersion}} is too old. The Modeling App specifies"
+" minimum Chap core version{{escape}} {{chapMinVersion}}"
+msgstr ""
+
+msgid "Compare evaluations"
+msgstr ""
+
+msgid "Compare evaluations to assess model, co-variates and data performance."
+msgstr ""
+
+msgid "Select base evaluation"
+msgstr ""
+
+msgid ""
+"Selected evaluations do not have any split periods in common. Please select "
+"evaluations with overlapping split periods."
+msgstr ""
+
+msgid "An error occurred while fetching chart data "
+msgstr ""
+
+msgid ""
+"Select two evaluations to compare their results. The\n"
+"                    selected evaluations must be compatible."
+msgstr ""
+
+msgid ""
+"Compatible evaluations have overlapping organisation units and split "
+"periods."
+msgstr ""
+
+msgid "Split period"
+msgstr ""
+
+msgid "Organisation unit level"
+msgstr "Уровень организации"
+
+msgid "Organisation unit level to import data to"
+msgstr ""
+
+msgid "Data Element"
+msgstr "Элемент данных"
+
+msgid "Indicator"
+msgstr "Индикатор"
+
+msgid "Program Indicator"
+msgstr "Индикатор программы"
+
+msgid "No compatible evaluations found"
+msgstr ""
+
+msgid "Select evaluation to compare with"
+msgstr ""
+
+msgid "No evaluations found"
+msgstr ""
+
+msgid "CHAP settings"
+msgstr ""
+
+msgid "An error occurred while connecting to the CHAP server."
+msgstr ""
+
+msgid ""
+"Are you sure you have configured your route correctly? See the console for "
+"more details."
+msgstr ""
+
+msgid "Server information"
+msgstr ""
+
+msgid "CHAP Version"
+msgstr ""
+
+msgid "Python Version"
+msgstr ""
+
+msgid "Operating System"
+msgstr ""
+
+msgid "Connected"
+msgstr ""
+
+msgid "Your server might not be secure"
+msgstr ""
+
+msgid ""
+"CHAP currently does not have it's own authentication service. Make sure to "
+"secure it by blocking public access on your server firewall."
+msgstr ""
+
+msgid "Your server is not secure"
+msgstr ""
+
+msgid "Route configuration"
+msgstr ""
+
+msgid "No route found."
+msgstr ""
+
+msgid "Add route"
+msgstr ""
+
+msgid "Delete route"
+msgstr ""
+
+msgid "Are you sure you want to delete this route?"
+msgstr ""
+
+msgid "Edit route"
+msgstr ""
+
+msgid "Public access"
+msgstr "Общий доступ"
+
+msgid ""
+"Your route is public and can be accessed by anyone. This can potentially "
+"expose sensitive data. If you want to restrict access, click the \"Sharing\""
+" button and remove access for \"All users\"."
+msgstr ""
+
+msgid "Sharing"
+msgstr "Поделиться"
+
+msgid "Edit"
+msgstr "Редактировать"
+
+msgid "Invalid URL format"
+msgstr ""
+
+msgid "URL is required"
+msgstr ""
+
+msgid "URL must end with a double wildcard (/**)"
+msgstr ""
+
+msgid "CHAP Core URL"
+msgstr ""
+
+msgid "Route settings"
+msgstr ""
+
+msgid ""
+"There was an error loading the route settings. Please try to reload the "
+"page."
+msgstr ""
+
+msgid "If the problem persists, please contact your system administrator."
+msgstr ""
+
+msgid "You do not have permission to add or modify routes."
+msgstr ""
+
+msgid ""
+"If you think this is an error, please contact your system administrator."
+msgstr ""
+
+msgid "Code"
+msgstr "Код"
+
+msgid "URL"
+msgstr "URL адрес"
+
+msgid "Authorities"
+msgstr ""
+
+msgid "Error deleting route"
+msgstr ""
+
+msgid "Route deleted successfully"
+msgstr ""
+
+msgid "Error saving route"
+msgstr ""
+
+msgid "Route saved successfully"
+msgstr ""
+
+msgid "Evaluation details"
+msgstr ""
+
+msgid ""
+"Deep dive into a specific evaluation run to assess its performance and "
+"reliability."
+msgstr ""
+
+msgid "Back to evaluations"
+msgstr ""
+
+msgid "Error loading evaluations"
+msgstr ""
+
+msgid "Evaluations"
+msgstr ""
+
+msgid ""
+"Evaluates the accuracy of a predictive model using historical data. Compares"
+" actual outcomes with predicted values to assess model performance."
+msgstr ""
+
+msgid "Get started with the Modeling app"
+msgstr ""
+
+msgid "To get started, create a route that points to a running CHAP server."
+msgstr ""
+
+msgid "Route and servers are configured on the settings page."
+msgstr ""
+
+msgid "Active jobs"
+msgstr ""
+
+msgid "View and manage currently running jobs and their status."
+msgstr ""
+
+msgid "Manage configured models available in your system."
+msgstr ""
+
+msgid ""
+"Configure a new model with custom settings or parameters based on a model "
+"template."
+msgstr ""
+
+msgid "Back to models"
+msgstr ""
+
+msgid "Create a new evaluation to assess the performance of a model"
+msgstr ""
+
+msgid "Create a new prediction to forecast outcomes using a model"
+msgstr ""
+
+msgid "Back to predictions"
+msgstr ""
+
+msgid "Prediction details"
+msgstr ""
+
+msgid "View the details of a prediction."
+msgstr ""
+
+msgid "Import prediction"
+msgstr ""
+
+msgid "Import the forecasted values of this prediction into DHIS2."
+msgstr ""
+
+msgid "Back to prediction details"
+msgstr ""
+
+msgid "Error loading predictions"
+msgstr ""
+
+msgid "Predictions"
+msgstr ""
+
+msgid ""
+"Forecasted trends generated by applying a predictive model to current data. "
+"These can be reviewed and imported into DHIS2 to support decision-making in "
+"the field."
+msgstr ""
+
+msgctxt ") instead."
+msgid "Spaces are not allowed. Use dashes (-) or underscores ("
+msgstr ""
