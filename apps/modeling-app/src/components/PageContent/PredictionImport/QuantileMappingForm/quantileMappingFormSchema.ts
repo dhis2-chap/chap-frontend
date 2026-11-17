@@ -23,11 +23,11 @@ export const importLocationStateSchema = z
     .optional();
 
 export const quantileMappingSchema = z.object({
-    quantile_low: z.string().min(1, { message: 'Quantile low is required' }),
-    quantile_high: z.string().min(1, { message: 'Quantile high is required' }),
-    median: z.string().min(1, { message: 'Median is required' }),
-    quantile_mid_low: z.string().min(1, { message: 'Quantile mid low is required' }),
-    quantile_mid_high: z.string().min(1, { message: 'Quantile mid high is required' }),
+    quantile_low: z.string().min(1, { message: i18n.t('Quantile low is required') }),
+    quantile_high: z.string().min(1, { message: i18n.t('Quantile high is required') }),
+    median: z.string().min(1, { message: i18n.t('Median is required') }),
+    quantile_mid_low: z.string().min(1, { message: i18n.t('Quantile mid low is required') }),
+    quantile_mid_high: z.string().min(1, { message: i18n.t('Quantile mid high is required') }),
     use_alert_outputs: z.boolean(),
     alert_probability: outbreakProbabilitySchema,
     outbreak_indicator: z.string(),

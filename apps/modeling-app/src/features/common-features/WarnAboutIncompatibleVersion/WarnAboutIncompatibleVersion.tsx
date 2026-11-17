@@ -21,7 +21,7 @@ const WarnAboutIncompatibleVersion = () => {
                     style={{ maxInlineSize: '1400px' }}
                 >
                     <div className={style.warningMarginInner}>
-                        <NoticeBox error title="Incompatible versions">
+                        <NoticeBox error title={i18n.t('Incompatible versions')}>
                             <div>
                                 {i18n.t(
                                     'The version of the Modeling App is not compatible with the backend (Chap core).',

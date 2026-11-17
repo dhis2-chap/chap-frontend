@@ -26,7 +26,7 @@ export const NewEvaluationPage = ({ useSavedDataset = false }: { useSavedDataset
                 icon={<IconArrowLeft16 />}
                 onClick={() => navigate(returnTo)}
             >
-                {i18n.t(isFromDetails ? 'Back to evaluation details' : 'Back to evaluations')}
+                {isFromDetails ? i18n.t('Back to evaluation details') : i18n.t('Back to evaluations')}
             </Button>
 
             <TabBar>

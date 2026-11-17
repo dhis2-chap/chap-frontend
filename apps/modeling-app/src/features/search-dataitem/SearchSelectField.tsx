@@ -221,7 +221,7 @@ export const SearchSelectField = ({
                                 type="button"
                                 onClick={handleClearSelection}
                                 className={styles.clearButton}
-                                aria-label="Clear selection"
+                                aria-label={i18n.t('Clear selection')}
                             >
                                 <IconCross16 />
                             </button>

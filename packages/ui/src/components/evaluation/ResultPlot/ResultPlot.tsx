@@ -138,7 +138,7 @@ const getOptions = ({
                 ? { afterSetExtremes: onAfterSetExtremes }
                 : undefined,
             title: {
-                text: 'Period',
+                text: i18n.t('Period'),
             },
             crosshair: true,
             zoomEnabled: true,
