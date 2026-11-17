@@ -1,3 +1,4 @@
+import i18n from '@dhis2/d2-i18n';
 import { ReactNode } from 'react';
 import { IconCross16 } from '@dhis2/ui';
 import cx from 'classnames';
@@ -34,7 +35,7 @@ export const Tag = ({ children, variant = 'default', onRemove, className }: TagP
                         type="button"
                         className={styles.removeButton}
                         onClick={onRemove}
-                        aria-label="Remove"
+                        aria-label={i18n.t('Remove')}
                     >
                         <IconCross16 />
                     </button>

@@ -1,3 +1,4 @@
+import './locales';
 export { UncertaintyAreaChart, type ThresholdChartLine } from './components/predictions/UncertaintyAreaChart/UncertaintyAreaChart';
 export * from './httpfunctions/index';
 export {

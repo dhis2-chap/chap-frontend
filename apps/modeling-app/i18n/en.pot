@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-11-17T15:02:19.474Z\n"
-"PO-Revision-Date: 2026-11-17T15:02:19.476Z\n"
+"POT-Creation-Date: 2026-11-17T16:55:47.217Z\n"
+"PO-Revision-Date: 2026-11-17T16:55:47.217Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -2608,6 +2608,21 @@ msgstr ""
 msgid "Signal probability is required"
 msgstr "Signal probability is required"
 
+msgid "Quantile low is required"
+msgstr "Quantile low is required"
+
+msgid "Quantile high is required"
+msgstr "Quantile high is required"
+
+msgid "Median is required"
+msgstr "Median is required"
+
+msgid "Quantile mid low is required"
+msgstr "Quantile mid low is required"
+
+msgid "Quantile mid high is required"
+msgstr "Quantile mid high is required"
+
 msgid "Outbreak indicator is required"
 msgstr "Outbreak indicator is required"
 
@@ -2852,6 +2867,9 @@ msgstr "Copied"
 
 msgid "Copy template"
 msgstr "Copy template"
+
+msgid "Incompatible versions"
+msgstr "Incompatible versions"
 
 msgid ""
 "The version of the Modeling App is not compatible with the backend (Chap "

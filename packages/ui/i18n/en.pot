@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-11-12T12:17:58.279Z\n"
-"PO-Revision-Date: 2026-11-12T12:17:58.280Z\n"
+"POT-Creation-Date: 2026-11-17T16:55:47.963Z\n"
+"PO-Revision-Date: 2026-11-17T16:55:47.964Z\n"
 
 msgid "Chap settings"
 msgstr "Chap settings"
@@ -106,6 +106,9 @@ msgstr "80% prediction interval"
 
 msgid "50% prediction interval"
 msgstr "50% prediction interval"
+
+msgid "Period"
+msgstr "Period"
 
 msgid "Median Prediction for {{predictionTargetName}}"
 msgstr "Median Prediction for {{predictionTargetName}}"
@@ -440,3 +443,6 @@ msgstr "From period"
 
 msgid "To period"
 msgstr "To period"
+
+msgid "Remove"
+msgstr "Remove"
