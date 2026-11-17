@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-11-17T09:01:44.218Z\n"
-"PO-Revision-Date: 2026-11-17T09:01:44.218Z\n"
+"POT-Creation-Date: 2026-11-17T15:02:19.474Z\n"
+"PO-Revision-Date: 2026-11-17T15:02:19.476Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -1260,20 +1260,6 @@ msgstr "{{covariate}} has no observations for these periods and organisation uni
 msgid "The selected organisation units must have geometry"
 msgstr "The selected organisation units must have geometry"
 
-msgid ""
-"Dataset import failed or was cancelled. Check the job details on the Jobs "
-"page."
-msgstr ""
-"Dataset import failed or was cancelled. Check the job details on the Jobs "
-"page."
-
-msgid ""
-"Dataset import is still running. Check the Jobs page, then start an "
-"evaluation from the saved dataset."
-msgstr ""
-"Dataset import is still running. Check the Jobs page, then start an "
-"evaluation from the saved dataset."
-
 msgid "Backtest parameters"
 msgstr "Backtest parameters"
 
@@ -1404,6 +1390,20 @@ msgstr "{{model}} requires at least {{minimum}} forecast periods."
 
 msgid "{{model}} supports at most {{maximum}} forecast periods."
 msgstr "{{model}} supports at most {{maximum}} forecast periods."
+
+msgid ""
+"Dataset import failed or was cancelled. Check the job details on the Jobs "
+"page."
+msgstr ""
+"Dataset import failed or was cancelled. Check the job details on the Jobs "
+"page."
+
+msgid ""
+"Dataset import is still running. Check the Jobs page, then start an "
+"evaluation from the saved dataset."
+msgstr ""
+"Dataset import is still running. Check the Jobs page, then start an "
+"evaluation from the saved dataset."
 
 msgid "Cannot run prediction"
 msgstr "Cannot run prediction"
@@ -2869,6 +2869,12 @@ msgstr ""
 
 msgid "Compare evaluations to assess model, co-variates and data performance."
 msgstr "Compare evaluations to assess model, co-variates and data performance."
+
+msgid "Back to evaluation details"
+msgstr "Back to evaluation details"
+
+msgid "Back to evaluation"
+msgstr "Back to evaluation"
 
 msgid "Select base evaluation"
 msgstr "Select base evaluation"

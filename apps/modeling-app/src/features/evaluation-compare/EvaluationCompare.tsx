@@ -189,7 +189,7 @@ export const EvaluationCompare = () => {
                             navigate(returnTo);
                         }}
                     >
-                        {i18n.t(isFromDetails ? 'Back to evaluation details' : 'Back to evaluation')}
+                        {isFromDetails ? i18n.t('Back to evaluation details') : i18n.t('Back to evaluation')}
                     </Button>
                 </div>
                 {plotDataLoading && (
