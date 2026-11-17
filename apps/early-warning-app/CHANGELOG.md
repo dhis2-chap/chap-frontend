@@ -1,5 +1,14 @@
 # @dhis2-chap/early-warning-app
 
+## 0.2.5
+
+### Patch Changes
+
+-   Updated dependencies [8a5873b]
+-   Updated dependencies [32dd06e]
+    -   @dhis2-chap/ui@7.6.0
+    -   @dhis2-chap/core@7.6.0
+
 ## 0.2.4
 
 ### Patch Changes
