@@ -1,5 +1,12 @@
 # @dhis2-chap/ui
 
+## 7.6.1
+
+### Patch Changes
+
+-   183cf12: Sync translations from Transifex for the modeling app and UI package, including complete French and Portuguese translations.
+    -   @dhis2-chap/core@7.6.1
+
 ## 7.6.0
 
 ### Minor Changes
