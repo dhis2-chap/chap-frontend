@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
-import type { ConfiguredModelInfoRead, MakeBacktestWithDataRequest, ModelSpecRead } from '@dhis2-chap/ui';
-import { getChap, readJson } from './helpers/evaluation-fixtures';
+import type { BacktestRead, ConfiguredModelInfoRead, DataBaseResponse, DatasetMakeRequest, JobResponse, MakeBacktestsResponse, ModelSpecRead } from '@dhis2-chap/ui';
+import { getChap, pollEvaluationJob, readJson } from './helpers/evaluation-fixtures';
 import { openPeriodPickerAtYear, selectPeriod } from './helpers/period-picker';
 
 const REQUIRED_DATA_MAPPINGS = [
@@ -30,38 +30,13 @@ const getMonthValueWithOffset = (offset: number): string => {
     return `${year}${month}`;
 };
 
-const isBacktestCreateRequest = (url: string, method: string): boolean => {
-    return method === 'POST' && url.includes('/analytics/create-backtest-with-data/');
-};
+const isDatasetRequest = (url: string, method: string): boolean => (
+    method === 'POST' && url.includes('/analytics/make-dataset')
+);
 
-const isBacktestImportRequest = (url: string, method: string): boolean => {
-    if (!isBacktestCreateRequest(url, method)) {
-        return false;
-    }
-
-    const dryRunQuery = new URL(url).searchParams.get('dryRun');
-    return dryRunQuery === 'false';
-};
-
-const stubCreateBacktestWithData = async (page: Page) => {
-    await page.route('**/analytics/create-backtest-with-data/*', async (route) => {
-        const request = route.request();
-        if (!isBacktestCreateRequest(request.url(), request.method())) {
-            await route.continue();
-            return;
-        }
-
-        await route.fulfill({
-            status: 200,
-            contentType: 'application/json',
-            body: JSON.stringify({
-                id: null,
-                importedCount: 1,
-                rejected: [],
-            }),
-        });
-    });
-};
+const isBacktestCreateRequest = (url: string, method: string): boolean => (
+    method === 'POST' && /\/analytics\/create-backtests?(?:\?|$)/.test(url)
+);
 
 const selectOrgUnitLevel = async (page: Page) => {
     await page.getByRole('button', { name: 'Select organisation units' }).click();
@@ -179,11 +154,9 @@ const prepareValidFormData = async (
 test('validates period rules with invalid values', async ({ page }) => {
     const newEvaluationUrl = '/#/evaluate/new';
 
-    await stubCreateBacktestWithData(page);
-
     let backtestCreateRequestCount = 0;
     page.on('request', (request) => {
-        if (isBacktestCreateRequest(request.url(), request.method())) {
+        if (isDatasetRequest(request.url(), request.method()) || isBacktestCreateRequest(request.url(), request.method())) {
             backtestCreateRequestCount += 1;
         }
     });
@@ -222,7 +195,7 @@ test('validates backtest parameters, submits chosen values, and shows backend va
         } });
     });
     await page.goto('/#/evaluate/new');
-    await prepareValidFormData(page, 'Custom backtest parameters');
+    await prepareValidFormData(page, 'Custom backtest parameters', { fromPeriodId: '202001', toPeriodId: '202412' });
     for (const [name, value] of Object.entries({ nPeriods: 3, nSplits: 7, stride: 1, nRetrain: 1 })) {
         await expect(page.locator(`[data-test="backtest-${name}"] input`)).toHaveValue(String(value));
     }
@@ -237,7 +210,7 @@ test('validates backtest parameters, submits chosen values, and shows backend va
     const periods = page.locator('[data-test="backtest-nPeriods"] input');
     let submissions = 0;
     page.on('request', (request) => {
-        if (isBacktestCreateRequest(request.url(), request.method())) submissions++;
+        if (isDatasetRequest(request.url(), request.method()) || isBacktestCreateRequest(request.url(), request.method())) submissions++;
     });
     await periods.fill('4');
     await expect(page.getByText(/supports 1–3 forecast periods/)).toBeVisible();
@@ -257,12 +230,12 @@ test('validates backtest parameters, submits chosen values, and shows backend va
     await page.getByText('Damped persistence', { exact: true }).click();
 
     // A server-side rejection cannot reliably be caused by a valid UI form.
-    await page.route('**/analytics/create-backtest-with-data/*', route => route.fulfill({
+    await page.route('**/analytics/create-backtests', route => route.fulfill({
         status: 422,
         json: { detail: [{ loc: ['body', 'futureWeatherProvider'], msg: 'Provider temporarily unavailable' }] },
     }));
     const requestPromise = page.waitForRequest(request => isBacktestCreateRequest(request.url(), request.method()));
-    await start.click();
+    await page.getByRole('button', { name: 'Start import', exact: true }).click();
     const request = await requestPromise;
     expect(request.postDataJSON()).toMatchObject({
         nPeriods: 2, nSplits: 4, stride: 2, nRetrain: 2,
@@ -284,7 +257,6 @@ test('accepts a model without covariates with only its target mapped', async ({ 
                 : model),
         });
     });
-    await stubCreateBacktestWithData(page);
     await page.goto('/#/evaluate/new');
     await page.locator('[data-test="evaluation-name-input"] input').fill('Target-only evaluation');
     await selectPeriod(page, 'evaluation-from-period-input', '202001');
@@ -302,60 +274,69 @@ test('accepts a model without covariates with only its target mapped', async ({ 
     await expect(page.getByText('Please map all model covariates to valid data items')).not.toBeVisible();
 
     const dryRunResponse = page.waitForResponse(response =>
-        isBacktestCreateRequest(response.url(), response.request().method()) &&
+        isDatasetRequest(response.url(), response.request().method()) &&
         new URL(response.url()).searchParams.get('dryRun') === 'true',
     );
     await page.getByRole('button', { name: 'Start dry run' }).click();
     const response = await dryRunResponse;
     expect(response.ok()).toBe(true);
-    const request = response.request().postDataJSON() as MakeBacktestWithDataRequest;
+    const request = response.request().postDataJSON() as DatasetMakeRequest;
     expect(request.dataSources).toEqual([
         { covariate: 'disease_cases', dataElementId: expect.any(String) },
     ]);
-    expect(request.providedData.length).toBeGreaterThan(0);
-    expect(request.providedData.every(observation => observation.featureName === 'disease_cases')).toBe(true);
+    expect(request.providedData!.length).toBeGreaterThan(0);
+    expect(request.providedData!.every(observation => observation.featureName === 'disease_cases')).toBe(true);
 });
 
-test('submits valid data, navigates to jobs, and auto-updates the created job to success', async ({ page }) => {
-    const newEvaluationUrl = '/#/evaluate/new';
+test('previews the dataset, imports it, and evaluates the saved data', async ({ page }) => {
+    test.setTimeout(180_000);
     const evaluationName = `E2E successful evaluation ${Date.now()}`;
-
-    await page.goto(newEvaluationUrl);
-
-    await prepareValidFormData(page, evaluationName, {
-        fromPeriodId: '202001',
-        toPeriodId: '202412',
+    const legacyRequests: string[] = [];
+    page.on('request', (request) => {
+        if (request.url().includes('create-backtest-with-data')) legacyRequests.push(request.url());
     });
+    await page.goto('/#/evaluate/new');
+    await prepareValidFormData(page, evaluationName, { fromPeriodId: '202001', toPeriodId: '202412' });
 
-    const createImportRequest = page.waitForRequest(request =>
-        isBacktestImportRequest(request.url(), request.method()),
+    const preview = page.waitForResponse(response =>
+        isDatasetRequest(response.url(), response.request().method()) &&
+        new URL(response.url()).searchParams.get('dryRun') === 'true',
     );
-    const createImportResponse = page.waitForResponse(response =>
-        isBacktestImportRequest(response.url(), response.request().method()),
+    await page.getByRole('button', { name: 'Start dry run' }).click();
+    expect((await preview).ok()).toBe(true);
+    const summary = page.locator('[role="dialog"]').filter({ has: page.getByText('Import Summary', { exact: true }) });
+    await expect(summary).toBeVisible();
+    await summary.getByRole('button', { name: 'Close', exact: true }).click();
+
+    const imported = page.waitForResponse(response =>
+        isDatasetRequest(response.url(), response.request().method()) &&
+        new URL(response.url()).searchParams.get('dryRun') !== 'true',
     );
-
-    await page.getByRole('button', { name: 'Start import' }).click();
-
-    const request = await createImportRequest;
-    await expect(
-        request.postDataJSON() as { name?: string },
-    ).toMatchObject({ name: evaluationName });
-
-    const importResponseBody = await readJson<{ id?: string | null }>(
-        await createImportResponse,
-        'Create evaluation import',
+    const evaluated = page.waitForResponse(response => isBacktestCreateRequest(response.url(), response.request().method()));
+    await page.getByRole('button', { name: 'Start import', exact: true }).click();
+    const { id: importJobId } = await readJson<JobResponse>(await imported, 'Import evaluation dataset');
+    const evaluationResponse = await evaluated;
+    const { id: datasetId } = await readJson<DataBaseResponse>(
+        await getChap(page, `/v1/jobs/${importJobId}/database_result`), 'Load imported dataset id',
     );
-    await expect(importResponseBody.id).toBeTruthy();
+    expect(evaluationResponse.request().postDataJSON()).toMatchObject({ name: evaluationName, datasetId });
+    expect(evaluationResponse.request().postDataJSON()).not.toHaveProperty('providedData');
+    const result = await readJson<MakeBacktestsResponse | JobResponse>(evaluationResponse, 'Start evaluation');
+    const jobId = 'jobs' in result ? result.jobs[0].jobId : result.id;
+    const jobName = 'jobs' in result ? `${evaluationName}/naive_model` : evaluationName;
 
     await expect(page).toHaveURL(/\/#\/jobs(?:\?.*)?$/);
-    await expect(page.getByRole('heading', { name: 'Active jobs' })).toBeVisible();
-
-    const createdJobRow = page.locator('tr').filter({
-        has: page.getByRole('cell', { name: evaluationName }),
-    }).first();
-
-    await expect(createdJobRow).toBeVisible();
-    await expect(createdJobRow.getByText('Success')).toBeVisible({ timeout: 10_000 });
+    await pollEvaluationJob(page, jobId);
+    const { id } = await readJson<DataBaseResponse>(
+        await getChap(page, `/v1/jobs/${jobId}/database_result`), 'Load created evaluation id',
+    );
+    const evaluation = await readJson<BacktestRead>(
+        await getChap(page, `/v1/crud/backtests/${id}/info`), 'Load evaluation',
+    );
+    expect(evaluation).toMatchObject({ name: jobName, datasetId });
+    const jobRow = page.locator('tr').filter({ has: page.getByRole('cell', { name: jobName, exact: true }) }).first();
+    await expect(jobRow.getByText('Success')).toBeVisible();
+    expect(legacyRequests).toEqual([]);
 });
 
 test('warns before leaving a form with unsaved changes', async ({ page }) => {

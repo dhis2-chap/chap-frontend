@@ -42,7 +42,7 @@ export const useEvaluationFormController = (initialValues?: Partial<ModelExecuti
     });
 
     const handleSubmit = (data: ModelExecutionFormValues) => {
-        if (!forecastHorizon.isBlocked) createNewBacktest(data);
+        if (!isSubmitting && !isValidationLoading && !forecastHorizon.isBlocked) createNewBacktest(data);
     };
     const handleDryRunSubmit = (data: ModelExecutionFormValues) => validateAndDryRun(data);
 
