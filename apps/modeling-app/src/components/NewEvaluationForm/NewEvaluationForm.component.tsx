@@ -77,7 +77,7 @@ export const NewEvaluationFormComponent = ({ initialValues }: NewEvaluationFormP
                                         <Button
                                             onClick={handleDryRun}
                                             loading={isValidationLoading}
-                                            disabled={forecastHorizon.isBlocked || modelUnavailable || !!periodSettingsError || periodSettingsLoading}
+                                            disabled={isSubmitting || isValidationLoading || forecastHorizon.isBlocked || modelUnavailable || !!periodSettingsError || periodSettingsLoading}
                                             primary
                                         >
                                             {i18n.t('Start dry run')}

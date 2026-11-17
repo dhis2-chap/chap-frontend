@@ -13,7 +13,7 @@ for (const { status, label, minimumVersion, dataToBeFetched } of [
         // Fetching climate data during import is unsupported and fails in the worker.
         dataToBeFetched: [{ featureName: 'rainfall', dataSourceName: 'total_precipitation' }],
     },
-    { status: 'SUCCESS', label: 'Success', minimumVersion: '2.7.0', dataToBeFetched: [] },
+    { status: 'SUCCESS', label: 'Success', minimumVersion: '2.8.0', dataToBeFetched: [] },
 ]) {
     test(`downloads diagnostics and client context for a ${status} job`, async ({ page }) => {
         test.setTimeout(90_000);

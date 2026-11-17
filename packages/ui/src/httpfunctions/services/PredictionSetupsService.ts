@@ -149,7 +149,7 @@ export class PredictionSetupsService {
      * be computed for the setup's data, or if the baseline is not a built-in baseline model.
      * @param predictionSetupId
      * @param metric Id of a metric with a comparison operator, as listed by the metrics endpoint.
-     * @param baseline Name of the baseline model to compare with, e.g. 'persistence'. Defaults to the installation's default baseline model.
+     * @param baseline Name of the baseline model to compare with, e.g. 'seasonal_shift_persistence'. Defaults to the installation's default baseline model.
      * @returns PredictionSetupMonitoring Successful Response
      * @throws ApiError
      */
@@ -185,6 +185,8 @@ export class PredictionSetupsService {
      * the backtest's target column, or of a different period type than the backtest
      * dataset's masked ranges. Forecasts use the same target, future-weather provider and
      * masked ranges as the backtest: the ranges are copied onto the run's new dataset.
+     * Without ``nPeriods``, they also use the backtest's horizon, kept within the range the
+     * model supports.
      * @param predictionSetupId
      * @param requestBody
      * @returns JobResponse Successful Response

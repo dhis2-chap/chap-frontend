@@ -16,7 +16,7 @@ export type Settings = {
      */
     selectedMetrics: Array<string>;
     /**
-     * Built-in baseline name, independent of its version (for example 'persistence').
+     * Built-in baseline name, independent of its version (for example 'seasonal_shift_persistence').
      */
     defaultBaselineModel: string;
     /**

@@ -1,7 +1,37 @@
 import i18n from '@dhis2/d2-i18n';
+import { useNavigate } from 'react-router-dom';
 import { Button, CircularLoader, NoticeBox, Switch } from '@dhis2/ui';
+import { AlertApproval } from '@dhis2-chap/ui';
 import type { usePredictionAlerts } from '@/hooks/usePredictionAlerts';
 import styles from './PredictionDetailsGrid.module.css';
+
+const countReview = (alerts: { approved?: AlertApproval }[]) => ({
+    // A signal without a decision is pending.
+    pending: alerts.filter(alert => (alert.approved ?? AlertApproval.PENDING) === AlertApproval.PENDING).length,
+    approved: alerts.filter(alert => alert.approved === AlertApproval.APPROVED).length,
+    declined: alerts.filter(alert => alert.approved === AlertApproval.DECLINED).length,
+    total: alerts.length,
+});
+
+// The review lives on its own page, so this notice is the way in: it says what is left to do and leads there.
+const SignalReviewNotice = ({ alerts }: { alerts: { approved?: AlertApproval }[] }) => {
+    const navigate = useNavigate();
+    const { pending, approved, declined, total } = countReview(alerts);
+    return (
+        <NoticeBox title={i18n.t('Signal review')} valid={pending === 0}>
+            <p className={styles.reviewStatus} data-test="signal-review-status">
+                {pending === 0
+                    ? i18n.t('All signals reviewed{{colon}} {{approved}} approved, {{declined}} declined.', { colon: ':', approved, declined })
+                    : i18n.t('{{pending}} of {{total}} signals awaiting review ({{approved}} approved, {{declined}} declined).', {
+                            pending, total, approved, declined,
+                        })}
+            </p>
+            <Button small primary={pending > 0} onClick={() => navigate('signals')}>
+                {i18n.t('Review signals')}
+            </Button>
+        </NoticeBox>
+    );
+};
 
 type Props = {
     alerts: ReturnType<typeof usePredictionAlerts>;
@@ -49,6 +79,7 @@ export const AlertLevelsSection = ({ alerts, enabled, disabled, onEnabledChange 
 
     return (
         <>
+            {alerts.displayedAlerts.length > 0 && <SignalReviewNotice alerts={alerts.displayedAlerts} />}
             <Switch
                 className={styles.toggleButton}
                 aria-label={i18n.t('Signal levels')}

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { useAlert } from '@dhis2/app-runtime';
-import { Button, ButtonStrip, InputField, Modal, ModalActions, ModalContent, ModalTitle, NoticeBox } from '@dhis2/ui';
+import { Button, ButtonStrip, InputField, Modal, ModalActions, ModalContent, ModalTitle, NoticeBox, TextAreaField } from '@dhis2/ui';
 import type { AlertPolicyRead } from '@dhis2-chap/ui';
 import { useUpdateAlertPolicyCodes } from '@/hooks/useAlertPolicies';
 import { useSaveAlertPolicyDisplay } from '@/hooks/useAlertPolicyDisplay';
@@ -20,6 +20,7 @@ export const EditAlertPolicyModal = ({ policy, display, onClose }: {
     const levels = policy.levels ?? [];
     const [noAlertCode, setNoAlertCode] = useState(policy.noAlertOutputCode ?? '0');
     const [codes, setCodes] = useState(() => Object.fromEntries(levels.map(level => [level.name, level.outputCode])));
+    const [responseActions, setResponseActions] = useState(() => Object.fromEntries(levels.map(level => [level.name, level.responseAction ?? ''])));
     const [colors, setColors] = useState<AlertPolicyDisplay>(() => Object.fromEntries(levels.map(level => [
         level.name, { color: getAlertLevelDisplay(level.name, policy, display).color },
     ])));
@@ -30,10 +31,11 @@ export const EditAlertPolicyModal = ({ policy, display, onClose }: {
     // The backend rejects codes with surrounding whitespace.
     const noAlertOutputCode = noAlertCode.trim();
     const levelOutputCodes = Object.fromEntries(Object.entries(codes).map(([name, code]) => [name, code.trim()]));
+    const levelResponseActions = Object.fromEntries(Object.entries(responseActions).map(([name, action]) => [name, action.trim() || null]));
     const valid = isValid([noAlertOutputCode, ...Object.values(levelOutputCodes)]);
     const save = async () => {
         await Promise.all([
-            saveCodes.mutateAsync({ policyId: policy.id, codes: { noAlertOutputCode, levelOutputCodes } }),
+            saveCodes.mutateAsync({ policyId: policy.id, codes: { noAlertOutputCode, levelOutputCodes, levelResponseActions } }),
             saveDisplay.mutateAsync({ policyId: policy.id, display: colors }),
         ]);
         showSaved();
@@ -71,6 +73,13 @@ export const EditAlertPolicyModal = ({ policy, display, onClose }: {
                                     onChange={({ value }) => setCodes(previous => ({ ...previous, [level.name]: value ?? '' }))}
                                 />
                             </div>
+                            <TextAreaField
+                                name={`response-action-${index}`}
+                                label={i18n.t('Response action (optional)')}
+                                value={responseActions[level.name]}
+                                rows={2}
+                                onChange={({ value }) => setResponseActions(previous => ({ ...previous, [level.name]: value ?? '' }))}
+                            />
                             <div className={styles.policyLevelThreshold}>
                                 <p className={styles.help}>{describeAlertThreshold(level)}</p>
                             </div>
