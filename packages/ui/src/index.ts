@@ -87,6 +87,7 @@ export { getPeriodNameFromId } from './utils/Time';
 export {
     plotResultsToViewData,
     getStableMaxYByOrgUnitId,
+    createQuantileFunc,
     type PlotDataResult,
 } from './utils/plotDataForEvaluations';
 
