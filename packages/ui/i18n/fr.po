@@ -1,20 +1,22 @@
 # Translators:
 # Bram Piot <bram.piot@gmail.com>, 2026
 # Andres Miguel Rubio, 2026
-# Edem Kossi <ekossi@hispwca.org>, 2026
 # Yao Selom SAKA (HISP WCA) <ysaka@hispwca.org>, 2026
 # Viktor Varland <viktor@dhis2.org>, 2026
-# Gabriela Rodriguez <grodriguezcoronado@gmail.com>, 2026
-# Philip Larsen Donnelly, 2026
-# Esther Tokouli, 2026
 # Cyrille Kabrane, 2026
+# Edem Kossi <ekossi@hispwca.org>, 2026
+# Gabriela Rodriguez <grodriguezcoronado@gmail.com>, 2026
+# Esther Tokouli, 2026
+# Philip Larsen Donnelly, 2026
+# Yayra Gomado <ygomado@hispwca.org>, 2026
+# Edvin Stava, 2026
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: i18next-conv\n"
-"POT-Creation-Date: 2026-11-02T11:59:23.166Z\n"
+"POT-Creation-Date: 2026-11-12T12:17:58.279Z\n"
 "PO-Revision-Date: 2025-12-03 08:49+0000\n"
-"Last-Translator: Cyrille Kabrane, 2026\n"
+"Last-Translator: Edvin Stava, 2026\n"
 "Language-Team: French (https://app.transifex.com/hisp-uio/teams/100509/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -23,28 +25,28 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 
 msgid "Chap settings"
-msgstr ""
+msgstr "Paramètres de Chap"
 
 msgid "Checking..."
 msgstr "Vérification..."
 
 msgid "API token rejected"
-msgstr ""
+msgstr "Jeton d'API refusé"
 
 msgid "No API token configured"
-msgstr ""
+msgstr "Aucun jeton d'API configuré"
 
 msgid "Not required by this server"
-msgstr ""
+msgstr "Non requis par ce serveur"
 
 msgid "API token accepted"
-msgstr ""
+msgstr "Jeton d'API accepté"
 
 msgid "Could not be verified"
-msgstr ""
+msgstr "Vérification impossible"
 
 msgid "An error occurred while connecting to the Chap server."
-msgstr ""
+msgstr "Une erreur s'est produite lors de la connexion au serveur Chap."
 
 msgid ""
 "Are you sure you have configured your route correctly? See the console for "
@@ -57,63 +59,73 @@ msgid "Server information"
 msgstr "Informations du serveur"
 
 msgid "Chap Version"
-msgstr ""
+msgstr "Version de Chap"
 
 msgid "Python Version"
-msgstr ""
+msgstr "Version de Python"
 
 msgid "Status"
 msgstr "Statut"
 
 msgid "Connected"
-msgstr ""
+msgstr "Connecté"
 
 msgid "Authentication"
-msgstr ""
+msgstr "Authentification"
 
 msgid "The Chap server rejected the API token"
-msgstr ""
+msgstr "Le serveur Chap a refusé le jeton d'API"
 
 msgid ""
 "The server is reachable, but requests are refused. Check the token for "
 "typos, then edit the route settings to enter the token configured on your "
 "Chap server."
 msgstr ""
+"Le serveur est accessible, mais les requêtes sont refusées. Vérifiez que le "
+"jeton ne contient pas de faute de frappe, puis modifiez les paramètres de la"
+" route pour saisir le jeton configuré sur votre serveur Chap."
 
 msgid "No API token is configured"
-msgstr ""
+msgstr "Aucun jeton d'API n'est configuré"
 
 msgid ""
 "The server is reachable, but it refuses requests without a token. Edit the "
 "route settings to add the token configured on your Chap server."
 msgstr ""
+"Le serveur est accessible, mais il refuse les requêtes sans jeton. Modifiez "
+"les paramètres de la route pour ajouter le jeton configuré sur votre serveur"
+" Chap."
 
 msgid "Chap requires an API token"
-msgstr ""
+msgstr "Chap requiert un jeton d'API"
 
 msgid ""
 "Edit the route settings to add the token configured on your Chap server."
 msgstr ""
+"Modifiez les paramètres de la route pour ajouter le jeton configuré sur "
+"votre serveur Chap."
 
 msgid "Restrict access to your Chap server"
-msgstr ""
+msgstr "Restreignez l'accès à votre serveur Chap"
 
 msgid ""
 "This server does not report API token protection. Keep it on a private "
 "network or restrict access with a firewall."
 msgstr ""
+"Ce serveur ne signale aucune protection par jeton d'API. Conservez-le sur un"
+" réseau privé ou restreignez l'accès à l'aide d'un pare-feu."
 
 msgid "Actual values"
-msgstr ""
+msgstr "Valeurs réelles"
 
 msgid "Median prediction"
-msgstr ""
+msgstr "Prédiction médiane"
 
 msgid "80% prediction interval"
-msgstr ""
+msgstr "Intervalle de prédiction à 80 %"
 
 msgid "50% prediction interval"
-msgstr ""
+msgstr "Intervalle de prédiction à 50 %"
 
 msgid "Median Prediction for {{predictionTargetName}}"
 msgstr "Prédiction médiane pour {{predictionTargetName}}"
@@ -137,25 +149,25 @@ msgid "Quantile 0.9 (high)"
 msgstr "Quantile 0,9 (élevé)"
 
 msgid "Median prediction (50% signal line)"
-msgstr ""
+msgstr "Prédiction médiane (ligne de signal à 50 %)"
 
 msgid "Signal line ({{probability}}%)"
-msgstr ""
+msgstr "Ligne de signal ({{probability}} %)"
 
 msgid "Endemic channel"
-msgstr ""
+msgstr "Canal endémique"
 
 msgid "Endemic threshold"
-msgstr ""
+msgstr "Seuil endémique"
 
 msgid "Prediction for {{predictionTargetName}} for {{orgUnitName}}"
 msgstr "Prévision pour {{predictionTargetName}} pour {{orgUnitName}}"
 
 msgid "Signal level"
-msgstr ""
+msgstr "Niveau de signal"
 
 msgid "Outbreak"
-msgstr ""
+msgstr "Flambée épidémique"
 
 msgid "Yes"
 msgstr "Oui"
@@ -167,31 +179,39 @@ msgid "Number of cases"
 msgstr "Nombre de cas"
 
 msgid "Remove saved API token"
-msgstr ""
+msgstr "Supprimer le jeton d'API enregistré"
 
 msgid "Setting API tokens is not supported on this DHIS2 version"
 msgstr ""
+"La définition de jetons d'API n'est pas prise en charge sur cette version de"
+" DHIS2"
 
 msgid "Chap API token"
-msgstr ""
+msgstr "Jeton d'API Chap"
 
 msgid "Chap API token (optional)"
-msgstr ""
+msgstr "Jeton d'API Chap (facultatif)"
 
 msgid ""
 "A token is configured. Leave blank to keep it, or enter a new token to "
 "replace it."
 msgstr ""
+"Un jeton est configuré. Laissez ce champ vide pour le conserver, ou "
+"saisissez un nouveau jeton pour le remplacer."
 
 msgid ""
 "Enter the token configured on your Chap server. Leave blank if the server "
 "does not require one."
 msgstr ""
+"Saisissez le jeton configuré sur votre serveur Chap. Laissez ce champ vide "
+"si le serveur n'en requiert pas."
 
 msgid ""
 "New tokens are stored encrypted in DHIS2. Existing plain-text tokens remain "
 "readable until replaced."
 msgstr ""
+"Les nouveaux jetons sont stockés chiffrés dans DHIS2. Les jetons existants "
+"en texte clair restent lisibles jusqu'à leur remplacement."
 
 msgid "Route configuration"
 msgstr "Configuration de la route"
@@ -221,7 +241,7 @@ msgid "Edit route"
 msgstr "Éditer la route"
 
 msgid "Increase response timeout to {{timeout}} seconds"
-msgstr ""
+msgstr "Augmenter le délai d'attente de réponse à {{timeout}} secondes"
 
 msgid "Save"
 msgstr "Enregistrer"
@@ -246,30 +266,32 @@ msgid "Edit"
 msgstr "Éditer"
 
 msgid "The token must not contain line breaks"
-msgstr ""
+msgstr "Le jeton ne doit pas contenir de saut de ligne"
 
 msgid "Invalid URL format"
-msgstr ""
+msgstr "Format d'URL non valide"
 
 msgid "URL is required"
 msgstr "L'URL est requise"
 
 msgid "URL must end with a double wildcard (/**)"
-msgstr ""
+msgstr "L'URL doit se terminer par un double caractère générique (/**)"
 
 msgid "Chap Core URL"
-msgstr ""
+msgstr "URL de Chap Core"
 
 msgid "Error saving route"
 msgstr "Erreur d'enregistrement de la route"
 
 msgid "An unknown error occurred. Please try again."
-msgstr ""
+msgstr "Une erreur inconnue s'est produite. Veuillez réessayer."
 
 msgid ""
 "Contact your DHIS2 server administrator to allow this Chap Core URL in "
 "{{setting}} in dhis.conf and restart DHIS2."
 msgstr ""
+"Contactez l'administrateur de votre serveur DHIS2 pour autoriser cette URL "
+"de Chap Core dans {{setting}} du fichier dhis.conf, puis redémarrer DHIS2."
 
 msgid "Route settings"
 msgstr "Paramètres de la route"
@@ -283,6 +305,7 @@ msgstr ""
 
 msgid "If the problem persists, please contact your system administrator."
 msgstr ""
+"Si le problème persiste, veuillez contacter votre administrateur système."
 
 msgid "You do not have permission to add or modify routes."
 msgstr "Vous n'êtes pas autorisé à ajouter ou à modifier des routes."
@@ -294,7 +317,7 @@ msgstr ""
 " système."
 
 msgid "API token stored in plain text"
-msgstr ""
+msgstr "Jeton d'API stocké en texte clair"
 
 msgid ""
 "Users who can read this route configuration can read its API token. Edit the"
@@ -302,6 +325,11 @@ msgid ""
 "versions. If the token may have been exposed, rotate it on the Chap server "
 "and enter the new token here."
 msgstr ""
+"Les utilisateurs qui peuvent lire la configuration de cette route peuvent "
+"aussi lire son jeton d'API. Modifiez la route et saisissez à nouveau le "
+"jeton pour le stocker chiffré sur les versions de DHIS2 compatibles. Si le "
+"jeton a pu être exposé, renouvelez-le sur le serveur Chap et saisissez le "
+"nouveau jeton ici."
 
 msgid "Name"
 msgstr "Nom"
@@ -313,10 +341,10 @@ msgid "URL"
 msgstr "URL"
 
 msgid "API token"
-msgstr ""
+msgstr "Jeton d'API"
 
 msgid "Configured"
-msgstr ""
+msgstr "Configuré"
 
 msgid "Not configured"
 msgstr "Non configuré"
@@ -325,16 +353,19 @@ msgid "Authorities"
 msgstr "Autorisations"
 
 msgid "Low response timeout"
-msgstr ""
+msgstr "Délai d'attente de réponse court"
 
 msgid ""
 "The response timeout is currently set to {{timeout}} seconds. This may cause"
 " long-running requests to fail before they complete. We recommend increasing"
 " it to {{recommended}} seconds."
 msgstr ""
+"Le délai d'attente de réponse est actuellement fixé à {{timeout}} secondes. "
+"Les requêtes longues risquent d'échouer avant d'aboutir. Nous recommandons "
+"de l'augmenter à {{recommended}} secondes."
 
 msgid "Increase to {{recommended}} seconds"
-msgstr ""
+msgstr "Augmenter à {{recommended}} secondes"
 
 msgid "Error deleting route"
 msgstr "Erreur lors de la suppression de la route"
@@ -346,10 +377,10 @@ msgid "Route saved successfully"
 msgstr "Route enregistrée avec succès"
 
 msgid "Error updating route timeout"
-msgstr ""
+msgstr "Erreur lors de la mise à jour du délai d'attente de la route"
 
 msgid "Route timeout updated successfully"
-msgstr ""
+msgstr "Délai d'attente de la route mis à jour avec succès"
 
 msgid ""
 "DHIS2 cannot preserve encrypted authentication when updating this route. Re-"
@@ -357,20 +388,70 @@ msgid ""
 "replaces all encrypted authentication on the route, including custom "
 "headers."
 msgstr ""
+"DHIS2 ne peut pas conserver l'authentification chiffrée lors de la mise à "
+"jour de cette route. Saisissez à nouveau le jeton d'API Chap, ou supprimez-"
+"le explicitement, avant d'enregistrer. L'enregistrement remplace toute "
+"l'authentification chiffrée de la route, y compris les en-têtes "
+"personnalisés."
 
 msgid ""
 "This app does not support setting API tokens on this DHIS2 version. Upgrade "
 "DHIS2 to 2.40.7, 2.41.4, 2.42 or later to store the token encrypted."
 msgstr ""
+"Cette application ne permet pas de définir des jetons d'API sur cette "
+"version de DHIS2. Mettez DHIS2 à niveau vers la version 2.40.7, 2.41.4, 2.42"
+" ou ultérieure pour stocker le jeton chiffré."
+
+msgid "{{selected}} of {{pending}} pending signals selected"
+msgstr "{{selected}} signaux en attente sélectionnés sur {{pending}}"
+
+msgid "Select by level"
+msgstr "Sélectionner par niveau"
+
+msgid "Decline selected"
+msgstr "Refuser la sélection"
+
+msgid "Approve selected"
+msgstr "Approuver la sélection"
+
+msgid "Organisation unit"
+msgstr "Unité d'organisation"
+
+msgid "Signals"
+msgstr "Signaux"
+
+msgid "Reviewed by"
+msgstr "Examiné par"
+
+msgid "Actions"
+msgstr "Actions"
+
+msgid "Approved"
+msgstr "Approuvé"
+
+msgid "Declined"
+msgstr "Refusé"
+
+msgid "Pending"
+msgstr "En attente"
+
+msgid "Approve"
+msgstr "Approuver"
+
+msgid "Decline"
+msgstr "Refuser"
+
+msgid "Reset to pending"
+msgstr "Remettre en attente"
 
 msgid "More"
 msgstr "Plus"
 
 msgid "Month {{month}}, {{year}}"
-msgstr ""
+msgstr "Mois {{month}}, {{year}}"
 
 msgid "Month {{month}}"
-msgstr ""
+msgstr "Mois {{month}}"
 
 msgid "Select period"
 msgstr "Sélectionner une période "
@@ -385,7 +466,7 @@ msgid "Next year"
 msgstr "Année prochaine"
 
 msgid "From period"
-msgstr ""
+msgstr "De la période"
 
 msgid "To period"
 msgstr "À la période"

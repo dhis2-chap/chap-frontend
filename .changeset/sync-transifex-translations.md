@@ -3,4 +3,4 @@
 '@dhis2-chap/ui': patch
 ---
 
-Sync translations from Transifex for the modeling app and UI package.
+Sync translations from Transifex for the modeling app and UI package, including complete French and Portuguese translations.
