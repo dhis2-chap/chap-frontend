@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-11-16T18:31:27.958Z\n"
-"PO-Revision-Date: 2026-11-16T18:31:27.959Z\n"
+"POT-Creation-Date: 2026-11-17T09:01:44.218Z\n"
+"PO-Revision-Date: 2026-11-17T09:01:44.218Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -1259,6 +1259,20 @@ msgstr "{{covariate}} has no observations for these periods and organisation uni
 
 msgid "The selected organisation units must have geometry"
 msgstr "The selected organisation units must have geometry"
+
+msgid ""
+"Dataset import failed or was cancelled. Check the job details on the Jobs "
+"page."
+msgstr ""
+"Dataset import failed or was cancelled. Check the job details on the Jobs "
+"page."
+
+msgid ""
+"Dataset import is still running. Check the Jobs page, then start an "
+"evaluation from the saved dataset."
+msgstr ""
+"Dataset import is still running. Check the Jobs page, then start an "
+"evaluation from the saved dataset."
 
 msgid "Backtest parameters"
 msgstr "Backtest parameters"

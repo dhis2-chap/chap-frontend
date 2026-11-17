@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ModelExecutionFormValues } from '../../ModelExecutionForm/hooks/useModelExecutionFormState';
 import { getLegacyBacktestParameters } from './backtestDefaults';
-import { BacktestsService, FeatureCollectionModel, MakeBacktestWithDataRequest, ApiError } from '@dhis2-chap/ui';
+import { BacktestsService, DatasetsService, FeatureCollectionModel, DatasetMakeRequest, ApiError } from '@dhis2-chap/ui';
 import { useDataEngine } from '@dhis2/app-runtime';
 import { useNavigate } from 'react-router-dom';
 import { prepareBacktestData } from '../../ModelExecutionForm/utils/prepareBacktestData';
@@ -10,11 +10,13 @@ import { ImportSummaryCorrected } from '../../ModelExecutionForm/types';
 import { getImportSummaryFromApiError } from '@/components/ModelExecutionForm/utils/importSummaryUtils';
 import { buildOrgUnitFeatureCollection } from '@/components/ModelExecutionForm/utils/orgUnitGeoJson';
 import { DEFAULT_PERIOD_SETTINGS, type Dhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
+import { Features, useIsFeatureAvailable } from '@/hooks/useIsFeatureAvailable';
+import { waitForDatasetImport } from './waitForDatasetImport';
 
 type Props = {
     periodSettings?: Dhis2PeriodSettings;
     onSuccess?: () => void;
-    onError?: (error: ApiError) => void;
+    onError?: (error: ApiError | Error) => void;
 };
 
 export const useCreateNewBacktest = ({
@@ -25,6 +27,7 @@ export const useCreateNewBacktest = ({
     const dataEngine = useDataEngine();
     const queryClient = useQueryClient();
     const navigate = useNavigate();
+    const { isAvailable: supportsMultiModel } = useIsFeatureAvailable(Features.MULTI_MODEL_BACKTESTS);
     const [summaryModalOpen, setSummaryModalOpen] = useState<boolean>(false);
     const [importSummary, setImportSummary] = useState<ImportSummaryCorrected | null>(null);
     const lastImportHashRef = useRef<string | null>(null);
@@ -41,36 +44,41 @@ export const useCreateNewBacktest = ({
             orgUnitResponse.geojson.organisationUnits,
         );
 
-        const backtestRequest: MakeBacktestWithDataRequest = {
+        const datasetRequest: DatasetMakeRequest = {
             name: formData.name,
+            targetColumn: model.target.name,
+            type: 'evaluation',
             geojson: filteredGeoJson,
             providedData: observations,
             dataSources,
             dataToBeFetched: [],
-            modelId: model.name,
+        };
+        const backtestRequest = {
+            name: formData.name,
+            modelIds: [model.name],
             ...(formData.backtestParameters ?? getLegacyBacktestParameters(formData.periodType)),
         };
 
-        return { backtestRequest, hash };
+        return { datasetRequest, backtestRequest, hash };
     };
 
     const {
         mutate: validateAndDryRun,
-        isPending: isValidationLoading,
+        isLoading: isValidationLoading,
         error: validationError,
         reset: resetValidation,
-    } = useMutation<ImportSummaryCorrected, ApiError, ModelExecutionFormValues>({
+    } = useMutation<ImportSummaryCorrected, ApiError | Error, ModelExecutionFormValues>({
         onMutate: () => {
             setImportSummary(null);
             setSummaryModalOpen(false);
             queryClient.removeQueries({ queryKey: ['new-backtest-data'] });
         },
         mutationFn: async (formData: ModelExecutionFormValues) => {
-            const { backtestRequest, hash } = await buildBacktestRequest(formData);
+            const { datasetRequest, hash } = await buildBacktestRequest(formData);
 
             try {
-                const result = await BacktestsService.createBacktestWithDataV1AnalyticsCreateBacktestWithDataPost(
-                    backtestRequest,
+                const result = await DatasetsService.makeDatasetV1AnalyticsMakeDatasetPost(
+                    datasetRequest,
                     true,
                 );
                 return {
@@ -91,28 +99,34 @@ export const useCreateNewBacktest = ({
             setImportSummary(data);
             setSummaryModalOpen(true);
         },
-        onError: (error: ApiError) => {
+        onError: (error) => {
             onError?.(error);
         },
     });
 
     const {
         mutate: createNewBacktest,
-        isPending,
+        isLoading,
         error,
-    } = useMutation<ImportSummaryCorrected, ApiError, ModelExecutionFormValues>({
+    } = useMutation<void, ApiError | Error, ModelExecutionFormValues>({
         mutationFn: async (formData: ModelExecutionFormValues) => {
-            const { backtestRequest, hash } = await buildBacktestRequest(formData);
+            const { datasetRequest, backtestRequest, hash } = await buildBacktestRequest(formData);
             lastImportHashRef.current = hash;
 
-            const result = await BacktestsService.createBacktestWithDataV1AnalyticsCreateBacktestWithDataPost(
-                backtestRequest,
-                false,
-            );
-            return {
-                ...result,
-                hash,
-            } as unknown as ImportSummaryCorrected;
+            const result = await DatasetsService.makeDatasetV1AnalyticsMakeDatasetPost(datasetRequest);
+            queryClient.invalidateQueries({ queryKey: ['jobs'] });
+            const datasetId = await waitForDatasetImport(result.id);
+            queryClient.invalidateQueries({ queryKey: ['datasets'] });
+
+            if (supportsMultiModel) {
+                await BacktestsService.createBacktestsV1AnalyticsCreateBacktestsPost({ ...backtestRequest, datasetId });
+            } else {
+                // Chap Core < 2.4.0 supports only one model per request.
+                const { modelIds, ...parameters } = backtestRequest;
+                await BacktestsService.createBacktestV1AnalyticsCreateBacktestPost({
+                    ...parameters, datasetId, modelId: modelIds[0],
+                });
+            }
         },
         onMutate: () => {
             resetValidation();
@@ -120,16 +134,12 @@ export const useCreateNewBacktest = ({
             setSummaryModalOpen(false);
             lastImportHashRef.current = null;
         },
-        onSuccess: (data: ImportSummaryCorrected) => {
-            if (data.id) {
-                queryClient.invalidateQueries({ queryKey: ['jobs'] });
-                queryClient.removeQueries({ queryKey: ['new-backtest-data'] });
-                onSuccess?.();
-                navigate('/jobs');
-            }
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['jobs'] });
+            queryClient.removeQueries({ queryKey: ['new-backtest-data'] });
         },
-        onError: (error: ApiError) => {
-            if (error.status === 400) {
+        onError: (error) => {
+            if (error instanceof ApiError && error.status === 400) {
                 const summary = getImportSummaryFromApiError(error, lastImportHashRef.current || undefined);
                 if (summary) {
                     setImportSummary(summary);
@@ -142,8 +152,8 @@ export const useCreateNewBacktest = ({
     });
 
     const downloadRequest = async (formData: ModelExecutionFormValues) => {
-        const { backtestRequest } = await buildBacktestRequest(formData);
-        const blob = new Blob([JSON.stringify(backtestRequest, null, 2)], { type: 'application/json' });
+        const { datasetRequest, backtestRequest } = await buildBacktestRequest(formData);
+        const blob = new Blob([JSON.stringify({ datasetRequest, backtestRequest }, null, 2)], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
@@ -155,10 +165,16 @@ export const useCreateNewBacktest = ({
     };
 
     return {
-        createNewBacktest,
+        // Per-call callbacks are skipped if the user has left the form while the import ran.
+        createNewBacktest: (formData: ModelExecutionFormValues) => createNewBacktest(formData, {
+            onSuccess: () => {
+                onSuccess?.();
+                navigate('/jobs');
+            },
+        }),
         validateAndDryRun,
         downloadRequest,
-        isSubmitting: isPending,
+        isSubmitting: isLoading,
         isValidationLoading,
         importSummary,
         error: validationError || error,

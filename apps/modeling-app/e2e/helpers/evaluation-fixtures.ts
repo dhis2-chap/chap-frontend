@@ -6,7 +6,9 @@ import type {
     FeatureModel,
     ImportSummaryResponse,
     JobDescription,
-    MakeBacktestWithDataRequest,
+    DatasetMakeRequest,
+    MakeBacktestsResponse,
+    JobResponse,
 } from '@dhis2-chap/ui';
 import type {
     AnalyticsResponse,
@@ -162,7 +164,7 @@ export const createCompletedNaiveEvaluation = async (
         throw new Error('No analytics rows were available for the naive evaluation fixture.');
     }
 
-    const requestBody: MakeBacktestWithDataRequest = {
+    const requestBody: DatasetMakeRequest = {
         name,
         geojson: await getOrgUnitGeoJson(page, analytics.metaData.dimensions.ou),
         providedData: analytics.rows.map(([dataElementId, orgUnit, period, value]) => ({
@@ -173,30 +175,39 @@ export const createCompletedNaiveEvaluation = async (
         })),
         dataSources: DATA_SOURCES,
         dataToBeFetched: [],
-        modelId: NAIVE_MODEL_ID,
-        nPeriods: 3,
-        nSplits: 10,
-        stride: 1,
+        type: 'evaluation',
     };
 
     const importSummary = await readJson<ImportSummaryResponse>(
-        await page.request.post(chapUrl('/v1/analytics/create-backtest-with-data/'), {
+        await page.request.post(chapUrl('/v1/analytics/make-dataset'), {
             data: requestBody,
-            params: {
-                dryRun: 'false',
-            },
         }),
-        'Create naive evaluation',
+        'Import evaluation dataset',
     );
 
     if (!importSummary.id) {
-        throw new Error('Create naive evaluation did not return a job id.');
+        throw new Error('Dataset import did not return a job id.');
     }
 
     await pollEvaluationJob(page, importSummary.id);
 
-    const { id } = await readJson<DataBaseResponse>(
+    const { id: datasetId } = await readJson<DataBaseResponse>(
         await getChap(page, `/v1/jobs/${importSummary.id}/database_result`),
+        'Load imported dataset id',
+    );
+    const parameters = { name, datasetId, nPeriods: 3, nSplits: 10, stride: 1 };
+    // The stable test stack predates multi-model backtests (Chap Core 2.4.0).
+    const supportsMultiModel = (await getChap(page, '/v1/analytics/backtest-parameters')).ok();
+    const result = await readJson<MakeBacktestsResponse | JobResponse>(
+        await page.request.post(chapUrl(`/v1/analytics/${supportsMultiModel ? 'create-backtests' : 'create-backtest'}`), {
+            data: { ...parameters, ...(supportsMultiModel ? { modelIds: [NAIVE_MODEL_ID] } : { modelId: NAIVE_MODEL_ID }) },
+        }),
+        'Create naive evaluation',
+    );
+    const jobId = 'jobs' in result ? result.jobs[0].jobId : result.id;
+    await pollEvaluationJob(page, jobId);
+    const { id } = await readJson<DataBaseResponse>(
+        await getChap(page, `/v1/jobs/${jobId}/database_result`),
         'Load created evaluation id',
     );
 
