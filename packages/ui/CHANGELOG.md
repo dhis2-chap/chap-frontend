@@ -1,5 +1,16 @@
 # @dhis2-chap/ui
 
+## 7.6.0
+
+### Minor Changes
+
+-   8a5873b: Add optional response actions to signal policy levels and show them beside signals in the review page [CLIM-1892]
+-   32dd06e: Review the signals of a prediction run on their own page: approve, decline or reopen them per organisation unit or in bulk, next to the forecast and the evaluation scores of the run's signal policy. Export the signal review table for other Chap frontends. [CLIM-1750]
+
+### Patch Changes
+
+-   @dhis2-chap/core@7.6.0
+
 ## 7.5.0
 
 ### Minor Changes

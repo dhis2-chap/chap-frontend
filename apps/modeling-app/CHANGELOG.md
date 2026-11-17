@@ -1,5 +1,23 @@
 # @dhis2-chap/modeling-app
 
+## 7.6.0
+
+### Minor Changes
+
+-   8a5873b: Add optional response actions to signal policy levels and show them beside signals in the review page [CLIM-1892]
+-   32dd06e: Review the signals of a prediction run on their own page: approve, decline or reopen them per organisation unit or in bulk, next to the forecast and the evaluation scores of the run's signal policy. Export the signal review table for other Chap frontends. [CLIM-1750]
+
+### Patch Changes
+
+-   0acd9f3: Fetch seasonal policy threshold lines in one request on the prediction details page.
+-   32dd06e: Offer debug info for cancelled and successful jobs from Chap Core 2.8.0, the first release that provides it. On Chap Core 2.7.0 the download failed. [CLIM-1749]
+-   627a414: Add an app description so Transifex accepts the modeling app's translation strings again.
+-   0e15899: Import DHIS2 evaluation data as a saved dataset, then start the evaluation from its ID. Use dataset validation for the import preview instead of the deprecated backtest-with-data endpoint. [CLIM-1914]
+-   Updated dependencies [8a5873b]
+-   Updated dependencies [32dd06e]
+    -   @dhis2-chap/ui@7.6.0
+    -   @dhis2-chap/core@7.6.0
+
 ## 7.5.0
 
 ### Minor Changes
