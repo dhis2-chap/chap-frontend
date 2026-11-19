@@ -3,11 +3,14 @@ import type { DataList, EvaluationEntry } from '@dhis2-chap/ui';
 import type { Spec } from 'vega';
 import { createCompletedNaiveEvaluation, getChap, readJson } from './helpers/evaluation-fixtures';
 
-test('logs in and loads the evaluations table', async ({ page }) => {
+test('loads evaluations and opens the saved-dataset evaluation form', async ({ page }) => {
     await page.goto('/#/evaluate');
 
     await expect(page.getByRole('heading', { name: 'Evaluations' })).toBeVisible();
     await expect(page.locator('table').first()).toBeVisible();
+    await page.getByRole('button', { name: 'New evaluation', exact: true }).click();
+    await expect(page).toHaveURL('/#/evaluate/from-dataset');
+    await expect(page.getByRole('heading', { name: 'New evaluation', exact: true })).toBeVisible();
 });
 
 test('renders predicted vs actual for the selected horizon without experimental features', async ({ page }, testInfo) => {

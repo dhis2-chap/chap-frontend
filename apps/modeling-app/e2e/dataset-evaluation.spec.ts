@@ -26,6 +26,65 @@ const selectModels = async (page: Page, names: string[]) => {
 const removeChips = (page: Page) => page.locator('[data-test^="selected-model-"][data-test$="-remove"]');
 
 test.describe('saved dataset evaluations', () => {
+    test('copies selected attributes into the saved-dataset form and runs the evaluation', async ({ page }) => {
+        test.setTimeout(240_000);
+        page.setDefaultTimeout(15_000);
+        const evaluation = await createCompletedNaiveEvaluation(page);
+        await page.goto(`/#/evaluate/${evaluation.id}`);
+        await page.getByRole('button', { name: 'Create new based on...', exact: true }).click();
+        const copy = page.locator('[data-test="copy-backtest-modal"]');
+        await copy.getByRole('checkbox', { name: 'Name', exact: true }).uncheck();
+        await copy.getByRole('checkbox', { name: 'Dataset', exact: true }).uncheck();
+        await copy.getByRole('button', { name: 'Create', exact: true }).click();
+
+        const dataset = page.locator('[data-test="evaluation-dataset-select"]');
+        const name = page.locator('[data-test="evaluation-name-input"] input');
+        await expect(dataset).not.toContainText(evaluation.dataset.name);
+        await expect(name).toHaveValue('');
+        await expect(page.getByText('No models selected', { exact: true })).toBeVisible();
+        await dataset.click();
+        await page.getByText(evaluation.dataset.name, { exact: true }).click();
+        await expect(removeChips(page)).toHaveCount(1);
+        await page.getByRole('button', { name: 'Back to evaluation details', exact: true }).click();
+        await page.getByRole('button', { name: 'Leave page', exact: true }).click();
+        await expect(page).toHaveURL(`/#/evaluate/${evaluation.id}`);
+
+        await page.getByRole('button', { name: 'Create new based on...', exact: true }).click();
+        await copy.getByRole('button', { name: 'Create', exact: true }).click();
+        await expect(page).toHaveURL(new RegExp(`/#/evaluate/from-dataset\\?datasetId=${evaluation.datasetId}&returnTo=`));
+        await expect(dataset).toContainText(evaluation.dataset.name);
+        await expect(name).toHaveValue(`${evaluation.name} (Copy)`);
+        await expect(removeChips(page)).toHaveCount(1);
+        await expect(page.locator(`[data-test="selected-model-${toDataTestKey(evaluation.modelId)}"]`)).toBeVisible();
+
+        const copiedName = `E2E copied evaluation ${Date.now()}`;
+        await name.fill(copiedName);
+        await page.getByRole('button', { name: 'Back to evaluation details', exact: true }).click();
+        await expect(page.getByRole('heading', { name: 'Unsaved changes' })).toBeVisible();
+        await page.getByRole('button', { name: 'Cancel', exact: true }).click();
+        const submitted = page.waitForResponse(response =>
+            /\/analytics\/create-backtests?$/.test(response.url()) && response.request().method() === 'POST',
+        );
+        await page.getByRole('button', { name: 'Start evaluation', exact: true }).click();
+        const response = await submitted;
+        expect(response.request().postDataJSON()).toMatchObject({ datasetId: evaluation.datasetId });
+        const run = await readJson<MakeBacktestsResponse | JobResponse>(response, 'Start copied evaluation');
+        await expect(page).toHaveURL(/\/#\/jobs$/);
+        const jobId = 'jobs' in run ? run.jobs[0].jobId : run.id;
+        await pollEvaluationJob(page, jobId);
+        const { id } = await readJson<DataBaseResponse>(
+            await getChap(page, `/v1/jobs/${jobId}/database_result`), 'Load copied evaluation id',
+        );
+        const saved = await readJson<BacktestRead>(
+            await getChap(page, `/v1/crud/backtests/${id}/info`), 'Load copied evaluation',
+        );
+        expect(saved).toMatchObject({
+            name: `${copiedName}/${evaluation.modelId}`,
+            datasetId: evaluation.datasetId,
+            modelId: evaluation.modelId,
+        });
+    });
+
     test('selects compatible models, resets on dataset change, and queues a job for each', async ({ page }) => {
         test.setTimeout(240_000);
         // Stable Chap releases predate configurable backtest parameters and use their own defaults.
