@@ -97,6 +97,15 @@ jobs:
 
       - run: pnpm build
 
+      - name: Save Modeling App bundle for the latest build
+        if: github.ref == 'refs/heads/main' && !github.event.repository.fork
+        uses: actions/upload-artifact@v4
+        with:
+          name: modeling-app-latest
+          path: apps/modeling-app/build/bundle/*.zip
+          if-no-files-found: error
+          retention-days: 7
+
 
   typescript:
     runs-on: ubuntu-latest
@@ -126,6 +135,25 @@ jobs:
       - run: pnpm build
 
       - run: pnpm tsc:check
+
+  latest:
+    needs: [lint, test, typescript, build]
+    if: github.ref == 'refs/heads/main' && !github.event.repository.fork
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: modeling-app-latest
+          path: apps/modeling-app/build/bundle
+
+      - name: Publish latest Modeling App build
+        run: bash scripts/publish-latest.sh
+        env:
+          GH_TOKEN: ${{ github.token }}
 
   release:
     needs: [lint, test, typescript, build]

@@ -41,6 +41,18 @@ pnpm tsc:check       # Type checking
 pnpm format          # Format code
 ```
 
+## Latest Modeling App build
+
+For testing changes before a versioned release, download
+[modeling-app-latest.zip](https://github.com/dhis2-chap/chap-frontend/releases/download/latest/modeling-app-latest.zip).
+This fixed link is updated after the checks for the latest commit on `main` pass.
+The [latest prerelease](https://github.com/dhis2-chap/chap-frontend/releases/tag/latest)
+links to the commit used to build it.
+
+This build is unstable and keeps the in-app alpha warning. Use a versioned release
+from [GitHub releases](https://github.com/dhis2-chap/chap-frontend/releases) or the
+DHIS2 App Hub for production.
+
 ## API Client Generation
 
 The UI package includes an auto-generated TypeScript API client from OpenAPI specifications:
