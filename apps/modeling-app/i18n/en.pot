@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-11-19T09:55:50.277Z\n"
-"PO-Revision-Date: 2026-11-19T09:55:50.277Z\n"
+"POT-Creation-Date: 2026-11-19T10:34:36.877Z\n"
+"PO-Revision-Date: 2026-11-19T10:34:36.877Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -319,21 +319,11 @@ msgstr "Close"
 msgid "Select which attributes to copy to the new run{{escape}}"
 msgstr "Select which attributes to copy to the new run{{escape}}"
 
-msgid "Untitled"
-msgstr "Untitled"
-
 msgid "Dataset"
 msgstr "Dataset"
 
 msgid "Model"
 msgstr "Model"
-
-msgid ""
-"The dataset includes the organisation units, periods and data sources. "
-"Create a new dataset to change them."
-msgstr ""
-"The dataset includes the organisation units, periods and data sources. "
-"Create a new dataset to change them."
 
 msgid "{{name}} (Copy)"
 msgstr "{{name}} (Copy)"
@@ -529,9 +519,6 @@ msgstr "Location"
 msgid "Missing"
 msgstr "Missing"
 
-msgid "Inspect dataset"
-msgstr "Inspect dataset"
-
 msgid "Cancel job"
 msgstr "Cancel job"
 
@@ -668,52 +655,6 @@ msgstr "Not applicable"
 msgid "{{name}} ({{status}})"
 msgstr "{{name}} ({{status}})"
 
-msgid "Map Data Items"
-msgstr "Map Data Items"
-
-msgid "Map the model features to corresponding data items in DHIS2"
-msgstr "Map the model features to corresponding data items in DHIS2"
-
-msgid "Target"
-msgstr "Target"
-
-msgid "Map the model target to the corresponding data item in DHIS2"
-msgstr "Map the model target to the corresponding data item in DHIS2"
-
-msgid "Map each model covariate to the corresponding data item in DHIS2"
-msgstr "Map each model covariate to the corresponding data item in DHIS2"
-
-msgid "No model selected"
-msgstr "No model selected"
-
-msgid "All data items mapped"
-msgstr "All data items mapped"
-
-msgid "{{mapped}}/{{total}} data items mapped"
-msgstr "{{mapped}}/{{total}} data items mapped"
-
-msgid "Dataset Configuration"
-msgstr "Dataset Configuration"
-
-msgid "Configure sources"
-msgstr "Configure sources"
-
-msgid ""
-"The Data Visualizer app is not compatible with this feature. Please update "
-"to a newer version."
-msgstr ""
-"The Data Visualizer app is not compatible with this feature. Please update "
-"to a newer version."
-
-msgid "Please map all model covariates to valid data items"
-msgstr "Please map all model covariates to valid data items"
-
-msgid "Target \"{{targetName}}\" must be mapped to a data item"
-msgstr "Target \"{{targetName}}\" must be mapped to a data item"
-
-msgid "Covariate \"{{covariateName}}\" must be mapped to a data item"
-msgstr "Covariate \"{{covariateName}}\" must be mapped to a data item"
-
 msgid "Organisation units"
 msgstr "Organisation units"
 
@@ -827,6 +768,9 @@ msgstr "Version"
 msgid "Commit"
 msgstr "Commit"
 
+msgid "Target"
+msgstr "Target"
+
 msgid "Covariates"
 msgstr "Covariates"
 
@@ -846,9 +790,6 @@ msgid "Use selected models ({{count}})"
 msgid_plural "Use selected models ({{count}})"
 msgstr[0] "Use selected models ({{count}})"
 msgstr[1] "Use selected models ({{count}})"
-
-msgid "Select model"
-msgstr "Select model"
 
 msgid "EWARS Evaluation 22-24"
 msgstr "EWARS Evaluation 22-24"

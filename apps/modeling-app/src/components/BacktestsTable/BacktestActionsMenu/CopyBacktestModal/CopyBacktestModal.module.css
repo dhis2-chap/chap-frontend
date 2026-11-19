@@ -7,7 +7,3 @@
   grid-template-columns: 1fr;
   gap: 8px;
 }
-
-.datasetDescription {
-  margin-block-start: 16px;
-}

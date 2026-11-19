@@ -21,9 +21,9 @@ You can also open the **⋯** menu in a row on the **Datasets** page and choose 
 
 ### Step 2: Choose a Dataset
 
-Enter a descriptive **Name** for the evaluation, then select a **Dataset**. By default, the origin filter lists datasets created on the Datasets page. Change the filter to find datasets created by earlier evaluations or predictions. A dataset opened directly from another page stays available regardless of the filter.
+Enter a descriptive **Name** for the evaluation, then select a **Dataset**. By default, the origin filter lists datasets created on the Datasets page. Change the filter to find datasets created by earlier evaluations or predictions.
 
-**Target column** shows the column the models predict and are scored against. On recent Chap versions, this is set on the dataset. Older versions allow you to choose it here.
+**Target column** shows the column the models predict and are scored against.
 
 If there are no saved datasets, click **New dataset** to import one first. The dataset determines the periods, organisation units and data sources; create a new dataset if you need to change them.
 
@@ -43,7 +43,7 @@ Click **Start evaluation**. A background job is queued for each selected model, 
 
 On the evaluation details page, click **Create new based on...**. You can also choose **Create new...** from an evaluation's **⋯** menu in the evaluations table.
 
-Choose whether to copy the **Name**, **Dataset** and **Model**, then click **Create**. The new evaluation form opens with those selections. Copying the dataset reuses its saved data, including its periods, organisation units and data sources. Review the backtest parameters before starting the new evaluation; they use the current modeling defaults.
+Choose whether to copy the **Name**, **Dataset** and **Model**, then click **Create**. The new evaluation form opens with those selections. Review the backtest parameters before starting the new evaluation; they use the current modeling defaults.
 
 ### Next Steps
 

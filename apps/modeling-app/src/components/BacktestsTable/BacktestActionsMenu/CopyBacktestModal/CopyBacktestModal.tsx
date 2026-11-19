@@ -99,7 +99,6 @@ export const CopyBacktestModal = ({ id, onClose, returnTo }: CopyBacktestModalPr
                         name="name"
                         checked={selectedAttributes.name}
                         onChange={() => handleAttributeChange('name')}
-                        value={backtest.name || i18n.t('Untitled')}
                     />
 
                     <Checkbox
@@ -114,12 +113,8 @@ export const CopyBacktestModal = ({ id, onClose, returnTo }: CopyBacktestModalPr
                         name="model"
                         checked={selectedAttributes.model}
                         onChange={() => handleAttributeChange('model')}
-                        value={backtest.modelId}
                     />
                 </div>
-                <p className={styles.datasetDescription}>
-                    {i18n.t('The dataset includes the organisation units, periods and data sources. Create a new dataset to change them.')}
-                </p>
             </ModalContent>
             <ModalActions>
                 <ButtonStrip>
