@@ -43,15 +43,8 @@ pnpm format          # Format code
 
 ## Latest Modeling App build
 
-For testing changes before a versioned release, download
-[modeling-app-latest.zip](https://github.com/dhis2-chap/chap-frontend/releases/download/latest/modeling-app-latest.zip).
-This fixed link is updated after the checks for the latest commit on `main` pass.
-The [latest prerelease](https://github.com/dhis2-chap/chap-frontend/releases/tag/latest)
-links to the commit used to build it.
-
-This build is unstable and keeps the in-app alpha warning. Use a versioned release
-from [GitHub releases](https://github.com/dhis2-chap/chap-frontend/releases) or the
-DHIS2 App Hub for production.
+[modeling-app-latest.zip](https://github.com/dhis2-chap/chap-frontend/releases/download/latest/modeling-app-latest.zip)
+is rebuilt from `main` after CI passes. It is unstable; use a versioned release for production.
 
 ## API Client Generation
 

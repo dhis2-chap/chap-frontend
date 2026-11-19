@@ -104,7 +104,7 @@ jobs:
           name: modeling-app-latest
           path: apps/modeling-app/build/bundle/*.zip
           if-no-files-found: error
-          retention-days: 7
+          retention-days: 1
 
 
   typescript:
@@ -143,17 +143,31 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
-
       - uses: actions/download-artifact@v4
         with:
           name: modeling-app-latest
-          path: apps/modeling-app/build/bundle
 
       - name: Publish latest Modeling App build
-        run: bash scripts/publish-latest.sh
         env:
           GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+            # A retried old run must not replace a newer build.
+            if [[ "$(gh api "repos/$GH_REPO/commits/main" --jq .sha)" != "$GITHUB_SHA" ]]; then
+                echo "Skipping: $GITHUB_SHA is no longer the head of main."
+                exit 0
+            fi
+            mv ./*.zip modeling-app-latest.zip
+            title='Latest main build (unstable)'
+            notes="Unstable build of $GITHUB_SHA. Use a versioned release for production."
+            if gh release view latest > /dev/null 2>&1; then
+                gh release upload latest modeling-app-latest.zip --clobber
+                gh api --method PATCH "repos/$GH_REPO/git/refs/tags/latest" -f sha="$GITHUB_SHA" -F force=true
+                gh release edit latest --title "$title" --notes "$notes" --prerelease --latest=false
+            else
+                gh release create latest modeling-app-latest.zip --target "$GITHUB_SHA" \
+                    --title "$title" --notes "$notes" --prerelease --latest=false
+            fi
 
   release:
     needs: [lint, test, typescript, build]
