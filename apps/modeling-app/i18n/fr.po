@@ -9,20 +9,20 @@
 # Karoline Tufte Lien <karoline@dhis2.org>, 2026
 # Viktor Varland <viktor@dhis2.org>, 2026
 # Edem Kossi <ekossi@hispwca.org>, 2026
-# Esther Tokouli, 2026
 # Philip Larsen Donnelly, 2026
 # Yayra Gomado <ygomado@hispwca.org>, 2026
 # Yao Selom SAKA (HISP WCA) <ysaka@hispwca.org>, 2026
 # Bram Piot <bram.piot@gmail.com>, 2026
 # Cyrille Kabrane, 2026
 # Edvin Stava, 2026
+# Esther Tokouli, 2026
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: i18next-conv\n"
-"POT-Creation-Date: 2026-11-16T08:19:22.486Z\n"
+"POT-Creation-Date: 2026-11-17T16:55:47.217Z\n"
 "PO-Revision-Date: 2025-12-03 08:49+0000\n"
-"Last-Translator: Edvin Stava, 2026\n"
+"Last-Translator: Esther Tokouli, 2026\n"
 "Language-Team: French (https://app.transifex.com/hisp-uio/teams/100509/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -339,7 +339,7 @@ msgid "Download"
 msgstr "Télécharger"
 
 msgid "{{name}} (Copy)"
-msgstr "{{name}} (Copie)"
+msgstr "{{name}} (Copier)"
 
 msgid "Create new based on..."
 msgstr "Créer un nouveau sur la base de..."
@@ -499,7 +499,7 @@ msgid "Next month"
 msgstr "Mois prochain"
 
 msgid "Select date range"
-msgstr "Sélectionnez la plage de dates"
+msgstr "Sélectionner la plage de dates"
 
 msgid "Done"
 msgstr "Terminé"
@@ -525,7 +525,7 @@ msgid "Oops!"
 msgstr "Oups !"
 
 msgid "Sorry, an unexpected error has occurred."
-msgstr "Désolé, une erreur inattendue s'est produite."
+msgstr "Désolé, une erreur inattendue est survenue."
 
 msgid "Back to app"
 msgstr "Retour à l'application"
@@ -565,13 +565,13 @@ msgid "Show all locations"
 msgstr "Afficher tous les emplacements"
 
 msgid "Location"
-msgstr "Localisation"
+msgstr "Emplacement"
 
 msgid "Missing"
 msgstr "Manquant"
 
 msgid "Inspect dataset"
-msgstr "Inspecter l'ensemble des données"
+msgstr "Inspecter l'ensemble de données"
 
 msgid "Cancel job"
 msgstr "Annuler la tâche"
@@ -579,8 +579,8 @@ msgstr "Annuler la tâche"
 msgid ""
 "Are you sure you want to cancel this job? This action cannot be undone."
 msgstr ""
-"Êtes-vous sûr de vouloir annuler cette tâche ? Cette action ne peut pas être"
-" annulée."
+"Êtes-vous sûr de vouloir annuler cette tâche ? Cette action est "
+"irréversible."
 
 msgid "Delete job"
 msgstr "Supprimer la tâche"
@@ -592,7 +592,7 @@ msgstr ""
 "être annulée."
 
 msgid "Failed to copy job ID"
-msgstr "Échec de la copie de l'identifiant de la tâche"
+msgstr "Échec de copie de l'identifiant de la tâche"
 
 msgid "Go to result"
 msgstr "Aller au résultat"
@@ -622,7 +622,7 @@ msgid "An error occurred while loading the logs."
 msgstr "Une erreur s'est produite lors du chargement de l'historique."
 
 msgid "No logs reported for this job"
-msgstr "Aucun historique rapporté pour cette tâche"
+msgstr "Aucune historique rapporté pour cette tâche"
 
 msgid "Job cancelled"
 msgstr "Tâche annulée"
@@ -1501,6 +1501,16 @@ msgstr "{{model}} nécessite au moins {{minimum}} périodes de prévision."
 msgid "{{model}} supports at most {{maximum}} forecast periods."
 msgstr ""
 "{{model}} prend en charge au maximum {{maximum}} périodes de prévision."
+
+msgid ""
+"Dataset import failed or was cancelled. Check the job details on the Jobs "
+"page."
+msgstr ""
+
+msgid ""
+"Dataset import is still running. Check the Jobs page, then start an "
+"evaluation from the saved dataset."
+msgstr ""
 
 msgid "Cannot run prediction"
 msgstr "Impossible d'exécuter la prédiction"
@@ -2767,6 +2777,21 @@ msgstr ""
 msgid "Signal probability is required"
 msgstr "La probabilité de signal est requise"
 
+msgid "Quantile low is required"
+msgstr ""
+
+msgid "Quantile high is required"
+msgstr ""
+
+msgid "Median is required"
+msgstr ""
+
+msgid "Quantile mid low is required"
+msgstr ""
+
+msgid "Quantile mid high is required"
+msgstr ""
+
 msgid "Outbreak indicator is required"
 msgstr "L'indicateur de flambée est requis"
 
@@ -3030,6 +3055,9 @@ msgstr "Copié"
 msgid "Copy template"
 msgstr "Copier le modèle"
 
+msgid "Incompatible versions"
+msgstr ""
+
 msgid ""
 "The version of the Modeling App is not compatible with the backend (Chap "
 "core)."
@@ -3048,6 +3076,12 @@ msgid "Compare evaluations to assess model, co-variates and data performance."
 msgstr ""
 "Comparer les évaluations pour évaluer la performance du modèle, des "
 "covariables et des données."
+
+msgid "Back to evaluation details"
+msgstr ""
+
+msgid "Back to evaluation"
+msgstr ""
 
 msgid "Select base evaluation"
 msgstr "Sélectionner l'évaluation de base"

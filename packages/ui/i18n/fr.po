@@ -1,22 +1,22 @@
 # Translators:
 # Bram Piot <bram.piot@gmail.com>, 2026
-# Andres Miguel Rubio, 2026
 # Yao Selom SAKA (HISP WCA) <ysaka@hispwca.org>, 2026
 # Viktor Varland <viktor@dhis2.org>, 2026
 # Cyrille Kabrane, 2026
 # Edem Kossi <ekossi@hispwca.org>, 2026
 # Gabriela Rodriguez <grodriguezcoronado@gmail.com>, 2026
-# Esther Tokouli, 2026
-# Philip Larsen Donnelly, 2026
 # Yayra Gomado <ygomado@hispwca.org>, 2026
 # Edvin Stava, 2026
+# Esther Tokouli, 2026
+# Philip Larsen Donnelly, 2026
+# Andres Miguel Rubio, 2026
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: i18next-conv\n"
-"POT-Creation-Date: 2026-11-12T12:17:58.279Z\n"
+"POT-Creation-Date: 2026-11-17T16:55:47.963Z\n"
 "PO-Revision-Date: 2025-12-03 08:49+0000\n"
-"Last-Translator: Edvin Stava, 2026\n"
+"Last-Translator: Andres Miguel Rubio, 2026\n"
 "Language-Team: French (https://app.transifex.com/hisp-uio/teams/100509/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -52,8 +52,8 @@ msgid ""
 "Are you sure you have configured your route correctly? See the console for "
 "more details."
 msgstr ""
-"Êtes-vous sûr d'avoir configuré votre route correctement ? Voir la console "
-"pour plus de détails."
+"Êtes-vous sûr d'avoir correctement configuré votre route ? Consultez la "
+"console pour plus de détails."
 
 msgid "Server information"
 msgstr "Informations du serveur"
@@ -92,9 +92,9 @@ msgid ""
 "The server is reachable, but it refuses requests without a token. Edit the "
 "route settings to add the token configured on your Chap server."
 msgstr ""
-"Le serveur est accessible, mais il refuse les requêtes sans jeton. Modifiez "
-"les paramètres de la route pour ajouter le jeton configuré sur votre serveur"
-" Chap."
+"Le serveur est accessible, mais refuse les requêtes sans jeton. Modifiez les"
+" paramètres de la route pour ajouter le jeton configuré sur votre serveur "
+"Chap."
 
 msgid "Chap requires an API token"
 msgstr "Chap requiert un jeton d'API"
@@ -127,6 +127,9 @@ msgstr "Intervalle de prédiction à 80 %"
 msgid "50% prediction interval"
 msgstr "Intervalle de prédiction à 50 %"
 
+msgid "Period"
+msgstr "Période"
+
 msgid "Median Prediction for {{predictionTargetName}}"
 msgstr "Prédiction médiane pour {{predictionTargetName}}"
 
@@ -140,7 +143,7 @@ msgid "Quantile 0.25"
 msgstr "Quantile 0,25"
 
 msgid "Quantile 0.5 (median)"
-msgstr "Quantile 0,5 (médian)"
+msgstr "Quantile 0,5 (médiane)"
 
 msgid "Quantile 0.75"
 msgstr "Quantile 0,75"
@@ -161,10 +164,10 @@ msgid "Endemic threshold"
 msgstr "Seuil endémique"
 
 msgid "Prediction for {{predictionTargetName}} for {{orgUnitName}}"
-msgstr "Prévision pour {{predictionTargetName}} pour {{orgUnitName}}"
+msgstr "Prédiction pour {{predictionTargetName}} pour {{orgUnitName}}"
 
 msgid "Signal level"
-msgstr "Niveau de signal"
+msgstr "Niveau du signal"
 
 msgid "Outbreak"
 msgstr "Flambée épidémique"
@@ -204,14 +207,14 @@ msgid ""
 "does not require one."
 msgstr ""
 "Saisissez le jeton configuré sur votre serveur Chap. Laissez ce champ vide "
-"si le serveur n'en requiert pas."
+"si le serveur n'en exige aucun."
 
 msgid ""
 "New tokens are stored encrypted in DHIS2. Existing plain-text tokens remain "
 "readable until replaced."
 msgstr ""
-"Les nouveaux jetons sont stockés chiffrés dans DHIS2. Les jetons existants "
-"en texte clair restent lisibles jusqu'à leur remplacement."
+"Les nouveaux jetons sont stockés de manière chiffrée dans DHIS2. Les jetons "
+"existants en texte clair restent lisibles jusqu'à leur remplacement."
 
 msgid "Route configuration"
 msgstr "Configuration de la route"
@@ -238,7 +241,7 @@ msgid "Delete"
 msgstr "Supprimer"
 
 msgid "Edit route"
-msgstr "Éditer la route"
+msgstr "Modifier la route"
 
 msgid "Increase response timeout to {{timeout}} seconds"
 msgstr "Augmenter le délai d'attente de réponse à {{timeout}} secondes"
@@ -263,7 +266,7 @@ msgid "Sharing"
 msgstr "Partage"
 
 msgid "Edit"
-msgstr "Éditer"
+msgstr "Modifier"
 
 msgid "The token must not contain line breaks"
 msgstr "Le jeton ne doit pas contenir de saut de ligne"
@@ -281,7 +284,7 @@ msgid "Chap Core URL"
 msgstr "URL de Chap Core"
 
 msgid "Error saving route"
-msgstr "Erreur d'enregistrement de la route"
+msgstr "Erreur lors de l'enregistrement de la route"
 
 msgid "An unknown error occurred. Please try again."
 msgstr "Une erreur inconnue s'est produite. Veuillez réessayer."
@@ -301,7 +304,7 @@ msgid ""
 "page."
 msgstr ""
 "Une erreur s'est produite lors du chargement des paramètres de la route. "
-"Essayez de recharger la page."
+"Veuillez réactualiser la page."
 
 msgid "If the problem persists, please contact your system administrator."
 msgstr ""
@@ -327,9 +330,9 @@ msgid ""
 msgstr ""
 "Les utilisateurs qui peuvent lire la configuration de cette route peuvent "
 "aussi lire son jeton d'API. Modifiez la route et saisissez à nouveau le "
-"jeton pour le stocker chiffré sur les versions de DHIS2 compatibles. Si le "
-"jeton a pu être exposé, renouvelez-le sur le serveur Chap et saisissez le "
-"nouveau jeton ici."
+"jeton pour le stocker de manière chiffré sur les versions de DHIS2 "
+"compatibles. Si le jeton a pu être exposé, renouvelez-le sur le serveur Chap"
+" et saisissez le nouveau jeton ici."
 
 msgid "Name"
 msgstr "Nom"
@@ -399,8 +402,9 @@ msgid ""
 "DHIS2 to 2.40.7, 2.41.4, 2.42 or later to store the token encrypted."
 msgstr ""
 "Cette application ne permet pas de définir des jetons d'API sur cette "
-"version de DHIS2. Mettez DHIS2 à niveau vers la version 2.40.7, 2.41.4, 2.42"
-" ou ultérieure pour stocker le jeton chiffré."
+"version de DHIS2. Effectuez la mise à jour de DHIS2 vers la version 2.40.7, "
+"2.41.4, 2.42 ou une version ultérieure afin que le jeton soit stocké sous "
+"forme chiffrée."
 
 msgid "{{selected}} of {{pending}} pending signals selected"
 msgstr "{{selected}} signaux en attente sélectionnés sur {{pending}}"
@@ -454,7 +458,7 @@ msgid "Month {{month}}"
 msgstr "Mois {{month}}"
 
 msgid "Select period"
-msgstr "Sélectionner une période "
+msgstr "Sélectionner une période"
 
 msgid "Previous year"
 msgstr "Année précédente"
@@ -470,3 +474,6 @@ msgstr "De la période"
 
 msgid "To period"
 msgstr "À la période"
+
+msgid "Remove"
+msgstr "Supprimer"
