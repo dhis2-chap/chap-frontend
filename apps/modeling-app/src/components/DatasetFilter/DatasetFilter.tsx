@@ -10,8 +10,8 @@ type Props = {
 
 export const DatasetFilter = ({ datasets }: Props) => {
     const { datasetId, setDatasetId } = useDatasetFilter();
-    // Only manually created datasets are offered. Backends without the flag leave it undefined, so those are kept.
-    const manualDatasets = datasets.filter(dataset => dataset.createdManually !== false);
+    // Offer manually created datasets, plus any dataset selected through a deep link.
+    const manualDatasets = datasets.filter(dataset => dataset.createdManually !== false || String(dataset.id) === datasetId);
     const options = [...new Map(manualDatasets.map(dataset => [dataset.id, dataset])).values()]
         .sort((a, b) => a.name.localeCompare(b.name));
 
@@ -29,6 +29,9 @@ export const DatasetFilter = ({ datasets }: Props) => {
                 placeholder={i18n.t('Dataset')}
                 onChange={({ selected }) => setDatasetId(selected)}
             >
+                {datasetId && !options.some(dataset => String(dataset.id) === datasetId) && (
+                    <MenuItem label={i18n.t('Dataset {{id}}', { id: `#${datasetId}` })} value={datasetId} />
+                )}
                 {options.map(dataset => (
                     <MenuItem
                         key={dataset.id}

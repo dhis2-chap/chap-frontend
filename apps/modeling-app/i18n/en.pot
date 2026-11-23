@@ -5,8 +5,11 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-11-17T16:55:47.217Z\n"
-"PO-Revision-Date: 2026-11-17T16:55:47.217Z\n"
+"POT-Creation-Date: 2026-11-23T11:43:12.537Z\n"
+"PO-Revision-Date: 2026-11-23T11:43:12.538Z\n"
+
+msgid "Evaluate & predict"
+msgstr "Evaluate & predict"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -444,6 +447,9 @@ msgstr "No manually created datasets"
 
 msgid "Dataset"
 msgstr "Dataset"
+
+msgid "Dataset {{id}}"
+msgstr "Dataset {{id}}"
 
 msgid "Origin"
 msgstr "Origin"
@@ -2812,14 +2818,23 @@ msgstr "Shift zoom right one period"
 msgid "No organisation units match the selected filters."
 msgstr "No organisation units match the selected filters."
 
-msgid "Dashboard"
-msgstr "Dashboard"
-
-msgid "Evaluate"
-msgstr "Evaluate"
-
 msgid "Overview"
 msgstr "Overview"
+
+msgid "Start here"
+msgstr "Start here"
+
+msgid "Review & promote"
+msgstr "Review & promote"
+
+msgid "Predict & monitor"
+msgstr "Predict & monitor"
+
+msgid "Advanced"
+msgstr "Advanced"
+
+msgid "All evaluations"
+msgstr "All evaluations"
 
 msgid "Report a bug"
 msgstr "Report a bug"
@@ -3313,6 +3328,19 @@ msgstr "Run predictions, review activity, and manage this setup."
 msgid "Back to prediction setups"
 msgstr "Back to prediction setups"
 
+msgid "From data to predictions"
+msgstr "From data to predictions"
+
+msgid ""
+"Prepare a reusable dataset, evaluate models, and review a model before "
+"using it for predictions."
+msgstr ""
+"Prepare a reusable dataset, evaluate models, and review a model before "
+"using it for predictions."
+
+msgid "Start or continue your modeling workflow"
+msgstr "Start or continue your modeling workflow"
+
 msgid "Latest Evaluation Runs"
 msgstr "Latest Evaluation Runs"
 
@@ -3339,9 +3367,6 @@ msgstr "Error loading prediction setups"
 
 msgid "Review the saved data and where values are missing."
 msgstr "Review the saved data and where values are missing."
-
-msgid "Dataset {{id}}"
-msgstr "Dataset {{id}}"
 
 msgid "Import data once and reuse it across evaluations."
 msgstr "Import data once and reuse it across evaluations."
@@ -3458,6 +3483,98 @@ msgstr "Manage the policies used to raise signals from forecasts."
 
 msgid "New policy"
 msgstr "New policy"
+
+msgid ""
+"Prepare data once, compare models on the same data, then choose a model for "
+"predictions."
+msgstr ""
+"Prepare data once, compare models on the same data, then choose a model for "
+"predictions."
+
+msgid "Workflow preview"
+msgstr "Workflow preview"
+
+msgid ""
+"Explore a simpler way through the existing tools. Model selection and "
+"promotion are still decisions you make."
+msgstr ""
+"Explore a simpler way through the existing tools. Model selection and "
+"promotion are still decisions you make."
+
+msgid "Start with your data"
+msgstr "Start with your data"
+
+msgid ""
+"A saved dataset keeps the target, periods, locations and data sources "
+"together. Reuse it for every model you want to compare."
+msgstr ""
+"A saved dataset keeps the target, periods, locations and data sources "
+"together. Reuse it for every model you want to compare."
+
+msgid "Could not load datasets"
+msgstr "Could not load datasets"
+
+msgid "Choose a saved dataset"
+msgstr "Choose a saved dataset"
+
+msgid "Dataset unavailable"
+msgstr "Dataset unavailable"
+
+msgid "Choose another dataset. The dataset in this link may have been removed."
+msgstr "Choose another dataset. The dataset in this link may have been removed."
+
+msgid "Create a dataset before evaluating models."
+msgstr "Create a dataset before evaluating models."
+
+msgid "Inspect selected dataset"
+msgstr "Inspect selected dataset"
+
+msgid "Manage datasets"
+msgstr "Manage datasets"
+
+msgid "1. Set up evaluation"
+msgstr "1. Set up evaluation"
+
+msgid ""
+"Choose compatible models and evaluate them with the same backtest settings. "
+"You can leave while Chap runs the jobs."
+msgstr ""
+"Choose compatible models and evaluate them with the same backtest settings. "
+"You can leave while Chap runs the jobs."
+
+msgid "Evaluate models"
+msgstr "Evaluate models"
+
+msgid "2. Review & promote"
+msgstr "2. Review & promote"
+
+msgid ""
+"Compare results and baselines for the same evaluation settings. Open an "
+"evaluation to inspect its forecasts and create a prediction setup when it "
+"is suitable."
+msgstr ""
+"Compare results and baselines for the same evaluation settings. Open an "
+"evaluation to inspect its forecasts and create a prediction setup when it "
+"is suitable."
+
+msgid "Review results"
+msgstr "Review results"
+
+msgid "Review all results"
+msgstr "Review all results"
+
+msgid "3. Predict & monitor"
+msgstr "3. Predict & monitor"
+
+msgid ""
+"Open a prediction setup to run forecasts, inspect predictions and review "
+"raised signals. This includes setups from all datasets."
+msgstr ""
+"Open a prediction setup to run forecasts, inspect predictions and review "
+"raised signals. This includes setups from all datasets."
+
+msgid "Open prediction setups"
+msgstr "Open prediction setups"
 
 msgid ""
 "The Chap server refused the request. An administrator can check the API "

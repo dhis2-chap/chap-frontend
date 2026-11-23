@@ -2,6 +2,22 @@
     inline-size: 100%;
 }
 
+.workflowIntro {
+    padding: var(--spacers-dp24);
+    margin-block-end: var(--spacers-dp16);
+    background: var(--colors-white);
+    border: 1px solid var(--colors-grey400);
+    border-radius: 6px;
+}
+
+.workflowIntro h2 {
+    margin-block-start: 0;
+}
+
+.workflowIntro p {
+    color: var(--colors-grey700);
+}
+
 .screenReaderOnly {
     position: absolute;
     inline-size: 1px;

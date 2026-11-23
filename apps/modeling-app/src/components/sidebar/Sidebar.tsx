@@ -100,26 +100,33 @@ export const Sidebar = ({
             >
                 <Sidenav>
                     <SidenavItems>
-                        <SidebarNavLink to="/dashboard" label={i18n.t('Dashboard')} />
+                        <SidebarNavLink to="/dashboard" label={i18n.t('Overview')} />
                         <SidebarNavLink to="/datasets" label={i18n.t('Datasets')} />
                         <SidebarParent
-                            label={i18n.t('Evaluate')}
+                            label={i18n.t('Evaluate & predict')}
+                            links={[
+                                { label: i18n.t('Start here'), to: '/workflow' },
+                                { label: i18n.t('Review & promote'), to: isBenchmarksAvailable ? '/evaluate/benchmarks' : '/evaluate' },
+                                { label: i18n.t('Predict & monitor'), to: '/predictions' },
+                            ]}
+                        />
+                        <SidebarParent
+                            label={i18n.t('Advanced')}
+                            initiallyOpen={false}
                             links={[
                                 {
-                                    label: i18n.t('Overview'),
+                                    label: i18n.t('All evaluations'),
                                     to: '/evaluate',
                                 },
                                 {
                                     label: i18n.t('Compare'),
                                     to: '/evaluate/compare',
                                 },
-                                ...(isBenchmarksAvailable ? [{ label: i18n.t('Benchmarks'), to: '/evaluate/benchmarks' }] : []),
+                                { label: i18n.t('Models'), to: '/models' },
+                                { label: i18n.t('Signal policies'), to: '/signals' },
+                                { label: i18n.t('Jobs'), to: '/jobs' },
                             ]}
                         />
-                        <SidebarNavLink to="/predictions" label={i18n.t('Predict')} />
-                        <SidebarNavLink to="/signals" label={i18n.t('Signal policies')} />
-                        <SidebarNavLink to="/models" label={i18n.t('Models')} />
-                        <SidebarNavLink to="/jobs" label={i18n.t('Jobs')} />
                     </SidenavItems>
                     <SidenavFooter>
                         <SidenavItems>

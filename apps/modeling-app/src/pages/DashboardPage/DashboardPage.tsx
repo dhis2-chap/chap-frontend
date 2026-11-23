@@ -152,7 +152,12 @@ export const DashboardPage: React.FC = () => {
 
     return (
         <div className={styles.dashboard}>
-            <h1 className={styles.screenReaderOnly}>{i18n.t('Dashboard')}</h1>
+            <h1 className={styles.screenReaderOnly}>{i18n.t('Overview')}</h1>
+            <div className={styles.workflowIntro}>
+                <h2>{i18n.t('From data to predictions')}</h2>
+                <p>{i18n.t('Prepare a reusable dataset, evaluate models, and review a model before using it for predictions.')}</p>
+                <Link to="/workflow">{i18n.t('Start or continue your modeling workflow')}</Link>
+            </div>
             <div className={styles.widgetGrid}>
                 <RecentItemsWidget
                     title={i18n.t('Latest Evaluation Runs')}
