@@ -1,5 +1,15 @@
 # @dhis2-chap/modeling-app
 
+## 7.6.2
+
+### Patch Changes
+
+-   97c22ce: Start evaluations only from saved datasets and reuse the dataset when copying an evaluation. [CLIM-1942]
+-   9f844be: Load the UI package translations, so the settings page and other shared components are translated, and make a few missed strings translatable.
+-   Updated dependencies [9f844be]
+    -   @dhis2-chap/ui@7.6.2
+    -   @dhis2-chap/core@7.6.2
+
 ## 7.6.1
 
 ### Patch Changes
