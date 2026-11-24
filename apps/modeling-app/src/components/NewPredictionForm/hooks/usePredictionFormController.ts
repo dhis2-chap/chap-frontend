@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { ModelExecutionFormValues } from '../../ModelExecutionForm/hooks/useModelExecutionFormState';
+import { ModelExecutionFormValues } from '../../ModelExecutionForm/hooks/modelExecutionFormSchema';
 import { useCreatePrediction } from './useCreatePrediction';
 import {
     NewPredictionFormValues,

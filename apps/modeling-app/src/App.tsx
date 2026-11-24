@@ -137,16 +137,10 @@ const router = createHashRouter([
                                     },
                                 ],
                             },
-                            {
-                                path: 'new',
-                                element: <NewEvaluationPage />,
-                                handle: {
-                                    breadcrumb: () => i18n.t('New evaluation'),
-                                } satisfies RouteHandle,
-                            },
+                            { path: 'new', element: <Navigate to="/evaluate/from-dataset" replace /> },
                             {
                                 path: 'from-dataset',
-                                element: <NewEvaluationPage useSavedDataset />,
+                                element: <NewEvaluationPage />,
                                 handle: {
                                     breadcrumb: () => i18n.t('New evaluation'),
                                 } satisfies RouteHandle,

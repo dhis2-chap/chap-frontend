@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-11-17T16:55:47.217Z\n"
-"PO-Revision-Date: 2026-11-17T16:55:47.217Z\n"
+"POT-Creation-Date: 2026-11-19T10:34:36.877Z\n"
+"PO-Revision-Date: 2026-11-19T10:34:36.877Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -307,9 +307,6 @@ msgstr "Rename"
 msgid "Download"
 msgstr "Download"
 
-msgid "{{name}} (Copy)"
-msgstr "{{name}} (Copy)"
-
 msgid "Create new based on..."
 msgstr "Create new based on..."
 
@@ -322,23 +319,14 @@ msgstr "Close"
 msgid "Select which attributes to copy to the new run{{escape}}"
 msgstr "Select which attributes to copy to the new run{{escape}}"
 
-msgid "Untitled"
-msgstr "Untitled"
-
-msgid "Organisation units"
-msgstr "Organisation units"
+msgid "Dataset"
+msgstr "Dataset"
 
 msgid "Model"
 msgstr "Model"
 
-msgid "Data sources"
-msgstr "Data sources"
-
-msgid "Period type"
-msgstr "Period type"
-
-msgid "Period range"
-msgstr "Period range"
+msgid "{{name}} (Copy)"
+msgstr "{{name}} (Copy)"
 
 msgid "Create"
 msgstr "Create"
@@ -442,9 +430,6 @@ msgstr "No datasets found"
 msgid "No manually created datasets"
 msgstr "No manually created datasets"
 
-msgid "Dataset"
-msgstr "Dataset"
-
 msgid "Origin"
 msgstr "Origin"
 
@@ -533,9 +518,6 @@ msgstr "Location"
 
 msgid "Missing"
 msgstr "Missing"
-
-msgid "Inspect dataset"
-msgstr "Inspect dataset"
 
 msgid "Cancel job"
 msgstr "Cancel job"
@@ -673,51 +655,8 @@ msgstr "Not applicable"
 msgid "{{name}} ({{status}})"
 msgstr "{{name}} ({{status}})"
 
-msgid "Map Data Items"
-msgstr "Map Data Items"
-
-msgid "Map the model features to corresponding data items in DHIS2"
-msgstr "Map the model features to corresponding data items in DHIS2"
-
-msgid "Target"
-msgstr "Target"
-
-msgid "Map the model target to the corresponding data item in DHIS2"
-msgstr "Map the model target to the corresponding data item in DHIS2"
-
-msgid "Map each model covariate to the corresponding data item in DHIS2"
-msgstr "Map each model covariate to the corresponding data item in DHIS2"
-
-msgid "No model selected"
-msgstr "No model selected"
-
-msgid "All data items mapped"
-msgstr "All data items mapped"
-
-msgid "{{mapped}}/{{total}} data items mapped"
-msgstr "{{mapped}}/{{total}} data items mapped"
-
-msgid "Dataset Configuration"
-msgstr "Dataset Configuration"
-
-msgid "Configure sources"
-msgstr "Configure sources"
-
-msgid ""
-"The Data Visualizer app is not compatible with this feature. Please update "
-"to a newer version."
-msgstr ""
-"The Data Visualizer app is not compatible with this feature. Please update "
-"to a newer version."
-
-msgid "Please map all model covariates to valid data items"
-msgstr "Please map all model covariates to valid data items"
-
-msgid "Target \"{{targetName}}\" must be mapped to a data item"
-msgstr "Target \"{{targetName}}\" must be mapped to a data item"
-
-msgid "Covariate \"{{covariateName}}\" must be mapped to a data item"
-msgstr "Covariate \"{{covariateName}}\" must be mapped to a data item"
+msgid "Organisation units"
+msgstr "Organisation units"
 
 msgid "Select organisation units"
 msgstr "Select organisation units"
@@ -817,6 +756,9 @@ msgstr "Select Model"
 msgid "Search models"
 msgstr "Search models"
 
+msgid "Period type"
+msgstr "Period type"
+
 msgid "Clear statuses"
 msgstr "Clear statuses"
 
@@ -825,6 +767,9 @@ msgstr "Version"
 
 msgid "Commit"
 msgstr "Commit"
+
+msgid "Target"
+msgstr "Target"
 
 msgid "Covariates"
 msgstr "Covariates"
@@ -845,9 +790,6 @@ msgid "Use selected models ({{count}})"
 msgid_plural "Use selected models ({{count}})"
 msgstr[0] "Use selected models ({{count}})"
 msgstr[1] "Use selected models ({{count}})"
-
-msgid "Select model"
-msgstr "Select model"
 
 msgid "EWARS Evaluation 22-24"
 msgstr "EWARS Evaluation 22-24"
@@ -1281,15 +1223,8 @@ msgstr "No saved datasets yet"
 msgid "Save a dataset first, then return here to run models in a benchmark."
 msgstr "Save a dataset first, then return here to run models in a benchmark."
 
-msgid ""
-"Save a dataset once and reuse it across evaluations, or import data for "
-"this evaluation only."
-msgstr ""
-"Save a dataset once and reuse it across evaluations, or import data for "
-"this evaluation only."
-
-msgid "Import from DHIS2 instead"
-msgstr "Import from DHIS2 instead"
+msgid "Save a dataset first, then return here to run an evaluation."
+msgstr "Save a dataset first, then return here to run an evaluation."
 
 msgid "How benchmarks work"
 msgstr "How benchmarks work"
@@ -1361,18 +1296,6 @@ msgstr "Could not check model forecast limits"
 msgid "Unsupported forecast periods"
 msgstr "Unsupported forecast periods"
 
-msgid "Start dry run"
-msgstr "Start dry run"
-
-msgid "Start import"
-msgstr "Start import"
-
-msgid "There was an error"
-msgstr "There was an error"
-
-msgid "Error loading models"
-msgstr "Error loading models"
-
 msgid "Enter a whole number greater than zero"
 msgstr "Enter a whole number greater than zero"
 
@@ -1390,20 +1313,6 @@ msgstr "{{model}} requires at least {{minimum}} forecast periods."
 
 msgid "{{model}} supports at most {{maximum}} forecast periods."
 msgstr "{{model}} supports at most {{maximum}} forecast periods."
-
-msgid ""
-"Dataset import failed or was cancelled. Check the job details on the Jobs "
-"page."
-msgstr ""
-"Dataset import failed or was cancelled. Check the job details on the Jobs "
-"page."
-
-msgid ""
-"Dataset import is still running. Check the Jobs page, then start an "
-"evaluation from the saved dataset."
-msgstr ""
-"Dataset import is still running. Check the Jobs page, then start an "
-"evaluation from the saved dataset."
 
 msgid "Cannot run prediction"
 msgstr "Cannot run prediction"
@@ -1800,6 +1709,9 @@ msgstr "location"
 msgid "locations"
 msgstr "locations"
 
+msgid "Data sources"
+msgstr "Data sources"
+
 msgid "source"
 msgstr "source"
 
@@ -2122,6 +2034,9 @@ msgstr "Prediction setup created"
 
 msgid "Failed to create prediction setup"
 msgstr "Failed to create prediction setup"
+
+msgid "Error loading models"
+msgstr "Error loading models"
 
 msgid "Are you sure you want to archive this model?"
 msgstr "Are you sure you want to archive this model?"
@@ -3267,6 +3182,9 @@ msgstr ""
 "Add models to run them against this benchmark. Completed runs will appear "
 "here."
 
+msgid "Period range"
+msgstr "Period range"
+
 msgid "Model runs"
 msgstr "Model runs"
 
@@ -3411,12 +3329,6 @@ msgstr "Back to datasets"
 
 msgid "Create a new evaluation to assess the performance of a model"
 msgstr "Create a new evaluation to assess the performance of a model"
-
-msgid "Use saved dataset"
-msgstr "Use saved dataset"
-
-msgid "Import from DHIS2"
-msgstr "Import from DHIS2"
 
 msgid "Create a prediction run for this setup."
 msgstr "Create a prediction run for this setup."

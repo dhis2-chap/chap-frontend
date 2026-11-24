@@ -9,7 +9,7 @@ import {
     PredictionSetupsService,
     RunPredictionSetupRequest,
 } from '@dhis2-chap/ui';
-import { ModelExecutionFormValues } from '../../ModelExecutionForm/hooks/useModelExecutionFormState';
+import { ModelExecutionFormValues } from '../../ModelExecutionForm/hooks/modelExecutionFormSchema';
 import { prepareBacktestData } from '../../ModelExecutionForm/utils/prepareBacktestData';
 import { buildOrgUnitFeatureCollection } from '../../ModelExecutionForm/utils/orgUnitGeoJson';
 import { getImportSummaryFromApiError } from '../../ModelExecutionForm/utils/importSummaryUtils';
