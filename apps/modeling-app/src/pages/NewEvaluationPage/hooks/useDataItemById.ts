@@ -1,5 +1,5 @@
 import z from 'zod';
-import { dataItemSchema } from '../../../components/ModelExecutionForm/hooks/useModelExecutionFormState';
+import { dataItemSchema } from '../../../components/ModelExecutionForm/hooks/modelExecutionFormSchema';
 import { useDataEngine } from '@dhis2/app-runtime';
 import { Query, useQuery, useQueryClient } from '@tanstack/react-query';
 

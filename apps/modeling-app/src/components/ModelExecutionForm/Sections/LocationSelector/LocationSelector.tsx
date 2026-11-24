@@ -7,7 +7,7 @@ import {
 import i18n from '@dhis2/d2-i18n';
 import cn from 'classnames';
 import { useFormContext, useWatch } from 'react-hook-form';
-import { BaseFormValues } from '../../hooks/useModelExecutionFormState';
+import { BaseFormValues } from '../../hooks/modelExecutionFormSchema';
 import {
     getSelectionSummary,
     OrganisationUnit,

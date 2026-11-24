@@ -131,10 +131,10 @@ export const CopyBacktestModal = ({ id, onClose, returnTo }: CopyBacktestModalPr
                             if (returnTo) params.set('returnTo', returnTo);
                             navigate(`/evaluate/from-dataset?${params}`, {
                                 state: {
-                                    name: selectedAttributes.name && backtest.name
-                                        ? i18n.t('{{name}} (Copy)', { name: backtest.name, interpolation: { escapeValue: false } })
-                                        : '',
-                                    modelNames: selectedAttributes.model ? [backtest.modelId] : [],
+                                    ...(selectedAttributes.name && backtest.name && {
+                                        name: i18n.t('{{name}} (Copy)', { name: backtest.name, interpolation: { escapeValue: false } }),
+                                    }),
+                                    ...(selectedAttributes.model && { modelNames: [backtest.modelId] }),
                                 },
                             });
                         }}

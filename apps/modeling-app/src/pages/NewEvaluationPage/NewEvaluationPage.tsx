@@ -1,3 +1,4 @@
+import type { ComponentProps } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { Button, IconArrowLeft16 } from '@dhis2/ui';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
@@ -30,7 +31,7 @@ export const NewEvaluationPage = () => {
             </Button>
 
             {/* A link to another dataset starts a fresh form. */}
-            <DatasetEvaluationForm key={datasetId} initialDatasetId={datasetId} initialValues={state} />
+            <DatasetEvaluationForm key={datasetId} initialDatasetId={datasetId} initialValues={state as ComponentProps<typeof DatasetEvaluationForm>['initialValues']} />
         </div>
     );
 };

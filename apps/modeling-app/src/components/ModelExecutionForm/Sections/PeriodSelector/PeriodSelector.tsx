@@ -6,7 +6,7 @@ import {
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { Controller, useWatch, useFormContext } from 'react-hook-form';
-import { BaseFormValues } from '../../hooks/useModelExecutionFormState';
+import { BaseFormValues } from '../../hooks/modelExecutionFormSchema';
 import {
     comparePeriodIds,
     getLastCompletedPeriodId,

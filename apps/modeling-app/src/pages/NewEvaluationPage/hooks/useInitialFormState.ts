@@ -4,9 +4,9 @@ import { z } from 'zod';
 import { PERIOD_TYPES } from '@dhis2-chap/core';
 import { ModelSpecRead } from '@dhis2-chap/ui';
 import { useOrgUnitsById } from '../../../hooks/useOrgUnitsById';
-import { ModelExecutionFormValues } from '../../../components/ModelExecutionForm/hooks/useModelExecutionFormState';
+import { ModelExecutionFormValues } from '../../../components/ModelExecutionForm/hooks/modelExecutionFormSchema';
 import { useDataItemByIds } from './useDataItemById';
-import { CovariateMapping } from '../../../components/ModelExecutionForm/hooks/useModelExecutionFormState';
+import { CovariateMapping } from '../../../components/ModelExecutionForm/hooks/modelExecutionFormSchema';
 
 type DataSourceInput = {
     covariate: string;

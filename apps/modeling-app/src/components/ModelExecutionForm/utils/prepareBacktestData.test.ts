@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { QueryClient } from '@tanstack/react-query';
 import { ModelsService } from '@dhis2-chap/ui';
 import type { useDataEngine } from '@dhis2/app-runtime';
-import type { ModelExecutionFormValues } from '../hooks/useModelExecutionFormState';
+import type { ModelExecutionFormValues } from '../hooks/modelExecutionFormSchema';
 import { prepareBacktestData } from './prepareBacktestData';
 import { fetchAnalytics, fetchOrgUnits } from './queryUtils';
 import type { ModelSpecRead } from '@dhis2-chap/ui';

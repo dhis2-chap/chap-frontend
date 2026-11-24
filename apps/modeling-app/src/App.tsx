@@ -137,6 +137,7 @@ const router = createHashRouter([
                                     },
                                 ],
                             },
+                            { path: 'new', element: <Navigate to="/evaluate/from-dataset" replace /> },
                             {
                                 path: 'from-dataset',
                                 element: <NewEvaluationPage />,
