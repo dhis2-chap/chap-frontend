@@ -41,6 +41,11 @@ pnpm tsc:check       # Type checking
 pnpm format          # Format code
 ```
 
+## Latest Modeling App build
+
+[modeling-app-latest.zip](https://github.com/dhis2-chap/chap-frontend/releases/download/latest/modeling-app-latest.zip)
+is rebuilt from `main` after CI passes. It is unstable; use a versioned release for production.
+
 ## API Client Generation
 
 The UI package includes an auto-generated TypeScript API client from OpenAPI specifications:
