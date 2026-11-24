@@ -1,4 +1,5 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { QueryClient } from '@tanstack/react-query';
 import { prepareDataset } from './prepareDataset';
 import { fetchAnalytics, fetchOrgUnits } from '../../ModelExecutionForm/utils/queryUtils';
 import type { DatasetFormValues } from '../hooks/useDatasetFormState';
@@ -25,7 +26,11 @@ const formData: DatasetFormValues = {
 const periodSettings = { calendar: 'gregory' as const, locale: 'en', timeZone: 'UTC' };
 const dataEngine = {} as Parameters<typeof prepareDataset>[1];
 
+let queryClient: QueryClient;
+afterEach(() => queryClient.clear());
 beforeEach(() => {
+    vi.clearAllMocks();
+    queryClient = new QueryClient();
     vi.mocked(fetchAnalytics).mockResolvedValue({
         response: {
             metaData: { dimensions: { ou: ['resolved-unit'] } },
@@ -46,7 +51,7 @@ beforeEach(() => {
 
 describe('prepareDataset', () => {
     it('keeps every chosen covariate name, even when one data item is reused', async () => {
-        const { request, orgUnitNames } = await prepareDataset(formData, dataEngine, periodSettings, true);
+        const { request, orgUnitNames } = await prepareDataset(formData, dataEngine, periodSettings, true, queryClient);
 
         expect(request).not.toHaveProperty('modelId');
         expect(request.targetColumn).toBe('custom_cases');
@@ -60,10 +65,31 @@ describe('prepareDataset', () => {
             period: ['202401', '202402'],
             values: { disease_cases: [12, null], custom_cases: [12, null] },
         });
-        expect(fetchAnalytics).toHaveBeenCalledWith(['data1'], ['202401', '202402'], ['LEVEL-2'], dataEngine);
-        expect(fetchOrgUnits).toHaveBeenCalledWith(['resolved-unit'], dataEngine);
+        expect(fetchAnalytics).toHaveBeenCalledWith(['data1'], ['202401', '202402'], ['LEVEL-2'], dataEngine, undefined);
+        expect(fetchOrgUnits).toHaveBeenCalledWith(['resolved-unit'], dataEngine, undefined);
         expect(request.geojson.features[0].id).toBe('resolved-unit');
         expect(orgUnitNames).toEqual(new Map([['resolved-unit', 'District']]));
+    });
+
+    it('reuses checked data with current mappings and name, but refetches when the selection changes', async () => {
+        await prepareDataset(formData, dataEngine, periodSettings, true, queryClient);
+        const edited = {
+            ...formData,
+            name: 'Renamed dataset',
+            columns: [{ ...formData.columns[0], covariateName: 'renamed_cases' }],
+            targetColumn: 'renamed_cases',
+        };
+        const { request } = await prepareDataset(edited, dataEngine, periodSettings, true, queryClient);
+        expect(fetchAnalytics).toHaveBeenCalledTimes(1);
+        expect(fetchOrgUnits).toHaveBeenCalledTimes(1);
+        expect(request.name).toBe('Renamed dataset');
+        expect(request.targetColumn).toBe('renamed_cases');
+        expect(request.providedDataColumns?.values).toEqual({ renamed_cases: [12, null] });
+
+        await prepareDataset({ ...edited, toPeriodId: '202403' }, dataEngine, periodSettings, true, queryClient);
+        await prepareDataset({ ...edited, orgUnits: [{ id: 'another-unit' }] }, dataEngine, periodSettings, true, queryClient);
+        expect(fetchAnalytics).toHaveBeenCalledTimes(3);
+        expect(fetchOrgUnits).toHaveBeenCalledTimes(3);
     });
 
     it('aligns sparse, unordered features by location and period and preserves the same completeness values', async () => {
@@ -85,8 +111,8 @@ describe('prepareDataset', () => {
             },
         });
 
-        const { request } = await prepareDataset(form, dataEngine, periodSettings, true);
-        const { request: legacy } = await prepareDataset(form, dataEngine, periodSettings, false);
+        const { request } = await prepareDataset(form, dataEngine, periodSettings, true, queryClient);
+        const { request: legacy } = await prepareDataset(form, dataEngine, periodSettings, false, queryClient);
         expect(legacy).not.toHaveProperty('providedDataColumns');
         expect(request.providedDataColumns).toEqual({
             orgUnit: ['a', 'a', 'b', 'b'],
@@ -105,7 +131,7 @@ describe('prepareDataset', () => {
             response: { metaData: { dimensions: { ou: [] } }, rows: [] },
         });
 
-        await expect(prepareDataset(formData, dataEngine, periodSettings, true)).rejects.toThrow('no observations');
+        await expect(prepareDataset(formData, dataEngine, periodSettings, true, queryClient)).rejects.toThrow('no observations');
     });
 
     it('leaves out organisation units without geometry, unless none have it', async () => {
@@ -120,13 +146,14 @@ describe('prepareDataset', () => {
             },
         });
 
-        const { request, orgUnitNames } = await prepareDataset(formData, dataEngine, periodSettings, true);
+        const { request, orgUnitNames } = await prepareDataset(formData, dataEngine, periodSettings, true, queryClient);
         expect(request.geojson.features.map(feature => feature.id)).toEqual(['resolved-unit']);
         expect([...orgUnitNames.keys()]).toEqual(['resolved-unit', 'no-shape']);
 
+        queryClient.clear();
         vi.mocked(fetchOrgUnits).mockResolvedValue({
             geojson: { organisationUnits: [{ id: 'no-shape', displayName: 'No shape', ...withoutGeometry }] },
         });
-        await expect(prepareDataset(formData, dataEngine, periodSettings, true)).rejects.toThrow('geometry');
+        await expect(prepareDataset(formData, dataEngine, periodSettings, true, queryClient)).rejects.toThrow('geometry');
     });
 });

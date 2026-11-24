@@ -18,7 +18,7 @@ export type DatasetImportSummary = ImportSummaryCorrected & { orgUnitNames: Map<
  * Builds the dataset from DHIS2 analytics, hands it to Chap and follows the resulting import job.
  * Chap's summary of the locations it left out is kept, including when it rejects all of them.
  */
-export const useCreateDataset = (periodSettings: Dhis2PeriodSettings) => {
+export const useCreateDataset = (periodSettings: Dhis2PeriodSettings, onProgress?: (message: string) => void) => {
     const dataEngine = useDataEngine();
     const { isAvailable: supportsColumnar } = useIsFeatureAvailable(Features.DATASET_OBSERVATION_COLUMNS);
     const queryClient = useQueryClient();
@@ -26,9 +26,13 @@ export const useCreateDataset = (periodSettings: Dhis2PeriodSettings) => {
     const [summary, setSummary] = useState<DatasetImportSummary>();
 
     const createDataset = useMutation<string, Error | ApiError, DatasetFormValues>({
-        onMutate: () => setSummary(undefined),
+        onMutate: () => {
+            setSummary(undefined);
+            onProgress?.(i18n.t('Preparing data'));
+        },
         mutationFn: async (formData) => {
-            const { request, orgUnitNames } = await prepareDataset(formData, dataEngine, periodSettings, supportsColumnar);
+            const { request, orgUnitNames } = await prepareDataset(formData, dataEngine, periodSettings, supportsColumnar, queryClient, onProgress);
+            onProgress?.(i18n.t('Creating dataset in Chap'));
             try {
                 const response = await DatasetsService.makeDatasetV1AnalyticsMakeDatasetPost(request);
                 setSummary({ ...(response as unknown as ImportSummaryCorrected), orgUnitNames });
@@ -45,6 +49,7 @@ export const useCreateDataset = (periodSettings: Dhis2PeriodSettings) => {
             }
         },
         onSuccess: (id) => {
+            queryClient.removeQueries({ queryKey: ['new-backtest-data'] });
             setJobId(id);
             queryClient.invalidateQueries({ queryKey: ['jobs'] });
         },

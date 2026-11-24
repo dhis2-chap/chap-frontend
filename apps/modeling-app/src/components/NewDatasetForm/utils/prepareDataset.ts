@@ -2,7 +2,8 @@ import i18n from '@dhis2/d2-i18n';
 import { getPeriodsInRange } from '@dhis2-chap/core';
 import type { DatasetMakeRequest, ObservationBase, ObservationColumns } from '@dhis2-chap/ui';
 import type { useDataEngine } from '@dhis2/app-runtime';
-import { fetchAnalytics, fetchOrgUnits } from '../../ModelExecutionForm/utils/queryUtils';
+import type { QueryClient } from '@tanstack/react-query';
+import { fetchDhis2Data } from '../../ModelExecutionForm/utils/fetchDhis2Data';
 import { buildOrgUnitFeatureCollection } from '../../ModelExecutionForm/utils/orgUnitGeoJson';
 import type { DatasetFormValues } from '../hooks/useDatasetFormState';
 import type { Dhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
@@ -42,6 +43,8 @@ export const prepareDataset = async (
     dataEngine: ReturnType<typeof useDataEngine>,
     periodSettings: Dhis2PeriodSettings,
     supportsColumnar: boolean,
+    queryClient: QueryClient,
+    onProgress?: (message: string) => void,
 ): Promise<PreparedDataset> => {
     const periods = getPeriodsInRange({
         startPeriodId: formData.fromPeriodId,
@@ -50,11 +53,13 @@ export const prepareDataset = async (
         locale: periodSettings.locale,
     }).map(period => period.id);
 
-    const { response } = await fetchAnalytics(
+    const { analyticsResponse: { response }, orgUnitResponse: { geojson } } = await fetchDhis2Data(
         [...new Set(formData.columns.map(column => column.dataItem.id))],
         periods,
         formData.orgUnits.map(orgUnit => orgUnit.id),
         dataEngine,
+        queryClient,
+        onProgress,
     );
 
     // A data item may be imported under several covariate names, so map per column rather than per row.
@@ -76,7 +81,6 @@ export const prepareDataset = async (
         }));
     }
 
-    const { geojson } = await fetchOrgUnits(response.metaData.dimensions.ou, dataEngine);
     // Chap leaves out locations without a polygon and lists them as rejected, so only fail when that would be all of them.
     const withGeometry = geojson.organisationUnits.filter(orgUnit => orgUnit.geometry);
     if (!withGeometry.length) {
