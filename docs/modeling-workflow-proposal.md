@@ -102,8 +102,6 @@ opens by itself when you are on one of its pages.
 - The detailed pages say "benchmark" where the team terminology says "evaluation".
   Renaming them is a separate change.
 - The user guides and their screenshots still describe the old sidebar.
-- [PR #353](https://github.com/dhis2-chap/chap-frontend/pull/353) changes the evaluation
-  form that step 2 links to for its settings; whichever merges second needs a small rebase.
 
 ## Validation
 
