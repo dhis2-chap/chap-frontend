@@ -26,8 +26,11 @@ test('starts model runs from New benchmark and groups them by dataset and parame
     const start = page.getByRole('button', { name: 'Run benchmark', exact: true });
     await expect(start).toBeDisabled();
     await expect(page.getByText('Runs with the same dataset, target column and backtest parameters appear in the same benchmark.', { exact: false })).toBeVisible();
-    await page.getByText('Created manually', { exact: true }).click();
-    await page.getByText('Created by evaluations or predictions', { exact: true }).click();
+    // The fixture's dataset counts as created by an evaluation only on some Chap versions.
+    if (evaluation.dataset.createdManually === false) {
+        await page.getByText('Created manually', { exact: true }).click();
+        await page.getByText('Created by evaluations or predictions', { exact: true }).click();
+    }
     await page.locator('[data-test="evaluation-dataset-select"]').click();
     await page.getByText(evaluation.dataset.name, { exact: true }).click();
     // Match the fixture's parameters so the backend reuses its benchmark.

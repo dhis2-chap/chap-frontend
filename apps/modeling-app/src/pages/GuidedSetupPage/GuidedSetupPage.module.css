@@ -1,0 +1,139 @@
+.steps {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacers-dp8);
+}
+
+.step {
+    display: flex;
+    gap: var(--spacers-dp16);
+    padding: var(--spacers-dp16);
+    background-color: var(--colors-white);
+    border: 1px solid var(--colors-grey300);
+    border-radius: var(--spacers-dp4);
+}
+
+.upcoming .stepTitle,
+.upcoming .stepSummary {
+    color: var(--colors-grey600);
+}
+
+.marker {
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 28px;
+    block-size: 28px;
+    border-radius: 50%;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--colors-grey700);
+    background-color: var(--colors-grey200);
+}
+
+.marker.current {
+    color: var(--colors-white);
+    background-color: var(--colors-blue700);
+}
+
+.marker.done {
+    color: var(--colors-white);
+    background-color: var(--colors-green600);
+}
+
+.stepMain {
+    flex: 1;
+    min-inline-size: 0;
+}
+
+.stepHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacers-dp16);
+    min-block-size: 28px;
+}
+
+.stepTitle {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--colors-grey900);
+}
+
+.stepSummary {
+    margin: 2px 0 0;
+    font-size: 14px;
+    line-height: 19px;
+    color: var(--colors-grey700);
+}
+
+.stepBody {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacers-dp16);
+    margin-block-start: var(--spacers-dp16);
+}
+
+/* Forms and tables use the full width; buttons and notices keep their own. */
+.stretch {
+    align-self: stretch;
+}
+
+/* The import form is made of cards, so give them the page background to sit on. */
+.inset {
+    align-self: stretch;
+    padding: 0 var(--spacers-dp16);
+    background-color: var(--colors-grey100);
+    border-radius: var(--spacers-dp4);
+}
+
+.datasetField {
+    inline-size: 100%;
+    max-inline-size: 420px;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--spacers-dp8) var(--spacers-dp16);
+}
+
+.nowrap {
+    white-space: nowrap;
+}
+
+.text {
+    margin: 0;
+    font-size: 14px;
+    line-height: 19px;
+    color: var(--colors-grey800);
+}
+
+.muted {
+    margin: 0;
+    font-size: 13px;
+    color: var(--colors-grey700);
+}
+
+.setup {
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--spacers-dp12);
+    padding: var(--spacers-dp12);
+    border: 1px solid var(--colors-grey300);
+    border-radius: var(--spacers-dp4);
+}
+
+.setupName {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--colors-grey900);
+}

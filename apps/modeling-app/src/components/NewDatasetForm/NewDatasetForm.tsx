@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import i18n from '@dhis2/d2-i18n';
 import { FormProvider, useFieldArray, useWatch } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -37,7 +37,14 @@ import { Features, useIsFeatureAvailable } from '@/hooks/useIsFeatureAvailable';
 import { countPeriods } from '@/utils/periods';
 import styles from './NewDatasetForm.module.css';
 
-export const NewDatasetForm = () => {
+type Props = {
+    /** Called with the new dataset, instead of offering where to go next. */
+    onCreated?: (datasetId: number) => void;
+    /** Start with the columns that let the most models run, leaving only the DHIS2 data items to pick. */
+    prefillColumns?: boolean;
+};
+
+export const NewDatasetForm = ({ onCreated, prefillColumns = false }: Props) => {
     const { settings, isLoading: isSettingsLoading, error: settingsError } = useDhis2PeriodSettings();
     const methods = useDatasetFormState(settings);
     const {
@@ -87,6 +94,22 @@ export const NewDatasetForm = () => {
     const checkData = methods.handleSubmit(data => inspection.mutate(withTarget(data), {
         onSuccess: result => setShownSummary({ title: i18n.t('Data check'), summary: result }),
     }));
+    useEffect(() => {
+        if (hasSucceeded && datasetId != null) onCreated?.(datasetId);
+    }, [hasSucceeded, datasetId, onCreated]);
+    const hasPrefilled = useRef(false);
+    useEffect(() => {
+        const [suggestion] = support.nextColumns;
+        if (!prefillColumns || hasPrefilled.current || !suggestion || columnValues.length) return;
+        hasPrefilled.current = true;
+        // Reset instead of append, so leaving an untouched form does not ask for confirmation.
+        methods.reset({
+            ...methods.getValues(),
+            columns: [...suggestion.columns]
+                .sort((a, b) => Number(b === 'disease_cases') - Number(a === 'disease_cases'))
+                .map(covariateName => ({ ...EMPTY_COLUMN, covariateName })),
+        });
+    }, [prefillColumns, support, columnValues.length, methods]);
     const periodCount = countPeriods(fromPeriodId, toPeriodId, settings.calendar);
     const minimumEvaluationPeriods = getMinimumEvaluationPeriods(
         periodType,
@@ -256,7 +279,7 @@ export const NewDatasetForm = () => {
                                 </NoticeBox>
                             )}
 
-                            {hasSucceeded && (
+                            {hasSucceeded && !onCreated && (
                                 <NoticeBox valid title={i18n.t('Dataset created')} className={styles.notice}>
                                     <ButtonStrip>
                                         {datasetId != null && (

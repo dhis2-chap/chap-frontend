@@ -3,7 +3,7 @@ import { IconChevronLeft24 } from '@dhis2/ui';
 import { IconMessages16 } from '@dhis2/ui-icons';
 import cx from 'classnames';
 import { useEffect, useRef, useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import styles from './Sidebar.module.css';
 import {
     Sidenav,
@@ -40,7 +40,6 @@ const SidebarNavLink = ({ to, label, disabled, end }: SidebarNavLinkProps) => {
 };
 
 interface SidebarParentProps {
-    initiallyOpen?: boolean;
     label: string;
     links: LinkItem[];
 }
@@ -48,12 +47,14 @@ interface SidebarParentProps {
 const SidebarParent = ({
     label,
     links = [],
-    initiallyOpen = true,
 }: SidebarParentProps) => {
-    const [isOpen, setIsOpen] = useState(initiallyOpen);
+    const { pathname } = useLocation();
+    const [toggled, setToggled] = useState<boolean>();
+    // Closed until the user is on one of its pages, so the guided path stays in focus.
+    const isOpen = toggled ?? links.some(({ to }) => pathname.startsWith(to));
 
     const handleOpen = () => {
-        setIsOpen(!isOpen);
+        setToggled(!isOpen);
     };
 
     if (links.length === 1) {
@@ -100,30 +101,18 @@ export const Sidebar = ({
             >
                 <Sidenav>
                     <SidenavItems>
-                        <SidebarNavLink to="/dashboard" label={i18n.t('Overview')} />
-                        <SidebarNavLink to="/datasets" label={i18n.t('Datasets')} />
-                        <SidebarParent
-                            label={i18n.t('Evaluate & predict')}
-                            links={[
-                                { label: i18n.t('Start here'), to: '/workflow' },
-                                { label: i18n.t('Review & promote'), to: isBenchmarksAvailable ? '/evaluate/benchmarks' : '/evaluate' },
-                                { label: i18n.t('Predict & monitor'), to: '/predictions' },
-                            ]}
-                        />
+                        <SidebarNavLink to="/guided" label={i18n.t('Guided setup')} />
+                        <SidebarNavLink to="/predictions" label={i18n.t('Predictions')} />
                         <SidebarParent
                             label={i18n.t('Advanced')}
-                            initiallyOpen={false}
                             links={[
-                                {
-                                    label: i18n.t('All evaluations'),
-                                    to: '/evaluate',
-                                },
-                                {
-                                    label: i18n.t('Compare'),
-                                    to: '/evaluate/compare',
-                                },
-                                { label: i18n.t('Models'), to: '/models' },
+                                { label: i18n.t('Dashboard'), to: '/dashboard' },
+                                { label: i18n.t('Datasets'), to: '/datasets' },
+                                { label: i18n.t('Evaluations'), to: '/evaluate' },
+                                { label: i18n.t('Compare'), to: '/evaluate/compare' },
+                                ...(isBenchmarksAvailable ? [{ label: i18n.t('Benchmarks'), to: '/evaluate/benchmarks' }] : []),
                                 { label: i18n.t('Signal policies'), to: '/signals' },
+                                { label: i18n.t('Models'), to: '/models' },
                                 { label: i18n.t('Jobs'), to: '/jobs' },
                             ]}
                         />

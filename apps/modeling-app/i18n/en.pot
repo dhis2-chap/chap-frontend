@@ -5,11 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-11-23T11:43:12.537Z\n"
-"PO-Revision-Date: 2026-11-23T11:43:12.538Z\n"
-
-msgid "Evaluate & predict"
-msgstr "Evaluate & predict"
+"POT-Creation-Date: 2026-11-24T17:19:14.268Z\n"
+"PO-Revision-Date: 2026-11-24T17:19:14.268Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -2818,23 +2815,14 @@ msgstr "Shift zoom right one period"
 msgid "No organisation units match the selected filters."
 msgstr "No organisation units match the selected filters."
 
-msgid "Overview"
-msgstr "Overview"
-
-msgid "Start here"
-msgstr "Start here"
-
-msgid "Review & promote"
-msgstr "Review & promote"
-
-msgid "Predict & monitor"
-msgstr "Predict & monitor"
+msgid "Guided setup"
+msgstr "Guided setup"
 
 msgid "Advanced"
 msgstr "Advanced"
 
-msgid "All evaluations"
-msgstr "All evaluations"
+msgid "Dashboard"
+msgstr "Dashboard"
 
 msgid "Report a bug"
 msgstr "Report a bug"
@@ -3328,19 +3316,6 @@ msgstr "Run predictions, review activity, and manage this setup."
 msgid "Back to prediction setups"
 msgstr "Back to prediction setups"
 
-msgid "From data to predictions"
-msgstr "From data to predictions"
-
-msgid ""
-"Prepare a reusable dataset, evaluate models, and review a model before "
-"using it for predictions."
-msgstr ""
-"Prepare a reusable dataset, evaluate models, and review a model before "
-"using it for predictions."
-
-msgid "Start or continue your modeling workflow"
-msgstr "Start or continue your modeling workflow"
-
 msgid "Latest Evaluation Runs"
 msgstr "Latest Evaluation Runs"
 
@@ -3400,6 +3375,175 @@ msgstr "Route and servers are configured on the settings page."
 msgid "View guides"
 msgstr "View guides"
 
+msgid "In use"
+msgstr "In use"
+
+msgid ""
+"This can take a while. You can leave this page; the results will be here "
+"when you come back."
+msgstr ""
+"This can take a while. You can leave this page; the results will be here "
+"when you come back."
+
+msgid "View progress"
+msgstr "View progress"
+
+msgid "No results yet"
+msgstr "No results yet"
+
+msgid "No model has finished. See what happened, then evaluate the models again."
+msgstr "No model has finished. See what happened, then evaluate the models again."
+
+msgid "View jobs"
+msgstr "View jobs"
+
+msgid "Use this model for predictions"
+msgstr "Use this model for predictions"
+
+msgid "Cancel import"
+msgstr "Cancel import"
+
+msgid "Data you have imported"
+msgstr "Data you have imported"
+
+msgid "Choose a dataset"
+msgstr "Choose a dataset"
+
+msgid "Import new data"
+msgstr "Import new data"
+
+msgid "Import data from DHIS2"
+msgstr "Import data from DHIS2"
+
+msgid "This data has no target column"
+msgstr "This data has no target column"
+
+msgid "Choose what to predict when you start the evaluation."
+msgstr "Choose what to predict when you start the evaluation."
+
+msgid "Open evaluation settings"
+msgstr "Open evaluation settings"
+
+msgid ""
+"Chap hides the most recent periods of your data, lets each model predict "
+"them, and scores the predictions against what actually happened."
+msgstr ""
+"Chap hides the most recent periods of your data, lets each model predict "
+"them, and scores the predictions against what actually happened."
+
+msgid "No model can use this data"
+msgstr "No model can use this data"
+
+msgid ""
+"No model matches the columns and period type of this data. Import data with "
+"the columns the models need."
+msgstr ""
+"No model matches the columns and period type of this data. Import data with "
+"the columns the models need."
+
+msgid "Not enough history"
+msgstr "Not enough history"
+
+msgid ""
+"This data has {{periodCount}} periods, but an evaluation needs at least "
+"{{requiredPeriodCount}}."
+msgstr ""
+"This data has {{periodCount}} periods, but an evaluation needs at least "
+"{{requiredPeriodCount}}."
+
+msgid "Could not load the evaluation settings"
+msgstr "Could not load the evaluation settings"
+
+msgid "Could not start the evaluation"
+msgstr "Could not start the evaluation"
+
+msgid "Evaluate models"
+msgstr "Evaluate models"
+
+msgid "Change evaluation settings"
+msgstr "Change evaluation settings"
+
+msgid "Four steps from your DHIS2 data to predictions."
+msgstr "Four steps from your DHIS2 data to predictions."
+
+msgid "Guided setup is unavailable"
+msgstr "Guided setup is unavailable"
+
+msgid ""
+"This Chap server is too old for the guided setup. Update Chap Core, or use "
+"the pages under Advanced."
+msgstr ""
+"This Chap server is too old for the guided setup. Update Chap Core, or use "
+"the pages under Advanced."
+
+msgid "Could not load your setup"
+msgstr "Could not load your setup"
+
+msgid "Choose data"
+msgstr "Choose data"
+
+msgid ""
+"Import the disease cases you want to predict, and the climate and "
+"population data the models use."
+msgstr ""
+"Import the disease cases you want to predict, and the climate and "
+"population data the models use."
+
+msgid "Change"
+msgstr "Change"
+
+msgid "This data no longer exists"
+msgstr "This data no longer exists"
+
+msgid "Choose other data to continue."
+msgstr "Choose other data to continue."
+
+msgid ""
+"Test models on your historical data to see how well they would have "
+"predicted."
+msgstr ""
+"Test models on your historical data to see how well they would have "
+"predicted."
+
+msgid "{{count}} models evaluated"
+msgid_plural "{{count}} models evaluated"
+msgstr[0] "{{count}} model evaluated"
+msgstr[1] "{{count}} models evaluated"
+
+msgid "Evaluate more models"
+msgstr "Evaluate more models"
+
+msgid "Choose a model"
+msgstr "Choose a model"
+
+msgid "Compare the results and pick the model to use for predictions."
+msgstr "Compare the results and pick the model to use for predictions."
+
+msgid "Compare results"
+msgstr "Compare results"
+
+msgid ""
+"Run predictions with the model you chose, then review them and import them "
+"into DHIS2."
+msgstr ""
+"Run predictions with the model you chose, then review them and import them "
+"into DHIS2."
+
+msgid "Could not load the prediction setup"
+msgstr "Could not load the prediction setup"
+
+msgid "Latest prediction{{colon}} {{name}}"
+msgstr "Latest prediction{{colon}} {{name}}"
+
+msgid "Prediction running"
+msgstr "Prediction running"
+
+msgid "View latest prediction"
+msgstr "View latest prediction"
+
+msgid "Open prediction setup"
+msgstr "Open prediction setup"
+
 msgid "No guides available"
 msgstr "No guides available"
 
@@ -3446,6 +3590,9 @@ msgstr "Import from DHIS2"
 msgid "Create a prediction run for this setup."
 msgstr "Create a prediction run for this setup."
 
+msgid "Back to guided setup"
+msgstr "Back to guided setup"
+
 msgid "Back to prediction setup"
 msgstr "Back to prediction setup"
 
@@ -3483,98 +3630,6 @@ msgstr "Manage the policies used to raise signals from forecasts."
 
 msgid "New policy"
 msgstr "New policy"
-
-msgid ""
-"Prepare data once, compare models on the same data, then choose a model for "
-"predictions."
-msgstr ""
-"Prepare data once, compare models on the same data, then choose a model for "
-"predictions."
-
-msgid "Workflow preview"
-msgstr "Workflow preview"
-
-msgid ""
-"Explore a simpler way through the existing tools. Model selection and "
-"promotion are still decisions you make."
-msgstr ""
-"Explore a simpler way through the existing tools. Model selection and "
-"promotion are still decisions you make."
-
-msgid "Start with your data"
-msgstr "Start with your data"
-
-msgid ""
-"A saved dataset keeps the target, periods, locations and data sources "
-"together. Reuse it for every model you want to compare."
-msgstr ""
-"A saved dataset keeps the target, periods, locations and data sources "
-"together. Reuse it for every model you want to compare."
-
-msgid "Could not load datasets"
-msgstr "Could not load datasets"
-
-msgid "Choose a saved dataset"
-msgstr "Choose a saved dataset"
-
-msgid "Dataset unavailable"
-msgstr "Dataset unavailable"
-
-msgid "Choose another dataset. The dataset in this link may have been removed."
-msgstr "Choose another dataset. The dataset in this link may have been removed."
-
-msgid "Create a dataset before evaluating models."
-msgstr "Create a dataset before evaluating models."
-
-msgid "Inspect selected dataset"
-msgstr "Inspect selected dataset"
-
-msgid "Manage datasets"
-msgstr "Manage datasets"
-
-msgid "1. Set up evaluation"
-msgstr "1. Set up evaluation"
-
-msgid ""
-"Choose compatible models and evaluate them with the same backtest settings. "
-"You can leave while Chap runs the jobs."
-msgstr ""
-"Choose compatible models and evaluate them with the same backtest settings. "
-"You can leave while Chap runs the jobs."
-
-msgid "Evaluate models"
-msgstr "Evaluate models"
-
-msgid "2. Review & promote"
-msgstr "2. Review & promote"
-
-msgid ""
-"Compare results and baselines for the same evaluation settings. Open an "
-"evaluation to inspect its forecasts and create a prediction setup when it "
-"is suitable."
-msgstr ""
-"Compare results and baselines for the same evaluation settings. Open an "
-"evaluation to inspect its forecasts and create a prediction setup when it "
-"is suitable."
-
-msgid "Review results"
-msgstr "Review results"
-
-msgid "Review all results"
-msgstr "Review all results"
-
-msgid "3. Predict & monitor"
-msgstr "3. Predict & monitor"
-
-msgid ""
-"Open a prediction setup to run forecasts, inspect predictions and review "
-"raised signals. This includes setups from all datasets."
-msgstr ""
-"Open a prediction setup to run forecasts, inspect predictions and review "
-"raised signals. This includes setups from all datasets."
-
-msgid "Open prediction setups"
-msgstr "Open prediction setups"
 
 msgid ""
 "The Chap server refused the request. An administrator can check the API "

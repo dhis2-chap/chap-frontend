@@ -27,6 +27,10 @@ type Props = {
     options?: ReactNode;
     /* Buttons, shown on the right. */
     actions?: ReactNode;
+    /* Replaces the Benchmarks heading. */
+    title?: string;
+    /* Shown in each row before View evaluation. Keep it stable between renders. */
+    rowAction?: (run: LeaderboardBacktestRead) => ReactNode;
     children?: ReactNode;
 };
 
@@ -43,7 +47,7 @@ const ViewEvaluationButton = ({ evaluationId }: { evaluationId: number }) => {
     );
 };
 
-export const BenchmarkTable = ({ specification, options, actions, children }: Props) => {
+export const BenchmarkTable = ({ specification, options, actions, title, rowAction, children }: Props) => {
     const { backtests } = specification;
     const evaluationId = backtests[0]?.id;
     // Chap Core 2.6 lists the configured metrics with the specification; older versions need the catalog.
@@ -130,9 +134,14 @@ export const BenchmarkTable = ({ specification, options, actions, children }: Pr
         columnHelper.display({
             id: 'actions',
             header: i18n.t('Actions'),
-            cell: ({ row }) => <ViewEvaluationButton evaluationId={row.original.id} />,
+            cell: ({ row }) => (
+                <div className={styles.actions}>
+                    {rowAction?.(row.original)}
+                    <ViewEvaluationButton evaluationId={row.original.id} />
+                </div>
+            ),
         }),
-    ], [runs, metricIds, metrics, reference]);
+    ], [runs, metricIds, metrics, reference, rowAction]);
     const table = useReactTable({
         data: runs,
         columns,
@@ -153,7 +162,7 @@ export const BenchmarkTable = ({ specification, options, actions, children }: Pr
     return (
         <>
             <div>
-                <h2 className={styles.cardTitle}>{i18n.t('Benchmarks')}</h2>
+                <h2 className={styles.cardTitle}>{title ?? i18n.t('Benchmarks')}</h2>
                 <p className={styles.caption}>
                     {reference
                         ? i18n.t('Scores compared with {{reference}}, aggregated across all splits and organisation units. Positive means better than {{reference}}, negative means worse. The best score in each column is highlighted, including ties.', { reference: referenceName(reference) })

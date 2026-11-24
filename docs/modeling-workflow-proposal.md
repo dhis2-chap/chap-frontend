@@ -1,185 +1,75 @@
-# Modeling workflow exploration · CLIM-1752
+# Guided setup · CLIM-1752
 
-Status: proposal for the spike, not an agreed product design. This draft implements
-the smallest useful frontend slice against the current Chap Core API. It does not
-complete the epic's meeting, role decisions or implementation backlog.
+Status: exploration for the spike, not an agreed design. It runs against the current
+Chap Core API and adds no backend automation.
 
-## Starting point
+## Problem
 
-[CLIM-1752](https://dhis2.atlassian.net/browse/CLIM-1752) asks for tasks instead of
-one screen per database table. The [flow presentation](https://chap-sandbox.dhis2.org/learning-material/presentations/modeling-app-flow/#/1)
-suggests two human tasks: set up a forecast, then review and promote. Automatic
-configuration, tuning, notifications and recurring predictions in those mockups
-are proposals, not capabilities this draft promises.
+[CLIM-1752](https://dhis2.atlassian.net/browse/CLIM-1752) asks for an app built around
+what people need to do, not one screen per Chap Core table. Getting a first prediction
+today means finding your way through Datasets, Evaluations, Benchmarks, Models and
+Prediction setups, in the right order, and learning what each of them is.
 
-Keep **three areas in one app** initially. Splitting deployments, permissions and
-shared state now would make the exploration harder. These are task boundaries,
-not fixed user roles; one person may do all of them.
+A first attempt added a start page with links into those screens. It showed the order,
+but every link still dropped the user into a full screen with its own vocabulary and no
+way back to the thread, and the page looked the same whether nothing or everything was done.
 
-| Area | User's job | Existing building blocks |
-| --- | --- | --- |
-| Overview / app services | Resume work; find help; manage the connection and defaults | Dashboard, jobs, guides, settings |
-| Datasets | Prepare and inspect reusable data: target, locations, periods, sources and missing values | Dataset creation, saved datasets, dataset details |
-| Evaluate & predict | Try models, compare evidence, choose one, generate predictions and review signals | Dataset evaluation form, benchmarks, evaluation details, prediction setups and runs, signal review |
-
-Within Evaluate & predict, separate **setup** from **review**, then expose
-prediction operations as the next task. A reviewer should eventually enter a
-specific set of results directly, without repeating data preparation.
+## The idea: one page, four steps, each done in place
 
 ```mermaid
 flowchart LR
-    O[Overview: resume work] --> D[Prepare reusable data]
-    O --> R
-    D --> S[Set up evaluation]
-    S --> J[Chap jobs]
-    J --> R[Review comparable results]
-    R --> S
-    R --> P[Choose model and create prediction setup]
-    P --> F[Run and inspect predictions]
-    F --> A[Review signals]
+    D[1 Choose data] --> E[2 Evaluate models] --> C[3 Choose a model] --> P[4 Predict]
 ```
 
-## What this draft implements
+![Guided setup](images/guided-setup.png)
 
-- Overview links into a task-oriented start page at `#/workflow`.
-- Navigation groups evaluation, review and prediction under Evaluate & predict.
-  Model configuration, individual evaluations, arbitrary comparisons, signal
-  policies and jobs remain available under Advanced. Existing deep links work.
-- The start page chooses a saved dataset and keeps that choice in `datasetId` in
-  the URL, so reload, back navigation and sharing retain it. Missing/deleted
-  datasets cannot start an evaluation. Failed dataset reads offer a retry.
-- Evaluate models opens the existing benchmark form with the dataset selected.
-  It retains compatibility checks, defaults, model health checks, parameter
-  validation, job submission and failure handling from `DatasetEvaluationForm`.
-- Review results opens existing benchmarks filtered to that dataset. The dataset
-  can have several benchmarks: comparison must stay within a specification,
-  including target and backtest settings. Dataset identity alone is not enough.
-- The shared dataset filter retains a linked selection while options load, even
-  for datasets created by evaluations, so these deep links do not crash the page.
-- Older servers without benchmarks use saved-dataset evaluation and the existing
-  filtered evaluation list. This is a compatibility fallback, not a ranked review.
-- The existing evaluation details screen remains the promotion point. The existing
-  prediction setup screen leads to runs, forecasts and signal review.
-- Prediction setups remain a global list, explicitly labeled as including all
-  datasets. There is no extra request to fetch all evaluations just to infer a
-  dataset filter, and no guessed link between a dataset and a prediction setup.
-
-This is a navigation and context-handoff prototype. It does **not** yet remove all
-the screens in the long flow. There is no new workflow store, API client, wizard,
-ranking algorithm, browser-side job orchestrator or dependency. Try it with a
-real saved dataset, then follow the existing forms and results through to a
-prediction setup.
-
-![Workflow preview with a selected dataset](images/modeling-workflow-preview.png)
-
-## Recommended next slices
-
-1. **Review this prototype in the spike.** Walk through a new dataset, an existing
-   dataset, a failed evaluation, and a different person reviewing results. Agree
-   whether the three areas and two evaluation tasks match actual work. Capture
-   conclusions in CLIM-1752 before filing implementation tickets.
-2. **Finish the dataset handoff.** Reconcile [PR #353 / CLIM-1942](https://github.com/dhis2-chap/chap-frontend/pull/353),
-   which removes the duplicate DHIS2 evaluation form. Return from creating or
-   inspecting a dataset to the selected workflow. Keep advanced settings available
-   but make sensible existing defaults the ordinary path. Do not duplicate forms.
-3. **Build a focused review workspace.** Compose the current `BenchmarkTable`,
-   metric descriptions, baseline comparisons and evaluation charts. Select a run
-   in the same screen and reuse `MarkReadyForForecastingModal` and
-   `useCreatePredictionSetup`. Preserve data-source and alert-policy validation.
-   Provide a deep link to the benchmark and selected run for handoff.
-4. **Automate setup in Chap Core.** Once the contract below is agreed, replace
-   configured-model selection with template selection plus a default/tuning choice.
-   Keep the same review and prediction screens. Show per-model progress, partial
-   results and failures; users can leave and return without losing a run.
-5. **Connect operations and handoff.** Show relevant setups and recent runs from
-   a review, support notifications when results are ready, and make scheduling
-   available only when the backend supports it. Connect to the existing signal
-   review/early-warning experience rather than building another alert inbox.
-
-Each slice should be independently reviewable. Reassess a separate dataset or
-review app only if user research demonstrates different deployment or access
-needs. Sharing components is already possible inside this repository. The shared
-blocks migration in [draft PR #345](https://github.com/dhis2-chap/chap-frontend/pull/345)
-can proceed independently; this draft reuses the current components directly.
-
-## Current frontend / backend boundary
-
-These are facts about the checked-in client and frontend, not a claim about every
-Chap Core deployment. Capability checks remain authoritative for a running server.
-
-| Task | Available now | Possible follow-up |
+| Step | The user | Left out of the simple path |
 | --- | --- | --- |
-| Prepare data | Saved dataset import and inspection; DHIS2 source mappings | Discover OCS/CAPS sources and import missing inputs |
-| Choose candidates | Existing configured models filtered for dataset compatibility | Configure selected templates automatically from dataset semantics |
-| Run evaluations | `createBacktests` returns specification/job IDs on Core 2.4+; single-model fallback | Durable parent run encompassing preparation, optional tuning and evaluation |
-| Compare evidence | Specifications, metric direction/targets, baselines and run details | Focused review layout; agreed ranking and readiness criteria |
-| Promote | Prediction setup references the evaluated backtest; existing modal validates inputs | Explicit reviewer decision/provenance if required |
-| Predict and review | Prediction setup/run pages, policies and signal review with version gates | Scheduling and notifications with clear server capabilities |
+| 1 Choose data | Picks data they imported, or imports it from DHIS2. The import starts with the columns that let the most models run, so only the DHIS2 data items are left to pick. | Dataset list, origin filter |
+| 2 Evaluate models | Picks models that can use the data and starts the evaluation. | Run name, target column, backtest parameters (Chap's defaults are used) |
+| 3 Choose a model | Sees the results as they arrive and clicks **Use this model**. | Benchmark and specification as concepts, the evaluation list |
+| 4 Predict | Runs a prediction, or opens the prediction setup to review signals and import into DHIS2. | Nothing new: this hands over to the existing prediction setup |
 
-### Chap Core discussion: automatic configuration and HPO
+A finished step folds into one line with its result. There is one obvious next action at
+any time, and a finished step can be opened again (other data, more models, compare again).
 
-Do not add fake HPO controls or run tuning loops in the browser. First agree on
-the smallest server-owned contract with the Chap Core team:
+The sidebar follows the same split: **Guided setup**, **Predictions**, and everything
+else under a collapsed **Advanced** group. Existing URLs keep working, and the group
+opens by itself when you are on one of its pages.
 
-- **Input:** immutable dataset/version, target, candidate template versions,
-  resolved evaluation specification, and either defaults or bounded tuning.
-  Reuse existing entities/IDs where they already express this; a new entity is
-  only needed for state that cannot be represented today.
-- **Cost:** defaults should be the initial ordinary path. Tuning needs an explicit
-  trial/time/concurrency budget, cancel behavior and clear resource limits.
-- **Progress:** one durable run ID with stages and per-candidate jobs, failure
-  reasons, retry/cancel semantics and partial results. Submission should be
-  idempotent; refreshing a tab must not duplicate work. Existing job UI can render
-  the child jobs. Parent execution belongs on the server.
-- **Output:** specification ID, resulting configured-model versions, backtest IDs,
-  tuning provenance and metric/baseline evidence. The review must work even if a
-  candidate fails; do not silently treat a missing score as a winner.
-- **Evaluation validity:** define the training/validation split used by tuning and
-  keep held-out evaluation periods separate. Record dataset identity, split,
-  parameters, seed and template revision. CLI-tuned configs need compatible
-  provenance and overlap checks before being presented as clean comparisons.
-- **Selection:** agree which metrics determine ranking, their directions/targets,
-  ties and comparison with baselines. Reuse metric metadata and existing ranking
-  helpers; no universal "best model" or automatic promotion in the frontend.
-- **Handoff:** decide who receives completion notifications and through which
-  service. A notification points to persistent results. It must not be necessary
-  to keep the setup tab open. Delivery needs backend support.
+## What keeps it small
 
-The OCS/CAPS boundary, ownership of source metadata and cross-app terminology
-belong in [CLIM-1619](https://dhis2.atlassian.net/browse/CLIM-1619), as the epic
-specifies. Raise the setup screen's requirements there rather than deciding those
-boundaries in this frontend branch. Keep "configured model" terminology until
-the proposed "modeling package" naming is agreed.
+- **No workflow state.** The page reads its progress from what Chap already has for the
+  chosen dataset: the newest evaluation of it, the runs in that evaluation, and the
+  prediction setup made from one of them. So it resumes on reload, on another machine and
+  for another person. Only `datasetId` is in the URL.
+- **No new forms.** The steps reuse the dataset import form, the model picker, the results
+  table, the prediction setup dialog and the prediction form. The detailed screens are the
+  same components with every option showing.
+- **No new API.** The guided setup needs the evaluation endpoints from Chap Core 2.4.0 and
+  says so on older servers.
 
-## Feedback needed before implementation tickets
+## Not in this exploration
 
-- Who prepares data, reviews evidence and monitors predictions? Which actions need
-  different authorities, and can the same person perform all three tasks?
-- Should a dataset represent a frozen snapshot or a refreshable source recipe?
-  How should a new snapshot relate to earlier evaluations and promoted setups?
-- Is benchmark/specification the right review unit, or must one submitted batch
-  stay identifiable even when it shares a specification with previous runs?
-- What makes a model suitable for use: metric thresholds, baseline improvement,
-  operational review, or a combination? Who records that decision?
-- Are predictions manual by default? Who owns scheduling, notification delivery
-  and the handoff to the early-warning app?
+- Automatic model configuration and tuning. Step 2 still lists configured models. If Chap
+  Core gets a job that configures and tunes templates, step 2 becomes "pick templates" and
+  the rest of the page stays as it is.
+- Roles. The page works the same for whoever opens it; a reviewer can be sent the link and
+  lands on the step that is waiting.
+- Notifications when an evaluation finishes, and scheduling of predictions.
+- A dataset with several evaluations shows the newest one. The others are under Advanced.
 
-## Validation scope
+## Open questions for the spike
 
-Two focused Playwright scenarios cover dataset handoff into the real existing
-forms/results and dataset error/retry/stale-link behavior. Fixture data is created
-through the existing evaluation helper; only the failed read is simulated.
-Existing tests continue to cover evaluation submission, benchmark metrics,
-promotion, prediction runs and signal review. Run lint, type checking, unit tests
-and a production build alongside the focused browser tests.
+- Is the guided setup the right landing page, also for people who only run predictions?
+- Should step 2 preselect models? Nothing in the model catalog says which to recommend.
+- The detailed pages say "benchmark" where the team terminology says "evaluation".
+  Renaming them is a separate change.
+- The user guides and their screenshots still describe the old sidebar.
+- [PR #353](https://github.com/dhis2-chap/chap-frontend/pull/353) changes the evaluation
+  form that step 2 links to for its settings; whichever merges second needs a small rebase.
 
-Validated locally on 23 November 2026 with Chap Core 2.9.0.dev0: both new
-scenarios and the existing benchmark-actions scenario pass; 344 unit tests pass
-(two existing integration tests skipped); lint, monorepo type checking and the
-modeling app production build pass. The benchmark test's origin expectation now
-uses the fixture's returned flag, since the helper imports a saved dataset before
-evaluating it. Older-server fallback remains to be exercised on a matching stack.
+## Validation
 
-Before promoting this draft, agree the flow in the spike and reconcile PR #353.
-The epic remains open until its meeting, agreed target flow and follow-up tickets
-are recorded.
+One Playwright scenario walks the whole path against a real DHIS2 and Chap Core: import
+data on the page, evaluate a model, choose it, reload, and open the prediction form.

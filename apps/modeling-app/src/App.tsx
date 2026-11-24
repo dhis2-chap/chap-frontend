@@ -24,7 +24,7 @@ import InfoAboutReportingBugs from './features/common-features/InfoAboutReportin
 import WarnAboutIncompatibleVersion from './features/common-features/WarnAboutIncompatibleVersion/WarnAboutIncompatibleVersion';
 import { Dhis2VersionWarning } from './components/Dhis2VersionWarning/Dhis2VersionWarning';
 import { DashboardPage } from './pages/DashboardPage';
-import { WorkflowPage } from './pages/WorkflowPage/WorkflowPage';
+import { GuidedSetupPage } from './pages/GuidedSetupPage/GuidedSetupPage';
 import { BenchmarksPage } from './pages/BenchmarksPage/BenchmarksPage';
 import { NewBenchmarkPage } from './pages/BenchmarksPage/NewBenchmarkPage';
 import { BenchmarkDetailsPage } from './pages/BenchmarksPage/BenchmarkDetailsPage';
@@ -82,7 +82,7 @@ const router = createHashRouter([
         children: [
             {
                 path: '/',
-                element: <Navigate to="/dashboard" replace />,
+                element: <Navigate to="/guided" replace />,
             },
             {
                 element: (
@@ -104,9 +104,8 @@ const router = createHashRouter([
                         element: <DashboardPage />,
                     },
                     {
-                        path: '/workflow',
-                        element: <WorkflowPage />,
-                        handle: { breadcrumb: () => i18n.t('Evaluate & predict') } satisfies RouteHandle,
+                        path: '/guided',
+                        element: <GuidedSetupPage />,
                     },
                     {
                         path: '/evaluate',
