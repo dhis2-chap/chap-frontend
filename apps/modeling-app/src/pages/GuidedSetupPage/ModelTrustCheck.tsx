@@ -85,7 +85,8 @@ export const ModelTrustCheck = ({ specification, run, metric }: Props) => {
                             </div>
                         )}
                     </Check>
-                ) : (
+                ) : baseline && (
+                    // Chap Core evaluates the baselines in the background; older versions have none to compare with.
                     <Check
                         question={i18n.t('Does it beat a simple baseline?')}
                         answer={i18n.t('Not compared yet')}
