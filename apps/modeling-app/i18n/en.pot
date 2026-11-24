@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-11-24T17:19:14.268Z\n"
-"PO-Revision-Date: 2026-11-24T17:19:14.268Z\n"
+"POT-Creation-Date: 2026-11-24T17:22:07.851Z\n"
+"PO-Revision-Date: 2026-11-24T17:22:07.852Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -3465,16 +3465,6 @@ msgstr "Change evaluation settings"
 
 msgid "Four steps from your DHIS2 data to predictions."
 msgstr "Four steps from your DHIS2 data to predictions."
-
-msgid "Guided setup is unavailable"
-msgstr "Guided setup is unavailable"
-
-msgid ""
-"This Chap server is too old for the guided setup. Update Chap Core, or use "
-"the pages under Advanced."
-msgstr ""
-"This Chap server is too old for the guided setup. Update Chap Core, or use "
-"the pages under Advanced."
 
 msgid "Could not load your setup"
 msgstr "Could not load your setup"

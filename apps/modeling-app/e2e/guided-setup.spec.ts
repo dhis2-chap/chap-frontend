@@ -76,3 +76,11 @@ test('goes from DHIS2 data to a prediction setup on one page', async ({ page }) 
     await expect(page).toHaveURL(new RegExp(`/predictions/${setup.id}/new\\?returnTo=`));
     await expect(page.locator('[data-test="prediction-start-button"]')).toBeEnabled();
 });
+
+test('opens on the guided setup, or on the dashboard where Chap Core is too old for it', async ({ page }) => {
+    const isSupported = (await getChap(page, '/v1/crud/backtest-specifications')).ok();
+
+    await page.goto('/#/');
+    await expect(page).toHaveURL(isSupported ? /\/guided$/ : /\/dashboard$/);
+    await expect(page.getByRole('link', { name: 'Guided setup', exact: true })).toHaveCount(isSupported ? 1 : 0);
+});

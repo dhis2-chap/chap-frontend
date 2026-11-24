@@ -46,8 +46,8 @@ opens by itself when you are on one of its pages.
 - **No new forms.** The steps reuse the dataset import form, the model picker, the results
   table, the prediction setup dialog and the prediction form. The detailed screens are the
   same components with every option showing.
-- **No new API.** The guided setup needs the evaluation endpoints from Chap Core 2.4.0 and
-  says so on older servers.
+- **No new API.** The guided setup needs the evaluation endpoints from Chap Core 2.4.0.
+  Older servers do not show it and keep the dashboard as their start page.
 
 ## Not in this exploration
 

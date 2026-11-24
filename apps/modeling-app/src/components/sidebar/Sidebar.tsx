@@ -80,7 +80,7 @@ export const Sidebar = ({
     const collapsedExternally = useRef<boolean>(false);
     const [collapsed, setCollapsed] = useState(false);
     const [isReportBugDialogOpen, setIsReportBugDialogOpen] = useState(false);
-    const { isAvailable: isBenchmarksAvailable } = useIsFeatureAvailable(Features.BENCHMARKS);
+    const { isAvailable: isBenchmarksAvailable, isLoading: isVersionLoading } = useIsFeatureAvailable(Features.BENCHMARKS);
 
     useEffect(() => {
         // only react if explicitly defined
@@ -101,7 +101,9 @@ export const Sidebar = ({
             >
                 <Sidenav>
                     <SidenavItems>
-                        <SidebarNavLink to="/guided" label={i18n.t('Guided setup')} />
+                        {(isVersionLoading || isBenchmarksAvailable) && (
+                            <SidebarNavLink to="/guided" label={i18n.t('Guided setup')} />
+                        )}
                         <SidebarNavLink to="/predictions" label={i18n.t('Predictions')} />
                         <SidebarParent
                             label={i18n.t('Advanced')}

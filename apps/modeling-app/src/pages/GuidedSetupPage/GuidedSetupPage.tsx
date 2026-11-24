@@ -3,6 +3,7 @@ import i18n from '@dhis2/d2-i18n';
 import { Button, CircularLoader, NoticeBox } from '@dhis2/ui';
 import type { DataSetInfo } from '@dhis2-chap/ui';
 import { useQueryClient } from '@tanstack/react-query';
+import { Navigate } from 'react-router-dom';
 import { ChapErrorNotice } from '../../components/ChapErrorNotice';
 import { useDatasetFilter } from '../../components/DatasetFilter/useDatasetFilter';
 import { PageHeader } from '../../features/common-features/PageHeader/PageHeader';
@@ -68,6 +69,9 @@ export const GuidedSetupPage = () => {
         action: <Button small onClick={() => setReopened(step)}>{reopenLabel}</Button>,
     });
 
+    // Chap Core before 2.4.0 has no evaluations to follow, so those servers keep the dashboard as their start page.
+    if (!isVersionLoading && !isAvailable) return <Navigate to="/dashboard" replace />;
+
     const error = datasets.error ?? specifications.error ?? details.error;
     const isLoading = isVersionLoading || datasets.isLoading || specifications.isInitialLoading || (!!latest && !specification);
 
@@ -77,11 +81,7 @@ export const GuidedSetupPage = () => {
                 pageTitle={i18n.t('Guided setup')}
                 pageDescription={i18n.t('Four steps from your DHIS2 data to predictions.')}
             />
-            {!isVersionLoading && !isAvailable ? (
-                <NoticeBox title={i18n.t('Guided setup is unavailable')}>
-                    {i18n.t('This Chap server is too old for the guided setup. Update Chap Core, or use the pages under Advanced.')}
-                </NoticeBox>
-            ) : error ? (
+            {error ? (
                 <ChapErrorNotice error={error} title={i18n.t('Could not load your setup')} />
             ) : isLoading ? (
                 <CircularLoader />
