@@ -16,7 +16,7 @@
       "build": {
         "dependsOn": ["^build"],
         "env": ["DHIS2_APP_RELEASE"],
-        "outputs": ["build/**"]
+        "outputs": ["build/**", "src/locales/**"]
       }
     }
   }
