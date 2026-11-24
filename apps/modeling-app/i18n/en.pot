@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-11-24T17:22:07.851Z\n"
-"PO-Revision-Date: 2026-11-24T17:22:07.852Z\n"
+"POT-Creation-Date: 2026-11-24T17:53:27.024Z\n"
+"PO-Revision-Date: 2026-11-24T17:53:27.025Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -2711,9 +2711,6 @@ msgstr "No signal policy"
 msgid "Unable to load signal policies{{colon}} {{message}}"
 msgstr "Unable to load signal policies{{colon}} {{message}}"
 
-msgid "You can change this configuration at any point."
-msgstr "You can change this configuration at any point."
-
 msgid "Set default import mapping"
 msgstr "Set default import mapping"
 
@@ -2723,6 +2720,9 @@ msgid ""
 msgstr ""
 "Choose the DHIS2 data elements to use by default when prediction outputs "
 "are imported."
+
+msgid "You can change this configuration at any point."
+msgstr "You can change this configuration at any point."
 
 msgid "There are running jobs in the background"
 msgstr "There are running jobs in the background"
@@ -3375,8 +3375,125 @@ msgstr "Route and servers are configured on the settings page."
 msgid "View guides"
 msgstr "View guides"
 
-msgid "In use"
-msgstr "In use"
+msgid "Import data from DHIS2"
+msgstr "Import data from DHIS2"
+
+msgid ""
+"Choose the disease cases you want to predict, and the climate and "
+"population data the models use."
+msgstr ""
+"Choose the disease cases you want to predict, and the climate and "
+"population data the models use."
+
+msgid "Use data you have imported"
+msgstr "Use data you have imported"
+
+msgid "Data you have imported"
+msgstr "Data you have imported"
+
+msgid "Choose the data to work with, or import new data from DHIS2."
+msgstr "Choose the data to work with, or import new data from DHIS2."
+
+msgid "Import new data"
+msgstr "Import new data"
+
+msgid "This data no longer exists"
+msgstr "This data no longer exists"
+
+msgid "Choose other data to continue."
+msgstr "Choose other data to continue."
+
+msgid "Continue to evaluation"
+msgstr "Continue to evaluation"
+
+msgid "Choose data first"
+msgstr "Choose data first"
+
+msgid "Promote"
+msgstr "Promote"
+
+msgid "Promoted"
+msgstr "Promoted"
+
+msgid "Choose models to evaluate"
+msgstr "Choose models to evaluate"
+
+msgid ""
+"Chap hides the most recent periods of your data, lets each model predict "
+"them, and scores the predictions against what actually happened. Simple "
+"baseline models are run as well, so you can see whether a model beats them."
+msgstr ""
+"Chap hides the most recent periods of your data, lets each model predict "
+"them, and scores the predictions against what actually happened. Simple "
+"baseline models are run as well, so you can see whether a model beats them."
+
+msgid "This data has no target column"
+msgstr "This data has no target column"
+
+msgid "Choose what to predict when you start the evaluation."
+msgstr "Choose what to predict when you start the evaluation."
+
+msgid "Open evaluation settings"
+msgstr "Open evaluation settings"
+
+msgid "Evaluated"
+msgstr "Evaluated"
+
+msgid "Details"
+msgstr "Details"
+
+msgid "No model can use this data"
+msgstr "No model can use this data"
+
+msgid ""
+"No model matches the columns and period type of this data. Import data with "
+"the columns the models need."
+msgstr ""
+"No model matches the columns and period type of this data. Import data with "
+"the columns the models need."
+
+msgid ""
+"{{count}} other models need columns or a period type this data does not "
+"have."
+msgid_plural ""
+"{{count}} other models need columns or a period type this data does not "
+"have."
+msgstr[0] ""
+"{{count}} other model needs columns or a period type this data does not "
+"have."
+msgstr[1] ""
+"{{count}} other models need columns or a period type this data does not "
+"have."
+
+msgid "Evaluation settings"
+msgstr "Evaluation settings"
+
+msgid "Change"
+msgstr "Change"
+
+msgid "Not enough history"
+msgstr "Not enough history"
+
+msgid ""
+"This data has {{periodCount}} periods, but an evaluation needs at least "
+"{{requiredPeriodCount}}."
+msgstr ""
+"This data has {{periodCount}} periods, but an evaluation needs at least "
+"{{requiredPeriodCount}}."
+
+msgid "Could not load the evaluation settings"
+msgstr "Could not load the evaluation settings"
+
+msgid "Could not start the evaluation"
+msgstr "Could not start the evaluation"
+
+msgid "Evaluate {{count}} models"
+msgid_plural "Evaluate {{count}} models"
+msgstr[0] "Evaluate {{count}} model"
+msgstr[1] "Evaluate {{count}} models"
+
+msgid "Evaluate models"
+msgstr "Evaluate models"
 
 msgid ""
 "This can take a while. You can leave this page; the results will be here "
@@ -3397,71 +3514,43 @@ msgstr "No model has finished. See what happened, then evaluate the models again
 msgid "View jobs"
 msgstr "View jobs"
 
-msgid "Use this model for predictions"
-msgstr "Use this model for predictions"
+msgid "Continue to promotion"
+msgstr "Continue to promotion"
 
-msgid "Cancel import"
-msgstr "Cancel import"
+msgid "Waiting for a model to finish"
+msgstr "Waiting for a model to finish"
 
-msgid "Data you have imported"
-msgstr "Data you have imported"
+msgid "Evaluate a model first"
+msgstr "Evaluate a model first"
 
-msgid "Choose a dataset"
-msgstr "Choose a dataset"
-
-msgid "Import new data"
-msgstr "Import new data"
-
-msgid "Import data from DHIS2"
-msgstr "Import data from DHIS2"
-
-msgid "This data has no target column"
-msgstr "This data has no target column"
-
-msgid "Choose what to predict when you start the evaluation."
-msgstr "Choose what to predict when you start the evaluation."
-
-msgid "Open evaluation settings"
-msgstr "Open evaluation settings"
+msgid "What it predicted, and what happened"
+msgstr "What it predicted, and what happened"
 
 msgid ""
-"Chap hides the most recent periods of your data, lets each model predict "
-"them, and scores the predictions against what actually happened."
-msgstr ""
-"Chap hides the most recent periods of your data, lets each model predict "
-"them, and scores the predictions against what actually happened."
+"The shaded range is where the model expected the numbers to land, up to "
+"{{count}} periods ahead. The orange line is what happened."
+msgid_plural ""
+"The shaded range is where the model expected the numbers to land, up to "
+"{{count}} periods ahead. The orange line is what happened."
+msgstr[0] ""
+"The shaded range is where the model expected the numbers to land, up to "
+"{{count}} periods ahead. The orange line is what happened."
+msgstr[1] ""
+"The shaded range is where the model expected the numbers to land, up to "
+"{{count}} periods ahead. The orange line is what happened."
 
-msgid "No model can use this data"
-msgstr "No model can use this data"
+msgid "Could not load the forecasts"
+msgstr "Could not load the forecasts"
+
+msgid "No forecasts for this location."
+msgstr "No forecasts for this location."
 
 msgid ""
-"No model matches the columns and period type of this data. Import data with "
-"the columns the models need."
+"What happened was inside the predicted range in {{inside}} of {{scored}} "
+"periods."
 msgstr ""
-"No model matches the columns and period type of this data. Import data with "
-"the columns the models need."
-
-msgid "Not enough history"
-msgstr "Not enough history"
-
-msgid ""
-"This data has {{periodCount}} periods, but an evaluation needs at least "
-"{{requiredPeriodCount}}."
-msgstr ""
-"This data has {{periodCount}} periods, but an evaluation needs at least "
-"{{requiredPeriodCount}}."
-
-msgid "Could not load the evaluation settings"
-msgstr "Could not load the evaluation settings"
-
-msgid "Could not start the evaluation"
-msgstr "Could not start the evaluation"
-
-msgid "Evaluate models"
-msgstr "Evaluate models"
-
-msgid "Change evaluation settings"
-msgstr "Change evaluation settings"
+"What happened was inside the predicted range in {{inside}} of {{scored}} "
+"periods."
 
 msgid "Four steps from your DHIS2 data to predictions."
 msgstr "Four steps from your DHIS2 data to predictions."
@@ -3469,70 +3558,160 @@ msgstr "Four steps from your DHIS2 data to predictions."
 msgid "Could not load your setup"
 msgstr "Could not load your setup"
 
-msgid "Choose data"
-msgstr "Choose data"
+msgid "Does it beat a simple baseline?"
+msgstr "Does it beat a simple baseline?"
+
+msgid "Yes, {{amount}} better than {{baseline}}"
+msgstr "Yes, {{amount}} better than {{baseline}}"
+
+msgid "No, {{amount}} worse than {{baseline}}"
+msgstr "No, {{amount}} worse than {{baseline}}"
 
 msgid ""
-"Import the disease cases you want to predict, and the climate and "
-"population data the models use."
+"Measured with {{metric}}. A baseline is a rule of thumb, such as repeating "
+"last year. A model that does not beat it adds little."
 msgstr ""
-"Import the disease cases you want to predict, and the climate and "
-"population data the models use."
+"Measured with {{metric}}. A baseline is a rule of thumb, such as repeating "
+"last year. A model that does not beat it adds little."
 
-msgid "Change"
-msgstr "Change"
+msgid "Worse"
+msgstr "Worse"
 
-msgid "This data no longer exists"
-msgstr "This data no longer exists"
+msgid "Better"
+msgstr "Better"
 
-msgid "Choose other data to continue."
-msgstr "Choose other data to continue."
+msgid "Not compared yet"
+msgstr "Not compared yet"
+
+msgid "Chap evaluates the baseline models in the background. Come back in a moment."
+msgstr "Chap evaluates the baseline models in the background. Come back in a moment."
+
+msgid "Is it right about how sure it is?"
+msgstr "Is it right about how sure it is?"
+
+msgid "Yes, {{share}} of the actual values were inside its range"
+msgstr "Yes, {{share}} of the actual values were inside its range"
+
+msgid "No, only {{share}} of the actual values were inside its range"
+msgstr "No, only {{share}} of the actual values were inside its range"
 
 msgid ""
-"Test models on your historical data to see how well they would have "
-"predicted."
+"A model gives a range it expects {{target}} of the values to fall in. Far "
+"fewer means it is too sure of itself, so its alerts will mislead."
 msgstr ""
-"Test models on your historical data to see how well they would have "
-"predicted."
+"A model gives a range it expects {{target}} of the values to fall in. Far "
+"fewer means it is too sure of itself, so its alerts will mislead."
+
+msgid "Expected {{target}}"
+msgstr "Expected {{target}}"
+
+msgid "Run and review predictions"
+msgstr "Run and review predictions"
+
+msgid ""
+"Run a prediction, review the signals it raises, and import the result into "
+"DHIS2. The monitoring chart shows whether the model keeps beating the "
+"baseline as real numbers come in."
+msgstr ""
+"Run a prediction, review the signals it raises, and import the result into "
+"DHIS2. The monitoring chart shows whether the model keeps beating the "
+"baseline as real numbers come in."
+
+msgid "Activity, input data and scheduling"
+msgstr "Activity, input data and scheduling"
+
+msgid "Promoted{{colon}} {{models}}"
+msgstr "Promoted{{colon}} {{models}}"
+
+msgid "Go to predictions"
+msgstr "Go to predictions"
+
+msgid "Choose the model to promote"
+msgstr "Choose the model to promote"
+
+msgid ""
+"Promoting a model makes it the one that produces your predictions. Nothing "
+"runs until you start a prediction."
+msgstr ""
+"Promoting a model makes it the one that produces your predictions. Nothing "
+"runs until you start a prediction."
+
+msgid "Not better than {{baseline}}"
+msgstr "Not better than {{baseline}}"
+
+msgid "Best {{metric}}"
+msgstr "Best {{metric}}"
+
+msgid "Is it good enough?"
+msgstr "Is it good enough?"
+
+msgid ""
+"Two checks and a look at the forecasts of {{model}}. They describe the "
+"past; the next step keeps checking the model once it is in use."
+msgstr ""
+"Two checks and a look at the forecasts of {{model}}. They describe the "
+"past; the next step keeps checking the model once it is in use."
+
+msgid "Signals"
+msgstr "Signals"
+
+msgid ""
+"A signal policy turns each prediction into signals, such as an outbreak "
+"alert, for someone to review before they are released."
+msgstr ""
+"A signal policy turns each prediction into signals, such as an outbreak "
+"alert, for someone to review before they are released."
+
+msgid "DHIS2 output"
+msgstr "DHIS2 output"
+
+msgid ""
+"Predictions are imported into DHIS2 data elements after you have reviewed "
+"them. You can choose the data elements now or at the first import."
+msgstr ""
+"Predictions are imported into DHIS2 data elements after you have reviewed "
+"them. You can choose the data elements now or at the first import."
+
+msgid "Name and promote"
+msgstr "Name and promote"
+
+msgid "You can change the name, the signal policy and the DHIS2 output later."
+msgstr "You can change the name, the signal policy and the DHIS2 output later."
+
+msgid "Could not promote the model"
+msgstr "Could not promote the model"
+
+msgid "Promote model"
+msgstr "Promote model"
+
+msgid "Choose a model first"
+msgstr "Choose a model first"
+
+msgid "Continue to predictions"
+msgstr "Continue to predictions"
+
+msgid "Promote a model first"
+msgstr "Promote a model first"
+
+msgid "Back"
+msgstr "Back"
+
+msgid "Continue"
+msgstr "Continue"
+
+msgid "Data"
+msgstr "Data"
+
+msgid "Evaluate"
+msgstr "Evaluate"
 
 msgid "{{count}} models evaluated"
 msgid_plural "{{count}} models evaluated"
 msgstr[0] "{{count}} model evaluated"
 msgstr[1] "{{count}} models evaluated"
 
-msgid "Evaluate more models"
-msgstr "Evaluate more models"
-
-msgid "Choose a model"
-msgstr "Choose a model"
-
-msgid "Compare the results and pick the model to use for predictions."
-msgstr "Compare the results and pick the model to use for predictions."
-
-msgid "Compare results"
-msgstr "Compare results"
-
-msgid ""
-"Run predictions with the model you chose, then review them and import them "
-"into DHIS2."
-msgstr ""
-"Run predictions with the model you chose, then review them and import them "
-"into DHIS2."
-
-msgid "Could not load the prediction setup"
-msgstr "Could not load the prediction setup"
-
-msgid "Latest prediction{{colon}} {{name}}"
-msgstr "Latest prediction{{colon}} {{name}}"
-
-msgid "Prediction running"
-msgstr "Prediction running"
-
-msgid "View latest prediction"
-msgstr "View latest prediction"
-
-msgid "Open prediction setup"
-msgstr "Open prediction setup"
+msgid "Setup steps"
+msgstr "Setup steps"
 
 msgid "No guides available"
 msgstr "No guides available"

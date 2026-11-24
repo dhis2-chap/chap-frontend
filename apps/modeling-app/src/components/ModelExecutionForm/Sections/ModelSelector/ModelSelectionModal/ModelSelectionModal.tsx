@@ -104,7 +104,7 @@ const PERIOD_TYPE_LABELS: Record<string, string> = {
     ANY: i18n.t('Any period'),
 };
 
-const getReadiness = (model: ModelSpecRead): ReadinessConfig | undefined =>
+export const getReadiness = (model: ModelSpecRead): ReadinessConfig | undefined =>
     model.authorAssessedStatus
         ? READINESS_BY_STATUS[model.authorAssessedStatus]
         : undefined;
@@ -131,7 +131,7 @@ const getPeriodLabel = (model: ModelSpecRead): string => {
 const getModelName = (model: ModelSpecRead): string =>
     model.displayName || model.name;
 
-const sortByReadiness = (models: ModelSpecRead[]): ModelSpecRead[] =>
+export const sortByReadiness = (models: ModelSpecRead[]): ModelSpecRead[] =>
     [...models].sort((a, b) => {
         const rankA = getReadiness(a)?.rank ?? Number.MAX_SAFE_INTEGER;
         const rankB = getReadiness(b)?.rank ?? Number.MAX_SAFE_INTEGER;

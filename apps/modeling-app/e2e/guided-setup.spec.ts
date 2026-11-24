@@ -1,8 +1,7 @@
 import { expect, test } from '@playwright/test';
-import type { DataBaseResponse, MakeBacktestsResponse } from '@dhis2-chap/ui';
-import { getChap, pollEvaluationJob, readJson } from './helpers/evaluation-fixtures';
+import type { AlertPolicyCreate, DataBaseResponse, MakeBacktestsResponse, PredictionSetupCreate } from '@dhis2-chap/ui';
+import { chapUrl, getChap, pollEvaluationJob, readJson } from './helpers/evaluation-fixtures';
 import { selectPeriod } from './helpers/period-picker';
-import { toDataTestKey } from '../src/utils/dataTestKey';
 
 // The columns the guided import starts with, and the DHIS2 data item for each.
 const COLUMNS = [
@@ -11,20 +10,23 @@ const COLUMNS = [
     { name: 'mean_temperature', search: 'CCH - Air temperature', option: /CCH\s*-\s*Air temperature \(ERA-?5[-\s]Land\)/i },
 ];
 
-test('goes from DHIS2 data to a prediction setup on one page', async ({ page }) => {
+test('goes from DHIS2 data to predictions through the four guided steps', async ({ page }) => {
     test.setTimeout(360_000);
     test.skip(!(await getChap(page, '/v1/crud/backtest-specifications')).ok(), 'The guided setup needs Chap Core 2.4.0 or newer.');
     const name = `E2E guided ${Date.now()}`;
+    const policy: AlertPolicyCreate = {
+        name: `${name} policy`,
+        levels: [{ name: 'Watch', outputCode: '1', thresholdParams: { type: 'percentile', quantile: 0.5 }, exceedanceThreshold: 0.5 }],
+    };
+    await readJson<DataBaseResponse>(await page.request.post(chapUrl('/v1/crud/alert-policies'), { data: policy }), 'Create signal policy');
 
-    await page.goto('/#/guided');
-    // Data from earlier runs is picked up automatically, so ask for new data.
-    const changeData = page.locator('[data-test="guided-step-1"]').getByRole('button', { name: 'Change', exact: true });
+    // Step 1: import data. With nothing imported yet the form is already open.
+    await page.goto('/#/guided/data');
     const importData = page.locator('[data-test="guided-import-data"]');
-    await expect(changeData.or(importData)).toBeVisible();
-    if (await changeData.isVisible()) await changeData.click();
-    await importData.click();
-
-    await page.locator('[data-test="evaluation-name-input"] input').fill(name);
+    const nameInput = page.locator('[data-test="evaluation-name-input"] input');
+    await expect(importData.or(nameInput)).toBeVisible();
+    if (await importData.isVisible()) await importData.click();
+    await nameInput.fill(name);
     await selectPeriod(page, 'evaluation-from-period-input', '202001');
     await selectPeriod(page, 'evaluation-to-period-input', '202412');
     await page.getByRole('button', { name: 'Select organisation units' }).click();
@@ -43,37 +45,42 @@ test('goes from DHIS2 data to a prediction setup on one page', async ({ page }) 
     await page.getByRole('button', { name: 'Remove column' }).last().click();
     await page.getByRole('button', { name: 'Create dataset', exact: true }).click();
 
-    // The imported data becomes the subject of the remaining steps.
-    await expect(page.locator('[data-test="guided-step-1"]')).toContainText(name, { timeout: 60_000 });
-    const startEvaluation = page.locator('[data-test="guided-start-evaluation"]');
-    await expect(startEvaluation).toBeVisible();
-
-    await page.getByRole('button', { name: 'Select models', exact: true }).click();
-    const models = page.getByRole('dialog');
-    await models.locator(`[data-test="model-toggle-${toDataTestKey('naive_model')}"]`).click();
-    await models.getByRole('button', { name: 'Use selected models (1)', exact: true }).click();
+    // Step 2: the imported data opens the evaluation step, where models are picked on the page.
+    await expect(page).toHaveURL(/\/guided\/evaluate\?datasetId=\d+$/, { timeout: 60_000 });
+    await expect(page.locator('[data-test="guided-step-data"]')).toContainText(name);
+    await expect(page.locator('[data-test="guided-continue"]')).toBeDisabled();
+    await page.locator('[data-test="guided-model-naive-model"]').click();
     const evaluationResponse = page.waitForResponse(response => response.url().endsWith('/v1/analytics/create-backtests') && response.request().method() === 'POST');
-    await startEvaluation.click();
+    await page.locator('[data-test="guided-start-evaluation"]').click();
     const evaluation = await readJson<MakeBacktestsResponse>(await evaluationResponse, 'Start guided evaluation');
-    await expect(page.locator('[data-test="guided-step-3"]')).toHaveAttribute('aria-current', 'step');
     await pollEvaluationJob(page, evaluation.jobs[0].jobId);
 
-    // The result arrives without a reload, and choosing it creates the prediction setup.
-    const useModel = page.locator('[data-test^="guided-use-model-"]');
-    await expect(useModel).toBeVisible({ timeout: 30_000 });
-    await useModel.click();
+    // Step 3: the result arrives without a reload, and promoting it is a step of its own.
+    await page.locator('[data-test^="guided-promote-"]').click({ timeout: 30_000 });
+    await expect(page).toHaveURL(/\/guided\/promote\?datasetId=\d+&evaluationId=\d+$/);
+    await expect(page.locator('[data-test^="guided-promote-model-"] input')).toBeChecked();
+    // Before promoting, the page says whether the model can be trusted and shows its forecasts.
+    await expect(page.locator('[data-test="guided-trust-check"]')).toContainText('of the actual values were inside its range');
+    await expect(page.locator('[data-test="guided-forecast-check"]')).toContainText(/inside the predicted range in \d+ of \d+ periods/);
     await expect(page.locator('[data-test="ready-configuration-name-input"] input')).toHaveValue(name);
+    await page.locator('[data-test="prediction-setup-alert-policy-select"]').click();
+    await page.getByText(policy.name, { exact: true }).click();
+    await expect(page.getByText(/^Watch · /)).toBeVisible();
     const setupResponse = page.waitForResponse(response => response.request().method() === 'POST' && response.url().includes('/v1/crud/prediction-setups'));
-    await page.locator('[data-test="submit-mark-ready-for-forecasting-button"]').click();
+    await page.locator('[data-test="guided-promote-submit"]').click();
+    const setupRequest = (await setupResponse).request().postDataJSON() as PredictionSetupCreate;
+    expect(setupRequest).toMatchObject({ name, alertPolicyId: expect.any(Number) });
     const setup = await readJson<DataBaseResponse>(await setupResponse, 'Create prediction setup');
 
-    const predictionSetup = page.locator(`[data-test="guided-prediction-setup-${setup.id}"]`);
-    await expect(predictionSetup).toContainText(name);
+    // Step 4: predictions run from the promoted model, with its signal policy in view.
+    await expect(page).toHaveURL(/\/guided\/predict\?datasetId=\d+$/);
+    await expect(page.locator('[data-test="prediction-setup-alert-policy"]')).toHaveText(policy.name);
+    await expect(page.getByText('Model performance monitoring', { exact: true })).toBeVisible();
     // Progress is read from Chap, not kept in the browser.
-    await page.reload();
-    await expect(page.locator('[data-test="guided-step-4"]')).toHaveAttribute('aria-current', 'step');
-    await predictionSetup.locator('[data-test="guided-run-prediction"]').click();
-    await expect(page).toHaveURL(new RegExp(`/predictions/${setup.id}/new\\?returnTo=`));
+    await page.goto('/#/guided');
+    await expect(page).toHaveURL(/\/guided\/predict\?datasetId=\d+$/);
+    await page.locator('[data-test="quick-action-predict"]').click();
+    await expect(page).toHaveURL(new RegExp(`/predictions/${setup.id}/new\\?returnTo=%2Fguided%2Fpredict`));
     await expect(page.locator('[data-test="prediction-start-button"]')).toBeEnabled();
 });
 
@@ -81,6 +88,6 @@ test('opens on the guided setup, or on the dashboard where Chap Core is too old 
     const isSupported = (await getChap(page, '/v1/crud/backtest-specifications')).ok();
 
     await page.goto('/#/');
-    await expect(page).toHaveURL(isSupported ? /\/guided$/ : /\/dashboard$/);
+    await expect(page).toHaveURL(isSupported ? /\/guided\/(data|evaluate|promote|predict)/ : /\/dashboard$/);
     await expect(page.getByRole('link', { name: 'Guided setup', exact: true })).toHaveCount(isSupported ? 1 : 0);
 });

@@ -14,8 +14,18 @@ import { SummaryWidget } from './SummaryWidget';
 import { InputDataCheckWidget } from './InputDataCheckWidget';
 import styles from './ConfiguredModelDashboard.module.css';
 
-export const ConfiguredModelDashboard: React.FC = () => {
-    const { predictionSetupId } = useParams();
+type Props = {
+    /** Defaults to the prediction setup in the URL. */
+    predictionSetupId?: string;
+    /** Where to come back to after starting a prediction. Defaults to the prediction setup page. */
+    returnTo?: string;
+    /** Only the runs, the monitoring, the actions and the configuration; leaves out activity, input checks and scheduling. */
+    essentialsOnly?: boolean;
+};
+
+export const ConfiguredModelDashboard = ({ predictionSetupId: givenPredictionSetupId, returnTo, essentialsOnly = false }: Props) => {
+    const params = useParams();
+    const predictionSetupId = givenPredictionSetupId ?? params.predictionSetupId;
     const parsedPredictionSetupId = Number(predictionSetupId);
     const {
         predictionSetup,
@@ -63,13 +73,15 @@ export const ConfiguredModelDashboard: React.FC = () => {
                         evaluationId={predictionSetup.backtestId}
                     />
                 )}
-                <ActivityWidget
-                    error={jobsError}
-                    hasValidPredictionSetupId={hasValidPredictionSetupId}
-                    isLoading={isLoadingJobs}
-                    jobs={jobs}
-                    predictionSetupId={predictionSetupId}
-                />
+                {!essentialsOnly && (
+                    <ActivityWidget
+                        error={jobsError}
+                        hasValidPredictionSetupId={hasValidPredictionSetupId}
+                        isLoading={isLoadingJobs}
+                        jobs={jobs}
+                        predictionSetupId={predictionSetupId}
+                    />
+                )}
             </div>
             <div className={styles.rightColumn}>
                 <QuickActionsWidget
@@ -77,12 +89,15 @@ export const ConfiguredModelDashboard: React.FC = () => {
                     predictionSetup={predictionSetup}
                     isLoading={isLoading}
                     latestPredictionId={predictions[0]?.id}
+                    returnTo={returnTo}
                 />
-                <InputDataCheckWidget
-                    predictionSetup={predictionSetup}
-                    latestDatasetId={predictions[0]?.datasetId}
-                />
-                {isSchedulingEnabled && (
+                {!essentialsOnly && (
+                    <InputDataCheckWidget
+                        predictionSetup={predictionSetup}
+                        latestDatasetId={predictions[0]?.datasetId}
+                    />
+                )}
+                {isSchedulingEnabled && !essentialsOnly && (
                     <SchedulingWidget
                         predictionSetup={predictionSetup}
                         isLoading={isLoading}

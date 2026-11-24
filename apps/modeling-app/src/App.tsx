@@ -24,7 +24,11 @@ import InfoAboutReportingBugs from './features/common-features/InfoAboutReportin
 import WarnAboutIncompatibleVersion from './features/common-features/WarnAboutIncompatibleVersion/WarnAboutIncompatibleVersion';
 import { Dhis2VersionWarning } from './components/Dhis2VersionWarning/Dhis2VersionWarning';
 import { DashboardPage } from './pages/DashboardPage';
-import { GuidedSetupPage } from './pages/GuidedSetupPage/GuidedSetupPage';
+import { GuidedSetupLayout } from './pages/GuidedSetupPage/GuidedSetupLayout';
+import { DataPage } from './pages/GuidedSetupPage/DataPage';
+import { EvaluatePage } from './pages/GuidedSetupPage/EvaluatePage';
+import { PromotePage } from './pages/GuidedSetupPage/PromotePage';
+import { PredictPage } from './pages/GuidedSetupPage/PredictPage';
 import { BenchmarksPage } from './pages/BenchmarksPage/BenchmarksPage';
 import { NewBenchmarkPage } from './pages/BenchmarksPage/NewBenchmarkPage';
 import { BenchmarkDetailsPage } from './pages/BenchmarksPage/BenchmarkDetailsPage';
@@ -105,7 +109,15 @@ const router = createHashRouter([
                     },
                     {
                         path: '/guided',
-                        element: <GuidedSetupPage />,
+                        element: <GuidedSetupLayout />,
+                        children: [
+                            // The layout opens the step that is waiting.
+                            { index: true },
+                            { path: 'data', element: <DataPage /> },
+                            { path: 'evaluate', element: <EvaluatePage /> },
+                            { path: 'promote', element: <PromotePage /> },
+                            { path: 'predict', element: <PredictPage /> },
+                        ],
                     },
                     {
                         path: '/evaluate',
