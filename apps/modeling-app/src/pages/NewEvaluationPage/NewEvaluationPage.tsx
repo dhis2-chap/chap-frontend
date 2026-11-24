@@ -1,13 +1,14 @@
+import type { ComponentProps } from 'react';
 import i18n from '@dhis2/d2-i18n';
-import { Button, IconArrowLeft16, Tab, TabBar } from '@dhis2/ui';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Button, IconArrowLeft16 } from '@dhis2/ui';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { PageHeader } from '../../features/common-features/PageHeader/PageHeader';
 import styles from './NewEvaluationPage.module.css';
-import { NewEvaluationForm } from '@/components/NewEvaluationForm';
 import { DatasetEvaluationForm } from '@/components/NewEvaluationForm/DatasetEvaluationForm';
 
-export const NewEvaluationPage = ({ useSavedDataset = false }: { useSavedDataset?: boolean }) => {
+export const NewEvaluationPage = () => {
     const navigate = useNavigate();
+    const { state } = useLocation();
     const [searchParams] = useSearchParams();
     const returnTo = searchParams.get('returnTo') || '/evaluate';
     const datasetId = searchParams.get('datasetId') ?? undefined;
@@ -29,25 +30,8 @@ export const NewEvaluationPage = ({ useSavedDataset = false }: { useSavedDataset
                 {isFromDetails ? i18n.t('Back to evaluation details') : i18n.t('Back to evaluations')}
             </Button>
 
-            <TabBar>
-                <Tab
-                    selected={useSavedDataset}
-                    onClick={() => navigate('/evaluate/from-dataset')}
-                >
-                    {i18n.t('Use saved dataset')}
-                </Tab>
-                <Tab
-                    selected={!useSavedDataset}
-                    onClick={() => navigate('/evaluate/new')}
-                >
-                    {i18n.t('Import from DHIS2')}
-                </Tab>
-            </TabBar>
-
-            {useSavedDataset
-                // Keyed so a link to another dataset starts a fresh form instead of keeping the old selection
-                ? <DatasetEvaluationForm key={datasetId} initialDatasetId={datasetId} />
-                : <NewEvaluationForm />}
+            {/* A link to another dataset starts a fresh form. */}
+            <DatasetEvaluationForm key={datasetId} initialDatasetId={datasetId} initialValues={state as ComponentProps<typeof DatasetEvaluationForm>['initialValues']} />
         </div>
     );
 };

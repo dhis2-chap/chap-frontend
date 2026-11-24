@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import {
     Modal,
     ModalTitle,
@@ -10,9 +10,7 @@ import {
     CircularLoader,
 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
-import clsx from 'clsx';
 import { useNavigate } from 'react-router-dom';
-import type { DataSource } from '@dhis2-chap/ui';
 import styles from './CopyBacktestModal.module.css';
 import { useBacktestById } from '../../../../hooks/useBacktestById';
 
@@ -25,20 +23,14 @@ interface CopyBacktestModalProps {
 type CopyableAttributeKey =
     | 'name'
     | 'model'
-    | 'dataSources'
-    | 'orgUnits'
-    | 'periodType'
-    | 'period';
+    | 'dataset';
 
 type CopyableAttributes = Record<CopyableAttributeKey, boolean>;
 
 const DEFAULT_COPYABLE_ATTRIBUTES: CopyableAttributes = {
     name: true,
     model: true,
-    dataSources: true,
-    orgUnits: true,
-    periodType: true,
-    period: true,
+    dataset: true,
 };
 
 export const CopyBacktestModal = ({ id, onClose, returnTo }: CopyBacktestModalProps) => {
@@ -52,48 +44,6 @@ export const CopyBacktestModal = ({ id, onClose, returnTo }: CopyBacktestModalPr
             [attribute]: !prev[attribute],
         }));
     };
-
-    const generateCopyState = useCallback((): Record<string, unknown> => {
-        if (!backtest) return {};
-
-        const state: Record<string, unknown> = {};
-        const { dataset } = backtest;
-
-        if (selectedAttributes.name && backtest.name) {
-            state.name = i18n.t('{{name}} (Copy)', { name: backtest.name });
-        }
-
-        if (selectedAttributes.model && backtest.configuredModel?.id) {
-            state.modelId = String(backtest.configuredModel.id);
-
-            if (selectedAttributes.dataSources && dataset?.dataSources?.length) {
-                state.dataSources = dataset.dataSources.map((dataSource: DataSource) => ({
-                    covariate: dataSource.covariate,
-                    dataElementId: dataSource.dataElementId,
-                }));
-            }
-        }
-
-        if (selectedAttributes.orgUnits && backtest.orgUnits?.length) {
-            state.orgUnits = backtest.orgUnits;
-        }
-
-        if (selectedAttributes.periodType && dataset?.periodType) {
-            state.periodType = dataset.periodType.toUpperCase();
-
-            if (selectedAttributes.period) {
-                if (dataset?.firstPeriod) {
-                    state.fromPeriodId = dataset.firstPeriod;
-                }
-
-                if (dataset?.lastPeriod) {
-                    state.toPeriodId = dataset.lastPeriod;
-                }
-            }
-        }
-
-        return state;
-    }, [backtest, selectedAttributes]);
 
     const hasSelectedAttributes = Object.values(selectedAttributes).some(Boolean);
 
@@ -149,15 +99,13 @@ export const CopyBacktestModal = ({ id, onClose, returnTo }: CopyBacktestModalPr
                         name="name"
                         checked={selectedAttributes.name}
                         onChange={() => handleAttributeChange('name')}
-                        value={backtest.name || i18n.t('Untitled')}
                     />
 
                     <Checkbox
-                        label={i18n.t('Organisation units')}
-                        name="orgUnits"
-                        checked={selectedAttributes.orgUnits}
-                        onChange={() => handleAttributeChange('orgUnits')}
-                        disabled={!(backtest.orgUnits?.length)}
+                        label={i18n.t('Dataset')}
+                        name="dataset"
+                        checked={selectedAttributes.dataset}
+                        onChange={() => handleAttributeChange('dataset')}
                     />
 
                     <Checkbox
@@ -165,49 +113,7 @@ export const CopyBacktestModal = ({ id, onClose, returnTo }: CopyBacktestModalPr
                         name="model"
                         checked={selectedAttributes.model}
                         onChange={() => handleAttributeChange('model')}
-                        value={backtest.configuredModel?.id ? String(backtest.configuredModel.id) : ''}
                     />
-
-                    <div
-                        className={clsx(
-                            styles.dependentAttribute,
-                            !selectedAttributes.model && styles.dependentAttributeDisabled,
-                        )}
-                    >
-                        <Checkbox
-                            label={i18n.t('Data sources')}
-                            name="dataSources"
-                            checked={selectedAttributes.dataSources}
-                            onChange={() => handleAttributeChange('dataSources')}
-                            disabled={
-                                !selectedAttributes.model
-                                || !(backtest.dataset?.dataSources?.length)
-                            }
-                        />
-                    </div>
-
-                    <Checkbox
-                        label={i18n.t('Period type')}
-                        name="periodType"
-                        checked={selectedAttributes.periodType}
-                        onChange={() => handleAttributeChange('periodType')}
-                        disabled={!backtest.dataset?.periodType}
-                    />
-
-                    <div
-                        className={clsx(
-                            styles.dependentAttribute,
-                            !selectedAttributes.periodType && styles.dependentAttributeDisabled,
-                        )}
-                    >
-                        <Checkbox
-                            label={i18n.t('Period range')}
-                            name="period"
-                            checked={selectedAttributes.period}
-                            onChange={() => handleAttributeChange('period')}
-                            disabled={!backtest.dataset?.periodType || !selectedAttributes.periodType}
-                        />
-                    </div>
                 </div>
             </ModalContent>
             <ModalActions>
@@ -220,10 +126,17 @@ export const CopyBacktestModal = ({ id, onClose, returnTo }: CopyBacktestModalPr
                         disabled={!hasSelectedAttributes}
                         dataTest="copy-backtest-button"
                         onClick={() => {
-                            const url = returnTo
-                                ? `/evaluate/new?returnTo=${encodeURIComponent(returnTo)}`
-                                : '/evaluate/new';
-                            navigate(url, { state: generateCopyState() });
+                            const params = new URLSearchParams();
+                            if (selectedAttributes.dataset) params.set('datasetId', String(backtest.datasetId));
+                            if (returnTo) params.set('returnTo', returnTo);
+                            navigate(`/evaluate/from-dataset?${params}`, {
+                                state: {
+                                    ...(selectedAttributes.name && backtest.name && {
+                                        name: i18n.t('{{name}} (Copy)', { name: backtest.name, interpolation: { escapeValue: false } }),
+                                    }),
+                                    ...(selectedAttributes.model && { modelNames: [backtest.modelId] }),
+                                },
+                            });
                         }}
                     >
                         {i18n.t('Create')}

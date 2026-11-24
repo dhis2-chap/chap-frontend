@@ -9,7 +9,7 @@ import {
     InputField,
     NoticeBox,
 } from '@dhis2/ui';
-import { ModelExecutionFormValues } from '../ModelExecutionForm/hooks/useModelExecutionFormState';
+import { ModelExecutionFormValues } from '../ModelExecutionForm/hooks/modelExecutionFormSchema';
 import {
     type ReadyPredictionFormContext,
     usePredictionFormController,

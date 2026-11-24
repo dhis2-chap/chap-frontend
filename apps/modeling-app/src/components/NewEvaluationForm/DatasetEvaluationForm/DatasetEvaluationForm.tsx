@@ -47,10 +47,11 @@ type FormValues = z.infer<typeof schema>;
 
 type Props = {
     initialDatasetId?: string;
+    initialValues?: Partial<Pick<FormValues, 'name' | 'modelNames'>>;
     benchmarkContext?: boolean;
 };
 
-export const DatasetEvaluationForm = ({ initialDatasetId = '', benchmarkContext = false }: Props) => {
+export const DatasetEvaluationForm = ({ initialDatasetId = '', initialValues, benchmarkContext = false }: Props) => {
     const datasets = useDatasets();
     const { models, isLoading: isModelsLoading, error: modelsError } = useModels();
     const navigate = useNavigate();
@@ -60,7 +61,7 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '', benchmarkContext 
 
     const methods = useForm<FormValues>({
         resolver: zodResolver(schema),
-        defaultValues: { name: '', datasetId: initialDatasetId, targetColumn: '', modelNames: [] },
+        defaultValues: { name: '', datasetId: initialDatasetId, targetColumn: '', modelNames: [], ...initialValues },
     });
     const [datasetId, targetColumn, modelNames, backtestParameters] = useWatch({
         control: methods.control,
@@ -156,16 +157,11 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '', benchmarkContext 
                 <NoticeBox title={i18n.t('No saved datasets yet')}>
                     {benchmarkContext
                         ? i18n.t('Save a dataset first, then return here to run models in a benchmark.')
-                        : i18n.t('Save a dataset once and reuse it across evaluations, or import data for this evaluation only.')}
+                        : i18n.t('Save a dataset first, then return here to run an evaluation.')}
                     <ButtonStrip className={styles.emptyActions}>
                         <Button small primary onClick={() => navigate('/datasets/new')}>
                             {i18n.t('New dataset')}
                         </Button>
-                        {!benchmarkContext && (
-                            <Button small secondary onClick={() => navigate('/evaluate/new')}>
-                                {i18n.t('Import from DHIS2 instead')}
-                            </Button>
-                        )}
                     </ButtonStrip>
                 </NoticeBox>
             </div>
@@ -207,7 +203,8 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '', benchmarkContext 
                                 onChange={({ selected }) => {
                                     methods.setValue('datasetId', selected, { shouldDirty: true });
                                     methods.setValue('targetColumn', '', { shouldDirty: true });
-                                    methods.setValue('modelNames', [], { shouldDirty: true });
+                                    // Keep a copied model when choosing the first dataset.
+                                    methods.setValue('modelNames', datasetId ? [] : modelNames, { shouldDirty: true });
                                     createEvaluation.reset();
                                 }}
                             >

@@ -7,7 +7,7 @@ import { useDataEngine } from '@dhis2/app-runtime';
 import { useQuery } from '@tanstack/react-query';
 import { useApiDataQuery } from '../../utils/useApiDataQuery';
 import { useDebounce } from '../../hooks/useDebounce';
-import { dimensionItemTypeSchema } from '../../components/ModelExecutionForm/hooks/useModelExecutionFormState';
+import { dimensionItemTypeSchema } from '../../components/ModelExecutionForm/hooks/modelExecutionFormSchema';
 
 interface Option {
     id: string;
