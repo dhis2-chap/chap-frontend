@@ -53,6 +53,7 @@ export const usePredictionFormController = ({
     const {
         createPrediction,
         isSubmitting,
+        progress,
         error,
         importSummary,
     } = useCreatePrediction({
@@ -66,7 +67,7 @@ export const usePredictionFormController = ({
 
     const handleSubmit = (data: NewPredictionFormValues) => {
         const resolvedPeriod = resolveSelectedPeriod(data);
-        if (!resolvedPeriod) {
+        if (!resolvedPeriod || isSubmitting) {
             return;
         }
 
@@ -92,6 +93,7 @@ export const usePredictionFormController = ({
         methods,
         handleStartPrediction,
         isSubmitting,
+        progress,
         error,
         importSummary,
         periodType,

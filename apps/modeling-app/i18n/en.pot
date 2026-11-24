@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-11-17T16:55:47.217Z\n"
-"PO-Revision-Date: 2026-11-17T16:55:47.217Z\n"
+"POT-Creation-Date: 2026-11-24T07:31:53.284Z\n"
+"PO-Revision-Date: 2026-11-24T07:31:53.284Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -968,6 +968,20 @@ msgstr ""
 msgid "Data layer not found for data item id{{escape}} {{dataItemId}}"
 msgstr "Data layer not found for data item id{{escape}} {{dataItemId}}"
 
+msgid "Fetching data for locations {{start}}–{{end}} of {{total}}"
+msgstr "Fetching data for locations {{start}}–{{end}} of {{total}}"
+
+msgid "Fetching geometry for locations {{start}}–{{end}} of {{total}}"
+msgstr "Fetching geometry for locations {{start}}–{{end}} of {{total}}"
+
+msgid "Finding selected locations"
+msgstr "Finding selected locations"
+
+msgid "Found {{count}} selected locations"
+msgid_plural "Found {{count}} selected locations"
+msgstr[0] "Found {{count}} selected locations"
+msgstr[1] "Found {{count}} selected locations"
+
 msgid "Needs update"
 msgstr "Needs update"
 
@@ -1242,6 +1256,12 @@ msgstr "Needs {{columns}}"
 msgid "A different period type"
 msgstr "A different period type"
 
+msgid "Preparing data"
+msgstr "Preparing data"
+
+msgid "Creating dataset in Chap"
+msgstr "Creating dataset in Chap"
+
 msgid "Dataset import was rejected"
 msgstr "Dataset import was rejected"
 
@@ -1253,6 +1273,9 @@ msgstr "Add at least one data column"
 
 msgid "Covariate names must be unique"
 msgstr "Covariate names must be unique"
+
+msgid "Checking data in Chap"
+msgstr "Checking data in Chap"
 
 msgid "{{covariate}} has no observations for these periods and organisation units"
 msgstr "{{covariate}} has no observations for these periods and organisation units"
@@ -1468,6 +1491,9 @@ msgstr "{{policy}} (raises pending signals for review)"
 
 msgid "None (this run raises no signals)"
 msgstr "None (this run raises no signals)"
+
+msgid "Starting prediction in Chap"
+msgstr "Starting prediction in Chap"
 
 msgid "Please select a period"
 msgstr "Please select a period"

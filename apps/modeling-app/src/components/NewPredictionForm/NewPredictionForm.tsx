@@ -57,6 +57,7 @@ const NewPredictionFormFields = ({
         methods,
         handleStartPrediction,
         isSubmitting,
+        progress,
         error,
         importSummary,
         periodType,
@@ -136,6 +137,8 @@ const NewPredictionFormFields = ({
                                     </Button>
                                 </ButtonStrip>
                             </div>
+
+                            {isSubmitting && <p role="status">{progress}</p>}
 
                             {!!error && (
                                 <ChapErrorNotice

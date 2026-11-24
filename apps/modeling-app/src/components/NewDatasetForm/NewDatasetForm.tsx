@@ -40,6 +40,7 @@ import styles from './NewDatasetForm.module.css';
 export const NewDatasetForm = () => {
     const { settings, isLoading: isSettingsLoading, error: settingsError } = useDhis2PeriodSettings();
     const methods = useDatasetFormState(settings);
+    const [progress, setProgress] = useState('');
     const {
         createDataset,
         isSubmitting,
@@ -52,8 +53,8 @@ export const NewDatasetForm = () => {
         jobId,
         jobStatus,
         datasetId,
-    } = useCreateDataset(settings);
-    const inspection = useInspectDataset(settings);
+    } = useCreateDataset(settings, setProgress);
+    const inspection = useInspectDataset(settings, setProgress);
     const navigate = useNavigate();
     const [shownSummary, setShownSummary] = useState<{ title: string; summary: DatasetImportSummary }>();
     const [shownLogsJobId, setShownLogsJobId] = useState<string>();
@@ -191,6 +192,8 @@ export const NewDatasetForm = () => {
                                     </ButtonStrip>
                                 </div>
                             </form>
+
+                            {(isSubmitting || inspection.isLoading) && <p role="status">{progress}</p>}
 
                             {!!inspection.error && (
                                 <ChapErrorNotice

@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import i18n from '@dhis2/d2-i18n';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ModelExecutionFormValues } from '../../ModelExecutionForm/hooks/useModelExecutionFormState';
 import { getLegacyBacktestParameters } from './backtestDefaults';
@@ -30,14 +31,17 @@ export const useCreateNewBacktest = ({
     const { isAvailable: supportsMultiModel } = useIsFeatureAvailable(Features.MULTI_MODEL_BACKTESTS);
     const [summaryModalOpen, setSummaryModalOpen] = useState<boolean>(false);
     const [importSummary, setImportSummary] = useState<ImportSummaryCorrected | null>(null);
+    const [progress, setProgress] = useState('');
     const lastImportHashRef = useRef<string | null>(null);
 
     const buildBacktestRequest = async (formData: ModelExecutionFormValues) => {
+        setProgress(i18n.t('Preparing data'));
         const { model, observations, orgUnitResponse, dataSources, hash } = await prepareBacktestData(
             formData,
             dataEngine,
             queryClient,
             periodSettings,
+            setProgress,
         );
 
         const filteredGeoJson: FeatureCollectionModel = buildOrgUnitFeatureCollection(
@@ -76,6 +80,7 @@ export const useCreateNewBacktest = ({
         mutationFn: async (formData: ModelExecutionFormValues) => {
             const { datasetRequest, hash } = await buildBacktestRequest(formData);
 
+            setProgress(i18n.t('Checking data in Chap'));
             try {
                 const result = await DatasetsService.makeDatasetV1AnalyticsMakeDatasetPost(
                     datasetRequest,
@@ -113,6 +118,7 @@ export const useCreateNewBacktest = ({
             const { datasetRequest, backtestRequest, hash } = await buildBacktestRequest(formData);
             lastImportHashRef.current = hash;
 
+            setProgress(i18n.t('Creating dataset in Chap'));
             const result = await DatasetsService.makeDatasetV1AnalyticsMakeDatasetPost(datasetRequest);
             queryClient.invalidateQueries({ queryKey: ['jobs'] });
             const datasetId = await waitForDatasetImport(result.id);
@@ -175,6 +181,7 @@ export const useCreateNewBacktest = ({
         validateAndDryRun,
         downloadRequest,
         isSubmitting: isLoading,
+        progress,
         isValidationLoading,
         importSummary,
         error: validationError || error,

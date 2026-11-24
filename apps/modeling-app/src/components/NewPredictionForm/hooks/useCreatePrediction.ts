@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import i18n from '@dhis2/d2-i18n';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useDataEngine } from '@dhis2/app-runtime';
 import { useNavigate } from 'react-router-dom';
@@ -34,15 +35,17 @@ export const useCreatePrediction = ({
     const dataEngine = useDataEngine();
     const queryClient = useQueryClient();
     const navigate = useNavigate();
+    const [progress, setProgress] = useState('');
     const [dataHash, setDataHash] = useState<string>();
 
     const {
         mutate: createPrediction,
-        isPending,
+        isLoading,
         error,
     } = useMutation<JobResponse, ApiError, ModelExecutionFormValues>({
         mutationFn: async (formData: ModelExecutionFormValues) => {
             setDataHash(undefined);
+            setProgress(i18n.t('Preparing data'));
             const nPeriods = await fetchPredictionPeriods(predictionSetupId, formData.periodType);
 
             const { observations, orgUnitResponse, hash } = await prepareBacktestData(
@@ -50,6 +53,7 @@ export const useCreatePrediction = ({
                 dataEngine,
                 queryClient,
                 periodSettings,
+                setProgress,
             );
 
             setDataHash(hash);
@@ -66,6 +70,7 @@ export const useCreatePrediction = ({
                 type: 'prediction',
             };
 
+            setProgress(i18n.t('Starting prediction in Chap'));
             return PredictionSetupsService.runPredictionSetupV1CrudPredictionSetupsPredictionSetupIdRunPost(
                 predictionSetupId,
                 predictionRequest,
@@ -86,7 +91,8 @@ export const useCreatePrediction = ({
     return {
         createPrediction,
         importSummary: error ? getImportSummaryFromApiError(error, dataHash) : null,
-        isSubmitting: isPending,
+        isSubmitting: isLoading,
+        progress,
         error,
     };
 };

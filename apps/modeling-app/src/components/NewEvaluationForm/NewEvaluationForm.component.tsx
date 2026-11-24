@@ -35,6 +35,7 @@ export const NewEvaluationFormComponent = ({ initialValues }: NewEvaluationFormP
         handleStartJob,
         handleDownloadRequest,
         isSubmitting,
+        progress,
         error,
         importSummary,
         summaryModalOpen,
@@ -73,6 +74,7 @@ export const NewEvaluationFormComponent = ({ initialValues }: NewEvaluationFormP
                             periodSettingsLoading={periodSettingsLoading}
                             actions={(
                                 <div className={styles.buttons}>
+                                    {(isSubmitting || isValidationLoading) && <p role="status">{progress}</p>}
                                     <ButtonStrip end>
                                         <Button
                                             onClick={handleDryRun}

@@ -4,8 +4,8 @@ import { ModelExecutionFormValues } from '../hooks/useModelExecutionFormState';
 import { getPeriodsInRange, PERIOD_TYPES, toDhis2FixedPeriodType } from '@dhis2-chap/core';
 import { DataSource, ModelSpecRead, ObservationBase } from '@dhis2-chap/ui';
 import { useDataEngine } from '@dhis2/app-runtime';
-import { AnalyticsResponse, OrgUnitResponse, fetchAnalytics, fetchOrgUnits } from './queryUtils';
-import { generateBacktestDataHash } from './hashUtils';
+import { OrgUnitResponse } from './queryUtils';
+import { fetchDhis2Data } from './fetchDhis2Data';
 import { type Dhis2PeriodSettings } from '@/hooks/useDhis2PeriodSettings';
 import { fetchRunnableModel } from '@/hooks/modelsQuery';
 
@@ -41,6 +41,7 @@ export const prepareBacktestData = async (
     dataEngine: ReturnType<typeof useDataEngine>,
     queryClient: QueryClient,
     periodSettings: Dhis2PeriodSettings,
+    onProgress?: (message: string) => void,
 ): Promise<PreparedBacktestData> => {
     const model = await fetchRunnableModel(queryClient, Number(formData.modelId));
 
@@ -76,34 +77,14 @@ export const prepareBacktestData = async (
         dataElementId: mapping.dataItem.id,
     }));
 
-    // Create a unique key of the data elements, periods, and org units for caching
-    const hash = generateBacktestDataHash(dataItems, periods, formData.orgUnits.map(ou => ou.id));
-
-    const cachedAnalyticsResponse = queryClient.getQueryData(['new-backtest-data', 'analytics', hash]) as AnalyticsResponse | undefined;
-
-    const analyticsResponse = cachedAnalyticsResponse || await fetchAnalytics(
+    const { analyticsResponse, orgUnitResponse, orgUnitIds, hash } = await fetchDhis2Data(
         dataItems,
         periods,
         formData.orgUnits.map(ou => ou.id),
         dataEngine,
+        queryClient,
+        onProgress,
     );
-
-    if (!cachedAnalyticsResponse) {
-        queryClient.setQueryData(['new-backtest-data', 'analytics', hash], analyticsResponse);
-    }
-
-    const orgUnitIds: string[] = analyticsResponse.response.metaData.dimensions.ou;
-
-    const cachedOrgUnitResponse = queryClient.getQueryData(['new-backtest-data', 'org-units', hash]) as OrgUnitResponse | undefined;
-
-    const orgUnitResponse = cachedOrgUnitResponse || await fetchOrgUnits(
-        orgUnitIds,
-        dataEngine,
-    );
-
-    if (!cachedOrgUnitResponse) {
-        queryClient.setQueryData(['new-backtest-data', 'org-units', hash], orgUnitResponse);
-    }
 
     const convertDhis2AnalyticsToChap = (data: [string, string, string, string][]): ObservationBase[] => {
         return data.flatMap((row) => {
