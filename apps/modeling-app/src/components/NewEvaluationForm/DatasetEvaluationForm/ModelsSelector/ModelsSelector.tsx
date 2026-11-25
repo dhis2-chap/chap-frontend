@@ -19,9 +19,11 @@ type Props = {
     onChange: (models: ModelSpecRead[]) => void;
     /** Marks models already evaluated on this data in the picker. */
     evaluatedIds?: number[];
+    /** Leaves the chosen models to the page, which lists them its own way. */
+    hideSelection?: boolean;
 };
 
-export const ModelsSelector = ({ models, selectedModels, disabled, disabledReason, openOnMount, onCancel, onChange, evaluatedIds }: Props) => {
+export const ModelsSelector = ({ models, selectedModels, disabled, disabledReason, openOnMount, onCancel, onChange, evaluatedIds, hideSelection }: Props) => {
     const [isModalOpen, setIsModalOpen] = useState(() => !!openOnMount && models.length > 0 && !disabledReason && !disabled);
     const confirmed = useRef(false);
     const [infoModel, setInfoModel] = useState<ModelSpecRead>();
@@ -41,7 +43,7 @@ export const ModelsSelector = ({ models, selectedModels, disabled, disabledReaso
     return (
         <div className={styles.container}>
             <Label>{i18n.t('Models')}</Label>
-            {selectedModels.length ? (
+            {hideSelection ? null : selectedModels.length ? (
                 <div className={styles.chips}>
                     {selectedModels.map(model => (
                         <Chip

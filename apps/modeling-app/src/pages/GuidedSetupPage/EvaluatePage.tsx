@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import i18n from '@dhis2/d2-i18n';
-import { Button, Checkbox, CircularLoader, NoticeBox, Tag } from '@dhis2/ui';
+import { Button, CircularLoader, NoticeBox, Tag } from '@dhis2/ui';
 import { ApiError, BacktestsService, Card, LeaderboardBacktestRead, MakeBacktestsRequest, ModelSpecRead, ModelTemplateRole } from '@dhis2-chap/ui';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Link, useNavigate } from 'react-router-dom';
@@ -22,12 +22,17 @@ import { BenchmarkRunsIndicator } from '../BenchmarksPage/BenchmarkRunsIndicator
 import { BenchmarkTable } from '../BenchmarksPage/BenchmarkTable';
 import { getModelsWithRun, makeBenchmarkRequest } from '../BenchmarksPage/benchmarkUtils';
 import { SpecificationParameters } from '../BenchmarksPage/SpecificationParameters';
+import { getTemplateName, type ModelChoice, ModelConfigurations } from './ModelConfigurations';
 import { StepNav } from './StepNav';
 import { useGuided } from './useGuidedProgress';
 import styles from './GuidedSetupPage.module.css';
 
-/** A configured model is named "template:configuration". */
-const getTemplateName = (model: ModelSpecRead) => model.name.split(':')[0];
+/** The configurations of each model, in the order of their first one. */
+const groupByTemplate = (models: ModelSpecRead[]) => {
+    const groups = new Map<string, ModelSpecRead[]>();
+    models.forEach(model => groups.set(getTemplateName(model), [...(groups.get(getTemplateName(model)) ?? []), model]));
+    return groups;
+};
 
 export const EvaluatePage = () => {
     const navigate = useNavigate();
@@ -36,7 +41,8 @@ export const EvaluatePage = () => {
     const { models, isLoading, error } = useModels();
     const { modelTemplates } = useModelTemplates();
     const defaults = useBacktestParameters(dataset?.periodType);
-    const [selectedIds, setSelectedIds] = useState<number[]>([]);
+    // The configuration to evaluate for each chosen model, by template name.
+    const [choices, setChoices] = useState<Record<string, number>>({});
 
     const columns = dataset?.covariates ?? [];
     const targetColumn = specification?.targetColumn ?? dataset?.targetColumn ?? (columns.includes('disease_cases') ? 'disease_cases' : undefined);
@@ -49,8 +55,16 @@ export const EvaluatePage = () => {
     const compatibleModels = sortByReadiness(allModels.filter(model => (
         targetColumn && datasetSupportsModel(getBacktestColumns(columns, targetColumn), dataset?.periodType ?? '', model)
     )));
-    const selectedModels = compatibleModels.filter(model => selectedIds.includes(model.id));
     const evaluatedModels = getModelsWithRun(runs, compatibleModels);
+    // The picker offers each model once, with its default configuration where it has one; the configuration is chosen below it.
+    const configurations = groupByTemplate(compatibleModels);
+    const pickerModels = [...configurations.values()].map(items => items.find(model => !model.name.includes(':')) ?? items[0]);
+    const selectedModels = Object.values(choices).flatMap(id => compatibleModels.filter(model => model.id === id));
+    const modelChoices: ModelChoice[] = Object.entries(choices).map(([templateName, selectedId]) => {
+        const template = modelTemplates?.find(item => item.name === templateName);
+        const items = configurations.get(templateName) ?? [];
+        return { templateName, selectedId, configurations: items, templateId: template?.id, displayName: template?.displayName || items[0]?.displayName || templateName };
+    });
     const forecastHorizon = useForecastHorizonValidation(selectedModels, parameters?.nPeriods);
 
     const periodCount = countPeriods(dataset?.firstPeriod, dataset?.lastPeriod);
@@ -78,7 +92,7 @@ export const EvaluatePage = () => {
             return BacktestsService.createBacktestsV1AnalyticsCreateBacktestsPost(request);
         },
         onSuccess: async () => {
-            setSelectedIds([]);
+            setChoices({});
             await Promise.all([
                 queryClient.invalidateQueries({ queryKey: ['jobs'] }),
                 queryClient.invalidateQueries({ queryKey: ['backtest-specifications'] }),
@@ -120,24 +134,24 @@ export const EvaluatePage = () => {
                         {compatibleModels.length ? (
                             <>
                                 <ModelsSelector
-                                    models={compatibleModels}
-                                    selectedModels={selectedModels}
-                                    evaluatedIds={evaluatedModels.map(model => model.id)}
+                                    models={pickerModels}
+                                    selectedModels={pickerModels.filter(model => getTemplateName(model) in choices)}
+                                    evaluatedIds={pickerModels
+                                        .filter(model => configurations.get(getTemplateName(model))?.some(item => evaluatedModels.includes(item)))
+                                        .map(model => model.id)}
                                     disabled={start.isLoading}
-                                    onChange={selected => setSelectedIds(selected.map(model => model.id))}
+                                    hideSelection={modelChoices.length > 0}
+                                    onChange={selected => setChoices(previous => Object.fromEntries(selected.map(model => (
+                                        [getTemplateName(model), previous[getTemplateName(model)] ?? model.id]
+                                    ))))}
                                 />
-                                <p className={styles.muted}>
-                                    {i18n.t('Each model comes with default hyperparameters, and some offer other configurations to choose from.')}
-                                    {' '}
-                                    <Link className={styles.link} to={`/models/new?returnTo=${encodeURIComponent(pathTo('evaluate'))}`} data-test="guided-custom-model">
-                                        {i18n.t('Set your own hyperparameters')}
-                                    </Link>
-                                </p>
-                                {/* Chap Core is getting a way to tune a model's hyperparameters for the data; until then the option is only shown. */}
-                                <span className={styles.row} title={i18n.t('Hyperparameter optimisation (HPO) tries many values for the hyperparameters of a model on your data and keeps the best.')}>
-                                    <Checkbox dense disabled checked={false} label={i18n.t('Tune hyperparameters automatically')} />
-                                    <Tag>{i18n.t('Coming soon')}</Tag>
-                                </span>
+                                <ModelConfigurations
+                                    choices={modelChoices}
+                                    disabled={start.isLoading}
+                                    returnTo={pathTo('evaluate')}
+                                    onChange={(templateName, modelId) => setChoices(previous => ({ ...previous, [templateName]: modelId }))}
+                                    onRemove={templateName => setChoices(previous => Object.fromEntries(Object.entries(previous).filter(([name]) => name !== templateName)))}
+                                />
                             </>
                         ) : (
                             <NoticeBox warning title={i18n.t('No model can use this data')}>

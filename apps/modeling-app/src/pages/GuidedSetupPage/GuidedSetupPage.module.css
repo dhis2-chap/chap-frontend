@@ -169,6 +169,10 @@ a.stepperLink:hover {
     gap: var(--spacers-dp8) var(--spacers-dp16);
 }
 
+.configurationSelect {
+    inline-size: 280px;
+}
+
 .settings {
     display: flex;
     align-items: center;

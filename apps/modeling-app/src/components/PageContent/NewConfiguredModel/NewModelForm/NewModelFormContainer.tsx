@@ -7,13 +7,16 @@ import { buildUserOptionsSchema, extractUserOptionsDefaults } from './FormCompon
 import { baseModelSchema, NewModelFormValues } from './NewModelForm.types';
 import { NewModelFormView } from './NewModelForm';
 import { Resolver } from 'react-hook-form';
+import { useSearchParams } from 'react-router-dom';
 
 type Props = {
     modelTemplates: ModelTemplateRead[];
 };
 
 export const NewModelFormContainer = ({ modelTemplates }: Props) => {
-    const [selectedModelId, setSelectedModelId] = useState<string>('');
+    // A page that sends the user here for one model, such as the guided setup, names its template.
+    const [searchParams] = useSearchParams();
+    const [selectedModelId, setSelectedModelId] = useState<string>(searchParams.get('templateId') ?? '');
     const [modelValidationError, setModelValidationError] = useState<string | undefined>();
 
     const selectedModel = useMemo(
