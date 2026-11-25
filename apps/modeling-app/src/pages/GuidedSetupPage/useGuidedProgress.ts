@@ -25,7 +25,7 @@ const isSaved = (dataset: DataSetInfo): dataset is DataSetInfo & { id: number } 
  */
 export const useGuidedProgress = () => {
     const queryClient = useQueryClient();
-    const [searchParams] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams();
     const datasetId = searchParams.get('datasetId');
     const { isAvailable, isLoading: isVersionLoading } = useIsFeatureAvailable(Features.BENCHMARKS);
     const datasets = useDatasets();
@@ -39,8 +39,11 @@ export const useGuidedProgress = () => {
     const dataset = datasetId
         ? savedDatasets.find(item => String(item.id) === datasetId)
         : isNewSetup ? undefined : importedDatasets[0];
-    // The guided setup follows the newest evaluation of the data; older ones stay under All tools.
-    const latest = specifications.data?.filter(item => item.dataset.id === dataset?.id).sort((a, b) => b.id - a.id)[0];
+    // Each evaluation of the data has its own settings, and only results with the same settings can be compared.
+    // The guided setup follows the one chosen on the evaluation step, or the newest.
+    const datasetSpecifications = (specifications.data ?? []).filter(item => item.dataset.id === dataset?.id).sort((a, b) => b.id - a.id);
+    const specificationId = searchParams.get('specificationId');
+    const latest = datasetSpecifications.find(item => String(item.id) === specificationId) ?? datasetSpecifications[0];
     const details = useBacktestSpecification(latest?.id ?? NaN);
     // The query keeps the previous evaluation while the next one loads.
     const specification = details.data?.id === latest?.id ? details.data : undefined;
@@ -62,9 +65,20 @@ export const useGuidedProgress = () => {
         .filter(run => run.predictionSetupId != null);
     const predictionSetupIds = [...new Set(promotedRuns.map(run => run.predictionSetupId!))].sort((a, b) => b - a);
     const selectedId = dataset?.id;
-    const pathTo = useCallback((step: GuidedStep, id = selectedId) => (
-        `/guided/${step}${id != null ? `?datasetId=${id}` : ''}`
-    ), [selectedId]);
+    // The chosen evaluation stays chosen between the steps of the same data.
+    const newestSpecificationId = datasetSpecifications[0]?.id;
+    const chosenSpecificationId = latest && latest.id !== newestSpecificationId ? latest.id : undefined;
+    const pathTo = useCallback((step: GuidedStep, id = selectedId) => {
+        if (id == null) return `/guided/${step}`;
+        return `/guided/${step}?datasetId=${id}${id === selectedId && chosenSpecificationId != null ? `&specificationId=${chosenSpecificationId}` : ''}`;
+    }, [selectedId, chosenSpecificationId]);
+    const selectSpecification = useCallback((id?: number) => setSearchParams((previous) => {
+        const next = new URLSearchParams(previous);
+        if (id == null || id === newestSpecificationId) next.delete('specificationId');
+        else next.set('specificationId', String(id));
+        next.delete('evaluationId');
+        return next;
+    }, { replace: true }), [setSearchParams, newestSpecificationId]);
     // The furthest step that can be worked on.
     const current: GuidedStep = !dataset ? 'data' : predictionSetupIds.length ? 'predict' : runs.length ? 'promote' : 'evaluate';
 
@@ -77,6 +91,8 @@ export const useGuidedProgress = () => {
         dataset,
         isDatasetMissing: !!datasetId && !dataset,
         specification,
+        datasetSpecifications,
+        selectSpecification,
         runs,
         runningJobs,
         promotedRuns,

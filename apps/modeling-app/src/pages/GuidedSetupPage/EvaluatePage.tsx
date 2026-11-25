@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import i18n from '@dhis2/d2-i18n';
-import { Button, CircularLoader, NoticeBox, Tag } from '@dhis2/ui';
-import { ApiError, BacktestsService, Card, LeaderboardBacktestRead, MakeBacktestsRequest, ModelSpecRead, ModelTemplateRole } from '@dhis2-chap/ui';
+import { Button, CircularLoader, NoticeBox, SingleSelectField, SingleSelectOption, Tag } from '@dhis2/ui';
+import { ApiError, BacktestSpecificationSummary, BacktestsService, Card, LeaderboardBacktestRead, MakeBacktestsRequest, ModelSpecRead, ModelTemplateRole } from '@dhis2-chap/ui';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Link, useNavigate } from 'react-router-dom';
 import { ChapErrorNotice } from '../../components/ChapErrorNotice';
@@ -10,6 +10,7 @@ import { sortByReadiness } from '../../components/ModelExecutionForm/Sections/Mo
 import { datasetSupportsModel, getBacktestColumns } from '../../components/NewDatasetForm/utils/datasetModels';
 import { ForecastHorizonNotice } from '../../components/NewEvaluationForm/ForecastHorizonNotice';
 import { getMinimumEvaluationPeriods, toBacktestDefaults } from '../../components/NewEvaluationForm/hooks/backtestDefaults';
+import type { BacktestParameters } from '../../components/NewEvaluationForm/hooks/backtestParameters';
 import { useForecastHorizonValidation } from '../../components/NewEvaluationForm/hooks/useForecastHorizonValidation';
 import { ModelsSelector } from '../../components/NewEvaluationForm/DatasetEvaluationForm/ModelsSelector/ModelsSelector';
 import { fetchRunnableModel } from '../../hooks/modelsQuery';
@@ -22,6 +23,8 @@ import { BenchmarkRunsIndicator } from '../BenchmarksPage/BenchmarkRunsIndicator
 import { BenchmarkTable } from '../BenchmarksPage/BenchmarkTable';
 import { getModelsWithRun, makeBenchmarkRequest } from '../BenchmarksPage/benchmarkUtils';
 import { SpecificationParameters } from '../BenchmarksPage/SpecificationParameters';
+import { CustomConfigurationModal } from './CustomConfigurationModal';
+import { EvaluationSettingsForm } from './EvaluationSettingsForm';
 import { getTemplateName, type ModelChoice, ModelConfigurations } from './ModelConfigurations';
 import { StepNav } from './StepNav';
 import { useGuided } from './useGuidedProgress';
@@ -34,21 +37,45 @@ const groupByTemplate = (models: ModelSpecRead[]) => {
     return groups;
 };
 
+const PARAMETER_KEYS = ['nPeriods', 'nSplits', 'stride', 'nRetrain', 'futureWeatherProvider'] as const;
+
+const pickParameters = (parameters: Partial<BacktestParameters>) => (
+    Object.fromEntries(PARAMETER_KEYS.map(key => [key, parameters[key]])) as BacktestParameters
+);
+
+const isSameParameters = (a?: Partial<BacktestParameters>, b?: Partial<BacktestParameters>) => (
+    PARAMETER_KEYS.every(key => a?.[key] === b?.[key])
+);
+
+/** Tells the evaluations of the same data apart by their settings. */
+const describeEvaluation = (item: BacktestSpecificationSummary, isNewest: boolean) => [
+    i18n.t('{{count}} periods ahead', { count: item.nPeriods, defaultValue: '{{count}} period ahead', defaultValue_plural: '{{count}} periods ahead' }),
+    i18n.t('{{count}} splits', { count: item.nSplits, defaultValue: '{{count}} split', defaultValue_plural: '{{count}} splits' }),
+    i18n.t('{{count}} models', { count: item.backtestCount, defaultValue: '{{count}} model', defaultValue_plural: '{{count}} models' }),
+].join(' · ') + (isNewest ? ` (${i18n.t('newest')})` : '');
+
 export const EvaluatePage = () => {
     const navigate = useNavigate();
     const queryClient = useQueryClient();
-    const { dataset, specification, runs, runningJobs, pathTo } = useGuided();
+    const { dataset, specification, datasetSpecifications, selectSpecification, runs, runningJobs, pathTo } = useGuided();
     const { models, isLoading, error } = useModels();
     const { modelTemplates } = useModelTemplates();
     const defaults = useBacktestParameters(dataset?.periodType);
     // The configuration to evaluate for each chosen model, by template name.
     const [choices, setChoices] = useState<Record<string, number>>({});
+    // Settings the user changed on this step, and the ones being edited.
+    const [editedParameters, setEditedParameters] = useState<BacktestParameters>();
+    const [settingsDraft, setSettingsDraft] = useState<BacktestParameters>();
+    const [customising, setCustomising] = useState<ModelChoice>();
 
     const columns = dataset?.covariates ?? [];
     const targetColumn = specification?.targetColumn ?? dataset?.targetColumn ?? (columns.includes('disease_cases') ? 'disease_cases' : undefined);
-    // More models join the evaluation that exists; a first evaluation uses Chap's default settings.
+    // More models join the evaluation in view; a first evaluation uses Chap's default settings.
     const defaultParameters = defaults.data ? toBacktestDefaults(defaults.data) : undefined;
-    const parameters = specification ?? defaultParameters;
+    const currentParameters = specification ? pickParameters(specification) : defaultParameters;
+    const parameters = editedParameters ?? currentParameters;
+    // Results are only comparable with the same settings, so other settings start an evaluation of their own.
+    const startsNewEvaluation = !!specification && !!editedParameters && !isSameParameters(editedParameters, currentParameters);
     // Chap runs the baselines with every evaluation, so they are not offered as a choice. A configured model is named "template:configuration".
     const baselineNames = modelTemplates?.filter(template => template.role === ModelTemplateRole.BASELINE).map(template => template.name) ?? [];
     const allModels = models?.filter(model => !baselineNames.includes(getTemplateName(model))) ?? [];
@@ -73,16 +100,16 @@ export const EvaluatePage = () => {
         ? getMinimumEvaluationPeriods(dataset?.periodType, { nPeriods, nSplits, stride })
         : undefined;
     const isTooShort = periodCount != null && !!requiredPeriodCount && periodCount < requiredPeriodCount;
-    const settingsPath = `/evaluate/benchmarks/new?datasetId=${dataset?.id}&origin=all&returnTo=${encodeURIComponent(pathTo('evaluate'))}`;
+    const settingsPath = `/evaluate/benchmarks/new?datasetId=${dataset?.id}&origin=all`;
 
     const start = useMutation<unknown, ApiError | Error>({
         mutationFn: async () => {
             const runnable = await Promise.all(selectedModels.map(model => fetchRunnableModel(queryClient, model.id)));
             const modelIds = runnable.map(model => model.id);
-            const request: MakeBacktestsRequest = specification
+            const request: MakeBacktestsRequest = specification && !startsNewEvaluation
                 ? makeBenchmarkRequest(specification, modelIds, dataset!.name)
                 : {
-                        ...defaultParameters,
+                        ...parameters,
                         name: dataset!.name,
                         datasetId: dataset!.id,
                         modelIds,
@@ -93,6 +120,9 @@ export const EvaluatePage = () => {
         },
         onSuccess: async () => {
             setChoices({});
+            setEditedParameters(undefined);
+            // A new evaluation is the newest, which the step follows.
+            if (startsNewEvaluation) selectSpecification(undefined);
             await Promise.all([
                 queryClient.invalidateQueries({ queryKey: ['jobs'] }),
                 queryClient.invalidateQueries({ queryKey: ['backtest-specifications'] }),
@@ -148,7 +178,7 @@ export const EvaluatePage = () => {
                                 <ModelConfigurations
                                     choices={modelChoices}
                                     disabled={start.isLoading}
-                                    returnTo={pathTo('evaluate')}
+                                    onCustomise={setCustomising}
                                     onChange={(templateName, modelId) => setChoices(previous => ({ ...previous, [templateName]: modelId }))}
                                     onRemove={templateName => setChoices(previous => Object.fromEntries(Object.entries(previous).filter(([name]) => name !== templateName)))}
                                 />
@@ -167,15 +197,31 @@ export const EvaluatePage = () => {
                                 })}
                             </p>
                         )}
-                        {parameters && (
+                        {parameters && (settingsDraft ? (
+                            <EvaluationSettingsForm
+                                periodType={dataset.periodType}
+                                initialValues={settingsDraft}
+                                onApply={(values) => {
+                                    setEditedParameters(isSameParameters(values, currentParameters) ? undefined : values);
+                                    setSettingsDraft(undefined);
+                                }}
+                                onCancel={() => setSettingsDraft(undefined)}
+                            />
+                        ) : (
                             <div className={styles.settings}>
                                 <span className={styles.muted}>{i18n.t('Evaluation settings')}</span>
                                 <SpecificationParameters specification={parameters} />
-                                {/* Other settings start a new evaluation, which the guided setup then follows. */}
-                                <Link className={styles.link} to={settingsPath} data-test="guided-evaluation-settings">
-                                    {specification ? i18n.t('Evaluate with other settings') : i18n.t('Change')}
-                                </Link>
+                                <Button small secondary disabled={start.isLoading} onClick={() => setSettingsDraft(pickParameters(parameters))} dataTest="guided-evaluation-settings">
+                                    {i18n.t('Change')}
+                                </Button>
                             </div>
+                        ))}
+                        {startsNewEvaluation && (
+                            <NoticeBox title={i18n.t('These settings start a new evaluation')}>
+                                {i18n.t('The models you choose get a results table of their own, since results from different settings cannot be compared.')}
+                                {' '}
+                                <Button small secondary onClick={() => setEditedParameters(undefined)}>{i18n.t('Keep the current settings')}</Button>
+                            </NoticeBox>
                         )}
                         {isTooShort && (
                             <NoticeBox warning title={i18n.t('Not enough history')}>
@@ -207,6 +253,21 @@ export const EvaluatePage = () => {
             </Card>
             {specification && (
                 <Card className={styles.card}>
+                    {datasetSpecifications.length > 1 && (
+                        <SingleSelectField
+                            dense
+                            className={styles.evaluationSelect}
+                            label={i18n.t('Evaluation')}
+                            helpText={i18n.t('Each set of evaluation settings has its own results.')}
+                            selected={String(specification.id)}
+                            onChange={({ selected }) => selectSpecification(Number(selected))}
+                            dataTest="guided-evaluation-select"
+                        >
+                            {datasetSpecifications.map((item, index) => (
+                                <SingleSelectOption key={item.id} value={String(item.id)} label={describeEvaluation(item, index === 0)} />
+                            ))}
+                        </SingleSelectField>
+                    )}
                     {runningJobs.length > 0 && (
                         <div className={styles.row}>
                             <BenchmarkRunsIndicator specification={specification} runningJobs={runningJobs} />
@@ -233,6 +294,14 @@ export const EvaluatePage = () => {
                 nextLabel={i18n.t('Continue to promotion')}
                 blockedReason={runs.length ? undefined : runningJobs.length ? i18n.t('Waiting for a model to finish') : i18n.t('Evaluate a model first')}
             />
+            {customising?.templateId != null && modelTemplates && (
+                <CustomConfigurationModal
+                    modelTemplates={modelTemplates}
+                    templateId={customising.templateId}
+                    onCreated={({ id }) => id != null && setChoices(previous => ({ ...previous, [customising.templateName]: id }))}
+                    onClose={() => setCustomising(undefined)}
+                />
+            )}
         </>
     );
 };

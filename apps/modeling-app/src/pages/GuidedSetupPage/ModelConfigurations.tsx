@@ -1,7 +1,6 @@
 import i18n from '@dhis2/d2-i18n';
 import { Button, SingleSelectField, SingleSelectOption } from '@dhis2/ui';
 import type { ModelSpecRead } from '@dhis2-chap/ui';
-import { useNavigate } from 'react-router-dom';
 import { toDataTestKey } from '../../utils/dataTestKey';
 import styles from './GuidedSetupPage.module.css';
 
@@ -30,15 +29,14 @@ export type ModelChoice = {
 type Props = {
     choices: ModelChoice[];
     disabled?: boolean;
-    /** Where to come back to after setting hyperparameters by hand. */
-    returnTo: string;
     onChange: (templateName: string, modelId: number) => void;
+    /** Opens the form for hyperparameters of the user's own. */
+    onCustomise: (choice: ModelChoice) => void;
     onRemove: (templateName: string) => void;
 };
 
 /** Each chosen model with the hyperparameters it is evaluated with. */
-export const ModelConfigurations = ({ choices, disabled, returnTo, onChange, onRemove }: Props) => {
-    const navigate = useNavigate();
+export const ModelConfigurations = ({ choices, disabled, onChange, onCustomise, onRemove }: Props) => {
     if (!choices.length) return null;
 
     return (
@@ -53,10 +51,11 @@ export const ModelConfigurations = ({ choices, disabled, returnTo, onChange, onR
                                 className={styles.configurationSelect}
                                 label={i18n.t('Hyperparameters')}
                                 disabled={disabled}
-                                selected={String(choice.selectedId)}
+                                // A configuration just made shows once the models are read again; an unknown value makes the select throw.
+                                selected={choice.configurations.some(model => model.id === choice.selectedId) ? String(choice.selectedId) : undefined}
                                 onChange={({ selected }) => {
                                     if (selected === CUSTOM) {
-                                        navigate(`/models/new?templateId=${choice.templateId}&returnTo=${encodeURIComponent(returnTo)}`);
+                                        onCustomise(choice);
                                     } else if (selected !== TUNE) {
                                         onChange(choice.templateName, Number(selected));
                                     }

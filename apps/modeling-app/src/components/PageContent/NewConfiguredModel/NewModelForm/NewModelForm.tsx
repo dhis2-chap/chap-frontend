@@ -1,13 +1,12 @@
 import { Button, ButtonStrip, IconArrowRightMulti16 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
-import { ModelTemplateRead } from '@dhis2-chap/ui';
+import { ConfiguredModelDB, ModelTemplateRead } from '@dhis2-chap/ui';
 import { FormProvider, Resolver, useForm } from 'react-hook-form';
 import styles from './NewModelForm.module.css';
 import { VariantNameInput, AdditionalCovariatesField } from './FormComponents';
 import { UserOptionsFields } from './FormComponents/UserOptionsFields';
 import { useNavigate } from 'react-router-dom';
 import { useCreateModel } from '../hooks/useCreateModel';
-import { useReturnTo } from '@/hooks/useReturnTo';
 import { NewModelFormValues } from './NewModelForm.types';
 
 type NewModelFormViewProps = {
@@ -15,6 +14,7 @@ type NewModelFormViewProps = {
     resolver: Resolver<NewModelFormValues>;
     defaultValues: NewModelFormValues;
     onValidationError?: (message?: string) => void;
+    onCreated?: (model: ConfiguredModelDB) => void;
 };
 
 export const NewModelFormView = ({
@@ -22,13 +22,11 @@ export const NewModelFormView = ({
     resolver,
     defaultValues,
     onValidationError,
+    onCreated,
 }: NewModelFormViewProps) => {
     const navigate = useNavigate();
-    const returnTo = useReturnTo();
     const { createModel, isCreating } = useCreateModel({
-        onSuccess: () => {
-            navigate(returnTo ?? '/models');
-        },
+        onSuccess: model => (onCreated ? onCreated(model) : navigate('/models')),
     });
     const methods = useForm<NewModelFormValues>({
         resolver,

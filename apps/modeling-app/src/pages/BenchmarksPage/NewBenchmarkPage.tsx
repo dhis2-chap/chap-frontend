@@ -4,14 +4,12 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { DatasetEvaluationForm } from '../../components/NewEvaluationForm/DatasetEvaluationForm';
 import { PageHeader } from '../../features/common-features/PageHeader/PageHeader';
 import { Features, useIsFeatureAvailable } from '../../hooks/useIsFeatureAvailable';
-import { useReturnTo } from '../../hooks/useReturnTo';
 import styles from './BenchmarksPage.module.css';
 
 export const NewBenchmarkPage = () => {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const datasetId = searchParams.get('datasetId') ?? undefined;
-    const returnTo = useReturnTo();
     const { isAvailable, isLoading } = useIsFeatureAvailable(Features.BENCHMARKS);
 
     return (
@@ -22,12 +20,12 @@ export const NewBenchmarkPage = () => {
             />
             <div className={styles.stack}>
                 <div>
-                    <Button small icon={<IconArrowLeft16 />} onClick={() => navigate(returnTo ?? '/evaluate/benchmarks')}>
-                        {returnTo ? i18n.t('Back') : i18n.t('Back to benchmarks')}
+                    <Button small icon={<IconArrowLeft16 />} onClick={() => navigate('/evaluate/benchmarks')}>
+                        {i18n.t('Back to benchmarks')}
                     </Button>
                 </div>
                 {isLoading ? <div className={styles.loading}><CircularLoader /></div> : isAvailable ? (
-                    <DatasetEvaluationForm key={datasetId} initialDatasetId={datasetId} benchmarkContext returnTo={returnTo} />
+                    <DatasetEvaluationForm key={datasetId} initialDatasetId={datasetId} benchmarkContext />
                 ) : (
                     <NoticeBox title={i18n.t('Benchmarks unavailable')}>
                         {i18n.t('This Chap server does not support backtest specifications. Update Chap Core to use benchmarks.')}
