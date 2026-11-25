@@ -62,6 +62,13 @@ export const PromotePage = () => {
     const rankedRuns = [...runs].sort((a, b) => getRank(a) - getRank(b));
     const bestRunIds = runs.length > 1 ? getBestRunIds(runs, metric) : new Set<number>();
     const selectedRun = runs.find(run => String(run.id) === searchParams.get('evaluationId') && run.predictionSetupId == null);
+    // A model chosen on the evaluation step is the only one in view; without a choice, all of them are offered.
+    const visibleRuns = selectedRun ? [selectedRun] : rankedRuns;
+    const chooseAnother = () => setSearchParams((previous) => {
+        const next = new URLSearchParams(previous);
+        next.delete('evaluationId');
+        return next;
+    }, { replace: true });
 
     const promote = form.handleSubmit(async (values) => {
         try {
@@ -91,14 +98,23 @@ export const PromotePage = () => {
             )}
             <form className={styles.form} onSubmit={promote} noValidate>
                 <Card className={styles.card}>
-                    <div>
-                        <h3 className={styles.title}>{i18n.t('Choose the model to promote')}</h3>
-                        <p className={styles.description}>
-                            {i18n.t('Promoting a model makes it the one that produces your predictions. Nothing runs until you start a prediction.')}
-                        </p>
+                    <div className={styles.sectionHeader}>
+                        <div>
+                            <h3 className={styles.title}>{selectedRun ? i18n.t('The model to promote') : i18n.t('Choose the model to promote')}</h3>
+                            <p className={styles.description}>
+                                {i18n.t('Promoting a model makes it the one that produces your predictions. Nothing runs until you start a prediction.')}
+                            </p>
+                        </div>
+                        {selectedRun && runs.length > 1 && (
+                            <span className={styles.nowrap}>
+                                <Button small onClick={chooseAnother} disabled={isCreating} dataTest="guided-promote-choose-another">
+                                    {i18n.t('Choose another model')}
+                                </Button>
+                            </span>
+                        )}
                     </div>
                     <ul className={styles.list}>
-                        {rankedRuns.map((run) => {
+                        {visibleRuns.map((run) => {
                             const score = getScore(run);
                             const isPromoted = run.predictionSetupId != null;
                             const { baseline, value: improvement } = specification ? getBaselineComparison(specification, run, metric) : { baseline: undefined, value: undefined };
@@ -158,7 +174,7 @@ export const PromotePage = () => {
                 )}
                 <Card className={styles.card}>
                     <div>
-                        <h3 className={styles.title}>{i18n.t('Signals')}</h3>
+                        <h3 className={styles.title}>{i18n.t('Signals (optional)')}</h3>
                         <p className={styles.description}>
                             {i18n.t('A signal policy turns each prediction into signals, such as an outbreak alert, for someone to review before they are released.')}
                         </p>

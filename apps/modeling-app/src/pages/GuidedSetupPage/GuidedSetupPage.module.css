@@ -85,6 +85,13 @@ a.stepperLink:hover {
     background-color: var(--colors-green600);
 }
 
+.backLink {
+    display: inline-block;
+    margin-block-end: var(--spacers-dp8);
+    font-size: 14px;
+    color: var(--colors-blue700);
+}
+
 /* A step page is a column of cards. */
 .page {
     display: flex;
@@ -162,10 +169,10 @@ a.stepperLink:hover {
     gap: var(--spacers-dp8) var(--spacers-dp16);
 }
 
-/* Two lines are enough to tell models apart; Details has the rest. */
-.modelDescription {
+/* Two lines are enough to tell packages apart; Details has the rest. */
+.packageDescription {
     display: -webkit-box;
-    margin: var(--spacers-dp4) 0 0 var(--spacers-dp24);
+    margin: var(--spacers-dp4) 0 0;
     max-inline-size: 860px;
     overflow: hidden;
     font-size: 13px;
@@ -173,6 +180,15 @@ a.stepperLink:hover {
     color: var(--colors-grey700);
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
+}
+
+/* The settings a package can be evaluated with. */
+.options {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--spacers-dp8) var(--spacers-dp24);
+    margin-block-start: var(--spacers-dp8);
 }
 
 .readiness {
@@ -284,91 +300,96 @@ a.stepperLink:hover {
     background-color: var(--colors-red500);
 }
 
-/* Left of the middle is worse than the baseline, right of it better. */
-.diverging {
+.caution {
+    color: var(--colors-yellow900);
+}
+
+.cautionFill {
+    background-color: var(--colors-yellow500);
+}
+
+/* A bar with labels above it and a scale below, so its length can be read. */
+.bar {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacers-dp4);
+}
+
+.barLabels {
     position: relative;
-    block-size: 34px;
-}
-
-.divergingBar {
-    position: absolute;
-    inset-block-start: 0;
-    block-size: 14px;
-    border-radius: 2px;
-}
-
-.divergingAxis {
-    position: absolute;
-    inset-inline-start: 50%;
-    inset-block-start: -3px;
-    block-size: 20px;
-    border-inline-start: 2px solid var(--colors-grey700);
-}
-
-.divergingLabelStart,
-.divergingLabelEnd {
-    position: absolute;
-    inset-block-end: 0;
+    display: flex;
+    justify-content: space-between;
+    min-block-size: 16px;
     font-size: 12px;
-    color: var(--colors-grey600);
+    color: var(--colors-grey700);
 }
 
-.divergingLabelStart {
-    inset-inline-start: 0;
-}
-
-.divergingLabelEnd {
-    inset-inline-end: 0;
-}
-
-.diverging::before {
-    content: '';
+.barTargetLabel {
     position: absolute;
-    inset-inline: 0;
-    inset-block-start: 0;
-    block-size: 14px;
-    border-radius: 2px;
-    background-color: var(--colors-grey200);
-}
-
-/* How much of what happened fell inside the model's range, against what is expected. */
-.meter {
-    position: relative;
-    block-size: 34px;
-}
-
-.meter::before {
-    content: '';
-    position: absolute;
-    inset-inline: 0;
-    inset-block-start: 0;
-    block-size: 14px;
-    border-radius: 2px;
-    background-color: var(--colors-grey200);
-}
-
-.meterFill {
-    position: absolute;
-    inset-block-start: 0;
-    inset-inline-start: 0;
-    block-size: 14px;
-    border-radius: 2px;
-}
-
-.meterTarget {
-    position: absolute;
-    inset-block-start: -3px;
-    block-size: 20px;
-    border-inline-start: 2px solid var(--colors-grey700);
-}
-
-.meterTarget span {
-    position: absolute;
-    inset-block-start: 22px;
-    font-size: 12px;
-    color: var(--colors-grey600);
     white-space: nowrap;
     transform: translateX(-50%);
+}
+
+.barTrack {
+    position: relative;
+    block-size: 14px;
+    border-radius: 2px;
+    background-color: var(--colors-grey200);
+}
+
+.barFill {
+    position: absolute;
+    inset-block: 0;
+    border-radius: 2px;
+}
+
+.barMarker {
+    position: absolute;
+    inset-block-start: -3px;
+    block-size: 20px;
+    border-inline-start: 2px solid var(--colors-grey800);
+    transform: translateX(-1px);
+}
+
+.scale {
+    position: relative;
+    block-size: 18px;
+    margin-block-start: 2px;
+    font-size: 12px;
+    color: var(--colors-grey600);
+}
+
+.scaleTick {
+    position: absolute;
+    inset-block-start: 3px;
+    white-space: nowrap;
+    transform: translateX(-50%);
+}
+
+.scaleTick::before {
+    content: '';
+    position: absolute;
+    inset-block-start: -5px;
+    inset-inline-start: 50%;
+    block-size: 4px;
+    border-inline-start: 1px solid var(--colors-grey500);
+}
+
+.scaleTickStart {
+    transform: none;
+}
+
+.scaleTickStart::before {
+    inset-inline-start: 0;
+}
+
+.scaleTickEnd {
+    transform: translateX(-100%);
+}
+
+.scaleTickEnd::before {
+    inset-inline-start: auto;
+    inset-inline-end: 0;
 }
 
 .forecast {

@@ -32,8 +32,12 @@ export const useGuidedProgress = () => {
 
     const savedDatasets = sortByCreatedDesc((datasets.data ?? []).filter(isSaved));
     const importedDatasets = savedDatasets.filter(dataset => dataset.createdManually !== false);
-    const dataset = datasetId ? savedDatasets.find(item => String(item.id) === datasetId) : importedDatasets[0];
-    // The guided setup follows the newest evaluation of the data; older ones stay under Advanced.
+    // A new setup starts from nothing; otherwise the newest imported data is picked up.
+    const isNewSetup = !datasetId && searchParams.get('import') === 'true';
+    const dataset = datasetId
+        ? savedDatasets.find(item => String(item.id) === datasetId)
+        : isNewSetup ? undefined : importedDatasets[0];
+    // The guided setup follows the newest evaluation of the data; older ones stay under All tools.
     const latest = specifications.data?.filter(item => item.dataset.id === dataset?.id).sort((a, b) => b.id - a.id)[0];
     const details = useBacktestSpecification(latest?.id ?? NaN);
     // The query keeps the previous evaluation while the next one loads.

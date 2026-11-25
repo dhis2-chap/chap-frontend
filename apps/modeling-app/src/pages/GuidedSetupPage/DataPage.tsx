@@ -3,7 +3,7 @@ import i18n from '@dhis2/d2-i18n';
 import { Button, NoticeBox, Radio } from '@dhis2/ui';
 import { Card } from '@dhis2-chap/ui';
 import { useQueryClient } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { NewDatasetForm } from '../../components/NewDatasetForm';
 import { formatPeriodRange } from '../BenchmarksPage/SpecificationParameters';
 import { StepNav } from './StepNav';
@@ -13,9 +13,10 @@ import styles from './GuidedSetupPage.module.css';
 export const DataPage = () => {
     const navigate = useNavigate();
     const queryClient = useQueryClient();
+    const [searchParams] = useSearchParams();
     const { importedDatasets, dataset, isDatasetMissing, pathTo } = useGuided();
-    // With nothing imported yet, importing is the only thing to do here.
-    const [isImporting, setIsImporting] = useState(!importedDatasets.length);
+    // With nothing imported yet, importing is the only thing to do here. A new setup starts with importing too.
+    const [isImporting, setIsImporting] = useState(!importedDatasets.length || searchParams.get('import') === 'true');
     const openEvaluation = async (datasetId: number) => {
         // The next step only opens for data the setup knows about.
         await queryClient.invalidateQueries({ queryKey: ['datasets'] });

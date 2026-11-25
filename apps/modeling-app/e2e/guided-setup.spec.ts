@@ -76,8 +76,11 @@ test('goes from DHIS2 data to predictions through the four guided steps', async 
     await expect(page).toHaveURL(/\/guided\/predict\?datasetId=\d+$/);
     await expect(page.locator('[data-test="prediction-setup-alert-policy"]')).toHaveText(policy.name);
     await expect(page.getByText('Model performance monitoring', { exact: true })).toBeVisible();
-    // Progress is read from Chap, not kept in the browser.
+    // Progress is read from Chap, not kept in the browser: the overview lists the setup as predicting.
     await page.goto('/#/guided');
+    const overviewRow = page.locator('[data-test^="guided-setup-"]').filter({ hasText: name });
+    await expect(overviewRow).toContainText('Predicting');
+    await overviewRow.getByRole('button', { name: 'Continue' }).click();
     await expect(page).toHaveURL(/\/guided\/predict\?datasetId=\d+$/);
     await page.locator('[data-test="quick-action-predict"]').click();
     await expect(page).toHaveURL(new RegExp(`/predictions/${setup.id}/new\\?returnTo=%2Fguided%2Fpredict`));
@@ -88,6 +91,7 @@ test('opens on the guided setup, or on the dashboard where Chap Core is too old 
     const isSupported = (await getChap(page, '/v1/crud/backtest-specifications')).ok();
 
     await page.goto('/#/');
-    await expect(page).toHaveURL(isSupported ? /\/guided\/(data|evaluate|promote|predict)/ : /\/dashboard$/);
+    // The guided setup opens on its overview, or on the first step when nothing is imported yet.
+    await expect(page).toHaveURL(isSupported ? /\/guided(\/data.*)?$/ : /\/dashboard$/);
     await expect(page.getByRole('link', { name: 'Guided setup', exact: true })).toHaveCount(isSupported ? 1 : 0);
 });

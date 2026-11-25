@@ -104,15 +104,17 @@ export const Sidebar = ({
                         {(isVersionLoading || isBenchmarksAvailable) && (
                             <SidebarNavLink to="/guided" label={i18n.t('Guided setup')} />
                         )}
+                        {isBenchmarksAvailable && (
+                            <SidebarNavLink to="/evaluate/benchmarks" label={i18n.t('Benchmarks')} />
+                        )}
                         <SidebarNavLink to="/predictions" label={i18n.t('Predictions')} />
                         <SidebarParent
-                            label={i18n.t('Advanced')}
+                            label={i18n.t('All tools')}
                             links={[
                                 { label: i18n.t('Dashboard'), to: '/dashboard' },
                                 { label: i18n.t('Datasets'), to: '/datasets' },
                                 { label: i18n.t('Evaluations'), to: '/evaluate' },
                                 { label: i18n.t('Compare'), to: '/evaluate/compare' },
-                                ...(isBenchmarksAvailable ? [{ label: i18n.t('Benchmarks'), to: '/evaluate/benchmarks' }] : []),
                                 { label: i18n.t('Signal policies'), to: '/signals' },
                                 { label: i18n.t('Models'), to: '/models' },
                                 { label: i18n.t('Jobs'), to: '/jobs' },

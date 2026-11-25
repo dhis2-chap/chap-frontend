@@ -27,6 +27,23 @@ import { StepNav } from './StepNav';
 import { useGuided } from './useGuidedProgress';
 import styles from './GuidedSetupPage.module.css';
 
+type ModelPackage = { templateName: string; models: ModelSpecRead[] };
+
+/** A configured model is named "template:configuration"; the template is the package it belongs to. */
+const getTemplateName = (model: ModelSpecRead) => model.name.split(':')[0];
+
+const getConfigurationName = (model: ModelSpecRead) => {
+    const [, configuration] = model.name.split(':');
+    return configuration || i18n.t('Default settings');
+};
+
+/** Groups configured models by package, keeping the order of their first model. */
+const groupByPackage = (models: ModelSpecRead[]): ModelPackage[] => {
+    const packages = new Map<string, ModelSpecRead[]>();
+    models.forEach(model => packages.set(getTemplateName(model), [...(packages.get(getTemplateName(model)) ?? []), model]));
+    return [...packages].map(([templateName, items]) => ({ templateName, models: items }));
+};
+
 export const EvaluatePage = () => {
     const navigate = useNavigate();
     const queryClient = useQueryClient();
@@ -44,11 +61,15 @@ export const EvaluatePage = () => {
     const parameters = specification ?? defaultParameters;
     // Chap runs the baselines with every evaluation, so they are not offered as a choice. A configured model is named "template:configuration".
     const baselineNames = modelTemplates?.filter(template => template.role === ModelTemplateRole.BASELINE).map(template => template.name) ?? [];
-    const allModels = models?.filter(model => !baselineNames.includes(model.name.split(':')[0])) ?? [];
+    const allModels = models?.filter(model => !baselineNames.includes(getTemplateName(model))) ?? [];
     const compatibleModels = sortByReadiness(allModels.filter(model => (
         targetColumn && datasetSupportsModel(getBacktestColumns(columns, targetColumn), dataset?.periodType ?? '', model)
     )));
     const selectedModels = compatibleModels.filter(model => selectedIds.includes(model.id));
+    const packages = groupByPackage(compatibleModels);
+    const getPackageName = (templateName: string, model: ModelSpecRead) => (
+        modelTemplates?.find(template => template.name === templateName)?.displayName || model.displayName || templateName
+    );
     const evaluatedModels = getModelsWithRun(runs, compatibleModels);
     const forecastHorizon = useForecastHorizonValidation(selectedModels, parameters?.nPeriods);
 
@@ -118,20 +139,15 @@ export const EvaluatePage = () => {
                     <>
                         {compatibleModels.length ? (
                             <ul className={styles.list}>
-                                {compatibleModels.map((model) => {
+                                {packages.map(({ templateName, models: configurations }) => {
+                                    const [model] = configurations;
                                     const readiness = getReadiness(model);
                                     return (
-                                        <li key={model.id} className={styles.listItem}>
+                                        <li key={templateName} className={styles.listItem} data-test={`guided-package-${toDataTestKey(templateName)}`}>
                                             <div className={styles.modelRow}>
-                                                <Checkbox
-                                                    checked={selectedIds.includes(model.id)}
-                                                    disabled={start.isLoading}
-                                                    onChange={({ checked }) => setSelectedIds(ids => (checked ? [...ids, model.id] : ids.filter(id => id !== model.id)))}
-                                                    dataTest={`guided-model-${toDataTestKey(model.name)}`}
-                                                    label={<span className={styles.itemName}>{model.displayName || model.name}</span>}
-                                                />
+                                                <span className={styles.itemName}>{getPackageName(templateName, model)}</span>
                                                 <div className={styles.row}>
-                                                    {evaluatedModels.includes(model) && <Tag positive>{i18n.t('Evaluated')}</Tag>}
+                                                    {configurations.some(item => evaluatedModels.includes(item)) && <Tag positive>{i18n.t('Evaluated')}</Tag>}
                                                     {readiness && (
                                                         <span className={styles.readiness} title={readiness.description}>
                                                             <span className={styles.dot} style={{ backgroundColor: readiness.color }} />
@@ -141,7 +157,25 @@ export const EvaluatePage = () => {
                                                     <Button small secondary onClick={() => setInfoModel(model)}>{i18n.t('Details')}</Button>
                                                 </div>
                                             </div>
-                                            {model.description && <p className={styles.modelDescription}>{model.description}</p>}
+                                            {model.description && <p className={styles.packageDescription}>{model.description}</p>}
+                                            <div className={styles.options}>
+                                                {configurations.map(configuration => (
+                                                    <Checkbox
+                                                        key={configuration.id}
+                                                        dense
+                                                        checked={selectedIds.includes(configuration.id)}
+                                                        disabled={start.isLoading}
+                                                        onChange={({ checked }) => setSelectedIds(ids => (checked ? [...ids, configuration.id] : ids.filter(id => id !== configuration.id)))}
+                                                        dataTest={`guided-model-${toDataTestKey(configuration.name)}`}
+                                                        label={getConfigurationName(configuration)}
+                                                    />
+                                                ))}
+                                                {/* Chap Core is getting a way to tune a package's settings for the data; until then the option is only shown. */}
+                                                <span className={styles.row} title={i18n.t('Hyperparameter optimisation (HPO) tries many settings on your data and keeps the best.')}>
+                                                    <Checkbox dense disabled checked={false} label={i18n.t('Tune settings automatically')} />
+                                                    <Tag>{i18n.t('Coming soon')}</Tag>
+                                                </span>
+                                            </div>
                                         </li>
                                     );
                                 })}
