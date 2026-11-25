@@ -4,14 +4,14 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { DatasetEvaluationForm } from '../../components/NewEvaluationForm/DatasetEvaluationForm';
 import { PageHeader } from '../../features/common-features/PageHeader/PageHeader';
 import { Features, useIsFeatureAvailable } from '../../hooks/useIsFeatureAvailable';
+import { useReturnTo } from '../../hooks/useReturnTo';
 import styles from './BenchmarksPage.module.css';
 
 export const NewBenchmarkPage = () => {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const datasetId = searchParams.get('datasetId') ?? undefined;
-    // Only app paths, such as the guided setup that sent the user here.
-    const returnTo = searchParams.get('returnTo')?.startsWith('/') ? searchParams.get('returnTo')! : undefined;
+    const returnTo = useReturnTo();
     const { isAvailable, isLoading } = useIsFeatureAvailable(Features.BENCHMARKS);
 
     return (

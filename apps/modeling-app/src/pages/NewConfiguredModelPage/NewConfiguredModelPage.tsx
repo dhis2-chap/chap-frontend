@@ -2,11 +2,13 @@ import i18n from '@dhis2/d2-i18n';
 import { Button, IconArrowLeft16 } from '@dhis2/ui';
 import { useNavigate } from 'react-router-dom';
 import { PageHeader } from '../../features/common-features/PageHeader/PageHeader';
+import { useReturnTo } from '../../hooks/useReturnTo';
 import { NewConfiguredModelContent } from '../../components/PageContent/NewConfiguredModel';
 import styles from './NewConfiguredModelPage.module.css';
 
 export const NewConfiguredModelPage: React.FC = () => {
     const navigate = useNavigate();
+    const returnTo = useReturnTo();
 
     return (
         <>
@@ -18,9 +20,9 @@ export const NewConfiguredModelPage: React.FC = () => {
                 <Button
                     small
                     icon={<IconArrowLeft16 />}
-                    onClick={() => navigate('/models')}
+                    onClick={() => navigate(returnTo ?? '/models')}
                 >
-                    {i18n.t('Back to models')}
+                    {returnTo ? i18n.t('Back') : i18n.t('Back to models')}
                 </Button>
             </div>
             <NewConfiguredModelContent />

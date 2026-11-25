@@ -7,6 +7,7 @@ import { VariantNameInput, AdditionalCovariatesField } from './FormComponents';
 import { UserOptionsFields } from './FormComponents/UserOptionsFields';
 import { useNavigate } from 'react-router-dom';
 import { useCreateModel } from '../hooks/useCreateModel';
+import { useReturnTo } from '@/hooks/useReturnTo';
 import { NewModelFormValues } from './NewModelForm.types';
 
 type NewModelFormViewProps = {
@@ -23,9 +24,10 @@ export const NewModelFormView = ({
     onValidationError,
 }: NewModelFormViewProps) => {
     const navigate = useNavigate();
+    const returnTo = useReturnTo();
     const { createModel, isCreating } = useCreateModel({
         onSuccess: () => {
-            navigate('/models');
+            navigate(returnTo ?? '/models');
         },
     });
     const methods = useForm<NewModelFormValues>({

@@ -126,6 +126,13 @@ export const EvaluatePage = () => {
                                     disabled={start.isLoading}
                                     onChange={selected => setSelectedIds(selected.map(model => model.id))}
                                 />
+                                <p className={styles.muted}>
+                                    {i18n.t('Each model comes with default hyperparameters, and some offer other configurations to choose from.')}
+                                    {' '}
+                                    <Link className={styles.link} to={`/models/new?returnTo=${encodeURIComponent(pathTo('evaluate'))}`} data-test="guided-custom-model">
+                                        {i18n.t('Set your own hyperparameters')}
+                                    </Link>
+                                </p>
                                 {/* Chap Core is getting a way to tune a model's hyperparameters for the data; until then the option is only shown. */}
                                 <span className={styles.row} title={i18n.t('Hyperparameter optimisation (HPO) tries many values for the hyperparameters of a model on your data and keeps the best.')}>
                                     <Checkbox dense disabled checked={false} label={i18n.t('Tune hyperparameters automatically')} />
