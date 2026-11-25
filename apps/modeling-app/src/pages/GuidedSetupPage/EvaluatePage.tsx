@@ -6,17 +6,16 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Link, useNavigate } from 'react-router-dom';
 import { ChapErrorNotice } from '../../components/ChapErrorNotice';
 import { ModelHealthNotice } from '../../components/ModelHealth/ModelHealth';
-import { getReadiness, sortByReadiness } from '../../components/ModelExecutionForm/Sections/ModelSelector/ModelSelectionModal/ModelSelectionModal';
+import { sortByReadiness } from '../../components/ModelExecutionForm/Sections/ModelSelector/ModelSelectionModal/ModelSelectionModal';
 import { datasetSupportsModel, getBacktestColumns } from '../../components/NewDatasetForm/utils/datasetModels';
 import { ForecastHorizonNotice } from '../../components/NewEvaluationForm/ForecastHorizonNotice';
 import { getMinimumEvaluationPeriods, toBacktestDefaults } from '../../components/NewEvaluationForm/hooks/backtestDefaults';
 import { useForecastHorizonValidation } from '../../components/NewEvaluationForm/hooks/useForecastHorizonValidation';
-import { ViewModelInfoModal } from '../../components/PageContent/Models/ModelsTable/ModelActionsMenu/ViewModelInfoModal';
+import { ModelsSelector } from '../../components/NewEvaluationForm/DatasetEvaluationForm/ModelsSelector/ModelsSelector';
 import { fetchRunnableModel } from '../../hooks/modelsQuery';
 import { useBacktestParameters } from '../../hooks/useBacktestParameters';
 import { useModels } from '../../hooks/useModels';
 import { useModelTemplates } from '../../hooks/useModelTemplates';
-import { toDataTestKey } from '../../utils/dataTestKey';
 import { hasRevisionMismatch } from '../../utils/modelHealth';
 import { countPeriods } from '../../utils/periods';
 import { BenchmarkRunsIndicator } from '../BenchmarksPage/BenchmarkRunsIndicator';
@@ -27,22 +26,8 @@ import { StepNav } from './StepNav';
 import { useGuided } from './useGuidedProgress';
 import styles from './GuidedSetupPage.module.css';
 
-type ModelPackage = { templateName: string; models: ModelSpecRead[] };
-
-/** A configured model is named "template:configuration"; the template is the package it belongs to. */
+/** A configured model is named "template:configuration". */
 const getTemplateName = (model: ModelSpecRead) => model.name.split(':')[0];
-
-const getConfigurationName = (model: ModelSpecRead) => {
-    const [, configuration] = model.name.split(':');
-    return configuration || i18n.t('Default settings');
-};
-
-/** Groups configured models by package, keeping the order of their first model. */
-const groupByPackage = (models: ModelSpecRead[]): ModelPackage[] => {
-    const packages = new Map<string, ModelSpecRead[]>();
-    models.forEach(model => packages.set(getTemplateName(model), [...(packages.get(getTemplateName(model)) ?? []), model]));
-    return [...packages].map(([templateName, items]) => ({ templateName, models: items }));
-};
 
 export const EvaluatePage = () => {
     const navigate = useNavigate();
@@ -52,7 +37,6 @@ export const EvaluatePage = () => {
     const { modelTemplates } = useModelTemplates();
     const defaults = useBacktestParameters(dataset?.periodType);
     const [selectedIds, setSelectedIds] = useState<number[]>([]);
-    const [infoModel, setInfoModel] = useState<ModelSpecRead>();
 
     const columns = dataset?.covariates ?? [];
     const targetColumn = specification?.targetColumn ?? dataset?.targetColumn ?? (columns.includes('disease_cases') ? 'disease_cases' : undefined);
@@ -66,10 +50,6 @@ export const EvaluatePage = () => {
         targetColumn && datasetSupportsModel(getBacktestColumns(columns, targetColumn), dataset?.periodType ?? '', model)
     )));
     const selectedModels = compatibleModels.filter(model => selectedIds.includes(model.id));
-    const packages = groupByPackage(compatibleModels);
-    const getPackageName = (templateName: string, model: ModelSpecRead) => (
-        modelTemplates?.find(template => template.name === templateName)?.displayName || model.displayName || templateName
-    );
     const evaluatedModels = getModelsWithRun(runs, compatibleModels);
     const forecastHorizon = useForecastHorizonValidation(selectedModels, parameters?.nPeriods);
 
@@ -79,7 +59,7 @@ export const EvaluatePage = () => {
         ? getMinimumEvaluationPeriods(dataset?.periodType, { nPeriods, nSplits, stride })
         : undefined;
     const isTooShort = periodCount != null && !!requiredPeriodCount && periodCount < requiredPeriodCount;
-    const settingsPath = `/evaluate/benchmarks/new?datasetId=${dataset?.id}&origin=all`;
+    const settingsPath = `/evaluate/benchmarks/new?datasetId=${dataset?.id}&origin=all&returnTo=${encodeURIComponent(pathTo('evaluate'))}`;
 
     const start = useMutation<unknown, ApiError | Error>({
         mutationFn: async () => {
@@ -138,48 +118,20 @@ export const EvaluatePage = () => {
                 ) : (
                     <>
                         {compatibleModels.length ? (
-                            <ul className={styles.list}>
-                                {packages.map(({ templateName, models: configurations }) => {
-                                    const [model] = configurations;
-                                    const readiness = getReadiness(model);
-                                    return (
-                                        <li key={templateName} className={styles.listItem} data-test={`guided-package-${toDataTestKey(templateName)}`}>
-                                            <div className={styles.modelRow}>
-                                                <span className={styles.itemName}>{getPackageName(templateName, model)}</span>
-                                                <div className={styles.row}>
-                                                    {configurations.some(item => evaluatedModels.includes(item)) && <Tag positive>{i18n.t('Evaluated')}</Tag>}
-                                                    {readiness && (
-                                                        <span className={styles.readiness} title={readiness.description}>
-                                                            <span className={styles.dot} style={{ backgroundColor: readiness.color }} />
-                                                            {readiness.label}
-                                                        </span>
-                                                    )}
-                                                    <Button small secondary onClick={() => setInfoModel(model)}>{i18n.t('Details')}</Button>
-                                                </div>
-                                            </div>
-                                            {model.description && <p className={styles.packageDescription}>{model.description}</p>}
-                                            <div className={styles.options}>
-                                                {configurations.map(configuration => (
-                                                    <Checkbox
-                                                        key={configuration.id}
-                                                        dense
-                                                        checked={selectedIds.includes(configuration.id)}
-                                                        disabled={start.isLoading}
-                                                        onChange={({ checked }) => setSelectedIds(ids => (checked ? [...ids, configuration.id] : ids.filter(id => id !== configuration.id)))}
-                                                        dataTest={`guided-model-${toDataTestKey(configuration.name)}`}
-                                                        label={getConfigurationName(configuration)}
-                                                    />
-                                                ))}
-                                                {/* Chap Core is getting a way to tune a package's settings for the data; until then the option is only shown. */}
-                                                <span className={styles.row} title={i18n.t('Hyperparameter optimisation (HPO) tries many settings on your data and keeps the best.')}>
-                                                    <Checkbox dense disabled checked={false} label={i18n.t('Tune settings automatically')} />
-                                                    <Tag>{i18n.t('Coming soon')}</Tag>
-                                                </span>
-                                            </div>
-                                        </li>
-                                    );
-                                })}
-                            </ul>
+                            <>
+                                <ModelsSelector
+                                    models={compatibleModels}
+                                    selectedModels={selectedModels}
+                                    evaluatedIds={evaluatedModels.map(model => model.id)}
+                                    disabled={start.isLoading}
+                                    onChange={selected => setSelectedIds(selected.map(model => model.id))}
+                                />
+                                {/* Chap Core is getting a way to tune a model's hyperparameters for the data; until then the option is only shown. */}
+                                <span className={styles.row} title={i18n.t('Hyperparameter optimisation (HPO) tries many values for the hyperparameters of a model on your data and keeps the best.')}>
+                                    <Checkbox dense disabled checked={false} label={i18n.t('Tune hyperparameters automatically')} />
+                                    <Tag>{i18n.t('Coming soon')}</Tag>
+                                </span>
+                            </>
                         ) : (
                             <NoticeBox warning title={i18n.t('No model can use this data')}>
                                 {i18n.t('No model matches the columns and period type of this data. Import data with the columns the models need.')}
@@ -198,7 +150,10 @@ export const EvaluatePage = () => {
                             <div className={styles.settings}>
                                 <span className={styles.muted}>{i18n.t('Evaluation settings')}</span>
                                 <SpecificationParameters specification={parameters} />
-                                {!specification && <Link className={styles.link} to={settingsPath}>{i18n.t('Change')}</Link>}
+                                {/* Other settings start a new evaluation, which the guided setup then follows. */}
+                                <Link className={styles.link} to={settingsPath} data-test="guided-evaluation-settings">
+                                    {specification ? i18n.t('Evaluate with other settings') : i18n.t('Change')}
+                                </Link>
                             </div>
                         )}
                         {isTooShort && (
@@ -241,7 +196,7 @@ export const EvaluatePage = () => {
                         </div>
                     )}
                     {runs.length > 0 ? (
-                        <BenchmarkTable specification={specification} title={i18n.t('Results')} rowAction={promote} />
+                        <BenchmarkTable specification={specification} title={i18n.t('Results')} rowAction={promote} compareByDefault />
                     ) : !runningJobs.length && (
                         <NoticeBox warning title={i18n.t('No results yet')}>
                             {i18n.t('No model has finished. See what happened, then evaluate the models again.')}
@@ -257,9 +212,6 @@ export const EvaluatePage = () => {
                 nextLabel={i18n.t('Continue to promotion')}
                 blockedReason={runs.length ? undefined : runningJobs.length ? i18n.t('Waiting for a model to finish') : i18n.t('Evaluate a model first')}
             />
-            {infoModel && (
-                <ViewModelInfoModal id={infoModel.id} sourceUrl={infoModel.sourceUrl} onClose={() => setInfoModel(undefined)} />
-            )}
         </>
     );
 };

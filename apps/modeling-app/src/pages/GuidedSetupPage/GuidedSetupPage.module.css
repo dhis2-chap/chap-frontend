@@ -169,43 +169,6 @@ a.stepperLink:hover {
     gap: var(--spacers-dp8) var(--spacers-dp16);
 }
 
-/* Two lines are enough to tell packages apart; Details has the rest. */
-.packageDescription {
-    display: -webkit-box;
-    margin: var(--spacers-dp4) 0 0;
-    max-inline-size: 860px;
-    overflow: hidden;
-    font-size: 13px;
-    line-height: 18px;
-    color: var(--colors-grey700);
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-}
-
-/* The settings a package can be evaluated with. */
-.options {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: var(--spacers-dp8) var(--spacers-dp24);
-    margin-block-start: var(--spacers-dp8);
-}
-
-.readiness {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 13px;
-    color: var(--colors-grey700);
-    cursor: help;
-}
-
-.dot {
-    inline-size: 8px;
-    block-size: 8px;
-    border-radius: 50%;
-}
-
 .settings {
     display: flex;
     align-items: center;

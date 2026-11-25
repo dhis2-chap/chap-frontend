@@ -49,7 +49,10 @@ test('goes from DHIS2 data to predictions through the four guided steps', async 
     await expect(page).toHaveURL(/\/guided\/evaluate\?datasetId=\d+$/, { timeout: 60_000 });
     await expect(page.locator('[data-test="guided-step-data"]')).toContainText(name);
     await expect(page.locator('[data-test="guided-continue"]')).toBeDisabled();
-    await page.locator('[data-test="guided-model-naive-model"]').click();
+    await page.locator('[data-test="evaluation-model-select-button"]').click();
+    const picker = page.getByRole('dialog');
+    await picker.locator('[data-test="model-toggle-naive-model"]').click();
+    await picker.getByRole('button', { name: 'Use selected models (1)', exact: true }).click();
     const evaluationResponse = page.waitForResponse(response => response.url().endsWith('/v1/analytics/create-backtests') && response.request().method() === 'POST');
     await page.locator('[data-test="guided-start-evaluation"]').click();
     const evaluation = await readJson<MakeBacktestsResponse>(await evaluationResponse, 'Start guided evaluation');

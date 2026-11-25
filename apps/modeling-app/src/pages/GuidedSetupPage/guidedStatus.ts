@@ -38,7 +38,8 @@ export const getGuidedSetupSummary = (
 ): GuidedSetupSummary => {
     const latest = specifications.filter(item => item.dataset.id === dataset.id).sort((a, b) => b.id - a.id)[0];
     const runs = latest ? backtests.filter(run => run.specificationId === latest.id) : [];
-    const promotedRuns = runs.filter(run => run.predictionSetupId != null);
+    // A model promoted from an earlier evaluation keeps predicting when the data is evaluated again.
+    const promotedRuns = backtests.filter(run => run.datasetId === dataset.id && run.predictionSetupId != null);
     const stage: GuidedStage = promotedRuns.length
         ? 'promoted'
         : runs.length ? 'readyToPromote' : runningCount ? 'evaluating' : 'notEvaluated';

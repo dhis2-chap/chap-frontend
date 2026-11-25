@@ -17,9 +17,11 @@ type Props = {
     /** Called when the picker is closed without confirming a selection. */
     onCancel?: () => void;
     onChange: (models: ModelSpecRead[]) => void;
+    /** Marks models already evaluated on this data in the picker. */
+    evaluatedIds?: number[];
 };
 
-export const ModelsSelector = ({ models, selectedModels, disabled, disabledReason, openOnMount, onCancel, onChange }: Props) => {
+export const ModelsSelector = ({ models, selectedModels, disabled, disabledReason, openOnMount, onCancel, onChange, evaluatedIds }: Props) => {
     const [isModalOpen, setIsModalOpen] = useState(() => !!openOnMount && models.length > 0 && !disabledReason && !disabled);
     const confirmed = useRef(false);
     const [infoModel, setInfoModel] = useState<ModelSpecRead>();
@@ -64,6 +66,7 @@ export const ModelsSelector = ({ models, selectedModels, disabled, disabledReaso
                 <ModelSelectionModal
                     multiple
                     models={models}
+                    evaluatedIds={evaluatedIds}
                     selectedModels={selectedModels}
                     onClose={() => {
                         setIsModalOpen(false);

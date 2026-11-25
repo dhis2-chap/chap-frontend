@@ -17,6 +17,7 @@ import {
     MultiSelect,
     MultiSelectOption,
     SingleSelect,
+    Tag,
     Tooltip,
 } from '@dhis2/ui';
 import { IconFlag16 } from '@dhis2/ui-icons';
@@ -32,6 +33,8 @@ import { hasRevisionMismatch } from '@/utils/modelHealth';
 
 type Props = {
     models?: ModelSpecRead[];
+    /** Models already evaluated on this data, marked so they are not picked twice by mistake. */
+    evaluatedIds?: number[];
     onClose: () => void;
 } & ({
     multiple?: false;
@@ -151,7 +154,7 @@ const getSelectButtonLabel = (multiple: boolean, isSelected: boolean): string =>
 };
 
 export const ModelSelectionModal = (props: Props) => {
-    const { models, onClose, multiple } = props;
+    const { models, evaluatedIds = [], onClose, multiple } = props;
     const [selectedIds, setSelectedIds] = useState<number[]>(() =>
         props.multiple ? props.selectedModels.map(model => model.id) : [],
     );
@@ -322,6 +325,7 @@ export const ModelSelectionModal = (props: Props) => {
                                                     <div className={styles.listName}>
                                                         <span className={styles.listNameText}>{getModelName(model)}</span>
                                                         <ModelHealthBadge model={model} />
+                                                        {evaluatedIds.includes(model.id) && <Tag positive>{i18n.t('Evaluated')}</Tag>}
                                                     </div>
                                                     <span className={styles.listAuthor} title={getAuthorLine(model)}>
                                                         {getAuthorLine(model)}
@@ -345,6 +349,7 @@ export const ModelSelectionModal = (props: Props) => {
                                         <header className={styles.detailHeader}>
                                             <div>
                                                 <h3 className={styles.detailName}>{getModelName(focusedModel)}</h3>
+                                                {evaluatedIds.includes(focusedModel.id) && <Tag positive>{i18n.t('Evaluated')}</Tag>}
                                             </div>
                                         </header>
 

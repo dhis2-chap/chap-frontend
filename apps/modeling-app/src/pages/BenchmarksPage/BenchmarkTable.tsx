@@ -31,6 +31,8 @@ type Props = {
     title?: string;
     /* Shown in each row before View evaluation. Keep it stable between renders. */
     rowAction?: (run: LeaderboardBacktestRead) => ReactNode;
+    /* Starts with the scores compared with the default baseline. */
+    compareByDefault?: boolean;
     children?: ReactNode;
 };
 
@@ -47,7 +49,7 @@ const ViewEvaluationButton = ({ evaluationId }: { evaluationId: number }) => {
     );
 };
 
-export const BenchmarkTable = ({ specification, options, actions, title, rowAction, children }: Props) => {
+export const BenchmarkTable = ({ specification, options, actions, title, rowAction, compareByDefault = false, children }: Props) => {
     const { backtests } = specification;
     const evaluationId = backtests[0]?.id;
     // Chap Core 2.6 lists the configured metrics with the specification; older versions need the catalog.
@@ -65,7 +67,7 @@ export const BenchmarkTable = ({ specification, options, actions, title, rowActi
     const metricIds = showAllMetrics || !defaultMetricIds.length ? allMetricIds : defaultMetricIds;
     // Runs keep pointing at archived models, so resolve names against all of them.
     const { models } = useModels({ includeArchived: true });
-    const [comparing, setComparing] = useState(false);
+    const [comparing, setComparing] = useState(compareByDefault);
     const { references, reference: selectedReference, select } = useReferenceModel(specification);
     const reference = comparing ? selectedReference : undefined;
     // Newest runs first until the user sorts by a column. Baselines are only shown as the reference to compare with.
@@ -116,7 +118,14 @@ export const BenchmarkTable = ({ specification, options, actions, title, rowActi
                     if (value === undefined) return '—';
                     return (
                         <span
-                            className={cx({ [comparisonStyles.better]: reference && value > 0, [comparisonStyles.worse]: reference && value < 0, [styles.best]: best })}
+                            className={cx({
+                                [comparisonStyles.better]: reference && value > 0,
+                                [comparisonStyles.worse]: reference && value < 0,
+                                [styles.best]: best,
+                                // The best run can still be worse than the baseline, so the highlight keeps the comparison colour.
+                                [styles.bestBetter]: best && reference && value > 0,
+                                [styles.bestWorse]: best && reference && value < 0,
+                            })}
                             title={best ? i18n.t('Best score among these runs') : undefined}
                         >
                             {reference ? formatComparison(value, metric) : value.toLocaleString(undefined, { maximumSignificantDigits: 6 })}

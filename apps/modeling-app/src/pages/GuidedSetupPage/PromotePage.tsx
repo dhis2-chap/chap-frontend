@@ -14,6 +14,7 @@ import { getDefaultMetricIds } from '../../components/PageContent/EvaluationDeta
 import { useCreatePredictionSetup } from '../../components/PageContent/EvaluationDetails/QuickActionsWidget/hooks/useCreatePredictionSetup';
 import { ImportMappingFields, SetupNameField, SignalPolicyField, usePredictionSetupForm } from '../../components/PredictionSetup/MarkReadyForForecastingModal';
 import { useAlertPolicies } from '../../hooks/useAlertPolicies';
+import { BACKTESTS_LIST_QUERY_KEY } from '../../hooks/useBacktests';
 import { useAlertPolicyDisplay } from '../../hooks/useAlertPolicyDisplay';
 import { buildQuantileTargetsFromForm } from '../../utils/predictionSetupImportMapping';
 import { getBestRunIds, getMetricIds, metricSortKey } from '../BenchmarksPage/benchmarkUtils';
@@ -85,7 +86,10 @@ export const PromotePage = () => {
             return;
         }
         // The next step opens once the evaluation says which model is promoted.
-        await queryClient.invalidateQueries({ queryKey: ['backtest-specifications'] });
+        await Promise.all([
+            queryClient.invalidateQueries({ queryKey: ['backtest-specifications'] }),
+            queryClient.invalidateQueries({ queryKey: [BACKTESTS_LIST_QUERY_KEY] }),
+        ]);
         navigate(pathTo('predict'));
     });
 

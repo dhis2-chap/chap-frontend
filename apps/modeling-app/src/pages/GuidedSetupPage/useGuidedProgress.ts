@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef } from 'react';
 import type { BacktestRead, DataSetInfo } from '@dhis2-chap/ui';
 import { useQueryClient } from '@tanstack/react-query';
 import { useOutletContext, useSearchParams } from 'react-router-dom';
+import { useBacktests } from '../../hooks/useBacktests';
 import { useDatasets } from '../../hooks/useDatasets';
 import { Features, useIsFeatureAvailable } from '../../hooks/useIsFeatureAvailable';
 import { sortByCreatedDesc } from '../../utils/sortByCreated';
@@ -29,6 +30,7 @@ export const useGuidedProgress = () => {
     const { isAvailable, isLoading: isVersionLoading } = useIsFeatureAvailable(Features.BENCHMARKS);
     const datasets = useDatasets();
     const specifications = useBacktestSpecifications(isAvailable);
+    const { backtests, isLoading: isBacktestsLoading, error: backtestsError } = useBacktests();
 
     const savedDatasets = sortByCreatedDesc((datasets.data ?? []).filter(isSaved));
     const importedDatasets = savedDatasets.filter(dataset => dataset.createdManually !== false);
@@ -54,20 +56,23 @@ export const useGuidedProgress = () => {
     }, [runningJobs.length, queryClient]);
 
     const runs = specification?.backtests ?? [];
-    const promotedRuns = runs.filter(run => run.predictionSetupId != null);
+    // A model promoted from an earlier evaluation keeps predicting when the data is evaluated again.
+    // The newest evaluation is read as well, since the list of all runs can lag behind a promotion.
+    const promotedRuns = [...runs, ...(backtests ?? []).filter(run => run.datasetId === dataset?.id && !runs.some(item => item.id === run.id))]
+        .filter(run => run.predictionSetupId != null);
     const predictionSetupIds = [...new Set(promotedRuns.map(run => run.predictionSetupId!))].sort((a, b) => b - a);
     const selectedId = dataset?.id;
     const pathTo = useCallback((step: GuidedStep, id = selectedId) => (
         `/guided/${step}${id != null ? `?datasetId=${id}` : ''}`
     ), [selectedId]);
     // The furthest step that can be worked on.
-    const current: GuidedStep = !dataset ? 'data' : !runs.length ? 'evaluate' : !predictionSetupIds.length ? 'promote' : 'predict';
+    const current: GuidedStep = !dataset ? 'data' : predictionSetupIds.length ? 'predict' : runs.length ? 'promote' : 'evaluate';
 
     return {
         isAvailable,
         isVersionLoading,
-        isLoading: isVersionLoading || datasets.isLoading || specifications.isInitialLoading || (!!latest && !specification),
-        error: datasets.error ?? specifications.error ?? details.error,
+        isLoading: isVersionLoading || datasets.isLoading || specifications.isInitialLoading || isBacktestsLoading || (!!latest && !specification),
+        error: datasets.error ?? specifications.error ?? details.error ?? backtestsError,
         importedDatasets,
         dataset,
         isDatasetMissing: !!datasetId && !dataset,

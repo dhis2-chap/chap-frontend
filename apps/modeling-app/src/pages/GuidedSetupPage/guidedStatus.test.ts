@@ -4,8 +4,8 @@ import { getCoverageStatus, getGuidedSetupSummary } from './guidedStatus';
 
 const dataset = { id: 1, name: 'Dengue' } as DataSetInfo & { id: number };
 const specification = (id: number, datasetId = 1) => ({ id, dataset: { id: datasetId } }) as BacktestSpecificationSummary;
-const run = (id: number, specificationId: number, predictionSetupId: number | null = null) => (
-    { id, specificationId, predictionSetupId } as BacktestRead
+const run = (id: number, specificationId: number, predictionSetupId: number | null = null, datasetId = 1) => (
+    { id, specificationId, predictionSetupId, datasetId } as BacktestRead
 );
 
 describe('getGuidedSetupSummary', () => {
@@ -17,11 +17,17 @@ describe('getGuidedSetupSummary', () => {
         expect(getGuidedSetupSummary(dataset, [], [], 2)).toMatchObject({ stage: 'evaluating', step: 'evaluate' });
     });
 
-    it('is ready to promote when the newest evaluation has results but nothing promoted', () => {
-        const summary = getGuidedSetupSummary(dataset, [specification(3), specification(5)], [run(10, 5), run(11, 3, 7)], 0);
+    it('is ready to promote when the newest evaluation has results but nothing is promoted', () => {
+        const summary = getGuidedSetupSummary(dataset, [specification(3), specification(5)], [run(10, 5), run(11, 3), run(12, 6, 7, 2)], 0);
         expect(summary).toMatchObject({ stage: 'readyToPromote', step: 'promote' });
-        // A model promoted from an older evaluation does not count.
         expect(summary.runs.map(item => item.id)).toEqual([10]);
+    });
+
+    it('stays promoted when the data is evaluated again with other settings', () => {
+        const summary = getGuidedSetupSummary(dataset, [specification(3), specification(5)], [run(10, 5), run(11, 3, 7)], 0);
+        expect(summary).toMatchObject({ stage: 'promoted', step: 'predict' });
+        expect(summary.runs.map(item => item.id)).toEqual([10]);
+        expect(summary.promotedRuns.map(item => item.id)).toEqual([11]);
     });
 
     it('is promoted once a model of the newest evaluation is promoted', () => {

@@ -49,9 +49,11 @@ type Props = {
     initialDatasetId?: string;
     initialValues?: Partial<Pick<FormValues, 'name' | 'modelNames'>>;
     benchmarkContext?: boolean;
+    /** Where to go once the runs have started, instead of the benchmark or the jobs. */
+    returnTo?: string;
 };
 
-export const DatasetEvaluationForm = ({ initialDatasetId = '', initialValues, benchmarkContext = false }: Props) => {
+export const DatasetEvaluationForm = ({ initialDatasetId = '', initialValues, benchmarkContext = false, returnTo }: Props) => {
     const datasets = useDatasets();
     const { models, isLoading: isModelsLoading, error: modelsError } = useModels();
     const navigate = useNavigate();
@@ -120,7 +122,7 @@ export const DatasetEvaluationForm = ({ initialDatasetId = '', initialValues, be
         },
         onSettled: () => queryClient.invalidateQueries({ queryKey: ['jobs'] }),
         onSuccess: specificationId => navigate(
-            benchmarkContext && specificationId != null ? `/evaluate/benchmarks/${specificationId}` : '/jobs',
+            returnTo ?? (benchmarkContext && specificationId != null ? `/evaluate/benchmarks/${specificationId}` : '/jobs'),
         ),
     });
 

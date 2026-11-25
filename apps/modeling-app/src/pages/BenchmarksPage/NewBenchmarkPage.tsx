@@ -10,6 +10,8 @@ export const NewBenchmarkPage = () => {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const datasetId = searchParams.get('datasetId') ?? undefined;
+    // Only app paths, such as the guided setup that sent the user here.
+    const returnTo = searchParams.get('returnTo')?.startsWith('/') ? searchParams.get('returnTo')! : undefined;
     const { isAvailable, isLoading } = useIsFeatureAvailable(Features.BENCHMARKS);
 
     return (
@@ -20,12 +22,12 @@ export const NewBenchmarkPage = () => {
             />
             <div className={styles.stack}>
                 <div>
-                    <Button small icon={<IconArrowLeft16 />} onClick={() => navigate('/evaluate/benchmarks')}>
-                        {i18n.t('Back to benchmarks')}
+                    <Button small icon={<IconArrowLeft16 />} onClick={() => navigate(returnTo ?? '/evaluate/benchmarks')}>
+                        {returnTo ? i18n.t('Back') : i18n.t('Back to benchmarks')}
                     </Button>
                 </div>
                 {isLoading ? <div className={styles.loading}><CircularLoader /></div> : isAvailable ? (
-                    <DatasetEvaluationForm key={datasetId} initialDatasetId={datasetId} benchmarkContext />
+                    <DatasetEvaluationForm key={datasetId} initialDatasetId={datasetId} benchmarkContext returnTo={returnTo} />
                 ) : (
                     <NoticeBox title={i18n.t('Benchmarks unavailable')}>
                         {i18n.t('This Chap server does not support backtest specifications. Update Chap Core to use benchmarks.')}
