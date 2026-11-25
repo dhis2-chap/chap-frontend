@@ -13,7 +13,7 @@ import { ChapErrorNotice } from '../../components/ChapErrorNotice';
 import { getDefaultMetricIds } from '../../components/PageContent/EvaluationDetails/EvaluationMetricsWidget/metricCatalog';
 import { useCreatePredictionSetup } from '../../components/PageContent/EvaluationDetails/QuickActionsWidget/hooks/useCreatePredictionSetup';
 import { ImportMappingFields, SetupNameField, SignalPolicyField, usePredictionSetupForm } from '../../components/PredictionSetup/MarkReadyForForecastingModal';
-import { isAlertPoliciesUnavailable, useAlertPolicies } from '../../hooks/useAlertPolicies';
+import { useAlertPolicies } from '../../hooks/useAlertPolicies';
 import { useAlertPolicyDisplay } from '../../hooks/useAlertPolicyDisplay';
 import { buildQuantileTargetsFromForm } from '../../utils/predictionSetupImportMapping';
 import { getBestRunIds, getMetricIds, metricSortKey } from '../BenchmarksPage/benchmarkUtils';
@@ -44,7 +44,7 @@ export const PromotePage = () => {
     const [isCreatingPolicy, setIsCreatingPolicy] = useState(false);
     const form = usePredictionSetupForm({ name: dataset?.name });
     const { createPredictionSetup, isCreating, error } = useCreatePredictionSetup();
-    const { data: policies, error: policiesError } = useAlertPolicies();
+    const { data: policies } = useAlertPolicies();
     const selectedPolicy = policies?.find(policy => String(policy.id) === form.watch('alert_policy_id'));
 
     // Models are listed by the first metric of the modeling defaults, best first.
@@ -172,21 +172,19 @@ export const PromotePage = () => {
                         <ModelTrustCheck key={selectedRun.id} specification={specification} run={selectedRun} metric={metric} />
                     </Card>
                 )}
-                {!isAlertPoliciesUnavailable(policiesError) && (
-                    <Card className={styles.card}>
-                        <div>
-                            <h3 className={styles.title}>{i18n.t('Signals (optional)')}</h3>
-                            <p className={styles.description}>
-                                {i18n.t('A signal policy turns each prediction into signals, such as an outbreak alert, for someone to review before they are released.')}
-                            </p>
-                        </div>
-                        <div className={styles.field}>
-                            <SignalPolicyField form={form} onCreateSignalPolicy={() => setIsCreatingPolicy(true)} />
-                        </div>
-                        {selectedPolicy && <PolicyLevels policy={selectedPolicy} />}
-                        <Link className={styles.link} to="/signals">{i18n.t('Manage signal policies')}</Link>
-                    </Card>
-                )}
+                <Card className={styles.card}>
+                    <div>
+                        <h3 className={styles.title}>{i18n.t('Signals (optional)')}</h3>
+                        <p className={styles.description}>
+                            {i18n.t('A signal policy turns each prediction into signals, such as an outbreak alert, for someone to review before they are released.')}
+                        </p>
+                    </div>
+                    <div className={styles.field}>
+                        <SignalPolicyField form={form} onCreateSignalPolicy={() => setIsCreatingPolicy(true)} />
+                    </div>
+                    {selectedPolicy && <PolicyLevels policy={selectedPolicy} />}
+                    <Link className={styles.link} to="/signals">{i18n.t('Manage signal policies')}</Link>
+                </Card>
                 <Card className={styles.card}>
                     <div>
                         <h3 className={styles.title}>{i18n.t('DHIS2 output (optional)')}</h3>
@@ -199,11 +197,7 @@ export const PromotePage = () => {
                 <Card className={styles.card}>
                     <div>
                         <h3 className={styles.title}>{i18n.t('Name and promote')}</h3>
-                        <p className={styles.description}>
-                            {isAlertPoliciesUnavailable(policiesError)
-                                ? i18n.t('You can change the name and the DHIS2 output later.')
-                                : i18n.t('You can change the name, the signal policy and the DHIS2 output later.')}
-                        </p>
+                        <p className={styles.description}>{i18n.t('You can change the name, the signal policy and the DHIS2 output later.')}</p>
                     </div>
                     <div className={styles.field}>
                         <SetupNameField form={form} />

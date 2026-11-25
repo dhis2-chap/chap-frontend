@@ -104,10 +104,10 @@ type SignalPolicyFieldProps = FieldProps & {
 };
 
 export const SignalPolicyField = ({ form: { control }, onCreateSignalPolicy }: SignalPolicyFieldProps) => {
-    const { data: alertPolicies, error: alertPoliciesError, isLoading: alertPoliciesLoading } = useAlertPolicies();
+    const { data: alertPolicies, error, isLoading: alertPoliciesLoading } = useAlertPolicies();
+    // Signals are optional: a Chap Core without signal policies reads as one that has none yet.
+    const alertPoliciesError = isAlertPoliciesUnavailable(error) ? null : error;
     const hasNoAlertPolicies = !alertPoliciesLoading && !alertPoliciesError && !alertPolicies?.length;
-
-    if (isAlertPoliciesUnavailable(alertPoliciesError)) return null;
 
     return (
         <>
