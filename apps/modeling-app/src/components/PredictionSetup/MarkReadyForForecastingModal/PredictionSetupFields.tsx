@@ -13,7 +13,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { Controller, useForm, type UseFormReturn } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useAlertPolicies } from '@/hooks/useAlertPolicies';
+import { isAlertPoliciesUnavailable, useAlertPolicies } from '@/hooks/useAlertPolicies';
 import { getChapErrorMessage } from '@/utils/chapErrors';
 import { DataItemSelect } from '../../PageContent/PredictionImport/QuantileMappingForm/DataItemSelect';
 import {
@@ -106,6 +106,8 @@ type SignalPolicyFieldProps = FieldProps & {
 export const SignalPolicyField = ({ form: { control }, onCreateSignalPolicy }: SignalPolicyFieldProps) => {
     const { data: alertPolicies, error: alertPoliciesError, isLoading: alertPoliciesLoading } = useAlertPolicies();
     const hasNoAlertPolicies = !alertPoliciesLoading && !alertPoliciesError && !alertPolicies?.length;
+
+    if (isAlertPoliciesUnavailable(alertPoliciesError)) return null;
 
     return (
         <>

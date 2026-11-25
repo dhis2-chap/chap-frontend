@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-11-24T18:00:47.746Z\n"
-"PO-Revision-Date: 2026-11-24T18:00:47.747Z\n"
+"POT-Creation-Date: 2026-11-25T13:26:54.036Z\n"
+"PO-Revision-Date: 2026-11-25T13:26:54.037Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -2032,6 +2032,9 @@ msgstr "Create prediction setup"
 msgid "Compare with..."
 msgstr "Compare with..."
 
+msgid "Continue in guided setup"
+msgstr "Continue in guided setup"
+
 msgid "Prediction setup created"
 msgstr "Prediction setup created"
 
@@ -2733,8 +2736,8 @@ msgstr "No organisation units match the selected filters."
 msgid "Guided setup"
 msgstr "Guided setup"
 
-msgid "Advanced"
-msgstr "Advanced"
+msgid "All tools"
+msgstr "All tools"
 
 msgid "Dashboard"
 msgstr "Dashboard"
@@ -3327,6 +3330,9 @@ msgstr "Continue to evaluation"
 msgid "Choose data first"
 msgstr "Choose data first"
 
+msgid "Default settings"
+msgstr "Default settings"
+
 msgid "Promote"
 msgstr "Promote"
 
@@ -3359,6 +3365,19 @@ msgstr "Evaluated"
 
 msgid "Details"
 msgstr "Details"
+
+msgid ""
+"Hyperparameter optimisation (HPO) tries many settings on your data and "
+"keeps the best."
+msgstr ""
+"Hyperparameter optimisation (HPO) tries many settings on your data and "
+"keeps the best."
+
+msgid "Tune settings automatically"
+msgstr "Tune settings automatically"
+
+msgid "Coming soon"
+msgstr "Coming soon"
 
 msgid "No model can use this data"
 msgstr "No model can use this data"
@@ -3476,6 +3495,9 @@ msgstr "Four steps from your DHIS2 data to predictions."
 msgid "Could not load your setup"
 msgstr "Could not load your setup"
 
+msgid "All setups"
+msgstr "All setups"
+
 msgid "Does it beat a simple baseline?"
 msgstr "Does it beat a simple baseline?"
 
@@ -3498,6 +3520,9 @@ msgstr "Worse"
 msgid "Better"
 msgstr "Better"
 
+msgid "Same"
+msgstr "Same"
+
 msgid "Not compared yet"
 msgstr "Not compared yet"
 
@@ -3510,18 +3535,63 @@ msgstr "Is it right about how sure it is?"
 msgid "Yes, {{share}} of the actual values were inside its range"
 msgstr "Yes, {{share}} of the actual values were inside its range"
 
+msgid "Partly, {{share}} of the actual values were inside its range"
+msgstr "Partly, {{share}} of the actual values were inside its range"
+
 msgid "No, only {{share}} of the actual values were inside its range"
 msgstr "No, only {{share}} of the actual values were inside its range"
 
 msgid ""
-"A model gives a range it expects {{target}} of the values to fall in. Far "
-"fewer means it is too sure of itself, so its alerts will mislead."
+"A model gives a range it expects {{target}} of the values to fall in. Fewer "
+"means it is too sure of itself, so its alerts can mislead."
 msgstr ""
-"A model gives a range it expects {{target}} of the values to fall in. Far "
-"fewer means it is too sure of itself, so its alerts will mislead."
+"A model gives a range it expects {{target}} of the values to fall in. Fewer "
+"means it is too sure of itself, so its alerts can mislead."
 
 msgid "Expected {{target}}"
 msgstr "Expected {{target}}"
+
+msgid "Predicting"
+msgstr "Predicting"
+
+msgid "Ready to promote"
+msgstr "Ready to promote"
+
+msgid "Evaluating"
+msgstr "Evaluating"
+
+msgid "Not evaluated"
+msgstr "Not evaluated"
+
+msgid "Predictions from {{models}}"
+msgstr "Predictions from {{models}}"
+
+msgid "{{count}} models evaluated, none promoted"
+msgid_plural "{{count}} models evaluated, none promoted"
+msgstr[0] "{{count}} model evaluated, none promoted"
+msgstr[1] "{{count}} models evaluated, none promoted"
+
+msgid "No models evaluated yet"
+msgstr "No models evaluated yet"
+
+msgid "Your setups"
+msgstr "Your setups"
+
+msgid ""
+"Each set of imported data is a setup. Continue where it stopped, or start a "
+"new one with new data."
+msgstr ""
+"Each set of imported data is a setup. Continue where it stopped, or start a "
+"new one with new data."
+
+msgid "Start a new setup"
+msgstr "Start a new setup"
+
+msgid "Could not load your setups"
+msgstr "Could not load your setups"
+
+msgid "Continue"
+msgstr "Continue"
 
 msgid "Run and review predictions"
 msgstr "Run and review predictions"
@@ -3544,6 +3614,9 @@ msgstr "Promoted{{colon}} {{models}}"
 msgid "Go to predictions"
 msgstr "Go to predictions"
 
+msgid "The model to promote"
+msgstr "The model to promote"
+
 msgid "Choose the model to promote"
 msgstr "Choose the model to promote"
 
@@ -3553,6 +3626,9 @@ msgid ""
 msgstr ""
 "Promoting a model makes it the one that produces your predictions. Nothing "
 "runs until you start a prediction."
+
+msgid "Choose another model"
+msgstr "Choose another model"
 
 msgid "Not better than {{baseline}}"
 msgstr "Not better than {{baseline}}"
@@ -3570,8 +3646,8 @@ msgstr ""
 "Two checks and a look at the forecasts of {{model}}. They describe the "
 "past; the next step keeps checking the model once it is in use."
 
-msgid "Signals"
-msgstr "Signals"
+msgid "Signals (optional)"
+msgstr "Signals (optional)"
 
 msgid ""
 "A signal policy turns each prediction into signals, such as an outbreak "
@@ -3580,8 +3656,8 @@ msgstr ""
 "A signal policy turns each prediction into signals, such as an outbreak "
 "alert, for someone to review before they are released."
 
-msgid "DHIS2 output"
-msgstr "DHIS2 output"
+msgid "DHIS2 output (optional)"
+msgstr "DHIS2 output (optional)"
 
 msgid ""
 "Predictions are imported into DHIS2 data elements after you have reviewed "
@@ -3592,6 +3668,9 @@ msgstr ""
 
 msgid "Name and promote"
 msgstr "Name and promote"
+
+msgid "You can change the name and the DHIS2 output later."
+msgstr "You can change the name and the DHIS2 output later."
 
 msgid "You can change the name, the signal policy and the DHIS2 output later."
 msgstr "You can change the name, the signal policy and the DHIS2 output later."
@@ -3613,9 +3692,6 @@ msgstr "Promote a model first"
 
 msgid "Back"
 msgstr "Back"
-
-msgid "Continue"
-msgstr "Continue"
 
 msgid "Data"
 msgstr "Data"
