@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import i18n from '@dhis2/d2-i18n';
-import { Button, CircularLoader, NoticeBox, SingleSelectField, SingleSelectOption, Tag } from '@dhis2/ui';
+import { Button, CircularLoader, NoticeBox, Radio, Tag } from '@dhis2/ui';
 import { ApiError, BacktestSpecificationSummary, BacktestsService, Card, LeaderboardBacktestRead, MakeBacktestsRequest, ModelSpecRead, ModelTemplateRole } from '@dhis2-chap/ui';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Link, useNavigate } from 'react-router-dom';
@@ -47,12 +47,15 @@ const isSameParameters = (a?: Partial<BacktestParameters>, b?: Partial<BacktestP
     PARAMETER_KEYS.every(key => a?.[key] === b?.[key])
 );
 
-/** Tells the evaluations of the same data apart by their settings. */
-const describeEvaluation = (item: BacktestSpecificationSummary, isNewest: boolean) => [
-    i18n.t('{{count}} periods ahead', { count: item.nPeriods, defaultValue: '{{count}} period ahead', defaultValue_plural: '{{count}} periods ahead' }),
-    i18n.t('{{count}} splits', { count: item.nSplits, defaultValue: '{{count}} split', defaultValue_plural: '{{count}} splits' }),
-    i18n.t('{{count}} models', { count: item.backtestCount, defaultValue: '{{count}} model', defaultValue_plural: '{{count}} models' }),
-].join(' · ') + (isNewest ? ` (${i18n.t('newest')})` : '');
+/** Tells the evaluation setups of the same data apart by their main settings. */
+const describeSetup = (parameters: Partial<BacktestParameters>) => [
+    i18n.t('{{count}} periods ahead', { count: parameters.nPeriods, defaultValue: '{{count}} period ahead', defaultValue_plural: '{{count}} periods ahead' }),
+    i18n.t('{{count}} splits', { count: parameters.nSplits, defaultValue: '{{count}} split', defaultValue_plural: '{{count}} splits' }),
+].join(' · ');
+
+const countModels = (item: BacktestSpecificationSummary) => (
+    i18n.t('{{count}} models evaluated', { count: item.backtestCount, defaultValue: '{{count}} model evaluated', defaultValue_plural: '{{count}} models evaluated' })
+);
 
 export const EvaluatePage = () => {
     const navigate = useNavigate();
@@ -156,23 +159,55 @@ export const EvaluatePage = () => {
                 <div>
                     <h3 className={styles.title}>{i18n.t('Evaluation setup')}</h3>
                     <p className={styles.description}>
-                        {i18n.t('Chap hides the most recent periods of your data, lets each model predict them, and scores the predictions against what actually happened. The setup says how far ahead and how many times. Results can only be compared within one setup.')}
+                        {i18n.t('Chap hides the most recent periods of your data, lets each model predict them, and scores the predictions against what actually happened. The setup says how far ahead and how many times. Results can only be compared within one setup, so each setup has results of its own.')}
                     </p>
                 </div>
-                {datasetSpecifications.length > 1 && !editedParameters && specification && (
-                    <SingleSelectField
-                        dense
-                        className={styles.evaluationSelect}
-                        label={i18n.t('Setup')}
-                        helpText={i18n.t('This data has been evaluated with more than one setup. The results and the promotion follow the one chosen here.')}
-                        selected={String(specification.id)}
-                        onChange={({ selected }) => selectSpecification(Number(selected))}
-                        dataTest="guided-evaluation-select"
-                    >
+                {datasetSpecifications.length > 0 && (
+                    <ul className={styles.list}>
                         {datasetSpecifications.map((item, index) => (
-                            <SingleSelectOption key={item.id} value={String(item.id)} label={describeEvaluation(item, index === 0)} />
+                            <li key={item.id} className={styles.listItem}>
+                                <Radio
+                                    name="guided-evaluation-setup"
+                                    value={String(item.id)}
+                                    checked={!editedParameters && specification?.id === item.id}
+                                    disabled={start.isLoading}
+                                    onChange={() => {
+                                        setEditedParameters(undefined);
+                                        selectSpecification(item.id);
+                                    }}
+                                    dataTest={`guided-evaluation-setup-${item.id}`}
+                                    label={(
+                                        <span className={styles.itemLabel}>
+                                            <span className={styles.itemName}>
+                                                {describeSetup(item)}
+                                                {index === 0 && <span className={styles.muted}>{` · ${i18n.t('newest')}`}</span>}
+                                            </span>
+                                            <span className={styles.muted}>{countModels(item)}</span>
+                                        </span>
+                                    )}
+                                />
+                            </li>
                         ))}
-                    </SingleSelectField>
+                        {startsNewEvaluation && editedParameters && (
+                            <li className={styles.listItem}>
+                                <div className={styles.modelRow}>
+                                    <Radio
+                                        name="guided-evaluation-setup"
+                                        value="new"
+                                        checked
+                                        dataTest="guided-evaluation-setup-new"
+                                        label={(
+                                            <span className={styles.itemLabel}>
+                                                <span className={styles.itemName}>{`${i18n.t('New setup')} · ${describeSetup(editedParameters)}`}</span>
+                                                <span className={styles.muted}>{i18n.t('Not evaluated yet. The models you evaluate next get results of their own.')}</span>
+                                            </span>
+                                        )}
+                                    />
+                                    <Button small secondary disabled={start.isLoading} onClick={() => setEditedParameters(undefined)}>{i18n.t('Discard')}</Button>
+                                </div>
+                            </li>
+                        )}
+                    </ul>
                 )}
                 {parameters && (settingsDraft ? (
                     <EvaluationSettingsForm
@@ -188,17 +223,10 @@ export const EvaluatePage = () => {
                     <div className={styles.settings}>
                         <SpecificationParameters specification={parameters} />
                         <Button small secondary disabled={start.isLoading} onClick={() => setSettingsDraft(pickParameters(parameters))} dataTest="guided-evaluation-settings">
-                            {specification ? i18n.t('Use other settings') : i18n.t('Change')}
+                            {specification ? i18n.t('New evaluation setup') : i18n.t('Change settings')}
                         </Button>
                     </div>
                 ))}
-                {startsNewEvaluation && (
-                    <NoticeBox title={i18n.t('A new evaluation setup')}>
-                        {i18n.t('The models you evaluate next get results of their own, since results from different settings cannot be compared.')}
-                        {' '}
-                        <Button small secondary onClick={() => setEditedParameters(undefined)}>{i18n.t('Back to the current setup')}</Button>
-                    </NoticeBox>
-                )}
                 {isTooShort && (
                     <NoticeBox warning title={i18n.t('Not enough history')}>
                         {i18n.t('This data has {{periodCount}} periods, but an evaluation needs at least {{requiredPeriodCount}}.', {
@@ -281,7 +309,14 @@ export const EvaluatePage = () => {
                     </>
                 )}
             </Card>
-            {specification && (
+            {startsNewEvaluation && editedParameters ? (
+                <Card className={styles.card}>
+                    <h2 className={styles.title}>{i18n.t('Results')}</h2>
+                    <NoticeBox title={i18n.t('No results for the new setup yet')}>
+                        {i18n.t('Choose models above and evaluate them with {{setup}}.', { setup: describeSetup(editedParameters) })}
+                    </NoticeBox>
+                </Card>
+            ) : specification && (
                 <Card className={styles.card}>
                     {runningJobs.length > 0 && (
                         <div className={styles.row}>
@@ -293,7 +328,7 @@ export const EvaluatePage = () => {
                         </div>
                     )}
                     {runs.length > 0 ? (
-                        <BenchmarkTable specification={specification} title={i18n.t('Results')} rowAction={promote} compareByDefault />
+                        <BenchmarkTable specification={specification} title={i18n.t('Results for {{setup}}', { setup: describeSetup(specification) })} rowAction={promote} compareByDefault />
                     ) : !runningJobs.length && (
                         <NoticeBox warning title={i18n.t('No results yet')}>
                             {i18n.t('No model has finished. See what happened, then evaluate the models again.')}
