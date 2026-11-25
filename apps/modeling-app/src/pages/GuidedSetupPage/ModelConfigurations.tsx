@@ -22,6 +22,8 @@ export type ModelChoice = {
     configurations: ModelSpecRead[];
     /** The configuration to evaluate. */
     selectedId: number;
+    /** Configurations already evaluated with the setup in view. */
+    evaluatedIds: number[];
     /** For making a configuration of its own; unknown for models without a template. */
     templateId?: number;
 };
@@ -63,7 +65,13 @@ export const ModelConfigurations = ({ choices, disabled, onChange, onCustomise, 
                                 dataTest={`guided-configuration-${toDataTestKey(choice.templateName)}`}
                             >
                                 {choice.configurations.map(model => (
-                                    <SingleSelectOption key={model.id} value={String(model.id)} label={getConfigurationName(model)} />
+                                    <SingleSelectOption
+                                        key={model.id}
+                                        value={String(model.id)}
+                                        label={choice.evaluatedIds.includes(model.id)
+                                            ? i18n.t('{{configuration}} (evaluated)', { configuration: getConfigurationName(model) })
+                                            : getConfigurationName(model)}
+                                    />
                                 ))}
                                 {/* Chap Core is getting a way to tune hyperparameters for the data; until then the option is only shown. */}
                                 <SingleSelectOption disabled value={TUNE} label={i18n.t('Tune hyperparameters automatically (coming soon)')} />

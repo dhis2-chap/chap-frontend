@@ -82,7 +82,8 @@ export const EvaluatePage = () => {
     const compatibleModels = sortByReadiness(allModels.filter(model => (
         targetColumn && datasetSupportsModel(getBacktestColumns(columns, targetColumn), dataset?.periodType ?? '', model)
     )));
-    const evaluatedModels = getModelsWithRun(runs, compatibleModels);
+    // A new setup has evaluated nothing yet.
+    const evaluatedModels = startsNewEvaluation ? [] : getModelsWithRun(runs, compatibleModels);
     // The picker offers each model once, with its default configuration where it has one; the configuration is chosen below it.
     const configurations = groupByTemplate(compatibleModels);
     const pickerModels = [...configurations.values()].map(items => items.find(model => !model.name.includes(':')) ?? items[0]);
@@ -90,7 +91,14 @@ export const EvaluatePage = () => {
     const modelChoices: ModelChoice[] = Object.entries(choices).map(([templateName, selectedId]) => {
         const template = modelTemplates?.find(item => item.name === templateName);
         const items = configurations.get(templateName) ?? [];
-        return { templateName, selectedId, configurations: items, templateId: template?.id, displayName: template?.displayName || items[0]?.displayName || templateName };
+        return {
+            templateName,
+            selectedId,
+            configurations: items,
+            evaluatedIds: items.filter(item => evaluatedModels.includes(item)).map(item => item.id),
+            templateId: template?.id,
+            displayName: template?.displayName || items[0]?.displayName || templateName,
+        };
     });
     const forecastHorizon = useForecastHorizonValidation(selectedModels, parameters?.nPeriods);
 
@@ -146,9 +154,66 @@ export const EvaluatePage = () => {
         <>
             <Card className={styles.card}>
                 <div>
+                    <h3 className={styles.title}>{i18n.t('Evaluation setup')}</h3>
+                    <p className={styles.description}>
+                        {i18n.t('Chap hides the most recent periods of your data, lets each model predict them, and scores the predictions against what actually happened. The setup says how far ahead and how many times. Results can only be compared within one setup.')}
+                    </p>
+                </div>
+                {datasetSpecifications.length > 1 && !editedParameters && specification && (
+                    <SingleSelectField
+                        dense
+                        className={styles.evaluationSelect}
+                        label={i18n.t('Setup')}
+                        helpText={i18n.t('This data has been evaluated with more than one setup. The results and the promotion follow the one chosen here.')}
+                        selected={String(specification.id)}
+                        onChange={({ selected }) => selectSpecification(Number(selected))}
+                        dataTest="guided-evaluation-select"
+                    >
+                        {datasetSpecifications.map((item, index) => (
+                            <SingleSelectOption key={item.id} value={String(item.id)} label={describeEvaluation(item, index === 0)} />
+                        ))}
+                    </SingleSelectField>
+                )}
+                {parameters && (settingsDraft ? (
+                    <EvaluationSettingsForm
+                        periodType={dataset.periodType}
+                        initialValues={settingsDraft}
+                        onApply={(values) => {
+                            setEditedParameters(isSameParameters(values, currentParameters) ? undefined : values);
+                            setSettingsDraft(undefined);
+                        }}
+                        onCancel={() => setSettingsDraft(undefined)}
+                    />
+                ) : (
+                    <div className={styles.settings}>
+                        <SpecificationParameters specification={parameters} />
+                        <Button small secondary disabled={start.isLoading} onClick={() => setSettingsDraft(pickParameters(parameters))} dataTest="guided-evaluation-settings">
+                            {specification ? i18n.t('Use other settings') : i18n.t('Change')}
+                        </Button>
+                    </div>
+                ))}
+                {startsNewEvaluation && (
+                    <NoticeBox title={i18n.t('A new evaluation setup')}>
+                        {i18n.t('The models you evaluate next get results of their own, since results from different settings cannot be compared.')}
+                        {' '}
+                        <Button small secondary onClick={() => setEditedParameters(undefined)}>{i18n.t('Back to the current setup')}</Button>
+                    </NoticeBox>
+                )}
+                {isTooShort && (
+                    <NoticeBox warning title={i18n.t('Not enough history')}>
+                        {i18n.t('This data has {{periodCount}} periods, but an evaluation needs at least {{requiredPeriodCount}}.', {
+                            periodCount,
+                            requiredPeriodCount,
+                        })}
+                    </NoticeBox>
+                )}
+                {defaults.error && <ChapErrorNotice error={defaults.error} title={i18n.t('Could not load the evaluation settings')} />}
+            </Card>
+            <Card className={styles.card}>
+                <div>
                     <h3 className={styles.title}>{i18n.t('Choose models to evaluate')}</h3>
                     <p className={styles.description}>
-                        {i18n.t('Chap hides the most recent periods of your data, lets each model predict them, and scores the predictions against what actually happened. Simple baseline models are run as well, so you can see whether a model beats them.')}
+                        {i18n.t('Simple baseline models are evaluated as well, so you can see whether a model beats them.')}
                     </p>
                 </div>
                 {isLoading || defaults.isInitialLoading ? <CircularLoader small /> : error ? (
@@ -197,43 +262,8 @@ export const EvaluatePage = () => {
                                 })}
                             </p>
                         )}
-                        {parameters && (settingsDraft ? (
-                            <EvaluationSettingsForm
-                                periodType={dataset.periodType}
-                                initialValues={settingsDraft}
-                                onApply={(values) => {
-                                    setEditedParameters(isSameParameters(values, currentParameters) ? undefined : values);
-                                    setSettingsDraft(undefined);
-                                }}
-                                onCancel={() => setSettingsDraft(undefined)}
-                            />
-                        ) : (
-                            <div className={styles.settings}>
-                                <span className={styles.muted}>{i18n.t('Evaluation settings')}</span>
-                                <SpecificationParameters specification={parameters} />
-                                <Button small secondary disabled={start.isLoading} onClick={() => setSettingsDraft(pickParameters(parameters))} dataTest="guided-evaluation-settings">
-                                    {i18n.t('Change')}
-                                </Button>
-                            </div>
-                        ))}
-                        {startsNewEvaluation && (
-                            <NoticeBox title={i18n.t('These settings start a new evaluation')}>
-                                {i18n.t('The models you choose get a results table of their own, since results from different settings cannot be compared.')}
-                                {' '}
-                                <Button small secondary onClick={() => setEditedParameters(undefined)}>{i18n.t('Keep the current settings')}</Button>
-                            </NoticeBox>
-                        )}
-                        {isTooShort && (
-                            <NoticeBox warning title={i18n.t('Not enough history')}>
-                                {i18n.t('This data has {{periodCount}} periods, but an evaluation needs at least {{requiredPeriodCount}}.', {
-                                    periodCount,
-                                    requiredPeriodCount,
-                                })}
-                            </NoticeBox>
-                        )}
                         {selectedModels.map(model => <ModelHealthNotice key={model.id} model={model} />)}
                         <ForecastHorizonNotice validation={forecastHorizon} />
-                        {defaults.error && <ChapErrorNotice error={defaults.error} title={i18n.t('Could not load the evaluation settings')} />}
                         {start.error && <ChapErrorNotice error={start.error} title={i18n.t('Could not start the evaluation')} />}
                         <div>
                             <Button
@@ -253,21 +283,6 @@ export const EvaluatePage = () => {
             </Card>
             {specification && (
                 <Card className={styles.card}>
-                    {datasetSpecifications.length > 1 && (
-                        <SingleSelectField
-                            dense
-                            className={styles.evaluationSelect}
-                            label={i18n.t('Evaluation')}
-                            helpText={i18n.t('Each set of evaluation settings has its own results.')}
-                            selected={String(specification.id)}
-                            onChange={({ selected }) => selectSpecification(Number(selected))}
-                            dataTest="guided-evaluation-select"
-                        >
-                            {datasetSpecifications.map((item, index) => (
-                                <SingleSelectOption key={item.id} value={String(item.id)} label={describeEvaluation(item, index === 0)} />
-                            ))}
-                        </SingleSelectField>
-                    )}
                     {runningJobs.length > 0 && (
                         <div className={styles.row}>
                             <BenchmarkRunsIndicator specification={specification} runningJobs={runningJobs} />
