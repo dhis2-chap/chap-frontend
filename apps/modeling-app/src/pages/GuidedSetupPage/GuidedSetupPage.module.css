@@ -178,6 +178,29 @@ a.stepperLink:hover {
     border-radius: var(--spacers-dp4);
 }
 
+.failedRuns {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacers-dp8);
+    margin: var(--spacers-dp4) 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.failedRun {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacers-dp16);
+}
+
+.failedError {
+    display: block;
+    font-size: 13px;
+    color: var(--colors-grey800);
+    overflow-wrap: anywhere;
+}
+
 .configurationSelect {
     inline-size: 280px;
 }

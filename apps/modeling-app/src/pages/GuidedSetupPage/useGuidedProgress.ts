@@ -6,9 +6,9 @@ import { useBacktests } from '../../hooks/useBacktests';
 import { useDatasets } from '../../hooks/useDatasets';
 import { Features, useIsFeatureAvailable } from '../../hooks/useIsFeatureAvailable';
 import { sortByCreatedDesc } from '../../utils/sortByCreated';
-import { requestMatchesSpecification } from '../BenchmarksPage/benchmarkUtils';
+import { getJobModelName, requestMatchesSpecification } from '../BenchmarksPage/benchmarkUtils';
 import { useBacktestSpecification, useBacktestSpecifications } from '../BenchmarksPage/useBacktestSpecification';
-import { useRunningBenchmarkJobs } from '../BenchmarksPage/useRunningBenchmarkJobs';
+import { useFailedBenchmarkJobs, useRunningBenchmarkJobs } from '../BenchmarksPage/useRunningBenchmarkJobs';
 
 export const GUIDED_STEPS = ['data', 'evaluate', 'promote', 'predict'] as const;
 export type GuidedStep = typeof GUIDED_STEPS[number];
@@ -48,6 +48,7 @@ export const useGuidedProgress = () => {
     // The query keeps the previous evaluation while the next one loads.
     const specification = details.data?.id === latest?.id ? details.data : undefined;
     const runningJobs = useRunningBenchmarkJobs().filter(({ request }) => latest && requestMatchesSpecification(request, latest));
+    const failedJobs = useFailedBenchmarkJobs(dataset?.id).filter(({ request }) => latest && requestMatchesSpecification(request, latest));
 
     // Results are written when a model finishes, so read them again.
     const runningCount = useRef(runningJobs.length);
@@ -59,6 +60,10 @@ export const useGuidedProgress = () => {
     }, [runningJobs.length, queryClient]);
 
     const runs = specification?.backtests ?? [];
+    // A model that failed and has no results in the setup; trying it again and succeeding clears it.
+    const failedRuns = failedJobs.filter(({ job }) => !runs.some(run => (
+        job.model_id != null ? run.configuredModel?.id === job.model_id : run.modelId === getJobModelName(job.name)
+    )));
     // A model promoted from an earlier evaluation keeps predicting when the data is evaluated again.
     // The newest evaluation is read as well, since the list of all runs can lag behind a promotion.
     const promotedRuns = [...runs, ...(backtests ?? []).filter(run => run.datasetId === dataset?.id && !runs.some(item => item.id === run.id))]
@@ -95,6 +100,7 @@ export const useGuidedProgress = () => {
         selectSpecification,
         runs,
         runningJobs,
+        failedRuns,
         promotedRuns,
         predictionSetupIds,
         current,

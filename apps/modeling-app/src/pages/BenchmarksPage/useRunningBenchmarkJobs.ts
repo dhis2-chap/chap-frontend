@@ -24,23 +24,31 @@ const getResolvedParameters = (job: JobDescription): Partial<MakeBacktestsReques
     }).filter(([, value]) => value != null));
 };
 
+const isFailedEvaluation = (job: JobDescription) => job.type === JOB_TYPES.BACKTEST && job.status === JOB_STATUSES.FAILED;
+
 /**
- * Running evaluation jobs with their submitted request. Jobs do not say which benchmark they
+ * Evaluation jobs with their submitted request. Jobs do not say which benchmark they
  * belong to, but the request carries the dataset and backtest parameters that identify it.
+ * A dataset id, where Chap Core records it on the job, saves reading the requests of other data.
  */
-export const useRunningBenchmarkJobs = (): RunningBenchmarkJob[] => {
+const useBenchmarkJobs = (isMatch: (job: JobDescription) => boolean, datasetId?: number): RunningBenchmarkJob[] => {
     const { jobs } = useJobs();
-    const running = jobs?.filter(isRunningEvaluation) ?? [];
+    const matching = jobs?.filter(job => isMatch(job) && (datasetId == null || job.dataset_id == null || job.dataset_id === datasetId)) ?? [];
     const requests = useQueries({
-        queries: running.map(job => ({
+        queries: matching.map(job => ({
             queryKey: ['job-request', job.id],
             queryFn: () => JobsService.getJobRequestV1JobsJobIdRequestGet(job.id) as Promise<Partial<MakeBacktestsRequest>>,
             staleTime: Infinity,
             retry: 0,
         })),
     });
-    return running.flatMap((job, index) => {
+    return matching.flatMap((job, index) => {
         const request = requests[index]?.data;
         return request ? [{ job, request: { ...request, ...getResolvedParameters(job) } }] : [];
     });
 };
+
+export const useRunningBenchmarkJobs = () => useBenchmarkJobs(isRunningEvaluation);
+
+/** Evaluation jobs that failed, for one dataset. */
+export const useFailedBenchmarkJobs = (datasetId?: number) => useBenchmarkJobs(isFailedEvaluation, datasetId);

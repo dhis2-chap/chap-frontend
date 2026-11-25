@@ -25,6 +25,7 @@ import { getModelsWithRun, makeBenchmarkRequest } from '../BenchmarksPage/benchm
 import { SpecificationParameters } from '../BenchmarksPage/SpecificationParameters';
 import { CustomConfigurationModal } from './CustomConfigurationModal';
 import { EvaluationSettingsForm } from './EvaluationSettingsForm';
+import { FailedRunsNotice } from './FailedRunsNotice';
 import { getTemplateName, type ModelChoice, ModelConfigurations } from './ModelConfigurations';
 import { StepNav } from './StepNav';
 import { useGuided } from './useGuidedProgress';
@@ -60,7 +61,7 @@ const countModels = (item: BacktestSpecificationSummary) => (
 export const EvaluatePage = () => {
     const navigate = useNavigate();
     const queryClient = useQueryClient();
-    const { dataset, specification, datasetSpecifications, selectSpecification, runs, runningJobs, pathTo } = useGuided();
+    const { dataset, specification, datasetSpecifications, selectSpecification, runs, runningJobs, failedRuns, pathTo } = useGuided();
     const { models, isLoading, error } = useModels();
     const { modelTemplates } = useModelTemplates();
     const defaults = useBacktestParameters(dataset?.periodType);
@@ -329,13 +330,14 @@ export const EvaluatePage = () => {
                     )}
                     {runs.length > 0 ? (
                         <BenchmarkTable specification={specification} title={i18n.t('Results for {{setup}}', { setup: describeSetup(specification) })} rowAction={promote} compareByDefault />
-                    ) : !runningJobs.length && (
+                    ) : !runningJobs.length && !failedRuns.length && (
                         <NoticeBox warning title={i18n.t('No results yet')}>
                             {i18n.t('No model has finished. See what happened, then evaluate the models again.')}
                             {' '}
                             <Link className={styles.link} to="/jobs">{i18n.t('View jobs')}</Link>
                         </NoticeBox>
                     )}
+                    <FailedRunsNotice failedRuns={failedRuns} />
                 </Card>
             )}
             <StepNav
