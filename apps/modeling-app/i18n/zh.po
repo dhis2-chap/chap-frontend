@@ -1,21 +1,301 @@
 # Translators:
-# Viktor Varland <viktor@dhis2.org>, 2025
-# 晓东 林 <13981924470@126.com>, 2025
-# Philip Larsen Donnelly, 2025
-# easylin <lin_xd@126.com>, 2025
+# Viktor Varland <viktor@dhis2.org>, 2026
+# Philip Larsen Donnelly, 2026
+# 晓东 林 <13981924470@126.com>, 2026
+# easylin <lin_xd@126.com>, 2026
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: i18next-conv\n"
-"POT-Creation-Date: 2025-11-01T14:32:32.298Z\n"
+"POT-Creation-Date: 2026-11-19T10:34:36.877Z\n"
 "PO-Revision-Date: 2025-12-03 08:49+0000\n"
-"Last-Translator: easylin <lin_xd@126.com>, 2025\n"
+"Last-Translator: easylin <lin_xd@126.com>, 2026\n"
 "Language-Team: Chinese (https://app.transifex.com/hisp-uio/teams/100509/zh/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: zh\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Evaluations"
+msgstr "评估"
+
+msgid "Compare evaluations"
+msgstr "评估比较"
+
+msgid "Benchmarks"
+msgstr "基准测试"
+
+msgid "New benchmark"
+msgstr "新基准"
+
+msgid "New evaluation"
+msgstr "新评估"
+
+msgid "Evaluation details"
+msgstr "评估细节"
+
+msgid "Datasets"
+msgstr "数据集"
+
+msgid "New dataset"
+msgstr "新数据集"
+
+msgid "Signal policies"
+msgstr "信号政策"
+
+msgid "Prediction setups"
+msgstr "预测设置"
+
+msgid "Prediction setup"
+msgstr "预测设置"
+
+msgid "Run prediction"
+msgstr "跑动预测"
+
+msgid "Prediction details"
+msgstr "预测详情"
+
+msgid "Import prediction"
+msgstr "进口预测"
+
+msgid "Review signals"
+msgstr "审查信号"
+
+msgid "Activity"
+msgstr "活动"
+
+msgid "Models"
+msgstr "机型"
+
+msgid "New model"
+msgstr "新模式"
+
+msgid "Colour"
+msgstr "颜色"
+
+msgid "Custom colour"
+msgstr "自定义颜色"
+
+msgid ""
+"This policy is used by a prediction setup or has signals raised against it, "
+"so it cannot be deleted."
+msgstr "该策略正被预测系统使用，或已针对其生成信号，因此无法删除。"
+
+msgid "Delete signal policy"
+msgstr "删除信号策略"
+
+msgid "Delete \"{{name}}\"? This cannot be undone."
+msgstr "删除“{{name}} ”？此操作无法撤销。"
+
+msgid "Unable to delete signal policy"
+msgstr "无法删除信号策略"
+
+msgid "Cancel"
+msgstr "取消"
+
+msgid "Delete"
+msgstr "删除"
+
+msgid "Unable to load signal policies"
+msgstr "无法加载信号策略"
+
+msgid "Name"
+msgstr "名称"
+
+msgid "Levels"
+msgstr "等级"
+
+msgid "Created"
+msgstr "已创建"
+
+msgid "Actions"
+msgstr "行动"
+
+msgid "No signal policies yet."
+msgstr "目前尚无相关政策。"
+
+msgid ""
+"Saved colours could not be loaded, so default colours are shown. Use Edit to"
+" save them again."
+msgstr "无法加载已保存的颜色，因此显示默认颜色。请使用“编辑”功能重新保存。"
+
+msgid "Edit"
+msgstr "编辑"
+
+msgid "Enter a code"
+msgstr "输入代码"
+
+msgid "Enter a level name"
+msgstr "输入关卡名称"
+
+msgid "Enter zero or more"
+msgstr "输入零个或多个"
+
+msgid "Enter a percentile between 0 and 100"
+msgstr "请输入0到100之间的百分位数"
+
+msgid "Enter a whole number of years"
+msgstr "请输入一个整数年数"
+
+msgid "Enter a policy name"
+msgstr "输入策略名称"
+
+msgid "Level names must be unique"
+msgstr "关卡名称必须是唯一的"
+
+msgid "Codes must be unique"
+msgstr "代码必须是唯一的"
+
+msgid "Signal policy created"
+msgstr "已创建信号策略"
+
+msgid "New signal policy"
+msgstr "新的信号政策"
+
+msgid "Policy name"
+msgstr "政策名称"
+
+msgid "No signal import code"
+msgstr "无信号导入代码"
+
+msgid "Must match the value type or option set of the outbreak indicator."
+msgstr "必须与疫情指标的值类型或选项集相匹配。"
+
+msgid "Levels are saved in this order, from least to most severe."
+msgstr "级别按从轻到重的顺序保存。"
+
+msgid "Level {{number}}"
+msgstr "级别{{number}}"
+
+msgid "Remove level"
+msgstr "删除层级"
+
+msgid "Level name"
+msgstr "关卡名称"
+
+msgid "e.g. Monitor"
+msgstr "例如：显示器"
+
+msgid "Import code"
+msgstr "导入代码"
+
+msgid "Response action (optional)"
+msgstr "响应措施（可选）"
+
+msgid "Strategy"
+msgstr "策略"
+
+msgid "Percentile (%)"
+msgstr "百分位数 (%)"
+
+msgid "SD above mean"
+msgstr "高于均值的标准差（简体中文（大陆））"
+
+msgid "Baseline years"
+msgstr "基准年"
+
+msgid "All history"
+msgstr "全部历史"
+
+msgid "Min. probability"
+msgstr "最小概率"
+
+msgid "Add level"
+msgstr "添加层级"
+
+msgid "Policy created, but colours could not be saved"
+msgstr "已创建策略，但无法保存颜色"
+
+msgid "Retry to save the colours. The policy has already been created."
+msgstr "请重试保存颜色。该策略已创建。"
+
+msgid "Unable to create signal policy"
+msgstr "无法创建信号策略"
+
+msgid "Create policy"
+msgstr "创建策略"
+
+msgid "Retry saving colours"
+msgstr "重试保存颜色"
+
+msgid "Signal policy saved"
+msgstr "信号策略已保存"
+
+msgid "Edit signal policy"
+msgstr "编辑信号策略"
+
+msgid "Codes must be unique and non-empty."
+msgstr "代码必须是唯一的且不能为空。"
+
+msgid "Unable to save. Please try again."
+msgstr "无法保存。请重试。"
+
+msgid "Save"
+msgstr "保存"
+
+msgid "Signal review saved"
+msgstr "已保存信号评论简体中文（大陆）"
+
+msgid "Unable to load raised signals"
+msgstr "无法加载高电平信号"
+
+msgid "No signals were recorded for this run."
+msgstr "此次运行未记录到任何信号。"
+
+msgid "Unable to load prediction data"
+msgstr "无法加载预测数据"
+
+msgid "Signals can still be reviewed, but their evidence may be incomplete."
+msgstr "虽然仍可查看这些信号，但其证据可能不完整。"
+
+msgid "Unable to load the signed-in user. Reload the page to retry."
+msgstr "无法加载已登录的用户。请刷新页面重试。"
+
+msgid "Unable to save the review. Please try again."
+msgstr "无法保存评论。请重试。"
+
+msgid "Edit the signal policy to change its thresholds."
+msgstr "编辑信号策略以更改其阈值。"
+
+msgid "Could not load the evaluation scores"
+msgstr "无法加载评估分数"
+
+msgid ""
+"How well this policy's signals matched observed outbreaks when the model was"
+" evaluated on past data, across all splits and organisation units."
+msgstr "当基于历史数据对该模型进行评估时，该政策发出的信号与实际观察到的疫情爆发情况在所有划分和组织单位中匹配得如何。"
+
+msgid "View evaluation"
+msgstr "查看评价"
+
+msgid "Green"
+msgstr "绿色"
+
+msgid "Yellow"
+msgstr "黄色"
+
+msgid "Orange"
+msgstr "橙色"
+
+msgid "Red"
+msgstr "红色"
+
+msgid "{{percentile}}th percentile, all history"
+msgstr "{{percentile}}第 th 百分位数，所有历史数据"
+
+msgid "{{percentile}}th percentile, {{count}}-year baseline"
+msgid_plural "{{percentile}}th percentile, {{count}}-year baseline"
+msgstr[0] "{{percentile}}第 th 百分位数，{{count}} 年基线"
+
+msgid "mean + {{stdMultiplier}} SD"
+msgstr "均值 +{{stdMultiplier}} 标准差"
+
+msgid "{{threshold}} · ≥{{probability}}%"
+msgstr "{{threshold}} · ≥{{probability}}%"
+
+msgid "View"
+msgstr "查看"
 
 msgid "Create new..."
 msgstr "创建新的..."
@@ -26,17 +306,11 @@ msgstr "比较"
 msgid "Rename"
 msgstr "改名"
 
-msgid "Delete"
-msgstr "删除"
-
-msgid "{{name}} (Copy)"
-msgstr "{{name}} （副本）"
+msgid "Download"
+msgstr "下载"
 
 msgid "Create new based on..."
 msgstr "根据..."
-
-msgid "Cancel"
-msgstr "取消"
 
 msgid "Failed to load evaluation data. Please try again."
 msgstr "加载评估数据失败。请重试。"
@@ -47,26 +321,14 @@ msgstr "关闭"
 msgid "Select which attributes to copy to the new run{{escape}}"
 msgstr "选择要复制到新运行的属性{{escape}}"
 
-msgid "Name"
-msgstr "名称"
-
-msgid "Untitled"
-msgstr "无标题"
-
-msgid "Organisation units"
-msgstr "组织机构"
+msgid "Dataset"
+msgstr "数据集"
 
 msgid "Model"
 msgstr "模型"
 
-msgid "Data sources"
-msgstr "数据来源"
-
-msgid "Period type"
-msgstr "期间类型"
-
-msgid "Period range"
-msgstr "周期范围"
+msgid "{{name}} (Copy)"
+msgstr "{{name}} （副本）"
 
 msgid "Create"
 msgstr "创建"
@@ -79,20 +341,23 @@ msgid ""
 "undone."
 msgstr "您确定要删除此评估吗？此操作无法撤销。"
 
+msgid "Export dataset and metrics associated with this evaluation."
+msgstr "导出与本次评估相关的数据集和指标。"
+
+msgid "Dataset (CSV)"
+msgstr "数据集（CSV）"
+
+msgid "Metrics (CSV)"
+msgstr "指标（CSV）"
+
 msgid "Name is required"
 msgstr "需要名称"
 
 msgid "Rename evaluation"
 msgstr "重新命名评估"
 
-msgid "Save"
-msgstr "保存"
-
 msgid "ID"
 msgstr "ID"
-
-msgid "Created"
-msgstr "已创建"
 
 msgid "Locations"
 msgstr "地点"
@@ -100,12 +365,6 @@ msgstr "地点"
 msgid "Evaluated on {{count}} locations"
 msgid_plural "Evaluated on {{count}} locations"
 msgstr[0] "在{{count}} 网站上进行评估"
-
-msgid "Actions"
-msgstr "行动"
-
-msgid "New evaluation"
-msgstr "新评估"
 
 msgid "Sort by {{column}}"
 msgstr "按{{column}}排序"
@@ -141,22 +400,69 @@ msgstr "删除评估失败"
 msgid "Error renaming evaluation"
 msgstr "重新命名评估错误"
 
-msgid "Could not connect to CHAP"
-msgstr "无法连接 CHAP"
+msgid "Breadcrumbs"
+msgstr "面包屑导航"
 
-msgid "The app is not able to connect to the CHAP server."
-msgstr "应用程序无法连接 CHAP 服务器。"
+msgid "Could not connect to Chap"
+msgstr "无法连接到 Chap"
+
+msgid "The app is not able to connect to the Chap server."
+msgstr "该应用无法连接到 Chap 服务器。"
 
 msgid ""
-"Please check your route configuration and make sure the CHAP server is "
+"Please check your route configuration and make sure the Chap server is "
 "running."
-msgstr "请检查路由配置，并确保 CHAP 服务器正在运行。"
+msgstr "请检查您的路由配置，并确保 CHAP 服务器正在运行。"
 
-msgid "Learn more about Modeling and CHAP"
-msgstr "了解更多建模和 CHAP 信息"
+msgid "Learn more about Modeling and Chap"
+msgstr "了解有关“建模”和“Chap”的更多信息"
 
 msgid "Configure settings"
 msgstr "配置设置"
+
+msgid "No datasets found"
+msgstr "未找到数据集"
+
+msgid "No manually created datasets"
+msgstr "没有手动创建的数据集"
+
+msgid "Origin"
+msgstr "来源"
+
+msgid "Created manually"
+msgstr "手动创建"
+
+msgid "Created by evaluations or predictions"
+msgstr "由评估或预测生成"
+
+msgid "Until {{date}}"
+msgstr "直到{{date}}"
+
+msgid "Previous month"
+msgstr "上个月"
+
+msgid "Next month"
+msgstr "下月"
+
+msgid "Select date range"
+msgstr "选择日期范围"
+
+msgid "Done"
+msgstr "完成"
+
+msgid "Date"
+msgstr "日期"
+
+msgid "Clear date range"
+msgstr "清除日期范围"
+
+msgid ""
+"DHIS2 2.40 is no longer supported. Some functionality may not work on this "
+"instance. Please upgrade DHIS2 to get the latest features."
+msgstr "DHIS2 2.40 已不再受支持。该实例上的某些功能可能无法正常运行。请升级 DHIS2 以获取最新功能。"
+
+msgid "Dismiss"
+msgstr "解除"
 
 msgid "Oops!"
 msgstr "哎呀"
@@ -164,8 +470,48 @@ msgstr "哎呀"
 msgid "Sorry, an unexpected error has occurred."
 msgstr "对不起，发生了意外错误。"
 
-msgid "Inspect dataset"
-msgstr "检查数据集"
+msgid "Back to app"
+msgstr "返回应用"
+
+msgid "Click to expand"
+msgstr "点击展开"
+
+msgid "No data to check"
+msgstr "没有数据可供检查"
+
+msgid "Period"
+msgstr "期间"
+
+msgid "Complete (%)"
+msgstr "完成率（%）"
+
+msgid "{{column}}{{colon}} {{available}} of {{expected}} locations"
+msgstr "{{column}}{{colon}} {{available}} {{expected}} 的各分店"
+
+msgid "Data completeness"
+msgstr "数据完整性"
+
+msgid "Reset zoom"
+msgstr "重设缩放"
+
+msgid "Show values for period"
+msgstr "显示该期间的数值"
+
+msgid ""
+"{{available}} of {{expected}} values present ({{percent}}%) · {{zeros}} zero"
+" · {{missing}} missing"
+msgstr ""
+"{{available}} {{expected}} 个值中，（ %）为 · 零 · 缺失{{percent}} {{zeros}} "
+"{{missing}} "
+
+msgid "Show all locations"
+msgstr "显示所有地点"
+
+msgid "Location"
+msgstr "位置"
+
+msgid "Missing"
+msgstr "失踪"
 
 msgid "Cancel job"
 msgstr "取消职位"
@@ -190,6 +536,18 @@ msgstr "转到结果"
 msgid "View Logs"
 msgstr "查看日志"
 
+msgid "Downloading request…"
+msgstr "正在下载请求……"
+
+msgid "Download request"
+msgstr "下载请求"
+
+msgid "Downloading debug info…"
+msgstr "正在下载调试信息……"
+
+msgid "Download debug info"
+msgstr "下载调试信息"
+
 msgid "Copy Job ID"
 msgstr "复制工作编号"
 
@@ -213,6 +571,20 @@ msgstr "职位已删除"
 
 msgid "Failed to delete job"
 msgstr "删除作业失败"
+
+msgid ""
+"Debug info downloaded. Logs may contain data values. Check the file before "
+"sharing."
+msgstr "已下载调试信息。日志中可能包含数据值。分享前请先检查该文件。"
+
+msgid "Failed to download debug info. Please try again."
+msgstr "下载调试信息失败。请重试。"
+
+msgid "The original request is not available for this job."
+msgstr "此任务没有原始请求。"
+
+msgid "Failed to download the job request. Please try again."
+msgstr "无法下载作业请求。请重试。"
 
 msgid "Status"
 msgstr "状态"
@@ -253,64 +625,32 @@ msgstr "创建评估"
 msgid "Make prediction"
 msgstr "进行预测"
 
-msgid "Create dataset (deprecated)"
-msgstr "创建数据集（已弃用）"
-
-msgid "Create evaluation (deprecated)"
-msgstr "创建评估（已弃用）"
-
-msgid "Create evaluation (Legacy)"
-msgstr "创建评估（遗产）"
-
 msgid "Create dataset"
 msgstr "创建数据集"
 
 msgid "Cancelled"
 msgstr "已取消"
 
-msgid "Map Data Items"
-msgstr "地图数据项"
+msgid "{{improvement}} vs {{reference}}"
+msgstr "{{improvement}} vs简体中文（大陆）{{reference}}"
 
-msgid "Map the model features to corresponding data items in DHIS2"
-msgstr "将模型特征映射到 DHIS2 中的相应数据项"
+msgid "Compare with"
+msgstr "与……相比"
 
-msgid "Target"
-msgstr "目标"
+msgid "No scores for this model yet."
+msgstr "该型号目前尚无评分。"
 
-msgid "Map the model target to the corresponding data item in DHIS2"
-msgstr "将模型目标映射到 DHIS2 中的相应数据项"
+msgid "No comparison"
+msgstr "根本没法比"
 
-msgid "Map each model covariate to the corresponding data item in DHIS2"
-msgstr "将每个模型协变量映射到 DHIS2 中的相应数据项"
+msgid "Not applicable"
+msgstr "不适用"
 
-msgid "No model selected"
-msgstr "未选择型号"
+msgid "{{name}} ({{status}})"
+msgstr "{{name}} ({{status}})"
 
-msgid "All data items mapped"
-msgstr "映射所有数据项"
-
-msgid "{{mapped}}/{{total}} data items mapped"
-msgstr "{{mapped}}/{{total}} 映射的数据项"
-
-msgid "Dataset Configuration"
-msgstr "数据集配置"
-
-msgid "Configure sources"
-msgstr "配置资源"
-
-msgid ""
-"The Data Visualizer app is not compatible with this feature. Please update "
-"to a newer version."
-msgstr "数据展示台应用程序与此功能不兼容。请更新至更新版本。"
-
-msgid "Please map all model covariates to valid data items"
-msgstr "请将所有模型协变量映射为有效数据项"
-
-msgid "Target \"{{targetName}}\" must be mapped to a data item"
-msgstr "目标 \"{{targetName}}\" 必须映射到数据项"
-
-msgid "Covariate \"{{covariateName}}\" must be mapped to a data item"
-msgstr "协变量 \"{{covariateName}}\" 必须映射到一个数据项"
+msgid "Organisation units"
+msgstr "组织机构"
 
 msgid "Select organisation units"
 msgstr "选择机构"
@@ -326,11 +666,47 @@ msgid ""
 "level."
 msgstr "有些模式要求您只能从同一级别中选择组织单位。"
 
+msgid "Could not verify the levels of the org units in the selected groups"
+msgstr "无法验证所选组中组织单位的层级"
+
 msgid "All org units must be at the same level"
 msgstr "所有组织单位必须处于同一级别"
 
 msgid "Confirm Selection"
 msgstr "确认选择"
+
+msgid "Production"
+msgstr "生产"
+
+msgid "Approved for general use."
+msgstr "批准用于一般用途。"
+
+msgid "Testing"
+msgstr "测试"
+
+msgid "Prepared for more extensive testing; not yet approved for production."
+msgstr "准备进行更广泛的测试；尚未批准用于生产。"
+
+msgid "Limited"
+msgstr "限定的"
+
+msgid ""
+"Tested on a small dataset. Requires manual tuning and close monitoring."
+msgstr "在小型数据集上进行了测试。需要手动调整和密切监控。"
+
+msgid "Experimental"
+msgstr "试验性的"
+
+msgid ""
+"An early prototype with no formal validation - only for initial "
+"experimentation."
+msgstr "早期原型未经正式验证，仅用于初步实验。"
+
+msgid "Deprecated"
+msgstr "已停用"
+
+msgid "This model is not intended for use or has been deprecated."
+msgstr "该模型不打算使用或已被弃用。"
 
 msgid "Monthly"
 msgstr "每月"
@@ -344,75 +720,78 @@ msgstr "每周"
 msgid "Daily"
 msgstr "每日"
 
-msgid "Any"
-msgstr "任何"
+msgid "Any period"
+msgstr "任意时间段"
 
-msgid "Deprecated"
-msgstr "已停用"
+msgid "Unknown"
+msgstr "未知"
 
-msgid "This model is not intended for use or has been deprecated."
-msgstr "该模型不打算使用或已被弃用。"
+msgid "Remove from selection"
+msgstr "从选择中移除"
 
-msgid "Experimental"
-msgstr "试验性的"
-
-msgid ""
-"An early prototype with no formal validation - only for initial "
-"experimentation."
-msgstr "早期原型未经正式验证，仅用于初步实验。"
-
-msgid "Limited"
-msgstr "限定的"
-
-msgid ""
-"Tested on a small dataset. Requires manual tuning and close monitoring."
-msgstr "在小型数据集上进行了测试。需要手动调整和密切监控。"
-
-msgid "Testing"
-msgstr "测试"
-
-msgid "Prepared for more extensive testing; not yet approved for production."
-msgstr "准备进行更广泛的测试；尚未批准用于生产。"
-
-msgid "Production"
-msgstr "生产"
-
-msgid "Approved for general use."
-msgstr "批准用于一般用途。"
-
-msgid "{{count}} covariates"
-msgid_plural "{{count}} covariates"
-msgstr[0] "{{count}} 辅变量"
-
-msgid "Author note"
-msgstr "作者说明"
+msgid "Add to selection"
+msgstr "添加到选定项中"
 
 msgid "Selected"
 msgstr "选择的"
 
+msgid "Use this model"
+msgstr "使用此模型"
+
+msgid "Select Models"
+msgstr "选择车型"
+
 msgid "Select Model"
 msgstr "选择型号"
 
-msgid "Search by title"
-msgstr "按标题搜索"
+msgid "Search models"
+msgstr "搜索模型"
 
-msgid "Period Type"
-msgstr "周期类型"
+msgid "Period type"
+msgstr "期间类型"
 
-msgid "Assessment Status"
-msgstr "评估状况"
+msgid "Clear statuses"
+msgstr "清除状态"
 
-msgid "Select model"
-msgstr "选择型号"
+msgid "Version"
+msgstr "版本"
+
+msgid "Commit"
+msgstr "提交"
+
+msgid "Target"
+msgstr "目标"
+
+msgid "Covariates"
+msgstr "变量"
+
+msgid "None"
+msgstr "None"
+
+msgid "Author"
+msgstr "作者"
+
+msgid "Author note"
+msgstr "作者说明"
+
+msgid "Select a model to see details"
+msgstr "选择一款机型查看详情"
+
+msgid "Use selected models ({{count}})"
+msgid_plural "Use selected models ({{count}})"
+msgstr[0] "使用选定的模型（{{count}} ）"
 
 msgid "EWARS Evaluation 22-24"
 msgstr "EWARS 评估 22-24"
 
-msgid "From period"
-msgstr "从时间段"
+msgid "End period must be after start period"
+msgstr "结束期必须在开始期之后"
 
-msgid "To period"
-msgstr "至期间"
+msgid "Invalid period"
+msgstr "日期范围无效"
+
+msgid "Period selection is unavailable"
+msgstr "无法选择时间段"
 
 msgid "Reason"
 msgstr "原因"
@@ -423,8 +802,9 @@ msgstr "特征"
 msgid "Org unit"
 msgstr "机构"
 
-msgid "Period"
-msgstr "期间"
+msgid "{{periods}} and {{count}} more"
+msgid_plural "{{periods}} and {{count}} more"
+msgstr[0] "{{periods}} 以及{{count}} 更多内容"
 
 msgid "Import Summary"
 msgstr "导入摘要"
@@ -489,14 +869,11 @@ msgstr "组织单位标识缺失"
 msgid "Period type is required"
 msgstr "需要期间类型"
 
-msgid "Start date is required"
-msgstr "要求提供开始日期"
+msgid "Start period is required"
+msgstr "必须填写起始日期"
 
-msgid "End date is required"
+msgid "End period is required"
 msgstr "必须填写结束日期"
-
-msgid "End date cannot be in the future"
-msgstr "结束日期不能在未来"
 
 msgid "At least one org unit is required"
 msgstr "至少需要一个 org 单元"
@@ -504,25 +881,107 @@ msgstr "至少需要一个 org 单元"
 msgid "Please select a model"
 msgstr "请选择型号"
 
-msgid "Please map the covariates to valid data items"
-msgstr "请将协变量映射到有效数据项"
-
 msgid "Please map the target to a valid data item"
 msgstr "请将目标映射到有效的数据项"
 
-msgid "End period must be after start period"
-msgstr "结束期必须在开始期之后"
-
-msgid "Model not found"
-msgstr "未找到模型"
+msgid "End period cannot be in the future"
+msgstr "期末日期不能是未来日期"
 
 msgid ""
-"The following org units have no geometry{{escape}} "
-"{{orgUnitsWithoutGeometry}}"
-msgstr "下列组织单位没有几何图形{{escape}} {{orgUnitsWithoutGeometry}}"
+"Map every model covariate to a data item before starting. Not "
+"mapped{{colon}} {{names}}"
+msgstr "在开始之前，请将每个模型协变量映射到一个数据项。尚未映射{{colon}} {{names}}"
 
 msgid "Data layer not found for data item id{{escape}} {{dataItemId}}"
 msgstr "未找到数据项 id{{escape}} 的数据层{{dataItemId}}"
+
+msgid "Needs update"
+msgstr "需要更新"
+
+msgid "This model can't run right now"
+msgstr "该模型目前无法运行"
+
+msgid "Future-weather provider"
+msgstr "未来天气服务提供商"
+
+msgid ""
+"This provider uses observed future weather. Its evaluation scores are not "
+"comparable to production performance, and it cannot be used for future "
+"predictions."
+msgstr "该服务提供商使用的是已观测到的未来天气数据。其评估分数无法与实际运行表现进行比较，且不能用于未来预测。"
+
+msgid "Select at least one metric"
+msgstr "请至少选择一项指标"
+
+msgid "Select a baseline model"
+msgstr "选择一个基线模型"
+
+msgid "Modeling defaults"
+msgstr "违约建模"
+
+msgid "These defaults apply to everyone using this Chap server."
+msgstr "这些默认设置适用于所有使用此 Chap 服务器的用户。"
+
+msgid "Could not load the Chap route"
+msgstr "无法加载 Chap 路线"
+
+msgid "Configure a Chap route in General settings first."
+msgstr "首先在“常规设置”中配置一条 CHAP 路由。"
+
+msgid "Could not load modeling defaults"
+msgstr "无法加载建模默认设置"
+
+msgid ""
+"This Chap server does not support modeling defaults. Upgrade Chap Core to "
+"use these settings."
+msgstr "此 Chap 服务器不支持建模默认设置。请升级 Chap Core 以使用这些设置。"
+
+msgid "Retry"
+msgstr "重试"
+
+msgid "Modeling defaults saved"
+msgstr "已保存的违约建模"
+
+msgid "Metrics"
+msgstr "指标"
+
+msgid ""
+"Selected metrics are shown by default on benchmarks and evaluations, and "
+"rank models in the order listed."
+msgstr "在基准测试和评估中，系统会默认显示选定的指标，并按所列顺序对模型进行排名。"
+
+msgid "Learn how to add custom metrics"
+msgstr "了解如何添加自定义指标"
+
+msgid "Available metrics"
+msgstr "可用的指标"
+
+msgid "Selected metrics"
+msgstr "选定指标"
+
+msgid "Baseline"
+msgstr "基线"
+
+msgid "Default baseline model"
+msgstr "默认基线模型"
+
+msgid "Model runs are compared against this baseline."
+msgstr "将模型运行结果与该基准进行比较。"
+
+msgid "Weekly backtest defaults"
+msgstr "每周回测默认设置"
+
+msgid "Monthly backtest defaults"
+msgstr "月度回测默认设置"
+
+msgid "Could not save modeling defaults"
+msgstr "无法保存建模默认设置"
+
+msgid "Discard changes"
+msgstr "忽略修改"
+
+msgid "Save changes"
+msgstr "保存修改"
 
 msgid "Unsaved changes"
 msgstr "未保存的更改"
@@ -535,23 +994,359 @@ msgstr "如果您离开此页面，您尚未保存的更改将丢失。您确定
 msgid "Leave page"
 msgstr "离开页面"
 
-msgid "Start dry run"
-msgstr "开始空运行"
+msgid "Data check"
+msgstr "数据核对"
 
-msgid "Start import"
-msgstr "开始导入"
+msgid "Dataset name"
+msgstr "数据集名称"
 
-msgid "There was an error"
-msgstr "出现错误"
+msgid "EWARS data 22-24"
+msgstr "EWARS数据 22-24"
 
-msgid "Error loading models"
-msgstr "错误加载模型"
+msgid "Target column"
+msgstr "目标列"
 
-msgid "An unknown error occurred"
-msgstr "发生一个未知错误"
+msgid "The column models predict. Evaluations of this dataset use it."
+msgstr "列模型进行预测。对该数据集的评估会用到它。"
 
-msgid "Missing data for covariate"
-msgstr "协变量缺失数据"
+msgid "Choose the column to predict"
+msgstr "选择要预测的列"
+
+msgid "Too short to evaluate"
+msgstr "篇幅太短，无法评价"
+
+msgid ""
+"This range has {{periodCount}} periods, but an evaluation needs at least "
+"{{minimumEvaluationPeriods}}. You can still create the dataset."
+msgstr ""
+"该范围包含{{periodCount}} 个周期，但评估至少需要{{minimumEvaluationPeriods}} 。您仍然可以创建该数据集。"
+
+msgid "Check data"
+msgstr "检查数据"
+
+msgid "Could not check the data"
+msgstr "无法验证数据"
+
+msgid "Could not create dataset"
+msgstr "无法创建数据集"
+
+msgid "Some locations were left out"
+msgstr "有些地点被遗漏了"
+
+msgid "Every location is missing data or a shape, so nothing was imported."
+msgstr "每个位置都缺少数据或形状，因此未导入任何内容。"
+
+msgid "Chap left out {{count}} locations because of missing data or shapes."
+msgid_plural ""
+"Chap left out {{count}} locations because of missing data or shapes."
+msgstr[0] "Chap 因数据或形状缺失，未将{{count}} 上的地点纳入其中。"
+
+msgid "Import summary"
+msgstr "进口摘要"
+
+msgid "View details"
+msgstr "查看详情"
+
+msgid "Creating dataset"
+msgstr "创建数据集"
+
+msgid "The import is running in the background."
+msgstr "导入正在后台运行。"
+
+msgid "View logs"
+msgstr "查看日志"
+
+msgid "Dataset creation failed"
+msgstr "数据集创建失败"
+
+msgid "Edit and retry"
+msgstr "编辑后重试"
+
+msgid "Dataset created"
+msgstr "数据集已创建"
+
+msgid "View datasets"
+msgstr "查看数据集"
+
+msgid ""
+"No model reads a column with this name. Check the spelling or pick a "
+"suggested name."
+msgstr "没有模型会读取此名称的列。请检查拼写，或选择建议的名称。"
+
+msgid "Read by {{count}} models"
+msgid_plural "Read by {{count}} models"
+msgstr[0] "由{{count}} 模特朗读"
+
+msgid "Data columns"
+msgstr "数据列"
+
+msgid "Models find their data by column name, so use the names they expect."
+msgstr "模型通过列名查找数据，因此请使用它们预期的列名。"
+
+msgid "No columns yet. Add a suggested column or one from Model support."
+msgstr "目前尚无列。添加一个建议的列或来自“模型支持”中的列。"
+
+msgid "Column name"
+msgstr "列名"
+
+msgid "DHIS2 data item"
+msgstr "DHIS2 数据项"
+
+msgid "Select a data item"
+msgstr "选择一个数据项"
+
+msgid "Remove column"
+msgstr "删除列"
+
+msgid "Add column"
+msgstr "添加列"
+
+msgid "Suggested"
+msgstr "建议"
+
+msgid "Weekly data"
+msgstr "每周数据"
+
+msgid "Monthly data"
+msgstr "月度数据"
+
+msgid "Could not load models"
+msgstr "无法加载模型"
+
+msgid ""
+"You can still create the dataset, but we cannot tell which models can use "
+"it."
+msgstr "您仍然可以创建该数据集，但我们无法确定哪些模型可以使用它。"
+
+msgid "Model support"
+msgstr "模型支持"
+
+msgid "of {{total}} models can use this dataset"
+msgstr "{{total}} 的各型号均可使用该数据集"
+
+msgid "Supported models"
+msgstr "支持的机型"
+
+msgid "Add columns to support more models"
+msgstr "添加列以支持更多模型"
+
+msgid "+{{count}} models"
+msgid_plural "+{{count}} models"
+msgstr[0] "+{{count}} 车型"
+
+msgid "Add"
+msgstr "添加"
+
+msgid "Supported ({{count}})"
+msgid_plural "Supported ({{count}})"
+msgstr[0] "已支持（{{count}} ）"
+
+msgid "Not supported ({{count}})"
+msgid_plural "Not supported ({{count}})"
+msgstr[0] "不支持（{{count}} ）"
+
+msgid "Needs {{columns}}"
+msgstr "需求{{columns}}"
+
+msgid "A different period type"
+msgstr "另一种时期类型"
+
+msgid "Dataset import was rejected"
+msgstr "数据集导入被拒绝"
+
+msgid "Covariate name is required"
+msgstr "必须填写协变量名称"
+
+msgid "Add at least one data column"
+msgstr "至少添加一列数据"
+
+msgid "Covariate names must be unique"
+msgstr "协变量名称必须是唯一的"
+
+msgid ""
+"{{covariate}} has no observations for these periods and organisation units"
+msgstr "{{covariate}} 这些时间段和组织单位没有相关数据"
+
+msgid "The selected organisation units must have geometry"
+msgstr "所选的组织单元必须具有几何形状"
+
+msgid "Backtest parameters"
+msgstr "回测参数"
+
+msgid "Could not load backtest parameters"
+msgstr "无法加载回测参数"
+
+msgid "Could not load weather providers"
+msgstr "无法加载天气数据提供商"
+
+msgid "No future-weather providers are available."
+msgstr "没有可用的未来天气服务提供商。"
+
+msgid "Error loading datasets or models"
+msgstr "加载数据集或模型时出错"
+
+msgid "No saved datasets yet"
+msgstr "目前尚无已保存的数据集"
+
+msgid "Save a dataset first, then return here to run models in a benchmark."
+msgstr "请先保存数据集，然后返回此处在基准测试中运行模型。"
+
+msgid "Save a dataset first, then return here to run an evaluation."
+msgstr ""
+
+msgid "How benchmarks work"
+msgstr "基准测试的工作原理"
+
+msgid ""
+"Runs with the same dataset, target column and backtest parameters appear in "
+"the same benchmark. The run name labels your model runs; it does not create "
+"a separate benchmark."
+msgstr "使用同一数据集进行运行时，目标列和回测参数会出现在同一个基准测试中。运行名称用于标识您的模型运行；它不会创建一个单独的基准测试。"
+
+msgid "Run name"
+msgstr "运行名称"
+
+msgid "Benchmark model runs"
+msgstr "基准模型运行"
+
+msgid "No datasets match the origin filter"
+msgstr "没有数据集符合“来源”筛选条件"
+
+msgid "Set on the dataset."
+msgstr "在数据集上设置。"
+
+msgid "The dataset column the models predict and are scored against."
+msgstr "数据集中的列，模型据此进行预测并据此进行评分。"
+
+msgid "Pick a dataset first"
+msgstr "首先选择一个数据集"
+
+msgid "Pick a target column first"
+msgstr "首先选择目标列"
+
+msgid "No compatible model"
+msgstr "无兼容型号"
+
+msgid "No configured model matches this dataset’s covariates and period type."
+msgstr "没有已配置的模型与该数据集的协变量和时间段类型相匹配。"
+
+msgid "Dataset too short"
+msgstr "数据集太短"
+
+msgid ""
+"This dataset has {{periodCount}} periods, but an evaluation needs at least "
+"{{requiredPeriodCount}}."
+msgstr "该数据集包含{{periodCount}} 个周期，但评估至少需要{{requiredPeriodCount}} 个周期。"
+
+msgid "Run benchmark"
+msgstr "运行基准测试"
+
+msgid "Start evaluation"
+msgstr "开始评估"
+
+msgid "Could not start evaluation"
+msgstr "无法启动评估"
+
+msgid "Select models"
+msgstr "选择型号"
+
+msgid "No models selected"
+msgstr "未选择任何型号"
+
+msgid "Could not check model forecast limits"
+msgstr "无法检查模型预测限值"
+
+msgid "Unsupported forecast periods"
+msgstr "不受支持的预测期间"
+
+msgid "Enter a whole number greater than zero"
+msgstr "请输入一个大于零的整数"
+
+msgid "Select a future-weather provider"
+msgstr "选择一家未来天气服务提供商"
+
+msgid "Number of training runs must not exceed the number of splits"
+msgstr "训练轮次数不得超过分段数"
+
+msgid "{{model}} supports {{minimum}}–{{maximum}} forecast periods."
+msgstr "{{model}} 支持{{minimum}}——{{maximum}} 的预测期间。"
+
+msgid "{{model}} requires at least {{minimum}} forecast periods."
+msgstr "{{model}} 至少需要{{minimum}} 个预测期。"
+
+msgid "{{model}} supports at most {{maximum}} forecast periods."
+msgstr "{{model}} 最多支持{{maximum}} 个预测时段。"
+
+msgid "Cannot run prediction"
+msgstr "无法运行预测"
+
+msgid "Prediction run name"
+msgstr "预测运行名称"
+
+msgid "Prediction could not run"
+msgstr "无法运行预测"
+
+msgid ""
+"Check or import the required data for the listed variables and organisation "
+"units, or adjust the training period in the prediction setup before "
+"retrying."
+msgstr "请检查或导入所列变量和组织单位所需的数据，或者在预测设置中调整训练周期，然后重试。"
+
+msgid "View rejected data"
+msgstr "查看被拒绝的数据"
+
+msgid "Prediction data rejected"
+msgstr "预测数据被拒绝"
+
+msgid "Loading period settings"
+msgstr "加载周期设置"
+
+msgid "Preparing period selection."
+msgstr "正在选择准备期间。"
+
+msgid ""
+"Missing prediction setup details. Open the setup configuration and ensure "
+"model, period type, training start, and data mappings are configured."
+msgstr "缺少预测设置的详细信息。请打开设置配置，确保已配置模型、周期类型、训练起始点和数据映射。"
+
+msgid "Training period"
+msgstr "培训期"
+
+msgid "Training start period"
+msgstr "培训开始时间"
+
+msgid "Last training period"
+msgstr "上一训练期"
+
+msgid "Unknown model"
+msgstr "型号不详"
+
+msgid "Run a new prediction"
+msgstr "运行新的预测"
+
+msgid "Training start"
+msgstr "培训开始"
+
+msgid "Signal policy"
+msgstr "信号政策"
+
+msgid "{{policy}} (raises pending signals for review)"
+msgstr "{{policy}} （提交待审信号）"
+
+msgid "None (this run raises no signals)"
+msgstr "无（本次运行未触发任何信号）"
+
+msgid "Please select a period"
+msgstr "请选择一个周期"
+
+msgid "Period must be completed (cannot be later than last completed period)"
+msgstr "必须填写经期（不得晚于上次经期结束时间）"
+
+msgid "Period is before training start"
+msgstr "该时段为训练开始前"
+
+msgid "Cannot determine a forecast horizon for this prediction setup."
+msgstr "无法为该预测配置确定预测时限。"
 
 msgid "{{count}} org units"
 msgid_plural "{{count}} org units"
@@ -604,8 +1399,292 @@ msgstr "没有与您的搜索匹配的组织单位"
 msgid "You cannot select more than {{max}} organisation units at a time"
 msgstr "每次选择的组织单位不能超过{{max}} "
 
-msgid "Please select a visualization."
-msgstr "请选择一种可视化方式。"
+msgid "Last 7 days"
+msgstr "最近7天"
+
+msgid "Last 14 days"
+msgstr "最近14天"
+
+msgid "Last 30 days"
+msgstr "最近30天"
+
+msgid "Last 90 days"
+msgstr "最近90天"
+
+msgid "{{count}} job"
+msgid_plural "{{count}} job"
+msgstr[0] "{{count}} 职位"
+
+msgid "Day"
+msgstr "天"
+
+msgid "Jobs"
+msgstr "工作机会"
+
+msgid "Active"
+msgstr "活跃的"
+
+msgid "Started"
+msgstr "已开始"
+
+msgid "Finished"
+msgstr "已完成"
+
+msgid "Recent activity"
+msgstr "最近的活动"
+
+msgid "Error loading jobs"
+msgstr "加载工作时出错"
+
+msgid "Invalid prediction setup"
+msgstr "预测配置无效"
+
+msgid "No activity yet. Run a prediction to see job status and logs here."
+msgstr "目前尚无活动。请在此运行预测以查看任务状态和日志。"
+
+msgid "Activity view"
+msgstr "活动视图"
+
+msgid "Chart"
+msgstr "图表"
+
+msgid "Table"
+msgstr "表"
+
+msgid "All statuses"
+msgstr "所有状态"
+
+msgid "View all activity"
+msgstr "查看所有活动"
+
+msgid "No activity matches the selected filters"
+msgstr "没有符合所选筛选条件的活动"
+
+msgid "Run a prediction to check its input data."
+msgstr "运行一次预测以检查其输入数据。"
+
+msgid "Unable to load input data."
+msgstr "无法加载输入数据。"
+
+msgid "Completeness unavailable for this dataset."
+msgstr "无法获取该数据集的完整性信息。"
+
+msgid "Latest period ({{period}})"
+msgstr "最新周期（{{period}} ）"
+
+msgid "{{percent}}% complete"
+msgstr "{{percent}}% 完成"
+
+msgid "{{count}} locations with gaps"
+msgid_plural "{{count}} locations with gaps"
+msgstr[0] "{{count}} 存在缺口的地点"
+
+msgid "Latest input data"
+msgstr "最新输入数据"
+
+msgid "View dataset"
+msgstr "查看数据集"
+
+msgid "Prediction origin period"
+msgstr "预测起始时间段"
+
+msgid "{{metric}} improvement over {{baseline}}"
+msgstr "{{metric}} 比……有所改进{{baseline}}"
+
+msgid "Better than {{baseline}}"
+msgstr "比……更好{{baseline}}"
+
+msgid "Worse than {{baseline}}"
+msgstr "比……更糟糕{{baseline}}"
+
+msgid "{{count}} forecasts scored"
+msgid_plural "{{count}} forecasts scored"
+msgstr[0] "{{count}} 预测得分"
+
+msgid "Evaluation splits"
+msgstr "评估结果存在分歧"
+
+msgid "Evaluation average"
+msgstr "评估平均分"
+
+msgid "Prediction runs"
+msgstr "预测运行"
+
+msgid "Prediction trend"
+msgstr "预测趋势"
+
+msgid "No observed prediction outcomes yet."
+msgstr "尚未观察到任何预测结果。"
+
+msgid "Model performance monitoring"
+msgstr "模型性能监控"
+
+msgid ""
+"Each dot is one run, scored against the baseline once outcomes were "
+"observed. The prediction trend combines all prediction runs so far."
+msgstr "每个点代表一次运行，在观察到结果后，将其与基准线进行对比并记录得分。预测趋势综合了迄今为止的所有预测运行结果。"
+
+msgid "Metric"
+msgstr "公制"
+
+msgid "Compare with baseline"
+msgstr "与基线进行比较"
+
+msgid "Could not load monitoring"
+msgstr "无法加载监控"
+
+msgid "No metrics available for monitoring."
+msgstr "没有可用于监控的指标。"
+
+msgid ""
+"The comparison with {{baseline}} is undefined for these runs, for example "
+"when the baseline scores zero."
+msgstr "对于这些运行，与{{baseline}} 的比较结果未定义，例如当基线得分为零时。"
+
+msgid "Delete prediction run"
+msgstr "删除预测运行"
+
+msgid ""
+"This will permanently delete the prediction run from Chap. It will not "
+"remove any values previously imported into DHIS2."
+msgstr "这将从Chap中永久删除该预测运行。此操作不会删除之前导入到DHIS2中的任何数据。"
+
+msgid "Import"
+msgstr "导入"
+
+msgid "{{count}} run"
+msgid_plural "{{count}} run"
+msgstr[0] "{{count}} 运行"
+
+msgid "Last run {{timeAgo}} ago"
+msgstr "上次运行时间：{{timeAgo}} 前"
+
+msgid "No runs yet"
+msgstr "目前还没有得分"
+
+msgid "Predictions"
+msgstr "预测"
+
+msgid "Running job"
+msgstr "正在运行的作业"
+
+msgid "Run ID"
+msgstr "运行 ID"
+
+msgid "Prediction periods"
+msgstr "预测期间"
+
+msgid "Training data cutoff"
+msgstr "训练数据截止时间"
+
+msgid "Error loading prediction runs"
+msgstr "加载预测结果时出错"
+
+msgid "No predictions yet. Run a prediction to start producing predictions."
+msgstr "目前尚无预测结果。请运行一次预测以开始生成预测结果。"
+
+msgid "Prediction run deleted"
+msgstr "预测运行已删除"
+
+msgid "Failed to delete prediction run"
+msgstr "无法删除预测运行"
+
+msgid "Quick actions"
+msgstr "快速行动"
+
+msgid "Go to last run"
+msgstr "转到上次运行"
+
+msgid "Edit setup"
+msgstr "编辑设置"
+
+msgid "Edit prediction setup"
+msgstr "编辑预测设置"
+
+msgid "Prediction setup updated"
+msgstr "预测设置已更新"
+
+msgid "Failed to update prediction setup"
+msgstr "无法更新预测设置"
+
+msgid "Edit schedule"
+msgstr "编辑日程"
+
+msgid "Scheduled predictions"
+msgstr "计划预测"
+
+msgid "Enable to include this setup in scheduled prediction runs."
+msgstr "启用此设置，将其纳入计划中的预测运行。"
+
+msgid "About scheduling"
+msgstr "关于日程安排"
+
+msgid ""
+"The external Chap scheduler must be running for scheduled predictions to "
+"execute. Contact your system administrator to set up the scheduler if you "
+"haven't yet."
+msgstr "外部 Chap 调度程序必须处于运行状态，计划好的预测才能执行。如果您尚未设置该调度程序，请联系您的系统管理员进行设置。"
+
+msgid "Scheduling"
+msgstr "调度"
+
+msgid "No prediction setup found"
+msgstr "未找到预测配置"
+
+msgid "Enabled"
+msgstr "使能"
+
+msgid "Disabled"
+msgstr "关闭"
+
+msgid "{{count}} {{label}}"
+msgid_plural "{{count}} {{label}}"
+msgstr[0] "{{count}} {{label}}"
+
+msgid "Configuration"
+msgstr "配置"
+
+msgid "location"
+msgstr "位置"
+
+msgid "locations"
+msgstr "地点"
+
+msgid "Data sources"
+msgstr "数据来源"
+
+msgid "source"
+msgstr "来源"
+
+msgid "sources"
+msgstr "来源"
+
+msgid "Error loading dataset"
+msgstr "加载数据集时出错"
+
+msgid ""
+"Created {{created}} · {{first}} to {{last}} · {{locations}} locations · "
+"target {{target}}"
+msgstr "创建了{{created}} ·{{first}} 至{{last}} ·{{locations}} 位置 · 目标{{target}}"
+
+msgid "Error loading datasets"
+msgstr "加载数据集时出错"
+
+msgid "No datasets yet. Create one to reuse the same data across evaluations."
+msgstr "目前尚无数据集。请创建一个数据集，以便在各项评估中重复使用同一组数据。"
+
+msgid "{{count}} period ahead"
+msgid_plural "{{count}} period ahead"
+msgstr[0] "{{count}} 未来一段时间"
+
+msgid "Select organisation unit"
+msgstr "选择组织机构"
+
+msgid "Select split period"
+msgstr "选择拆分期间"
+
+msgid "Select forecast horizon"
+msgstr "选择预测时段"
 
 msgid ""
 "This plot has encountered an unexpected error and could not be displayed."
@@ -613,11 +1692,9 @@ msgstr "该绘图遇到意外错误，无法显示。"
 
 msgid ""
 "This visualization is provided by external contributors and may occasionally"
-" fail due to issues in the contributed plot definition."
-msgstr "该可视化由外部贡献者提供，有时可能会因贡献的绘图定义中的问题而失败。"
-
-msgid "No visualization found"
-msgstr "未找到可视化"
+" fail due to issues in the contributed plot definition. Please contact your "
+"system administrator if you experience issues with this visualization."
+msgstr "此可视化内容由外部贡献者提供，有时可能会因贡献的图表定义存在问题而无法正常显示。如果您在使用此可视化内容时遇到问题，请联系您的系统管理员。"
 
 msgid "Click to view actions"
 msgstr "点击查看行动"
@@ -636,6 +1713,27 @@ msgstr "查看来源"
 
 msgid "Save as SVG"
 msgstr "保存为 SVG"
+
+msgid "an organisation unit"
+msgstr "一个组织单位"
+
+msgid "a split period"
+msgstr "一个分段时期"
+
+msgid "a forecast horizon"
+msgstr "预测期"
+
+msgid "Please select a visualization."
+msgstr "请选择一种可视化方式。"
+
+msgid "Please select {{filters}} to view this visualization."
+msgstr "请访问{{filters}} 查看此可视化内容。"
+
+msgid " and "
+msgstr " 和 "
+
+msgid "No visualization found"
+msgstr "未找到可视化"
 
 msgid "Evaluation plots"
 msgstr "评价图"
@@ -671,6 +1769,67 @@ msgstr "评估 ID 无效"
 msgid "The evaluation ID is invalid. Please try again."
 msgstr "评估 ID 无效。请重试。"
 
+msgid "Not available"
+msgstr "不详"
+
+msgid "target {{target}}"
+msgstr "目标{{target}}"
+
+msgid "Evaluation metrics"
+msgstr "评估指标"
+
+msgid "No metrics available for this evaluation."
+msgstr "此项评估暂无相关指标。"
+
+msgid "Scores aggregated across all evaluation splits and organisation units."
+msgstr "汇总自所有评估分组和组织单位的分数。"
+
+msgid "Could not load comparisons"
+msgstr "无法加载比较结果"
+
+msgid "Show fewer metrics"
+msgstr "显示更少的指标"
+
+msgid "Show all {{count}} metrics"
+msgid_plural "Show all {{count}} metrics"
+msgstr[0] "显示所有{{count}} 指标"
+
+msgid ""
+"Relative improvement over {{reference}}. +20% means 20% better than it, -20%"
+" means 20% worse."
+msgstr "相对于{{reference}} 的相对改进。+20% 表示比它好 20%，-20% 表示比它差 20%。"
+
+msgid ""
+"Improvement over {{reference}} in the units of the score. Positive means "
+"better, negative means worse."
+msgstr "相对于{{reference}} 在评分单位上的改进。正值表示更好，负值表示更差。"
+
+msgid ""
+"How much closer to the target of {{target}} than {{reference}}. Positive "
+"means better, negative means worse."
+msgstr "与{{target}} 相比，距离目标有多近？与{{reference}} 相比，距离目标有多远？正值表示更好，负值表示更差。"
+
+msgid ""
+"How much closer to the target than {{reference}}. Positive means better, "
+"negative means worse."
+msgstr "与{{reference}} 相比，距离目标还有多远？正值表示更好，负值表示更差。"
+
+msgid ""
+"Compared with {{reference}}. Positive means better, negative means worse."
+msgstr "与{{reference}} 相比。正值表示更好，负值表示更差。"
+
+msgid "Higher is better, up to the target of {{target}}."
+msgstr "数值越高越好，最高可达{{target}} 的目标值。"
+
+msgid "Closer to the target of {{target}} is better."
+msgstr "越接近{{target}} 的目标值越好。"
+
+msgid "Higher is better."
+msgstr "越高越好。"
+
+msgid "Lower is better."
+msgstr "数值越低越好。"
+
 msgid "Summary"
 msgstr "概括"
 
@@ -686,31 +1845,9 @@ msgid ""
 "the results of the run, but the metadata may not be accurate."
 msgstr "用于运行此评估的模型已更新。您仍然可以查看运行结果，但元数据可能不准确。"
 
-msgid "Training period"
-msgstr "培训期"
-
 msgid "{{count}} locations"
 msgid_plural "{{count}} locations"
 msgstr[0] "{{count}} 地点"
-
-msgid "Please select a visualization and metric."
-msgstr "请选择可视化和度量标准。"
-
-msgid ""
-"Keep in mind that this is advanced functionality and may not be suitable for"
-" all users."
-msgstr "请注意，这是高级功能，可能不适合所有用户。"
-
-msgid "Metric plot"
-msgstr "公制图"
-
-msgid ""
-"Metric plots are advanced functionality and may be misinterpreted. Use with "
-"caution."
-msgstr "公制图是高级功能，可能会被误解。请谨慎使用。"
-
-msgid "Select metric"
-msgstr "选择公制"
 
 msgid "Evaluation result"
 msgstr "评估结果"
@@ -730,34 +1867,88 @@ msgstr "所有地点"
 msgid "Result"
 msgstr "结果"
 
+msgid "Not defined"
+msgstr "未定义"
+
+msgid "vs {{reference}}"
+msgstr "vs简体中文（大陆）{{reference}}"
+
+msgid "All forecast horizons"
+msgstr "所有预测时段"
+
+msgid "Horizon {{horizon}}"
+msgstr "地平线{{horizon}}"
+
+msgid "{{count}} forecast case scored"
+msgid_plural "{{count}} forecast case scored"
+msgstr[0] "{{count}} 预测案例得分"
+
+msgid "Signal level"
+msgstr "信号电平"
+
+msgid "Threshold"
+msgstr "阈值"
+
+msgid "Policy overall"
+msgstr "总体政策"
+
+msgid "Outbreak detection"
+msgstr "疫情监测"
+
+msgid ""
+"How well a policy's signals match observed outbreaks, across all splits and "
+"organisation units. Each split's thresholds come from the data before it."
+msgstr "在所有划分和组织单位中，某项政策的信号与实际观察到的疫情爆发情况匹配程度如何。每个划分的阈值均来自其之前的數據。"
+
+msgid "Could not load outbreak scoring"
+msgstr "无法加载疫情评分"
+
+msgid "Manage signal policies"
+msgstr "管理信号策略"
+
+msgid "Split by horizon"
+msgstr "按投资期限划分"
+
+msgid "Compare with baseline model"
+msgstr "与基线模型进行比较"
+
+msgid "Show all metrics"
+msgstr "显示所有指标"
+
+msgid "Could not score outbreak detection"
+msgstr "无法对疫情监测进行评分"
+
+msgid "Could not score the baseline model"
+msgstr "无法对基线模型进行评分"
+
+msgid ""
+"Each score is compared with the baseline model {{reference}} under the same "
+"policy."
+msgstr "在相同的策略下，将每项评分与基线模型{{reference}} 进行比较。"
+
 msgid "Start period"
 msgstr "开始时间"
 
 msgid "End period"
 msgstr "期末"
 
-msgid "Create prediction"
-msgstr "创建预测"
+msgid "Predict"
+msgstr "预测"
 
-msgid ""
-"You should only do predictions on well-tested and reliable models that have "
-"shown promise when evaluated. Do you still want to continue?"
-msgstr "您应该只对经过充分测试的可靠模型进行预测，这些模型在评估时已显示出前景。您还想继续吗？"
-
-msgid "Continue"
-msgstr "继续"
-
-msgid "Quick actions"
-msgstr "快速行动"
+msgid "Create prediction setup"
+msgstr "创建预测配置"
 
 msgid "Compare with..."
 msgstr "与..."
 
-msgid "Predict..."
-msgstr "预测..."
+msgid "Prediction setup created"
+msgstr "已创建预测配置"
 
-msgid "Error loading jobs"
-msgstr "加载工作时出错"
+msgid "Failed to create prediction setup"
+msgstr "无法创建预测配置"
+
+msgid "Error loading models"
+msgstr "错误加载模型"
 
 msgid "Are you sure you want to archive this model?"
 msgstr "您确定要将此模型存档吗？"
@@ -770,8 +1961,110 @@ msgstr "您仍然可以查看该模型的评估，但无法创建新的评估或
 msgid "Archive"
 msgstr "存档"
 
+msgid "View info"
+msgstr "查看信息"
+
 msgid "View evaluations"
 msgstr "查看评价"
+
+msgid "Any"
+msgstr "任何"
+
+msgid "True"
+msgstr "真"
+
+msgid "False"
+msgstr "假"
+
+msgid "Model details{{colon}} {{name}}"
+msgstr "车型详情{{colon}} {{name}}"
+
+msgid "Model details"
+msgstr "车型详情"
+
+msgid "Error loading model details"
+msgstr "加载模型详细信息时出错"
+
+msgid "General"
+msgstr "常规"
+
+msgid "Display name"
+msgstr "显示名"
+
+msgid "Configuration name"
+msgstr "配置名称"
+
+msgid "Configured model ID"
+msgstr "已配置的模型 ID"
+
+msgid "Organization"
+msgstr "组织"
+
+msgid "Contact"
+msgstr "联系人"
+
+msgid "Archived"
+msgstr "存档"
+
+msgid "Description"
+msgstr "描述"
+
+msgid "Model template"
+msgstr "模型模板"
+
+msgid "Template name"
+msgstr "模板名称"
+
+msgid "Supported period"
+msgstr "支持的时间段"
+
+msgid "Requires geo"
+msgstr "需要地理位置信息"
+
+msgid "Yes"
+msgstr "是"
+
+msgid "No"
+msgstr "否"
+
+msgid "Min prediction length"
+msgstr "最小预测长度"
+
+msgid "Max prediction length"
+msgstr "最大预测长度"
+
+msgid "Documentation"
+msgstr "文档"
+
+msgid "Required"
+msgstr "必须的"
+
+msgid "Additional"
+msgstr "补充"
+
+msgid "Allow free additional"
+msgstr "允许免费追加"
+
+msgid "User options"
+msgstr "用户选项"
+
+msgid "This model has no configurable user options."
+msgstr "该型号没有可配置的用户选项。"
+
+msgid "Option"
+msgstr "选项"
+
+msgid "Selected value"
+msgstr "所选值"
+
+msgid "Default"
+msgstr "默认"
+
+msgid "default"
+msgstr "默认"
+
+msgid "Citation"
+msgstr "引用"
 
 msgid "Model archived"
 msgstr "模型存档"
@@ -779,23 +2072,8 @@ msgstr "模型存档"
 msgid "Failed to archive model"
 msgstr "模型存档失败"
 
-msgid "Author"
-msgstr "作者"
-
-msgid "Covariates"
-msgstr "变量"
-
 msgid "No covariate names available"
 msgstr "无协变量名"
-
-msgid "Archived"
-msgstr "存档"
-
-msgid "Active"
-msgstr "活跃的"
-
-msgid "New model"
-msgstr "新模式"
 
 msgid "No models available"
 msgstr "无型号"
@@ -823,17 +2101,8 @@ msgstr "其他连续协变量"
 msgid "Enter covariate name"
 msgstr "输入协变量名称"
 
-msgid "Add"
-msgstr "添加"
-
-msgid "Required"
-msgstr "必须的"
-
 msgid "Remove"
 msgstr "移除"
-
-msgid "Model template"
-msgstr "模型模板"
 
 msgid "Select the base model template"
 msgstr "选择基本模式模板"
@@ -868,30 +2137,113 @@ msgstr "模型创建成功"
 msgid "Failed to create model"
 msgstr "创建模型失败"
 
-msgid "Error loading prediction"
-msgstr "误差加载预测"
+msgid "{{name}} prediction"
+msgstr "{{name}} 预测"
 
-msgid "Prediction not found"
-msgstr "未找到预测"
+msgid "Missing prediction setup id."
+msgstr "缺少预测配置 ID。"
+
+msgid "Error loading prediction setup"
+msgstr "加载预测设置时出错"
+
+msgid "Prediction setup not found."
+msgstr "未找到预测配置。"
 
 msgid ""
-"The prediction you are looking for does not exist or you do not have "
-"permission to access it."
-msgstr "您要查找的预测不存在，或者您没有权限访问该预测。"
+"There was a problem loading the prediction data required for signal "
+"configuration."
+msgstr "在加载信号配置所需的预测数据时出现问题。"
+
+msgid "No prediction data found"
+msgstr "未找到预测数据"
+
+msgid "This prediction has no forecast data to configure signals for."
+msgstr "该预测没有可用于配置信号的预报数据。"
+
+msgid "Threshold unavailable"
+msgstr "阈值不可用"
+
+msgid "Outbreak detected"
+msgstr "检测到疫情爆发"
+
+msgid "Endemic threshold unavailable"
+msgstr "无地方性阈值数据"
 
 msgid ""
-"The model you are looking for does not exist or you do not have permission "
-"to access it."
-msgstr "您要查找的模型不存在，或者您没有访问该模型的权限。"
+"Insufficient historical data to compute the endemic threshold for this "
+"location."
+msgstr "历史数据不足，无法计算该地点的流行阈值。"
+
+msgid "Adjust signal output"
+msgstr "调整信号输出"
+
+msgid "Apply"
+msgstr "应用"
+
+msgid "Signal review"
+msgstr "《Signal》影评"
+
+msgid ""
+"All signals reviewed{{colon}} {{approved}} approved, {{declined}} declined."
+msgstr "所有信号均已审核：{{colon}} 、{{approved}} 已获批准，{{declined}} 已被拒绝。"
+
+msgid ""
+"{{pending}} of {{total}} signals awaiting review ({{approved}} approved, "
+"{{declined}} declined)."
+msgstr "{{pending}} {{total}} 待审核的信号（ 已批准， 已拒绝）。{{approved}} {{declined}} "
+
+msgid "Signal levels"
+msgstr "信号电平"
+
+msgid "No signal policy was recorded for this run."
+msgstr "此次运行未记录任何信号策略。"
+
+msgid "Show recorded signals on the plots."
+msgstr "在图上显示记录的信号。"
+
+msgid "Show {{alertCount}} signals from {{policy}} with their thresholds."
+msgstr "显示来自{{policy}} 的{{alertCount}} 信号及其阈值。"
+
+msgid "{{policy}} raised no signals for this run. Show its thresholds."
+msgstr "{{policy}} 本次运行未触发任何信号。显示其阈值。"
+
+msgid "Saved signal colours could not be loaded"
+msgstr "无法加载已保存的信号颜色"
+
+msgid "Signals are shown with default colours."
+msgstr "信号以默认颜色显示。"
+
+msgid "Organisation units exceeding threshold"
+msgstr "超过阈值的组织单位"
+
+msgid "Periods exceeding threshold"
+msgstr "超过阈值的周期"
+
+msgid "Thresholds unavailable"
+msgstr "阈值不可用"
+
+msgid "Prediction run"
+msgstr "预测运行"
+
+msgid "Explore thresholds"
+msgstr "探索阈值"
+
+msgid "Try other threshold settings. Hides recorded signals."
+msgstr "尝试其他阈值设置。隐藏已记录的信号。"
+
+msgid ""
+"There was a problem loading the prediction data required for this prediction"
+" run."
+msgstr "在加载本次预测运行所需的预测数据时出现问题。"
+
+msgid "This prediction has no forecast data to display."
+msgstr "该预测没有可显示的预报数据。"
+
+msgid "Prediction settings"
+msgstr "预测设置"
 
 msgid "Prediction result"
 msgstr "预测结果"
-
-msgid "Chart"
-msgstr "图表"
-
-msgid "Table"
-msgstr "表"
 
 msgid "Map"
 msgstr "地图"
@@ -899,21 +2251,73 @@ msgstr "地图"
 msgid "No prediction data found."
 msgstr "未找到预测数据。"
 
+msgid "Signal output"
+msgstr "信号输出"
+
+msgid "Use signal outputs"
+msgstr "使用信号输出"
+
+msgid "Import the signal level code from {{policy}}."
+msgstr "从{{policy}} 导入信号电平代码。"
+
+msgid "Import 1 when an outbreak is likely, otherwise 0."
+msgstr "当可能发生疫情时，输入1；否则输入0。"
+
+msgid "Imported value"
+msgstr "导入值"
+
+msgid "No signal"
+msgstr "无信号"
+
+msgid "One region-period result is missing and will be skipped."
+msgid_plural "One region-period result is missing and will be skipped."
+msgstr[0] "{{count}} 缺少“地区-时间段”的结果，将予以跳过。"
+
+msgid "Some outbreak indicators will be skipped"
+msgstr "某些疫情指标将被跳过"
+
 msgid ""
-"There was an error loading the prediction summary. Please try again later."
-msgstr "加载预测摘要时出现错误。请稍后再试。"
+"One region has forecast periods without thresholds. Only outbreak indicators"
+" for those periods will be skipped; indicators for periods with thresholds "
+"will still be imported."
+msgid_plural ""
+"One region has forecast periods without thresholds. Only outbreak indicators"
+" for those periods will be skipped; indicators for periods with thresholds "
+"will still be imported."
+msgstr[0] "{{count}} 某些区域的预测时段未设置阈值。仅会跳过这些时段的疫情指标；而设有阈值的时段的指标仍将被导入。"
 
-msgid "Predicted periods"
-msgstr "预测期间"
+msgid "Minimum outbreak probability"
+msgstr "最小暴发概率"
 
-msgid "Import"
-msgstr "导入"
+msgid "Threshold strategy"
+msgstr "阈值策略"
 
-msgid "Guide"
-msgstr "指南"
+msgid "Threshold parameters"
+msgstr "阈值参数"
+
+msgid "Adjust"
+msgstr "调整"
+
+msgid "Outbreak indicator"
+msgstr "疫情指标"
+
+msgid "Endemic threshold (optional)"
+msgstr "地方性阈值（可选）"
+
+msgid "Requires data value delete authority."
+msgstr "需要数据值删除权限。"
+
+msgid "Clear previous values"
+msgstr "清除先前值"
 
 msgid "Loading"
 msgstr "载入"
+
+msgid "Data elements"
+msgstr "数据元"
+
+msgid "Data items"
+msgstr "数据项"
 
 msgid "Start typing to search for data items"
 msgstr "开始键入以搜索数据项"
@@ -927,16 +2331,42 @@ msgstr "选择一个数据项..."
 msgid "Clear selection"
 msgstr "清空选项"
 
+msgid "Search for data elements"
+msgstr "搜索数据元素"
+
 msgid "Search for indicators, data elements, or program indicators"
 msgstr "搜索指标、数据元素或计划指标"
 
-msgid "Import forecasted values"
-msgstr "进口预测值"
+msgid "Checking import with DHIS2"
+msgstr "使用 DHIS2 检查导入情况"
+
+msgid "Checking values to clear"
+msgstr "检查待清除的值"
+
+msgid "Clearing previous values"
+msgstr "清除先前值"
+
+msgid "Importing prediction values"
+msgstr "导入预测值"
+
+msgid "Clear and import"
+msgstr "清除并导入"
 
 msgid ""
-"Importing forecasted values into DHIS2 requires you to set up five data "
-"elements for the quantiles outputted by the model."
-msgstr "将预测值导入 DHIS2 需要为模型输出的量化值设置五个数据元素。"
+"This will clear existing values for the selected output data elements, then "
+"import this prediction into DHIS2."
+msgstr "这将清除所选输出数据元素的现有值，然后将该预测结果导入 DHIS2。"
+
+msgid ""
+"This will import this prediction into DHIS2 without clearing existing values"
+" first."
+msgstr "这将把该预测导入 DHIS2，而不会先清除现有值。"
+
+msgid "Clear and import prediction"
+msgstr "清除和导入预测"
+
+msgid "Import progress"
+msgstr "导入进度"
 
 msgid "Quantile high"
 msgstr "定量高"
@@ -953,37 +2383,135 @@ msgstr "定量中低"
 msgid "Quantile low"
 msgstr "定量低"
 
+msgid "Unable to load signal data"
+msgstr "无法加载信号数据"
+
+msgid ""
+"There was a problem loading the prediction data required for outbreak "
+"indicator import."
+msgstr "在加载疫情指标导入所需的预测数据时出现问题。"
+
+msgid "Cannot import prediction"
+msgstr "无法导入预测结果"
+
+msgid "Missing or invalid prediction setup id."
+msgstr "预测配置 ID 缺失或无效。"
+
+msgid "Import forecasted values"
+msgstr "进口预测值"
+
+msgid ""
+"Importing forecasted values into DHIS2 requires you to set up five data "
+"elements for the quantiles outputted by the model."
+msgstr "将预测值导入 DHIS2 需要为模型输出的量化值设置五个数据元素。"
+
+msgid "Signal probability is required"
+msgstr "需要信号概率"
+
+msgid "Quantile low is required"
+msgstr ""
+
+msgid "Quantile high is required"
+msgstr ""
+
+msgid "Median is required"
+msgstr ""
+
+msgid "Quantile mid low is required"
+msgstr ""
+
+msgid "Quantile mid high is required"
+msgstr ""
+
+msgid "Outbreak indicator is required"
+msgstr "必须提供疫情指标"
+
 msgid "Failed to post prediction data"
 msgstr "未能发布预测数据"
+
+msgid ""
+"Previous values may have been cleared, but the new import did not complete"
+msgstr "之前的值可能已被清除，但新的导入操作尚未完成"
 
 msgid "Prediction data posted successfully"
 msgstr "预测数据发布成功"
 
-msgid "Delete prediction"
-msgstr "删除预测"
+msgid "{{name}} uses an option set without the codes {{values}}."
+msgstr "{{name}} 使用了一组不包含代码{{values}} 的选项。"
+
+msgid "{{name}} has value type {{valueType}} and cannot store {{values}}."
+msgstr "{{name}} 其值类型为{{valueType}} ，无法存储{{values}} 。"
+
+msgid "Error loading prediction configurations"
+msgstr "加载预测配置时出错"
+
+msgid "Delete prediction setup"
+msgstr "删除预测设置"
 
 msgid ""
-"Are you sure you want to delete this prediction? This action cannot be "
-"undone."
-msgstr "您确定要删除此预测吗？此操作无法撤销。"
+"This will permanently delete the setup, associated prediction runs, and "
+"associated data. This action cannot be undone."
+msgstr "这将永久删除该设置、相关的预测运行以及相关数据。此操作无法撤销。"
 
-msgid "View"
-msgstr "查看"
+msgid "Date created"
+msgstr "创建日期"
 
-msgid "Periods"
-msgstr "期间"
+msgid ""
+"No prediction configurations yet - create one from a completed evaluation."
+msgstr "目前尚无预测配置——请根据已完成的评估创建一个。"
 
-msgid "New prediction"
-msgstr "新预测"
+msgid "Prediction setup deleted"
+msgstr "预测设置已删除"
 
-msgid "No predictions available"
-msgstr "没有预测"
+msgid "Failed to delete prediction setup"
+msgstr "无法删除预测设置"
 
-msgid "Prediction deleted"
-msgstr "预测已删除"
+msgid "Error loading prediction"
+msgstr "误差加载预测"
 
-msgid "Failed to delete prediction"
-msgstr "删除预测失败"
+msgid "Prediction not found"
+msgstr "未找到预测"
+
+msgid ""
+"The prediction you are looking for does not exist or you do not have "
+"permission to access it."
+msgstr "您要查找的预测不存在，或者您没有权限访问该预测。"
+
+msgid "Model not found"
+msgstr "未找到模型"
+
+msgid "The model for this prediction could not be loaded."
+msgstr "无法加载该预测模型。"
+
+msgid "Setup name"
+msgstr "设置名称"
+
+msgid ""
+"No signal policies exist yet. Create one under Signal policies to raise "
+"signals from this setup."
+msgstr "目前尚无信号策略。请在“信号策略”下创建一个，以便从该配置中触发信号。"
+
+msgid ""
+"Every prediction run automatically raises pending signals with this policy, "
+"for review before release. Leave empty to run predictions without signals."
+msgstr "根据此策略，每次预测运行都会自动触发待处理信号，以便在发布前进行审核。若留空，则执行不触发信号的预测。"
+
+msgid "No signal policy"
+msgstr "“无信号”政策"
+
+msgid "Unable to load signal policies{{colon}} {{message}}"
+msgstr "无法加载信号策略{{colon}} {{message}}"
+
+msgid "You can change this configuration at any point."
+msgstr "您可以随时更改此配置。"
+
+msgid "Set default import mapping"
+msgstr "设置默认导入映射"
+
+msgid ""
+"Choose the DHIS2 data elements to use by default when prediction outputs are"
+" imported."
+msgstr "选择在导入预测结果时默认使用的 DHIS2 数据元素。"
 
 msgid "There are running jobs in the background"
 msgstr "后台有正在运行的工作"
@@ -991,23 +2519,144 @@ msgstr "后台有正在运行的工作"
 msgid "Running jobs"
 msgstr "运行工作"
 
+msgid "Review the threshold parameters and apply your changes."
+msgstr "检查阈值参数并应用您的更改。"
+
+msgid "Waiting for connection"
+msgstr "正在等待连接"
+
+msgid "Threshold calculation will resume when your connection returns."
+msgstr "当您的网络连接恢复后，阈值计算将自动继续。"
+
+msgid "Calculating thresholds..."
+msgstr "正在计算阈值……"
+
+msgid "Unable to calculate thresholds"
+msgstr "无法计算阈值"
+
+msgid "There was a problem calculating thresholds for this prediction run."
+msgstr "在本次预测运行中，计算阈值时出现了一个问题。"
+
+msgid "Unable to load threshold strategies"
+msgstr "无法加载阈值策略"
+
+msgid ""
+"The strategy options could not be loaded, so the strategy cannot be changed."
+msgstr "无法加载策略选项，因此无法更改策略。"
+
+msgid "Standard deviations above mean"
+msgstr "高于均值的标准差"
+
+msgid "Lower percentile (%)"
+msgstr "较低百分位数 (%)"
+
+msgid "Upper percentile (%)"
+msgstr "上位百分位数 (%)"
+
+msgid ""
+"Most recent complete years in the dataset. Leave empty to use all available "
+"history."
+msgstr "数据集中最近的完整年份。若留空，则使用所有可用的历史数据。"
+
+msgid "Outbreak"
+msgstr "疫情爆发"
+
+msgid "No outbreak"
+msgstr "未发生疫情"
+
+msgid "Unavailable"
+msgstr "不可用"
+
+msgid "Organisation units with outbreaks"
+msgstr "发生疫情的组织单位"
+
+msgid "Organisation units without outbreaks"
+msgstr "未发生疫情的组织单位"
+
+msgid "Organisation units with unavailable thresholds"
+msgstr "未设置阈值的组织单位"
+
+msgid "Remove filter"
+msgstr "移除过滤器"
+
+msgid "Filter by signal level"
+msgstr "按信号电平筛选"
+
+msgid "Select all"
+msgstr "全选"
+
+msgid "Status filter"
+msgstr "状态过滤器"
+
+msgid "Shift zoom left"
+msgstr "按住 Shift 键向左缩放"
+
+msgid "Shift zoom left one period"
+msgstr "向左平移缩放一个周期"
+
+msgid "Shift zoom right"
+msgstr "按住 Shift 键向右缩放"
+
+msgid "Shift zoom right one period"
+msgstr "将缩放向右移动一个周期"
+
+msgid "No organisation units match the selected filters."
+msgstr "没有组织单位符合所选筛选条件。"
+
+msgid "Dashboard"
+msgstr "仪表盘"
+
 msgid "Evaluate"
 msgstr "评估"
 
 msgid "Overview"
 msgstr "概要"
 
-msgid "Predict"
-msgstr "预测"
+msgid "Report a bug"
+msgstr "报告错误"
 
-msgid "Models"
-msgstr "机型"
-
-msgid "Jobs"
-msgstr "工作机会"
+msgid "Guides"
+msgstr "指南"
 
 msgid "Settings"
 msgstr "设置"
+
+msgid ""
+"This is an alpha version of the Modeling App. Some features may change or "
+"contain bugs."
+msgstr "这是“建模应用”的Alpha版本。部分功能可能会有变动，或存在漏洞。"
+
+msgid "Read the guide"
+msgstr "阅读指南"
+
+msgid "Failed to copy report details"
+msgstr "无法复制报告详细信息"
+
+msgid ""
+"Copy the template and email it to the Chap team. It includes this page and "
+"time so we can find the problem faster."
+msgstr "请复制该模板并通过电子邮件发送给Chap团队。模板中已包含当前页面和时间信息，这样我们就能更快地查明问题所在。"
+
+msgid "Send to"
+msgstr "发送"
+
+msgid "Copied email address"
+msgstr "已复制的电子邮件地址"
+
+msgid "Copy email address"
+msgstr "复制电子邮件地址"
+
+msgid "Bug report template"
+msgstr "错误报告模板"
+
+msgid "Copied"
+msgstr "副本"
+
+msgid "Copy template"
+msgstr "复制模板"
+
+msgid "Incompatible versions"
+msgstr ""
 
 msgid ""
 "The version of the Modeling App is not compatible with the backend (Chap "
@@ -1021,14 +2670,26 @@ msgstr ""
 "Chap Core 版本{{chapVersion}} 太旧。建模应用程序规定的 Chap 核心最低版本为{{escape}} "
 "。{{chapMinVersion}}"
 
-msgid "Compare evaluations"
-msgstr "评估比较"
-
 msgid "Compare evaluations to assess model, co-variates and data performance."
 msgstr "比较评估结果，以评估模型、共变数和数据性能。"
 
+msgid "Back to evaluation details"
+msgstr ""
+
+msgid "Back to evaluation"
+msgstr ""
+
 msgid "Select base evaluation"
 msgstr "选择基准评估"
+
+msgid "Location(s)"
+msgstr "地点"
+
+msgid "Shift zoom left (H)"
+msgstr "按住 Shift 键向左缩放 (H)"
+
+msgid "Shift zoom right (L)"
+msgstr "向右变焦（L）"
 
 msgid ""
 "Selected evaluations do not have any split periods in common. Please select "
@@ -1068,6 +2729,12 @@ msgstr "指标"
 msgid "Program Indicator"
 msgstr "项目指标"
 
+msgid "Used before"
+msgstr "以前用过"
+
+msgid "All data items"
+msgstr "所有数据项"
+
 msgid "No compatible evaluations found"
 msgstr "未找到兼容的评估"
 
@@ -1077,129 +2744,349 @@ msgstr "选择要与之比较的评估"
 msgid "No evaluations found"
 msgstr "未找到评价"
 
-msgid "CHAP settings"
-msgstr "CHAP 设置"
+msgid "Confirm"
+msgstr "确认"
 
-msgid "An error occurred while connecting to the CHAP server."
-msgstr "连接 CHAP 服务器时发生错误。"
-
-msgid ""
-"Are you sure you have configured your route correctly? See the console for "
-"more details."
-msgstr "您确定路由配置正确吗？详情请查看控制台。"
-
-msgid "Server information"
-msgstr "服务器信息"
-
-msgid "CHAP Version"
-msgstr "CHAP 版本"
-
-msgid "Python Version"
-msgstr "Python 版本"
-
-msgid "Operating System"
-msgstr "操作系统"
-
-msgid "Connected"
-msgstr "已连接"
-
-msgid "Your server might not be secure"
-msgstr "您的服务器可能不安全"
+msgid "This action cannot be undone"
+msgstr "此操作无法撤销"
 
 msgid ""
-"CHAP currently does not have it's own authentication service. Make sure to "
-"secure it by blocking public access on your server firewall."
-msgstr "CHAP 目前没有自己的身份验证服务。请确保在服务器防火墙上阻止公共访问，以确保其安全性。"
+"You are about to permanently delete ALL data values for the selected data "
+"elements across all organisation units and time periods. This action is "
+"irreversible."
+msgstr "您即将永久删除所有组织单位和时间段内所选数据元素的全部数据值。此操作无法撤销。"
 
-msgid "Your server is not secure"
-msgstr "您的服务器不安全"
+msgid "Data elements to be pruned{{colon}}"
+msgstr "待删除的数据元素{{colon}}"
 
-msgid "Route configuration"
-msgstr "路线配置"
+msgid "To confirm, type {{quote}}delete{{quote}} in the field below{{colon}}"
+msgstr "请在下方输入{{quote}}delete{{quote}} 以确认{{colon}}"
 
-msgid "No route found."
-msgstr "未找到路线。"
+msgid "Type {{quote}}delete{{quote}} to confirm"
+msgstr "输入{{quote}}，删除{{quote}} 以确认"
 
-msgid "Add route"
-msgstr "添加路线"
+msgid "Loading..."
+msgstr "载入....."
 
-msgid "Delete route"
-msgstr "删除路线"
+msgid "Start typing to search for data elements"
+msgstr "开始输入以搜索数据元素"
 
-msgid "Are you sure you want to delete this route?"
-msgstr "您确定要删除这条路线吗？"
+msgid "Select a data element..."
+msgstr "选择一个数据元素..."
 
-msgid "Edit route"
-msgstr "编辑路线"
+msgid "Remove data element"
+msgstr "删除数据元素"
 
-msgid "Public access"
-msgstr "公开访问"
+msgid "At least one slot is required"
+msgstr "至少需要一个插槽"
 
-msgid ""
-"Your route is public and can be accessed by anyone. This can potentially "
-"expose sensitive data. If you want to restrict access, click the \"Sharing\""
-" button and remove access for \"All users\"."
-msgstr "您的路由是公开的，任何人都可以访问。这可能会暴露敏感数据。如果要限制访问权限，请单击 \"共享 \"按钮并删除 \"所有用户 \"的访问权限。"
+msgid "Maximum {{max}} data elements allowed"
+msgstr "允许的{{max}} 数据元素数量上限"
 
-msgid "Sharing"
-msgstr "共享"
+msgid "Select at least one data element"
+msgstr "请至少选择一个数据项"
 
-msgid "Edit"
-msgstr "编辑"
-
-msgid "Invalid URL format"
-msgstr "URL 格式无效"
-
-msgid "URL is required"
-msgstr "需要 URL"
-
-msgid "URL must end with a double wildcard (/**)"
-msgstr "URL 必须以双通配符 (/**) 结尾"
-
-msgid "CHAP Core URL"
-msgstr "CHAP 核心 URL"
-
-msgid "Route settings"
-msgstr "路线设置"
+msgid "Missing authority"
+msgstr "缺少授权"
 
 msgid ""
-"There was an error loading the route settings. Please try to reload the "
-"page."
-msgstr "加载路线设置时出现错误。请尝试重新加载页面。"
+"You do not have the required authority to access this page. Data pruning "
+"operations requires a superuser authority."
+msgstr "您没有访问此页面的所需权限。数据清理操作需要超级用户权限。"
 
-msgid "If the problem persists, please contact your system administrator."
-msgstr "如果问题仍然存在，请联系系统管理员。"
-
-msgid "You do not have permission to add or modify routes."
-msgstr "您没有添加或修改路由的权限。"
+msgid "Prune data values"
+msgstr "修剪数据值"
 
 msgid ""
-"If you think this is an error, please contact your system administrator."
-msgstr "如果您认为这是一个错误，请联系您的系统管理员。"
+"Select data elements whose data values you want to permanently delete across"
+" all organisation units and time periods."
+msgstr "选择您希望在所有组织单位和时间段内永久删除其数据值的数据元素。"
 
-msgid "Code"
-msgstr "代码"
+msgid "Add another"
+msgstr "再加一个"
 
-msgid "URL"
-msgstr "URL"
+msgid "Prune values"
+msgstr "修剪值"
 
-msgid "Authorities"
-msgstr "授权"
+msgid "Results"
+msgstr "结果"
 
-msgid "Error deleting route"
-msgstr "删除路由出错"
+msgid "All {{count}} data elements were successfully pruned."
+msgid_plural "All {{count}} data elements were successfully pruned."
+msgstr[0] "所有{{count}} 数据元素均已成功删除。"
 
-msgid "Route deleted successfully"
-msgstr "路由已成功删除"
+msgid "{{failureCount}} of {{totalCount}} data elements failed to be pruned"
+msgstr "{{failureCount}} {{totalCount}} 个数据元素未能被剪枝"
 
-msgid "Error saving route"
-msgstr "保存路径出错"
+msgid "Error"
+msgstr "错误"
 
-msgid "Route saved successfully"
-msgstr "成功保存路线"
+msgid "Please remember to rerun your analytics tables to update the system."
+msgstr "请记得重新运行分析表以更新系统。"
 
-msgid "Evaluation details"
-msgstr "评估细节"
+msgid "Experimental features"
+msgstr "实验功能"
+
+msgid "Warning"
+msgstr "警告"
+
+msgid ""
+"These features are experimental and may be unstable or change without "
+"notice."
+msgstr "这些功能尚处于试验阶段，可能不稳定，或会在未事先通知的情况下发生变更。"
+
+msgid ""
+"You need the {{authority}} authority to change these settings. Contact your "
+"system administrator to get access."
+msgstr "您需要{{authority}} 权限才能更改这些设置。请联系系统管理员以获取访问权限。"
+
+msgid "Enable experimental features"
+msgstr "启用实验性功能"
+
+msgid "Turn on to access experimental features in the app"
+msgstr "开启此功能即可使用应用中的实验性功能"
+
+msgid "Available features"
+msgstr "可用功能"
+
+msgid "Show scheduling information in the prediction setup dashboard"
+msgstr "在预测设置仪表盘中显示排程信息"
+
+msgid "Settings saved successfully"
+msgstr "设置已成功保存"
+
+msgid "Failed to save settings"
+msgstr "保存设置失败"
+
+msgid "Data Pruning"
+msgstr "数据修剪"
+
+msgid "Requires superuser authority"
+msgstr "需要超级用户权限"
+
+msgid "{{name}} (baseline)"
+msgstr "{{name}} (基线)"
+
+msgid "The signal policy has no levels"
+msgstr "该信号策略没有级别"
+
+msgid ""
+"The selected models are no longer compatible with this dataset. Choose "
+"models again."
+msgstr "所选模型不再与该数据集兼容。请重新选择模型。"
+
+msgid "Benchmark {{id}}"
+msgstr "基准测试{{id}}"
+
+msgid "Add models"
+msgstr "添加模型"
+
+msgid ""
+"Run configured models using this benchmark’s dataset and saved backtest "
+"parameters."
+msgstr "使用该基准测试的数据集和已保存的回测参数运行已配置的模型。"
+
+msgid "No compatible models"
+msgstr "无兼容机型"
+
+msgid "Already run with this version"
+msgstr "已经使用此版本运行过了"
+
+msgid ""
+"{{models}} has already been run in this benchmark with this model version. "
+"Running it again adds another row, so you can see how much the scores vary "
+"between runs."
+msgid_plural ""
+"{{models}} has already been run in this benchmark with this model version. "
+"Running it again adds another row, so you can see how much the scores vary "
+"between runs."
+msgstr[0] ""
+"{{models}} 这些模型版本在此基准测试中已经运行过。再次运行时，每个版本都会增加一行数据，这样您就可以看到不同运行结果之间的分数差异。"
+
+msgid "Dataset target has changed"
+msgstr "数据集目标已更改"
+
+msgid ""
+"This benchmark predicts {{benchmarkTarget}}, but the dataset now predicts "
+"{{datasetTarget}}. Import the data as a new dataset to run more models "
+"against {{benchmarkTarget}}."
+msgstr ""
+"该基准预测结果为{{benchmarkTarget}} ，但该数据集目前的预测结果为{{datasetTarget}} "
+"。请将数据导入为新数据集，以便针对{{benchmarkTarget}} 运行更多模型。"
+
+msgid "Could not start model runs"
+msgstr "无法启动模型运行"
+
+msgid "Run models"
+msgstr "运行模型"
+
+msgid "Could not download benchmark CSV. Try again."
+msgstr "无法下载基准测试 CSV 文件。请重试。"
+
+msgid "Download CSV"
+msgstr "下载 CSV"
+
+msgid "New evaluation from this dataset"
+msgstr "基于该数据集的新评估"
+
+msgid "Invalid benchmark"
+msgstr "无效基准"
+
+msgid "Could not load benchmark"
+msgstr "无法加载基准测试"
+
+msgid "Hide archived models"
+msgstr "隐藏已归档的模型"
+
+msgid ""
+"Benchmark {{id}}. Compare model runs that share this dataset and backtest "
+"setup."
+msgstr "基准测试{{id}} 。比较使用同一数据集和回测设置的模型运行结果。"
+
+msgid "Model runs queued"
+msgstr "模型运行已排入队列"
+
+msgid ""
+"{{count}} model runs queued. Completed results will appear in the "
+"benchmarks."
+msgid_plural ""
+"{{count}} model runs queued. Completed results will appear in the "
+"benchmarks."
+msgstr[0] "{{count}} 模型运行已排入队列。完成的结果将显示在基准测试中。"
+
+msgid "View jobs and failures"
+msgstr "查看作业和失败情况"
+
+msgid "Open the benchmark returned by Chap"
+msgstr "打开 Chap 返回的基准测试结果"
+
+msgid "Include archived models"
+msgstr "包含存档的模型"
+
+msgid "{{count}} models running"
+msgid_plural "{{count}} models running"
+msgstr[0] "{{count}} 模型正在运行"
+
+msgid "Score of {{reference}}, which the other rows are compared with"
+msgstr "{{reference}} 的评分，其他行均以此为基准进行比较"
+
+msgid "Best score among these runs"
+msgstr "这些跑分中最高的分数"
+
+msgid ""
+"Scores compared with {{reference}}, aggregated across all splits and "
+"organisation units. Positive means better than {{reference}}, negative means"
+" worse. The best score in each column is highlighted, including ties."
+msgstr ""
+"与{{reference}} 相比的得分，汇总自所有分组和组织单位。正值表示优于{{reference}} "
+"，负值表示逊于该网站。每列中得分最高的记录均已突出显示，包括并列的情况。"
+
+msgid ""
+"Aggregate scores across all splits and organisation units. The best score in"
+" each column is highlighted, including ties. Best only means best among "
+"these runs, not necessarily a good score."
+msgstr ""
+"汇总所有分组和组织单位的分数。每列中得分最高的分数均已突出显示，包括并列的情况。“最高”仅指在这些运行中得分最高，并不一定意味着这是一个好分数。"
+
+msgid "Tick Compare with baseline to choose the reference."
+msgstr "勾选“与基准比较”以选择参考项。"
+
+msgid "Show default metrics"
+msgstr "显示默认指标"
+
+msgid "Metric descriptions unavailable"
+msgstr "无法提供度量描述"
+
+msgid ""
+"Scores are still available, but best values cannot be highlighted without "
+"metric definitions."
+msgstr "虽然分数仍然可用，但在没有指标定义的情况下，无法突出显示最佳值。"
+
+msgid "No model runs yet"
+msgstr "目前尚无模型运行结果"
+
+msgid ""
+"Add models to run them against this benchmark. Completed runs will appear "
+"here."
+msgstr "添加模型，以便使用此基准测试对其进行运行。已完成的运行结果将显示在此处。"
+
+msgid "Period range"
+msgstr "周期范围"
+
+msgid "Model runs"
+msgstr "模型运行"
+
+msgid ""
+"Compare model runs evaluated on the same dataset and backtest parameters."
+msgstr "比较基于同一数据集评估的模型运行结果，并对参数进行回测。"
+
+msgid "Benchmarks unavailable"
+msgstr "无基准测试数据"
+
+msgid ""
+"This Chap server does not support backtest specifications. Update Chap Core "
+"to use benchmarks."
+msgstr "此 Chap 服务器不支持回测规范。请更新 Chap Core 以使用基准测试。"
+
+msgid "Could not load benchmarks"
+msgstr "无法加载基准测试数据"
+
+msgid "No benchmarks yet"
+msgstr "尚无基准测试结果"
+
+msgid ""
+"A benchmark is defined by a saved dataset and backtest parameters. Run "
+"models to compare their performance."
+msgstr "基准由保存的数据集和回测参数定义。运行模型以比较其表现。"
+
+msgid "{{count}} model runs in this benchmark"
+msgid_plural "{{count}} model runs in this benchmark"
+msgstr[0] "{{count}} 该基准测试中的模型运行"
+
+msgid "No benchmarks match the selected filters."
+msgstr "没有基准测试结果符合所选筛选条件。"
+
+msgid "Back to benchmarks"
+msgstr "返回基准测试"
+
+msgid "Run predictions, review activity, and manage this setup."
+msgstr "运行预测、查看活动情况并管理此配置。"
+
+msgid "Back to prediction setups"
+msgstr "返回预测设置"
+
+msgid "Latest Evaluation Runs"
+msgstr "最新评估运行"
+
+msgid "See all evaluation runs"
+msgstr "查看所有评估运行"
+
+msgid "Error loading evaluations"
+msgstr "评估加载出错"
+
+msgid "Unnamed evaluation"
+msgstr "未命名的评估"
+
+msgid "Prediction Setups"
+msgstr "预测设置"
+
+msgid "See all prediction setups"
+msgstr "查看所有预测方案"
+
+msgid "No prediction setups yet"
+msgstr "目前尚无预测方案"
+
+msgid "Error loading prediction setups"
+msgstr "加载预测设置时出错"
+
+msgid "Review the saved data and where values are missing."
+msgstr "检查已保存的数据，并找出缺失值的位置。"
+
+msgid "Dataset {{id}}"
+msgstr "数据集{{id}}"
+
+msgid "Import data once and reuse it across evaluations."
+msgstr "只需导入一次数据，即可在各项评估中重复使用。"
 
 msgid ""
 "Deep dive into a specific evaluation run to assess its performance and "
@@ -1209,12 +3096,6 @@ msgstr "深入研究特定的评估运行，以评估其性能和可靠性。"
 msgid "Back to evaluations"
 msgstr "返回评估"
 
-msgid "Error loading evaluations"
-msgstr "评估加载出错"
-
-msgid "Evaluations"
-msgstr "评估"
-
 msgid ""
 "Evaluates the accuracy of a predictive model using historical data. Compares"
 " actual outcomes with predicted values to assess model performance."
@@ -1223,11 +3104,23 @@ msgstr "利用历史数据评估预测模型的准确性。将实际结果与预
 msgid "Get started with the Modeling app"
 msgstr "开始使用建模应用程序"
 
-msgid "To get started, create a route that points to a running CHAP server."
-msgstr "要开始使用，请创建一条指向正在运行的 CHAP 服务器的路由。"
+msgid "To get started, create a route that points to a running Chap server."
+msgstr "首先，创建一个指向正在运行的 Chap 服务器的路由。"
 
 msgid "Route and servers are configured on the settings page."
 msgstr "路由和服务器在设置页面进行配置。"
+
+msgid "View guides"
+msgstr "查看指南"
+
+msgid "No guides available"
+msgstr "没有指南"
+
+msgid "Guide not found"
+msgstr "未找到指南"
+
+msgid "The guide \"{{guideSlug}}\" could not be found."
+msgstr "找不到指南“{{guideSlug}} ”。"
 
 msgid "Active jobs"
 msgstr "活跃职位"
@@ -1246,42 +3139,114 @@ msgstr "根据模型模板，使用自定义设置或参数配置新模型。"
 msgid "Back to models"
 msgstr "返回模型"
 
+msgid "Choose the data to import and name its columns so models can use them."
+msgstr "选择要导入的数据，并为其列命名，以便模型能够使用这些数据。"
+
+msgid "Back to datasets"
+msgstr "返回数据集"
+
 msgid "Create a new evaluation to assess the performance of a model"
 msgstr "创建新的评估，以评估模型的性能"
 
-msgid "Create a new prediction to forecast outcomes using a model"
-msgstr "创建新的预测，利用模型预测结果"
+msgid "Create a prediction run for this setup."
+msgstr "针对此设置创建一个预测运行。"
 
-msgid "Back to predictions"
-msgstr "返回预测"
+msgid "Back to prediction setup"
+msgstr "返回预测设置"
 
-msgid "Prediction details"
-msgstr "预测详情"
+msgid "View and manage jobs for this prediction setup."
+msgstr "查看并管理此预测配置的任务。"
 
-msgid "View the details of a prediction."
-msgstr "查看预测详情。"
-
-msgid "Import prediction"
-msgstr "进口预测"
+msgid "The prediction setup id in the URL is not valid."
+msgstr "URL 中的预测配置 ID 无效。"
 
 msgid "Import the forecasted values of this prediction into DHIS2."
 msgstr "将预测值导入 DHIS2。"
 
-msgid "Back to prediction details"
-msgstr "返回预测详情"
-
-msgid "Error loading predictions"
-msgstr "加载预测结果出错"
-
-msgid "Predictions"
-msgstr "预测"
+msgid "Unnamed prediction"
+msgstr "未命名的预测"
 
 msgid ""
-"Forecasted trends generated by applying a predictive model to current data. "
-"These can be reviewed and imported into DHIS2 to support decision-making in "
-"the field."
-msgstr "通过对当前数据应用预测模型生成的预测趋势。这些数据可进行审查并导入 DHIS2，以支持实地决策。"
+"Approve signals to clear them for dissemination. Expand an organisation unit"
+" to see the forecast behind its signals."
+msgstr "批准信号，以便将其发布。展开某个组织单元，查看其信号背后的预测。"
+
+msgid "Ready to predict"
+msgstr "准备好进行预测了吗"
+
+msgid ""
+"Saved model configurations that are ready to be used to generate "
+"predictions."
+msgstr "已保存的模型配置，可直接用于生成预测结果。"
+
+msgid "Manage the policies used to raise signals from forecasts."
+msgstr "管理用于根据预测生成信号的策略。"
+
+msgid "New policy"
+msgstr "新政策"
+
+msgid ""
+"The Chap server refused the request. An administrator can check the API "
+"token under Settings, in the route configuration."
+msgstr "Chap 服务器拒绝了该请求。管理员可以在“设置”下的路由配置中查看 API 令牌。"
+
+msgid "An unknown error occurred"
+msgstr "发生一个未知错误"
+
+msgid "Not authorized. Check the Chap API token in settings."
+msgstr "未授权。请在设置中检查 Chap API 令牌。"
+
+msgid "Not authorized to access the Chap server"
+msgstr "无权访问 Chap 服务器"
+
+msgid ""
+"This model's service changed without a new version number, so it can't run."
+msgstr "该模型的服务已发生变更，但版本号未更新，因此无法运行。"
+
+msgid ""
+"This model's service now runs different code than version {{version}} was "
+"registered with, so Chap won't run it. Choose another model, or ask your "
+"Chap administrator to redeploy that version or release the change as a new "
+"version."
+msgstr ""
+"该模型的服务当前运行的代码与注册时使用的版本（{{version}} ）不同，因此 Chap 无法运行它。请选择另一个模型，或联系您的 Chap "
+"管理员，请其重新部署该版本，或将此更改作为新版本发布。"
+
+msgid ""
+"{{model}} can no longer run because its service changed after you selected "
+"it. Choose another model and try again."
+msgstr "{{model}} 由于您选择该型号后其服务发生了变化，因此无法再运行。请选择另一款型号，然后重试。"
+
+msgid "{{stdMultiplier}} standard deviations above seasonal mean"
+msgstr "{{stdMultiplier}} 高于季节平均值的标准差"
+
+msgid "{{lower}}-{{upper}} percentile, all-history baseline"
+msgstr "{{lower}}-{{upper}} 百分位数，所有病史基线"
+
+msgid "{{lower}}-{{upper}} percentile, {{count}}-year baseline"
+msgid_plural "{{lower}}-{{upper}} percentile, {{count}}-year baseline"
+msgstr[0] "{{lower}}-{{upper}} 百分位数，{{count}} 年基线"
+
+msgid "Enter a percentage between 0 and 100"
+msgstr "请输入0到100之间的百分比"
+
+msgid "Enter a number of 0 or more"
+msgstr "请输入一个或多个数字"
+
+msgid "Must be lower than the upper percentile"
+msgstr "必须低于该百分位数的上限"
+
+msgid "Enter a whole number of 1 or more, or leave empty to use all history"
+msgstr "请输入1或更大的整数，或留空以使用全部历史记录"
 
 msgctxt ") instead."
 msgid "Spaces are not allowed. Use dashes (-) or underscores ("
 msgstr "不允许使用空格。请使用破折号 (-) 或下划线 (_) 代替。"
+
+msgctxt "Application title"
+msgid "__MANIFEST_APP_TITLE"
+msgstr "建模"
+
+msgctxt "Application description"
+msgid "__MANIFEST_APP_DESCRIPTION"
+msgstr "利用Chap进行疾病预测与预警"

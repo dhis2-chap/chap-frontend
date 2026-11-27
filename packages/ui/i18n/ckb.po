@@ -1,14 +1,14 @@
 # Translators:
-# Andres Miguel Rubio, 2026
 # KRG HIS <antonia.bezenchek@informa.pro>, 2026
 # Viktor Varland <viktor@dhis2.org>, 2026
+# Andres Miguel Rubio, 2026
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: i18next-conv\n"
-"POT-Creation-Date: 2026-11-02T11:59:23.166Z\n"
+"POT-Creation-Date: 2026-11-17T16:55:47.963Z\n"
 "PO-Revision-Date: 2025-12-03 08:49+0000\n"
-"Last-Translator: Viktor Varland <viktor@dhis2.org>, 2026\n"
+"Last-Translator: Andres Miguel Rubio, 2026\n"
 "Language-Team: Central Kurdish (https://app.transifex.com/hisp-uio/teams/100509/ckb/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -106,6 +106,9 @@ msgstr ""
 
 msgid "50% prediction interval"
 msgstr ""
+
+msgid "Period"
+msgstr "ماوة"
 
 msgid "Median Prediction for {{predictionTargetName}}"
 msgstr ""
@@ -347,6 +350,48 @@ msgid ""
 "DHIS2 to 2.40.7, 2.41.4, 2.42 or later to store the token encrypted."
 msgstr ""
 
+msgid "{{selected}} of {{pending}} pending signals selected"
+msgstr ""
+
+msgid "Select by level"
+msgstr ""
+
+msgid "Decline selected"
+msgstr ""
+
+msgid "Approve selected"
+msgstr ""
+
+msgid "Organisation unit"
+msgstr "يةكةي ريكخراو"
+
+msgid "Signals"
+msgstr ""
+
+msgid "Reviewed by"
+msgstr ""
+
+msgid "Actions"
+msgstr ""
+
+msgid "Approved"
+msgstr ""
+
+msgid "Declined"
+msgstr ""
+
+msgid "Pending"
+msgstr ""
+
+msgid "Approve"
+msgstr ""
+
+msgid "Decline"
+msgstr ""
+
+msgid "Reset to pending"
+msgstr ""
+
 msgid "More"
 msgstr ""
 
@@ -373,3 +418,6 @@ msgstr ""
 
 msgid "To period"
 msgstr ""
+
+msgid "Remove"
+msgstr "لابردن"

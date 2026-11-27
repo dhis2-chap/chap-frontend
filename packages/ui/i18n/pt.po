@@ -1,24 +1,22 @@
 # Translators:
 # David Júnior <davidjr.mondlane@gmail.com>, 2026
-# Andres Miguel Rubio, 2026
-# Helton Dias, 2026
 # Sheila André <sandre@saudigitus.org>, 2026
 # Gabriela Rodriguez <grodriguezcoronado@gmail.com>, 2026
-# Shelsea Chumaio, 2026
-# Fernando Domingos Inacio <nando.inaciio1996@gmail.com>, 2026
 # Viktor Varland <viktor@dhis2.org>, 2026
 # Edson Nhancale, 2026
 # David Mondlane, 2026
-# Philip Larsen Donnelly, 2026
 # Ge Joao <gsimango@saudigitus.org>, 2026
 # Edvin Stava, 2026
+# Philip Larsen Donnelly, 2026
+# Andres Miguel Rubio, 2026
+# Fernando Domingos Inacio <nando.inaciio1996@gmail.com>, 2026
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: i18next-conv\n"
-"POT-Creation-Date: 2026-11-12T12:17:58.279Z\n"
+"POT-Creation-Date: 2026-11-17T16:55:47.963Z\n"
 "PO-Revision-Date: 2025-12-03 08:49+0000\n"
-"Last-Translator: Edvin Stava, 2026\n"
+"Last-Translator: Fernando Domingos Inacio <nando.inaciio1996@gmail.com>, 2026\n"
 "Language-Team: Portuguese (https://app.transifex.com/hisp-uio/teams/100509/pt/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -128,6 +126,9 @@ msgstr "Intervalo de previsão de 80%"
 msgid "50% prediction interval"
 msgstr "Intervalo de previsão de 50%"
 
+msgid "Period"
+msgstr "Período"
+
 msgid "Median Prediction for {{predictionTargetName}}"
 msgstr "Previsão da mediana para {{predictionTargetName}}"
 
@@ -171,7 +172,7 @@ msgid "Outbreak"
 msgstr "Surto"
 
 msgid "Yes"
-msgstr "sim"
+msgstr "Sim"
 
 msgid "No"
 msgstr "Não"
@@ -449,19 +450,22 @@ msgid "Month {{month}}"
 msgstr "Mês {{month}}"
 
 msgid "Select period"
-msgstr "Seleccione o período"
+msgstr "Selecione o período"
 
 msgid "Previous year"
 msgstr "Ano anterior"
 
 msgid "Select year"
-msgstr "Seleccionar ano"
+msgstr "Selecionar ano"
 
 msgid "Next year"
-msgstr "ano seguinte"
+msgstr "Ano seguinte"
 
 msgid "From period"
 msgstr "Do período"
 
 msgid "To period"
 msgstr "Até ao período"
+
+msgid "Remove"
+msgstr "Remover"

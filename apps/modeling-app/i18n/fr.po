@@ -20,7 +20,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: i18next-conv\n"
-"POT-Creation-Date: 2026-11-17T16:55:47.217Z\n"
+"POT-Creation-Date: 2026-11-19T10:34:36.877Z\n"
 "PO-Revision-Date: 2025-12-03 08:49+0000\n"
 "Last-Translator: Esther Tokouli, 2026\n"
 "Language-Team: French (https://app.transifex.com/hisp-uio/teams/100509/fr/)\n"
@@ -134,17 +134,17 @@ msgid ""
 "Saved colours could not be loaded, so default colours are shown. Use Edit to"
 " save them again."
 msgstr ""
-"Les couleurs enregistrées n'ont pas pu être chargées : les couleurs par "
+"Les couleurs enregistrées n'ont pas pu être chargées, donc les couleurs par "
 "défaut sont affichées. Utilisez Modifier pour les enregistrer à nouveau."
 
 msgid "Edit"
 msgstr "Modifier"
 
 msgid "Enter a code"
-msgstr "Saisissez un code"
+msgstr "Saisir un code"
 
 msgid "Enter a level name"
-msgstr "Saisissez un nom de niveau"
+msgstr "Saisir un nom de niveau"
 
 msgid "Enter zero or more"
 msgstr "Saisissez une valeur supérieure ou égale à zéro"
@@ -338,9 +338,6 @@ msgstr "Renommer"
 msgid "Download"
 msgstr "Télécharger"
 
-msgid "{{name}} (Copy)"
-msgstr "{{name}} (Copier)"
-
 msgid "Create new based on..."
 msgstr "Créer un nouveau sur la base de..."
 
@@ -354,23 +351,14 @@ msgid "Select which attributes to copy to the new run{{escape}}"
 msgstr ""
 "Sélectionner les attributs à copier vers la nouvelle exécution{{escape}}"
 
-msgid "Untitled"
-msgstr "Sans titre"
-
-msgid "Organisation units"
-msgstr "Unités d'organisation"
+msgid "Dataset"
+msgstr "Ensemble de données"
 
 msgid "Model"
 msgstr "Modèle"
 
-msgid "Data sources"
-msgstr "Sources de données"
-
-msgid "Period type"
-msgstr "Type de période"
-
-msgid "Period range"
-msgstr "Intervalle pour la période"
+msgid "{{name}} (Copy)"
+msgstr "{{name}} (Copier)"
 
 msgid "Create"
 msgstr "Créer"
@@ -466,7 +454,7 @@ msgstr ""
 "serveur Chap est en cours d'exécution."
 
 msgid "Learn more about Modeling and Chap"
-msgstr "En savoir plus sur Modeling et Chap"
+msgstr "En savoir plus sur les applications Modeling et Chap"
 
 msgid "Configure settings"
 msgstr "Configurer les paramètres"
@@ -476,9 +464,6 @@ msgstr "Aucun ensemble de données trouvé"
 
 msgid "No manually created datasets"
 msgstr "Aucun ensemble de données créé manuellement"
-
-msgid "Dataset"
-msgstr "Ensemble de données"
 
 msgid "Origin"
 msgstr "Origine"
@@ -569,9 +554,6 @@ msgstr "Emplacement"
 
 msgid "Missing"
 msgstr "Manquant"
-
-msgid "Inspect dataset"
-msgstr "Inspecter l'ensemble de données"
 
 msgid "Cancel job"
 msgstr "Annuler la tâche"
@@ -717,61 +699,8 @@ msgstr "Non applicable"
 msgid "{{name}} ({{status}})"
 msgstr "{{name}} ({{status}})"
 
-msgid "Map Data Items"
-msgstr "Items de données cartographiques"
-
-msgid "Map the model features to corresponding data items in DHIS2"
-msgstr ""
-"Mapper les caractéristiques du modèle avec les items de données "
-"correspondants dans DHIS2"
-
-msgid "Target"
-msgstr "Cible"
-
-msgid "Map the model target to the corresponding data item in DHIS2"
-msgstr ""
-"Mapper la cible du modèle avec l'item de données correspondant dans DHIS2"
-
-msgid "Map each model covariate to the corresponding data item in DHIS2"
-msgstr ""
-"Mapper chaque covariable du modèle avec l'item de données correspondant dans"
-" DHIS2"
-
-msgid "No model selected"
-msgstr "Aucun modèle sélectionné"
-
-msgid "All data items mapped"
-msgstr "Tous les items de données sont mappés"
-
-msgid "{{mapped}}/{{total}} data items mapped"
-msgstr "{{mapped}}/{{total}} items de données mappés"
-
-msgid "Dataset Configuration"
-msgstr "Configuration de l'ensemble de données"
-
-msgid "Configure sources"
-msgstr "Configurer les sources"
-
-msgid ""
-"The Data Visualizer app is not compatible with this feature. Please update "
-"to a newer version."
-msgstr ""
-"L'application Visualiseur de données n'est pas compatible avec cette "
-"fonctionnalité. Veuillez effectuer une mise à jour vers une version plus "
-"récente."
-
-msgid "Please map all model covariates to valid data items"
-msgstr ""
-"Veuillez mapper toutes les covariables du modèle à des items de données "
-"valides."
-
-msgid "Target \"{{targetName}}\" must be mapped to a data item"
-msgstr "La cible \"{{targetName}}\" doit être mappée avec un item de données."
-
-msgid "Covariate \"{{covariateName}}\" must be mapped to a data item"
-msgstr ""
-"La covariable \"{{covariateName}}\" doit être mappée avec un item de "
-"données."
+msgid "Organisation units"
+msgstr "Unités d'organisation"
 
 msgid "Select organisation units"
 msgstr "Sélectionner les unités d'organisation"
@@ -878,6 +807,9 @@ msgstr "Sélectionner le modèle"
 msgid "Search models"
 msgstr "Rechercher des modèles"
 
+msgid "Period type"
+msgstr "Type de période"
+
 msgid "Clear statuses"
 msgstr "Effacer les statuts"
 
@@ -886,6 +818,9 @@ msgstr "Version"
 
 msgid "Commit"
 msgstr "Confirmer"
+
+msgid "Target"
+msgstr "Cible"
 
 msgid "Covariates"
 msgstr "Covariables"
@@ -907,9 +842,6 @@ msgid_plural "Use selected models ({{count}})"
 msgstr[0] "Utiliser le modèle sélectionné ({{count}})"
 msgstr[1] "Utiliser les modèles sélectionnés ({{count}})"
 msgstr[2] "Utiliser les modèles sélectionnés ({{count}})"
-
-msgid "Select model"
-msgstr "Sélectionner le modèle"
 
 msgid "EWARS Evaluation 22-24"
 msgstr "Évaluation de l'EWARS 22-24"
@@ -976,7 +908,7 @@ msgstr ""
 "items de données et le type de période."
 
 msgid "Valid"
-msgstr "Valable"
+msgstr "Valide"
 
 msgid "Rejected"
 msgstr "Rejeté"
@@ -1382,15 +1314,8 @@ msgstr ""
 "Enregistrez d'abord un ensemble de données, puis revenez ici pour exécuter "
 "des modèles dans un banc d'essai."
 
-msgid ""
-"Save a dataset once and reuse it across evaluations, or import data for this"
-" evaluation only."
+msgid "Save a dataset first, then return here to run an evaluation."
 msgstr ""
-"Enregistrez un ensemble de données une fois et réutilisez-le dans plusieurs "
-"évaluations, ou importez des données pour cette évaluation uniquement."
-
-msgid "Import from DHIS2 instead"
-msgstr "Importer plutôt depuis DHIS2"
 
 msgid "How benchmarks work"
 msgstr "Fonctionnement des bancs d'essai"
@@ -1423,10 +1348,10 @@ msgstr ""
 "laquelle ils sont évalués."
 
 msgid "Pick a dataset first"
-msgstr "Choisissez d'abord un ensemble de données"
+msgstr "Choisissez en premier un ensemble de données"
 
 msgid "Pick a target column first"
-msgstr "Choisissez d'abord une colonne cible"
+msgstr "Choisissez en premier une colonne cible"
 
 msgid "No compatible model"
 msgstr "Aucun modèle compatible"
@@ -1467,18 +1392,6 @@ msgstr "Impossible de vérifier les limites de prévision des modèles"
 msgid "Unsupported forecast periods"
 msgstr "Périodes de prévision non prises en charge"
 
-msgid "Start dry run"
-msgstr "Commencer l’exécution sans effet"
-
-msgid "Start import"
-msgstr "Lancer l'importation"
-
-msgid "There was an error"
-msgstr "Une erreur s'est produite"
-
-msgid "Error loading models"
-msgstr "Une erreur s'est produite lors du chargement des utilisateurs"
-
 msgid "Enter a whole number greater than zero"
 msgstr "Saisissez un nombre entier supérieur à zéro"
 
@@ -1501,16 +1414,6 @@ msgstr "{{model}} nécessite au moins {{minimum}} périodes de prévision."
 msgid "{{model}} supports at most {{maximum}} forecast periods."
 msgstr ""
 "{{model}} prend en charge au maximum {{maximum}} périodes de prévision."
-
-msgid ""
-"Dataset import failed or was cancelled. Check the job details on the Jobs "
-"page."
-msgstr ""
-
-msgid ""
-"Dataset import is still running. Check the Jobs page, then start an "
-"evaluation from the saved dataset."
-msgstr ""
 
 msgid "Cannot run prediction"
 msgstr "Impossible d'exécuter la prédiction"
@@ -1578,7 +1481,7 @@ msgid "None (this run raises no signals)"
 msgstr "Aucune (cette exécution ne déclenche aucun signal)"
 
 msgid "Please select a period"
-msgstr "Veuillez choisir une période"
+msgstr "Veuillez sélectionner une période"
 
 msgid "Period must be completed (cannot be later than last completed period)"
 msgstr ""
@@ -1929,6 +1832,9 @@ msgstr "emplacement"
 msgid "locations"
 msgstr "emplacements"
 
+msgid "Data sources"
+msgstr "Sources de données"
+
 msgid "source"
 msgstr "source"
 
@@ -2273,6 +2179,9 @@ msgstr "Configuration de prédiction créée"
 
 msgid "Failed to create prediction setup"
 msgstr "Échec de la création de la configuration de prédiction"
+
+msgid "Error loading models"
+msgstr "Une erreur s'est produite lors du chargement des modèles"
 
 msgid "Are you sure you want to archive this model?"
 msgstr "Êtes-vous sûr de vouloir archiver ce modèle ?"
@@ -2778,19 +2687,19 @@ msgid "Signal probability is required"
 msgstr "La probabilité de signal est requise"
 
 msgid "Quantile low is required"
-msgstr ""
+msgstr "Le quantile inférieur est requis"
 
 msgid "Quantile high is required"
-msgstr ""
+msgstr "Le quantile supérieur est requis"
 
 msgid "Median is required"
-msgstr ""
+msgstr "La médiane est requise"
 
 msgid "Quantile mid low is required"
-msgstr ""
+msgstr "Le quantile inférieur moyen est requis"
 
 msgid "Quantile mid high is required"
-msgstr ""
+msgstr "Le quantile supérieur moyen est requis"
 
 msgid "Outbreak indicator is required"
 msgstr "L'indicateur de flambée est requis"
@@ -3056,7 +2965,7 @@ msgid "Copy template"
 msgstr "Copier le modèle"
 
 msgid "Incompatible versions"
-msgstr ""
+msgstr "Versions incompatibles"
 
 msgid ""
 "The version of the Modeling App is not compatible with the backend (Chap "
@@ -3078,10 +2987,10 @@ msgstr ""
 "covariables et des données."
 
 msgid "Back to evaluation details"
-msgstr ""
+msgstr "Retour aux détails de l'évaluation"
 
 msgid "Back to evaluation"
-msgstr ""
+msgstr "Retour à l'évaluation"
 
 msgid "Select base evaluation"
 msgstr "Sélectionner l'évaluation de base"
@@ -3481,6 +3390,9 @@ msgstr ""
 "Ajoutez des modèles pour les exécuter dans ce banc d'essai. Les exécutions "
 "terminées apparaîtront ici."
 
+msgid "Period range"
+msgstr "Intervalle pour la période"
+
 msgid "Model runs"
 msgstr "Exécutions de modèles"
 
@@ -3639,12 +3551,6 @@ msgstr "Retour aux ensembles de données"
 
 msgid "Create a new evaluation to assess the performance of a model"
 msgstr "Créer une nouvelle évaluation pour évaluer la performance d'un modèle"
-
-msgid "Use saved dataset"
-msgstr "Utiliser un ensemble de données enregistré"
-
-msgid "Import from DHIS2"
-msgstr "Importer depuis DHIS2"
 
 msgid "Create a prediction run for this setup."
 msgstr "Créez une exécution de prédiction pour cette configuration."
