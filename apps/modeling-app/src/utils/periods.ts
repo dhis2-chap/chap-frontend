@@ -46,6 +46,12 @@ const parsePeriod = (
     return isValid(parsed) ? parsed : null;
 };
 
+// Counting walks the range through the calendar engine, which takes tens of milliseconds for a
+// few years of data. Forms and pages count the periods of their data on every render, so the
+// count of a range is kept.
+const MAX_CACHED_PERIOD_COUNTS = 500;
+const periodCountCache = new Map<string, number | undefined>();
+
 /** Number of periods from start to end inclusive, or undefined when the range cannot be resolved. */
 export const countPeriods = (
     startPeriodId: string | undefined | null,
@@ -55,11 +61,21 @@ export const countPeriods = (
     if (!startPeriodId || !endPeriodId) {
         return undefined;
     }
-    try {
-        return getPeriodsInRange({ startPeriodId, endPeriodId, calendar }).length;
-    } catch {
-        return undefined;
+    const cacheKey = `${calendar}|${startPeriodId}|${endPeriodId}`;
+    if (periodCountCache.has(cacheKey)) {
+        return periodCountCache.get(cacheKey);
     }
+    let count: number | undefined;
+    try {
+        count = getPeriodsInRange({ startPeriodId, endPeriodId, calendar }).length;
+    } catch {
+        count = undefined;
+    }
+    if (periodCountCache.size >= MAX_CACHED_PERIOD_COUNTS) {
+        periodCountCache.clear();
+    }
+    periodCountCache.set(cacheKey, count);
+    return count;
 };
 
 export const getNextPeriods = (
