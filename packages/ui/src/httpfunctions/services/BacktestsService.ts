@@ -17,6 +17,8 @@ import type { MakeBacktestRequest } from '../models/MakeBacktestRequest';
 import type { MakeBacktestsRequest } from '../models/MakeBacktestsRequest';
 import type { MakeBacktestsResponse } from '../models/MakeBacktestsResponse';
 import type { MakeBacktestWithDataRequest } from '../models/MakeBacktestWithDataRequest';
+import type { MakeHpoBacktestRequest } from '../models/MakeHpoBacktestRequest';
+import type { SelectionBias } from '../models/SelectionBias';
 import type { WeatherProviderInfo } from '../models/WeatherProviderInfo';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -161,6 +163,61 @@ export class BacktestsService {
             query: {
                 'includeComparisonModels': includeComparisonModels,
                 'includeArchivedModels': includeArchivedModels,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
+     * Estimate how much picking the best model on a specification flatters it
+     * **Needs `read:backtests`.**
+     *
+     * Estimate the selection bias of the model with the best comparison with the baseline over all split points.
+     *
+     * Runs a bootstrap over the specification's own split points, after BBC-CV (Tsamardinos,
+     * Greasidou and Borboudakis 2018). No model is run again and nothing is fitted. Each draw takes
+     * split points with replacement, in blocks of ``blockSize`` consecutive ones, and picks its best
+     * model. On the split points the draw left out, that pick is compared with the final model, the
+     * one picked on all split points. The gap (final model's value minus the pick's value) is zero
+     * when the draw picks the final model, and the estimated bias is the mean gap over the draws. A
+     * model that wins every draw has no selection bias. ``nDrawsPicked`` of each candidate says how
+     * often the draws pick it.
+     *
+     * Candidates are the newest backtest of each model on the leaderboard, scored on the
+     * forecasts all of them and the baseline made, at every horizon distance unless
+     * ``horizonDistance`` picks one. With several horizon distances, a left-out split point is only
+     * scored when it is more than ``gapSplits`` (largest minus smallest horizon distance) splits from
+     * every drawn one, so the two share no target period. That takes more split points: 20 with
+     * three horizon distances and 9 with two, against 4 with one.
+     *
+     * The estimate of one specification is rough, and it is too low when models do well or badly
+     * together for longer stretches than a block. 404 if the specification is unknown, 422 if the
+     * metric or baseline is unknown or unsuitable, the baseline has not run, there are fewer than
+     * two models, or fewer than half of the draws leave out a split point to score.
+     * @param specificationId
+     * @param metric Id of a mean-aggregated metric with a comparison operator, e.g. 'crps_log1p'.
+     * @param baseline Name of the baseline model to compare with. Defaults to the installation's default.
+     * @param horizonDistance Score only this horizon distance. By default every horizon distance is scored, as on the leaderboard.
+     * @returns SelectionBias Successful Response
+     * @throws ApiError
+     */
+    public static getBacktestSpecificationSelectionBiasV1CrudBacktestSpecificationsSpecificationIdSelectionBiasGet(
+        specificationId: number,
+        metric: string = 'crps_log1p',
+        baseline?: (string | null),
+        horizonDistance?: (number | null),
+    ): CancelablePromise<SelectionBias> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/v1/crud/backtest-specifications/{specificationId}/selection-bias',
+            path: {
+                'specificationId': specificationId,
+            },
+            query: {
+                'metric': metric,
+                'baseline': baseline,
+                'horizonDistance': horizonDistance,
             },
             errors: {
                 422: `Validation Error`,
@@ -401,6 +458,26 @@ export class BacktestsService {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/v1/analytics/create-backtest',
+            body: requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
+     * Optimize a model and evaluate it against an existing backtest specification
+     * **Needs `run:backtests`.**
+     * @param requestBody
+     * @returns JobResponse Successful Response
+     * @throws ApiError
+     */
+    public static createHpoBacktestV1AnalyticsCreateHpoBacktestPost(
+        requestBody: MakeHpoBacktestRequest,
+    ): CancelablePromise<JobResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/v1/analytics/create-hpo-backtest',
             body: requestBody,
             mediaType: 'application/json',
             errors: {
