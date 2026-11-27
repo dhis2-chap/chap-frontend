@@ -15,7 +15,7 @@ const getVariantNameHelpText = (selectedModel?: ModelTemplateRead, variantName?:
             variantName: variantName,
         });
     }
-    return i18n.t('Provide a descriptive name for this variant');
+    return i18n.t('Provide a descriptive name for this configuration');
 };
 
 export const VariantNameInput: React.FC<VariantNameInputProps> = ({ selectedModel }) => {
@@ -33,7 +33,7 @@ export const VariantNameInput: React.FC<VariantNameInputProps> = ({ selectedMode
             render={({ field }) => (
                 <InputField
                     {...field}
-                    label={i18n.t('Variant name')}
+                    label={i18n.t('Configuration name')}
                     autoComplete="off"
                     helpText={getVariantNameHelpText(selectedModel, variantName)}
                     error={!!errors.name}

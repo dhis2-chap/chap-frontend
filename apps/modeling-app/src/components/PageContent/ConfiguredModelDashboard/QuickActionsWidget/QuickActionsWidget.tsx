@@ -26,6 +26,8 @@ type Props = {
     predictionSetup?: PredictionSetupReadWithPredictions;
     isLoading: boolean;
     latestPredictionId?: number;
+    /** Where to come back to after starting a prediction. Defaults to the prediction setup page. */
+    returnTo?: string;
 };
 
 export const QuickActionsWidget = ({
@@ -33,6 +35,7 @@ export const QuickActionsWidget = ({
     predictionSetup,
     isLoading,
     latestPredictionId,
+    returnTo = `/predictions/${predictionSetupId}`,
 }: Props) => {
     const navigate = useNavigate();
     const [configurationModalIsOpen, setConfigurationModalIsOpen] = useState(false);
@@ -44,7 +47,6 @@ export const QuickActionsWidget = ({
             return;
         }
 
-        const returnTo = `/predictions/${predictionSetupId}`;
         navigate(
             `/predictions/${predictionSetupId}/new?returnTo=${encodeURIComponent(returnTo)}`,
         );

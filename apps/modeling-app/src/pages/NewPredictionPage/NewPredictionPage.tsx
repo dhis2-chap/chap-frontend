@@ -24,7 +24,7 @@ export const NewPredictionPage = () => {
                 icon={<IconArrowLeft16 />}
                 onClick={() => navigate(returnTo)}
             >
-                {i18n.t('Back to prediction setup')}
+                {returnTo.startsWith('/guided') ? i18n.t('Back to guided setup') : i18n.t('Back to prediction setup')}
             </Button>
 
             <NewPredictionContent returnTo={returnTo} />

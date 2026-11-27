@@ -10,6 +10,9 @@ export const useAlertPolicies = () => useQuery<AlertPolicyRead[], ApiError>({
     retry: false,
 });
 
+/** Chap Core without signal policies answers 404; signals are optional, so there is then nothing to offer. */
+export const isAlertPoliciesUnavailable = (error: ApiError | null | undefined) => error?.status === 404;
+
 export const useCreateAlertPolicy = () => {
     const queryClient = useQueryClient();
     return useMutation<DataBaseResponse, ApiError, AlertPolicyCreate>({

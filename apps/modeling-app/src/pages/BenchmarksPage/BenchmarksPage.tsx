@@ -1,7 +1,6 @@
 import i18n from '@dhis2/d2-i18n';
 import { Button, CircularLoader, DataTable, DataTableBody, DataTableCell, DataTableColumnHeader, DataTableHead, DataTableRow, IconAdd16, NoticeBox } from '@dhis2/ui';
-import { ApiError, BacktestsService, BacktestSpecificationSummary, Card } from '@dhis2-chap/ui';
-import { useQuery } from '@tanstack/react-query';
+import { Card } from '@dhis2-chap/ui';
 import { Link, useNavigate } from 'react-router-dom';
 import { PageHeader } from '../../features/common-features/PageHeader/PageHeader';
 import { ChapErrorNotice } from '../../components/ChapErrorNotice';
@@ -13,6 +12,7 @@ import { SpecificationParameters, formatPeriodRange } from './SpecificationParam
 import { BenchmarkRunsIndicator } from './BenchmarkRunsIndicator';
 import { BenchmarkActionsMenu } from './BenchmarkActionsMenu';
 import { useRunningBenchmarkJobs } from './useRunningBenchmarkJobs';
+import { useBacktestSpecifications } from './useBacktestSpecification';
 import styles from './BenchmarksPage.module.css';
 
 const COLUMNS = () => [
@@ -28,12 +28,7 @@ export const BenchmarksPage = () => {
     const navigate = useNavigate();
     const { origin } = useDatasetOriginFilter();
     const { datasetId } = useDatasetFilter();
-    const query = useQuery<BacktestSpecificationSummary[], ApiError>({
-        queryKey: ['backtest-specifications'],
-        queryFn: () => BacktestsService.getBacktestSpecificationsV1CrudBacktestSpecificationsGet(),
-        refetchOnMount: 'always',
-        refetchOnWindowFocus: true,
-    });
+    const query = useBacktestSpecifications();
     const runningJobs = useRunningBenchmarkJobs();
     const specifications = query.data ?? [];
     const visible = specifications

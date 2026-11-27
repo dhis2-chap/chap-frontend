@@ -67,6 +67,7 @@ export const EvaluationDetailsComponent = ({ evaluationId }: Props) => {
             <div className={styles.rightColumn}>
                 <QuickActionsWidget
                     evaluationId={evaluationId}
+                    datasetId={backtest.datasetId}
                     predictionSetupId={predictionSetupId}
                 />
                 <EvaluationSummaryWidget

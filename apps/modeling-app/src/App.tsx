@@ -24,6 +24,11 @@ import InfoAboutReportingBugs from './features/common-features/InfoAboutReportin
 import WarnAboutIncompatibleVersion from './features/common-features/WarnAboutIncompatibleVersion/WarnAboutIncompatibleVersion';
 import { Dhis2VersionWarning } from './components/Dhis2VersionWarning/Dhis2VersionWarning';
 import { DashboardPage } from './pages/DashboardPage';
+import { GuidedSetupLayout } from './pages/GuidedSetupPage/GuidedSetupLayout';
+import { DataPage } from './pages/GuidedSetupPage/DataPage';
+import { EvaluatePage } from './pages/GuidedSetupPage/EvaluatePage';
+import { ChooseModelPage } from './pages/GuidedSetupPage/ChooseModelPage';
+import { PredictPage } from './pages/GuidedSetupPage/PredictPage';
 import { BenchmarksPage } from './pages/BenchmarksPage/BenchmarksPage';
 import { NewBenchmarkPage } from './pages/BenchmarksPage/NewBenchmarkPage';
 import { BenchmarkDetailsPage } from './pages/BenchmarksPage/BenchmarkDetailsPage';
@@ -81,7 +86,7 @@ const router = createHashRouter([
         children: [
             {
                 path: '/',
-                element: <Navigate to="/dashboard" replace />,
+                element: <Navigate to="/guided" replace />,
             },
             {
                 element: (
@@ -101,6 +106,18 @@ const router = createHashRouter([
                     {
                         path: '/dashboard',
                         element: <DashboardPage />,
+                    },
+                    {
+                        path: '/guided',
+                        element: <GuidedSetupLayout />,
+                        children: [
+                            // The layout opens the step that is waiting.
+                            { index: true },
+                            { path: 'data', element: <DataPage /> },
+                            { path: 'evaluate', element: <EvaluatePage /> },
+                            { path: 'model', element: <ChooseModelPage /> },
+                            { path: 'predict', element: <PredictPage /> },
+                        ],
                     },
                     {
                         path: '/evaluate',

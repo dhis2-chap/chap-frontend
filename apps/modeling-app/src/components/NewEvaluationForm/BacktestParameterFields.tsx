@@ -12,9 +12,11 @@ import styles from './BacktestParameterFields.module.css';
 type Props = {
     periodType: string | null | undefined;
     disabled?: boolean;
+    /** Values to start from instead of Chap Core's defaults, such as those of an evaluation being changed. */
+    initialValues?: BacktestParameters;
 };
 
-export const BacktestParameterFields = ({ periodType, disabled }: Props) => {
+export const BacktestParameterFields = ({ periodType, disabled, initialValues }: Props) => {
     const { control, resetField } = useFormContext<{ backtestParameters: BacktestParameters }>();
     const [nSplits, providerId] = useWatch({ control, name: ['backtestParameters.nSplits', 'backtestParameters.futureWeatherProvider'] });
     const parameters = useBacktestParameters(periodType);
@@ -26,9 +28,9 @@ export const BacktestParameterFields = ({ periodType, disabled }: Props) => {
     // Chap Core owns the defaults per period type, so fill them in whenever they arrive.
     useEffect(() => {
         if (parameters.data) {
-            resetField('backtestParameters', { defaultValue: toBacktestDefaults(parameters.data) });
+            resetField('backtestParameters', { defaultValue: initialValues ?? toBacktestDefaults(parameters.data) });
         }
-    }, [parameters.data, resetField]);
+    }, [parameters.data, resetField, initialValues]);
 
     if (!parameters.isAvailable) {
         return null;

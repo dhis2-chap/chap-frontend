@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Card, ModelTemplateRead } from '@dhis2-chap/ui';
+import { Card, ConfiguredModelDB, ModelTemplateRead } from '@dhis2-chap/ui';
 import { z } from 'zod';
 import { ModelTemplateSelector } from './FormComponents';
 import { buildUserOptionsSchema, extractUserOptionsDefaults } from './FormComponents/UserOptionsFields';
@@ -10,10 +10,14 @@ import { Resolver } from 'react-hook-form';
 
 type Props = {
     modelTemplates: ModelTemplateRead[];
+    /** Starts with this template chosen, as when configuring one model from the guided setup. */
+    initialTemplateId?: number;
+    /** Called with the new configured model instead of opening the models page. */
+    onCreated?: (model: ConfiguredModelDB) => void;
 };
 
-export const NewModelFormContainer = ({ modelTemplates }: Props) => {
-    const [selectedModelId, setSelectedModelId] = useState<string>('');
+export const NewModelFormContainer = ({ modelTemplates, initialTemplateId, onCreated }: Props) => {
+    const [selectedModelId, setSelectedModelId] = useState<string>(initialTemplateId != null ? String(initialTemplateId) : '');
     const [modelValidationError, setModelValidationError] = useState<string | undefined>();
 
     const selectedModel = useMemo(
@@ -63,6 +67,7 @@ export const NewModelFormContainer = ({ modelTemplates }: Props) => {
                     resolver={resolver as Resolver<NewModelFormValues>}
                     defaultValues={defaultValues}
                     onValidationError={setModelValidationError}
+                    onCreated={onCreated}
                 />
             )}
         </Card>

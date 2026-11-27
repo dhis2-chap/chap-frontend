@@ -90,6 +90,14 @@
     border-radius: 3px;
 }
 
+.best.bestBetter {
+    color: var(--colors-green800);
+}
+
+.best.bestWorse {
+    color: var(--colors-red800);
+}
+
 .parameterTags {
     display: flex;
     flex-wrap: wrap;

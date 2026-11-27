@@ -26,6 +26,9 @@ type PeriodCountOptions = PeriodIdOptions & {
     count: number;
 };
 
+/** How many following periods a range asks the library for first; about a year of months. */
+const FIRST_RANGE_BATCH = 12;
+
 const getPeriodIdYear = (period: Dhis2FixedPeriod): number => {
     const year = parseInt(period.id.substring(0, 4), 10);
 
@@ -123,30 +126,43 @@ export const getPeriodsInRange = ({
     }
 
     const periods = [startPeriod];
-    let currentPeriod = startPeriod;
+    // The library generates every period of a year to find the ones that follow, so asking for
+    // one period at a time costs a year of periods for each period in the range. Ask for a
+    // batch instead, and for twice as many each time the end is still ahead.
+    let batchSize = FIRST_RANGE_BATCH;
 
-    while (currentPeriod.id !== endPeriod.id) {
-        if (periods.length > MAX_PERIOD_RANGE) {
-            throw new Error(`Period range exceeds ${MAX_PERIOD_RANGE} periods`);
-        }
-
-        const [nextPeriod] = getAdjacentFixedPeriods({
+    while (periods[periods.length - 1].id !== endPeriod.id) {
+        const currentPeriod = periods[periods.length - 1];
+        // Asked for more than a year of periods after the last period of a year, the library
+        // starts with that period itself.
+        const nextPeriods = getAdjacentFixedPeriods({
             period: currentPeriod,
-            steps: 1,
+            steps: batchSize,
             calendar,
             locale,
-        });
+        }).filter(period => compareFixedPeriods(period, currentPeriod) > 0);
 
-        if (!nextPeriod || nextPeriod.id === currentPeriod.id) {
+        if (!nextPeriods.length) {
             throw new Error(`Could not generate the next period after "${currentPeriod.id}"`);
         }
 
-        if (compareFixedPeriods(nextPeriod, endPeriod) > 0) {
-            break;
+        for (const nextPeriod of nextPeriods) {
+            if (compareFixedPeriods(nextPeriod, endPeriod) > 0) {
+                return periods;
+            }
+
+            if (periods.length > MAX_PERIOD_RANGE) {
+                throw new Error(`Period range exceeds ${MAX_PERIOD_RANGE} periods`);
+            }
+
+            periods.push(nextPeriod);
+
+            if (nextPeriod.id === endPeriod.id) {
+                return periods;
+            }
         }
 
-        periods.push(nextPeriod);
-        currentPeriod = nextPeriod;
+        batchSize *= 2;
     }
 
     return periods;

@@ -1,19 +1,13 @@
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { expect, test } from '@playwright/test';
-import type { DatasetMakeRequest, ImportSummaryResponse, JobDiagnostics } from '@dhis2-chap/ui';
+import type { DataBaseResponse, DatasetMakeRequest, ImportSummaryResponse, JobDiagnostics, MakeBacktestsResponse } from '@dhis2-chap/ui';
 import { chapUrl, getChap, getJobStatus, readJson } from './helpers/evaluation-fixtures';
 import { isVersionCompatible } from '../src/utils/compareVersions';
 
-for (const { status, label, minimumVersion, dataToBeFetched } of [
-    {
-        status: 'FAILURE',
-        label: 'Failed',
-        minimumVersion: '2.6.0',
-        // Fetching climate data during import is unsupported and fails in the worker.
-        dataToBeFetched: [{ featureName: 'rainfall', dataSourceName: 'total_precipitation' }],
-    },
-    { status: 'SUCCESS', label: 'Success', minimumVersion: '2.8.0', dataToBeFetched: [] },
+for (const { status, label, minimumVersion } of [
+    { status: 'FAILURE', label: 'Failed', minimumVersion: '2.6.0' },
+    { status: 'SUCCESS', label: 'Success', minimumVersion: '2.8.0' },
 ]) {
     test(`downloads diagnostics and client context for a ${status} job`, async ({ page }) => {
         test.setTimeout(90_000);
@@ -22,7 +16,11 @@ for (const { status, label, minimumVersion, dataToBeFetched } of [
             'Load Chap Core version',
         );
         test.skip(!isVersionCompatible(chapVersion, minimumVersion), `Job diagnostics need Chap Core >= ${minimumVersion}`);
-        const name = `E2E debug info ${status} ${Date.now()}`;
+        const pollStatus = (id: string, expected: string) => expect.poll(
+            () => getJobStatus(page, id, 'Poll job'),
+            { timeout: 45_000, intervals: [1_000] },
+        ).toBe(expected);
+        let name = `E2E debug info ${status} ${Date.now()}`;
         const orgUnit = 'W6sNfkJcXGC';
         const request: DatasetMakeRequest = {
             name,
@@ -35,20 +33,34 @@ for (const { status, label, minimumVersion, dataToBeFetched } of [
                     geometry: { type: 'Polygon', coordinates: [[[102, 18], [103, 18], [103, 19], [102, 19], [102, 18]]] },
                 }],
             },
-            providedData: ['202001', '202002', '202003'].map((period, index) => ({
-                orgUnit, period, featureName: 'disease_cases', value: 10 + index,
+            providedData: Array.from({ length: 12 }, (_, index) => ({
+                orgUnit, period: `2020${String(index + 1).padStart(2, '0')}`, featureName: 'disease_cases', value: 10 + index,
             })),
-            dataToBeFetched,
+            dataToBeFetched: [],
         };
-        const { id: jobId } = await readJson<ImportSummaryResponse>(
+        let { id: jobId } = await readJson<ImportSummaryResponse>(
             await page.request.post(chapUrl('/v1/analytics/make-dataset'), { data: request }),
             'Create dataset job',
         );
         expect(jobId).toBeTruthy();
-        await expect.poll(
-            () => getJobStatus(page, jobId!, 'Poll job'),
-            { timeout: 45_000, intervals: [1_000] },
-        ).toBe(status);
+        if (status === 'FAILURE') {
+            // The naive model reads rainfall and temperature, which this dataset lacks, so its evaluation fails in the worker.
+            await pollStatus(jobId!, 'SUCCESS');
+            const { id: datasetId } = await readJson<DataBaseResponse>(
+                await getChap(page, `/v1/jobs/${jobId}/database_result`),
+                'Load dataset id',
+            );
+            const evaluation = await readJson<MakeBacktestsResponse>(
+                await page.request.post(chapUrl('/v1/analytics/create-backtests'), {
+                    data: { name, datasetId, modelIds: ['naive_model'], nPeriods: 3, nSplits: 2, stride: 1 },
+                }),
+                'Start an evaluation that fails',
+            );
+            jobId = evaluation.jobs[0].jobId;
+            // Chap Core names each job of an evaluation after the request and the model.
+            name = `${name}/naive_model`;
+        }
+        await pollStatus(jobId!, status);
 
         await page.goto(`/#/jobs?search=${encodeURIComponent(name)}`);
         const row = page.getByRole('row').filter({ hasText: name });

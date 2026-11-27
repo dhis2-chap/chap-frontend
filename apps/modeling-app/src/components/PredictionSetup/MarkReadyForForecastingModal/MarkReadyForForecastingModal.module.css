@@ -25,6 +25,10 @@
     border-block-start: 1px solid var(--colors-grey300);
 }
 
+.signalPolicyAction {
+    margin-block-start: var(--spacers-dp8);
+}
+
 .configurationNotice {
     margin-block-start: var(--spacers-dp12);
 }

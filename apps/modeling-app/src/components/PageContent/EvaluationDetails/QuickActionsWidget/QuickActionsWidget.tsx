@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, IconCheckmarkCircle16, IconVisualizationLineMulti16, IconDuplicate16, IconExportItems24 } from '@dhis2/ui';
+import { Button, IconArrowRight16, IconCheckmarkCircle16, IconVisualizationLineMulti16, IconDuplicate16, IconExportItems24 } from '@dhis2/ui';
 import i18n from '@dhis2/d2-i18n';
 import { useNavigate } from 'react-router-dom';
 import { Widget } from '@dhis2-chap/ui';
@@ -9,19 +9,24 @@ import {
     type MarkReadyForForecastingFormValues,
 } from '../../../PredictionSetup/MarkReadyForForecastingModal';
 import { buildQuantileTargetsFromForm } from '@/utils/predictionSetupImportMapping';
+import { Features, useIsFeatureAvailable } from '../../../../hooks/useIsFeatureAvailable';
 import { useCreatePredictionSetup } from './hooks/useCreatePredictionSetup';
 import styles from './QuickActionsWidget.module.css';
 
 type Props = {
     evaluationId: number;
+    datasetId: number;
     predictionSetupId?: number;
 };
 
 export const QuickActionsWidget = ({
     evaluationId,
+    datasetId,
     predictionSetupId,
 }: Props) => {
     const navigate = useNavigate();
+    // The guided setup needs the evaluations of Chap Core 2.4.0+.
+    const { isAvailable: isGuidedSetupAvailable } = useIsFeatureAvailable(Features.BENCHMARKS);
     const [markReadyModalIsOpen, setMarkReadyModalIsOpen] = useState(false);
     const [copyModalIsOpen, setCopyModalIsOpen] = useState(false);
     const {
@@ -39,6 +44,12 @@ export const QuickActionsWidget = ({
 
     const handleCreateNew = () => {
         setCopyModalIsOpen(true);
+    };
+
+    const handleContinueInGuidedSetup = () => {
+        navigate(predictionSetupId
+            ? `/guided/predict?datasetId=${datasetId}`
+            : `/guided/model?datasetId=${datasetId}&evaluationId=${evaluationId}`);
     };
 
     const handlePredict = () => {
@@ -110,6 +121,16 @@ export const QuickActionsWidget = ({
                         >
                             {i18n.t('Create new based on...')}
                         </Button>
+                        {isGuidedSetupAvailable && (
+                            <Button
+                                onClick={handleContinueInGuidedSetup}
+                                dataTest="quick-action-guided-setup"
+                                icon={<IconArrowRight16 />}
+                                className={styles.actionButton}
+                            >
+                                {i18n.t('Continue in guided setup')}
+                            </Button>
+                        )}
                     </div>
                 </div>
             </Widget>

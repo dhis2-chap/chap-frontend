@@ -1,0 +1,459 @@
+/* Steps across the top: where you are, what is done, and a way back to it. */
+.stepper {
+    display: flex;
+    margin: 0 0 var(--spacers-dp16);
+    padding: 0;
+    list-style: none;
+    background-color: var(--colors-white);
+    border: 1px solid var(--colors-grey300);
+    border-radius: var(--spacers-dp4);
+    overflow: hidden;
+}
+
+.stepperItem {
+    flex: 1;
+    min-inline-size: 0;
+    border-block-end: 3px solid transparent;
+}
+
+.stepperItem + .stepperItem {
+    border-inline-start: 1px solid var(--colors-grey300);
+}
+
+.stepperItem.active {
+    border-block-end-color: var(--colors-blue700);
+    background-color: var(--colors-blue050);
+}
+
+.stepperLink {
+    display: flex;
+    align-items: center;
+    gap: var(--spacers-dp12);
+    padding: var(--spacers-dp12) var(--spacers-dp16);
+    color: inherit;
+    text-decoration: none;
+}
+
+a.stepperLink:hover {
+    background-color: var(--colors-grey100);
+}
+
+.unreached {
+    color: var(--colors-grey600);
+}
+
+.stepperText {
+    display: flex;
+    flex-direction: column;
+    min-inline-size: 0;
+}
+
+.stepperTitle {
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.stepperSummary {
+    font-size: 13px;
+    color: var(--colors-grey700);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.marker {
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 28px;
+    block-size: 28px;
+    border-radius: 50%;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--colors-grey700);
+    background-color: var(--colors-grey200);
+}
+
+.marker.current {
+    color: var(--colors-white);
+    background-color: var(--colors-blue700);
+}
+
+.marker.done {
+    color: var(--colors-white);
+    background-color: var(--colors-green600);
+}
+
+.backLink {
+    display: inline-block;
+    margin-block-end: var(--spacers-dp8);
+    font-size: 14px;
+    color: var(--colors-blue700);
+}
+
+/* A step page is a column of cards. */
+.page {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacers-dp16);
+}
+
+/* The form for choosing a model spans several cards. */
+.form {
+    display: contents;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacers-dp16);
+    padding: var(--spacers-dp24);
+}
+
+.sectionHeader {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--spacers-dp16);
+}
+
+.title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--colors-grey900);
+}
+
+.description {
+    margin: var(--spacers-dp4) 0 0;
+    max-inline-size: 760px;
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--colors-grey700);
+}
+
+.list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border: 1px solid var(--colors-grey300);
+    border-radius: var(--spacers-dp4);
+}
+
+.listItem {
+    padding: var(--spacers-dp12) var(--spacers-dp16);
+}
+
+.listItem + .listItem {
+    border-block-start: 1px solid var(--colors-grey300);
+}
+
+.itemLabel {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.itemName {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--colors-grey900);
+}
+
+.modelRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--spacers-dp8) var(--spacers-dp16);
+}
+
+.settingsForm {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacers-dp12);
+    padding: var(--spacers-dp16);
+    border: 1px solid var(--colors-grey300);
+    border-radius: var(--spacers-dp4);
+}
+
+.failedRuns {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacers-dp8);
+    margin: var(--spacers-dp4) 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.failedRun {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacers-dp16);
+}
+
+.failedError {
+    display: block;
+    font-size: 13px;
+    color: var(--colors-grey800);
+    overflow-wrap: anywhere;
+}
+
+.configurationSelect {
+    inline-size: 280px;
+}
+
+/* What tuning does for a modeling package, under its row. */
+.tuning {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: var(--spacers-dp8) var(--spacers-dp16);
+    margin-block-start: var(--spacers-dp12);
+    padding: var(--spacers-dp12);
+    border-radius: var(--spacers-dp4);
+    background-color: var(--colors-grey100);
+}
+
+.trials {
+    flex: none;
+    inline-size: 160px;
+}
+
+.tuningText {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacers-dp4);
+    min-inline-size: 280px;
+    max-inline-size: 720px;
+}
+
+.experimental {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--spacers-dp8);
+    margin-block-end: var(--spacers-dp12);
+}
+
+.settings {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--spacers-dp8) var(--spacers-dp12);
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--spacers-dp8) var(--spacers-dp16);
+}
+
+.muted {
+    margin: 0;
+    font-size: 13px;
+    color: var(--colors-grey700);
+}
+
+.link {
+    color: var(--colors-blue700);
+}
+
+.field {
+    max-inline-size: 560px;
+}
+
+.nowrap {
+    white-space: nowrap;
+}
+
+/* Buttons next to a heading, kept on one line. */
+.actions {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: var(--spacers-dp8);
+}
+
+.stepNav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacers-dp16);
+}
+
+.stepNavAction {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: var(--spacers-dp8) var(--spacers-dp16);
+    text-align: end;
+}
+
+/* The checks a model should pass before it is put to use. */
+.trust {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacers-dp16);
+}
+
+.checks {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: var(--spacers-dp16);
+}
+
+.check {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacers-dp8);
+    padding: var(--spacers-dp16);
+    border: 1px solid var(--colors-grey300);
+    border-radius: var(--spacers-dp4);
+}
+
+.checkQuestion {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--colors-grey900);
+}
+
+.checkAnswer {
+    display: flex;
+    align-items: center;
+    gap: var(--spacers-dp8);
+    margin: 0;
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--colors-grey900);
+}
+
+.good {
+    color: var(--colors-green800);
+}
+
+.warn {
+    color: var(--colors-red800);
+}
+
+.goodFill {
+    background-color: var(--colors-green500);
+}
+
+.warnFill {
+    background-color: var(--colors-red500);
+}
+
+.caution {
+    color: var(--colors-yellow900);
+}
+
+.cautionFill {
+    background-color: var(--colors-yellow500);
+}
+
+/* A bar with labels above it and a scale below, so its length can be read. */
+.bar {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacers-dp4);
+}
+
+.barLabels {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    min-block-size: 16px;
+    font-size: 12px;
+    color: var(--colors-grey700);
+}
+
+.barTargetLabel {
+    position: absolute;
+    white-space: nowrap;
+    transform: translateX(-50%);
+}
+
+.barTrack {
+    position: relative;
+    block-size: 14px;
+    border-radius: 2px;
+    background-color: var(--colors-grey200);
+}
+
+.barFill {
+    position: absolute;
+    inset-block: 0;
+    border-radius: 2px;
+}
+
+.barMarker {
+    position: absolute;
+    inset-block-start: -3px;
+    block-size: 20px;
+    border-inline-start: 2px solid var(--colors-grey800);
+    transform: translateX(-1px);
+}
+
+.scale {
+    position: relative;
+    block-size: 18px;
+    margin-block-start: 2px;
+    font-size: 12px;
+    color: var(--colors-grey600);
+}
+
+.scaleTick {
+    position: absolute;
+    inset-block-start: 3px;
+    white-space: nowrap;
+    transform: translateX(-50%);
+}
+
+.scaleTick::before {
+    content: '';
+    position: absolute;
+    inset-block-start: -5px;
+    inset-inline-start: 50%;
+    block-size: 4px;
+    border-inline-start: 1px solid var(--colors-grey500);
+}
+
+.scaleTickStart {
+    transform: none;
+}
+
+.scaleTickStart::before {
+    inset-inline-start: 0;
+}
+
+.scaleTickEnd {
+    transform: translateX(-100%);
+}
+
+.scaleTickEnd::before {
+    inset-inline-start: auto;
+    inset-inline-end: 0;
+}
+
+.forecast {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacers-dp8);
+    padding: var(--spacers-dp16);
+    border: 1px solid var(--colors-grey300);
+    border-radius: var(--spacers-dp4);
+}
+
+.forecastSummary {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--colors-grey900);
+}

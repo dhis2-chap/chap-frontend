@@ -9,10 +9,12 @@ import { useNavigate } from 'react-router-dom';
 import { saveAs } from 'file-saver';
 import { TableActionButton } from '../../components/TableActionButton';
 import { useModels } from '../../hooks/useModels';
+import { getConfiguredModelName, isTunedConfiguration } from '../../utils/configuredModelName';
 import { benchmarkCsv, getBestRunIds, getMetricIds, metricSortKey } from './benchmarkUtils';
 import { formatComparison, getDefaultMetricIds, prettifyMetricId } from '../../components/PageContent/EvaluationDetails/EvaluationMetricsWidget/metricCatalog';
 import { MetricInfoIcon } from '../../components/MetricInfoIcon/MetricInfoIcon';
 import { getComparison, referenceLabel, referenceName, useReferenceModel } from '../../components/ModelComparisons/referenceModels';
+import { SelectionBiasSummary } from '../../components/SelectionBias/SelectionBiasSummary';
 import comparisonStyles from '../../components/ModelComparisons/ModelComparisons.module.css';
 import styles from './BenchmarksPage.module.css';
 
@@ -27,6 +29,14 @@ type Props = {
     options?: ReactNode;
     /* Buttons, shown on the right. */
     actions?: ReactNode;
+    /* Replaces the Benchmarks heading. */
+    title?: string;
+    /* Shown in each row before View evaluation. Keep it stable between renders. */
+    rowAction?: (run: LeaderboardBacktestRead) => ReactNode;
+    /* Starts with the scores compared with the default baseline. */
+    compareByDefault?: boolean;
+    /* Says below the table what to expect of the best model on new data. */
+    showSelectionBias?: boolean;
     children?: ReactNode;
 };
 
@@ -43,7 +53,7 @@ const ViewEvaluationButton = ({ evaluationId }: { evaluationId: number }) => {
     );
 };
 
-export const BenchmarkTable = ({ specification, options, actions, children }: Props) => {
+export const BenchmarkTable = ({ specification, options, actions, title, rowAction, compareByDefault = false, showSelectionBias = false, children }: Props) => {
     const { backtests } = specification;
     const evaluationId = backtests[0]?.id;
     // Chap Core 2.6 lists the configured metrics with the specification; older versions need the catalog.
@@ -61,14 +71,17 @@ export const BenchmarkTable = ({ specification, options, actions, children }: Pr
     const metricIds = showAllMetrics || !defaultMetricIds.length ? allMetricIds : defaultMetricIds;
     // Runs keep pointing at archived models, so resolve names against all of them.
     const { models } = useModels({ includeArchived: true });
-    const [comparing, setComparing] = useState(false);
+    const [comparing, setComparing] = useState(compareByDefault);
     const { references, reference: selectedReference, select } = useReferenceModel(specification);
     const reference = comparing ? selectedReference : undefined;
     // Newest runs first until the user sorts by a column. Baselines are only shown as the reference to compare with.
     const runs = useMemo<BenchmarkRun[]>(() => backtests
         .map(run => ({
             ...run,
-            modelName: models?.find(model => model.id === run.configuredModel?.id)?.displayName || run.configuredModel?.name || run.modelId,
+            // Chap Core names a tuned configuration by an id; say that it is tuned instead.
+            modelName: run.configuredModel && isTunedConfiguration(run.configuredModel)
+                ? getConfiguredModelName(run.configuredModel, run.configuredModel.modelTemplate?.displayName)
+                : models?.find(model => model.id === run.configuredModel?.id)?.displayName || run.configuredModel?.name || run.modelId,
             comparison: getComparison(run, reference),
         }))
         .sort((a, b) => (b.created ?? '').localeCompare(a.created ?? '')), [backtests, models, reference]);
@@ -112,7 +125,14 @@ export const BenchmarkTable = ({ specification, options, actions, children }: Pr
                     if (value === undefined) return '—';
                     return (
                         <span
-                            className={cx({ [comparisonStyles.better]: reference && value > 0, [comparisonStyles.worse]: reference && value < 0, [styles.best]: best })}
+                            className={cx({
+                                [comparisonStyles.better]: reference && value > 0,
+                                [comparisonStyles.worse]: reference && value < 0,
+                                [styles.best]: best,
+                                // The best run can still be worse than the baseline, so the highlight keeps the comparison colour.
+                                [styles.bestBetter]: best && reference && value > 0,
+                                [styles.bestWorse]: best && reference && value < 0,
+                            })}
                             title={best ? i18n.t('Best score among these runs') : undefined}
                         >
                             {reference ? formatComparison(value, metric) : value.toLocaleString(undefined, { maximumSignificantDigits: 6 })}
@@ -130,9 +150,14 @@ export const BenchmarkTable = ({ specification, options, actions, children }: Pr
         columnHelper.display({
             id: 'actions',
             header: i18n.t('Actions'),
-            cell: ({ row }) => <ViewEvaluationButton evaluationId={row.original.id} />,
+            cell: ({ row }) => (
+                <div className={styles.actions}>
+                    {rowAction?.(row.original)}
+                    <ViewEvaluationButton evaluationId={row.original.id} />
+                </div>
+            ),
         }),
-    ], [runs, metricIds, metrics, reference]);
+    ], [runs, metricIds, metrics, reference, rowAction]);
     const table = useReactTable({
         data: runs,
         columns,
@@ -153,7 +178,7 @@ export const BenchmarkTable = ({ specification, options, actions, children }: Pr
     return (
         <>
             <div>
-                <h2 className={styles.cardTitle}>{i18n.t('Benchmarks')}</h2>
+                <h2 className={styles.cardTitle}>{title ?? i18n.t('Benchmarks')}</h2>
                 <p className={styles.caption}>
                     {reference
                         ? i18n.t('Scores compared with {{reference}}, aggregated across all splits and organisation units. Positive means better than {{reference}}, negative means worse. The best score in each column is highlighted, including ties.', { reference: referenceName(reference) })
@@ -246,6 +271,14 @@ export const BenchmarkTable = ({ specification, options, actions, children }: Pr
                         </DataTableBody>
                     </DataTable>
                 </div>
+            )}
+            {showSelectionBias && (
+                // By the first metric of the table, which is the one the models are ranked by elsewhere.
+                <SelectionBiasSummary
+                    specification={specification}
+                    metric={metrics?.find(item => item.id === defaultMetricIds[0])}
+                    getModelName={backtestId => runs.find(run => run.id === backtestId)?.modelName}
+                />
             )}
         </>
     );

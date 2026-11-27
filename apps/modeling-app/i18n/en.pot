@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-11-19T10:34:36.877Z\n"
-"PO-Revision-Date: 2026-11-19T10:34:36.877Z\n"
+"POT-Creation-Date: 2026-11-27T14:28:49.993Z\n"
+"PO-Revision-Date: 2026-11-27T14:28:49.994Z\n"
 
 msgid "Evaluations"
 msgstr "Evaluations"
@@ -430,6 +430,9 @@ msgstr "No datasets found"
 msgid "No manually created datasets"
 msgstr "No manually created datasets"
 
+msgid "Dataset {{id}}"
+msgstr "Dataset {{id}}"
+
 msgid "Origin"
 msgstr "Origin"
 
@@ -761,6 +764,9 @@ msgstr "Period type"
 
 msgid "Clear statuses"
 msgstr "Clear statuses"
+
+msgid "Evaluated"
+msgstr "Evaluated"
 
 msgid "Version"
 msgstr "Version"
@@ -2029,6 +2035,9 @@ msgstr "Create prediction setup"
 msgid "Compare with..."
 msgstr "Compare with..."
 
+msgid "Continue in guided setup"
+msgstr "Continue in guided setup"
+
 msgid "Prediction setup created"
 msgstr "Prediction setup created"
 
@@ -2214,11 +2223,8 @@ msgstr "Type a value"
 msgid "The model name will be \"{{displayName}} [{{variantName}}]\""
 msgstr "The model name will be \"{{displayName}} [{{variantName}}]\""
 
-msgid "Provide a descriptive name for this variant"
-msgstr "Provide a descriptive name for this variant"
-
-msgid "Variant name"
-msgstr "Variant name"
+msgid "Provide a descriptive name for this configuration"
+msgstr "Provide a descriptive name for this configuration"
 
 msgid "Model template is required"
 msgstr "Model template is required"
@@ -2623,9 +2629,6 @@ msgstr "No signal policy"
 msgid "Unable to load signal policies{{colon}} {{message}}"
 msgstr "Unable to load signal policies{{colon}} {{message}}"
 
-msgid "You can change this configuration at any point."
-msgstr "You can change this configuration at any point."
-
 msgid "Set default import mapping"
 msgstr "Set default import mapping"
 
@@ -2636,11 +2639,66 @@ msgstr ""
 "Choose the DHIS2 data elements to use by default when prediction outputs "
 "are imported."
 
+msgid "You can change this configuration at any point."
+msgstr "You can change this configuration at any point."
+
 msgid "There are running jobs in the background"
 msgstr "There are running jobs in the background"
 
 msgid "Running jobs"
 msgstr "Running jobs"
+
+msgid "Selection bias"
+msgstr "Selection bias"
+
+msgid "Not estimated{{colon}} {{reason}}"
+msgstr "Not estimated{{colon}} {{reason}}"
+
+msgid "Best model"
+msgstr "Best model"
+
+msgid "In the evaluation"
+msgstr "In the evaluation"
+
+msgid "Estimated bias"
+msgstr "Estimated bias"
+
+msgid "Expected on new data"
+msgstr "Expected on new data"
+
+msgid "{{metric}} compared with {{baseline}}, where positive is better."
+msgstr "{{metric}} compared with {{baseline}}, where positive is better."
+
+msgid ""
+"The bias is how much of the lead of the best model is expected to be "
+"luck{{colon}} Chap drew the evaluation splits again {{draws}} times, and "
+"another model came out best in {{others}} of the draws."
+msgstr ""
+"The bias is how much of the lead of the best model is expected to be "
+"luck{{colon}} Chap drew the evaluation splits again {{draws}} times, and "
+"another model came out best in {{others}} of the draws."
+
+msgid ""
+"The bias is how much of the lead of the best model is expected to be "
+"luck{{colon}} Chap drew the evaluation splits again {{draws}} times, and "
+"the same model came out best every time."
+msgstr ""
+"The bias is how much of the lead of the best model is expected to be "
+"luck{{colon}} Chap drew the evaluation splits again {{draws}} times, and "
+"the same model came out best every time."
+
+msgid "Scored on forecasts {{nearest}} to {{farthest}} periods ahead."
+msgstr "Scored on forecasts {{nearest}} to {{farthest}} periods ahead."
+
+msgid ""
+"A split left out of a draw only counts when it forecasts no period that a "
+"drawn split also forecasts."
+msgstr ""
+"A split left out of a draw only counts when it forecasts no period that a "
+"drawn split also forecasts."
+
+msgid "The estimate is rough."
+msgstr "The estimate is rough."
 
 msgid "Review the threshold parameters and apply your changes."
 msgstr "Review the threshold parameters and apply your changes."
@@ -2727,14 +2785,14 @@ msgstr "Shift zoom right one period"
 msgid "No organisation units match the selected filters."
 msgstr "No organisation units match the selected filters."
 
+msgid "Guided setup (experimental)"
+msgstr "Guided setup (experimental)"
+
+msgid "All tools"
+msgstr "All tools"
+
 msgid "Dashboard"
 msgstr "Dashboard"
-
-msgid "Evaluate"
-msgstr "Evaluate"
-
-msgid "Overview"
-msgstr "Overview"
 
 msgid "Report a bug"
 msgstr "Report a bug"
@@ -3258,9 +3316,6 @@ msgstr "Error loading prediction setups"
 msgid "Review the saved data and where values are missing."
 msgstr "Review the saved data and where values are missing."
 
-msgid "Dataset {{id}}"
-msgstr "Dataset {{id}}"
-
 msgid "Import data once and reuse it across evaluations."
 msgstr "Import data once and reuse it across evaluations."
 
@@ -3292,6 +3347,540 @@ msgstr "Route and servers are configured on the settings page."
 
 msgid "View guides"
 msgstr "View guides"
+
+msgid "In use{{colon}} {{models}}"
+msgstr "In use{{colon}} {{models}}"
+
+msgid "Go to predictions"
+msgstr "Go to predictions"
+
+msgid "The configured model to use"
+msgstr "The configured model to use"
+
+msgid "Choose the configured model to use"
+msgstr "Choose the configured model to use"
+
+msgid ""
+"Each row is a configured model you evaluated. The one you choose makes your "
+"predictions. Every prediction trains it on your newest data, and that "
+"trained model makes the forecast. Nothing runs until you start a prediction."
+msgstr ""
+"Each row is a configured model you evaluated. The one you choose makes your "
+"predictions. Every prediction trains it on your newest data, and that "
+"trained model makes the forecast. Nothing runs until you start a prediction."
+
+msgid "Choose another model"
+msgstr "Choose another model"
+
+msgid "Evaluate more modeling packages"
+msgstr "Evaluate more modeling packages"
+
+msgid "Not better than {{baseline}}"
+msgstr "Not better than {{baseline}}"
+
+msgid "Best {{metric}}"
+msgstr "Best {{metric}}"
+
+msgid "In use"
+msgstr "In use"
+
+msgid "Is it good enough?"
+msgstr "Is it good enough?"
+
+msgid ""
+"A few checks and a look at the forecasts of {{model}}. They describe the "
+"past; the next step keeps checking the model once it is in use."
+msgstr ""
+"A few checks and a look at the forecasts of {{model}}. They describe the "
+"past; the next step keeps checking the model once it is in use."
+
+msgid "Signals (optional)"
+msgstr "Signals (optional)"
+
+msgid ""
+"A signal policy turns each prediction into signals, such as an outbreak "
+"alert, for someone to review before they are released."
+msgstr ""
+"A signal policy turns each prediction into signals, such as an outbreak "
+"alert, for someone to review before they are released."
+
+msgid "DHIS2 output (optional)"
+msgstr "DHIS2 output (optional)"
+
+msgid ""
+"Predictions are imported into DHIS2 data elements after you have reviewed "
+"them. You can choose the data elements now or at the first import."
+msgstr ""
+"Predictions are imported into DHIS2 data elements after you have reviewed "
+"them. You can choose the data elements now or at the first import."
+
+msgid "You can change the name, the signal policy and the DHIS2 output later."
+msgstr "You can change the name, the signal policy and the DHIS2 output later."
+
+msgid "Could not set up predictions with the model"
+msgstr "Could not set up predictions with the model"
+
+msgid "Continue to predictions"
+msgstr "Continue to predictions"
+
+msgid "{{model}}, with the signals, DHIS2 output and name above"
+msgstr "{{model}}, with the signals, DHIS2 output and name above"
+
+msgid "Choose a model first"
+msgstr "Choose a model first"
+
+msgid "Use this model for predictions"
+msgstr "Use this model for predictions"
+
+msgid "Set your own configuration"
+msgstr "Set your own configuration"
+
+msgid "Open another setup"
+msgstr "Open another setup"
+
+msgid "Start a new setup with new data"
+msgstr "Start a new setup with new data"
+
+msgid "This data no longer exists"
+msgstr "This data no longer exists"
+
+msgid "Open another setup, or start a new one with new data."
+msgstr "Open another setup, or start a new one with new data."
+
+msgid "Import data from DHIS2"
+msgstr "Import data from DHIS2"
+
+msgid ""
+"Choose the disease cases you want to predict, and the climate and "
+"population data the models use."
+msgstr ""
+"Choose the disease cases you want to predict, and the climate and "
+"population data the models use."
+
+msgid "Use data you have imported"
+msgstr "Use data you have imported"
+
+msgid "Data of this setup"
+msgstr "Data of this setup"
+
+msgid ""
+"A setup follows one set of data from evaluation to predictions. Other data "
+"has a setup of its own."
+msgstr ""
+"A setup follows one set of data from evaluation to predictions. Other data "
+"has a setup of its own."
+
+msgid "Columns{{colon}} {{columns}}"
+msgstr "Columns{{colon}} {{columns}}"
+
+msgid "Continue to evaluation"
+msgstr "Continue to evaluation"
+
+msgid "{{count}} periods ahead"
+msgid_plural "{{count}} periods ahead"
+msgstr[0] "{{count}} period ahead"
+msgstr[1] "{{count}} periods ahead"
+
+msgid "{{count}} splits"
+msgid_plural "{{count}} splits"
+msgstr[0] "{{count}} split"
+msgstr[1] "{{count}} splits"
+
+msgid "{{count}} models evaluated"
+msgid_plural "{{count}} models evaluated"
+msgstr[0] "{{count}} model evaluated"
+msgstr[1] "{{count}} models evaluated"
+
+msgid "needs Chap Core 2.9.0 or newer"
+msgstr "needs Chap Core 2.9.0 or newer"
+
+msgid "not supported by this modeling package"
+msgstr "not supported by this modeling package"
+
+msgid "Tuning needs an evaluation setup to add to. Evaluate a model first."
+msgstr "Tuning needs an evaluation setup to add to. Evaluate a model first."
+
+msgid "{{model}} (tuned)"
+msgstr "{{model}} (tuned)"
+
+msgid "Evaluation setup"
+msgstr "Evaluation setup"
+
+msgid ""
+"Chap hides the most recent periods of your data, lets each model predict "
+"them, and scores the predictions against what actually happened. The setup "
+"says how far ahead and how many times. Results can only be compared within "
+"one setup, so each setup has results of its own."
+msgstr ""
+"Chap hides the most recent periods of your data, lets each model predict "
+"them, and scores the predictions against what actually happened. The setup "
+"says how far ahead and how many times. Results can only be compared within "
+"one setup, so each setup has results of its own."
+
+msgid "newest"
+msgstr "newest"
+
+msgid "New setup"
+msgstr "New setup"
+
+msgid "Not evaluated yet. The models you evaluate next get results of their own."
+msgstr "Not evaluated yet. The models you evaluate next get results of their own."
+
+msgid "Discard"
+msgstr "Discard"
+
+msgid "New evaluation setup"
+msgstr "New evaluation setup"
+
+msgid "Change settings"
+msgstr "Change settings"
+
+msgid "Not enough history"
+msgstr "Not enough history"
+
+msgid ""
+"This data has {{periodCount}} periods, but an evaluation needs at least "
+"{{requiredPeriodCount}}."
+msgstr ""
+"This data has {{periodCount}} periods, but an evaluation needs at least "
+"{{requiredPeriodCount}}."
+
+msgid "Could not load the evaluation settings"
+msgstr "Could not load the evaluation settings"
+
+msgid "Choose modeling packages to evaluate"
+msgstr "Choose modeling packages to evaluate"
+
+msgid ""
+"A modeling package becomes a configured model once its configuration is "
+"chosen, and a configured model is what gets evaluated. Simple baseline "
+"models are evaluated as well, so you can see whether a model beats them."
+msgstr ""
+"A modeling package becomes a configured model once its configuration is "
+"chosen, and a configured model is what gets evaluated. Simple baseline "
+"models are evaluated as well, so you can see whether a model beats them."
+
+msgid "This data has no target column"
+msgstr "This data has no target column"
+
+msgid "Choose what to predict when you start the evaluation."
+msgstr "Choose what to predict when you start the evaluation."
+
+msgid "Open evaluation settings"
+msgstr "Open evaluation settings"
+
+msgid "Modeling packages"
+msgstr "Modeling packages"
+
+msgid "Select modeling packages"
+msgstr "Select modeling packages"
+
+msgid "No modeling package can use this data"
+msgstr "No modeling package can use this data"
+
+msgid ""
+"No modeling package matches the columns and period type of this data. "
+"Import data with the columns the modeling packages need."
+msgstr ""
+"No modeling package matches the columns and period type of this data. "
+"Import data with the columns the modeling packages need."
+
+msgid ""
+"{{count}} other models need columns or a period type this data does not "
+"have."
+msgid_plural ""
+"{{count}} other models need columns or a period type this data does not "
+"have."
+msgstr[0] ""
+"{{count}} other model needs columns or a period type this data does not "
+"have."
+msgstr[1] ""
+"{{count}} other models need columns or a period type this data does not "
+"have."
+
+msgid "Could not start tuning"
+msgstr "Could not start tuning"
+
+msgid "Could not start the evaluation"
+msgstr "Could not start the evaluation"
+
+msgid "Evaluate {{count}} models"
+msgid_plural "Evaluate {{count}} models"
+msgstr[0] "Evaluate {{count}} model"
+msgstr[1] "Evaluate {{count}} models"
+
+msgid "Evaluate models"
+msgstr "Evaluate models"
+
+msgid "No results for the new setup yet"
+msgstr "No results for the new setup yet"
+
+msgid "Choose modeling packages above and evaluate them with {{setup}}."
+msgstr "Choose modeling packages above and evaluate them with {{setup}}."
+
+msgid ""
+"This can take a while. You can leave this page; the results will be here "
+"when you come back."
+msgstr ""
+"This can take a while. You can leave this page; the results will be here "
+"when you come back."
+
+msgid "View progress"
+msgstr "View progress"
+
+msgid "Results for {{setup}}"
+msgstr "Results for {{setup}}"
+
+msgid "No results yet"
+msgstr "No results yet"
+
+msgid "No model has finished. See what happened, then evaluate the models again."
+msgstr "No model has finished. See what happened, then evaluate the models again."
+
+msgid "View jobs"
+msgstr "View jobs"
+
+msgid "Continue to choose a model"
+msgstr "Continue to choose a model"
+
+msgid "Waiting for a model to finish"
+msgstr "Waiting for a model to finish"
+
+msgid "Evaluate a model first"
+msgstr "Evaluate a model first"
+
+msgid "Use these settings"
+msgstr "Use these settings"
+
+msgid "{{count}} models failed"
+msgid_plural "{{count}} models failed"
+msgstr[0] "{{count}} model failed"
+msgstr[1] "{{count}} models failed"
+
+msgid "What it predicted, and what happened"
+msgstr "What it predicted, and what happened"
+
+msgid ""
+"The shaded range is where the model expected the numbers to land, up to "
+"{{count}} periods ahead. The orange line is what happened."
+msgid_plural ""
+"The shaded range is where the model expected the numbers to land, up to "
+"{{count}} periods ahead. The orange line is what happened."
+msgstr[0] ""
+"The shaded range is where the model expected the numbers to land, up to "
+"{{count}} periods ahead. The orange line is what happened."
+msgstr[1] ""
+"The shaded range is where the model expected the numbers to land, up to "
+"{{count}} periods ahead. The orange line is what happened."
+
+msgid "Could not load the forecasts"
+msgstr "Could not load the forecasts"
+
+msgid "No forecasts for this location."
+msgstr "No forecasts for this location."
+
+msgid ""
+"What happened was inside the predicted range in {{inside}} of {{scored}} "
+"periods."
+msgstr ""
+"What happened was inside the predicted range in {{inside}} of {{scored}} "
+"periods."
+
+msgid "Guided setup"
+msgstr "Guided setup"
+
+msgid "Four steps from your DHIS2 data to predictions."
+msgstr "Four steps from your DHIS2 data to predictions."
+
+msgid ""
+"The guided setup is new and will change. Everything it makes is also under "
+"All tools in the menu. Tell us what works and what does not with Report a "
+"bug."
+msgstr ""
+"The guided setup is new and will change. Everything it makes is also under "
+"All tools in the menu. Tell us what works and what does not with Report a "
+"bug."
+
+msgid "Could not load your setup"
+msgstr "Could not load your setup"
+
+msgid "All setups"
+msgstr "All setups"
+
+msgid "Modeling package"
+msgstr "Modeling package"
+
+msgid "Model configuration"
+msgstr "Model configuration"
+
+msgid "{{configuration}} (evaluated)"
+msgstr "{{configuration}} (evaluated)"
+
+msgid "Tune automatically ({{reason}})"
+msgstr "Tune automatically ({{reason}})"
+
+msgid "Tune automatically (experimental)"
+msgstr "Tune automatically (experimental)"
+
+msgid "Set your own configuration…"
+msgstr "Set your own configuration…"
+
+msgid "Configurations to try"
+msgstr "Configurations to try"
+
+msgid ""
+"Chap tries {{trials}} configurations with different values of {{options}}. "
+"It scores each on the periods the evaluation trains on and evaluates the "
+"best one as a new configured model. Each one is a full training run, so "
+"more take longer."
+msgstr ""
+"Chap tries {{trials}} configurations with different values of {{options}}. "
+"It scores each on the periods the evaluation trains on and evaluates the "
+"best one as a new configured model. Each one is a full training run, so "
+"more take longer."
+
+msgid ""
+"Chap tries {{trials}} configurations. It scores each on the periods the "
+"evaluation trains on and evaluates the best one as a new configured model. "
+"Each one is a full training run, so more take longer."
+msgstr ""
+"Chap tries {{trials}} configurations. It scores each on the periods the "
+"evaluation trains on and evaluates the best one as a new configured model. "
+"Each one is a full training run, so more take longer."
+
+msgid ""
+"The default configuration is evaluated as well, so you can see what tuning "
+"adds."
+msgstr ""
+"The default configuration is evaluated as well, so you can see what tuning "
+"adds."
+
+msgid "Does it beat a simple baseline?"
+msgstr "Does it beat a simple baseline?"
+
+msgid "Yes, {{amount}} better than {{baseline}}"
+msgstr "Yes, {{amount}} better than {{baseline}}"
+
+msgid "No, {{amount}} worse than {{baseline}}"
+msgstr "No, {{amount}} worse than {{baseline}}"
+
+msgid ""
+"Measured with {{metric}}. A baseline is a rule of thumb, such as repeating "
+"last year. A model that does not beat it adds little."
+msgstr ""
+"Measured with {{metric}}. A baseline is a rule of thumb, such as repeating "
+"last year. A model that does not beat it adds little."
+
+msgid "Worse"
+msgstr "Worse"
+
+msgid "Better"
+msgstr "Better"
+
+msgid "Same"
+msgstr "Same"
+
+msgid "Not compared yet"
+msgstr "Not compared yet"
+
+msgid "Chap evaluates the baseline models in the background. Come back in a moment."
+msgstr "Chap evaluates the baseline models in the background. Come back in a moment."
+
+msgid "Is it right about how sure it is?"
+msgstr "Is it right about how sure it is?"
+
+msgid "Yes, {{share}} of the actual values were inside its range"
+msgstr "Yes, {{share}} of the actual values were inside its range"
+
+msgid "Partly, {{share}} of the actual values were inside its range"
+msgstr "Partly, {{share}} of the actual values were inside its range"
+
+msgid "No, only {{share}} of the actual values were inside its range"
+msgstr "No, only {{share}} of the actual values were inside its range"
+
+msgid ""
+"A model gives a range it expects {{target}} of the values to fall in. Fewer "
+"means it is too sure of itself, so its alerts can mislead."
+msgstr ""
+"A model gives a range it expects {{target}} of the values to fall in. Fewer "
+"means it is too sure of itself, so its alerts can mislead."
+
+msgid "Expected {{target}}"
+msgstr "Expected {{target}}"
+
+msgid "Predicting"
+msgstr "Predicting"
+
+msgid "Ready to choose a model"
+msgstr "Ready to choose a model"
+
+msgid "Evaluating"
+msgstr "Evaluating"
+
+msgid "Not evaluated"
+msgstr "Not evaluated"
+
+msgid "Predictions from {{models}}"
+msgstr "Predictions from {{models}}"
+
+msgid "{{count}} models evaluated, none in use"
+msgid_plural "{{count}} models evaluated, none in use"
+msgstr[0] "{{count}} model evaluated, none in use"
+msgstr[1] "{{count}} models evaluated, none in use"
+
+msgid "No models evaluated yet"
+msgstr "No models evaluated yet"
+
+msgid "Your setups"
+msgstr "Your setups"
+
+msgid ""
+"Each set of imported data is a setup. Continue where it stopped, or start a "
+"new one with new data."
+msgstr ""
+"Each set of imported data is a setup. Continue where it stopped, or start a "
+"new one with new data."
+
+msgid "Start a new setup"
+msgstr "Start a new setup"
+
+msgid "Could not load your setups"
+msgstr "Could not load your setups"
+
+msgid "Continue"
+msgstr "Continue"
+
+msgid "Run and review predictions"
+msgstr "Run and review predictions"
+
+msgid ""
+"Run a prediction, review the signals it raises, and import the result into "
+"DHIS2. Each prediction trains the configured model you chose on your newest "
+"data, and that trained model makes the forecast. The monitoring chart shows "
+"whether it keeps beating the baseline as real numbers come in."
+msgstr ""
+"Run a prediction, review the signals it raises, and import the result into "
+"DHIS2. Each prediction trains the configured model you chose on your newest "
+"data, and that trained model makes the forecast. The monitoring chart shows "
+"whether it keeps beating the baseline as real numbers come in."
+
+msgid "Activity, input data and scheduling"
+msgstr "Activity, input data and scheduling"
+
+msgid "Back"
+msgstr "Back"
+
+msgid "Data"
+msgstr "Data"
+
+msgid "Evaluate"
+msgstr "Evaluate"
+
+msgid "Choose model"
+msgstr "Choose model"
+
+msgid "Setup steps"
+msgstr "Setup steps"
 
 msgid "No guides available"
 msgstr "No guides available"
@@ -3332,6 +3921,9 @@ msgstr "Create a new evaluation to assess the performance of a model"
 
 msgid "Create a prediction run for this setup."
 msgstr "Create a prediction run for this setup."
+
+msgid "Back to guided setup"
+msgstr "Back to guided setup"
 
 msgid "Back to prediction setup"
 msgstr "Back to prediction setup"
@@ -3386,6 +3978,12 @@ msgstr "Not authorized. Check the Chap API token in settings."
 
 msgid "Not authorized to access the Chap server"
 msgstr "Not authorized to access the Chap server"
+
+msgid "Default configuration"
+msgstr "Default configuration"
+
+msgid "Tuned {{id}}"
+msgstr "Tuned {{id}}"
 
 msgid "This model's service changed without a new version number, so it can't run."
 msgstr "This model's service changed without a new version number, so it can't run."

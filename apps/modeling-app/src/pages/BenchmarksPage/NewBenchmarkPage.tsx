@@ -1,6 +1,6 @@
 import i18n from '@dhis2/d2-i18n';
 import { Button, CircularLoader, IconArrowLeft16, NoticeBox } from '@dhis2/ui';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { DatasetEvaluationForm } from '../../components/NewEvaluationForm/DatasetEvaluationForm';
 import { PageHeader } from '../../features/common-features/PageHeader/PageHeader';
 import { Features, useIsFeatureAvailable } from '../../hooks/useIsFeatureAvailable';
@@ -8,6 +8,8 @@ import styles from './BenchmarksPage.module.css';
 
 export const NewBenchmarkPage = () => {
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const datasetId = searchParams.get('datasetId') ?? undefined;
     const { isAvailable, isLoading } = useIsFeatureAvailable(Features.BENCHMARKS);
 
     return (
@@ -23,7 +25,7 @@ export const NewBenchmarkPage = () => {
                     </Button>
                 </div>
                 {isLoading ? <div className={styles.loading}><CircularLoader /></div> : isAvailable ? (
-                    <DatasetEvaluationForm benchmarkContext />
+                    <DatasetEvaluationForm key={datasetId} initialDatasetId={datasetId} benchmarkContext />
                 ) : (
                     <NoticeBox title={i18n.t('Benchmarks unavailable')}>
                         {i18n.t('This Chap server does not support backtest specifications. Update Chap Core to use benchmarks.')}

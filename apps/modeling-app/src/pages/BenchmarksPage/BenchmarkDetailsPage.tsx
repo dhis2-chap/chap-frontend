@@ -71,6 +71,7 @@ const BenchmarkDetails = ({ id }: { id: number }) => {
                 <Card className={styles.card}>
                     <BenchmarkTable
                         specification={specification}
+                        showSelectionBias
                         options={(
                             <>
                                 <Checkbox

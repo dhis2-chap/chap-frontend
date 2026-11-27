@@ -1,0 +1,264 @@
+import {
+    Button,
+    InputField,
+    NoticeBox,
+    SingleSelectField,
+    SingleSelectOption,
+    Switch,
+} from '@dhis2/ui';
+import i18n from '@dhis2/d2-i18n';
+import { useState } from 'react';
+import type { KeyboardEvent, MouseEvent } from 'react';
+import { AnimatePresence, motion } from 'motion/react';
+import { Controller, useForm, type UseFormReturn } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { isAlertPoliciesUnavailable, useAlertPolicies } from '@/hooks/useAlertPolicies';
+import { getChapErrorMessage } from '@/utils/chapErrors';
+import { DataItemSelect } from '../../PageContent/PredictionImport/QuantileMappingForm/DataItemSelect';
+import {
+    ALERT_KEY,
+    QUANTILE_KEYS,
+    QUANTILE_SUGGESTED_KEYWORDS,
+    type PredictionSetupFormValues,
+} from '@/utils/predictionSetupImportMapping';
+import styles from './MarkReadyForForecastingModal.module.css';
+
+const quantileFieldSchema = z.string();
+
+export const markReadyForForecastingSchema = z.object({
+    name: z.string()
+        .trim()
+        .min(1, { message: i18n.t('Name is required') }),
+    use_import_mapping: z.boolean(),
+    quantile_high: quantileFieldSchema,
+    quantile_mid_high: quantileFieldSchema,
+    median: quantileFieldSchema,
+    quantile_mid_low: quantileFieldSchema,
+    quantile_low: quantileFieldSchema,
+    outbreak_indicator: quantileFieldSchema,
+    alert_policy_id: z.string(),
+});
+
+export type MarkReadyForForecastingFormValues = PredictionSetupFormValues & {
+    // Empty string means the setup raises no alerts.
+    alert_policy_id: string;
+};
+
+const quantileFields: Array<{
+    name: typeof QUANTILE_KEYS[number];
+    label: string;
+}> = [
+    { name: 'quantile_high', label: i18n.t('Quantile high') },
+    { name: 'quantile_mid_high', label: i18n.t('Quantile mid high') },
+    { name: 'median', label: i18n.t('Median') },
+    { name: 'quantile_mid_low', label: i18n.t('Quantile mid low') },
+    { name: 'quantile_low', label: i18n.t('Quantile low') },
+];
+
+export const usePredictionSetupForm = (defaultValues?: Partial<MarkReadyForForecastingFormValues>) => (
+    useForm<MarkReadyForForecastingFormValues>({
+        resolver: zodResolver(markReadyForForecastingSchema),
+        shouldFocusError: false,
+        defaultValues: {
+            name: '',
+            use_import_mapping: false,
+            quantile_high: '',
+            quantile_mid_high: '',
+            median: '',
+            quantile_mid_low: '',
+            quantile_low: '',
+            outbreak_indicator: '',
+            alert_policy_id: '',
+            ...defaultValues,
+        },
+    })
+);
+
+type FieldProps = {
+    form: UseFormReturn<MarkReadyForForecastingFormValues>;
+};
+
+export const SetupNameField = ({ form: { control, formState: { errors } } }: FieldProps) => (
+    <Controller
+        name="name"
+        control={control}
+        render={({ field }) => (
+            <InputField
+                {...field}
+                label={i18n.t('Setup name')}
+                autoComplete="off"
+                error={!!errors.name}
+                validationText={errors.name?.message}
+                onChange={({ value }) => field.onChange(value)}
+                dataTest="ready-configuration-name-input"
+                required
+            />
+        )}
+    />
+);
+
+type SignalPolicyFieldProps = FieldProps & {
+    /** Offers to create a signal policy below the select. */
+    onCreateSignalPolicy?: () => void;
+};
+
+export const SignalPolicyField = ({ form: { control }, onCreateSignalPolicy }: SignalPolicyFieldProps) => {
+    const { data: alertPolicies, error, isLoading: alertPoliciesLoading } = useAlertPolicies();
+    // Signals are optional: a Chap Core without signal policies reads as one that has none yet.
+    const alertPoliciesError = isAlertPoliciesUnavailable(error) ? null : error;
+    const hasNoAlertPolicies = !alertPoliciesLoading && !alertPoliciesError && !alertPolicies?.length;
+
+    return (
+        <>
+            <Controller
+                name="alert_policy_id"
+                control={control}
+                render={({ field }) => (
+                    <SingleSelectField
+                        className={styles.alertPolicySelect}
+                        label={i18n.t('Signal policy')}
+                        helpText={hasNoAlertPolicies
+                            ? i18n.t('No signal policies exist yet. Create one under Signal policies to raise signals from this setup.')
+                            : i18n.t('Every prediction run automatically raises pending signals with this policy, for review before release. Leave empty to run predictions without signals.')}
+                        placeholder={i18n.t('No signal policy')}
+                        loading={alertPoliciesLoading}
+                        disabled={hasNoAlertPolicies || !!alertPoliciesError}
+                        error={!!alertPoliciesError}
+                        validationText={alertPoliciesError
+                            ? i18n.t('Unable to load signal policies{{colon}} {{message}}', { colon: ':', message: getChapErrorMessage(alertPoliciesError) })
+                            : undefined}
+                        clearable
+                        // An unmatched selected value makes SingleSelect throw in dev builds.
+                        selected={alertPolicies?.some(policy => String(policy.id) === field.value) ? field.value : ''}
+                        onChange={({ selected }) => field.onChange(selected ?? '')}
+                        dataTest="prediction-setup-alert-policy-select"
+                    >
+                        {alertPolicies?.map(policy => (
+                            <SingleSelectOption key={policy.id} value={String(policy.id)} label={policy.name} />
+                        ))}
+                    </SingleSelectField>
+                )}
+            />
+            {onCreateSignalPolicy && (
+                <div className={styles.signalPolicyAction}>
+                    <Button small onClick={onCreateSignalPolicy} dataTest="prediction-setup-new-signal-policy">
+                        {i18n.t('New signal policy')}
+                    </Button>
+                </div>
+            )}
+        </>
+    );
+};
+
+/** The DHIS2 data elements that prediction outputs are imported into by default. */
+export const ImportMappingFields = ({ form: { control, setValue, clearErrors, getValues, formState: { errors } } }: FieldProps) => {
+    const [importMappingIsEnabled, setImportMappingIsEnabled] = useState(() => getValues('use_import_mapping'));
+
+    const toggleImportMapping = () => {
+        const nextIsEnabled = !importMappingIsEnabled;
+        setImportMappingIsEnabled(nextIsEnabled);
+        setValue('use_import_mapping', nextIsEnabled, { shouldDirty: true });
+
+        if (!nextIsEnabled) {
+            clearErrors([...QUANTILE_KEYS, ALERT_KEY]);
+        }
+    };
+
+    const handleImportMappingKeyDown = (event: KeyboardEvent) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            toggleImportMapping();
+        }
+    };
+
+    const handleSwitchClick = (event: MouseEvent) => {
+        event.stopPropagation();
+    };
+
+    return (
+        <>
+            <div
+                className={styles.mappingToggle}
+                onClick={toggleImportMapping}
+                onKeyDown={handleImportMappingKeyDown}
+                role="button"
+                tabIndex={0}
+            >
+                <div className={styles.mappingToggleText}>
+                    <span className={styles.mappingToggleTitle}>
+                        {i18n.t('Set default import mapping')}
+                    </span>
+                    <span className={styles.mappingToggleDescription}>
+                        {i18n.t('Choose the DHIS2 data elements to use by default when prediction outputs are imported.')}
+                    </span>
+                </div>
+                <span onClick={handleSwitchClick}>
+                    <Switch
+                        checked={importMappingIsEnabled}
+                        onChange={toggleImportMapping}
+                    />
+                </span>
+            </div>
+            <AnimatePresence initial={false}>
+                {importMappingIsEnabled && (
+                    <motion.div
+                        className={styles.quantileGrid}
+                        initial={{ height: 0, opacity: 0, y: -4 }}
+                        animate={{ height: 'auto', opacity: 1, y: 0 }}
+                        exit={{ height: 0, opacity: 0, y: -4 }}
+                        transition={{ duration: 0.18, ease: 'easeOut' }}
+                    >
+                        {quantileFields.map(({ name, label }) => (
+                            <Controller
+                                key={name}
+                                name={name}
+                                control={control}
+                                render={({ field }) => (
+                                    <DataItemSelect
+                                        label={label}
+                                        value={field.value}
+                                        onChange={field.onChange}
+                                        error={errors[name]?.message}
+                                        dataElementsOnly
+                                        suggestedKeyword={QUANTILE_SUGGESTED_KEYWORDS[name]}
+                                    />
+                                )}
+                            />
+                        ))}
+                        <Controller
+                            name="outbreak_indicator"
+                            control={control}
+                            render={({ field }) => (
+                                <DataItemSelect
+                                    label={i18n.t('Outbreak indicator')}
+                                    value={field.value}
+                                    onChange={field.onChange}
+                                    error={errors.outbreak_indicator?.message}
+                                    dataElementsOnly
+                                />
+                            )}
+                        />
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </>
+    );
+};
+
+/** The name, signal policy and DHIS2 import mapping of a prediction setup. */
+export const PredictionSetupFields = ({ form }: FieldProps) => (
+    <div className={styles.content}>
+        <SetupNameField form={form} />
+        <SignalPolicyField form={form} />
+        <NoticeBox
+            className={styles.configurationNotice}
+        >
+            {i18n.t('You can change this configuration at any point.')}
+        </NoticeBox>
+
+        <section className={styles.section}>
+            <ImportMappingFields form={form} />
+        </section>
+    </div>
+);
