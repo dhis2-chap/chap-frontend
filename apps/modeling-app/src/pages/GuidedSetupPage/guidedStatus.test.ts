@@ -17,23 +17,23 @@ describe('getGuidedSetupSummary', () => {
         expect(getGuidedSetupSummary(dataset, [], [], 2)).toMatchObject({ stage: 'evaluating', step: 'evaluate' });
     });
 
-    it('is ready to promote when the newest evaluation has results but nothing is promoted', () => {
+    it('is ready for a model to be chosen when the newest evaluation has results but none is in use', () => {
         const summary = getGuidedSetupSummary(dataset, [specification(3), specification(5)], [run(10, 5), run(11, 3), run(12, 6, 7, 2)], 0);
-        expect(summary).toMatchObject({ stage: 'readyToPromote', step: 'promote' });
+        expect(summary).toMatchObject({ stage: 'readyToChoose', step: 'model' });
         expect(summary.runs.map(item => item.id)).toEqual([10]);
     });
 
-    it('stays promoted when the data is evaluated again with other settings', () => {
+    it('stays in use when the data is evaluated again with other settings', () => {
         const summary = getGuidedSetupSummary(dataset, [specification(3), specification(5)], [run(10, 5), run(11, 3, 7)], 0);
-        expect(summary).toMatchObject({ stage: 'promoted', step: 'predict' });
+        expect(summary).toMatchObject({ stage: 'inUse', step: 'predict' });
         expect(summary.runs.map(item => item.id)).toEqual([10]);
-        expect(summary.promotedRuns.map(item => item.id)).toEqual([11]);
+        expect(summary.chosenRuns.map(item => item.id)).toEqual([11]);
     });
 
-    it('is promoted once a model of the newest evaluation is promoted', () => {
+    it('is in use once a model of the newest evaluation is chosen', () => {
         const summary = getGuidedSetupSummary(dataset, [specification(5), specification(6, 2)], [run(10, 5), run(12, 5, 4)], 0);
-        expect(summary).toMatchObject({ stage: 'promoted', step: 'predict' });
-        expect(summary.promotedRuns.map(item => item.id)).toEqual([12]);
+        expect(summary).toMatchObject({ stage: 'inUse', step: 'predict' });
+        expect(summary.chosenRuns.map(item => item.id)).toEqual([12]);
     });
 });
 

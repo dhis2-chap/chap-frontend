@@ -21,9 +21,12 @@ type Props = {
     evaluatedIds?: number[];
     /** Leaves the chosen models to the page, which lists them its own way. */
     hideSelection?: boolean;
+    /** What is being chosen, where the page offers something more specific than models. */
+    label?: string;
+    selectLabel?: string;
 };
 
-export const ModelsSelector = ({ models, selectedModels, disabled, disabledReason, openOnMount, onCancel, onChange, evaluatedIds, hideSelection }: Props) => {
+export const ModelsSelector = ({ models, selectedModels, disabled, disabledReason, openOnMount, onCancel, onChange, evaluatedIds, hideSelection, label, selectLabel }: Props) => {
     const [isModalOpen, setIsModalOpen] = useState(() => !!openOnMount && models.length > 0 && !disabledReason && !disabled);
     const confirmed = useRef(false);
     const [infoModel, setInfoModel] = useState<ModelSpecRead>();
@@ -36,13 +39,13 @@ export const ModelsSelector = ({ models, selectedModels, disabled, disabledReaso
             onClick={() => setIsModalOpen(true)}
             dataTest="evaluation-model-select-button"
         >
-            {i18n.t('Select models')}
+            {selectLabel ?? i18n.t('Select models')}
         </Button>
     );
 
     return (
         <div className={styles.container}>
-            <Label>{i18n.t('Models')}</Label>
+            <Label>{label ?? i18n.t('Models')}</Label>
             {hideSelection ? null : selectedModels.length ? (
                 <div className={styles.chips}>
                     {selectedModels.map(model => (

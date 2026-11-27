@@ -9,7 +9,7 @@ import styles from './GuidedSetupPage.module.css';
 export const PredictPage = () => {
     const navigate = useNavigate();
     const { predictionSetupIds, pathTo } = useGuided();
-    // A dataset usually has one promoted model; the newest wins when there are several.
+    // A dataset usually has one model in use; the newest wins when there are several.
     const [predictionSetupId] = predictionSetupIds;
 
     return (
@@ -18,7 +18,7 @@ export const PredictPage = () => {
                 <div>
                     <h3 className={styles.title}>{i18n.t('Run and review predictions')}</h3>
                     <p className={styles.description}>
-                        {i18n.t('Run a prediction, review the signals it raises, and import the result into DHIS2. The monitoring chart shows whether the model keeps beating the baseline as real numbers come in.')}
+                        {i18n.t('Run a prediction, review the signals it raises, and import the result into DHIS2. Each prediction trains the configured model you chose on your newest data, and that trained model makes the forecast. The monitoring chart shows whether it keeps beating the baseline as real numbers come in.')}
                     </p>
                 </div>
                 <span className={styles.nowrap}>
@@ -28,7 +28,7 @@ export const PredictPage = () => {
                 </span>
             </div>
             <ConfiguredModelDashboard predictionSetupId={String(predictionSetupId)} returnTo={pathTo('predict')} essentialsOnly />
-            <StepNav back={pathTo('promote')} />
+            <StepNav back={pathTo('model')} />
         </>
     );
 };

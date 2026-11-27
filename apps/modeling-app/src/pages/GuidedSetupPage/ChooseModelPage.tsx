@@ -13,6 +13,7 @@ import { ChapErrorNotice } from '../../components/ChapErrorNotice';
 import { getDefaultMetricIds } from '../../components/PageContent/EvaluationDetails/EvaluationMetricsWidget/metricCatalog';
 import { useCreatePredictionSetup } from '../../components/PageContent/EvaluationDetails/QuickActionsWidget/hooks/useCreatePredictionSetup';
 import { ImportMappingFields, SetupNameField, SignalPolicyField, usePredictionSetupForm } from '../../components/PredictionSetup/MarkReadyForForecastingModal';
+import { SelectionBiasSummary } from '../../components/SelectionBias/SelectionBiasSummary';
 import { useAlertPolicies } from '../../hooks/useAlertPolicies';
 import { BACKTESTS_LIST_QUERY_KEY } from '../../hooks/useBacktests';
 import { useAlertPolicyDisplay } from '../../hooks/useAlertPolicyDisplay';
@@ -37,11 +38,11 @@ const PolicyLevels = ({ policy }: { policy: AlertPolicyRead }) => {
     );
 };
 
-export const PromotePage = () => {
+export const ChooseModelPage = () => {
     const navigate = useNavigate();
     const queryClient = useQueryClient();
     const [searchParams, setSearchParams] = useSearchParams();
-    const { dataset, specification, runs, promotedRuns, pathTo } = useGuided();
+    const { dataset, specification, runs, chosenRuns, pathTo } = useGuided();
     const [isCreatingPolicy, setIsCreatingPolicy] = useState(false);
     const form = usePredictionSetupForm({ name: dataset?.name });
     const { createPredictionSetup, isCreating, error } = useCreatePredictionSetup();
@@ -63,7 +64,7 @@ export const PromotePage = () => {
     const rankedRuns = [...runs].sort((a, b) => getRank(a) - getRank(b));
     const bestRunIds = runs.length > 1 ? getBestRunIds(runs, metric) : new Set<number>();
     const selectedRun = runs.find(run => String(run.id) === searchParams.get('evaluationId') && run.predictionSetupId == null);
-    // A model chosen on the evaluation step is the only one in view; without a choice, all of them are offered.
+    // The chosen model is the only one in view; without a choice, all of them are offered.
     const visibleRuns = selectedRun ? [selectedRun] : rankedRuns;
     const chooseAnother = () => setSearchParams((previous) => {
         const next = new URLSearchParams(previous);
@@ -71,11 +72,12 @@ export const PromotePage = () => {
         return next;
     }, { replace: true });
 
-    const promote = form.handleSubmit(async (values) => {
+    const confirm = form.handleSubmit(async (values) => {
+        if (!selectedRun) return;
         try {
             await createPredictionSetup({
                 data: {
-                    backtestId: selectedRun!.id,
+                    backtestId: selectedRun.id,
                     name: values.name,
                     quantileTargets: buildQuantileTargetsFromForm(values),
                     alertPolicyId: values.alert_policy_id ? Number(values.alert_policy_id) : null,
@@ -85,7 +87,7 @@ export const PromotePage = () => {
             // The error is shown below the form.
             return;
         }
-        // The next step opens once the evaluation says which model is promoted.
+        // The next step opens once the evaluation says which model is in use.
         await Promise.all([
             queryClient.invalidateQueries({ queryKey: ['backtest-specifications'] }),
             queryClient.invalidateQueries({ queryKey: [BACKTESTS_LIST_QUERY_KEY] }),
@@ -95,47 +97,51 @@ export const PromotePage = () => {
 
     return (
         <>
-            {promotedRuns.length > 0 && (
-                <NoticeBox valid title={i18n.t('Promoted{{colon}} {{models}}', { colon: ':', models: promotedRuns.map(getRunModelName).join(', ') })}>
+            {chosenRuns.length > 0 && (
+                <NoticeBox valid title={i18n.t('In use{{colon}} {{models}}', { colon: ':', models: chosenRuns.map(getRunModelName).join(', ') })}>
                     <Link className={styles.link} to={pathTo('predict')}>{i18n.t('Go to predictions')}</Link>
                 </NoticeBox>
             )}
-            <form className={styles.form} onSubmit={promote} noValidate>
+            <form className={styles.form} onSubmit={confirm} noValidate>
                 <Card className={styles.card}>
                     <div className={styles.sectionHeader}>
                         <div>
-                            <h3 className={styles.title}>{selectedRun ? i18n.t('The model to promote') : i18n.t('Choose the model to promote')}</h3>
+                            <h3 className={styles.title}>{selectedRun ? i18n.t('The configured model to use') : i18n.t('Choose the configured model to use')}</h3>
                             <p className={styles.description}>
-                                {i18n.t('Promoting a model makes it the one that produces your predictions. Nothing runs until you start a prediction.')}
+                                {i18n.t('Each row is a configured model you evaluated. The one you choose makes your predictions. Every prediction trains it on your newest data, and that trained model makes the forecast. Nothing runs until you start a prediction.')}
                             </p>
                         </div>
-                        {selectedRun && runs.length > 1 && (
-                            <span className={styles.nowrap}>
-                                <Button small onClick={chooseAnother} disabled={isCreating} dataTest="guided-promote-choose-another">
+                        <div className={styles.actions}>
+                            {selectedRun && runs.length > 1 && (
+                                <Button small onClick={chooseAnother} disabled={isCreating} dataTest="guided-choose-another">
                                     {i18n.t('Choose another model')}
                                 </Button>
-                            </span>
-                        )}
+                            )}
+                            {/* The models to choose between come from the step before. */}
+                            <Button small onClick={() => navigate(pathTo('evaluate'))} disabled={isCreating} dataTest="guided-evaluate-more">
+                                {i18n.t('Evaluate more modeling packages')}
+                            </Button>
+                        </div>
                     </div>
                     <ul className={styles.list}>
                         {visibleRuns.map((run) => {
                             const score = getScore(run);
-                            const isPromoted = run.predictionSetupId != null;
+                            const isInUse = run.predictionSetupId != null;
                             const { baseline, value: improvement } = specification ? getBaselineComparison(specification, run, metric) : { baseline: undefined, value: undefined };
                             return (
                                 <li key={run.id} className={styles.listItem}>
                                     <div className={styles.modelRow}>
                                         <Radio
-                                            name="guided-promote-model"
+                                            name="guided-choose-model"
                                             value={String(run.id)}
                                             checked={selectedRun?.id === run.id}
-                                            disabled={isPromoted || isCreating}
+                                            disabled={isInUse || isCreating}
                                             onChange={() => setSearchParams((previous) => {
                                                 const next = new URLSearchParams(previous);
                                                 next.set('evaluationId', String(run.id));
                                                 return next;
                                             }, { replace: true })}
-                                            dataTest={`guided-promote-model-${run.id}`}
+                                            dataTest={`guided-choose-model-${run.id}`}
                                             label={(
                                                 <span className={styles.itemLabel}>
                                                     <span className={styles.itemName}>{getRunModelName(run)}</span>
@@ -156,7 +162,7 @@ export const PromotePage = () => {
                                                 </span>
                                             )}
                                             {metric && bestRunIds.has(run.id) && <Tag>{i18n.t('Best {{metric}}', { metric: metric.displayName })}</Tag>}
-                                            {isPromoted && <Tag positive>{i18n.t('Promoted')}</Tag>}
+                                            {isInUse && <Tag positive>{i18n.t('In use')}</Tag>}
                                             <Link className={styles.link} to={`/evaluate/${run.id}`}>{i18n.t('View evaluation')}</Link>
                                         </div>
                                     </div>
@@ -164,13 +170,24 @@ export const PromotePage = () => {
                             );
                         })}
                     </ul>
+                    {/* About the best of the evaluated models, whichever one is chosen. */}
+                    {specification && (
+                        <SelectionBiasSummary
+                            specification={specification}
+                            metric={metric}
+                            getModelName={(backtestId) => {
+                                const run = runs.find(item => item.id === backtestId);
+                                return run && getRunModelName(run);
+                            }}
+                        />
+                    )}
                 </Card>
                 {specification && selectedRun && (
                     <Card className={styles.card}>
                         <div>
                             <h3 className={styles.title}>{i18n.t('Is it good enough?')}</h3>
                             <p className={styles.description}>
-                                {i18n.t('Two checks and a look at the forecasts of {{model}}. They describe the past; the next step keeps checking the model once it is in use.', { model: getRunModelName(selectedRun) })}
+                                {i18n.t('A few checks and a look at the forecasts of {{model}}. They describe the past; the next step keeps checking the model once it is in use.', { model: getRunModelName(selectedRun) })}
                             </p>
                         </div>
                         <ModelTrustCheck key={selectedRun.id} specification={specification} run={selectedRun} metric={metric} />
@@ -200,27 +217,32 @@ export const PromotePage = () => {
                 </Card>
                 <Card className={styles.card}>
                     <div>
-                        <h3 className={styles.title}>{i18n.t('Name and promote')}</h3>
+                        <h3 className={styles.title}>{i18n.t('Name')}</h3>
                         <p className={styles.description}>{i18n.t('You can change the name, the signal policy and the DHIS2 output later.')}</p>
                     </div>
                     <div className={styles.field}>
                         <SetupNameField form={form} />
                     </div>
-                    {error && <ChapErrorNotice error={error} title={i18n.t('Could not promote the model')} />}
-                    <div className={styles.row}>
-                        <Button primary type="submit" loading={isCreating} disabled={!selectedRun || isCreating} dataTest="guided-promote-submit">
-                            {i18n.t('Promote model')}
-                        </Button>
-                        {!selectedRun && <span className={styles.muted}>{i18n.t('Choose a model first')}</span>}
-                    </div>
                 </Card>
+                {error && <ChapErrorNotice error={error} title={i18n.t('Could not set up predictions with the model')} />}
+                {!selectedRun && chosenRuns.length > 0 ? (
+                    // A model is in use and no other one is chosen, so there is nothing to confirm.
+                    <StepNav back={pathTo('evaluate')} next={pathTo('predict')} nextLabel={i18n.t('Continue to predictions')} />
+                ) : (
+                    // The button confirms everything on the step, so it sits below all of it and says so.
+                    <StepNav
+                        back={pathTo('evaluate')}
+                        actionNote={selectedRun
+                            ? i18n.t('{{model}}, with the signals, DHIS2 output and name above', { model: getRunModelName(selectedRun) })
+                            : i18n.t('Choose a model first')}
+                        action={(
+                            <Button primary type="submit" loading={isCreating} disabled={!selectedRun || isCreating} dataTest="guided-choose-submit">
+                                {i18n.t('Use this model for predictions')}
+                            </Button>
+                        )}
+                    />
+                )}
             </form>
-            <StepNav
-                back={pathTo('evaluate')}
-                next={pathTo('predict')}
-                nextLabel={i18n.t('Continue to predictions')}
-                blockedReason={promotedRuns.length ? undefined : i18n.t('Promote a model first')}
-            />
             {isCreatingPolicy && <CreateAlertPolicyModal onClose={() => setIsCreatingPolicy(false)} />}
         </>
     );

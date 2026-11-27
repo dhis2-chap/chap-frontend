@@ -66,8 +66,8 @@ export const getBaselineComparison = (specification: BacktestSpecificationRead, 
 };
 
 /**
- * Two questions that say whether a model is worth promoting, and a look at its forecasts.
- * They are the checks the evaluation guides teach: beat a simple baseline, and be right about how sure you are.
+ * The questions that say whether a model is worth using, and a look at its forecasts.
+ * They are the checks the evaluation guides teach: beat a simple baseline and be right about how sure you are.
  */
 export const ModelTrustCheck = ({ specification, run, metric }: Props) => {
     const { baseline, value: improvement } = getBaselineComparison(specification, run, metric);

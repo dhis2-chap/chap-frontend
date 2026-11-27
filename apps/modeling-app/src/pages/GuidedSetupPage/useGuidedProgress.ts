@@ -5,16 +5,18 @@ import { useOutletContext, useSearchParams } from 'react-router-dom';
 import { useBacktests } from '../../hooks/useBacktests';
 import { useDatasets } from '../../hooks/useDatasets';
 import { Features, useIsFeatureAvailable } from '../../hooks/useIsFeatureAvailable';
+import { getConfiguredModelName, isTunedConfiguration } from '../../utils/configuredModelName';
 import { sortByCreatedDesc } from '../../utils/sortByCreated';
 import { getJobModelName, requestMatchesSpecification } from '../BenchmarksPage/benchmarkUtils';
 import { useBacktestSpecification, useBacktestSpecifications } from '../BenchmarksPage/useBacktestSpecification';
 import { useFailedBenchmarkJobs, useRunningBenchmarkJobs } from '../BenchmarksPage/useRunningBenchmarkJobs';
 
-export const GUIDED_STEPS = ['data', 'evaluate', 'promote', 'predict'] as const;
+export const GUIDED_STEPS = ['data', 'evaluate', 'model', 'predict'] as const;
 export type GuidedStep = typeof GUIDED_STEPS[number];
 
+/** The configured model of a run: its modeling package and, unless it runs the defaults, its configuration. */
 export const getRunModelName = (run: BacktestRead) => (
-    run.configuredModel?.modelTemplate?.displayName || run.configuredModel?.name || run.modelId
+    run.configuredModel ? getConfiguredModelName(run.configuredModel, run.configuredModel.modelTemplate?.displayName) : run.modelId
 );
 
 const isSaved = (dataset: DataSetInfo): dataset is DataSetInfo & { id: number } => dataset.id != null;
@@ -61,14 +63,19 @@ export const useGuidedProgress = () => {
 
     const runs = specification?.backtests ?? [];
     // A model that failed and has no results in the setup; trying it again and succeeding clears it.
-    const failedRuns = failedJobs.filter(({ job }) => !runs.some(run => (
-        job.model_id != null ? run.configuredModel?.id === job.model_id : run.modelId === getJobModelName(job.name)
-    )));
-    // A model promoted from an earlier evaluation keeps predicting when the data is evaluated again.
-    // The newest evaluation is read as well, since the list of all runs can lag behind a promotion.
-    const promotedRuns = [...runs, ...(backtests ?? []).filter(run => run.datasetId === dataset?.id && !runs.some(item => item.id === run.id))]
+    // Tuning makes a configured model of its own each time, so a tuned model of the package that finished later clears a failed tuning.
+    const failedRuns = failedJobs.filter(({ job, request }) => !runs.some((run) => {
+        if (request.modelTemplateId != null) {
+            return run.configuredModel?.modelTemplate?.id === request.modelTemplateId && isTunedConfiguration(run.configuredModel) &&
+                (run.created ?? '') >= (job.end_time ?? job.start_time ?? '');
+        }
+        return job.model_id != null ? run.configuredModel?.id === job.model_id : run.modelId === getJobModelName(job.name);
+    }));
+    // A model chosen from an earlier evaluation keeps predicting when the data is evaluated again.
+    // The newest evaluation is read as well, since the list of all runs can lag behind the choice.
+    const chosenRuns = [...runs, ...(backtests ?? []).filter(run => run.datasetId === dataset?.id && !runs.some(item => item.id === run.id))]
         .filter(run => run.predictionSetupId != null);
-    const predictionSetupIds = [...new Set(promotedRuns.map(run => run.predictionSetupId!))].sort((a, b) => b - a);
+    const predictionSetupIds = [...new Set(chosenRuns.map(run => run.predictionSetupId!))].sort((a, b) => b - a);
     const selectedId = dataset?.id;
     // The chosen evaluation stays chosen between the steps of the same data.
     const newestSpecificationId = datasetSpecifications[0]?.id;
@@ -85,12 +92,14 @@ export const useGuidedProgress = () => {
         return next;
     }, { replace: true }), [setSearchParams, newestSpecificationId]);
     // The furthest step that can be worked on.
-    const current: GuidedStep = !dataset ? 'data' : predictionSetupIds.length ? 'predict' : runs.length ? 'promote' : 'evaluate';
+    const current: GuidedStep = !dataset ? 'data' : predictionSetupIds.length ? 'predict' : runs.length ? 'model' : 'evaluate';
 
     return {
         isAvailable,
         isVersionLoading,
-        isLoading: isVersionLoading || datasets.isLoading || specifications.isInitialLoading || isBacktestsLoading || (!!latest && !specification),
+        isLoading: isVersionLoading || datasets.isLoading || specifications.isInitialLoading || isBacktestsLoading,
+        // The evaluation of the data in view is still being read. The steps after the first one are not known until it is.
+        isSpecificationLoading: !!latest && !specification,
         error: datasets.error ?? specifications.error ?? details.error ?? backtestsError,
         importedDatasets,
         dataset,
@@ -101,7 +110,7 @@ export const useGuidedProgress = () => {
         runs,
         runningJobs,
         failedRuns,
-        promotedRuns,
+        chosenRuns,
         predictionSetupIds,
         current,
         pathTo,

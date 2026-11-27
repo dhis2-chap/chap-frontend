@@ -11,10 +11,10 @@ import styles from './GuidedSetupPage.module.css';
 
 const StageTag = ({ setup }: { setup: GuidedSetupSummary }) => {
     switch (setup.stage) {
-        case 'promoted':
+        case 'inUse':
             return <Tag positive>{i18n.t('Predicting')}</Tag>;
-        case 'readyToPromote':
-            return <Tag neutral>{i18n.t('Ready to promote')}</Tag>;
+        case 'readyToChoose':
+            return <Tag neutral>{i18n.t('Ready to choose a model')}</Tag>;
         case 'evaluating':
             return <Tag>{i18n.t('Evaluating')}</Tag>;
         default:
@@ -22,15 +22,15 @@ const StageTag = ({ setup }: { setup: GuidedSetupSummary }) => {
     }
 };
 
-const getStageSummary = ({ stage, runs, promotedRuns, runningCount }: GuidedSetupSummary) => {
+const getStageSummary = ({ stage, runs, chosenRuns, runningCount }: GuidedSetupSummary) => {
     switch (stage) {
-        case 'promoted':
-            return i18n.t('Predictions from {{models}}', { models: promotedRuns.map(getRunModelName).join(', ') });
-        case 'readyToPromote':
-            return i18n.t('{{count}} models evaluated, none promoted', {
+        case 'inUse':
+            return i18n.t('Predictions from {{models}}', { models: chosenRuns.map(getRunModelName).join(', ') });
+        case 'readyToChoose':
+            return i18n.t('{{count}} models evaluated, none in use', {
                 count: runs.length,
-                defaultValue: '{{count}} model evaluated, none promoted',
-                defaultValue_plural: '{{count}} models evaluated, none promoted',
+                defaultValue: '{{count}} model evaluated, none in use',
+                defaultValue_plural: '{{count}} models evaluated, none in use',
             });
         case 'evaluating':
             return i18n.t('{{count}} models running', { count: runningCount, defaultValue: '{{count}} model running', defaultValue_plural: '{{count}} models running' });

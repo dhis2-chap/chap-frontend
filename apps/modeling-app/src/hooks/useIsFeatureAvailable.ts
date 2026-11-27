@@ -24,6 +24,10 @@ export const FEATURE_MIN_VERSIONS = {
     outbreakMetrics: '2.6.0',
     // Chap compares prediction setups with a baseline model from 2.6.0.
     predictionMonitoring: '2.6.0',
+    // Chap tunes the hyperparameters of a modeling package from 2.9.0.
+    hyperparameterTuning: '2.9.0',
+    // Chap estimates how much of the best model's lead is luck from 2.9.0.
+    selectionBias: '2.9.0',
 } as const;
 
 /**
@@ -44,6 +48,8 @@ export const Features = {
     DATASET_OBSERVATION_COLUMNS: 'datasetObservationColumns',
     OUTBREAK_METRICS: 'outbreakMetrics',
     PREDICTION_MONITORING: 'predictionMonitoring',
+    HYPERPARAMETER_TUNING: 'hyperparameterTuning',
+    SELECTION_BIAS: 'selectionBias',
 } as const;
 
 export type Feature = keyof typeof FEATURE_MIN_VERSIONS;

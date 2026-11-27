@@ -14,7 +14,7 @@ export const getCoverageStatus = (coverage: number, target: number): Status => {
     return shortfall <= COVERAGE_PASS_MARGIN ? 'good' : shortfall <= COVERAGE_FAIL_MARGIN ? 'caution' : 'bad';
 };
 
-export type GuidedStage = 'notEvaluated' | 'evaluating' | 'readyToPromote' | 'promoted';
+export type GuidedStage = 'notEvaluated' | 'evaluating' | 'readyToChoose' | 'inUse';
 
 export type GuidedSetupSummary = {
     dataset: DataSetInfo & { id: number };
@@ -22,13 +22,13 @@ export type GuidedSetupSummary = {
     /** The step Continue opens. */
     step: GuidedStep;
     runs: BacktestRead[];
-    promotedRuns: BacktestRead[];
+    chosenRuns: BacktestRead[];
     runningCount: number;
 };
 
 /**
  * Where each imported dataset is on the way to predictions. It reads the same things as the
- * steps do: the newest evaluation of the data, its models and which of them is promoted.
+ * steps do: the newest evaluation of the data, its models and which of them is in use.
  */
 export const getGuidedSetupSummary = (
     dataset: DataSetInfo & { id: number },
@@ -38,11 +38,11 @@ export const getGuidedSetupSummary = (
 ): GuidedSetupSummary => {
     const latest = specifications.filter(item => item.dataset.id === dataset.id).sort((a, b) => b.id - a.id)[0];
     const runs = latest ? backtests.filter(run => run.specificationId === latest.id) : [];
-    // A model promoted from an earlier evaluation keeps predicting when the data is evaluated again.
-    const promotedRuns = backtests.filter(run => run.datasetId === dataset.id && run.predictionSetupId != null);
-    const stage: GuidedStage = promotedRuns.length
-        ? 'promoted'
-        : runs.length ? 'readyToPromote' : runningCount ? 'evaluating' : 'notEvaluated';
-    const step: GuidedStep = stage === 'promoted' ? 'predict' : stage === 'readyToPromote' ? 'promote' : 'evaluate';
-    return { dataset, stage, step, runs, promotedRuns, runningCount };
+    // A model chosen from an earlier evaluation keeps predicting when the data is evaluated again.
+    const chosenRuns = backtests.filter(run => run.datasetId === dataset.id && run.predictionSetupId != null);
+    const stage: GuidedStage = chosenRuns.length
+        ? 'inUse'
+        : runs.length ? 'readyToChoose' : runningCount ? 'evaluating' : 'notEvaluated';
+    const step: GuidedStep = stage === 'inUse' ? 'predict' : stage === 'readyToChoose' ? 'model' : 'evaluate';
+    return { dataset, stage, step, runs, chosenRuns, runningCount };
 };

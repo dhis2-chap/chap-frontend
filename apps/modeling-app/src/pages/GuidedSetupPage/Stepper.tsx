@@ -11,7 +11,7 @@ type Props = {
 };
 
 export const Stepper = ({ progress, active }: Props) => {
-    const { dataset, runs, runningJobs, promotedRuns, current, pathTo } = progress;
+    const { dataset, runs, runningJobs, chosenRuns, current, pathTo } = progress;
     const steps: { id: GuidedStep; title: string; summary?: string; isDone: boolean }[] = [
         { id: 'data', title: i18n.t('Data'), summary: dataset?.name, isDone: !!dataset },
         {
@@ -24,10 +24,10 @@ export const Stepper = ({ progress, active }: Props) => {
             isDone: runs.length > 0,
         },
         {
-            id: 'promote',
-            title: i18n.t('Promote'),
-            summary: promotedRuns.map(getRunModelName).join(', '),
-            isDone: promotedRuns.length > 0,
+            id: 'model',
+            title: i18n.t('Choose model'),
+            summary: chosenRuns.map(getRunModelName).join(', '),
+            isDone: chosenRuns.length > 0,
         },
         { id: 'predict', title: i18n.t('Predict'), isDone: false },
     ];

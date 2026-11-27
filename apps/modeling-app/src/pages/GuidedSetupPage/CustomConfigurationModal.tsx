@@ -10,10 +10,10 @@ type Props = {
     onClose: () => void;
 };
 
-/** Makes a configured model with hyperparameters of the user's own, without leaving the evaluation step. */
+/** Makes a configured model with a configuration of the user's own, without leaving the evaluation step. */
 export const CustomConfigurationModal = ({ modelTemplates, templateId, onCreated, onClose }: Props) => (
     <Modal large onClose={onClose}>
-        <ModalTitle>{i18n.t('Set your own hyperparameters')}</ModalTitle>
+        <ModalTitle>{i18n.t('Set your own configuration')}</ModalTitle>
         <ModalContent>
             <NewModelFormContainer
                 modelTemplates={modelTemplates}

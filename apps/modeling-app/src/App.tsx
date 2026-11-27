@@ -27,7 +27,7 @@ import { DashboardPage } from './pages/DashboardPage';
 import { GuidedSetupLayout } from './pages/GuidedSetupPage/GuidedSetupLayout';
 import { DataPage } from './pages/GuidedSetupPage/DataPage';
 import { EvaluatePage } from './pages/GuidedSetupPage/EvaluatePage';
-import { PromotePage } from './pages/GuidedSetupPage/PromotePage';
+import { ChooseModelPage } from './pages/GuidedSetupPage/ChooseModelPage';
 import { PredictPage } from './pages/GuidedSetupPage/PredictPage';
 import { BenchmarksPage } from './pages/BenchmarksPage/BenchmarksPage';
 import { NewBenchmarkPage } from './pages/BenchmarksPage/NewBenchmarkPage';
@@ -115,7 +115,7 @@ const router = createHashRouter([
                             { index: true },
                             { path: 'data', element: <DataPage /> },
                             { path: 'evaluate', element: <EvaluatePage /> },
-                            { path: 'promote', element: <PromotePage /> },
+                            { path: 'model', element: <ChooseModelPage /> },
                             { path: 'predict', element: <PredictPage /> },
                         ],
                     },

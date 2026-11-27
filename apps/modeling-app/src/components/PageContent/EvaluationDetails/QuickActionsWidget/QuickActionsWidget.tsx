@@ -49,7 +49,7 @@ export const QuickActionsWidget = ({
     const handleContinueInGuidedSetup = () => {
         navigate(predictionSetupId
             ? `/guided/predict?datasetId=${datasetId}`
-            : `/guided/promote?datasetId=${datasetId}&evaluationId=${evaluationId}`);
+            : `/guided/model?datasetId=${datasetId}&evaluationId=${evaluationId}`);
     };
 
     const handlePredict = () => {

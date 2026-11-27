@@ -3,7 +3,7 @@ import i18n from '@dhis2/d2-i18n';
 import { Button, CircularLoader, NoticeBox, Radio, Tag } from '@dhis2/ui';
 import { ApiError, BacktestSpecificationSummary, BacktestsService, Card, LeaderboardBacktestRead, MakeBacktestsRequest, ModelSpecRead, ModelTemplateRole } from '@dhis2-chap/ui';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { ChapErrorNotice } from '../../components/ChapErrorNotice';
 import { ModelHealthNotice } from '../../components/ModelHealth/ModelHealth';
 import { sortByReadiness } from '../../components/ModelExecutionForm/Sections/ModelSelector/ModelSelectionModal/ModelSelectionModal';
@@ -15,8 +15,10 @@ import { useForecastHorizonValidation } from '../../components/NewEvaluationForm
 import { ModelsSelector } from '../../components/NewEvaluationForm/DatasetEvaluationForm/ModelsSelector/ModelsSelector';
 import { fetchRunnableModel } from '../../hooks/modelsQuery';
 import { useBacktestParameters } from '../../hooks/useBacktestParameters';
+import { Features, useIsFeatureAvailable } from '../../hooks/useIsFeatureAvailable';
 import { useModels } from '../../hooks/useModels';
 import { useModelTemplates } from '../../hooks/useModelTemplates';
+import { getTemplateName } from '../../utils/configuredModelName';
 import { hasRevisionMismatch } from '../../utils/modelHealth';
 import { countPeriods } from '../../utils/periods';
 import { BenchmarkRunsIndicator } from '../BenchmarksPage/BenchmarkRunsIndicator';
@@ -26,17 +28,20 @@ import { SpecificationParameters } from '../BenchmarksPage/SpecificationParamete
 import { CustomConfigurationModal } from './CustomConfigurationModal';
 import { EvaluationSettingsForm } from './EvaluationSettingsForm';
 import { FailedRunsNotice } from './FailedRunsNotice';
-import { getTemplateName, type ModelChoice, ModelConfigurations } from './ModelConfigurations';
+import { type ConfigurationChoice, DEFAULT_TRIALS, type ModelChoice, ModelConfigurations, TUNE } from './ModelConfigurations';
 import { StepNav } from './StepNav';
 import { useGuided } from './useGuidedProgress';
 import styles from './GuidedSetupPage.module.css';
 
-/** The configurations of each model, in the order of their first one. */
+/** The configured models of each modeling package, in the order of their first one. */
 const groupByTemplate = (models: ModelSpecRead[]) => {
     const groups = new Map<string, ModelSpecRead[]>();
     models.forEach(model => groups.set(getTemplateName(model), [...(groups.get(getTemplateName(model)) ?? []), model]));
     return groups;
 };
+
+/** The configured model that runs a modeling package as it comes, or the first one where it has none. */
+const getDefaultModel = (models: ModelSpecRead[]): ModelSpecRead | undefined => models.find(model => !model.name.includes(':')) ?? models[0];
 
 const PARAMETER_KEYS = ['nPeriods', 'nSplits', 'stride', 'nRetrain', 'futureWeatherProvider'] as const;
 
@@ -59,14 +64,16 @@ const countModels = (item: BacktestSpecificationSummary) => (
 );
 
 export const EvaluatePage = () => {
-    const navigate = useNavigate();
     const queryClient = useQueryClient();
     const { dataset, specification, datasetSpecifications, selectSpecification, runs, runningJobs, failedRuns, pathTo } = useGuided();
     const { models, isLoading, error } = useModels();
     const { modelTemplates } = useModelTemplates();
     const defaults = useBacktestParameters(dataset?.periodType);
-    // The configuration to evaluate for each chosen model, by template name.
-    const [choices, setChoices] = useState<Record<string, number>>({});
+    const { isAvailable: canTune } = useIsFeatureAvailable(Features.HYPERPARAMETER_TUNING);
+    // What to evaluate for each chosen modeling package, by its name: one of its configured models, or tuning.
+    const [choices, setChoices] = useState<Record<string, ConfigurationChoice>>({});
+    // How many configurations to try for the modeling packages that are tuned.
+    const [trials, setTrials] = useState<Record<string, number>>({});
     // Settings the user changed on this step, and the ones being edited.
     const [editedParameters, setEditedParameters] = useState<BacktestParameters>();
     const [settingsDraft, setSettingsDraft] = useState<BacktestParameters>();
@@ -90,20 +97,36 @@ export const EvaluatePage = () => {
     const evaluatedModels = startsNewEvaluation ? [] : getModelsWithRun(runs, compatibleModels);
     // The picker offers each model once, with its default configuration where it has one; the configuration is chosen below it.
     const configurations = groupByTemplate(compatibleModels);
-    const pickerModels = [...configurations.values()].map(items => items.find(model => !model.name.includes(':')) ?? items[0]);
-    const selectedModels = Object.values(choices).flatMap(id => compatibleModels.filter(model => model.id === id));
-    const modelChoices: ModelChoice[] = Object.entries(choices).map(([templateName, selectedId]) => {
+    const pickerModels = [...configurations.values()].flatMap(items => getDefaultModel(items) ?? []);
+    // A model that is running has no result yet, but does not need to be started again.
+    const runningModelIds = startsNewEvaluation ? [] : runningJobs.map(({ job }) => job.model_id);
+    const modelChoices: ModelChoice[] = Object.entries(choices).map(([templateName, selected]) => {
         const template = modelTemplates?.find(item => item.name === templateName);
         const items = configurations.get(templateName) ?? [];
+        const defaultModel = getDefaultModel(items);
         return {
             templateName,
-            selectedId,
+            selected,
             configurations: items,
             evaluatedIds: items.filter(item => evaluatedModels.includes(item)).map(item => item.id),
             templateId: template?.id,
             displayName: template?.displayName || items[0]?.displayName || templateName,
+            tuningUnavailable: !canTune
+                ? i18n.t('needs Chap Core 2.9.0 or newer')
+                : !Object.keys(template?.hpoSearchSpace ?? {}).length ? i18n.t('not supported by this modeling package') : undefined,
+            tunedOptions: Object.keys(template?.hpoSearchSpace ?? {}),
+            trials: trials[templateName] ?? DEFAULT_TRIALS,
+            comparesWithDefault: !!defaultModel && !evaluatedModels.includes(defaultModel) && !runningModelIds.includes(defaultModel.id),
         };
     });
+    const tunedChoices = modelChoices.filter(choice => choice.selected === TUNE);
+    // Tuning is compared with the default configuration. Evaluating it also makes the evaluation setup the tuned model is filed under.
+    const selectedModels = modelChoices.flatMap((choice) => {
+        if (choice.selected !== TUNE) return choice.configurations.filter(model => model.id === choice.selected);
+        const defaultModel = getDefaultModel(choice.configurations);
+        return defaultModel && choice.comparesWithDefault ? [defaultModel] : [];
+    });
+    const evaluationCount = selectedModels.length + tunedChoices.length;
     const forecastHorizon = useForecastHorizonValidation(selectedModels, parameters?.nPeriods);
 
     const periodCount = countPeriods(dataset?.firstPeriod, dataset?.lastPeriod);
@@ -117,40 +140,55 @@ export const EvaluatePage = () => {
     const start = useMutation<unknown, ApiError | Error>({
         mutationFn: async () => {
             const runnable = await Promise.all(selectedModels.map(model => fetchRunnableModel(queryClient, model.id)));
-            const modelIds = runnable.map(model => model.id);
-            const request: MakeBacktestsRequest = specification && !startsNewEvaluation
-                ? makeBenchmarkRequest(specification, modelIds, dataset!.name)
-                : {
-                        ...parameters,
-                        name: dataset!.name,
-                        datasetId: dataset!.id,
-                        modelIds,
-                        // Chap Core 2.6.0+ reads the target from the dataset.
-                        ...(!dataset!.targetColumn && { targetColumn }),
-                    };
-            return BacktestsService.createBacktestsV1AnalyticsCreateBacktestsPost(request);
-        },
-        onSuccess: async () => {
-            setChoices({});
-            setEditedParameters(undefined);
-            // A new evaluation is the newest, which the step follows.
-            if (startsNewEvaluation) selectSpecification(undefined);
-            await Promise.all([
-                queryClient.invalidateQueries({ queryKey: ['jobs'] }),
-                queryClient.invalidateQueries({ queryKey: ['backtest-specifications'] }),
-            ]);
+            let specificationId = specification && !startsNewEvaluation ? specification.id : undefined;
+            if (runnable.length) {
+                const modelIds = runnable.map(model => model.id);
+                const request: MakeBacktestsRequest = specification && !startsNewEvaluation
+                    ? makeBenchmarkRequest(specification, modelIds, dataset!.name)
+                    : {
+                            ...parameters,
+                            name: dataset!.name,
+                            datasetId: dataset!.id,
+                            modelIds,
+                            // Chap Core 2.6.0+ reads the target from the dataset.
+                            ...(!dataset!.targetColumn && { targetColumn }),
+                        };
+                ({ specificationId } = await BacktestsService.createBacktestsV1AnalyticsCreateBacktestsPost(request));
+            }
+            // Tuning adds to an evaluation setup that exists, which the request above makes when there was none.
+            const tuning = await Promise.allSettled(tunedChoices.map(async (choice) => {
+                if (specificationId == null || choice.templateId == null) throw new Error(i18n.t('Tuning needs an evaluation setup to add to. Evaluate a model first.'));
+                const defaultModel = getDefaultModel(choice.configurations);
+                return BacktestsService.createHpoBacktestV1AnalyticsCreateHpoBacktestPost({
+                    name: `${dataset!.name}/${i18n.t('{{model}} (tuned)', { model: choice.displayName })}`,
+                    modelTemplateId: choice.templateId,
+                    backtestSpecificationId: specificationId,
+                    // Tuned with the covariates the default configuration comes with.
+                    additionalContinuousCovariates: defaultModel?.additionalContinuousCovariates ?? [],
+                    nTrials: choice.trials,
+                });
+            }));
+            const failed = tunedChoices.filter((_, index) => tuning[index].status === 'rejected');
+            if (runnable.length || failed.length < tunedChoices.length) {
+                // What could not start stays chosen, so it can be tried again without starting the rest twice.
+                setChoices(Object.fromEntries(failed.map(choice => [choice.templateName, TUNE])));
+                setEditedParameters(undefined);
+                // A new evaluation is the newest, which the step follows.
+                if (startsNewEvaluation) selectSpecification(undefined);
+                await Promise.all([
+                    queryClient.invalidateQueries({ queryKey: ['jobs'] }),
+                    queryClient.invalidateQueries({ queryKey: ['backtest-specifications'] }),
+                ]);
+            }
+            const failure = tuning.find((result): result is PromiseRejectedResult => result.status === 'rejected');
+            if (failure) throw failure.reason;
         },
     });
 
-    const promote = useCallback((run: LeaderboardBacktestRead) => (run.predictionSetupId == null ? (
-        <span className={styles.nowrap}>
-            <Button small primary onClick={() => navigate(`${pathTo('promote')}&evaluationId=${run.id}`)} dataTest={`guided-promote-${run.id}`}>
-                {i18n.t('Promote')}
-            </Button>
-        </span>
-    ) : (
-        <Tag positive>{i18n.t('Promoted')}</Tag>
-    )), [navigate, pathTo]);
+    // The results are for comparing; which model to use is chosen on the next step, so a row only says when it is in use.
+    const markInUse = useCallback((run: LeaderboardBacktestRead) => (
+        run.predictionSetupId != null && <Tag positive>{i18n.t('In use')}</Tag>
+    ), []);
 
     if (!dataset) return null;
 
@@ -240,9 +278,9 @@ export const EvaluatePage = () => {
             </Card>
             <Card className={styles.card}>
                 <div>
-                    <h3 className={styles.title}>{i18n.t('Choose models to evaluate')}</h3>
+                    <h3 className={styles.title}>{i18n.t('Choose modeling packages to evaluate')}</h3>
                     <p className={styles.description}>
-                        {i18n.t('Simple baseline models are evaluated as well, so you can see whether a model beats them.')}
+                        {i18n.t('A modeling package becomes a configured model once its configuration is chosen, and a configured model is what gets evaluated. Simple baseline models are evaluated as well, so you can see whether a model beats them.')}
                     </p>
                 </div>
                 {isLoading || defaults.isInitialLoading ? <CircularLoader small /> : error ? (
@@ -265,6 +303,8 @@ export const EvaluatePage = () => {
                                         .map(model => model.id)}
                                     disabled={start.isLoading}
                                     hideSelection={modelChoices.length > 0}
+                                    label={i18n.t('Modeling packages')}
+                                    selectLabel={i18n.t('Select modeling packages')}
                                     onChange={selected => setChoices(previous => Object.fromEntries(selected.map(model => (
                                         [getTemplateName(model), previous[getTemplateName(model)] ?? model.id]
                                     ))))}
@@ -273,13 +313,14 @@ export const EvaluatePage = () => {
                                     choices={modelChoices}
                                     disabled={start.isLoading}
                                     onCustomise={setCustomising}
-                                    onChange={(templateName, modelId) => setChoices(previous => ({ ...previous, [templateName]: modelId }))}
+                                    onChange={(templateName, selected) => setChoices(previous => ({ ...previous, [templateName]: selected }))}
+                                    onTrialsChange={(templateName, count) => setTrials(previous => ({ ...previous, [templateName]: count }))}
                                     onRemove={templateName => setChoices(previous => Object.fromEntries(Object.entries(previous).filter(([name]) => name !== templateName)))}
                                 />
                             </>
                         ) : (
-                            <NoticeBox warning title={i18n.t('No model can use this data')}>
-                                {i18n.t('No model matches the columns and period type of this data. Import data with the columns the models need.')}
+                            <NoticeBox warning title={i18n.t('No modeling package can use this data')}>
+                                {i18n.t('No modeling package matches the columns and period type of this data. Import data with the columns the modeling packages need.')}
                             </NoticeBox>
                         )}
                         {allModels.length > compatibleModels.length && compatibleModels.length > 0 && (
@@ -293,17 +334,23 @@ export const EvaluatePage = () => {
                         )}
                         {selectedModels.map(model => <ModelHealthNotice key={model.id} model={model} />)}
                         <ForecastHorizonNotice validation={forecastHorizon} />
-                        {start.error && <ChapErrorNotice error={start.error} title={i18n.t('Could not start the evaluation')} />}
+                        {start.error && (
+                            <ChapErrorNotice
+                                error={start.error}
+                                // Tuning starts after the configured models, so it is what is left when the start fails part-way.
+                                title={tunedChoices.length && !selectedModels.length ? i18n.t('Could not start tuning') : i18n.t('Could not start the evaluation')}
+                            />
+                        )}
                         <div>
                             <Button
                                 primary
                                 loading={start.isLoading}
-                                disabled={start.isLoading || !parameters || !selectedModels.length || isTooShort || selectedModels.some(hasRevisionMismatch) || forecastHorizon.isBlocked}
+                                disabled={start.isLoading || !parameters || !evaluationCount || isTooShort || selectedModels.some(hasRevisionMismatch) || forecastHorizon.isBlocked}
                                 onClick={() => start.mutate()}
                                 dataTest="guided-start-evaluation"
                             >
-                                {selectedModels.length
-                                    ? i18n.t('Evaluate {{count}} models', { count: selectedModels.length, defaultValue: 'Evaluate {{count}} model', defaultValue_plural: 'Evaluate {{count}} models' })
+                                {evaluationCount
+                                    ? i18n.t('Evaluate {{count}} models', { count: evaluationCount, defaultValue: 'Evaluate {{count}} model', defaultValue_plural: 'Evaluate {{count}} models' })
                                     : i18n.t('Evaluate models')}
                             </Button>
                         </div>
@@ -314,7 +361,7 @@ export const EvaluatePage = () => {
                 <Card className={styles.card}>
                     <h2 className={styles.title}>{i18n.t('Results')}</h2>
                     <NoticeBox title={i18n.t('No results for the new setup yet')}>
-                        {i18n.t('Choose models above and evaluate them with {{setup}}.', { setup: describeSetup(editedParameters) })}
+                        {i18n.t('Choose modeling packages above and evaluate them with {{setup}}.', { setup: describeSetup(editedParameters) })}
                     </NoticeBox>
                 </Card>
             ) : specification && (
@@ -329,7 +376,7 @@ export const EvaluatePage = () => {
                         </div>
                     )}
                     {runs.length > 0 ? (
-                        <BenchmarkTable specification={specification} title={i18n.t('Results for {{setup}}', { setup: describeSetup(specification) })} rowAction={promote} compareByDefault />
+                        <BenchmarkTable specification={specification} title={i18n.t('Results for {{setup}}', { setup: describeSetup(specification) })} rowAction={markInUse} compareByDefault />
                     ) : !runningJobs.length && !failedRuns.length && (
                         <NoticeBox warning title={i18n.t('No results yet')}>
                             {i18n.t('No model has finished. See what happened, then evaluate the models again.')}
@@ -342,8 +389,8 @@ export const EvaluatePage = () => {
             )}
             <StepNav
                 back={pathTo('data')}
-                next={pathTo('promote')}
-                nextLabel={i18n.t('Continue to promotion')}
+                next={pathTo('model')}
+                nextLabel={i18n.t('Continue to choose a model')}
                 blockedReason={runs.length ? undefined : runningJobs.length ? i18n.t('Waiting for a model to finish') : i18n.t('Evaluate a model first')}
             />
             {customising?.templateId != null && modelTemplates && (

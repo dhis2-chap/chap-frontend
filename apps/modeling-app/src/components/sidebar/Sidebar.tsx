@@ -102,7 +102,7 @@ export const Sidebar = ({
                 <Sidenav>
                     <SidenavItems>
                         {(isVersionLoading || isBenchmarksAvailable) && (
-                            <SidebarNavLink to="/guided" label={i18n.t('Guided setup')} />
+                            <SidebarNavLink to="/guided" label={i18n.t('Guided setup (experimental)')} />
                         )}
                         {isBenchmarksAvailable && (
                             <SidebarNavLink to="/evaluate/benchmarks" label={i18n.t('Benchmarks')} />

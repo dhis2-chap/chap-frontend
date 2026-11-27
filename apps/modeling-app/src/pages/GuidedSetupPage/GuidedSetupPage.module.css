@@ -99,7 +99,7 @@ a.stepperLink:hover {
     gap: var(--spacers-dp16);
 }
 
-/* The promote form spans several cards. */
+/* The form for choosing a model spans several cards. */
 .form {
     display: contents;
 }
@@ -205,6 +205,40 @@ a.stepperLink:hover {
     inline-size: 280px;
 }
 
+/* What tuning does for a modeling package, under its row. */
+.tuning {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: var(--spacers-dp8) var(--spacers-dp16);
+    margin-block-start: var(--spacers-dp12);
+    padding: var(--spacers-dp12);
+    border-radius: var(--spacers-dp4);
+    background-color: var(--colors-grey100);
+}
+
+.trials {
+    flex: none;
+    inline-size: 160px;
+}
+
+.tuningText {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacers-dp4);
+    min-inline-size: 280px;
+    max-inline-size: 720px;
+}
+
+.experimental {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--spacers-dp8);
+    margin-block-end: var(--spacers-dp12);
+}
+
 .settings {
     display: flex;
     align-items: center;
@@ -237,6 +271,14 @@ a.stepperLink:hover {
     white-space: nowrap;
 }
 
+/* Buttons next to a heading, kept on one line. */
+.actions {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: var(--spacers-dp8);
+}
+
 .stepNav {
     display: flex;
     align-items: center;
@@ -244,7 +286,16 @@ a.stepperLink:hover {
     gap: var(--spacers-dp16);
 }
 
-/* The checks a model should pass before it is promoted. */
+.stepNavAction {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: var(--spacers-dp8) var(--spacers-dp16);
+    text-align: end;
+}
+
+/* The checks a model should pass before it is put to use. */
 .trust {
     display: flex;
     flex-direction: column;

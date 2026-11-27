@@ -1,10 +1,13 @@
 import { useQueries } from '@tanstack/react-query';
-import { JobDescription, JobsService, MakeBacktestsRequest } from '@dhis2-chap/ui';
+import { JobDescription, JobsService, MakeBacktestsRequest, MakeHpoBacktestRequest } from '@dhis2-chap/ui';
 import { JOB_STATUSES, JOB_TYPES, useJobs } from '../../hooks/useJobs';
+
+/** A request to evaluate configured models, or to tune a modeling package and evaluate what tuning picks. */
+type EvaluationRequest = Partial<MakeBacktestsRequest> & Partial<Pick<MakeHpoBacktestRequest, 'modelTemplateId' | 'backtestSpecificationId' | 'nTrials'>>;
 
 export type RunningBenchmarkJob = {
     job: JobDescription;
-    request: Partial<MakeBacktestsRequest>;
+    request: EvaluationRequest;
 };
 
 const isRunningEvaluation = (job: JobDescription) => job.type === JOB_TYPES.BACKTEST &&
@@ -14,6 +17,8 @@ const isRunningEvaluation = (job: JobDescription) => job.type === JOB_TYPES.BACK
 const getResolvedParameters = (job: JobDescription): Partial<MakeBacktestsRequest> => {
     const parameters = job.parameters ?? {};
     return Object.fromEntries(Object.entries({
+        // A tuning request names its evaluation setup instead of the dataset; the job says which dataset that is.
+        datasetId: job.dataset_id,
         nPeriods: parameters.n_periods,
         nSplits: parameters.n_splits,
         stride: parameters.stride,
@@ -37,7 +42,7 @@ const useBenchmarkJobs = (isMatch: (job: JobDescription) => boolean, datasetId?:
     const requests = useQueries({
         queries: matching.map(job => ({
             queryKey: ['job-request', job.id],
-            queryFn: () => JobsService.getJobRequestV1JobsJobIdRequestGet(job.id) as Promise<Partial<MakeBacktestsRequest>>,
+            queryFn: () => JobsService.getJobRequestV1JobsJobIdRequestGet(job.id) as Promise<EvaluationRequest>,
             staleTime: Infinity,
             retry: 0,
         })),

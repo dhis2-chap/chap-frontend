@@ -9,10 +9,12 @@ import { useNavigate } from 'react-router-dom';
 import { saveAs } from 'file-saver';
 import { TableActionButton } from '../../components/TableActionButton';
 import { useModels } from '../../hooks/useModels';
+import { getConfiguredModelName, isTunedConfiguration } from '../../utils/configuredModelName';
 import { benchmarkCsv, getBestRunIds, getMetricIds, metricSortKey } from './benchmarkUtils';
 import { formatComparison, getDefaultMetricIds, prettifyMetricId } from '../../components/PageContent/EvaluationDetails/EvaluationMetricsWidget/metricCatalog';
 import { MetricInfoIcon } from '../../components/MetricInfoIcon/MetricInfoIcon';
 import { getComparison, referenceLabel, referenceName, useReferenceModel } from '../../components/ModelComparisons/referenceModels';
+import { SelectionBiasSummary } from '../../components/SelectionBias/SelectionBiasSummary';
 import comparisonStyles from '../../components/ModelComparisons/ModelComparisons.module.css';
 import styles from './BenchmarksPage.module.css';
 
@@ -33,6 +35,8 @@ type Props = {
     rowAction?: (run: LeaderboardBacktestRead) => ReactNode;
     /* Starts with the scores compared with the default baseline. */
     compareByDefault?: boolean;
+    /* Says below the table what to expect of the best model on new data. */
+    showSelectionBias?: boolean;
     children?: ReactNode;
 };
 
@@ -49,7 +53,7 @@ const ViewEvaluationButton = ({ evaluationId }: { evaluationId: number }) => {
     );
 };
 
-export const BenchmarkTable = ({ specification, options, actions, title, rowAction, compareByDefault = false, children }: Props) => {
+export const BenchmarkTable = ({ specification, options, actions, title, rowAction, compareByDefault = false, showSelectionBias = false, children }: Props) => {
     const { backtests } = specification;
     const evaluationId = backtests[0]?.id;
     // Chap Core 2.6 lists the configured metrics with the specification; older versions need the catalog.
@@ -74,7 +78,10 @@ export const BenchmarkTable = ({ specification, options, actions, title, rowActi
     const runs = useMemo<BenchmarkRun[]>(() => backtests
         .map(run => ({
             ...run,
-            modelName: models?.find(model => model.id === run.configuredModel?.id)?.displayName || run.configuredModel?.name || run.modelId,
+            // Chap Core names a tuned configuration by an id; say that it is tuned instead.
+            modelName: run.configuredModel && isTunedConfiguration(run.configuredModel)
+                ? getConfiguredModelName(run.configuredModel, run.configuredModel.modelTemplate?.displayName)
+                : models?.find(model => model.id === run.configuredModel?.id)?.displayName || run.configuredModel?.name || run.modelId,
             comparison: getComparison(run, reference),
         }))
         .sort((a, b) => (b.created ?? '').localeCompare(a.created ?? '')), [backtests, models, reference]);
@@ -264,6 +271,14 @@ export const BenchmarkTable = ({ specification, options, actions, title, rowActi
                         </DataTableBody>
                     </DataTable>
                 </div>
+            )}
+            {showSelectionBias && (
+                // By the first metric of the table, which is the one the models are ranked by elsewhere.
+                <SelectionBiasSummary
+                    specification={specification}
+                    metric={metrics?.find(item => item.id === defaultMetricIds[0])}
+                    getModelName={backtestId => runs.find(run => run.id === backtestId)?.modelName}
+                />
             )}
         </>
     );
