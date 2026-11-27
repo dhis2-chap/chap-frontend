@@ -44,3 +44,53 @@
     line-height: 19px;
     color: var(--colors-grey700);
 }
+
+.answer {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.clear {
+    color: var(--colors-green800);
+}
+
+.unclear {
+    color: var(--colors-yellow900);
+}
+
+/* Each model, a bar of how often it came out best, and the share. */
+.draws {
+    display: grid;
+    grid-template-columns: minmax(0, max-content) minmax(80px, 240px) max-content;
+    align-items: center;
+    gap: var(--spacers-dp4) var(--spacers-dp12);
+    font-size: 13px;
+    color: var(--colors-grey800);
+}
+
+.track {
+    position: relative;
+    block-size: 8px;
+    border-radius: 4px;
+    background-color: var(--colors-grey200);
+    overflow: hidden;
+}
+
+.fill {
+    block-size: 100%;
+    background-color: var(--colors-grey500);
+}
+
+.bestFill {
+    background-color: var(--colors-blue600);
+}
+
+.share {
+    font-variant-numeric: tabular-nums;
+}
+
+.strong {
+    font-weight: 500;
+    color: var(--colors-grey900);
+}

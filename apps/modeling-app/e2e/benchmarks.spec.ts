@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
-import type { BacktestSpecificationRead, MakeBacktestsRequest, MakeBacktestsResponse, ModelSpecRead } from '@dhis2-chap/ui';
+import type { BacktestSpecificationRead, MakeBacktestsRequest, MakeBacktestsResponse, ModelSpecRead, SelectionBias } from '@dhis2-chap/ui';
 import { getChap, getJobStatus, createCompletedNaiveEvaluation, readJson } from './helpers/evaluation-fixtures';
 import { toDataTestKey } from '../src/utils/dataTestKey';
 import { isVersionCompatible } from '../src/utils/compareVersions';
@@ -172,4 +172,55 @@ test('uses benchmark actions to view, add models, export scores and reuse the da
     expect(overviewDownload.suggestedFilename()).toBe(`benchmark-${specification.id}.csv`);
     expect(await readFile((await overviewDownload.path())!, 'utf8')).toBe(csv);
     await expect(page).toHaveURL('/#/evaluate/benchmarks?origin=all');
+});
+
+test('says whether the best model is ahead of the others by more than luck', async ({ page }) => {
+    test.setTimeout(240_000);
+    const { chap_core_version: chapVersion } = await readJson<{ chap_core_version: string }>(
+        await getChap(page, '/system/info'),
+        'Load Chap Core version',
+    );
+    test.skip(!isVersionCompatible(chapVersion, '2.9.0'), 'The selection bias needs Chap Core >= 2.9.0');
+    const evaluation = await createCompletedNaiveEvaluation(page, `E2E selection bias ${Date.now()}`);
+    const [run] = (await readJson<BacktestSpecificationRead>(
+        await getChap(page, `/v1/crud/backtest-specifications/${evaluation.specificationId}`),
+        'Load benchmark',
+    )).backtests;
+    // The test stack can only run the naive model, so a second model is added to the benchmark
+    // here, and Chap Core's answers about it are given as Chap Core 2.9.0 gives them.
+    const other = { ...run, id: run.id + 100_000, configuredModel: { ...run.configuredModel!, id: run.configuredModel!.id + 100_000, name: 'e2e_other_model' } };
+    await page.route(`**/v1/crud/backtest-specifications/${evaluation.specificationId}?**`, async (route) => {
+        const response = await route.fetch();
+        const specification = await response.json() as BacktestSpecificationRead;
+        await route.fulfill({ response, json: { ...specification, backtests: [...specification.backtests, other] } });
+    });
+    const biasRequests: URL[] = [];
+    await page.route('**/selection-bias?**', async (route) => {
+        const url = new URL(route.request().url());
+        biasRequests.push(url);
+        if (!url.searchParams.has('horizonDistance')) {
+            await route.fulfill({ status: 422, json: { detail: 'Too few split points (10): only 31% of the draws leave out a split point to score, and at least half must.' } });
+            return;
+        }
+        const selectionBias: SelectionBias = {
+            metricId: 'crps_log1p', baselineModel: 'persistence', comparisonDescription: '', horizonDistances: [1], gapSplits: 0,
+            splitPeriods: [], selectedBacktestId: other.id, validationValue: 0.2, estimatedBias: 0.05, estimatedValue: 0.15,
+            blockSize: 3, nDraws: 2000, nDrawsScored: 1900,
+            candidates: [
+                { backtestId: other.id, configuredModelId: other.configuredModel.id, modelName: other.configuredModel.name, validationValue: 0.2, nDrawsPicked: 1520 },
+                { backtestId: run.id, configuredModelId: run.configuredModel!.id, modelName: run.configuredModel!.name, validationValue: 0.1, nDrawsPicked: 380 },
+            ],
+        };
+        await route.fulfill({ json: selectionBias });
+    });
+
+    await page.goto(`/#/evaluate/benchmarks/${evaluation.specificationId}`);
+    const summary = page.locator('[data-test="selection-bias"]');
+    await expect(summary.getByRole('heading', { name: 'Is the best model ahead of the others by more than luck?' })).toBeVisible({ timeout: 30_000 });
+    await expect(summary.locator('[data-test="selection-bias-answer"]')).toHaveText('e2e_other_model came out best in 1,520 of 1,900 redraws of the evaluation, so part of its lead may be luck.');
+    await expect(summary).toContainText('Forecasts one period ahead:');
+    await expect(summary).toContainText('only forecasts one period ahead were checked');
+    // Every period ahead first, as on the leaderboard, then one period ahead when Chap Core says there are too few splits.
+    expect(biasRequests.map(url => url.searchParams.get('horizonDistance'))).toEqual([null, '1']);
+    expect(biasRequests[0].pathname).toContain(`/v1/crud/backtest-specifications/${evaluation.specificationId}/selection-bias`);
 });
