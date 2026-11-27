@@ -48,46 +48,47 @@ beforeEach(() => {
     vi.mocked(useSelectionBias).mockReset();
 });
 
-it('says what the best model scored, how much of it is luck and what to expect on new data', () => {
+it('says how often the best model came out best, and what to expect of it on new data', () => {
     query({ data: bias });
     const html = render({ getModelName: backtestId => (backtestId === 7 ? 'Auto-regressive' : undefined) });
-    expect(text(html)).toContain('Best model Auto-regressive In the evaluation +12.2% Estimated bias +1.22% Expected on new data +11%');
-    expect(html).toContain('CRPS (log) compared with Seasonal shift persistence, where positive is better.');
-    expect(html).toContain('Chap drew the evaluation splits again 1,500 times, and another model came out best in 300 of the draws.');
-    expect(html).toContain('Scored on forecasts 1 to 3 periods ahead.');
-    expect(html).toContain('A split left out of a draw only counts when it forecasts no period that a drawn split also forecasts.');
+    expect(html).toContain('Auto-regressive came out best in 1,200 of 1,500 redraws of the evaluation, so part of its lead may be luck.');
+    expect(text(html)).toContain('Auto-regressive 80% chap_ewars_monthly [weekly] 20%');
+    expect(text(html)).toContain('Compared with Seasonal shift persistence in the evaluation +12.2% Expected on new data +11%');
+    expect(html).toContain('Forecasts 1 to 3 periods ahead were checked.');
+    expect(html).not.toContain('Even the best model');
 });
 
-it('says when only forecasts one period ahead could be scored', () => {
-    query({ data: { ...bias, horizonDistances: [1], gapSplits: 0, isFirstHorizonOnly: true } });
-    const html = render();
-    expect(text(html)).toContain('Best model one period ahead auto_regressive_monthly In the evaluation');
-    expect(html).toContain('Only forecasts one period ahead were scored');
-    expect(html).not.toContain('Scored on forecasts');
-    expect(html).not.toContain('A split left out of a draw');
-});
-
-it('has no bias to report when the same model comes out best in every draw', () => {
+it('says when another model came out best more often, and when only forecasts one period ahead were checked', () => {
     const [best, other] = bias.candidates;
-    query({ data: { ...bias, candidates: [{ ...best, nDrawsPicked: 1500 }, { ...other, nDrawsPicked: 0 }], estimatedBias: 0, estimatedValue: 0.122 } });
+    query({ data: { ...bias, candidates: [{ ...best, nDrawsPicked: 600 }, { ...other, nDrawsPicked: 900 }], horizonDistances: [1], isFirstHorizonOnly: true } });
     const html = render();
-    expect(text(html)).toContain('Estimated bias 0% Expected on new data +12.2%');
-    expect(html).toContain('the same model came out best every time.');
+    expect(text(html)).toContain('Forecasts one period ahead: auto_regressive_monthly has the best score, but chap_ewars_monthly [weekly] came out best more often in redraws of the evaluation (900 against 600 of 1,500), so the lead of auto_regressive_monthly may be luck.');
+    // The model that comes out best most often is listed first.
+    expect(text(html)).toContain('chap_ewars_monthly [weekly] 60% auto_regressive_monthly 40%');
+    expect(html).not.toContain('periods ahead were checked');
 });
 
-it('falls back to the name Chap Core gives the model, and colours a model that is behind the baseline', () => {
-    query({ data: { ...bias, selectedBacktestId: 6, validationValue: -0.32, estimatedBias: 0.02, estimatedValue: -0.34 } });
+it('says the lead is not luck when the same model came out best every time, and warns when even it is behind the baseline', () => {
+    const [best, other] = bias.candidates;
+    query({ data: { ...bias, candidates: [{ ...best, nDrawsPicked: 1500 }, { ...other, nDrawsPicked: 0 }], validationValue: -0.32, estimatedBias: 0, estimatedValue: -0.32 } });
     const html = render();
-    expect(text(html)).toContain('Best model chap_ewars_monthly [weekly] In the evaluation -32%');
-    expect(html).toMatch(/class="[^"]*worse[^"]*">-34%/);
+    expect(html).toContain('auto_regressive_monthly came out best in every one of 1,500 redraws of the evaluation, so its lead is not luck.');
+    expect(html).toMatch(/class="[^"]*worse[^"]*">-32%/);
+    expect(html).toContain('Even the best model is expected to do worse than Seasonal shift persistence on new data.');
 });
 
-it('gives the reason when Chap Core cannot estimate it', () => {
+it('never rounds a share to 0% or 100% when it is neither', () => {
+    const [best, other] = bias.candidates;
+    query({ data: { ...bias, candidates: [{ ...best, nDrawsPicked: 1499 }, { ...other, nDrawsPicked: 1 }] } });
+    expect(text(render())).toContain('auto_regressive_monthly &gt;99% chap_ewars_monthly [weekly] &lt;1%');
+});
+
+it('gives the reason when Chap Core cannot check it', () => {
     query({ error: { status: 422, body: { detail: 'Too few split points (3)' } } });
-    expect(text(render())).toContain('Selection bias Not estimated: Too few split points (3)');
+    expect(text(render())).toContain('Not checked: Too few split points (3)');
 });
 
-it('renders nothing until there is an estimate, and does not count a model evaluated twice as two', () => {
+it('renders nothing until there is an answer, and does not count a model evaluated twice as two', () => {
     query({});
     const [run] = specification.backtests;
     expect(render({ specification: { ...specification, backtests: [run, { ...run, id: 9 }] } })).toBe('');
