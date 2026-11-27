@@ -77,8 +77,9 @@ one chart:
   locations or one, with the count of periods where what happened was inside the range.
   Each period keeps the forecast made longest before it, so the chart does not flatter.
 
-Under the list of evaluated models, and under the table of a benchmark, a **Selection
-bias** summary says what to expect of the best model on new data, in four numbers: the
+Under the results on the Evaluate step, under the list of evaluated models on the Choose
+model step and under the table of a benchmark, a **Selection bias** summary says what to
+expect of the best model on new data, in four numbers: the
 best model, how it compares with the baseline in the evaluation, how much of that is
 estimated to be luck, and what is left. The best of several models always looks a little
 better than it is. Chap draws the splits of the evaluation again some two thousand times

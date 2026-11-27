@@ -376,7 +376,8 @@ export const EvaluatePage = () => {
                         </div>
                     )}
                     {runs.length > 0 ? (
-                        <BenchmarkTable specification={specification} title={i18n.t('Results for {{setup}}', { setup: describeSetup(specification) })} rowAction={markInUse} compareByDefault />
+                        // The selection bias sits with the scores it is about, next to the settings that decide whether it can be estimated.
+                        <BenchmarkTable specification={specification} title={i18n.t('Results for {{setup}}', { setup: describeSetup(specification) })} rowAction={markInUse} compareByDefault showSelectionBias />
                     ) : !runningJobs.length && !failedRuns.length && (
                         <NoticeBox warning title={i18n.t('No results yet')}>
                             {i18n.t('No model has finished. See what happened, then evaluate the models again.')}
