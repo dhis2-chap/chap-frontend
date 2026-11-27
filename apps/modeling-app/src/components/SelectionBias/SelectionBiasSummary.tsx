@@ -57,8 +57,7 @@ export const SelectionBiasSummary = ({ specification, metric, getModelName }: Pr
             {title}
             <dl className={styles.stats}>
                 <div className={styles.stat}>
-                    {/* One period ahead, the best model can be another one than the page marks as best. */}
-                    <dt className={styles.label}>{data.isFirstHorizonOnly ? i18n.t('Best model one period ahead') : i18n.t('Best model')}</dt>
+                    <dt className={styles.label}>{i18n.t('Best model')}</dt>
                     <dd className={styles.value}>{getModelName?.(data.selectedBacktestId) ?? (best ? getConfiguredModelName({ name: best.modelName }) : '—')}</dd>
                 </div>
                 <div className={styles.stat}>
@@ -92,9 +91,7 @@ export const SelectionBiasSummary = ({ specification, metric, getModelName }: Pr
                                 colon: ':',
                                 draws,
                             }),
-                    data.isFirstHorizonOnly
-                        ? i18n.t('Only forecasts one period ahead were scored, since this evaluation has too few splits to score every period ahead, so the numbers differ from the scores above.')
-                        : nearest !== farthest && i18n.t('Scored on forecasts {{nearest}} to {{farthest}} periods ahead.', { nearest, farthest }),
+                    nearest !== farthest && i18n.t('Scored on forecasts {{nearest}} to {{farthest}} periods ahead.', { nearest, farthest }),
                     data.gapSplits > 0 && i18n.t('A split left out of a draw only counts when it forecasts no period that a drawn split also forecasts.'),
                     i18n.t('The estimate is rough.'),
                 ].filter(Boolean).join(' ')}

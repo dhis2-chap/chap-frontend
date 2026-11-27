@@ -1,9 +1,9 @@
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { beforeEach, expect, it, vi } from 'vitest';
-import type { BacktestSpecificationRead, MetricInfo } from '@dhis2-chap/ui';
+import type { BacktestSpecificationRead, MetricInfo, SelectionBias } from '@dhis2-chap/ui';
 import { SelectionBiasSummary } from './SelectionBiasSummary';
-import { useSelectionBias, type SelectionBiasResult } from './useSelectionBias';
+import { useSelectionBias } from './useSelectionBias';
 
 vi.mock('./useSelectionBias', () => ({ useSelectionBias: vi.fn() }));
 
@@ -18,7 +18,7 @@ const specification = {
     ],
 } as BacktestSpecificationRead;
 
-const bias: SelectionBiasResult = {
+const bias: SelectionBias = {
     metricId: 'crps_log1p',
     baselineModel: 'seasonal_shift_persistence',
     comparisonDescription: '',
@@ -36,10 +36,9 @@ const bias: SelectionBiasResult = {
     blockSize: 3,
     nDraws: 2000,
     nDrawsScored: 1500,
-    isFirstHorizonOnly: false,
 };
 
-const query = (result: { data?: SelectionBiasResult; error?: unknown }) => vi.mocked(useSelectionBias).mockReturnValue(result as ReturnType<typeof useSelectionBias>);
+const query = (result: { data?: SelectionBias; error?: unknown }) => vi.mocked(useSelectionBias).mockReturnValue(result as ReturnType<typeof useSelectionBias>);
 const render = (props: Partial<Parameters<typeof SelectionBiasSummary>[0]> = {}) =>
     renderToStaticMarkup(createElement(SelectionBiasSummary, { specification, metric, ...props }));
 const text = (html: string) => html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
@@ -58,11 +57,9 @@ it('says what the best model scored, how much of it is luck and what to expect o
     expect(html).toContain('A split left out of a draw only counts when it forecasts no period that a drawn split also forecasts.');
 });
 
-it('says when only forecasts one period ahead could be scored', () => {
-    query({ data: { ...bias, horizonDistances: [1], gapSplits: 0, isFirstHorizonOnly: true } });
+it('leaves out what does not apply to an evaluation of one period ahead', () => {
+    query({ data: { ...bias, horizonDistances: [1], gapSplits: 0 } });
     const html = render();
-    expect(text(html)).toContain('Best model one period ahead auto_regressive_monthly In the evaluation');
-    expect(html).toContain('Only forecasts one period ahead were scored');
     expect(html).not.toContain('Scored on forecasts');
     expect(html).not.toContain('A split left out of a draw');
 });
@@ -83,8 +80,8 @@ it('falls back to the name Chap Core gives the model, and colours a model that i
 });
 
 it('gives the reason when Chap Core cannot estimate it', () => {
-    query({ error: { status: 422, body: { detail: 'Too few split points (3)' } } });
-    expect(text(render())).toContain('Selection bias Not estimated: Too few split points (3)');
+    query({ error: { status: 422, body: { detail: 'Too few split points (7)' } } });
+    expect(text(render())).toContain('Selection bias Not estimated: Too few split points (7)');
 });
 
 it('renders nothing until there is an estimate, and does not count a model evaluated twice as two', () => {

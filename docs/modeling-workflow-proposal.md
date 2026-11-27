@@ -85,8 +85,10 @@ better than it is. Chap draws the splits of the evaluation again some two thousa
 (a bootstrap over its split points) and picks the best model each time; the bias comes
 from the draws that pick another model. No model is run again, and no model has to be
 chosen first: the numbers are about the best one, whichever one is chosen. It needs Chap
-Core 2.9.0 and at least two evaluated models. With the default seven splits only forecasts
-one period ahead can be scored, which the summary says.
+Core 2.9.0, at least two evaluated models and enough splits to score every period ahead,
+as the scores the models are ranked by do: 9 splits with two periods ahead and 20 with
+three. With the default seven splits the summary says that it could not be estimated, and
+why.
 
 These are the questions the evaluation webinars teach, and the chart follows the forecast
 band and model-against-baseline blocks in
