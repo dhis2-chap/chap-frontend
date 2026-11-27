@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: i18next-conv\n"
-"POT-Creation-Date: 2026-11-02T11:59:23.166Z\n"
+"POT-Creation-Date: 2026-11-17T16:55:47.963Z\n"
 "PO-Revision-Date: 2025-12-03 08:49+0000\n"
 "Last-Translator: Malinda Wijeratne, 2026\n"
 "Language-Team: Sinhala (https://app.transifex.com/hisp-uio/teams/100509/si/)\n"
@@ -103,6 +103,9 @@ msgid "80% prediction interval"
 msgstr ""
 
 msgid "50% prediction interval"
+msgstr ""
+
+msgid "Period"
 msgstr ""
 
 msgid "Median Prediction for {{predictionTargetName}}"
@@ -345,6 +348,48 @@ msgid ""
 "DHIS2 to 2.40.7, 2.41.4, 2.42 or later to store the token encrypted."
 msgstr ""
 
+msgid "{{selected}} of {{pending}} pending signals selected"
+msgstr ""
+
+msgid "Select by level"
+msgstr ""
+
+msgid "Decline selected"
+msgstr ""
+
+msgid "Approve selected"
+msgstr ""
+
+msgid "Organisation unit"
+msgstr ""
+
+msgid "Signals"
+msgstr ""
+
+msgid "Reviewed by"
+msgstr ""
+
+msgid "Actions"
+msgstr ""
+
+msgid "Approved"
+msgstr "අනුමතයි"
+
+msgid "Declined"
+msgstr ""
+
+msgid "Pending"
+msgstr ""
+
+msgid "Approve"
+msgstr "අනුමත කරන්න"
+
+msgid "Decline"
+msgstr ""
+
+msgid "Reset to pending"
+msgstr ""
+
 msgid "More"
 msgstr "තව"
 
@@ -371,3 +416,6 @@ msgstr ""
 
 msgid "To period"
 msgstr ""
+
+msgid "Remove"
+msgstr "ඉවත් කරන්න"

@@ -1,19 +1,300 @@
 # Translators:
-# Viktor Varland <viktor@dhis2.org>, 2025
-# Philip Larsen Donnelly, 2025
+# Philip Larsen Donnelly, 2026
+# Viktor Varland <viktor@dhis2.org>, 2026
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: i18next-conv\n"
-"POT-Creation-Date: 2025-11-01T14:32:32.298Z\n"
+"POT-Creation-Date: 2026-11-19T10:34:36.877Z\n"
 "PO-Revision-Date: 2025-12-03 08:49+0000\n"
-"Last-Translator: Philip Larsen Donnelly, 2025\n"
+"Last-Translator: Viktor Varland <viktor@dhis2.org>, 2026\n"
 "Language-Team: Urdu (https://app.transifex.com/hisp-uio/teams/100509/ur/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: ur\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Evaluations"
+msgstr ""
+
+msgid "Compare evaluations"
+msgstr ""
+
+msgid "Benchmarks"
+msgstr ""
+
+msgid "New benchmark"
+msgstr ""
+
+msgid "New evaluation"
+msgstr ""
+
+msgid "Evaluation details"
+msgstr ""
+
+msgid "Datasets"
+msgstr ""
+
+msgid "New dataset"
+msgstr ""
+
+msgid "Signal policies"
+msgstr ""
+
+msgid "Prediction setups"
+msgstr ""
+
+msgid "Prediction setup"
+msgstr ""
+
+msgid "Run prediction"
+msgstr ""
+
+msgid "Prediction details"
+msgstr ""
+
+msgid "Import prediction"
+msgstr ""
+
+msgid "Review signals"
+msgstr ""
+
+msgid "Activity"
+msgstr ""
+
+msgid "Models"
+msgstr ""
+
+msgid "New model"
+msgstr ""
+
+msgid "Colour"
+msgstr ""
+
+msgid "Custom colour"
+msgstr ""
+
+msgid ""
+"This policy is used by a prediction setup or has signals raised against it, "
+"so it cannot be deleted."
+msgstr ""
+
+msgid "Delete signal policy"
+msgstr ""
+
+msgid "Delete \"{{name}}\"? This cannot be undone."
+msgstr ""
+
+msgid "Unable to delete signal policy"
+msgstr ""
+
+msgid "Cancel"
+msgstr "منسوخ"
+
+msgid "Delete"
+msgstr "حذف"
+
+msgid "Unable to load signal policies"
+msgstr ""
+
+msgid "Name"
+msgstr "ÙØ§Ù"
+
+msgid "Levels"
+msgstr ""
+
+msgid "Created"
+msgstr "تخلیق"
+
+msgid "Actions"
+msgstr "ایکشنز"
+
+msgid "No signal policies yet."
+msgstr ""
+
+msgid ""
+"Saved colours could not be loaded, so default colours are shown. Use Edit to"
+" save them again."
+msgstr ""
+
+msgid "Edit"
+msgstr "ترمیم"
+
+msgid "Enter a code"
+msgstr ""
+
+msgid "Enter a level name"
+msgstr ""
+
+msgid "Enter zero or more"
+msgstr ""
+
+msgid "Enter a percentile between 0 and 100"
+msgstr ""
+
+msgid "Enter a whole number of years"
+msgstr ""
+
+msgid "Enter a policy name"
+msgstr ""
+
+msgid "Level names must be unique"
+msgstr ""
+
+msgid "Codes must be unique"
+msgstr ""
+
+msgid "Signal policy created"
+msgstr ""
+
+msgid "New signal policy"
+msgstr ""
+
+msgid "Policy name"
+msgstr ""
+
+msgid "No signal import code"
+msgstr ""
+
+msgid "Must match the value type or option set of the outbreak indicator."
+msgstr ""
+
+msgid "Levels are saved in this order, from least to most severe."
+msgstr ""
+
+msgid "Level {{number}}"
+msgstr ""
+
+msgid "Remove level"
+msgstr ""
+
+msgid "Level name"
+msgstr ""
+
+msgid "e.g. Monitor"
+msgstr ""
+
+msgid "Import code"
+msgstr ""
+
+msgid "Response action (optional)"
+msgstr ""
+
+msgid "Strategy"
+msgstr "حکمت عملی"
+
+msgid "Percentile (%)"
+msgstr ""
+
+msgid "SD above mean"
+msgstr ""
+
+msgid "Baseline years"
+msgstr ""
+
+msgid "All history"
+msgstr ""
+
+msgid "Min. probability"
+msgstr ""
+
+msgid "Add level"
+msgstr ""
+
+msgid "Policy created, but colours could not be saved"
+msgstr ""
+
+msgid "Retry to save the colours. The policy has already been created."
+msgstr ""
+
+msgid "Unable to create signal policy"
+msgstr ""
+
+msgid "Create policy"
+msgstr ""
+
+msgid "Retry saving colours"
+msgstr ""
+
+msgid "Signal policy saved"
+msgstr ""
+
+msgid "Edit signal policy"
+msgstr ""
+
+msgid "Codes must be unique and non-empty."
+msgstr ""
+
+msgid "Unable to save. Please try again."
+msgstr ""
+
+msgid "Save"
+msgstr "محفوظ"
+
+msgid "Signal review saved"
+msgstr ""
+
+msgid "Unable to load raised signals"
+msgstr ""
+
+msgid "No signals were recorded for this run."
+msgstr ""
+
+msgid "Unable to load prediction data"
+msgstr ""
+
+msgid "Signals can still be reviewed, but their evidence may be incomplete."
+msgstr ""
+
+msgid "Unable to load the signed-in user. Reload the page to retry."
+msgstr ""
+
+msgid "Unable to save the review. Please try again."
+msgstr ""
+
+msgid "Edit the signal policy to change its thresholds."
+msgstr ""
+
+msgid "Could not load the evaluation scores"
+msgstr ""
+
+msgid ""
+"How well this policy's signals matched observed outbreaks when the model was"
+" evaluated on past data, across all splits and organisation units."
+msgstr ""
+
+msgid "View evaluation"
+msgstr ""
+
+msgid "Green"
+msgstr "ہرا"
+
+msgid "Yellow"
+msgstr ""
+
+msgid "Orange"
+msgstr ""
+
+msgid "Red"
+msgstr ""
+
+msgid "{{percentile}}th percentile, all history"
+msgstr ""
+
+msgid "{{percentile}}th percentile, {{count}}-year baseline"
+msgid_plural "{{percentile}}th percentile, {{count}}-year baseline"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "mean + {{stdMultiplier}} SD"
+msgstr ""
+
+msgid "{{threshold}} · ≥{{probability}}%"
+msgstr ""
+
+msgid "View"
+msgstr "دیکھیں"
 
 msgid "Create new..."
 msgstr ""
@@ -24,17 +305,11 @@ msgstr ""
 msgid "Rename"
 msgstr "نام بدلو"
 
-msgid "Delete"
-msgstr "حذف"
-
-msgid "{{name}} (Copy)"
-msgstr ""
+msgid "Download"
+msgstr "ڈاؤن لوڈ کریں"
 
 msgid "Create new based on..."
 msgstr ""
-
-msgid "Cancel"
-msgstr "منسوخ"
 
 msgid "Failed to load evaluation data. Please try again."
 msgstr ""
@@ -45,25 +320,13 @@ msgstr "بند"
 msgid "Select which attributes to copy to the new run{{escape}}"
 msgstr ""
 
-msgid "Name"
-msgstr "ÙØ§Ù"
-
-msgid "Untitled"
-msgstr "عنوان"
-
-msgid "Organisation units"
-msgstr "تنظیمی یونٹس"
+msgid "Dataset"
+msgstr ""
 
 msgid "Model"
 msgstr ""
 
-msgid "Data sources"
-msgstr ""
-
-msgid "Period type"
-msgstr "مدت کی قسم"
-
-msgid "Period range"
+msgid "{{name}} (Copy)"
 msgstr ""
 
 msgid "Create"
@@ -77,20 +340,23 @@ msgid ""
 "undone."
 msgstr ""
 
+msgid "Export dataset and metrics associated with this evaluation."
+msgstr ""
+
+msgid "Dataset (CSV)"
+msgstr ""
+
+msgid "Metrics (CSV)"
+msgstr ""
+
 msgid "Name is required"
 msgstr "نام کی ضرورت ہے"
 
 msgid "Rename evaluation"
 msgstr ""
 
-msgid "Save"
-msgstr "محفوظ"
-
 msgid "ID"
 msgstr "شناخت"
-
-msgid "Created"
-msgstr "تخلیق"
 
 msgid "Locations"
 msgstr ""
@@ -99,12 +365,6 @@ msgid "Evaluated on {{count}} locations"
 msgid_plural "Evaluated on {{count}} locations"
 msgstr[0] ""
 msgstr[1] ""
-
-msgid "Actions"
-msgstr "ایکشنز"
-
-msgid "New evaluation"
-msgstr ""
 
 msgid "Sort by {{column}}"
 msgstr ""
@@ -141,22 +401,69 @@ msgstr ""
 msgid "Error renaming evaluation"
 msgstr ""
 
-msgid "Could not connect to CHAP"
+msgid "Breadcrumbs"
 msgstr ""
 
-msgid "The app is not able to connect to the CHAP server."
+msgid "Could not connect to Chap"
+msgstr ""
+
+msgid "The app is not able to connect to the Chap server."
 msgstr ""
 
 msgid ""
-"Please check your route configuration and make sure the CHAP server is "
+"Please check your route configuration and make sure the Chap server is "
 "running."
 msgstr ""
 
-msgid "Learn more about Modeling and CHAP"
+msgid "Learn more about Modeling and Chap"
 msgstr ""
 
 msgid "Configure settings"
 msgstr ""
+
+msgid "No datasets found"
+msgstr ""
+
+msgid "No manually created datasets"
+msgstr ""
+
+msgid "Origin"
+msgstr ""
+
+msgid "Created manually"
+msgstr ""
+
+msgid "Created by evaluations or predictions"
+msgstr ""
+
+msgid "Until {{date}}"
+msgstr ""
+
+msgid "Previous month"
+msgstr ""
+
+msgid "Next month"
+msgstr ""
+
+msgid "Select date range"
+msgstr "تاریخ کی حد منتخب کریں"
+
+msgid "Done"
+msgstr "ہو گیا"
+
+msgid "Date"
+msgstr "تاریخ"
+
+msgid "Clear date range"
+msgstr ""
+
+msgid ""
+"DHIS2 2.40 is no longer supported. Some functionality may not work on this "
+"instance. Please upgrade DHIS2 to get the latest features."
+msgstr ""
+
+msgid "Dismiss"
+msgstr "خطرہ"
 
 msgid "Oops!"
 msgstr ""
@@ -164,7 +471,45 @@ msgstr ""
 msgid "Sorry, an unexpected error has occurred."
 msgstr ""
 
-msgid "Inspect dataset"
+msgid "Back to app"
+msgstr ""
+
+msgid "Click to expand"
+msgstr ""
+
+msgid "No data to check"
+msgstr ""
+
+msgid "Period"
+msgstr "مدت"
+
+msgid "Complete (%)"
+msgstr ""
+
+msgid "{{column}}{{colon}} {{available}} of {{expected}} locations"
+msgstr ""
+
+msgid "Data completeness"
+msgstr ""
+
+msgid "Reset zoom"
+msgstr ""
+
+msgid "Show values for period"
+msgstr ""
+
+msgid ""
+"{{available}} of {{expected}} values present ({{percent}}%) · {{zeros}} zero"
+" · {{missing}} missing"
+msgstr ""
+
+msgid "Show all locations"
+msgstr ""
+
+msgid "Location"
+msgstr "مقام"
+
+msgid "Missing"
 msgstr ""
 
 msgid "Cancel job"
@@ -190,6 +535,18 @@ msgstr ""
 msgid "View Logs"
 msgstr ""
 
+msgid "Downloading request…"
+msgstr ""
+
+msgid "Download request"
+msgstr ""
+
+msgid "Downloading debug info…"
+msgstr ""
+
+msgid "Download debug info"
+msgstr ""
+
 msgid "Copy Job ID"
 msgstr ""
 
@@ -212,6 +569,20 @@ msgid "Job deleted"
 msgstr ""
 
 msgid "Failed to delete job"
+msgstr ""
+
+msgid ""
+"Debug info downloaded. Logs may contain data values. Check the file before "
+"sharing."
+msgstr ""
+
+msgid "Failed to download debug info. Please try again."
+msgstr ""
+
+msgid "The original request is not available for this job."
+msgstr ""
+
+msgid "Failed to download the job request. Please try again."
 msgstr ""
 
 msgid "Status"
@@ -253,64 +624,32 @@ msgstr ""
 msgid "Make prediction"
 msgstr ""
 
-msgid "Create dataset (deprecated)"
-msgstr ""
-
-msgid "Create evaluation (deprecated)"
-msgstr ""
-
-msgid "Create evaluation (Legacy)"
-msgstr ""
-
 msgid "Create dataset"
 msgstr ""
 
 msgid "Cancelled"
 msgstr "منسوخ"
 
-msgid "Map Data Items"
+msgid "{{improvement}} vs {{reference}}"
 msgstr ""
 
-msgid "Map the model features to corresponding data items in DHIS2"
+msgid "Compare with"
 msgstr ""
 
-msgid "Target"
-msgstr "ہدف"
-
-msgid "Map the model target to the corresponding data item in DHIS2"
+msgid "No scores for this model yet."
 msgstr ""
 
-msgid "Map each model covariate to the corresponding data item in DHIS2"
+msgid "No comparison"
 msgstr ""
 
-msgid "No model selected"
+msgid "Not applicable"
 msgstr ""
 
-msgid "All data items mapped"
+msgid "{{name}} ({{status}})"
 msgstr ""
 
-msgid "{{mapped}}/{{total}} data items mapped"
-msgstr ""
-
-msgid "Dataset Configuration"
-msgstr ""
-
-msgid "Configure sources"
-msgstr ""
-
-msgid ""
-"The Data Visualizer app is not compatible with this feature. Please update "
-"to a newer version."
-msgstr ""
-
-msgid "Please map all model covariates to valid data items"
-msgstr ""
-
-msgid "Target \"{{targetName}}\" must be mapped to a data item"
-msgstr ""
-
-msgid "Covariate \"{{covariateName}}\" must be mapped to a data item"
-msgstr ""
+msgid "Organisation units"
+msgstr "تنظیمی یونٹس"
 
 msgid "Select organisation units"
 msgstr "تنظیم یونٹس منتخب کریں"
@@ -326,10 +665,46 @@ msgid ""
 "level."
 msgstr ""
 
+msgid "Could not verify the levels of the org units in the selected groups"
+msgstr ""
+
 msgid "All org units must be at the same level"
 msgstr ""
 
 msgid "Confirm Selection"
+msgstr ""
+
+msgid "Production"
+msgstr ""
+
+msgid "Approved for general use."
+msgstr ""
+
+msgid "Testing"
+msgstr ""
+
+msgid "Prepared for more extensive testing; not yet approved for production."
+msgstr ""
+
+msgid "Limited"
+msgstr "محدود"
+
+msgid ""
+"Tested on a small dataset. Requires manual tuning and close monitoring."
+msgstr ""
+
+msgid "Experimental"
+msgstr ""
+
+msgid ""
+"An early prototype with no formal validation - only for initial "
+"experimentation."
+msgstr ""
+
+msgid "Deprecated"
+msgstr ""
+
+msgid "This model is not intended for use or has been deprecated."
 msgstr ""
 
 msgid "Monthly"
@@ -344,75 +719,78 @@ msgstr "ہفتہ وار"
 msgid "Daily"
 msgstr "روزانہ"
 
-msgid "Any"
+msgid "Any period"
 msgstr ""
 
-msgid "Deprecated"
+msgid "Unknown"
+msgstr "نامعلوم"
+
+msgid "Remove from selection"
 msgstr ""
 
-msgid "This model is not intended for use or has been deprecated."
-msgstr ""
-
-msgid "Experimental"
-msgstr ""
-
-msgid ""
-"An early prototype with no formal validation - only for initial "
-"experimentation."
-msgstr ""
-
-msgid "Limited"
-msgstr "محدود"
-
-msgid ""
-"Tested on a small dataset. Requires manual tuning and close monitoring."
-msgstr ""
-
-msgid "Testing"
-msgstr ""
-
-msgid "Prepared for more extensive testing; not yet approved for production."
-msgstr ""
-
-msgid "Production"
-msgstr ""
-
-msgid "Approved for general use."
-msgstr ""
-
-msgid "{{count}} covariates"
-msgid_plural "{{count}} covariates"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Author note"
+msgid "Add to selection"
 msgstr ""
 
 msgid "Selected"
 msgstr "منتخب"
 
+msgid "Use this model"
+msgstr ""
+
+msgid "Select Models"
+msgstr ""
+
 msgid "Select Model"
 msgstr ""
 
-msgid "Search by title"
+msgid "Search models"
 msgstr ""
 
-msgid "Period Type"
-msgstr "اؤقات کی قسم"
+msgid "Period type"
+msgstr "مدت کی قسم"
 
-msgid "Assessment Status"
+msgid "Clear statuses"
 msgstr ""
 
-msgid "Select model"
+msgid "Version"
+msgstr "ورژن"
+
+msgid "Commit"
+msgstr "کمیٹی"
+
+msgid "Target"
+msgstr "ہدف"
+
+msgid "Covariates"
 msgstr ""
+
+msgid "None"
+msgstr "کوئی نہں"
+
+msgid "Author"
+msgstr ""
+
+msgid "Author note"
+msgstr ""
+
+msgid "Select a model to see details"
+msgstr ""
+
+msgid "Use selected models ({{count}})"
+msgid_plural "Use selected models ({{count}})"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "EWARS Evaluation 22-24"
 msgstr ""
 
-msgid "From period"
+msgid "End period must be after start period"
 msgstr ""
 
-msgid "To period"
+msgid "Invalid period"
+msgstr ""
+
+msgid "Period selection is unavailable"
 msgstr ""
 
 msgid "Reason"
@@ -424,8 +802,10 @@ msgstr ""
 msgid "Org unit"
 msgstr ""
 
-msgid "Period"
-msgstr "مدت"
+msgid "{{periods}} and {{count}} more"
+msgid_plural "{{periods}} and {{count}} more"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Import Summary"
 msgstr ""
@@ -492,13 +872,10 @@ msgstr ""
 msgid "Period type is required"
 msgstr ""
 
-msgid "Start date is required"
+msgid "Start period is required"
 msgstr ""
 
-msgid "End date is required"
-msgstr ""
-
-msgid "End date cannot be in the future"
+msgid "End period is required"
 msgstr ""
 
 msgid "At least one org unit is required"
@@ -507,25 +884,107 @@ msgstr ""
 msgid "Please select a model"
 msgstr ""
 
-msgid "Please map the covariates to valid data items"
-msgstr ""
-
 msgid "Please map the target to a valid data item"
 msgstr ""
 
-msgid "End period must be after start period"
-msgstr ""
-
-msgid "Model not found"
+msgid "End period cannot be in the future"
 msgstr ""
 
 msgid ""
-"The following org units have no geometry{{escape}} "
-"{{orgUnitsWithoutGeometry}}"
+"Map every model covariate to a data item before starting. Not "
+"mapped{{colon}} {{names}}"
 msgstr ""
 
 msgid "Data layer not found for data item id{{escape}} {{dataItemId}}"
 msgstr ""
+
+msgid "Needs update"
+msgstr ""
+
+msgid "This model can't run right now"
+msgstr ""
+
+msgid "Future-weather provider"
+msgstr ""
+
+msgid ""
+"This provider uses observed future weather. Its evaluation scores are not "
+"comparable to production performance, and it cannot be used for future "
+"predictions."
+msgstr ""
+
+msgid "Select at least one metric"
+msgstr ""
+
+msgid "Select a baseline model"
+msgstr ""
+
+msgid "Modeling defaults"
+msgstr ""
+
+msgid "These defaults apply to everyone using this Chap server."
+msgstr ""
+
+msgid "Could not load the Chap route"
+msgstr ""
+
+msgid "Configure a Chap route in General settings first."
+msgstr ""
+
+msgid "Could not load modeling defaults"
+msgstr ""
+
+msgid ""
+"This Chap server does not support modeling defaults. Upgrade Chap Core to "
+"use these settings."
+msgstr ""
+
+msgid "Retry"
+msgstr ""
+
+msgid "Modeling defaults saved"
+msgstr ""
+
+msgid "Metrics"
+msgstr ""
+
+msgid ""
+"Selected metrics are shown by default on benchmarks and evaluations, and "
+"rank models in the order listed."
+msgstr ""
+
+msgid "Learn how to add custom metrics"
+msgstr ""
+
+msgid "Available metrics"
+msgstr ""
+
+msgid "Selected metrics"
+msgstr ""
+
+msgid "Baseline"
+msgstr ""
+
+msgid "Default baseline model"
+msgstr ""
+
+msgid "Model runs are compared against this baseline."
+msgstr ""
+
+msgid "Weekly backtest defaults"
+msgstr ""
+
+msgid "Monthly backtest defaults"
+msgstr ""
+
+msgid "Could not save modeling defaults"
+msgstr ""
+
+msgid "Discard changes"
+msgstr ""
+
+msgid "Save changes"
+msgstr "تبدیلیاں محفوظ کریں"
 
 msgid "Unsaved changes"
 msgstr ""
@@ -538,22 +997,362 @@ msgstr ""
 msgid "Leave page"
 msgstr ""
 
-msgid "Start dry run"
+msgid "Data check"
 msgstr ""
 
-msgid "Start import"
+msgid "Dataset name"
 msgstr ""
 
-msgid "There was an error"
+msgid "EWARS data 22-24"
 msgstr ""
 
-msgid "Error loading models"
+msgid "Target column"
 msgstr ""
 
-msgid "An unknown error occurred"
+msgid "The column models predict. Evaluations of this dataset use it."
 msgstr ""
 
-msgid "Missing data for covariate"
+msgid "Choose the column to predict"
+msgstr ""
+
+msgid "Too short to evaluate"
+msgstr ""
+
+msgid ""
+"This range has {{periodCount}} periods, but an evaluation needs at least "
+"{{minimumEvaluationPeriods}}. You can still create the dataset."
+msgstr ""
+
+msgid "Check data"
+msgstr ""
+
+msgid "Could not check the data"
+msgstr ""
+
+msgid "Could not create dataset"
+msgstr ""
+
+msgid "Some locations were left out"
+msgstr ""
+
+msgid "Every location is missing data or a shape, so nothing was imported."
+msgstr ""
+
+msgid "Chap left out {{count}} locations because of missing data or shapes."
+msgid_plural ""
+"Chap left out {{count}} locations because of missing data or shapes."
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Import summary"
+msgstr ""
+
+msgid "View details"
+msgstr ""
+
+msgid "Creating dataset"
+msgstr ""
+
+msgid "The import is running in the background."
+msgstr ""
+
+msgid "View logs"
+msgstr ""
+
+msgid "Dataset creation failed"
+msgstr ""
+
+msgid "Edit and retry"
+msgstr ""
+
+msgid "Dataset created"
+msgstr ""
+
+msgid "View datasets"
+msgstr ""
+
+msgid ""
+"No model reads a column with this name. Check the spelling or pick a "
+"suggested name."
+msgstr ""
+
+msgid "Read by {{count}} models"
+msgid_plural "Read by {{count}} models"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Data columns"
+msgstr ""
+
+msgid "Models find their data by column name, so use the names they expect."
+msgstr ""
+
+msgid "No columns yet. Add a suggested column or one from Model support."
+msgstr ""
+
+msgid "Column name"
+msgstr ""
+
+msgid "DHIS2 data item"
+msgstr ""
+
+msgid "Select a data item"
+msgstr ""
+
+msgid "Remove column"
+msgstr ""
+
+msgid "Add column"
+msgstr ""
+
+msgid "Suggested"
+msgstr ""
+
+msgid "Weekly data"
+msgstr ""
+
+msgid "Monthly data"
+msgstr ""
+
+msgid "Could not load models"
+msgstr ""
+
+msgid ""
+"You can still create the dataset, but we cannot tell which models can use "
+"it."
+msgstr ""
+
+msgid "Model support"
+msgstr ""
+
+msgid "of {{total}} models can use this dataset"
+msgstr ""
+
+msgid "Supported models"
+msgstr ""
+
+msgid "Add columns to support more models"
+msgstr ""
+
+msgid "+{{count}} models"
+msgid_plural "+{{count}} models"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Add"
+msgstr "اضافہ"
+
+msgid "Supported ({{count}})"
+msgid_plural "Supported ({{count}})"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Not supported ({{count}})"
+msgid_plural "Not supported ({{count}})"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Needs {{columns}}"
+msgstr ""
+
+msgid "A different period type"
+msgstr ""
+
+msgid "Dataset import was rejected"
+msgstr ""
+
+msgid "Covariate name is required"
+msgstr ""
+
+msgid "Add at least one data column"
+msgstr ""
+
+msgid "Covariate names must be unique"
+msgstr ""
+
+msgid ""
+"{{covariate}} has no observations for these periods and organisation units"
+msgstr ""
+
+msgid "The selected organisation units must have geometry"
+msgstr ""
+
+msgid "Backtest parameters"
+msgstr ""
+
+msgid "Could not load backtest parameters"
+msgstr ""
+
+msgid "Could not load weather providers"
+msgstr ""
+
+msgid "No future-weather providers are available."
+msgstr ""
+
+msgid "Error loading datasets or models"
+msgstr ""
+
+msgid "No saved datasets yet"
+msgstr ""
+
+msgid "Save a dataset first, then return here to run models in a benchmark."
+msgstr ""
+
+msgid "Save a dataset first, then return here to run an evaluation."
+msgstr ""
+
+msgid "How benchmarks work"
+msgstr ""
+
+msgid ""
+"Runs with the same dataset, target column and backtest parameters appear in "
+"the same benchmark. The run name labels your model runs; it does not create "
+"a separate benchmark."
+msgstr ""
+
+msgid "Run name"
+msgstr ""
+
+msgid "Benchmark model runs"
+msgstr ""
+
+msgid "No datasets match the origin filter"
+msgstr ""
+
+msgid "Set on the dataset."
+msgstr ""
+
+msgid "The dataset column the models predict and are scored against."
+msgstr ""
+
+msgid "Pick a dataset first"
+msgstr ""
+
+msgid "Pick a target column first"
+msgstr ""
+
+msgid "No compatible model"
+msgstr ""
+
+msgid "No configured model matches this dataset’s covariates and period type."
+msgstr ""
+
+msgid "Dataset too short"
+msgstr ""
+
+msgid ""
+"This dataset has {{periodCount}} periods, but an evaluation needs at least "
+"{{requiredPeriodCount}}."
+msgstr ""
+
+msgid "Run benchmark"
+msgstr ""
+
+msgid "Start evaluation"
+msgstr ""
+
+msgid "Could not start evaluation"
+msgstr ""
+
+msgid "Select models"
+msgstr ""
+
+msgid "No models selected"
+msgstr ""
+
+msgid "Could not check model forecast limits"
+msgstr ""
+
+msgid "Unsupported forecast periods"
+msgstr ""
+
+msgid "Enter a whole number greater than zero"
+msgstr ""
+
+msgid "Select a future-weather provider"
+msgstr ""
+
+msgid "Number of training runs must not exceed the number of splits"
+msgstr ""
+
+msgid "{{model}} supports {{minimum}}–{{maximum}} forecast periods."
+msgstr ""
+
+msgid "{{model}} requires at least {{minimum}} forecast periods."
+msgstr ""
+
+msgid "{{model}} supports at most {{maximum}} forecast periods."
+msgstr ""
+
+msgid "Cannot run prediction"
+msgstr ""
+
+msgid "Prediction run name"
+msgstr ""
+
+msgid "Prediction could not run"
+msgstr ""
+
+msgid ""
+"Check or import the required data for the listed variables and organisation "
+"units, or adjust the training period in the prediction setup before "
+"retrying."
+msgstr ""
+
+msgid "View rejected data"
+msgstr ""
+
+msgid "Prediction data rejected"
+msgstr ""
+
+msgid "Loading period settings"
+msgstr ""
+
+msgid "Preparing period selection."
+msgstr ""
+
+msgid ""
+"Missing prediction setup details. Open the setup configuration and ensure "
+"model, period type, training start, and data mappings are configured."
+msgstr ""
+
+msgid "Training period"
+msgstr ""
+
+msgid "Training start period"
+msgstr ""
+
+msgid "Last training period"
+msgstr ""
+
+msgid "Unknown model"
+msgstr ""
+
+msgid "Run a new prediction"
+msgstr ""
+
+msgid "Training start"
+msgstr ""
+
+msgid "Signal policy"
+msgstr ""
+
+msgid "{{policy}} (raises pending signals for review)"
+msgstr ""
+
+msgid "None (this run raises no signals)"
+msgstr ""
+
+msgid "Please select a period"
+msgstr ""
+
+msgid "Period must be completed (cannot be later than last completed period)"
+msgstr ""
+
+msgid "Period is before training start"
+msgstr ""
+
+msgid "Cannot determine a forecast horizon for this prediction setup."
 msgstr ""
 
 msgid "{{count}} org units"
@@ -610,7 +1409,297 @@ msgstr ""
 msgid "You cannot select more than {{max}} organisation units at a time"
 msgstr ""
 
-msgid "Please select a visualization."
+msgid "Last 7 days"
+msgstr "آخری 7 دن"
+
+msgid "Last 14 days"
+msgstr "آخری 14 دن"
+
+msgid "Last 30 days"
+msgstr "آخری 30 دن"
+
+msgid "Last 90 days"
+msgstr ""
+
+msgid "{{count}} job"
+msgid_plural "{{count}} job"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Day"
+msgstr "دن"
+
+msgid "Jobs"
+msgstr ""
+
+msgid "Active"
+msgstr "فعال"
+
+msgid "Started"
+msgstr ""
+
+msgid "Finished"
+msgstr ""
+
+msgid "Recent activity"
+msgstr ""
+
+msgid "Error loading jobs"
+msgstr ""
+
+msgid "Invalid prediction setup"
+msgstr ""
+
+msgid "No activity yet. Run a prediction to see job status and logs here."
+msgstr ""
+
+msgid "Activity view"
+msgstr ""
+
+msgid "Chart"
+msgstr "چارٹ"
+
+msgid "Table"
+msgstr "ٹیبل"
+
+msgid "All statuses"
+msgstr ""
+
+msgid "View all activity"
+msgstr ""
+
+msgid "No activity matches the selected filters"
+msgstr ""
+
+msgid "Run a prediction to check its input data."
+msgstr ""
+
+msgid "Unable to load input data."
+msgstr ""
+
+msgid "Completeness unavailable for this dataset."
+msgstr ""
+
+msgid "Latest period ({{period}})"
+msgstr ""
+
+msgid "{{percent}}% complete"
+msgstr ""
+
+msgid "{{count}} locations with gaps"
+msgid_plural "{{count}} locations with gaps"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Latest input data"
+msgstr ""
+
+msgid "View dataset"
+msgstr ""
+
+msgid "Prediction origin period"
+msgstr ""
+
+msgid "{{metric}} improvement over {{baseline}}"
+msgstr ""
+
+msgid "Better than {{baseline}}"
+msgstr ""
+
+msgid "Worse than {{baseline}}"
+msgstr ""
+
+msgid "{{count}} forecasts scored"
+msgid_plural "{{count}} forecasts scored"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Evaluation splits"
+msgstr ""
+
+msgid "Evaluation average"
+msgstr ""
+
+msgid "Prediction runs"
+msgstr ""
+
+msgid "Prediction trend"
+msgstr ""
+
+msgid "No observed prediction outcomes yet."
+msgstr ""
+
+msgid "Model performance monitoring"
+msgstr ""
+
+msgid ""
+"Each dot is one run, scored against the baseline once outcomes were "
+"observed. The prediction trend combines all prediction runs so far."
+msgstr ""
+
+msgid "Metric"
+msgstr ""
+
+msgid "Compare with baseline"
+msgstr ""
+
+msgid "Could not load monitoring"
+msgstr ""
+
+msgid "No metrics available for monitoring."
+msgstr ""
+
+msgid ""
+"The comparison with {{baseline}} is undefined for these runs, for example "
+"when the baseline scores zero."
+msgstr ""
+
+msgid "Delete prediction run"
+msgstr ""
+
+msgid ""
+"This will permanently delete the prediction run from Chap. It will not "
+"remove any values previously imported into DHIS2."
+msgstr ""
+
+msgid "Import"
+msgstr "درآمد کریں"
+
+msgid "{{count}} run"
+msgid_plural "{{count}} run"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Last run {{timeAgo}} ago"
+msgstr ""
+
+msgid "No runs yet"
+msgstr ""
+
+msgid "Predictions"
+msgstr ""
+
+msgid "Running job"
+msgstr ""
+
+msgid "Run ID"
+msgstr ""
+
+msgid "Prediction periods"
+msgstr ""
+
+msgid "Training data cutoff"
+msgstr ""
+
+msgid "Error loading prediction runs"
+msgstr ""
+
+msgid "No predictions yet. Run a prediction to start producing predictions."
+msgstr ""
+
+msgid "Prediction run deleted"
+msgstr ""
+
+msgid "Failed to delete prediction run"
+msgstr ""
+
+msgid "Quick actions"
+msgstr ""
+
+msgid "Go to last run"
+msgstr ""
+
+msgid "Edit setup"
+msgstr ""
+
+msgid "Edit prediction setup"
+msgstr ""
+
+msgid "Prediction setup updated"
+msgstr ""
+
+msgid "Failed to update prediction setup"
+msgstr ""
+
+msgid "Edit schedule"
+msgstr ""
+
+msgid "Scheduled predictions"
+msgstr ""
+
+msgid "Enable to include this setup in scheduled prediction runs."
+msgstr ""
+
+msgid "About scheduling"
+msgstr ""
+
+msgid ""
+"The external Chap scheduler must be running for scheduled predictions to "
+"execute. Contact your system administrator to set up the scheduler if you "
+"haven't yet."
+msgstr ""
+
+msgid "Scheduling"
+msgstr "شیڈولنگ"
+
+msgid "No prediction setup found"
+msgstr ""
+
+msgid "Enabled"
+msgstr "فعال"
+
+msgid "Disabled"
+msgstr "معذور"
+
+msgid "{{count}} {{label}}"
+msgid_plural "{{count}} {{label}}"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Configuration"
+msgstr "ترتیب"
+
+msgid "location"
+msgstr ""
+
+msgid "locations"
+msgstr ""
+
+msgid "Data sources"
+msgstr ""
+
+msgid "source"
+msgstr ""
+
+msgid "sources"
+msgstr ""
+
+msgid "Error loading dataset"
+msgstr ""
+
+msgid ""
+"Created {{created}} · {{first}} to {{last}} · {{locations}} locations · "
+"target {{target}}"
+msgstr ""
+
+msgid "Error loading datasets"
+msgstr ""
+
+msgid "No datasets yet. Create one to reuse the same data across evaluations."
+msgstr ""
+
+msgid "{{count}} period ahead"
+msgid_plural "{{count}} period ahead"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Select organisation unit"
+msgstr "تنظیم یونٹ منتخب کریں"
+
+msgid "Select split period"
+msgstr ""
+
+msgid "Select forecast horizon"
 msgstr ""
 
 msgid ""
@@ -619,10 +1708,8 @@ msgstr ""
 
 msgid ""
 "This visualization is provided by external contributors and may occasionally"
-" fail due to issues in the contributed plot definition."
-msgstr ""
-
-msgid "No visualization found"
+" fail due to issues in the contributed plot definition. Please contact your "
+"system administrator if you experience issues with this visualization."
 msgstr ""
 
 msgid "Click to view actions"
@@ -641,6 +1728,27 @@ msgid "View Source"
 msgstr ""
 
 msgid "Save as SVG"
+msgstr ""
+
+msgid "an organisation unit"
+msgstr ""
+
+msgid "a split period"
+msgstr ""
+
+msgid "a forecast horizon"
+msgstr ""
+
+msgid "Please select a visualization."
+msgstr ""
+
+msgid "Please select {{filters}} to view this visualization."
+msgstr ""
+
+msgid " and "
+msgstr ""
+
+msgid "No visualization found"
 msgstr ""
 
 msgid "Evaluation plots"
@@ -677,6 +1785,68 @@ msgstr ""
 msgid "The evaluation ID is invalid. Please try again."
 msgstr ""
 
+msgid "Not available"
+msgstr "دستیاب نہیں ہے"
+
+msgid "target {{target}}"
+msgstr ""
+
+msgid "Evaluation metrics"
+msgstr ""
+
+msgid "No metrics available for this evaluation."
+msgstr ""
+
+msgid "Scores aggregated across all evaluation splits and organisation units."
+msgstr ""
+
+msgid "Could not load comparisons"
+msgstr ""
+
+msgid "Show fewer metrics"
+msgstr ""
+
+msgid "Show all {{count}} metrics"
+msgid_plural "Show all {{count}} metrics"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid ""
+"Relative improvement over {{reference}}. +20% means 20% better than it, -20%"
+" means 20% worse."
+msgstr ""
+
+msgid ""
+"Improvement over {{reference}} in the units of the score. Positive means "
+"better, negative means worse."
+msgstr ""
+
+msgid ""
+"How much closer to the target of {{target}} than {{reference}}. Positive "
+"means better, negative means worse."
+msgstr ""
+
+msgid ""
+"How much closer to the target than {{reference}}. Positive means better, "
+"negative means worse."
+msgstr ""
+
+msgid ""
+"Compared with {{reference}}. Positive means better, negative means worse."
+msgstr ""
+
+msgid "Higher is better, up to the target of {{target}}."
+msgstr ""
+
+msgid "Closer to the target of {{target}} is better."
+msgstr ""
+
+msgid "Higher is better."
+msgstr ""
+
+msgid "Lower is better."
+msgstr ""
+
 msgid "Summary"
 msgstr ""
 
@@ -692,32 +1862,10 @@ msgid ""
 "the results of the run, but the metadata may not be accurate."
 msgstr ""
 
-msgid "Training period"
-msgstr ""
-
 msgid "{{count}} locations"
 msgid_plural "{{count}} locations"
 msgstr[0] ""
 msgstr[1] ""
-
-msgid "Please select a visualization and metric."
-msgstr ""
-
-msgid ""
-"Keep in mind that this is advanced functionality and may not be suitable for"
-" all users."
-msgstr ""
-
-msgid "Metric plot"
-msgstr ""
-
-msgid ""
-"Metric plots are advanced functionality and may be misinterpreted. Use with "
-"caution."
-msgstr ""
-
-msgid "Select metric"
-msgstr ""
 
 msgid "Evaluation result"
 msgstr ""
@@ -737,33 +1885,88 @@ msgstr ""
 msgid "Result"
 msgstr "نتیجہ"
 
+msgid "Not defined"
+msgstr ""
+
+msgid "vs {{reference}}"
+msgstr ""
+
+msgid "All forecast horizons"
+msgstr ""
+
+msgid "Horizon {{horizon}}"
+msgstr ""
+
+msgid "{{count}} forecast case scored"
+msgid_plural "{{count}} forecast case scored"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Signal level"
+msgstr ""
+
+msgid "Threshold"
+msgstr ""
+
+msgid "Policy overall"
+msgstr ""
+
+msgid "Outbreak detection"
+msgstr ""
+
+msgid ""
+"How well a policy's signals match observed outbreaks, across all splits and "
+"organisation units. Each split's thresholds come from the data before it."
+msgstr ""
+
+msgid "Could not load outbreak scoring"
+msgstr ""
+
+msgid "Manage signal policies"
+msgstr ""
+
+msgid "Split by horizon"
+msgstr ""
+
+msgid "Compare with baseline model"
+msgstr ""
+
+msgid "Show all metrics"
+msgstr ""
+
+msgid "Could not score outbreak detection"
+msgstr ""
+
+msgid "Could not score the baseline model"
+msgstr ""
+
+msgid ""
+"Each score is compared with the baseline model {{reference}} under the same "
+"policy."
+msgstr ""
+
 msgid "Start period"
 msgstr ""
 
 msgid "End period"
 msgstr ""
 
-msgid "Create prediction"
+msgid "Predict"
 msgstr ""
 
-msgid ""
-"You should only do predictions on well-tested and reliable models that have "
-"shown promise when evaluated. Do you still want to continue?"
-msgstr ""
-
-msgid "Continue"
-msgstr "جاری رہے"
-
-msgid "Quick actions"
+msgid "Create prediction setup"
 msgstr ""
 
 msgid "Compare with..."
 msgstr ""
 
-msgid "Predict..."
+msgid "Prediction setup created"
 msgstr ""
 
-msgid "Error loading jobs"
+msgid "Failed to create prediction setup"
+msgstr ""
+
+msgid "Error loading models"
 msgstr ""
 
 msgid "Are you sure you want to archive this model?"
@@ -777,7 +1980,109 @@ msgstr ""
 msgid "Archive"
 msgstr "آرکائیو"
 
+msgid "View info"
+msgstr ""
+
 msgid "View evaluations"
+msgstr ""
+
+msgid "Any"
+msgstr ""
+
+msgid "True"
+msgstr "سچ ہے"
+
+msgid "False"
+msgstr "غلط"
+
+msgid "Model details{{colon}} {{name}}"
+msgstr ""
+
+msgid "Model details"
+msgstr ""
+
+msgid "Error loading model details"
+msgstr ""
+
+msgid "General"
+msgstr "Ø¬ÙØ±Ù"
+
+msgid "Display name"
+msgstr ""
+
+msgid "Configuration name"
+msgstr ""
+
+msgid "Configured model ID"
+msgstr ""
+
+msgid "Organization"
+msgstr ""
+
+msgid "Contact"
+msgstr ""
+
+msgid "Archived"
+msgstr ""
+
+msgid "Description"
+msgstr "تفصیلات"
+
+msgid "Model template"
+msgstr ""
+
+msgid "Template name"
+msgstr ""
+
+msgid "Supported period"
+msgstr ""
+
+msgid "Requires geo"
+msgstr ""
+
+msgid "Yes"
+msgstr "Ø¬Û ÛØ§Úº"
+
+msgid "No"
+msgstr "ÙÛÛÚº"
+
+msgid "Min prediction length"
+msgstr ""
+
+msgid "Max prediction length"
+msgstr ""
+
+msgid "Documentation"
+msgstr ""
+
+msgid "Required"
+msgstr "لازمی"
+
+msgid "Additional"
+msgstr ""
+
+msgid "Allow free additional"
+msgstr ""
+
+msgid "User options"
+msgstr ""
+
+msgid "This model has no configurable user options."
+msgstr ""
+
+msgid "Option"
+msgstr "اختیار"
+
+msgid "Selected value"
+msgstr ""
+
+msgid "Default"
+msgstr "طےشدہ"
+
+msgid "default"
+msgstr ""
+
+msgid "Citation"
 msgstr ""
 
 msgid "Model archived"
@@ -786,22 +2091,7 @@ msgstr ""
 msgid "Failed to archive model"
 msgstr ""
 
-msgid "Author"
-msgstr ""
-
-msgid "Covariates"
-msgstr ""
-
 msgid "No covariate names available"
-msgstr ""
-
-msgid "Archived"
-msgstr ""
-
-msgid "Active"
-msgstr "فعال"
-
-msgid "New model"
 msgstr ""
 
 msgid "No models available"
@@ -830,17 +2120,8 @@ msgstr ""
 msgid "Enter covariate name"
 msgstr ""
 
-msgid "Add"
-msgstr "اضافہ"
-
-msgid "Required"
-msgstr "لازمی"
-
 msgid "Remove"
 msgstr "حذف"
-
-msgid "Model template"
-msgstr ""
 
 msgid "Select the base model template"
 msgstr ""
@@ -875,30 +2156,113 @@ msgstr ""
 msgid "Failed to create model"
 msgstr ""
 
-msgid "Error loading prediction"
+msgid "{{name}} prediction"
 msgstr ""
 
-msgid "Prediction not found"
+msgid "Missing prediction setup id."
+msgstr ""
+
+msgid "Error loading prediction setup"
+msgstr ""
+
+msgid "Prediction setup not found."
 msgstr ""
 
 msgid ""
-"The prediction you are looking for does not exist or you do not have "
-"permission to access it."
+"There was a problem loading the prediction data required for signal "
+"configuration."
+msgstr ""
+
+msgid "No prediction data found"
+msgstr ""
+
+msgid "This prediction has no forecast data to configure signals for."
+msgstr ""
+
+msgid "Threshold unavailable"
+msgstr ""
+
+msgid "Outbreak detected"
+msgstr ""
+
+msgid "Endemic threshold unavailable"
 msgstr ""
 
 msgid ""
-"The model you are looking for does not exist or you do not have permission "
-"to access it."
+"Insufficient historical data to compute the endemic threshold for this "
+"location."
+msgstr ""
+
+msgid "Adjust signal output"
+msgstr ""
+
+msgid "Apply"
+msgstr "درخواست دیں"
+
+msgid "Signal review"
+msgstr ""
+
+msgid ""
+"All signals reviewed{{colon}} {{approved}} approved, {{declined}} declined."
+msgstr ""
+
+msgid ""
+"{{pending}} of {{total}} signals awaiting review ({{approved}} approved, "
+"{{declined}} declined)."
+msgstr ""
+
+msgid "Signal levels"
+msgstr ""
+
+msgid "No signal policy was recorded for this run."
+msgstr ""
+
+msgid "Show recorded signals on the plots."
+msgstr ""
+
+msgid "Show {{alertCount}} signals from {{policy}} with their thresholds."
+msgstr ""
+
+msgid "{{policy}} raised no signals for this run. Show its thresholds."
+msgstr ""
+
+msgid "Saved signal colours could not be loaded"
+msgstr ""
+
+msgid "Signals are shown with default colours."
+msgstr ""
+
+msgid "Organisation units exceeding threshold"
+msgstr ""
+
+msgid "Periods exceeding threshold"
+msgstr ""
+
+msgid "Thresholds unavailable"
+msgstr ""
+
+msgid "Prediction run"
+msgstr ""
+
+msgid "Explore thresholds"
+msgstr ""
+
+msgid "Try other threshold settings. Hides recorded signals."
+msgstr ""
+
+msgid ""
+"There was a problem loading the prediction data required for this prediction"
+" run."
+msgstr ""
+
+msgid "This prediction has no forecast data to display."
+msgstr ""
+
+msgid "Prediction settings"
 msgstr ""
 
 msgid "Prediction result"
 msgstr ""
-
-msgid "Chart"
-msgstr "چارٹ"
-
-msgid "Table"
-msgstr "ٹیبل"
 
 msgid "Map"
 msgstr "نقشہ"
@@ -906,21 +2270,75 @@ msgstr "نقشہ"
 msgid "No prediction data found."
 msgstr ""
 
+msgid "Signal output"
+msgstr ""
+
+msgid "Use signal outputs"
+msgstr ""
+
+msgid "Import the signal level code from {{policy}}."
+msgstr ""
+
+msgid "Import 1 when an outbreak is likely, otherwise 0."
+msgstr ""
+
+msgid "Imported value"
+msgstr ""
+
+msgid "No signal"
+msgstr ""
+
+msgid "One region-period result is missing and will be skipped."
+msgid_plural "One region-period result is missing and will be skipped."
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Some outbreak indicators will be skipped"
+msgstr ""
+
 msgid ""
-"There was an error loading the prediction summary. Please try again later."
+"One region has forecast periods without thresholds. Only outbreak indicators"
+" for those periods will be skipped; indicators for periods with thresholds "
+"will still be imported."
+msgid_plural ""
+"One region has forecast periods without thresholds. Only outbreak indicators"
+" for those periods will be skipped; indicators for periods with thresholds "
+"will still be imported."
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Minimum outbreak probability"
 msgstr ""
 
-msgid "Predicted periods"
+msgid "Threshold strategy"
 msgstr ""
 
-msgid "Import"
-msgstr "درآمد کریں"
+msgid "Threshold parameters"
+msgstr ""
 
-msgid "Guide"
+msgid "Adjust"
+msgstr ""
+
+msgid "Outbreak indicator"
+msgstr ""
+
+msgid "Endemic threshold (optional)"
+msgstr ""
+
+msgid "Requires data value delete authority."
+msgstr ""
+
+msgid "Clear previous values"
 msgstr ""
 
 msgid "Loading"
 msgstr "لوڈ کر رہا ہے"
+
+msgid "Data elements"
+msgstr "ڈیٹا عنصر"
+
+msgid "Data items"
+msgstr ""
 
 msgid "Start typing to search for data items"
 msgstr ""
@@ -934,15 +2352,41 @@ msgstr ""
 msgid "Clear selection"
 msgstr ""
 
+msgid "Search for data elements"
+msgstr ""
+
 msgid "Search for indicators, data elements, or program indicators"
 msgstr ""
 
-msgid "Import forecasted values"
+msgid "Checking import with DHIS2"
+msgstr ""
+
+msgid "Checking values to clear"
+msgstr ""
+
+msgid "Clearing previous values"
+msgstr ""
+
+msgid "Importing prediction values"
+msgstr ""
+
+msgid "Clear and import"
 msgstr ""
 
 msgid ""
-"Importing forecasted values into DHIS2 requires you to set up five data "
-"elements for the quantiles outputted by the model."
+"This will clear existing values for the selected output data elements, then "
+"import this prediction into DHIS2."
+msgstr ""
+
+msgid ""
+"This will import this prediction into DHIS2 without clearing existing values"
+" first."
+msgstr ""
+
+msgid "Clear and import prediction"
+msgstr ""
+
+msgid "Import progress"
 msgstr ""
 
 msgid "Quantile high"
@@ -960,36 +2404,134 @@ msgstr ""
 msgid "Quantile low"
 msgstr ""
 
+msgid "Unable to load signal data"
+msgstr ""
+
+msgid ""
+"There was a problem loading the prediction data required for outbreak "
+"indicator import."
+msgstr ""
+
+msgid "Cannot import prediction"
+msgstr ""
+
+msgid "Missing or invalid prediction setup id."
+msgstr ""
+
+msgid "Import forecasted values"
+msgstr ""
+
+msgid ""
+"Importing forecasted values into DHIS2 requires you to set up five data "
+"elements for the quantiles outputted by the model."
+msgstr ""
+
+msgid "Signal probability is required"
+msgstr ""
+
+msgid "Quantile low is required"
+msgstr ""
+
+msgid "Quantile high is required"
+msgstr ""
+
+msgid "Median is required"
+msgstr ""
+
+msgid "Quantile mid low is required"
+msgstr ""
+
+msgid "Quantile mid high is required"
+msgstr ""
+
+msgid "Outbreak indicator is required"
+msgstr ""
+
 msgid "Failed to post prediction data"
+msgstr ""
+
+msgid ""
+"Previous values may have been cleared, but the new import did not complete"
 msgstr ""
 
 msgid "Prediction data posted successfully"
 msgstr ""
 
-msgid "Delete prediction"
+msgid "{{name}} uses an option set without the codes {{values}}."
+msgstr ""
+
+msgid "{{name}} has value type {{valueType}} and cannot store {{values}}."
+msgstr ""
+
+msgid "Error loading prediction configurations"
+msgstr ""
+
+msgid "Delete prediction setup"
 msgstr ""
 
 msgid ""
-"Are you sure you want to delete this prediction? This action cannot be "
-"undone."
+"This will permanently delete the setup, associated prediction runs, and "
+"associated data. This action cannot be undone."
 msgstr ""
 
-msgid "View"
-msgstr "دیکھیں"
-
-msgid "Periods"
-msgstr "دور"
-
-msgid "New prediction"
+msgid "Date created"
 msgstr ""
 
-msgid "No predictions available"
+msgid ""
+"No prediction configurations yet - create one from a completed evaluation."
 msgstr ""
 
-msgid "Prediction deleted"
+msgid "Prediction setup deleted"
 msgstr ""
 
-msgid "Failed to delete prediction"
+msgid "Failed to delete prediction setup"
+msgstr ""
+
+msgid "Error loading prediction"
+msgstr ""
+
+msgid "Prediction not found"
+msgstr ""
+
+msgid ""
+"The prediction you are looking for does not exist or you do not have "
+"permission to access it."
+msgstr ""
+
+msgid "Model not found"
+msgstr ""
+
+msgid "The model for this prediction could not be loaded."
+msgstr ""
+
+msgid "Setup name"
+msgstr ""
+
+msgid ""
+"No signal policies exist yet. Create one under Signal policies to raise "
+"signals from this setup."
+msgstr ""
+
+msgid ""
+"Every prediction run automatically raises pending signals with this policy, "
+"for review before release. Leave empty to run predictions without signals."
+msgstr ""
+
+msgid "No signal policy"
+msgstr ""
+
+msgid "Unable to load signal policies{{colon}} {{message}}"
+msgstr ""
+
+msgid "You can change this configuration at any point."
+msgstr ""
+
+msgid "Set default import mapping"
+msgstr ""
+
+msgid ""
+"Choose the DHIS2 data elements to use by default when prediction outputs are"
+" imported."
 msgstr ""
 
 msgid "There are running jobs in the background"
@@ -998,23 +2540,144 @@ msgstr ""
 msgid "Running jobs"
 msgstr ""
 
+msgid "Review the threshold parameters and apply your changes."
+msgstr ""
+
+msgid "Waiting for connection"
+msgstr ""
+
+msgid "Threshold calculation will resume when your connection returns."
+msgstr ""
+
+msgid "Calculating thresholds..."
+msgstr ""
+
+msgid "Unable to calculate thresholds"
+msgstr ""
+
+msgid "There was a problem calculating thresholds for this prediction run."
+msgstr ""
+
+msgid "Unable to load threshold strategies"
+msgstr ""
+
+msgid ""
+"The strategy options could not be loaded, so the strategy cannot be changed."
+msgstr ""
+
+msgid "Standard deviations above mean"
+msgstr ""
+
+msgid "Lower percentile (%)"
+msgstr ""
+
+msgid "Upper percentile (%)"
+msgstr ""
+
+msgid ""
+"Most recent complete years in the dataset. Leave empty to use all available "
+"history."
+msgstr ""
+
+msgid "Outbreak"
+msgstr ""
+
+msgid "No outbreak"
+msgstr ""
+
+msgid "Unavailable"
+msgstr ""
+
+msgid "Organisation units with outbreaks"
+msgstr ""
+
+msgid "Organisation units without outbreaks"
+msgstr ""
+
+msgid "Organisation units with unavailable thresholds"
+msgstr ""
+
+msgid "Remove filter"
+msgstr ""
+
+msgid "Filter by signal level"
+msgstr ""
+
+msgid "Select all"
+msgstr "تمام کو چنو"
+
+msgid "Status filter"
+msgstr ""
+
+msgid "Shift zoom left"
+msgstr ""
+
+msgid "Shift zoom left one period"
+msgstr ""
+
+msgid "Shift zoom right"
+msgstr ""
+
+msgid "Shift zoom right one period"
+msgstr ""
+
+msgid "No organisation units match the selected filters."
+msgstr ""
+
+msgid "Dashboard"
+msgstr "ڈیشبورڈ"
+
 msgid "Evaluate"
 msgstr ""
 
 msgid "Overview"
 msgstr ""
 
-msgid "Predict"
+msgid "Report a bug"
 msgstr ""
 
-msgid "Models"
-msgstr ""
-
-msgid "Jobs"
+msgid "Guides"
 msgstr ""
 
 msgid "Settings"
 msgstr "ØªØ±ØªÛØ¨Ø§Øª"
+
+msgid ""
+"This is an alpha version of the Modeling App. Some features may change or "
+"contain bugs."
+msgstr ""
+
+msgid "Read the guide"
+msgstr ""
+
+msgid "Failed to copy report details"
+msgstr ""
+
+msgid ""
+"Copy the template and email it to the Chap team. It includes this page and "
+"time so we can find the problem faster."
+msgstr ""
+
+msgid "Send to"
+msgstr "کے لئے بھیج"
+
+msgid "Copied email address"
+msgstr ""
+
+msgid "Copy email address"
+msgstr ""
+
+msgid "Bug report template"
+msgstr ""
+
+msgid "Copied"
+msgstr ""
+
+msgid "Copy template"
+msgstr ""
+
+msgid "Incompatible versions"
+msgstr ""
 
 msgid ""
 "The version of the Modeling App is not compatible with the backend (Chap "
@@ -1026,13 +2689,25 @@ msgid ""
 " minimum Chap core version{{escape}} {{chapMinVersion}}"
 msgstr ""
 
-msgid "Compare evaluations"
-msgstr ""
-
 msgid "Compare evaluations to assess model, co-variates and data performance."
 msgstr ""
 
+msgid "Back to evaluation details"
+msgstr ""
+
+msgid "Back to evaluation"
+msgstr ""
+
 msgid "Select base evaluation"
+msgstr ""
+
+msgid "Location(s)"
+msgstr ""
+
+msgid "Shift zoom left (H)"
+msgstr ""
+
+msgid "Shift zoom right (L)"
 msgstr ""
 
 msgid ""
@@ -1071,6 +2746,12 @@ msgstr "اشارے"
 msgid "Program Indicator"
 msgstr ""
 
+msgid "Used before"
+msgstr ""
+
+msgid "All data items"
+msgstr "تمام اعداد و شمار کی اشیاء"
+
 msgid "No compatible evaluations found"
 msgstr ""
 
@@ -1080,128 +2761,347 @@ msgstr ""
 msgid "No evaluations found"
 msgstr ""
 
-msgid "CHAP settings"
-msgstr ""
+msgid "Confirm"
+msgstr "تصدیق کریں"
 
-msgid "An error occurred while connecting to the CHAP server."
-msgstr ""
-
-msgid ""
-"Are you sure you have configured your route correctly? See the console for "
-"more details."
-msgstr ""
-
-msgid "Server information"
-msgstr ""
-
-msgid "CHAP Version"
-msgstr ""
-
-msgid "Python Version"
-msgstr ""
-
-msgid "Operating System"
-msgstr ""
-
-msgid "Connected"
-msgstr ""
-
-msgid "Your server might not be secure"
+msgid "This action cannot be undone"
 msgstr ""
 
 msgid ""
-"CHAP currently does not have it's own authentication service. Make sure to "
-"secure it by blocking public access on your server firewall."
+"You are about to permanently delete ALL data values for the selected data "
+"elements across all organisation units and time periods. This action is "
+"irreversible."
 msgstr ""
 
-msgid "Your server is not secure"
+msgid "Data elements to be pruned{{colon}}"
 msgstr ""
 
-msgid "Route configuration"
+msgid "To confirm, type {{quote}}delete{{quote}} in the field below{{colon}}"
 msgstr ""
 
-msgid "No route found."
+msgid "Type {{quote}}delete{{quote}} to confirm"
 msgstr ""
 
-msgid "Add route"
+msgid "Loading..."
+msgstr "لوڈ کر رہا ہے ..."
+
+msgid "Start typing to search for data elements"
 msgstr ""
 
-msgid "Delete route"
+msgid "Select a data element..."
 msgstr ""
 
-msgid "Are you sure you want to delete this route?"
+msgid "Remove data element"
 msgstr ""
 
-msgid "Edit route"
+msgid "At least one slot is required"
 msgstr ""
 
-msgid "Public access"
-msgstr "عوامی رسائی"
-
-msgid ""
-"Your route is public and can be accessed by anyone. This can potentially "
-"expose sensitive data. If you want to restrict access, click the \"Sharing\""
-" button and remove access for \"All users\"."
+msgid "Maximum {{max}} data elements allowed"
 msgstr ""
 
-msgid "Sharing"
-msgstr "اشتراک کرنا"
-
-msgid "Edit"
-msgstr "ترمیم"
-
-msgid "Invalid URL format"
+msgid "Select at least one data element"
 msgstr ""
 
-msgid "URL is required"
-msgstr ""
-
-msgid "URL must end with a double wildcard (/**)"
-msgstr ""
-
-msgid "CHAP Core URL"
-msgstr ""
-
-msgid "Route settings"
+msgid "Missing authority"
 msgstr ""
 
 msgid ""
-"There was an error loading the route settings. Please try to reload the "
-"page."
+"You do not have the required authority to access this page. Data pruning "
+"operations requires a superuser authority."
 msgstr ""
 
-msgid "If the problem persists, please contact your system administrator."
-msgstr ""
-
-msgid "You do not have permission to add or modify routes."
+msgid "Prune data values"
 msgstr ""
 
 msgid ""
-"If you think this is an error, please contact your system administrator."
+"Select data elements whose data values you want to permanently delete across"
+" all organisation units and time periods."
 msgstr ""
 
-msgid "Code"
-msgstr "کوڈ"
-
-msgid "URL"
-msgstr "یو آر ایل"
-
-msgid "Authorities"
+msgid "Add another"
 msgstr ""
 
-msgid "Error deleting route"
+msgid "Prune values"
 msgstr ""
 
-msgid "Route deleted successfully"
+msgid "Results"
 msgstr ""
 
-msgid "Error saving route"
+msgid "All {{count}} data elements were successfully pruned."
+msgid_plural "All {{count}} data elements were successfully pruned."
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "{{failureCount}} of {{totalCount}} data elements failed to be pruned"
 msgstr ""
 
-msgid "Route saved successfully"
+msgid "Error"
+msgstr "غلطی"
+
+msgid "Please remember to rerun your analytics tables to update the system."
 msgstr ""
 
-msgid "Evaluation details"
+msgid "Experimental features"
+msgstr ""
+
+msgid "Warning"
+msgstr "وارنگ"
+
+msgid ""
+"These features are experimental and may be unstable or change without "
+"notice."
+msgstr ""
+
+msgid ""
+"You need the {{authority}} authority to change these settings. Contact your "
+"system administrator to get access."
+msgstr ""
+
+msgid "Enable experimental features"
+msgstr ""
+
+msgid "Turn on to access experimental features in the app"
+msgstr ""
+
+msgid "Available features"
+msgstr ""
+
+msgid "Show scheduling information in the prediction setup dashboard"
+msgstr ""
+
+msgid "Settings saved successfully"
+msgstr ""
+
+msgid "Failed to save settings"
+msgstr ""
+
+msgid "Data Pruning"
+msgstr ""
+
+msgid "Requires superuser authority"
+msgstr ""
+
+msgid "{{name}} (baseline)"
+msgstr ""
+
+msgid "The signal policy has no levels"
+msgstr ""
+
+msgid ""
+"The selected models are no longer compatible with this dataset. Choose "
+"models again."
+msgstr ""
+
+msgid "Benchmark {{id}}"
+msgstr ""
+
+msgid "Add models"
+msgstr ""
+
+msgid ""
+"Run configured models using this benchmark’s dataset and saved backtest "
+"parameters."
+msgstr ""
+
+msgid "No compatible models"
+msgstr ""
+
+msgid "Already run with this version"
+msgstr ""
+
+msgid ""
+"{{models}} has already been run in this benchmark with this model version. "
+"Running it again adds another row, so you can see how much the scores vary "
+"between runs."
+msgid_plural ""
+"{{models}} has already been run in this benchmark with this model version. "
+"Running it again adds another row, so you can see how much the scores vary "
+"between runs."
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Dataset target has changed"
+msgstr ""
+
+msgid ""
+"This benchmark predicts {{benchmarkTarget}}, but the dataset now predicts "
+"{{datasetTarget}}. Import the data as a new dataset to run more models "
+"against {{benchmarkTarget}}."
+msgstr ""
+
+msgid "Could not start model runs"
+msgstr ""
+
+msgid "Run models"
+msgstr ""
+
+msgid "Could not download benchmark CSV. Try again."
+msgstr ""
+
+msgid "Download CSV"
+msgstr ""
+
+msgid "New evaluation from this dataset"
+msgstr ""
+
+msgid "Invalid benchmark"
+msgstr ""
+
+msgid "Could not load benchmark"
+msgstr ""
+
+msgid "Hide archived models"
+msgstr ""
+
+msgid ""
+"Benchmark {{id}}. Compare model runs that share this dataset and backtest "
+"setup."
+msgstr ""
+
+msgid "Model runs queued"
+msgstr ""
+
+msgid ""
+"{{count}} model runs queued. Completed results will appear in the "
+"benchmarks."
+msgid_plural ""
+"{{count}} model runs queued. Completed results will appear in the "
+"benchmarks."
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "View jobs and failures"
+msgstr ""
+
+msgid "Open the benchmark returned by Chap"
+msgstr ""
+
+msgid "Include archived models"
+msgstr ""
+
+msgid "{{count}} models running"
+msgid_plural "{{count}} models running"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Score of {{reference}}, which the other rows are compared with"
+msgstr ""
+
+msgid "Best score among these runs"
+msgstr ""
+
+msgid ""
+"Scores compared with {{reference}}, aggregated across all splits and "
+"organisation units. Positive means better than {{reference}}, negative means"
+" worse. The best score in each column is highlighted, including ties."
+msgstr ""
+
+msgid ""
+"Aggregate scores across all splits and organisation units. The best score in"
+" each column is highlighted, including ties. Best only means best among "
+"these runs, not necessarily a good score."
+msgstr ""
+
+msgid "Tick Compare with baseline to choose the reference."
+msgstr ""
+
+msgid "Show default metrics"
+msgstr ""
+
+msgid "Metric descriptions unavailable"
+msgstr ""
+
+msgid ""
+"Scores are still available, but best values cannot be highlighted without "
+"metric definitions."
+msgstr ""
+
+msgid "No model runs yet"
+msgstr ""
+
+msgid ""
+"Add models to run them against this benchmark. Completed runs will appear "
+"here."
+msgstr ""
+
+msgid "Period range"
+msgstr ""
+
+msgid "Model runs"
+msgstr ""
+
+msgid ""
+"Compare model runs evaluated on the same dataset and backtest parameters."
+msgstr ""
+
+msgid "Benchmarks unavailable"
+msgstr ""
+
+msgid ""
+"This Chap server does not support backtest specifications. Update Chap Core "
+"to use benchmarks."
+msgstr ""
+
+msgid "Could not load benchmarks"
+msgstr ""
+
+msgid "No benchmarks yet"
+msgstr ""
+
+msgid ""
+"A benchmark is defined by a saved dataset and backtest parameters. Run "
+"models to compare their performance."
+msgstr ""
+
+msgid "{{count}} model runs in this benchmark"
+msgid_plural "{{count}} model runs in this benchmark"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "No benchmarks match the selected filters."
+msgstr ""
+
+msgid "Back to benchmarks"
+msgstr ""
+
+msgid "Run predictions, review activity, and manage this setup."
+msgstr ""
+
+msgid "Back to prediction setups"
+msgstr ""
+
+msgid "Latest Evaluation Runs"
+msgstr ""
+
+msgid "See all evaluation runs"
+msgstr ""
+
+msgid "Error loading evaluations"
+msgstr ""
+
+msgid "Unnamed evaluation"
+msgstr ""
+
+msgid "Prediction Setups"
+msgstr ""
+
+msgid "See all prediction setups"
+msgstr ""
+
+msgid "No prediction setups yet"
+msgstr ""
+
+msgid "Error loading prediction setups"
+msgstr ""
+
+msgid "Review the saved data and where values are missing."
+msgstr ""
+
+msgid "Dataset {{id}}"
+msgstr ""
+
+msgid "Import data once and reuse it across evaluations."
 msgstr ""
 
 msgid ""
@@ -1212,12 +3112,6 @@ msgstr ""
 msgid "Back to evaluations"
 msgstr ""
 
-msgid "Error loading evaluations"
-msgstr ""
-
-msgid "Evaluations"
-msgstr ""
-
 msgid ""
 "Evaluates the accuracy of a predictive model using historical data. Compares"
 " actual outcomes with predicted values to assess model performance."
@@ -1226,10 +3120,22 @@ msgstr ""
 msgid "Get started with the Modeling app"
 msgstr ""
 
-msgid "To get started, create a route that points to a running CHAP server."
+msgid "To get started, create a route that points to a running Chap server."
 msgstr ""
 
 msgid "Route and servers are configured on the settings page."
+msgstr ""
+
+msgid "View guides"
+msgstr ""
+
+msgid "No guides available"
+msgstr ""
+
+msgid "Guide not found"
+msgstr ""
+
+msgid "The guide \"{{guideSlug}}\" could not be found."
 msgstr ""
 
 msgid "Active jobs"
@@ -1249,42 +3155,113 @@ msgstr ""
 msgid "Back to models"
 msgstr ""
 
+msgid "Choose the data to import and name its columns so models can use them."
+msgstr ""
+
+msgid "Back to datasets"
+msgstr ""
+
 msgid "Create a new evaluation to assess the performance of a model"
 msgstr ""
 
-msgid "Create a new prediction to forecast outcomes using a model"
+msgid "Create a prediction run for this setup."
 msgstr ""
 
-msgid "Back to predictions"
+msgid "Back to prediction setup"
 msgstr ""
 
-msgid "Prediction details"
+msgid "View and manage jobs for this prediction setup."
 msgstr ""
 
-msgid "View the details of a prediction."
-msgstr ""
-
-msgid "Import prediction"
+msgid "The prediction setup id in the URL is not valid."
 msgstr ""
 
 msgid "Import the forecasted values of this prediction into DHIS2."
 msgstr ""
 
-msgid "Back to prediction details"
-msgstr ""
-
-msgid "Error loading predictions"
-msgstr ""
-
-msgid "Predictions"
+msgid "Unnamed prediction"
 msgstr ""
 
 msgid ""
-"Forecasted trends generated by applying a predictive model to current data. "
-"These can be reviewed and imported into DHIS2 to support decision-making in "
-"the field."
+"Approve signals to clear them for dissemination. Expand an organisation unit"
+" to see the forecast behind its signals."
+msgstr ""
+
+msgid "Ready to predict"
+msgstr ""
+
+msgid ""
+"Saved model configurations that are ready to be used to generate "
+"predictions."
+msgstr ""
+
+msgid "Manage the policies used to raise signals from forecasts."
+msgstr ""
+
+msgid "New policy"
+msgstr ""
+
+msgid ""
+"The Chap server refused the request. An administrator can check the API "
+"token under Settings, in the route configuration."
+msgstr ""
+
+msgid "An unknown error occurred"
+msgstr ""
+
+msgid "Not authorized. Check the Chap API token in settings."
+msgstr ""
+
+msgid "Not authorized to access the Chap server"
+msgstr ""
+
+msgid ""
+"This model's service changed without a new version number, so it can't run."
+msgstr ""
+
+msgid ""
+"This model's service now runs different code than version {{version}} was "
+"registered with, so Chap won't run it. Choose another model, or ask your "
+"Chap administrator to redeploy that version or release the change as a new "
+"version."
+msgstr ""
+
+msgid ""
+"{{model}} can no longer run because its service changed after you selected "
+"it. Choose another model and try again."
+msgstr ""
+
+msgid "{{stdMultiplier}} standard deviations above seasonal mean"
+msgstr ""
+
+msgid "{{lower}}-{{upper}} percentile, all-history baseline"
+msgstr ""
+
+msgid "{{lower}}-{{upper}} percentile, {{count}}-year baseline"
+msgid_plural "{{lower}}-{{upper}} percentile, {{count}}-year baseline"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Enter a percentage between 0 and 100"
+msgstr ""
+
+msgid "Enter a number of 0 or more"
+msgstr ""
+
+msgid "Must be lower than the upper percentile"
+msgstr ""
+
+msgid "Enter a whole number of 1 or more, or leave empty to use all history"
 msgstr ""
 
 msgctxt ") instead."
 msgid "Spaces are not allowed. Use dashes (-) or underscores ("
+msgstr ""
+
+msgctxt "Application title"
+msgid "__MANIFEST_APP_TITLE"
+msgstr ""
+
+msgctxt "Application description"
+msgid "__MANIFEST_APP_DESCRIPTION"
 msgstr ""

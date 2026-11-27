@@ -1,16 +1,16 @@
 # Translators:
-# Andres Miguel Rubio, 2026
 # Viktor Varland <viktor@dhis2.org>, 2026
 # Philip Larsen Donnelly, 2026
-# 晓东 林 <13981924470@126.com>, 2026
 # easylin <lin_xd@126.com>, 2026
+# 晓东 林 <13981924470@126.com>, 2026
+# Andres Miguel Rubio, 2026
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: i18next-conv\n"
-"POT-Creation-Date: 2026-11-02T11:59:23.166Z\n"
+"POT-Creation-Date: 2026-11-17T16:55:47.963Z\n"
 "PO-Revision-Date: 2025-12-03 08:49+0000\n"
-"Last-Translator: easylin <lin_xd@126.com>, 2026\n"
+"Last-Translator: Andres Miguel Rubio, 2026\n"
 "Language-Team: Chinese (https://app.transifex.com/hisp-uio/teams/100509/zh/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -19,28 +19,28 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 msgid "Chap settings"
-msgstr ""
+msgstr "Chap设置"
 
 msgid "Checking..."
 msgstr "检查"
 
 msgid "API token rejected"
-msgstr ""
+msgstr "API 令牌被拒绝"
 
 msgid "No API token configured"
-msgstr ""
+msgstr "未配置 API 令牌"
 
 msgid "Not required by this server"
-msgstr ""
+msgstr "该服务器不要求此项"
 
 msgid "API token accepted"
-msgstr ""
+msgstr "API 令牌已通过验证"
 
 msgid "Could not be verified"
-msgstr ""
+msgstr "无法验证"
 
 msgid "An error occurred while connecting to the Chap server."
-msgstr ""
+msgstr "连接 Chap 服务器时发生错误。"
 
 msgid ""
 "Are you sure you have configured your route correctly? See the console for "
@@ -51,7 +51,7 @@ msgid "Server information"
 msgstr "服务器信息"
 
 msgid "Chap Version"
-msgstr ""
+msgstr "Chap版本"
 
 msgid "Python Version"
 msgstr "Python 版本"
@@ -63,51 +63,54 @@ msgid "Connected"
 msgstr "已连接"
 
 msgid "Authentication"
-msgstr ""
+msgstr "身份验证"
 
 msgid "The Chap server rejected the API token"
-msgstr ""
+msgstr "Chap 服务器拒绝了该 API 令牌"
 
 msgid ""
 "The server is reachable, but requests are refused. Check the token for "
 "typos, then edit the route settings to enter the token configured on your "
 "Chap server."
-msgstr ""
+msgstr "服务器可以访问，但请求被拒绝。请检查令牌是否有拼写错误，然后编辑路由设置，输入您在 Chap 服务器上配置的令牌。"
 
 msgid "No API token is configured"
-msgstr ""
+msgstr "未配置 API 令牌"
 
 msgid ""
 "The server is reachable, but it refuses requests without a token. Edit the "
 "route settings to add the token configured on your Chap server."
-msgstr ""
+msgstr "虽然可以连接到该服务器，但它会拒绝没有令牌的请求。请编辑路由设置，添加您在 Chap 服务器上配置的令牌。"
 
 msgid "Chap requires an API token"
-msgstr ""
+msgstr "Chap 需要一个 API 令牌"
 
 msgid ""
 "Edit the route settings to add the token configured on your Chap server."
-msgstr ""
+msgstr "编辑路由设置，添加在您的 Chap 服务器上配置的令牌。"
 
 msgid "Restrict access to your Chap server"
-msgstr ""
+msgstr "限制对您的 Chap 服务器的访问"
 
 msgid ""
 "This server does not report API token protection. Keep it on a private "
 "network or restrict access with a firewall."
-msgstr ""
+msgstr "该服务器未启用 API 令牌保护功能。请将其置于私有网络中，或使用防火墙限制访问。"
 
 msgid "Actual values"
-msgstr ""
+msgstr "实际值"
 
 msgid "Median prediction"
-msgstr ""
+msgstr "中位数预测"
 
 msgid "80% prediction interval"
-msgstr ""
+msgstr "80%预测区间"
 
 msgid "50% prediction interval"
-msgstr ""
+msgstr "50%预测区间"
+
+msgid "Period"
+msgstr "期间"
 
 msgid "Median Prediction for {{predictionTargetName}}"
 msgstr "预测中值为{{predictionTargetName}}"
@@ -131,25 +134,25 @@ msgid "Quantile 0.9 (high)"
 msgstr "定量 0.9（高）"
 
 msgid "Median prediction (50% signal line)"
-msgstr ""
+msgstr "预测中位数（50%信号线）"
 
 msgid "Signal line ({{probability}}%)"
-msgstr ""
+msgstr "信号线（{{probability}}%）"
 
 msgid "Endemic channel"
-msgstr ""
+msgstr "地方性通道"
 
 msgid "Endemic threshold"
-msgstr ""
+msgstr "地方性阈值"
 
 msgid "Prediction for {{predictionTargetName}} for {{orgUnitName}}"
 msgstr "预测{{predictionTargetName}} for{{orgUnitName}}"
 
 msgid "Signal level"
-msgstr ""
+msgstr "信号电平"
 
 msgid "Outbreak"
-msgstr ""
+msgstr "疫情爆发"
 
 msgid "Yes"
 msgstr "是"
@@ -161,31 +164,31 @@ msgid "Number of cases"
 msgstr "病例数"
 
 msgid "Remove saved API token"
-msgstr ""
+msgstr "删除已保存的 API 令牌"
 
 msgid "Setting API tokens is not supported on this DHIS2 version"
-msgstr ""
+msgstr "此版本的 DHIS2 不支持设置 API 令牌"
 
 msgid "Chap API token"
-msgstr ""
+msgstr "Chap API 令牌"
 
 msgid "Chap API token (optional)"
-msgstr ""
+msgstr "Chap API 令牌（可选）"
 
 msgid ""
 "A token is configured. Leave blank to keep it, or enter a new token to "
 "replace it."
-msgstr ""
+msgstr "已配置一个令牌。若要保留该令牌，请留空；若要替换为新令牌，请输入新令牌。"
 
 msgid ""
 "Enter the token configured on your Chap server. Leave blank if the server "
 "does not require one."
-msgstr ""
+msgstr "请输入在您的 Chap 服务器上配置的令牌。如果服务器不需要令牌，请留空。"
 
 msgid ""
 "New tokens are stored encrypted in DHIS2. Existing plain-text tokens remain "
 "readable until replaced."
-msgstr ""
+msgstr "新令牌在DHIS2中以加密形式存储。现有的明文令牌在被替换之前仍可读取。"
 
 msgid "Route configuration"
 msgstr "路线配置"
@@ -215,7 +218,7 @@ msgid "Edit route"
 msgstr "编辑路线"
 
 msgid "Increase response timeout to {{timeout}} seconds"
-msgstr ""
+msgstr "将响应超时时间延长至{{timeout}} 秒"
 
 msgid "Save"
 msgstr "保存"
@@ -236,7 +239,7 @@ msgid "Edit"
 msgstr "编辑"
 
 msgid "The token must not contain line breaks"
-msgstr ""
+msgstr "该令牌中不得包含换行符"
 
 msgid "Invalid URL format"
 msgstr "URL 格式无效"
@@ -248,18 +251,20 @@ msgid "URL must end with a double wildcard (/**)"
 msgstr "URL 必须以双通配符 (/**) 结尾"
 
 msgid "Chap Core URL"
-msgstr ""
+msgstr "Chap 核心网址"
 
 msgid "Error saving route"
 msgstr "保存路径出错"
 
 msgid "An unknown error occurred. Please try again."
-msgstr ""
+msgstr "发生了一个未知错误。请重试。"
 
 msgid ""
 "Contact your DHIS2 server administrator to allow this Chap Core URL in "
 "{{setting}} in dhis.conf and restart DHIS2."
 msgstr ""
+"请联系您的 DHIS2 服务器管理员，在 dhis.conf 文件的{{setting}} 部分中允许此 Chap Core URL，然后重启 "
+"DHIS2。"
 
 msgid "Route settings"
 msgstr "路线设置"
@@ -280,7 +285,7 @@ msgid ""
 msgstr "如果您认为这是一个错误，请联系您的系统管理员。"
 
 msgid "API token stored in plain text"
-msgstr ""
+msgstr "API 令牌以明文形式存储"
 
 msgid ""
 "Users who can read this route configuration can read its API token. Edit the"
@@ -288,6 +293,8 @@ msgid ""
 "versions. If the token may have been exposed, rotate it on the Chap server "
 "and enter the new token here."
 msgstr ""
+"能够读取此路由配置的用户也能读取其 API 令牌。请编辑该路由并重新输入令牌，以便在受支持的 DHIS2 "
+"版本中以加密形式存储该令牌。如果令牌可能已泄露，请在 Chap 服务器上轮换该令牌，并在此处输入新令牌。"
 
 msgid "Name"
 msgstr "名称"
@@ -299,10 +306,10 @@ msgid "URL"
 msgstr "URL"
 
 msgid "API token"
-msgstr ""
+msgstr "API 令牌"
 
 msgid "Configured"
-msgstr ""
+msgstr "已配置"
 
 msgid "Not configured"
 msgstr "未配置"
@@ -311,16 +318,17 @@ msgid "Authorities"
 msgstr "授权"
 
 msgid "Low response timeout"
-msgstr ""
+msgstr "低响应超时"
 
 msgid ""
 "The response timeout is currently set to {{timeout}} seconds. This may cause"
 " long-running requests to fail before they complete. We recommend increasing"
 " it to {{recommended}} seconds."
 msgstr ""
+"响应超时目前设置为{{timeout}} 秒。这可能会导致长时间运行的请求在完成之前就失败。我们建议将其增加到{{recommended}} 秒。"
 
 msgid "Increase to {{recommended}} seconds"
-msgstr ""
+msgstr "增加至{{recommended}} 秒"
 
 msgid "Error deleting route"
 msgstr "删除路由出错"
@@ -332,10 +340,10 @@ msgid "Route saved successfully"
 msgstr "成功保存路线"
 
 msgid "Error updating route timeout"
-msgstr ""
+msgstr "更新路由时超时"
 
 msgid "Route timeout updated successfully"
-msgstr ""
+msgstr "路由超时已成功更新"
 
 msgid ""
 "DHIS2 cannot preserve encrypted authentication when updating this route. Re-"
@@ -343,20 +351,66 @@ msgid ""
 "replaces all encrypted authentication on the route, including custom "
 "headers."
 msgstr ""
+"DHIS2 在更新此路由时无法保留加密身份验证。在保存之前，请重新输入 CHAP API "
+"令牌，或将其明确删除。保存操作将替换该路由上的所有加密身份验证，包括自定义标头。"
 
 msgid ""
 "This app does not support setting API tokens on this DHIS2 version. Upgrade "
 "DHIS2 to 2.40.7, 2.41.4, 2.42 or later to store the token encrypted."
 msgstr ""
+"该应用不支持在此版本的 DHIS2 上设置 API 令牌。请将 DHIS2 升级至 2.40.7、2.41.4、2.42 "
+"或更高版本，以便以加密形式存储令牌。"
+
+msgid "{{selected}} of {{pending}} pending signals selected"
+msgstr "{{selected}} {{pending}} 中选定的待处理信号"
+
+msgid "Select by level"
+msgstr "按级别选择"
+
+msgid "Decline selected"
+msgstr "已取消选中"
+
+msgid "Approve selected"
+msgstr "批准所选内容"
+
+msgid "Organisation unit"
+msgstr "机构"
+
+msgid "Signals"
+msgstr "信号"
+
+msgid "Reviewed by"
+msgstr "审阅人："
+
+msgid "Actions"
+msgstr "行动"
+
+msgid "Approved"
+msgstr "已审核"
+
+msgid "Declined"
+msgstr "已拒绝"
+
+msgid "Pending"
+msgstr "悬吊中"
+
+msgid "Approve"
+msgstr "审核"
+
+msgid "Decline"
+msgstr "下降"
+
+msgid "Reset to pending"
+msgstr "重置为待处理状态"
 
 msgid "More"
 msgstr "更多"
 
 msgid "Month {{month}}, {{year}}"
-msgstr ""
+msgstr "月份{{month}} ，{{year}}"
 
 msgid "Month {{month}}"
-msgstr ""
+msgstr "月份{{month}}"
 
 msgid "Select period"
 msgstr "选择周期"
@@ -375,3 +429,6 @@ msgstr "从时间段"
 
 msgid "To period"
 msgstr "至期间"
+
+msgid "Remove"
+msgstr "移除"
